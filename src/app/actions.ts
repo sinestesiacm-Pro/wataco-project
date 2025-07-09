@@ -242,12 +242,12 @@ export async function searchHotels(params: {
 
     const result = await response.json();
     
-    if (!result.status || !result.data || result.data.length === 0) {
+    if (!result.status || !result.data || !result.data.hotels || result.data.hotels.length === 0) {
       return { success: false, error: 'No hotels found for this destination.' };
     }
 
-    // The API response seems to have a `data` property which is the array of hotels.
-    return { success: true, data: result.data };
+    // The API response has a 'data' object which contains a 'hotels' array.
+    return { success: true, data: result.data.hotels };
 
   } catch (err: any) {
     console.error(err);
