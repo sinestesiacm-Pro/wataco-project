@@ -98,7 +98,7 @@ const TabButton = ({ label, icon, isActive, onClick }: { label: string, icon: Re
         "rounded-full px-6 py-2 text-sm font-semibold flex items-center gap-2 transition-all duration-300",
         isActive
           ? "bg-primary text-primary-foreground shadow-lg"
-          : "text-muted-foreground hover:text-foreground hover:bg-muted"
+          : "bg-accent text-accent-foreground hover:bg-tertiary hover:text-tertiary-foreground"
       )}
     >
       {icon}

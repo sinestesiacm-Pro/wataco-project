@@ -53,8 +53,12 @@ export default {
           foreground: 'hsl(var(--destructive-foreground))',
         },
         success: {
-          DEFAULT: '#28A745',
-          foreground: '#FFFFFF',
+          DEFAULT: 'hsl(var(--success))',
+          foreground: 'hsl(var(--success-foreground))',
+        },
+        tertiary: {
+          DEFAULT: 'hsl(var(--tertiary))',
+          foreground: 'hsl(var(--tertiary-foreground))',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
