@@ -154,8 +154,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
     const searchParams = new URLSearchParams({
       keyword: validation.data.keyword,
       subType: 'CITY,AIRPORT',
-      'page[limit]': '20',
-      view: 'FULL',
+      'page[limit]': '50',
     });
 
     const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations?${searchParams.toString()}`, {
