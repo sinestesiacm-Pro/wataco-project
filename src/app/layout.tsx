@@ -19,7 +19,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Poppins:wght@400;600;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
-        <link rel="icon" href="https://i.ibb.co/VvW0v7Y/logo-with-text.png" type="image/png" />
+        <link rel="icon" href="https://i.ibb.co/8DdwvnW6/Chat-GPT-Image-9-lug-2025-14-16-37.png" type="image/png" />
       </head>
       <body className="font-body antialiased bg-background">
         <div className="flex flex-col min-h-screen">
