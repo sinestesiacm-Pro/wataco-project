@@ -5,34 +5,39 @@ import CruiseSearchPage from '@/components/cruise-search-page';
 import { ActivitiesSection } from '@/components/activities-section';
 import { TestimonialsSection } from '@/components/testimonials-section';
 import { Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
+
+function PageContent({ tab }: { tab?: string }) {
+  const activeTab = tab || 'Flights';
+
+  switch (activeTab) {
+    case 'Hotels':
+      return <HotelSearchPage />;
+    case 'Packages':
+      return <PackagesSearchPage />;
+    case 'Cruises':
+      return <CruiseSearchPage />;
+    case 'Activities':
+      return (
+          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+              <ActivitiesSection />
+          </div>
+      )
+    case 'Flights':
+    default:
+      return <FlightSearchPage />;
+  }
+}
 
 export default function Home({ searchParams }: { searchParams?: { tab?: string } }) {
-  const activeTab = searchParams?.tab || 'Flights';
-
-  const renderActiveTab = () => {
-    switch (activeTab) {
-      case 'Hotels':
-        return <HotelSearchPage />;
-      case 'Packages':
-        return <PackagesSearchPage />;
-      case 'Cruises':
-        return <CruiseSearchPage />;
-      case 'Activities':
-        return (
-            <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-                <ActivitiesSection />
-            </div>
-        )
-      case 'Flights':
-      default:
-        return <FlightSearchPage />;
-    }
-  };
-
   return (
     <>
-      <Suspense>
-        {renderActiveTab()}
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-[calc(100vh-20rem)]">
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        </div>
+      }>
+        <PageContent tab={searchParams?.tab} />
       </Suspense>
       <TestimonialsSection />
     </>

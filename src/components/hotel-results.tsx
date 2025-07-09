@@ -1,9 +1,11 @@
 'use client';
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
-import { Star } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Star, MapPin } from 'lucide-react';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { HotelDetailsDialog } from './hotel-details-dialog';
+import { Separator } from './ui/separator';
+import { Badge } from './ui/badge';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
@@ -14,62 +16,83 @@ const renderStars = (rating: string | undefined) => {
     if (starCount === 0) return null;
     
     return (
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
             {[...Array(starCount)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
             ))}
+            <span className="text-sm font-bold">{starCount}.0</span>
         </div>
     );
 };
 
+const formatAmenity = (amenity: string) => {
+  return amenity.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
 export function HotelResults({ hotels }: HotelResultsProps) {
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
-        {hotels.map((offer, index) => (
-          <Card key={`${offer.id}-${index}`} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col">
-            <div className="overflow-hidden relative">
-              <Image 
-                src={offer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
-                data-ai-hint="hotel exterior" 
-                alt={offer.hotel.name || 'Hotel image'} 
-                width={400} 
-                height={300} 
-                className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-110" 
-              />
-               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-               <div className="absolute bottom-4 left-4">
-                 <h3 className="text-xl font-bold font-headline text-white">{offer.hotel.name}</h3>
-                 {offer.hotel.address?.cityName && (
-                    <p className="text-sm text-white/90">{`${offer.hotel.address.cityName}`}</p>
-                 )}
-              </div>
+    <div className="space-y-4">
+       <h2 className="text-3xl font-headline font-bold text-gray-800">
+          Mostrando {hotels.length} hotel{hotels.length !== 1 && 'es'}
+        </h2>
+      {hotels.map((offer) => (
+        <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col md:flex-row">
+            <div className="md:w-1/3 xl:w-1/4 relative">
+                <Image 
+                    src={offer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
+                    data-ai-hint="hotel exterior" 
+                    alt={offer.hotel.name || 'Hotel image'} 
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
             </div>
             
-            <CardContent className="p-4 flex flex-col flex-grow">
-              <div className='flex justify-between items-start mb-2'>
-                {renderStars(offer.hotel.rating)}
-              </div>
-             
-              <div className="flex-grow" />
-
-              <div className="flex justify-between items-center mt-4 pt-4 border-t">
-                {offer.offers?.[0]?.price?.total ? (
+            <div className="md:w-2/3 xl:w-3/4 flex flex-col">
+              <div className="p-6 flex-grow">
+                <div className="flex justify-between items-start">
                     <div>
-                        <p className="text-xs text-muted-foreground font-body">Desde</p>
-                        <p className="font-bold text-2xl text-accent">
-                          ${offer.offers[0].price.total}
-                        </p>
+                        <h3 className="text-2xl font-bold font-headline text-primary">{offer.hotel.name}</h3>
+                        <div className="flex items-center gap-4 mt-1">
+                            {renderStars(offer.hotel.rating)}
+                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                <MapPin className="w-4 h-4" />
+                                {offer.hotel.address.cityName}, {offer.hotel.address.countryCode}
+                            </div>
+                        </div>
                     </div>
-                ) : <div />}
+                </div>
+                 <p className="text-sm text-muted-foreground mt-4 line-clamp-2">
+                    {offer.hotel.description?.text}
+                 </p>
+                 {offer.hotel.amenities && offer.hotel.amenities.length > 0 && (
+                    <div className="mt-4">
+                        <div className="flex flex-wrap gap-2">
+                            {offer.hotel.amenities.slice(0, 5).map((amenity, index) => (
+                            <Badge key={index} variant="secondary">
+                                {formatAmenity(amenity)}
+                            </Badge>
+                            ))}
+                        </div>
+                    </div>
+                 )}
+              </div>
+              
+              <Separator />
+
+              <div className="p-6 bg-muted/30 flex flex-col sm:flex-row justify-between items-center gap-4">
+                 <div className="text-center sm:text-left">
+                    <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
+                    <p className="font-bold text-3xl text-accent">
+                      ${offer.offers?.[0]?.price?.total}
+                    </p>
+                </div>
                 <HotelDetailsDialog
                   offer={offer}
                 />
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            </div>
+        </Card>
+      ))}
     </div>
   );
 }
