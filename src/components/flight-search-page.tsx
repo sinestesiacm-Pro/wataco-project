@@ -29,6 +29,12 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
   <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{children}</div>
 );
 
+const images = [
+  'https://images.unsplash.com/photo-1501785888041-af3ba6f60060?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1528543606781-2f6e6857f318?fit=crop&w=1920&q=80'
+];
 
 export default function FlightSearchPage() {
   const [origin, setOrigin] = useState('MAD');
@@ -57,6 +63,16 @@ export default function FlightSearchPage() {
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const searchIdRef = useRef(0);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 15000); // Change image every 15 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -229,6 +245,14 @@ export default function FlightSearchPage() {
   return (
     <>
       <section className="hero-section">
+        {images.map((image, index) => (
+          <div
+            key={image}
+            className={`hero-background-slide ${index === currentImageIndex ? 'active' : ''}`}
+            style={{ backgroundImage: `url(${image})` }}
+            data-ai-hint="travel landscape"
+          />
+        ))}
         <div className="hero-overlay"></div>
         <div className="hero-content">
             <h1 className="hero-title">
