@@ -220,7 +220,7 @@ export default function FlightSearchPage() {
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <section className="mb-12">
           <div className="text-center mb-12 pt-8">
-            <h1 className="hero-title font-headline" aria-label="Tu Próxima Aventura te Espera">
+            <h1 className="hero-title" aria-label="Tu Próxima Aventura te Espera">
                 <span data-text="Tu">Tu</span>
                 <span data-text="Próxima">Próxima</span>
                 <span data-text="Aventura">Aventura</span>

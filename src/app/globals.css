@@ -24,6 +24,9 @@
     --input: 220 13% 91%;
     --ring: 211 100% 50%;
     --radius: 0.75rem;
+    --success: 139 51% 53%; /* Added for success toast */
+    --success-foreground: 0 0% 100%;
+    --tertiary: 145 63% 49%; /* Added for hero animation */
   }
 
   .dark {
@@ -47,6 +50,9 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 211 100% 50%;
     --radius: 0.75rem;
+    --success: 139 51% 53%;
+    --success-foreground: 0 0% 100%;
+    --tertiary: 145 63% 49%;
   }
 }
 
@@ -59,8 +65,21 @@
   }
 }
 
+@keyframes colorize {
+  0%, 100% {
+    color: hsl(var(--primary));
+  }
+  33% {
+    color: hsl(var(--accent));
+  }
+  66% {
+    color: hsl(var(--tertiary));
+  }
+}
+
 /* Hero Title Styles & Interactive Effect */
 .hero-title {
+    font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(2.8rem, 7vw, 5rem);
     font-weight: 700;
     line-height: 1.1;
@@ -68,6 +87,11 @@
     letter-spacing: 0.02em;
     cursor: pointer;
     color: hsl(var(--foreground));
+    animation: colorize 15s linear infinite;
+}
+
+.hero-title:hover {
+  animation-play-state: paused;
 }
 
 .hero-title > span {
