@@ -104,8 +104,8 @@ export default function FlightSearchPage() {
     <div className="w-full min-h-screen">
       <header className="bg-card shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center gap-3">
-          <Icons.logo className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold font-headline text-primary">BE ON TRIP</h1>
+          <Icons.logo className="h-8 w-auto" />
+          <h1 className="text-3xl font-bold font-headline text-foreground">BE ON TRIP</h1>
         </div>
       </header>
       
