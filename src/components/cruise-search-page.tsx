@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { format } from 'date-fns';
 import { searchCruises } from '@/app/actions';
 import type { CruiseData } from '@/lib/types';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CalendarIcon, Users, Loader2, Minus, Plus, Ship, Sailboat } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, Minus, Plus, Ship, Sailboat, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
@@ -27,6 +27,7 @@ export default function CruiseSearchPage() {
   const [cruiseData, setCruiseData] = useState<CruiseData | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const searchIdRef = useRef(0);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,12 +42,18 @@ export default function CruiseSearchPage() {
 
     setLoading(true);
     setCruiseData(null);
+    
+    const searchId = ++searchIdRef.current;
 
     const result = await searchCruises({
       destinationRegion,
       departureDate: format(departureDate, 'yyyy-MM-dd'),
       adults,
     });
+    
+    if (searchId !== searchIdRef.current) {
+        return;
+    }
 
     if (result.success && result.data) {
       setCruiseData(result.data);
@@ -62,6 +69,11 @@ export default function CruiseSearchPage() {
     setLoading(false);
   };
   
+  const handleCancelSearch = () => {
+    searchIdRef.current++;
+    setLoading(false);
+  };
+
   const LoadingSkeleton = () => (
     <div className="space-y-6 mt-8">
       <div className="space-y-4">
@@ -156,9 +168,22 @@ export default function CruiseSearchPage() {
                     </PopoverContent>
                   </Popover>
                 </div>
-                <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-2 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  {loading ? <Loader2 className="animate-spin" /> : <div className="flex items-center"><Ship className="mr-2 h-5 w-5" /> Buscar Cruceros</div>}
-                </Button>
+                {loading ? (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="lg"
+                    className="w-full text-lg font-bold lg:col-span-2 h-full mt-1 rounded-xl"
+                    onClick={handleCancelSearch}
+                  >
+                    <X className="mr-2 h-5 w-5" />
+                    Cancelar
+                  </Button>
+                ) : (
+                  <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-2 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                    <div className="flex items-center"><Ship className="mr-2 h-5 w-5" /> Buscar Cruceros</div>
+                  </Button>
+                )}
               </div>
             </form>
           </div>

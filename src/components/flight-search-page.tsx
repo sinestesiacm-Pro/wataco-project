@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, X } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -60,6 +60,7 @@ export default function FlightSearchPage() {
   const debouncedOriginQuery = useDebounce(originQuery, 300);
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const searchIdRef = useRef(0);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -143,6 +144,8 @@ export default function FlightSearchPage() {
     setLoading(true);
     setFlightData(null);
 
+    const searchId = ++searchIdRef.current;
+
     const result = await searchFlights({
       origin,
       destination,
@@ -152,6 +155,10 @@ export default function FlightSearchPage() {
       children,
       infants,
     });
+
+    if (searchId !== searchIdRef.current) {
+      return;
+    }
 
     if (result.success && result.data) {
       setFlightData(result.data);
@@ -167,6 +174,11 @@ export default function FlightSearchPage() {
     setLoading(false);
   };
   
+  const handleCancelSearch = () => {
+    searchIdRef.current++;
+    setLoading(false);
+  };
+
   const handleSetRecommendedDestination = (destination: { iata: string; query: string }) => {
     setDestination(destination.iata);
     setDestinationQuery(destination.query);
@@ -368,9 +380,26 @@ export default function FlightSearchPage() {
                   </Popover>
                 </div>
 
-                <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-2 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  {loading ? <Loader2 className="animate-spin" /> : 'Buscar'}
-                </Button>
+                {loading ? (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="lg"
+                    className="w-full text-lg font-bold lg:col-span-2 h-full mt-1 rounded-xl shadow-md"
+                    onClick={handleCancelSearch}
+                  >
+                    <X className="mr-2 h-5 w-5" />
+                    Cancelar
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-2 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
+                  >
+                    Buscar
+                  </Button>
+                )}
               </div>
             </form>
           </div>

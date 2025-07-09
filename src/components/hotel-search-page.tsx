@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, Minus, Plus, MapPin, BedDouble } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, Minus, Plus, MapPin, BedDouble, X } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -62,6 +62,7 @@ export default function HotelSearchPage() {
 
   const [filters, setFilters] = useState<HotelFiltersState>({ stars: [], amenities: [] });
   const isInitialSearch = useRef(true);
+  const searchIdRef = useRef(0);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -102,20 +103,23 @@ export default function HotelSearchPage() {
 
   const handleSearch = useCallback(async () => {
     if (!destination || !checkInDate || !checkOutDate) {
-      toast({
-        title: 'Información Faltante',
-        description: 'Por favor, selecciona un destino y las fechas.',
-        variant: 'destructive',
-      });
+      if (!isInitialSearch.current) {
+        toast({
+            title: 'Información Faltante',
+            description: 'Por favor, selecciona un destino y las fechas.',
+            variant: 'destructive',
+        });
+      }
       return;
     }
 
     setLoading(true);
-    // On initial search, clear previous results
     if (isInitialSearch.current) {
       setHotelData(null);
     }
     
+    const searchId = ++searchIdRef.current;
+
     const result = await searchHotels({
       cityCode: destination.iataCode,
       checkInDate: format(checkInDate, 'yyyy-MM-dd'),
@@ -125,12 +129,16 @@ export default function HotelSearchPage() {
       amenities: filters.amenities,
     });
     
+    if (searchId !== searchIdRef.current) {
+        return;
+    }
+
     isInitialSearch.current = false;
 
     if (result.success && result.data) {
       setHotelData(result.data);
     } else {
-      setHotelData([]); // Set to empty array on error to show "No hotels" message
+      setHotelData([]); 
       toast({
         title: 'Error de Búsqueda',
         description: result.error || 'No se pudieron encontrar hoteles. Intenta otra búsqueda.',
@@ -139,9 +147,22 @@ export default function HotelSearchPage() {
     }
     setLoading(false);
   }, [destination, checkInDate, checkOutDate, adults, filters, toast]);
+  
+  const handleCancelSearch = () => {
+    searchIdRef.current++;
+    setLoading(false);
+  };
 
   const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
+      if (!destination || !checkInDate || !checkOutDate) {
+        toast({
+            title: 'Información Faltante',
+            description: 'Por favor, selecciona un destino y las fechas.',
+            variant: 'destructive',
+        });
+        return;
+      }
       isInitialSearch.current = true;
       handleSearch();
   }
@@ -150,7 +171,6 @@ export default function HotelSearchPage() {
     setFilters(newFilters);
   }, []);
   
-  // Re-run search when filters change, but not on initial load
   useEffect(() => {
     if (!isInitialSearch.current) {
        const timer = setTimeout(() => {
@@ -292,25 +312,36 @@ export default function HotelSearchPage() {
                     </PopoverContent>
                   </Popover>
                 </div>
-
-                <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-12 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  {loading && !hotelData ? <Loader2 className="animate-spin" /> : 'Buscar Hoteles'}
-                </Button>
+                <div className="lg:col-span-12">
+                  {loading ? (
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="lg"
+                      className="w-full text-lg font-bold h-full mt-1 rounded-xl"
+                      onClick={handleCancelSearch}
+                    >
+                      <X className="mr-2 h-5 w-5" />
+                      Cancelar Búsqueda
+                    </Button>
+                  ) : (
+                    <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                      Buscar Hoteles
+                    </Button>
+                  )}
+                </div>
               </div>
             </form>
           </div>
         </section>
         
         <section className="mt-8">
-          {/* Initial loading skeleton */}
           {loading && hotelData === null && <LoadingSkeleton />}
           
-          {/* Initial view with recommendations */}
           {!loading && hotelData === null && (
               <RecommendedHotels />
           )}
 
-          {/* View after a search has been made (or is being filtered) */}
           {hotelData !== null && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-3">
@@ -318,7 +349,6 @@ export default function HotelSearchPage() {
               </div>
               <div className="lg:col-span-9">
                 {loading ? (
-                    // Skeleton for when filtering
                     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
                         {[...Array(6)].map((_, i) => (
                             <Skeleton key={i} className="h-96 w-full rounded-2xl" />

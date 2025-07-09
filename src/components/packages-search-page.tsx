@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, Luggage } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, Luggage, X } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -56,6 +56,7 @@ export default function PackagesSearchPage() {
   const debouncedOriginQuery = useDebounce(originQuery, 300);
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const searchIdRef = useRef(0);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string, subType: 'CITY,AIRPORT' | 'CITY' = 'CITY,AIRPORT') => {
@@ -123,6 +124,8 @@ export default function PackagesSearchPage() {
     setLoading(true);
     setPackagesData(null);
 
+    const searchId = ++searchIdRef.current;
+
     const result = await searchPackages({
       originLocationCode: origin,
       destinationLocationCode: destination,
@@ -130,6 +133,10 @@ export default function PackagesSearchPage() {
       returnDate: format(returnDate, 'yyyy-MM-dd'),
       adults,
     });
+
+    if (searchId !== searchIdRef.current) {
+        return;
+    }
 
     if (result.success && result.data) {
       setPackagesData(result.data);
@@ -145,6 +152,11 @@ export default function PackagesSearchPage() {
     setLoading(false);
   };
   
+  const handleCancelSearch = () => {
+    searchIdRef.current++;
+    setLoading(false);
+  };
+
   const LoadingSkeleton = () => (
     <div className="space-y-6 mt-8">
       <div className="space-y-4">
@@ -287,9 +299,24 @@ export default function PackagesSearchPage() {
                     </PopoverContent>
                   </Popover>
                 </div>
-                <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-12 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  {loading ? <Loader2 className="animate-spin" /> : <div className="flex items-center"><Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes</div>}
-                </Button>
+                <div className="lg:col-span-12">
+                  {loading ? (
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="lg"
+                      className="w-full text-lg font-bold h-full mt-1 rounded-xl"
+                      onClick={handleCancelSearch}
+                    >
+                      <X className="mr-2 h-5 w-5" />
+                      Cancelar
+                    </Button>
+                  ) : (
+                    <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                       <div className="flex items-center"><Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes</div>
+                    </Button>
+                  )}
+                </div>
               </div>
             </form>
           </div>
