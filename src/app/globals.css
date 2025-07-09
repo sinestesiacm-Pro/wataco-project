@@ -69,10 +69,7 @@
   0%, 100% {
     color: hsl(var(--primary));
   }
-  33% {
-    color: hsl(var(--accent));
-  }
-  66% {
+  50% {
     color: hsl(var(--tertiary));
   }
 }
@@ -119,7 +116,7 @@
 
 .hero-title:hover > span::before {
     transform: translate(-3px, -2px) skewX(10deg);
-    color: hsl(var(--accent)); /* Orange accent */
+    color: hsl(var(--tertiary));
     opacity: 0.8;
 }
 
