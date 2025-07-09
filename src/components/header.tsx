@@ -43,7 +43,7 @@ export function Header() {
             <TabButton
               label="Hotels"
               icon={<BedDouble className="h-4 w-4" />}
-              isActive={isOnHomePage && active-tab === 'Hotels'}
+              isActive={isOnHomePage && activeTab === 'Hotels'}
               onClick={() => handleTabClick('Hotels')}
             />
             <TabButton
