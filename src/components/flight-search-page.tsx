@@ -90,14 +90,15 @@ export default function FlightSearchPage() {
       setSuggestionsLoading(false);
     };
 
-    if (activeInput === 'origin') {
+    if (activeInput === 'origin' && originQuery.length > 1) {
       fetchSuggestions(debouncedOriginQuery);
-    } else if (activeInput === 'destination') {
+    } else if (activeInput === 'destination' && destinationQuery.length > 1) {
       fetchSuggestions(debouncedDestinationQuery);
     } else {
-      setSuggestions([]); // Clear suggestions when no input is active
+      setSuggestions([]); // Clear suggestions when no input is active or query is too short
     }
-  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, toast]);
+  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, originQuery, destinationQuery, toast]);
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -217,12 +218,12 @@ export default function FlightSearchPage() {
   const travelerText = `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`;
 
   const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => (
-    <div className="absolute z-10 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+    <div className="absolute z-20 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
         </div>
-      ) : (
+      ) : suggestions.length > 0 ? (
         suggestions.map((airport, index) => (
           <div
             key={`${airport.iataCode}-${airport.name}-${index}`}
@@ -241,6 +242,8 @@ export default function FlightSearchPage() {
             </div>
           </div>
         ))
+      ) : (
+         <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
       )}
     </div>
   );
@@ -267,14 +270,8 @@ export default function FlightSearchPage() {
                 <InputGroup>
                   <InputIcon><PlaneTakeoff className="h-4 w-4" /></InputIcon>
                   <Input id="origin" type="text" value={originQuery} 
-                      onChange={e => {
-                        setOriginQuery(e.target.value);
-                        setActiveInput('origin');
-                      }} 
-                      onFocus={() => {
-                        setActiveInput('origin');
-                        setSuggestions([]);
-                      }}
+                      onChange={e => setOriginQuery(e.target.value)} 
+                      onFocus={() => setActiveInput('origin')}
                       placeholder="Ciudad o aeropuerto de origen" 
                       className="mt-1 pl-10" 
                       autoComplete="off"
@@ -287,14 +284,8 @@ export default function FlightSearchPage() {
                 <InputGroup>
                   <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
                   <Input id="destination" type="text" value={destinationQuery} 
-                      onChange={e => {
-                        setDestinationQuery(e.target.value);
-                        setActiveInput('destination');
-                      }}
-                      onFocus={() => {
-                        setActiveInput('destination');
-                        setSuggestions([]);
-                      }} 
+                      onChange={e => setDestinationQuery(e.target.value)}
+                      onFocus={() => setActiveInput('destination')} 
                       placeholder="Ciudad o aeropuerto de destino" 
                       className="mt-1 pl-10" 
                       autoComplete="off"

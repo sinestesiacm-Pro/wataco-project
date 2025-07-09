@@ -59,10 +59,10 @@ export default function HotelSearchPage() {
 
   const [suggestions, setSuggestions] = useState<Airport[]>([]);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
-  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+  const [activeInput, setActiveInput] = useState<'destination' | null>(null);
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
-  const suggestionsRef = useRef<HTMLDivElement>(null);
-
+  const destinationRef = useRef<HTMLDivElement>(null);
+  
   const [filters, setFilters] = useState<HotelFiltersState>({ stars: [], amenities: [] });
   const isInitialSearch = useRef(true);
   const searchIdRef = useRef(0);
@@ -72,11 +72,15 @@ export default function HotelSearchPage() {
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
+      if (query.length < 2) {
+        setSuggestions([]);
+        return;
+      }
       setSuggestionsLoading(true);
       const result = await searchAirports(query);
       if (result.success && result.data) {
-        if (isSuggestionsOpen) {
-          setSuggestions(result.data.filter(a => a.subType === 'CITY'));
+        if (activeInput) {
+            setSuggestions(result.data.filter(a => a.subType === 'CITY'));
         }
       } else {
         setSuggestions([]);
@@ -89,17 +93,18 @@ export default function HotelSearchPage() {
       setSuggestionsLoading(false);
     };
 
-    if (isSuggestionsOpen && debouncedDestinationQuery.length > 1) {
+    if (activeInput === 'destination' && destinationQuery.length > 1) {
       fetchSuggestions(debouncedDestinationQuery);
     } else {
-      setSuggestions([]);
+       setSuggestions([]);
     }
-  }, [debouncedDestinationQuery, isSuggestionsOpen, toast]);
+  }, [debouncedDestinationQuery, activeInput, destinationQuery, toast]);
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
-        setIsSuggestionsOpen(false);
+      if (destinationRef.current && !destinationRef.current.contains(event.target as Node)) {
+        setActiveInput(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -110,7 +115,7 @@ export default function HotelSearchPage() {
     setDestination(airport);
     const query = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
     setDestinationQuery(query || airport.name);
-    setIsSuggestionsOpen(false);
+    setActiveInput(null);
     setSuggestions([]);
   };
 
@@ -209,12 +214,12 @@ export default function HotelSearchPage() {
   const travelerText = `${adults} adulto${adults > 1 ? 's' : ''}`;
 
   const SuggestionsList = () => (
-    <div className="absolute z-10 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+    <div className="absolute z-20 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
         </div>
-      ) : (
+      ) : suggestions.length > 0 ? (
         suggestions.map((airport, index) => {
           const suggestionText = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
           return (
@@ -232,6 +237,8 @@ export default function HotelSearchPage() {
             </div>
           )
         })
+      ) : (
+        <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
       )}
     </div>
   );
@@ -246,19 +253,19 @@ export default function HotelSearchPage() {
         <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-              <div className='lg:col-span-5 relative' ref={suggestionsRef}>
+              <div className='lg:col-span-5 relative' ref={destinationRef}>
                 <Label htmlFor="destination" className="text-sm font-semibold ml-2">Destino</Label>
                 <InputGroup>
                   <InputIcon><BedDouble className="h-4 w-4" /></InputIcon>
                   <Input id="destination" type="text" value={destinationQuery} 
-                      onChange={e => { setDestinationQuery(e.target.value); setIsSuggestionsOpen(true); }}
-                      onFocus={() => { setIsSuggestionsOpen(true); }}
+                      onChange={e => setDestinationQuery(e.target.value)}
+                      onFocus={() => setActiveInput('destination')}
                       placeholder="Ej. Nueva York" 
                       className="mt-1 pl-10" 
                       autoComplete="off"
                   />
                 </InputGroup>
-                 {isSuggestionsOpen && debouncedDestinationQuery && <SuggestionsList />}
+                 {activeInput === 'destination' && <SuggestionsList />}
               </div>
               
               <div className="lg:col-span-3">
@@ -336,7 +343,7 @@ export default function HotelSearchPage() {
                 </Popover>
               </div>
               <div className="lg:col-span-2 flex items-end">
-                {loading ? (
+                {loading && isInitialSearch.current ? (
                   <Button
                     type="button"
                     variant="destructive"
