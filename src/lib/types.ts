@@ -171,3 +171,21 @@ export interface AmadeusHotelOffer {
 export interface AmadeusHotelSearchResponse {
   data: AmadeusHotelOffer[];
 }
+
+// Package Types
+export interface PackageOffer {
+    type: 'package-offer';
+    id: string;
+    flightOffer: FlightOffer;
+    hotelOffer: AmadeusHotelOffer;
+    price: {
+        currency: string;
+        total: string;
+    };
+    self: string;
+}
+
+export interface PackageData {
+    data: PackageOffer[];
+    dictionaries: Dictionaries;
+}

@@ -1,6 +1,6 @@
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
@@ -322,4 +322,30 @@ export async function getHotelDetails(params: { offerId: string }): Promise<{ su
     console.error(err);
     return { success: false, error: err.message || 'An unexpected error occurred.' };
   }
+}
+
+const packageSearchSchema = z.object({
+  originLocationCode: z.string().min(3).max(3),
+  destinationLocationCode: z.string().min(3).max(3),
+  departureDate: z.string(),
+  returnDate: z.string(),
+  adults: z.number().int().min(1),
+});
+
+export async function searchPackages(params: {
+  originLocationCode: string;
+  destinationLocationCode: string;
+  departureDate: string;
+  returnDate: string;
+  adults: number;
+}): Promise<{ success: boolean; data?: PackageData; error?: string }> {
+  
+  const validation = packageSearchSchema.safeParse(params);
+  if (!validation.success) {
+    return { success: false, error: 'Invalid package search parameters.' };
+  }
+
+  // The actual Amadeus Flight+Hotel Search API is complex and may not be available in the standard test environment.
+  // This is a placeholder response that informs the user.
+  return { success: false, error: "Package search feature is not available in this demo. Please search for flights and hotels separately." };
 }
