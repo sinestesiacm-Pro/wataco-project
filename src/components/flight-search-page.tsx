@@ -18,6 +18,8 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Switch } from './ui/switch';
 import React from 'react';
+import { HotelsSection } from './hotels-section';
+import { ActivitiesSection } from './activities-section';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -124,7 +126,7 @@ export default function FlightSearchPage() {
       <header className="bg-card shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center">
-            <Icons.logo width={105} height={40} />
+            <Icons.logo className="h-10 w-auto" />
           </div>
           {/* Future Nav Links can go here */}
         </div>
@@ -271,7 +273,11 @@ export default function FlightSearchPage() {
             <FlightResults flightData={flightData} destinationIata={destination} />
           )}
           {!loading && !flightData && (
-             <RecommendedDestinations setDestination={setDestination} />
+             <>
+                <RecommendedDestinations setDestination={setDestination} />
+                <HotelsSection />
+                <ActivitiesSection />
+             </>
           )}
         </section>
       </main>
