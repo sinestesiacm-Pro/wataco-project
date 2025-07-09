@@ -12,8 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, ArrowRightLeft } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -44,6 +43,8 @@ export default function FlightSearchPage() {
   });
   const [isRoundTrip, setIsRoundTrip] = useState(true);
   const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
+  const [infants, setInfants] = useState(0);
   
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -86,6 +87,8 @@ export default function FlightSearchPage() {
       departureDate: format(departureDate, 'yyyy-MM-dd'),
       returnDate: isRoundTrip && returnDate ? format(returnDate, 'yyyy-MM-dd') : undefined,
       adults,
+      children,
+      infants,
     });
 
     if (result.success && result.data) {
@@ -111,13 +114,17 @@ export default function FlightSearchPage() {
       </div>
     </div>
   );
+  
+  const totalTravelers = adults + children + infants;
+  const travelerText = `${totalTravelers} traveler${totalTravelers > 1 ? 's' : ''}`;
+
 
   return (
     <div className="w-full min-h-screen">
       <header className="bg-card shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center">
-            <Icons.logo className="h-8 w-auto" />
+            <Icons.logo className="h-10 w-auto" />
           </div>
           {/* Future Nav Links can go here */}
         </div>
@@ -182,18 +189,72 @@ export default function FlightSearchPage() {
                   </div>
                 </div>
                 <div className='lg:col-span-2'>
-                  <Label htmlFor="adults" className="text-sm font-semibold ml-2">Adults</Label>
-                   <Select value={adults.toString()} onValueChange={(val) => setAdults(parseInt(val))}>
-                      <SelectTrigger className="mt-1">
+                  <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Passengers</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
                         <Users className="mr-2 h-4 w-4" />
-                        <SelectValue placeholder="Adults" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[...Array(8)].map((_, i) => (
-                          <SelectItem key={i+1} value={(i+1).toString()}>{i+1}</SelectItem>
-                        ))}
-                      </SelectContent>
-                  </Select>
+                        {travelerText}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80" align="end">
+                      <div className="grid gap-4">
+                        <div className="space-y-2">
+                          <h4 className="font-medium leading-none">Travelers</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Select the number of passengers.
+                          </p>
+                        </div>
+                        <div className="grid gap-4">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-medium">Adults</p>
+                              <p className="text-xs text-muted-foreground">Ages 12+</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1 || adults <= infants}>
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-medium">Children</p>
+                              <p className="text-xs text-muted-foreground">Ages 2-11</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <span className="font-bold text-lg w-4 text-center">{children}</span>
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-medium">Infants</p>
+                              <p className="text-xs text-muted-foreground">Under 2</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.max(0, v - 1))} disabled={infants <= 0}>
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <span className="font-bold text-lg w-4 text-center">{infants}</span>
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8 || infants >= adults}>
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-2 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
