@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { format } from 'date-fns';
 import type { Hotel, BookingDestination } from '@/lib/types';
 import { searchHotels, searchBookingDestinations } from '@/app/actions';
@@ -109,7 +109,6 @@ export default function HotelSearchPage() {
 
     const result = await searchHotels({
       dest_id: destination.dest_id,
-      dest_type: destination.dest_type,
       arrival_date: format(checkInDate, 'yyyy-MM-dd'),
       departure_date: format(checkOutDate, 'yyyy-MM-dd'),
       adults,
@@ -128,7 +127,7 @@ export default function HotelSearchPage() {
     setLoading(false);
   };
   
-  const handleFilterChange = React.useCallback((newFilters: { stars: number[] }) => {
+  const handleFilterChange = useCallback((newFilters: { stars: number[] }) => {
     setFilters(newFilters);
   }, []);
   

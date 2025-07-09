@@ -189,7 +189,6 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 
 const hotelSearchSchema = z.object({
   dest_id: z.string(),
-  dest_type: z.string(),
   arrival_date: z.string(),
   departure_date: z.string(),
   adults: z.number().int().min(1),
@@ -198,7 +197,6 @@ const hotelSearchSchema = z.object({
 
 export async function searchHotels(params: {
   dest_id: string;
-  dest_type: string;
   arrival_date: string;
   departure_date: string;
   adults: number;
@@ -213,11 +211,10 @@ export async function searchHotels(params: {
     return { success: false, error: 'RapidAPI key is not configured in the environment variables.'};
   }
 
-  const { dest_id, dest_type, arrival_date, departure_date, adults, star_rating } = validation.data;
+  const { dest_id, arrival_date, departure_date, adults, star_rating } = validation.data;
   
   const searchParams = new URLSearchParams({
     dest_id,
-    search_type: dest_type.toUpperCase(),
     arrival_date,
     departure_date,
     adults: adults.toString(),
@@ -305,11 +302,8 @@ export async function searchBookingDestinations(query: string): Promise<{ succes
     if (!result.status || !result.data || result.data.length === 0) {
       return { success: false, error: 'No destinations found.' };
     }
-    
-    // Filter out results that are not cities or regions for a cleaner list
-    const filteredData = result.data.filter((item: BookingDestination) => ['city', 'region'].includes(item.dest_type));
 
-    return { success: true, data: filteredData };
+    return { success: true, data: result.data };
 
   } catch (err: any) {
     console.error(err);
