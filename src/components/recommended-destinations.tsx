@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
 interface RecommendedDestinationsProps {
-  setDestination: (iata: string) => void;
+  setDestination: (destination: { iata: string; query: string }) => void;
 }
 
 const destinationsByContinent = {
@@ -48,7 +48,10 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
               <Card
                 key={dest.iata}
                 className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer border"
-                onClick={() => setDestination(dest.iata)}
+                onClick={() => {
+                  const query = `${dest.city}, ${dest.country}`;
+                  setDestination({ iata: dest.iata, query });
+                }}
               >
                 <div className="overflow-hidden relative">
                   <Image

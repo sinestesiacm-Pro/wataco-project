@@ -167,6 +167,11 @@ export default function FlightSearchPage() {
     setLoading(false);
   };
   
+  const handleSetRecommendedDestination = (destination: { iata: string; query: string }) => {
+    setDestination(destination.iata);
+    setDestinationQuery(destination.query);
+  };
+
   const LoadingSkeleton = () => (
     <div className="space-y-6 mt-8">
       <div className="space-y-4">
@@ -368,7 +373,7 @@ export default function FlightSearchPage() {
           )}
           {!loading && !flightData && (
              <>
-                <RecommendedDestinations setDestination={setDestination} />
+                <RecommendedDestinations setDestination={handleSetRecommendedDestination} />
              </>
           )}
         </section>
