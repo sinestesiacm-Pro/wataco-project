@@ -6,7 +6,6 @@ import type { FlightData } from '@/lib/types';
 
 import { RecommendedDestinations } from '@/components/recommended-destinations';
 import { FlightResults } from '@/components/flight-results';
-import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -116,9 +115,8 @@ export default function FlightSearchPage() {
     <div className="w-full min-h-screen">
       <header className="bg-card shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Icons.logo className="h-8 w-auto" />
-            <h1 className="text-2xl font-bold font-headline text-foreground">Be On Trip</h1>
+          <div className="flex items-center">
+            <img src="https://firebasestorage.googleapis.com/v0/b/tripify-app.appspot.com/o/logo-with-text.png?alt=media" alt="Be On Trip Logo" className="h-10 w-auto" />
           </div>
           {/* Future Nav Links can go here */}
         </div>

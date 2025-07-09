@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Icons } from './icons';
 import { Facebook, Twitter, Instagram } from 'lucide-react';
 
 export function Footer() {
@@ -7,9 +6,8 @@ export function Footer() {
     <footer className="bg-card border-t mt-16">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          <div className="flex items-center gap-2 justify-center md:justify-start">
-            <Icons.logo className="h-8 w-auto" />
-            <span className="font-headline font-bold text-lg text-foreground">Be On Trip</span>
+          <div className="flex items-center justify-center md:justify-start">
+            <img src="https://firebasestorage.googleapis.com/v0/b/tripify-app.appspot.com/o/logo-with-text.png?alt=media" alt="Be On Trip Logo" className="h-8 w-auto" />
           </div>
           <div className="text-center text-sm text-muted-foreground">
             © {new Date().getFullYear()} Be On Trip. All rights reserved.
