@@ -155,6 +155,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
       keyword: validation.data.keyword,
       subType: 'CITY,AIRPORT',
       'page[limit]': '20',
+      view: 'FULL',
     });
 
     const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations?${searchParams.toString()}`, {
@@ -170,7 +171,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 
     const data: AirportSearchResponse = await response.json();
     
-    const filteredData = data.data.filter(location => location.iataCode);
+    const filteredData = data.data.filter(location => location.iataCode && location.address?.cityName);
     
     return { success: true, data: filteredData };
 
