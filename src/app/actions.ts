@@ -1,7 +1,7 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, Hotel } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, Hotel, BookingDestination } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
@@ -187,12 +187,12 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
   }
 }
 
-
 const hotelSearchSchema = z.object({
   dest_id: z.string(),
   arrival_date: z.string(),
   departure_date: z.string(),
   adults: z.number().int().min(1),
+  star_rating: z.string().optional(),
 });
 
 export async function searchHotels(params: {
@@ -200,6 +200,7 @@ export async function searchHotels(params: {
   arrival_date: string;
   departure_date: string;
   adults: number;
+  star_rating?: string;
 }): Promise<{ success: boolean; data?: Hotel[]; error?: string }> {
   const validation = hotelSearchSchema.safeParse(params);
   if (!validation.success) {
@@ -207,10 +208,10 @@ export async function searchHotels(params: {
   }
   
   if (!RAPIDAPI_KEY) {
-    throw new Error('RapidAPI key is not configured in the environment variables.');
+    return { success: false, error: 'RapidAPI key is not configured in the environment variables.'};
   }
 
-  const { dest_id, arrival_date, departure_date, adults } = validation.data;
+  const { dest_id, arrival_date, departure_date, adults, star_rating } = validation.data;
   
   const searchParams = new URLSearchParams({
     dest_id,
@@ -223,6 +224,10 @@ export async function searchHotels(params: {
     languagecode: 'en-us',
     currency_code: 'USD',
   });
+
+  if (star_rating) {
+    searchParams.append('star_rating', star_rating);
+  }
 
   try {
     const response = await fetch(`${RAPIDAPI_BASE_URL}/searchHotels?${searchParams.toString()}`, {
@@ -245,9 +250,62 @@ export async function searchHotels(params: {
     if (!result.status || !result.data || !result.data.hotels || result.data.hotels.length === 0) {
       return { success: false, error: 'No hotels found for this destination.' };
     }
+    
+    const hotelsWithStars = result.data.hotels.map((hotel: any) => ({
+      ...hotel,
+      stars: hotel.review_score ? Math.round(hotel.review_score / 2) : undefined,
+    }));
 
-    // The API response has a 'data' object which contains a 'hotels' array.
-    return { success: true, data: result.data.hotels };
+    return { success: true, data: hotelsWithStars };
+
+  } catch (err: any) {
+    console.error(err);
+    return { success: false, error: err.message || 'An unexpected error occurred.' };
+  }
+}
+
+const bookingDestinationSearchSchema = z.object({
+  query: z.string().min(1),
+});
+
+export async function searchBookingDestinations(query: string): Promise<{ success: boolean; data?: BookingDestination[]; error?: string }> {
+  const validation = bookingDestinationSearchSchema.safeParse({ query });
+  if (!validation.success) {
+    return { success: false, error: 'Invalid destination search query.' };
+  }
+  
+  if (!RAPIDAPI_KEY) {
+     return { success: false, error: 'RapidAPI key is not configured in the environment variables.'};
+  }
+
+  const searchParams = new URLSearchParams({ query: validation.data.query });
+
+  try {
+    const response = await fetch(`${RAPIDAPI_BASE_URL}/searchDestination?${searchParams.toString()}`, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-host': RAPIDAPI_HOST,
+        'x-rapidapi-key': RAPIDAPI_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      console.error('RapidAPI Destination Search Error:', errorBody);
+      const errorMessage = errorBody.message || 'Error in destination search.';
+      return { success: false, error: errorMessage };
+    }
+
+    const result = await response.json();
+    
+    if (!result.status || !result.data || result.data.length === 0) {
+      return { success: false, error: 'No destinations found.' };
+    }
+    
+    // Filter out results that are not cities or regions for a cleaner list
+    const filteredData = result.data.filter((item: BookingDestination) => ['city', 'region'].includes(item.dest_type));
+
+    return { success: true, data: filteredData };
 
   } catch (err: any) {
     console.error(err);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Search, Plane, BedDouble, Zap } from 'lucide-react';
@@ -8,7 +8,16 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 export function Header() {
-  const [activeTab, setActiveTab] = useState('Flights');
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const activeTab = searchParams.get('tab') || 'Flights';
+
+  const handleTabClick = (tab: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', tab);
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
@@ -24,19 +33,19 @@ export function Header() {
               label="Flights"
               icon={<Plane className="h-4 w-4" />}
               isActive={activeTab === 'Flights'}
-              onClick={() => setActiveTab('Flights')}
+              onClick={() => handleTabClick('Flights')}
             />
             <TabButton
               label="Hotels"
               icon={<BedDouble className="h-4 w-4" />}
               isActive={activeTab === 'Hotels'}
-              onClick={() => setActiveTab('Hotels')}
+              onClick={() => handleTabClick('Hotels')}
             />
             <TabButton
               label="Activities"
               icon={<Zap className="h-4 w-4" />}
               isActive={activeTab === 'Activities'}
-              onClick={() => setActiveTab('Activities')}
+              onClick={() => handleTabClick('Activities')}
             />
           </nav>
           <div className="flex items-center">

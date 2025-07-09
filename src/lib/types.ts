@@ -127,10 +127,24 @@ export interface Hotel {
   price_breakdown: PriceBreakdown;
   city: string;
   country_trans: string;
+  url: string;
+  accommodation_type_name: string;
+  review_nr: number;
+  stars?: number;
 }
 
 export interface HotelSearchResponse {
   status: boolean;
   message: string;
-  data: Hotel[];
+  data: {
+    hotels: Hotel[];
+  };
+}
+
+export interface BookingDestination {
+  dest_id: string;
+  dest_type: string;
+  city_name: string;
+  country: string;
+  label: string;
 }

@@ -19,8 +19,6 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Switch } from './ui/switch';
 import React from 'react';
-import { HotelsSection } from './hotels-section';
-import { ActivitiesSection } from './activities-section';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -371,8 +369,6 @@ export default function FlightSearchPage() {
           {!loading && !flightData && (
              <>
                 <RecommendedDestinations setDestination={setDestination} />
-                <HotelsSection />
-                <ActivitiesSection />
              </>
           )}
         </section>
