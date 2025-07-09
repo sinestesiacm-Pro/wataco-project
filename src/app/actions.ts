@@ -253,7 +253,9 @@ export async function searchHotels(params: {
       return { success: false, error: 'No hotels found for this destination.' };
     }
     
-    const hotelsWithStars = result.data.hotels.map((hotel: any) => ({
+    const validHotels = result.data.hotels.filter((hotel: any) => hotel && hotel.hotel_id && hotel.hotel_name);
+
+    const hotelsWithStars = validHotels.map((hotel: any) => ({
       ...hotel,
       stars: hotel.review_score ? Math.round(hotel.review_score / 2) : undefined,
     }));

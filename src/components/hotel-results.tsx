@@ -38,14 +38,16 @@ export function HotelResults({ hotels }: HotelResultsProps) {
                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                <div className="absolute bottom-4 left-4">
                  <h3 className="text-xl font-bold font-headline text-white">{hotel.hotel_name}</h3>
-                 <p className="text-sm text-white/90">{`${hotel.city}, ${hotel.country_trans}`}</p>
+                 {hotel.city && hotel.country_trans && (
+                    <p className="text-sm text-white/90">{`${hotel.city}, ${hotel.country_trans}`}</p>
+                 )}
               </div>
             </div>
             
             <CardContent className="p-4 flex flex-col flex-grow">
               <div className='flex justify-between items-start mb-2'>
-                <Badge variant="secondary">{hotel.accommodation_type_name}</Badge>
-                {hotel.review_score && (
+                {hotel.accommodation_type_name && <Badge variant="secondary">{hotel.accommodation_type_name}</Badge>}
+                {hotel.review_score && hotel.review_nr && (
                     <div className="flex items-center gap-1">
                         <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                         <span className="font-bold">{hotel.review_score.toFixed(1)}</span>
