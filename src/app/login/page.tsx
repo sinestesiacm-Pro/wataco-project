@@ -21,8 +21,22 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
 
+  const isFirebaseConfigured = () => {
+    const isConfigured = process.env.NEXT_PUBLIC_FIREBASE_API_KEY && process.env.NEXT_PUBLIC_FIREBASE_API_KEY !== 'YOUR_API_KEY';
+    if (!isConfigured) {
+       toast({
+        title: 'Firebase Not Configured',
+        description: 'Please provide your Firebase API keys in the .env file to enable authentication.',
+        variant: 'destructive',
+      });
+    }
+    return isConfigured;
+  }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isFirebaseConfigured()) return;
+    
     setLoading(true);
     try {
       await signInWithEmail(email, password);
@@ -41,6 +55,8 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    if (!isFirebaseConfigured()) return;
+    
     setGoogleLoading(true);
     try {
       await signInWithGoogle();
