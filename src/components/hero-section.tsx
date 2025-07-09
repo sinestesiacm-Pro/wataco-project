@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface HeroSectionProps {
   images: string[];
@@ -16,19 +17,24 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
     if (images.length > 1) {
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 15000);
+        }, 5000);
 
         return () => clearInterval(interval);
     }
-  }, [images.length]);
+  }, [images]);
 
   return (
     <section className="hero-section">
-      {images.map((image, index) => (
-        <div
-          key={`${image}-${index}`}
-          className={`hero-background-slide ${index === currentImageIndex ? 'active' : ''}`}
-          style={{ backgroundImage: `url(${image})` }}
+       {images.map((image, index) => (
+        <Image
+          key={index}
+          src={image}
+          alt="Travel background"
+          fill
+          className={`hero-background-image ${index === currentImageIndex ? 'active' : ''}`}
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+          priority={index === 0}
+          sizes="100vw"
           data-ai-hint="travel background"
         />
       ))}

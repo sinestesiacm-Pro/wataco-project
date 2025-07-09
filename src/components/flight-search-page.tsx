@@ -234,7 +234,7 @@ export default function FlightSearchPage() {
 
 
   return (
-    <>
+    <div className="w-full">
       <HeroSection
         images={flightImages}
         title={<>Tu Próxima Aventura<br />te Espera</>}
@@ -424,6 +424,6 @@ export default function FlightSearchPage() {
           )}
         </section>
       </div>
-    </>
+    </div>
   );
 }
