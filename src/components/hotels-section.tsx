@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button';
 import { BedDouble, Star } from 'lucide-react';
 
 const hotels = [
-  { name: 'Luxury Beachfront Resort', location: 'Cancun, Mexico', rating: 4.8, price: '350', image: 'https://placehold.co/400x300.png', hint: 'luxury hotel beach' },
-  { name: 'Cozy Mountain Lodge', location: 'Aspen, Colorado', rating: 4.9, price: '450', image: 'https://placehold.co/400x300.png', hint: 'mountain lodge winter' },
-  { name: 'Urban Chic Boutique Hotel', location: 'Tokyo, Japan', rating: 4.7, price: '280', image: 'https://placehold.co/400x300.png', hint: 'modern hotel room' },
-  { name: 'Historic City Center Hotel', location: 'Rome, Italy', rating: 4.6, price: '220', image: 'https://placehold.co/400x300.png', hint: 'classic hotel italy' },
+  { name: 'Luxury Beachfront Resort', location: 'Cancun, Mexico', rating: 4.8, price: '350', image: 'https://images.unsplash.com/photo-1614505241498-80a3ec936595?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjBob3RlbCUyMGJlYWNofGVufDB8fHx8MTc1MjA2Nzg2MHww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'luxury hotel beach' },
+  { name: 'Cozy Mountain Lodge', location: 'Aspen, Colorado', rating: 4.9, price: '450', image: 'https://images.unsplash.com/photo-1641480224327-e0a577b72735?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtb3VudGFpbiUyMGxvZGdlJTIwd2ludGVyfGVufDB8fHx8MTc1MjA2Nzg2MHww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'mountain lodge winter' },
+  { name: 'Urban Chic Boutique Hotel', location: 'Tokyo, Japan', rating: 4.7, price: '280', image: 'https://images.unsplash.com/photo-1621891337421-af0e6b355e2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBob3RlbCUyMHJvb218ZW58MHx8fHwxNzUyMDY3ODYwfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'modern hotel room' },
+  { name: 'Historic City Center Hotel', location: 'Rome, Italy', rating: 4.6, price: '220', image: 'https://images.unsplash.com/photo-1656593447226-6e2abf722d2c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjbGFzc2ljJTIwaG90ZWwlMjBpdGFseXxlbnwwfHx8fDE3NTIwNjc4NjB8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'classic hotel italy' },
 ];
 
 export function HotelsSection() {
