@@ -14,20 +14,26 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    if (images.length > 1) {
-        const interval = setInterval(() => {
-            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 5000);
+    // Reset index to 0 every time the `images` prop changes.
+    // This is crucial for when the user switches tabs.
+    setCurrentImageIndex(0);
 
-        return () => clearInterval(interval);
+    if (images.length > 1) {
+      const interval = setInterval(() => {
+        // We use a functional update to ensure we always have the latest index.
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      }, 5000);
+
+      // Cleanup the interval when the component unmounts or `images` changes.
+      return () => clearInterval(interval);
     }
-  }, [images.length]);
+  }, [images]); // The dependency is the `images` array itself.
 
   return (
     <section className="hero-section">
        {images.map((image, index) => (
         <Image
-          key={index}
+          key={image}
           src={image}
           alt={`Travel background ${index + 1}`}
           fill
