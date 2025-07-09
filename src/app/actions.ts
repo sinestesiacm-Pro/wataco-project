@@ -255,7 +255,7 @@ export async function searchHotels(params: {
       checkOutDate,
       adults: adults.toString(),
       currency: 'USD',
-      view: 'FULL_LIGHT',
+      view: 'FULL',
       bestRateOnly: 'false',
     });
 

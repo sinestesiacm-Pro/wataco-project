@@ -9,52 +9,25 @@ import {
   DialogTitle,
   DialogFooter,
   DialogTrigger,
-  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { getHotelDetails } from '@/app/actions';
 import type { AmadeusHotelOffer } from '@/lib/types';
-import { Loader2, BedDouble, CheckCircle, Wifi, ParkingCircle, Star } from 'lucide-react';
+import { BedDouble, CheckCircle, Star } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Badge } from './ui/badge';
-import { useToast } from '@/hooks/use-toast';
 
 interface HotelDetailsDialogProps {
-  offerId: string;
-  hotelName: string;
+  offer: AmadeusHotelOffer;
 }
 
-export function HotelDetailsDialog({ offerId, hotelName }: HotelDetailsDialogProps) {
+export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [details, setDetails] = useState<AmadeusHotelOffer | null>(null);
-  const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
-
-  const handleOpen = async () => {
-    if (details) return;
-
-    setLoading(true);
-    const result = await getHotelDetails({ offerId });
-    if (result.success && result.data) {
-      setDetails(result.data);
-    } else {
-      toast({
-        title: 'Error',
-        description: result.error || 'Could not fetch hotel details.',
-        variant: 'destructive',
-      });
-      setIsOpen(false);
-    }
-    setLoading(false);
-  };
+  const details = offer;
   
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => {
-        setIsOpen(open);
-        if (open) handleOpen();
-    }}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
           <BedDouble className="mr-2 h-4 w-4" />
@@ -62,11 +35,7 @@ export function HotelDetailsDialog({ offerId, hotelName }: HotelDetailsDialogPro
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
-        {loading ? (
-          <div className="flex items-center justify-center h-96">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : details ? (
+        {details ? (
           <>
             <DialogHeader>
               <DialogTitle className="font-headline text-2xl">{details.hotel.name}</DialogTitle>

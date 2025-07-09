@@ -81,8 +81,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
                     </div>
                 ) : <div />}
                 <HotelDetailsDialog
-                  offerId={offer.id}
-                  hotelName={offer.hotel.name}
+                  offer={offer}
                 />
               </div>
             </CardContent>
