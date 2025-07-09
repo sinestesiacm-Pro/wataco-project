@@ -222,6 +222,8 @@ const hotelSearchSchema = z.object({
   checkOutDate: z.string(),
   adults: z.number().int().min(1),
   ratings: z.array(z.number()).optional(),
+  amenities: z.array(z.string()).optional(),
+  boardTypes: z.array(z.string()).optional(),
 });
 
 export async function searchHotels(params: {
@@ -230,13 +232,15 @@ export async function searchHotels(params: {
   checkOutDate: string;
   adults: number;
   ratings?: number[];
+  amenities?: string[];
+  boardTypes?: string[];
 }): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
   const validation = hotelSearchSchema.safeParse(params);
   if (!validation.success) {
     return { success: false, error: 'Invalid hotel search parameters.' };
   }
 
-  const { cityCode, checkInDate, checkOutDate, adults, ratings } = validation.data;
+  const { cityCode, checkInDate, checkOutDate, adults, ratings, amenities, boardTypes } = validation.data;
 
   try {
     // Step 1: Get list of hotel IDs for the given cityCode
@@ -261,6 +265,14 @@ export async function searchHotels(params: {
 
     if (ratings && ratings.length > 0) {
       searchParams.append('ratings', ratings.join(','));
+    }
+
+    if (amenities && amenities.length > 0) {
+      searchParams.append('amenities', amenities.join(','));
+    }
+
+    if (boardTypes && boardTypes.length > 0) {
+      searchParams.append('boardType', boardTypes.join(','));
     }
 
     const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${searchParams.toString()}`, {

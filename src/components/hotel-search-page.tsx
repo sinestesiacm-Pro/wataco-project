@@ -27,6 +27,12 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
   <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{children}</div>
 );
 
+type HotelFiltersState = {
+  stars: number[];
+  amenities: string[];
+  boardTypes: string[];
+};
+
 export default function HotelSearchPage() {
   const [destination, setDestination] = useState<Airport | null>(null);
   const [destinationQuery, setDestinationQuery] = useState('');
@@ -53,7 +59,7 @@ export default function HotelSearchPage() {
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  const [filters, setFilters] = useState<{ stars: number[] }>({ stars: [] });
+  const [filters, setFilters] = useState<HotelFiltersState>({ stars: [], amenities: [], boardTypes: [] });
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -92,8 +98,8 @@ export default function HotelSearchPage() {
     setSuggestions([]);
   };
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSearch = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (!destination || !checkInDate || !checkOutDate) {
       toast({
         title: 'Missing Information',
@@ -112,6 +118,8 @@ export default function HotelSearchPage() {
       checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
       adults,
       ratings: filters.stars,
+      amenities: filters.amenities,
+      boardTypes: filters.boardTypes,
     });
 
     if (result.success && result.data) {
@@ -126,30 +134,30 @@ export default function HotelSearchPage() {
     }
     setLoading(false);
   };
-  
-  const handleFilterChange = useCallback((newFilters: { stars: number[] }) => {
+
+  const handleFilterChange = useCallback((newFilters: HotelFiltersState) => {
     setFilters(newFilters);
   }, []);
   
-  const filteredHotels = useMemo(() => {
-    if (!hotelData) return null;
-    return hotelData.filter(offer => {
-      if (filters.stars.length > 0) {
-        const hotelRating = parseInt(offer.hotel.rating || '0', 10);
-        return filters.stars.includes(hotelRating);
-      }
-      return true;
-    });
-  }, [hotelData, filters]);
+  // Re-run search when filters change, if a search has already been performed
+  useEffect(() => {
+    if (hotelData || loading) {
+       // Debounce the search on filter change
+       const timer = setTimeout(() => {
+        handleSearch();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [filters]);
 
   const LoadingSkeleton = () => (
     <div className="grid md:grid-cols-12 gap-8 mt-8">
         <div className="md:col-span-3">
-             <Skeleton className="h-64 w-full rounded-2xl" />
+             <Skeleton className="h-96 w-full rounded-2xl" />
         </div>
-        <div className="md:col-span-9 space-y-4">
-            {[...Array(3)].map((_, i) => (
-                <Skeleton key={i} className="h-48 w-full rounded-2xl" />
+        <div className="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[...Array(6)].map((_, i) => (
+                <Skeleton key={i} className="h-72 w-full rounded-2xl" />
             ))}
         </div>
     </div>
@@ -275,8 +283,8 @@ export default function HotelSearchPage() {
                   </Popover>
                 </div>
 
-                <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-2 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  {loading ? <Loader2 className="animate-spin" /> : 'Search'}
+                <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-12 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                  {loading ? <Loader2 className="animate-spin" /> : 'Search Hotels'}
                 </Button>
               </div>
             </form>
@@ -285,14 +293,20 @@ export default function HotelSearchPage() {
         
         <section className="mt-8">
           {loading && <LoadingSkeleton />}
-          {hotelData && (
+          {(hotelData && hotelData.length > 0) && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-3">
                 <HotelFilters onFilterChange={handleFilterChange} />
               </div>
               <div className="lg:col-span-9">
-                <HotelResults hotels={filteredHotels} />
+                <HotelResults hotels={hotelData} />
               </div>
+            </div>
+          )}
+           {(hotelData && hotelData.length === 0 && !loading) && (
+            <div className="text-center py-16">
+                <h3 className="text-xl font-semibold">No Hotels Found</h3>
+                <p className="text-muted-foreground">Try adjusting your search or filters.</p>
             </div>
           )}
         </section>

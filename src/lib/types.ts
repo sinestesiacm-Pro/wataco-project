@@ -148,6 +148,7 @@ export interface AmadeusHotelOffer {
     id: string;
     checkInDate: string;
     checkOutDate: string;
+    boardType?: string;
     price: {
       currency: string;
       total: string;
