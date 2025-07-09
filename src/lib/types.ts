@@ -96,16 +96,41 @@ export interface FlightData {
     dictionaries: Dictionaries;
 }
 
+export interface AirportAddress {
+    cityName?: string;
+    countryName?: string;
+}
+
 export interface Airport {
   name: string;
   iataCode: string;
   subType: string;
-  address?: {
-    cityName?: string;
-    countryName?: string;
-  };
+  address?: AirportAddress;
 }
 
 export interface AirportSearchResponse {
   data: Airport[];
+}
+
+// Hotel Types
+export interface PriceBreakdown {
+  gross_price: string;
+  currency: string;
+}
+
+export interface Hotel {
+  hotel_id: string;
+  hotel_name: string;
+  main_photo_url: string;
+  review_score: number | null;
+  review_score_word: string;
+  price_breakdown: PriceBreakdown;
+  city: string;
+  country_trans: string;
+}
+
+export interface HotelSearchResponse {
+  status: boolean;
+  message: string;
+  data: Hotel[];
 }

@@ -1,12 +1,17 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, Hotel } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
+
+const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
+const RAPIDAPI_HOST = 'booking-com15.p.rapidapi.com';
+const RAPIDAPI_BASE_URL = 'https://booking-com15.p.rapidapi.com/api/v1/hotels';
+
 
 // In-memory cache for Amadeus token
 let amadeusTokenCache = {
@@ -175,6 +180,74 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
     const filteredData = data.data.filter(location => location.iataCode && location.name);
     
     return { success: true, data: filteredData };
+
+  } catch (err: any) {
+    console.error(err);
+    return { success: false, error: err.message || 'An unexpected error occurred.' };
+  }
+}
+
+
+const hotelSearchSchema = z.object({
+  dest_id: z.string(),
+  arrival_date: z.string(),
+  departure_date: z.string(),
+  adults: z.number().int().min(1),
+});
+
+export async function searchHotels(params: {
+  dest_id: string;
+  arrival_date: string;
+  departure_date: string;
+  adults: number;
+}): Promise<{ success: boolean; data?: Hotel[]; error?: string }> {
+  const validation = hotelSearchSchema.safeParse(params);
+  if (!validation.success) {
+    return { success: false, error: 'Invalid hotel search parameters.' };
+  }
+  
+  if (!RAPIDAPI_KEY) {
+    throw new Error('RapidAPI key is not configured in the environment variables.');
+  }
+
+  const { dest_id, arrival_date, departure_date, adults } = validation.data;
+  
+  const searchParams = new URLSearchParams({
+    dest_id,
+    search_type: 'CITY',
+    arrival_date,
+    departure_date,
+    adults: adults.toString(),
+    room_qty: '1',
+    page_number: '1',
+    languagecode: 'en-us',
+    currency_code: 'USD',
+  });
+
+  try {
+    const response = await fetch(`${RAPIDAPI_BASE_URL}/searchHotels?${searchParams.toString()}`, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-host': RAPIDAPI_HOST,
+        'x-rapidapi-key': RAPIDAPI_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      console.error('RapidAPI Hotel Search Error:', errorBody);
+      const errorMessage = errorBody.message || 'Error in hotel search.';
+      return { success: false, error: errorMessage };
+    }
+
+    const result = await response.json();
+    
+    if (!result.status || !result.data || result.data.length === 0) {
+      return { success: false, error: 'No hotels found for this destination.' };
+    }
+
+    // The API response seems to have a `data` property which is the array of hotels.
+    return { success: true, data: result.data };
 
   } catch (err: any) {
     console.error(err);
