@@ -39,9 +39,10 @@ async function getAmadeusToken(): Promise<string> {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Failed to get Amadeus token', errorText);
-      throw new Error(`Invalid API credentials: ${response.statusText}`);
+      const errorBody = await response.json().catch(() => response.text());
+      console.error('Failed to get Amadeus token', errorBody);
+      const errorMessage = (errorBody as any)?.error_description || (errorBody as any)?.errors?.[0]?.detail || response.statusText;
+      throw new Error(`Amadeus token error: ${errorMessage}`);
     }
 
     const data = await response.json();
@@ -57,7 +58,10 @@ async function getAmadeusToken(): Promise<string> {
     return token;
   } catch (err) {
     console.error(err);
-    throw new Error('Could not retrieve API token.');
+    if (err instanceof Error) {
+        throw new Error(`Could not retrieve API token. Reason: ${err.message}`);
+    }
+    throw new Error('Could not retrieve API token due to an unknown error.');
   }
 }
 
@@ -194,7 +198,7 @@ async function getHotelIdsByCityCode(cityCode: string): Promise<string[]> {
   const token = await getAmadeusToken();
   const params = new URLSearchParams({
     cityCode: cityCode.toUpperCase(),
-    radius: '20', // Search in a 20km radius
+    radius: '42', // Search in a 42km radius
     radiusUnit: 'KM',
     'page[limit]': '30', // Limit to 30 hotels to avoid overwhelming the offers API
   });
@@ -204,9 +208,10 @@ async function getHotelIdsByCityCode(cityCode: string): Promise<string[]> {
   });
 
   if (!response.ok) {
-    const errorBody = await response.json();
+    const errorBody = await response.json().catch(() => ({}));
     console.error('Amadeus Hotel List Error:', errorBody);
-    throw new Error('Could not retrieve hotel list.');
+    const errorMessage = (errorBody as any).errors?.[0]?.detail || 'Could not retrieve hotel list.';
+    throw new Error(errorMessage);
   }
 
   const result = await response.json();
