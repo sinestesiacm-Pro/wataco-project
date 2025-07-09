@@ -1,3 +1,4 @@
+
 'use server';
 
 import { FlightData, Airport, AirportSearchResponse } from '@/lib/types';
@@ -139,7 +140,7 @@ export async function searchFlights(params: {
 
 
 const airportSearchSchema = z.object({
-  keyword: z.string().min(2),
+  keyword: z.string().min(1),
 });
 
 export async function searchAirports(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
@@ -170,8 +171,8 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 
     const data: AirportSearchResponse = await response.json();
     
-    // Filter out locations that don't have an iataCode or an address, as they are unusable.
-    const filteredData = data.data.filter(location => location.iataCode && location.address);
+    // Filter out locations that don't have an iataCode or a name.
+    const filteredData = data.data.filter(location => location.iataCode && location.name);
     
     return { success: true, data: filteredData };
 
