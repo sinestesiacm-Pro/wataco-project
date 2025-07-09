@@ -30,8 +30,8 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 );
 
 const packageImages = [
-  'https://images.unsplash.com/photo-1501785888041-af3ba6f60060?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1502602898657-3e91760c0341?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1530789253388-582c481c54b0?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?fit=crop&w=1920&q=80',
 ];
