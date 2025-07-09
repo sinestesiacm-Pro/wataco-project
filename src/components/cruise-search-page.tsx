@@ -17,8 +17,8 @@ import { RecommendedCruises } from './recommended-cruises';
 import { HeroSection } from './hero-section';
 
 const cruiseImages = [
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
-  'https://images.unsplash.com/photo-1493558103817-58b2924bce98',
+  'https://images.unsplash.com/photo-1548554982-623e1b489864?q=80&w=2070&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1599827551381-e2a4a75a898b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8Y3J1aXNlJTIwc2hpcHxlbnwwfHx8fDE3NTIwODQwNDh8MA&ixlib=rb-4.1.0&q=80&w=1080',
   'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=80&w=2070&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1493558103817-58b2924bce98',
 ];
