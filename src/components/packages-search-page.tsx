@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { searchPackages } from '@/app/actions';
 import type { PackageData, Airport } from '@/lib/types';
 import { searchAirports } from '@/app/actions';
@@ -18,6 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { RecommendedPackages } from './recommended-packages';
+import type { DateRange } from 'react-day-picker';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -34,15 +35,9 @@ export default function PackagesSearchPage() {
   const [originQuery, setOriginQuery] = useState('Madrid, Spain');
   const [destinationQuery, setDestinationQuery] = useState('');
   
-  const [departureDate, setDepartureDate] = useState<Date | undefined>(() => {
-    const nextWeek = new Date();
-    nextWeek.setDate(nextWeek.getDate() + 7);
-    return nextWeek;
-  });
-  const [returnDate, setReturnDate] = useState<Date | undefined>(() => {
-    const twoWeeks = new Date();
-    twoWeeks.setDate(twoWeeks.getDate() + 14);
-    return twoWeeks;
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: addDays(new Date(), 7),
+    to: addDays(new Date(), 14),
   });
   const [adults, setAdults] = useState(1);
   
@@ -112,7 +107,7 @@ export default function PackagesSearchPage() {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!origin || !destination || !departureDate || !returnDate) {
+    if (!origin || !destination || !date?.from || !date?.to) {
       toast({
         title: 'Información Faltante',
         description: 'Por favor, completa todos los detalles del paquete requeridos.',
@@ -129,8 +124,8 @@ export default function PackagesSearchPage() {
     const result = await searchPackages({
       originLocationCode: origin,
       destinationLocationCode: destination,
-      departureDate: format(departureDate, 'yyyy-MM-dd'),
-      returnDate: format(returnDate, 'yyyy-MM-dd'),
+      departureDate: format(date.from, 'yyyy-MM-dd'),
+      returnDate: format(date.to, 'yyyy-MM-dd'),
       adults,
     });
 
@@ -236,35 +231,41 @@ export default function PackagesSearchPage() {
                   </InputGroup>
                   {activeInput === 'destination' && <SuggestionsList type="destination" />}
                 </div>
-                <div className="lg:col-span-4 grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="departureDate" className="text-sm font-semibold ml-2">Salida</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !departureDate && "text-muted-foreground")}>
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {departureDate ? format(departureDate, "MMM d, yyyy") : <span>Elige una fecha</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} initialFocus />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <div>
-                  <Label htmlFor="returnDate" className="text-sm font-semibold ml-2">Regreso</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !returnDate && "text-muted-foreground")}>
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {returnDate ? format(returnDate, "MMM d, yyyy") : <span>Elige una fecha</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar mode="single" selected={returnDate} onSelect={setReturnDate} initialFocus disabled={(date) => departureDate ? date <= departureDate : false} />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                <div className="lg:col-span-4">
+                  <Label htmlFor="dates" className="text-sm font-semibold ml-2">Fechas del Viaje</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="dates"
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal mt-1",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date?.from && date.to ? (
+                            <>
+                              {format(date.from, "dd LLL, y")} -{" "}
+                              {format(date.to, "dd LLL, y")}
+                            </>
+                          ) : (
+                          <span>Elige tus fechas</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        initialFocus
+                        mode="range"
+                        defaultMonth={date?.from}
+                        selected={date}
+                        onSelect={setDate}
+                        numberOfMonths={2}
+                        disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div className='lg:col-span-2'>
                   <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Pasajeros</Label>

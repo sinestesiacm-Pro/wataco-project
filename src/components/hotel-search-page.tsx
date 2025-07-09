@@ -1,7 +1,7 @@
 
 'use client';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import type { AmadeusHotelOffer, Airport } from '@/lib/types';
 import { searchHotels, searchAirports } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils';
 import React from 'react';
 import { RecommendedHotels } from './recommended-hotels';
 import { Card, CardContent } from './ui/card';
+import type { DateRange } from 'react-day-picker';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -38,15 +39,9 @@ export default function HotelSearchPage() {
   const [destination, setDestination] = useState<Airport | null>(null);
   const [destinationQuery, setDestinationQuery] = useState('');
   
-  const [checkInDate, setCheckInDate] = useState<Date | undefined>(() => {
-    const nextWeek = new Date();
-    nextWeek.setDate(nextWeek.getDate() + 7);
-    return nextWeek;
-  });
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(() => {
-    const twoWeeks = new Date();
-    twoWeeks.setDate(twoWeeks.getDate() + 14);
-    return twoWeeks;
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: addDays(new Date(), 7),
+    to: addDays(new Date(), 14),
   });
   const [adults, setAdults] = useState(1);
   
@@ -63,6 +58,9 @@ export default function HotelSearchPage() {
   const [filters, setFilters] = useState<HotelFiltersState>({ stars: [], amenities: [] });
   const isInitialSearch = useRef(true);
   const searchIdRef = useRef(0);
+
+  const checkInDate = date?.from;
+  const checkOutDate = date?.to;
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -155,7 +153,7 @@ export default function HotelSearchPage() {
 
   const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-      if (!destination || !checkInDate || !checkOutDate) {
+      if (!destination || !date?.from || !date?.to) {
         toast({
             title: 'Información Faltante',
             description: 'Por favor, selecciona un destino y las fechas.',
@@ -248,35 +246,45 @@ export default function HotelSearchPage() {
                    {isSuggestionsOpen && debouncedDestinationQuery && <SuggestionsList />}
                 </div>
                 
-                <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="checkInDate" className="text-sm font-semibold ml-2">Entrada</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !checkInDate && "text-muted-foreground")}>
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {checkInDate ? format(checkInDate, "MMM d, yyyy") : <span>Elige una fecha</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar mode="single" selected={checkInDate} onSelect={setCheckInDate} initialFocus />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <div>
-                  <Label htmlFor="checkOutDate" className="text-sm font-semibold ml-2">Salida</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !checkOutDate && "text-muted-foreground")}>
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {checkOutDate ? format(checkOutDate, "MMM d, yyyy") : <span>Elige una fecha</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar mode="single" selected={checkOutDate} onSelect={setCheckOutDate} initialFocus disabled={(date) => checkInDate ? date <= checkInDate : false} />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                <div className="lg:col-span-5">
+                  <Label htmlFor="dates" className="text-sm font-semibold ml-2">Entrada y Salida</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="dates"
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal mt-1",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date?.from ? (
+                          date.to ? (
+                            <>
+                              {format(date.from, "dd LLL, y")} -{" "}
+                              {format(date.to, "dd LLL, y")}
+                            </>
+                          ) : (
+                            format(date.from, "dd LLL, y")
+                          )
+                        ) : (
+                          <span>Elige tus fechas</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        initialFocus
+                        mode="range"
+                        defaultMonth={date?.from}
+                        selected={date}
+                        onSelect={setDate}
+                        numberOfMonths={2}
+                        disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <div className='lg:col-span-2'>
