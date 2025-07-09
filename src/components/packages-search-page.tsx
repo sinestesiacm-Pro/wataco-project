@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, Package } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, Luggage } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -287,7 +287,7 @@ export default function PackagesSearchPage() {
                   </Popover>
                 </div>
                 <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-12 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  {loading ? <Loader2 className="animate-spin" /> : <div className="flex items-center"><Package className="mr-2 h-5 w-5" /> Buscar Paquetes</div>}
+                  {loading ? <Loader2 className="animate-spin" /> : <div className="flex items-center"><Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes</div>}
                 </Button>
               </div>
             </form>
