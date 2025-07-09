@@ -3,6 +3,7 @@ import HotelSearchPage from '@/components/hotel-search-page';
 import PackagesSearchPage from '@/components/packages-search-page';
 import CruiseSearchPage from '@/components/cruise-search-page';
 import { ActivitiesSection } from '@/components/activities-section';
+import { TestimonialsSection } from '@/components/testimonials-section';
 import { Suspense } from 'react';
 
 export default function Home({ searchParams }: { searchParams?: { tab?: string } }) {
@@ -29,8 +30,11 @@ export default function Home({ searchParams }: { searchParams?: { tab?: string }
   };
 
   return (
-    <Suspense>
-      {renderActiveTab()}
-    </Suspense>
+    <>
+      <Suspense>
+        {renderActiveTab()}
+      </Suspense>
+      <TestimonialsSection />
+    </>
   );
 }

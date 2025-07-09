@@ -28,15 +28,6 @@ const renderStars = (rating: string | undefined) => {
 export function PackagesResults({ packagesData }: PackagesResultsProps) {
   const { data: packages, dictionaries } = packagesData;
 
-  if (!packages || packages.length === 0) {
-    return (
-      <div className="text-center py-16">
-        <h3 className="text-xl font-semibold">No se Encontraron Paquetes</h3>
-        <p className="text-muted-foreground">Intenta ajustar tus criterios de búsqueda.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-8">
        <h2 className="text-3xl font-headline font-bold text-gray-800">

@@ -6,7 +6,7 @@ import type { AmadeusHotelOffer } from '@/lib/types';
 import { HotelDetailsDialog } from './hotel-details-dialog';
 
 interface HotelResultsProps {
-    hotels: AmadeusHotelOffer[] | null;
+    hotels: AmadeusHotelOffer[];
 }
 
 const renderStars = (rating: string | undefined) => {
@@ -23,15 +23,6 @@ const renderStars = (rating: string | undefined) => {
 };
 
 export function HotelResults({ hotels }: HotelResultsProps) {
-    if (!hotels || hotels.length === 0) {
-        return (
-            <div className="text-center py-16">
-                <h3 className="text-xl font-semibold">No se Encontraron Hoteles</h3>
-                <p className="text-muted-foreground">Intenta ajustar tu búsqueda o filtros.</p>
-            </div>
-        );
-    }
-
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">

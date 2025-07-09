@@ -17,6 +17,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
+import { RecommendedPackages } from './recommended-packages';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -296,8 +297,11 @@ export default function PackagesSearchPage() {
         
         <section className="mt-8">
           {loading && <LoadingSkeleton />}
-          {packagesData && (
+          {packagesData && packagesData.data.length > 0 && (
             <PackagesResults packagesData={packagesData} />
+          )}
+          {!loading && (!packagesData || packagesData.data.length === 0) && (
+             <RecommendedPackages />
           )}
         </section>
       </div>

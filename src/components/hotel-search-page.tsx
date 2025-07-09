@@ -18,6 +18,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
+import { RecommendedHotels } from './recommended-hotels';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -301,7 +302,7 @@ export default function HotelSearchPage() {
         
         <section className="mt-8">
           {loading && <LoadingSkeleton />}
-          {(hotelData && hotelData.length > 0) && (
+          {!loading && hotelData && hotelData.length > 0 && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-3">
                 <HotelFilters onFilterChange={handleFilterChange} />
@@ -311,12 +312,10 @@ export default function HotelSearchPage() {
               </div>
             </div>
           )}
-           {(hotelData && hotelData.length === 0 && !loading) && (
-            <div className="text-center py-16">
-                <h3 className="text-xl font-semibold">No se Encontraron Hoteles</h3>
-                <p className="text-muted-foreground">Intenta ajustar tu búsqueda o filtros.</p>
-            </div>
-          )}
+           
+           {!loading && (!hotelData || hotelData.length === 0) && (
+             <RecommendedHotels />
+           )}
         </section>
       </div>
     </div>

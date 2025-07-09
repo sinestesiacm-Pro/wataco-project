@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import React from 'react';
 import { Label } from './ui/label';
 import { Skeleton } from './ui/skeleton';
-// import { CruiseResults } from './cruise-results'; // Will add this later if needed
+import { RecommendedCruises } from './recommended-cruises';
 
 export default function CruiseSearchPage() {
   const [destinationRegion, setDestinationRegion] = useState('');
@@ -168,11 +168,7 @@ export default function CruiseSearchPage() {
           {loading && <LoadingSkeleton />}
           {/* {cruiseData && <CruiseResults cruiseData={cruiseData} />} */}
           {!loading && !cruiseData && (
-             <div className="text-center py-16">
-                <Sailboat className="mx-auto h-12 w-12 text-muted-foreground" />
-                <h3 className="mt-4 text-xl font-semibold">Tu Aventura en el Océano te Espera</h3>
-                <p className="mt-2 text-muted-foreground">Usa la búsqueda de arriba para encontrar tu escapada en crucero perfecta.</p>
-            </div>
+             <RecommendedCruises />
           )}
         </section>
       </div>
