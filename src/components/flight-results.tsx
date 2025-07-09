@@ -117,7 +117,7 @@ export function FlightResults({ flightData, destinationIata }: FlightResultsProp
                   </div>
                   
                   <div className="md:w-1/4 w-full text-center md:text-right flex-shrink-0 flex flex-col justify-center items-center md:items-end mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l md:pl-6">
-                      <p className="text-4xl font-bold font-headline text-gray-800">{flight.price.total}€</p>
+                      <p className="text-4xl font-bold font-headline text-gray-800">${flight.price.total}</p>
                       <p className="text-xs text-muted-foreground mb-3">Total for {flight.travelerPricings.length} traveler(s)</p>
                       <Button 
                         size="lg"

@@ -1,6 +1,6 @@
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, AmadeusHotelId } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
@@ -194,34 +194,6 @@ const hotelSearchSchema = z.object({
   boardTypes: z.array(z.string()).optional(),
 });
 
-async function getHotelIdsByCityCode(cityCode: string): Promise<string[]> {
-  const token = await getAmadeusToken();
-  const params = new URLSearchParams({
-    cityCode: cityCode.toUpperCase(),
-    radius: '42', // Search in a 42km radius
-    radiusUnit: 'KM',
-    'page[limit]': '30', // Limit to 30 hotels to avoid overwhelming the offers API
-  });
-
-  const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city?${params.toString()}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  if (!response.ok) {
-    const errorBody = await response.json().catch(() => ({}));
-    console.error('Amadeus Hotel List Error:', errorBody);
-    const errorMessage = (errorBody as any).errors?.[0]?.detail || 'Could not retrieve hotel list.';
-    throw new Error(errorMessage);
-  }
-
-  const result = await response.json();
-  if (!result.data || result.data.length === 0) {
-    return [];
-  }
-
-  return result.data.map((hotel: AmadeusHotelId) => hotel.hotelId);
-}
-
 export async function searchHotels(params: {
   cityCode: string;
   checkInDate: string;
@@ -239,20 +211,16 @@ export async function searchHotels(params: {
   const { cityCode, checkInDate, checkOutDate, adults, ratings, amenities, boardTypes } = validation.data;
 
   try {
-    const hotelIds = await getHotelIdsByCityCode(cityCode);
-    if (hotelIds.length === 0) {
-      return { success: false, error: 'No hotels found for this destination.' };
-    }
-
     const token = await getAmadeusToken();
 
     const searchParams = new URLSearchParams({
-      hotelIds: hotelIds.join(','),
+      cityCode: cityCode.toUpperCase(),
       checkInDate,
       checkOutDate,
       adults: adults.toString(),
       currency: 'USD',
       view: 'FULL',
+      'page[limit]': '30',
     });
 
     if (ratings && ratings.length > 0) {

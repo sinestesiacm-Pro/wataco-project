@@ -122,7 +122,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
                  <div>
                     <p className="text-xs text-muted-foreground font-body">Total Price</p>
                     <p className="font-bold text-2xl text-accent">
-                      €{details.offers[0].price.total}
+                      ${details.offers[0].price.total}
                     </p>
                  </div>
               )}
