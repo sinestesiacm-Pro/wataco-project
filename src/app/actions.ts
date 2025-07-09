@@ -189,6 +189,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 
 const hotelSearchSchema = z.object({
   dest_id: z.string(),
+  dest_type: z.string(),
   arrival_date: z.string(),
   departure_date: z.string(),
   adults: z.number().int().min(1),
@@ -197,6 +198,7 @@ const hotelSearchSchema = z.object({
 
 export async function searchHotels(params: {
   dest_id: string;
+  dest_type: string;
   arrival_date: string;
   departure_date: string;
   adults: number;
@@ -211,11 +213,11 @@ export async function searchHotels(params: {
     return { success: false, error: 'RapidAPI key is not configured in the environment variables.'};
   }
 
-  const { dest_id, arrival_date, departure_date, adults, star_rating } = validation.data;
+  const { dest_id, dest_type, arrival_date, departure_date, adults, star_rating } = validation.data;
   
   const searchParams = new URLSearchParams({
     dest_id,
-    search_type: 'CITY',
+    search_type: dest_type.toUpperCase(),
     arrival_date,
     departure_date,
     adults: adults.toString(),

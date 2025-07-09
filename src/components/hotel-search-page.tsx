@@ -109,6 +109,7 @@ export default function HotelSearchPage() {
 
     const result = await searchHotels({
       dest_id: destination.dest_id,
+      dest_type: destination.dest_type,
       arrival_date: format(checkInDate, 'yyyy-MM-dd'),
       departure_date: format(checkOutDate, 'yyyy-MM-dd'),
       adults,
