@@ -40,7 +40,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
           <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col">
             <div className="overflow-hidden relative">
               <Image 
-                src={'https://placehold.co/400x300.png'}
+                src={offer.hotel.media?.[0]?.uri || 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MjA3MzM2OHww&ixlib=rb-4.1.0&q=80&w=1080'}
                 data-ai-hint="hotel exterior" 
                 alt={offer.hotel.name || 'Hotel image'} 
                 width={400} 
