@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Zap } from 'lucide-react';
 
 const activities = [
-  { name: 'Historic City Walking Tour', description: 'Explore the old town with a local guide.', image: 'https://placehold.co/400x300.png', hint: 'city walking tour' },
-  { name: 'Local Cuisine Cooking Class', description: 'Learn to cook authentic regional dishes.', image: 'https://placehold.co/400x300.png', hint: 'cooking class' },
-  { name: 'Adventure Park Zip-lining', description: 'Experience the thrill of zip-lining through the forest.', image: 'https://placehold.co/400x300.png', hint: 'ziplining adventure' },
-  { name: 'Museum & Art Gallery Pass', description: 'Access the top cultural spots.', image: 'https://placehold.co/400x300.png', hint: 'art museum' },
+  { name: 'Historic City Walking Tour', description: 'Explore the old town with a local guide.', image: 'https://images.unsplash.com/photo-1744658069386-b4801e3d0c24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaXR5JTIwd2Fsa2luZyUyMHRvdXJ8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'city walking tour' },
+  { name: 'Local Cuisine Cooking Class', description: 'Learn to cook authentic regional dishes.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb29raW5nJTIwY2xhc3N8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'cooking class' },
+  { name: 'Adventure Park Zip-lining', description: 'Experience the thrill of zip-lining through the forest.', image: 'https://images.unsplash.com/photo-1692205959816-d75d4a7b89d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx6aXBsaW5pbmclMjBhZHZlbnR1cmV8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'ziplining adventure' },
+  { name: 'Museum & Art Gallery Pass', description: 'Access the top cultural spots.', image: 'https://images.unsplash.com/photo-1524014444623-194fde519952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhcnQlMjBtdXNldW18ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'art museum' },
 ];
 
 export function ActivitiesSection() {
