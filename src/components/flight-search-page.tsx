@@ -117,7 +117,7 @@ export default function FlightSearchPage() {
       <header className="bg-card shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center">
-            <Image src="https://firebasestorage.googleapis.com/v0/b/tripify-app.appspot.com/o/logo-with-text.png?alt=media" alt="Be On Trip Logo" className="h-10 w-auto" width={160} height={40} priority />
+            <Image src="https://firebasestorage.googleapis.com/v0/b/tripify-app.appspot.com/o/logo-with-text.png?alt=media" alt="Be On Trip Logo" width={160} height={40} priority />
           </div>
           {/* Future Nav Links can go here */}
         </div>
