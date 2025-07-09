@@ -229,7 +229,7 @@ export async function searchHotels(params: {
       searchParams.append('amenities', amenities.join(','));
     }
 
-    const response = await fetch(`${AMADEUS_BASE_URL}/v2/shopping/hotel-offers?${searchParams.toString()}`, {
+    const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${searchParams.toString()}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
