@@ -28,7 +28,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
           <Card key={hotel.hotel_id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col">
             <div className="overflow-hidden relative">
               <Image 
-                src={hotel.main_photo_url.replace('square60', 'square200')}
+                src={hotel.main_photo_url ? hotel.main_photo_url.replace('square60', 'square200') : 'https://placehold.co/400x300.png'}
                 data-ai-hint="hotel room" 
                 alt={hotel.hotel_name} 
                 width={400} 
