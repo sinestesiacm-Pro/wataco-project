@@ -128,9 +128,9 @@ export default function HotelSearchPage() {
     setLoading(false);
   };
   
-  const handleFilterChange = (newFilters: { stars: number[] }) => {
+  const handleFilterChange = React.useCallback((newFilters: { stars: number[] }) => {
     setFilters(newFilters);
-  };
+  }, []);
   
   const filteredHotels = useMemo(() => {
     if (!hotelData) return null;
