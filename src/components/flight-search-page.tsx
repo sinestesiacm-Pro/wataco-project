@@ -219,8 +219,18 @@ export default function FlightSearchPage() {
     <div className="w-full">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <section className="mb-12">
-          <h2 className="text-4xl lg:text-5xl font-bold font-headline text-center mb-4 text-gray-800">Tu Próxima Aventura te Espera</h2>
-          <p className="text-center text-muted-foreground font-body text-lg mb-8 max-w-2xl mx-auto">Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo.</p>
+          <div className="text-center mb-12 pt-8">
+            <h1 className="hero-title font-headline" aria-label="Tu Próxima Aventura te Espera">
+                <span data-text="Tu">Tu</span>
+                <span data-text="Próxima">Próxima</span>
+                <span data-text="Aventura">Aventura</span>
+                <span data-text="te">te</span>
+                <span data-text="Espera">Espera</span>
+            </h1>
+            <p className="hero-subtitle text-muted-foreground font-body max-w-2xl mx-auto mt-4">
+                Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo.
+            </p>
+          </div>
           
           <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
             <form onSubmit={handleSearch} className="space-y-4">
