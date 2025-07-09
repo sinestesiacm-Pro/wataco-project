@@ -72,22 +72,24 @@ export default function HotelSearchPage() {
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
-      if (query.length < 2) {
-        setSuggestions([]);
-        return;
-      }
       setSuggestionsLoading(true);
       const result = await searchAirports(query);
       if (result.success && result.data) {
-        setSuggestions(result.data.filter(a => a.subType === 'CITY'));
+        if (isSuggestionsOpen) {
+          setSuggestions(result.data.filter(a => a.subType === 'CITY'));
+        }
       } else {
         setSuggestions([]);
       }
       setSuggestionsLoading(false);
     };
 
-    fetchSuggestions(debouncedDestinationQuery);
-  }, [debouncedDestinationQuery]);
+    if (isSuggestionsOpen && debouncedDestinationQuery.length > 1) {
+      fetchSuggestions(debouncedDestinationQuery);
+    } else {
+      setSuggestions([]);
+    }
+  }, [debouncedDestinationQuery, isSuggestionsOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
