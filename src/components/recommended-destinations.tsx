@@ -47,7 +47,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
             {destinations.map((dest) => (
               <Card
                 key={dest.iata}
-                className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border"
+                className="rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 border-0"
               >
                 <div className="overflow-hidden relative">
                   <Image
@@ -58,7 +58,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                     height={300}
                     className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-all duration-300 group-hover:backdrop-blur-sm" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   <div className="absolute bottom-4 left-4">
                     <h3 className="text-2xl font-bold font-headline text-white">{dest.city}</h3>
                     <p className="text-sm text-white/90">{dest.country}</p>
@@ -70,8 +70,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                   </p>
                   <Button 
                     size="sm" 
-                    variant="outline" 
-                    className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20"
+                    variant="outline"
                     onClick={() => {
                       const query = `${dest.city}, ${dest.country}`;
                       setDestination({ iata: dest.iata, query });
