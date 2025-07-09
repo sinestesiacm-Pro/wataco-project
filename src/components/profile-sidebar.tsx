@@ -81,6 +81,7 @@ export default function ProfileSidebar() {
                     <SelectContent>
                         <SelectItem value="es">Español</SelectItem>
                         <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="it">Italiano</SelectItem>
                     </SelectContent>
                 </Select>
             </div>

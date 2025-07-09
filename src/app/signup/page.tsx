@@ -36,7 +36,7 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await signUpWithEmail(email, password);
-      toast({ title: "¡Cuenta creada!", description: "¡Bienvenido! Te has registrado con éxito." });
+      toast({ title: "¡Cuenta creada!", description: "¡Bienvenido! Te has registrado con éxito.", variant: "success" });
       router.push('/');
     } catch (error: any) {
       console.error(error);
@@ -58,7 +58,7 @@ export default function SignupPage() {
     setGoogleLoading(true);
     try {
       await signInWithGoogle();
-      toast({ title: "¡Cuenta creada!", description: "¡Bienvenido!" });
+      toast({ title: "¡Cuenta creada!", description: "¡Bienvenido!", variant: "success" });
       router.push('/');
     } catch (error: any) {
       console.error(error);

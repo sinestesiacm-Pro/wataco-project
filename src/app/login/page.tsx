@@ -26,7 +26,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await signInWithEmail(email, password);
-      toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido de vuelta!" });
+      toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido de vuelta!", variant: "success" });
       router.push('/');
     } catch (error: any) {
       console.error(error);
@@ -48,7 +48,7 @@ export default function LoginPage() {
     setGoogleLoading(true);
     try {
       await signInWithGoogle();
-      toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido!" });
+      toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido!", variant: "success" });
       router.push('/');
     } catch (error: any) {
       console.error(error);
