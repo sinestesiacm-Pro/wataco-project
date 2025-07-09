@@ -1,7 +1,7 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, Hotel, BookingDestination } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, Hotel, HotelDetails, BookingDestination } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
@@ -310,6 +310,59 @@ export async function searchBookingDestinations(query: string): Promise<{ succes
     const filteredData = result.data.filter((item: BookingDestination) => ['city', 'region'].includes(item.dest_type));
 
     return { success: true, data: filteredData };
+
+  } catch (err: any) {
+    console.error(err);
+    return { success: false, error: err.message || 'An unexpected error occurred.' };
+  }
+}
+
+
+const hotelDetailsSchema = z.object({
+  hotel_id: z.string(),
+});
+
+export async function getHotelDetails(params: { hotel_id: string }): Promise<{ success: boolean; data?: HotelDetails; error?: string }> {
+  const validation = hotelDetailsSchema.safeParse(params);
+  if (!validation.success) {
+    return { success: false, error: 'Invalid hotel details parameters.' };
+  }
+
+  if (!RAPIDAPI_KEY) {
+    return { success: false, error: 'RapidAPI key is not configured in the environment variables.'};
+  }
+
+  const { hotel_id } = validation.data;
+  
+  const searchParams = new URLSearchParams({
+    hotel_id,
+    languagecode: 'en-us',
+    currency_code: 'EUR',
+  });
+  
+  try {
+    const response = await fetch(`${RAPIDAPI_BASE_URL}/getHotelDetails?${searchParams.toString()}`, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-host': RAPIDAPI_HOST,
+        'x-rapidapi-key': RAPIDAPI_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      console.error('RapidAPI Hotel Details Error:', errorBody);
+      const errorMessage = errorBody.message || 'Error fetching hotel details.';
+      return { success: false, error: errorMessage };
+    }
+
+    const result = await response.json();
+    
+    if (!result.status || !result.data) {
+      return { success: false, error: 'Could not retrieve hotel details.' };
+    }
+
+    return { success: true, data: result.data };
 
   } catch (err: any) {
     console.error(err);

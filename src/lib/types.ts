@@ -120,16 +120,16 @@ export interface PriceBreakdown {
 
 export interface Hotel {
   hotel_id: string;
-  hotel_name: string;
-  main_photo_url: string;
+  hotel_name?: string;
+  main_photo_url?: string;
   review_score: number | null;
-  review_score_word: string;
+  review_score_word?: string;
   price_breakdown?: PriceBreakdown;
-  city: string;
-  country_trans: string;
+  city?: string;
+  country_trans?: string;
   url: string;
-  accommodation_type_name: string;
-  review_nr: number;
+  accommodation_type_name?: string;
+  review_nr?: number;
   stars?: number;
 }
 
@@ -147,4 +147,29 @@ export interface BookingDestination {
   city_name: string;
   country: string;
   label: string;
+}
+
+export interface HotelPhoto {
+  url_original: string;
+  url_max: string;
+}
+
+export interface HotelFacility {
+  name: string;
+  facility_id: string;
+}
+
+export interface HotelDetails {
+  hotel_id: string;
+  hotel_name_trans: string;
+  description?: {
+    description: string;
+  };
+  photos: HotelPhoto[];
+  block?: {
+    facility_name: string;
+    facilities: HotelFacility[];
+  }[];
+  url: string;
+  composite_price_breakdown?: PriceBreakdown;
 }

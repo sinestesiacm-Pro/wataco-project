@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { BedDouble, Star } from 'lucide-react';
 import type { Hotel } from '@/lib/types';
 import { Badge } from './ui/badge';
+import { HotelDetailsDialog } from './hotel-details-dialog';
 
 interface HotelResultsProps {
     hotels: Hotel[] | null;
@@ -65,12 +66,11 @@ export function HotelResults({ hotels }: HotelResultsProps) {
                         <p className="font-bold text-2xl text-accent">{hotel.price_breakdown.gross_price}</p>
                     </div>
                 ) : <div />}
-                <Button asChild>
-                    <a href={hotel.url} target="_blank" rel="noopener noreferrer">
-                        <BedDouble className="mr-2 h-4 w-4" />
-                        View Deal
-                    </a>
-                </Button>
+                <HotelDetailsDialog
+                  hotelId={hotel.hotel_id}
+                  hotelName={hotel.hotel_name || 'Hotel'}
+                  bookingUrl={hotel.url}
+                />
               </div>
             </CardContent>
           </Card>
