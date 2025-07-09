@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
@@ -36,8 +35,8 @@ export function HotelResults({ hotels }: HotelResultsProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
-        {hotels.map((offer) => (
-          <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col">
+        {hotels.map((offer, index) => (
+          <Card key={`${offer.id}-${index}`} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col">
             <div className="overflow-hidden relative">
               <Image 
                 src={offer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
