@@ -101,7 +101,7 @@ export interface Airport {
   iataCode: string;
   subType: string;
   address: {
-    cityName: string;
+    cityName?: string;
     countryName: string;
   };
 }
