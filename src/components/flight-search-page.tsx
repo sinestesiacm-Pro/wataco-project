@@ -189,9 +189,9 @@ export default function FlightSearchPage() {
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Searching...
         </div>
       ) : (
-        suggestions.map(airport => (
+        suggestions.map((airport, index) => (
           <div
-            key={`${airport.iataCode}-${airport.name}`}
+            key={`${airport.iataCode}-${airport.name}-${index}`}
             className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
             onClick={() => handleSelectSuggestion(airport, type)}
           >
