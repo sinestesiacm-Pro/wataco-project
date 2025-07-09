@@ -99,7 +99,7 @@ export async function searchFlights(params: {
       departureDate: departureDate,
       adults: adults.toString(),
       max: '15',
-      currencyCode: 'EUR',
+      currencyCode: 'USD',
     });
 
     if (returnDate) {
@@ -211,9 +211,9 @@ export async function searchHotels(params: {
       checkInDate,
       checkOutDate,
       adults: adults.toString(),
-      currency: 'EUR',
+      currency: 'USD',
       view: 'FULL_LIGHT',
-      bestRateOnly: 'true',
+      bestRateOnly: 'false',
     });
 
     if (ratings && ratings.length > 0) {
