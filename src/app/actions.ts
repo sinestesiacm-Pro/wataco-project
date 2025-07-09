@@ -6,7 +6,7 @@ import { z } from 'zod';
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
-const HOTELBEDS_API_KEY = process.env.HOTELBEDS_API_KEY;
+const HOTELBEDS_API_KEY = "7b693caa6d94519ce17374929121537f";
 
 
 // In-memory cache for Amadeus token
@@ -249,10 +249,10 @@ export async function searchHotels(params: {
         name: 'The Grand Resort',
         rating: '5',
         media: [
-          { uri: 'https://placehold.co/800x600.png', category: 'EXTERIOR' },
-          { uri: 'https://placehold.co/800x600.png', category: 'LOBBY' },
-          { uri: 'https://placehold.co/800x600.png', category: 'POOL' },
-          { uri: 'https://placehold.co/800x600.png', category: 'ROOM' },
+          { uri: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?fit=crop&w=800&q=80', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?fit=crop&w=800&q=80', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['123 Luxury Ave'], postalCode: '33139', cityName: 'Miami Beach', countryCode: 'US' },
         description: { lang: 'es', text: 'Experimenta el máximo lujo en The Grand Resort, donde un servicio impecable y vistas impresionantes al océano te esperan. Disfruta de nuestra piscina infinita, spa de clase mundial y opciones gastronómicas gourmet.' },
@@ -275,9 +275,9 @@ export async function searchHotels(params: {
         name: 'City Center Boutique Hotel',
         rating: '4',
         media: [
-          { uri: 'https://placehold.co/800x600.png', category: 'EXTERIOR' },
-          { uri: 'https://placehold.co/800x600.png', category: 'LOBBY' },
-          { uri: 'https://placehold.co/800x600.png', category: 'ROOM' },
+          { uri: 'https://images.unsplash.com/photo-1568495248636-6432b97bd949?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1590490360181-a75d1f88a652?fit=crop&w=800&q=80', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['456 Central St'], postalCode: '10001', cityName: 'New York', countryCode: 'US' },
         description: { lang: 'es', text: 'Ubicado en el corazón de la acción, nuestro hotel boutique ofrece un diseño elegante y un ambiente acogedor. Perfecto para viajeros de negocios y de placer que buscan explorar la ciudad.' },
@@ -300,9 +300,9 @@ export async function searchHotels(params: {
         name: 'Mountain View Lodge',
         rating: '3',
         media: [
-            { uri: 'https://placehold.co/800x600.png', category: 'EXTERIOR' },
-            { uri: 'https://placehold.co/800x600.png', category: 'VIEW' },
-            { uri: 'https://placehold.co/800x600.png', category: 'ROOM' },
+            { uri: 'https://images.unsplash.com/photo-1575586232388-26154f2c8f8a?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+            { uri: 'https://images.unsplash.com/photo-1616594039964-ae9124a35e23?fit=crop&w=800&q=80', category: 'VIEW' },
+            { uri: 'https://images.unsplash.com/photo-1598928922559-052a3539818d?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['789 Peak Rd'], postalCode: '80202', cityName: 'Denver', countryCode: 'US' },
         description: { lang: 'es', text: 'Escápate a la tranquilidad de las montañas. Nuestro albergue rústico ofrece un refugio acogedor con fácil acceso a rutas de senderismo y esquí. Disfruta de la chimenea en nuestra sala común.' },
@@ -325,9 +325,9 @@ export async function searchHotels(params: {
         name: 'Playa Paraiso All-Inclusive',
         rating: '5',
         media: [
-          { uri: 'https://placehold.co/800x600.png', category: 'POOL' },
-          { uri: 'https://placehold.co/800x600.png', category: 'BEACH' },
-          { uri: 'https://placehold.co/800x600.png', category: 'RESTAURANT' },
+          { uri: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?fit=crop&w=800&q=80', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=800&q=80', category: 'BEACH' },
+          { uri: 'https://images.unsplash.com/photo-1559539343-a8c63ce577b8?fit=crop&w=800&q=80', category: 'RESTAURANT' },
         ],
         address: { lines: ['1 Paradise Beach'], postalCode: '77710', cityName: 'Playa del Carmen', countryCode: 'MX' },
         description: { lang: 'es', text: 'Sumérgete en el paraíso en nuestro resort todo incluido. Con múltiples piscinas, restaurantes y acceso directo a una playa de arena blanca, tus vacaciones de ensueño comienzan aquí.' },

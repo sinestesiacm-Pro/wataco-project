@@ -37,7 +37,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
         </h2>
       {hotels.map((offer) => (
         <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card/95 backdrop-blur-sm flex flex-col md:flex-row">
-            <div className="md:w-1/3 xl:w-1/4 relative">
+            <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4">
                 <Image 
                     src={offer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
                     data-ai-hint="hotel exterior" 
