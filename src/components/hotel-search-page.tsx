@@ -19,6 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { RecommendedHotels } from './recommended-hotels';
+import { Card, CardContent } from './ui/card';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -293,7 +294,7 @@ export default function HotelSearchPage() {
                 </div>
 
                 <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-12 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  {loading ? <Loader2 className="animate-spin" /> : 'Buscar Hoteles'}
+                  {loading && !hotelData ? <Loader2 className="animate-spin" /> : 'Buscar Hoteles'}
                 </Button>
               </div>
             </form>
@@ -301,25 +302,45 @@ export default function HotelSearchPage() {
         </section>
         
         <section className="mt-8">
-          {loading && <LoadingSkeleton />}
-          {!loading && hotelData && hotelData.length > 0 && (
+          {/* Initial loading skeleton */}
+          {loading && hotelData === null && <LoadingSkeleton />}
+          
+          {/* Initial view with recommendations */}
+          {!loading && hotelData === null && (
+              <RecommendedHotels />
+          )}
+
+          {/* View after a search has been made (or is being filtered) */}
+          {hotelData !== null && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-3">
                 <HotelFilters onFilterChange={handleFilterChange} />
               </div>
               <div className="lg:col-span-9">
-                <HotelResults hotels={hotelData} />
+                {loading ? (
+                    // Skeleton for when filtering
+                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
+                        {[...Array(6)].map((_, i) => (
+                            <Skeleton key={i} className="h-96 w-full rounded-2xl" />
+                        ))}
+                    </div>
+                ) : (
+                    hotelData.length > 0 ? (
+                        <HotelResults hotels={hotelData} />
+                    ) : (
+                        <Card>
+                            <CardContent className="pt-6 text-center text-muted-foreground">
+                                <p>No se encontraron hoteles para tu búsqueda.</p>
+                                <p>Intenta ajustar los filtros o buscar otro destino.</p>
+                            </CardContent>
+                        </Card>
+                    )
+                )}
               </div>
             </div>
           )}
-           
-           {!loading && (!hotelData || hotelData.length === 0) && (
-             <RecommendedHotels />
-           )}
         </section>
       </div>
     </div>
   );
 }
-
-    
