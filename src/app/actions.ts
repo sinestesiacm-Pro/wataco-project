@@ -190,6 +190,33 @@ const hotelSearchSchema = z.object({
   boardTypes: z.array(z.string()).optional(),
 });
 
+async function getHotelIdsByCityCode(cityCode: string): Promise<string[]> {
+  const token = await getAmadeusToken();
+  const params = new URLSearchParams({
+    cityCode: cityCode.toUpperCase(),
+    radius: '20', // Search in a 20km radius
+    radiusUnit: 'KM',
+    'page[limit]': '30', // Limit to 30 hotels to avoid overwhelming the offers API
+  });
+
+  const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city?${params.toString()}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json();
+    console.error('Amadeus Hotel List Error:', errorBody);
+    throw new Error('Could not retrieve hotel list.');
+  }
+
+  const result = await response.json();
+  if (!result.data || result.data.length === 0) {
+    return [];
+  }
+
+  return result.data.map((hotel: AmadeusHotelId) => hotel.hotelId);
+}
+
 export async function searchHotels(params: {
   cityCode: string;
   checkInDate: string;
@@ -207,16 +234,20 @@ export async function searchHotels(params: {
   const { cityCode, checkInDate, checkOutDate, adults, ratings, amenities, boardTypes } = validation.data;
 
   try {
+    const hotelIds = await getHotelIdsByCityCode(cityCode);
+    if (hotelIds.length === 0) {
+      return { success: false, error: 'No hotels found for this destination.' };
+    }
+
     const token = await getAmadeusToken();
 
     const searchParams = new URLSearchParams({
-      cityCode: cityCode.toUpperCase(),
+      hotelIds: hotelIds.join(','),
       checkInDate,
       checkOutDate,
       adults: adults.toString(),
       currency: 'USD',
       view: 'FULL',
-      bestRateOnly: 'false',
     });
 
     if (ratings && ratings.length > 0) {
@@ -226,7 +257,7 @@ export async function searchHotels(params: {
     if (amenities && amenities.length > 0) {
       searchParams.append('amenities', amenities.join(','));
     }
-
+    
     if (boardTypes && boardTypes.length > 0) {
       searchParams.append('boardType', boardTypes.join(','));
     }
@@ -237,7 +268,7 @@ export async function searchHotels(params: {
 
     if (!response.ok) {
       const errorBody = await response.json();
-      console.error('Amadeus Hotel Search Error:', errorBody);
+      console.error('Amadeus Hotel Offers Error:', errorBody);
       const errorMessage = errorBody.errors?.[0]?.detail || 'Error in hotel search.';
       return { success: false, error: errorMessage };
     }
@@ -245,7 +276,7 @@ export async function searchHotels(params: {
     const result = await response.json();
 
     if (!result.data || result.data.length === 0) {
-      return { success: false, error: 'No hotels found for this destination.' };
+      return { success: false, error: 'No hotel offers available for the selected criteria.' };
     }
 
     return { success: true, data: result.data };
@@ -254,6 +285,7 @@ export async function searchHotels(params: {
     return { success: false, error: err.message || 'An unexpected error occurred.' };
   }
 }
+
 
 const hotelDetailsSchema = z.object({
   offerId: z.string(),
