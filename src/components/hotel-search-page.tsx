@@ -86,8 +86,8 @@ export default function HotelSearchPage() {
   
   const handleSelectSuggestion = (airport: Airport) => {
     setDestination(airport);
-    const query = [airport.address.cityName, airport.address.countryName].filter(Boolean).join(', ');
-    setDestinationQuery(query);
+    const query = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
+    setDestinationQuery(query || airport.name);
     setIsSuggestionsOpen(false);
     setSuggestions([]);
   };
@@ -164,20 +164,23 @@ export default function HotelSearchPage() {
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Searching...
         </div>
       ) : (
-        suggestions.map((airport, index) => (
-          <div
-            key={`${airport.iataCode}-${index}`}
-            className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
-            onClick={() => handleSelectSuggestion(airport)}
-          >
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-muted-foreground" />
-              <div className="flex-grow">
-                <p className="font-semibold text-sm">{airport.address?.cityName}, {airport.address?.countryName}</p>
+        suggestions.map((airport, index) => {
+          const suggestionText = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
+          return (
+            <div
+              key={`${airport.iataCode}-${index}`}
+              className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
+              onClick={() => handleSelectSuggestion(airport)}
+            >
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-muted-foreground" />
+                <div className="flex-grow">
+                  <p className="font-semibold text-sm">{suggestionText || airport.name}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))
+          )
+        })
       )}
     </div>
   );

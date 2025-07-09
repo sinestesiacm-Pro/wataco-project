@@ -106,7 +106,7 @@ export interface Airport {
   name: string;
   iataCode: string;
   subType: string;
-  address: AirportAddress;
+  address?: AirportAddress;
 }
 
 export interface AirportSearchResponse {
