@@ -186,6 +186,32 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
   }
 }
 
+const hotelDestinations: Airport[] = [
+    { name: 'Nueva York', iataCode: 'NYC', subType: 'CITY', address: { cityName: 'Nueva York', countryName: 'Estados Unidos' } },
+    { name: 'Londres', iataCode: 'LON', subType: 'CITY', address: { cityName: 'Londres', countryName: 'Reino Unido' } },
+    { name: 'París', iataCode: 'PAR', subType: 'CITY', address: { cityName: 'París', countryName: 'Francia' } },
+    { name: 'Tokio', iataCode: 'TYO', subType: 'CITY', address: { cityName: 'Tokio', countryName: 'Japón' } },
+    { name: 'Dubai', iataCode: 'DXB', subType: 'CITY', address: { cityName: 'Dubai', countryName: 'Emiratos Árabes Unidos' } },
+    { name: 'Roma', iataCode: 'ROM', subType: 'CITY', address: { cityName: 'Roma', countryName: 'Italia' } },
+    { name: 'Cancún', iataCode: 'CUN', subType: 'CITY', address: { cityName: 'Cancún', countryName: 'México' } },
+    { name: 'Madrid', iataCode: 'MAD', subType: 'CITY', address: { cityName: 'Madrid', countryName: 'España' } },
+    { name: 'Buenos Aires', iataCode: 'BUE', subType: 'CITY', address: { cityName: 'Buenos Aires', countryName: 'Argentina' } },
+    { name: 'Medellín', iataCode: 'MDE', subType: 'CITY', address: { cityName: 'Medellín', countryName: 'Colombia' } },
+];
+
+export async function searchHotelDestinations(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
+    if (!keyword) {
+        return { success: true, data: [] };
+    }
+    const lowercasedKeyword = keyword.toLowerCase();
+    const filteredData = hotelDestinations.filter(
+        dest => dest.name.toLowerCase().includes(lowercasedKeyword) || dest.address?.countryName?.toLowerCase().includes(lowercasedKeyword)
+    );
+    // Simulate network delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 200)); 
+    return { success: true, data: filteredData };
+}
+
 const hotelSearchSchema = z.object({
   cityCode: z.string().min(3).max(3),
   checkInDate: z.string(),
@@ -207,10 +233,13 @@ export async function searchHotels(params: {
   if (!validation.success) {
     return { success: false, error: 'Parámetros de búsqueda de hotel inválidos.' };
   }
+  
+  if (!HOTELBEDS_API_KEY) {
+      return { success: false, error: 'La clave API de Hotelbeds no está configurada.' };
+  }
 
-  // NOTE: The Hotelbeds API integration is complex.
-  // This is a mocked response to demonstrate the new UI layout and data structure.
-  // The API key is available in process.env.HOTELBEDS_API_KEY.
+  // NOTE: This is a mocked response to demonstrate the UI with Hotelbeds-like data.
+  // A real integration would involve calls to Hotelbeds API endpoints.
   const mockHotelsData: AmadeusHotelOffer[] = [
     {
       type: 'hotel-offer',
@@ -234,7 +263,7 @@ export async function searchHotels(params: {
         id: 'offer-1',
         checkInDate: params.checkInDate,
         checkOutDate: params.checkOutDate,
-        price: { currency: 'USD', total: '475.00' },
+        price: { currency: 'USD', total: '475.00', base: '420.00' },
         room: { description: { text: 'Suite con vista al mar y balcón privado.' } }
       }]
     },
@@ -259,7 +288,7 @@ export async function searchHotels(params: {
         id: 'offer-2',
         checkInDate: params.checkInDate,
         checkOutDate: params.checkOutDate,
-        price: { currency: 'USD', total: '320.00' },
+        price: { currency: 'USD', total: '320.00', base: '280.00' },
         room: { description: { text: 'Habitación doble estándar con escritorio.' } }
       }]
     },
@@ -284,7 +313,7 @@ export async function searchHotels(params: {
         id: 'offer-3',
         checkInDate: params.checkInDate,
         checkOutDate: params.checkOutDate,
-        price: { currency: 'USD', total: '150.00' },
+        price: { currency: 'USD', total: '150.00', base: '130.00' },
         room: { description: { text: 'Cabaña acogedora con cocina pequeña.' } }
       }]
     },
@@ -309,7 +338,7 @@ export async function searchHotels(params: {
         id: 'offer-4',
         checkInDate: params.checkInDate,
         checkOutDate: params.checkOutDate,
-        price: { currency: 'USD', total: '380.00' },
+        price: { currency: 'USD', total: '380.00', base: '350.00' },
         room: { description: { text: 'Junior Suite con todo incluido.' } }
       }]
     }

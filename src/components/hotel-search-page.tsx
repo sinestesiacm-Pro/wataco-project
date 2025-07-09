@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { addDays, format } from 'date-fns';
 import type { AmadeusHotelOffer, Airport } from '@/lib/types';
-import { searchHotels, searchAirports } from '@/app/actions';
+import { searchHotels, searchHotelDestinations } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
 
 import { HotelResults } from '@/components/hotel-results';
@@ -77,10 +77,10 @@ export default function HotelSearchPage() {
         return;
       }
       setSuggestionsLoading(true);
-      const result = await searchAirports(query);
+      const result = await searchHotelDestinations(query);
       if (result.success && result.data) {
         if (activeInput) {
-            setSuggestions(result.data.filter(a => a.subType === 'CITY'));
+            setSuggestions(result.data);
         }
       } else {
         setSuggestions([]);
@@ -93,12 +93,12 @@ export default function HotelSearchPage() {
       setSuggestionsLoading(false);
     };
 
-    if (activeInput === 'destination' && destinationQuery.length > 1) {
+    if (activeInput === 'destination' && debouncedDestinationQuery) {
       fetchSuggestions(debouncedDestinationQuery);
     } else {
        setSuggestions([]);
     }
-  }, [debouncedDestinationQuery, activeInput, destinationQuery, toast]);
+  }, [debouncedDestinationQuery, activeInput, toast]);
 
 
   useEffect(() => {
