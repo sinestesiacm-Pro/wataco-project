@@ -1,4 +1,3 @@
-
 'use server';
 
 import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, AmadeusHotelId } from '@/lib/types';
@@ -251,7 +250,7 @@ export async function searchHotels(params: {
     const token = await getAmadeusToken();
 
     const searchParams = new URLSearchParams({
-      hotelIds: hotelIds.slice(0, 100).join(','),
+      hotelIds: hotelIds.slice(0, 50).join(','),
       checkInDate,
       checkOutDate,
       adults: adults.toString(),
