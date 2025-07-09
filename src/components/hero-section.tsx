@@ -27,7 +27,7 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
     <section className="hero-section">
        {images.map((image, index) => (
         <Image
-          key={index}
+          key={image}
           src={image}
           alt={`Travel background ${index + 1}`}
           fill

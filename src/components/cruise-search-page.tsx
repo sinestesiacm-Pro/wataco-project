@@ -17,10 +17,10 @@ import { RecommendedCruises } from './recommended-cruises';
 import { HeroSection } from './hero-section';
 
 const cruiseImages = [
-  'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1580553765955-a0d05e2474f8?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1621405788895-d886ffb07636?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1623718649591-311775a30c43?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1579541592237-90372836511c?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1548552323-26889a74288f?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1574293890349-22316e4b51c1?fit=crop&w=1920&q=80',
 ];
 
 export default function CruiseSearchPage() {
@@ -177,6 +177,7 @@ export default function CruiseSearchPage() {
                 </Popover>
               </div>
               <div className="lg:col-span-2">
+                 <Label className="text-sm font-semibold ml-2 opacity-0">Buscar</Label>
                 {loading ? (
                   <Button
                     type="button"
