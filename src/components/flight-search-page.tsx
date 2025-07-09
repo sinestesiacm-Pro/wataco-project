@@ -33,7 +33,7 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 const flightImages = [
   'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1488085061387-422e29b40080?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1524592714643-d8c97356b6a0?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1483019342236-99e65b4c1952?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?fit=crop&w=1920&q=80',
 ];
 
