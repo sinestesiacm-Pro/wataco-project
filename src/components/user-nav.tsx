@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogOut, User as UserIcon } from 'lucide-react';
+import { LogOut, User as UserIcon, LayoutGrid } from 'lucide-react';
+import Link from 'next/link';
 
 export function UserNav() {
   const { user, logOut } = useAuth();
@@ -27,7 +28,7 @@ export function UserNav() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
+          <Avatar className="h-10 w-10 border-2 border-primary/50">
             <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
             <AvatarFallback>{userInitial}</AvatarFallback>
           </Avatar>
@@ -44,8 +45,14 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {/* Add other items like Profile, Settings etc. here */}
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/profile">
+              <LayoutGrid className="mr-2 h-4 w-4" />
+              <span>Mi Perfil</span>
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
+        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logOut} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
