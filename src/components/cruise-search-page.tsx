@@ -17,10 +17,10 @@ import { RecommendedCruises } from './recommended-cruises';
 import { HeroSection } from './hero-section';
 
 const cruiseImages = [
-  'https://images.unsplash.com/photo-1572293453911-2c0700c21345?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1548552192-b40342c106a7?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1579546025689-f5597c5555e7?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1580553765955-a0d05e2474f8?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1621405788895-d886ffb07636?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1623718649591-311775a30c43?fit=crop&w=1920&q=80',
 ];
 
 export default function CruiseSearchPage() {

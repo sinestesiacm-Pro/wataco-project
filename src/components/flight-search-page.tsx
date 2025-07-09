@@ -31,10 +31,10 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 );
 
 const flightImages = [
-  'https://images.unsplash.com/photo-1501785888041-af3ba6f60060?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1528543606781-2f6e6857f318?fit=crop&w=1920&q=80'
+  'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1488085061387-422e29b40080?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-152459271464c-a0b0616143a4?fit=crop&w=1920&q=80'
 ];
 
 export default function FlightSearchPage() {
