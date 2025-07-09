@@ -2,7 +2,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Book, Plane, Images, Users, Settings } from 'lucide-react';
+import { Book, Plane, Images, Users, Settings, Loader2 } from 'lucide-react';
 
 const SectionPlaceholder = ({ title, icon: Icon, children }: { title: string; icon: React.ElementType; children: React.ReactNode }) => (
     <Card className="shadow-lg">
