@@ -37,10 +37,10 @@ type HotelFiltersState = {
 };
 
 const hotelImages = [
-  'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1618773928121-c32242e63f39?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1582719508461-905c673771fd?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1445019980597-93e8ac7246e7?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=1920&q=80',
 ];
 
 export default function HotelSearchPage() {
@@ -239,7 +239,7 @@ export default function HotelSearchPage() {
         <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-              <div className='lg:col-span-4 relative' ref={suggestionsRef}>
+              <div className='lg:col-span-5 relative' ref={suggestionsRef}>
                 <Label htmlFor="destination" className="text-sm font-semibold ml-2">Destino</Label>
                 <InputGroup>
                   <InputIcon><BedDouble className="h-4 w-4" /></InputIcon>
@@ -254,7 +254,7 @@ export default function HotelSearchPage() {
                  {isSuggestionsOpen && debouncedDestinationQuery && <SuggestionsList />}
               </div>
               
-              <div className="lg:col-span-4">
+              <div className="lg:col-span-3">
                 <Label htmlFor="dates" className="text-sm font-semibold ml-2">Entrada y Salida</Label>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -328,20 +328,19 @@ export default function HotelSearchPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="lg:col-span-2">
-                 <Label className="text-sm font-semibold ml-2 opacity-0">Search</Label>
+              <div className="lg:col-span-2 flex items-end">
                 {loading ? (
                   <Button
                     type="button"
                     variant="destructive"
-                    className="w-full font-bold mt-1 rounded-xl"
+                    className="w-full font-bold rounded-xl"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
                     Cancelar
                   </Button>
                 ) : (
-                  <Button type="submit" className="w-full font-bold bg-accent hover:bg-accent/90 mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                  <Button type="submit" className="w-full font-bold bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
                     Buscar
                   </Button>
                 )}

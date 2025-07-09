@@ -30,9 +30,9 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 );
 
 const packageImages = [
-  'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1501785888041-af3ba6f60060?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1502602898657-3e91760c0341?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1530789253388-582c481c54b0?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1505832018823-50331d703ac7?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?fit=crop&w=1920&q=80',
 ];
 
@@ -224,7 +224,7 @@ export default function PackagesSearchPage() {
                 </InputGroup>
                  {activeInput === 'origin' && <SuggestionsList type="origin" />}
               </div>
-              <div className='lg:col-span-3 relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
+              <div className='lg:col-span-4 relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
                 <Label htmlFor="destination" className="text-sm font-semibold ml-2">A</Label>
                 <InputGroup>
                   <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
@@ -238,7 +238,7 @@ export default function PackagesSearchPage() {
                 </InputGroup>
                 {activeInput === 'destination' && <SuggestionsList type="destination" />}
               </div>
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-3">
                 <Label htmlFor="dates" className="text-sm font-semibold ml-2">Fechas</Label>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -307,21 +307,20 @@ export default function PackagesSearchPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="lg:col-span-2">
-                <Label className="text-sm font-semibold ml-2 opacity-0">Search</Label>
+              <div className="lg:col-span-12 flex justify-end">
                 {loading ? (
                   <Button
                     type="button"
                     variant="destructive"
-                    className="w-full font-bold mt-1 rounded-xl"
+                    className="w-full lg:w-auto font-bold mt-1 rounded-xl"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
                     Cancelar
                   </Button>
                 ) : (
-                  <Button type="submit" className="w-full font-bold bg-accent hover:bg-accent/90 mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                     <Luggage className="mr-2 h-5 w-5" /> Buscar
+                  <Button type="submit" className="w-full lg:w-auto font-bold bg-accent hover:bg-accent/90 mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                     <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
                   </Button>
                 )}
               </div>

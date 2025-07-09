@@ -17,10 +17,10 @@ import { RecommendedCruises } from './recommended-cruises';
 import { HeroSection } from './hero-section';
 
 const cruiseImages = [
+  'https://images.unsplash.com/photo-1548552323-26889a74288f?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1579541592237-90372836511c?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1548552323-26889a74288f?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1574293890349-22316e4b51c1?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1516556888824-7fb346bd396d?fit=crop&w=1920&q=80',
 ];
 
 export default function CruiseSearchPage() {
@@ -176,20 +176,19 @@ export default function CruiseSearchPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="lg:col-span-2">
-                 <Label className="text-sm font-semibold ml-2 opacity-0">Buscar</Label>
+              <div className="lg:col-span-2 flex items-end">
                 {loading ? (
                   <Button
                     type="button"
                     variant="destructive"
-                    className="w-full font-bold mt-1 rounded-xl"
+                    className="w-full font-bold rounded-xl"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
                     Cancelar
                   </Button>
                 ) : (
-                  <Button type="submit" className="w-full font-bold bg-accent hover:bg-accent/90 mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                  <Button type="submit" className="w-full font-bold bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
                     <Ship className="mr-2 h-5 w-5" /> Buscar
                   </Button>
                 )}
