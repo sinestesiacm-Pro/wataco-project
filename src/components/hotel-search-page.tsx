@@ -80,6 +80,11 @@ export default function HotelSearchPage() {
         }
       } else {
         setSuggestions([]);
+        toast({
+            title: "Error de Búsqueda de Ciudad",
+            description: result.error || "No se pudieron obtener las sugerencias.",
+            variant: "destructive",
+        });
       }
       setSuggestionsLoading(false);
     };
@@ -89,7 +94,7 @@ export default function HotelSearchPage() {
     } else {
       setSuggestions([]);
     }
-  }, [debouncedDestinationQuery, isSuggestionsOpen]);
+  }, [debouncedDestinationQuery, isSuggestionsOpen, toast]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

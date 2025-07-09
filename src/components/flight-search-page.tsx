@@ -62,7 +62,8 @@ export default function FlightSearchPage() {
   const [activeInput, setActiveInput] = useState<'origin' | 'destination' | null>(null);
   const debouncedOriginQuery = useDebounce(originQuery, 300);
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
-  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const originRef = useRef<HTMLDivElement>(null);
+  const destinationRef = useRef<HTMLDivElement>(null);
   const searchIdRef = useRef(0);
 
   useEffect(() => {
@@ -74,25 +75,37 @@ export default function FlightSearchPage() {
       setSuggestionsLoading(true);
       const result = await searchAirports(query);
       if (result.success && result.data) {
-        setSuggestions(result.data);
+        // Check activeInput again to prevent race conditions if user blurs input quickly
+        if (activeInput) {
+            setSuggestions(result.data);
+        }
       } else {
         setSuggestions([]);
+        toast({
+            title: "Error de Búsqueda de Aeropuerto",
+            description: result.error || "No se pudieron obtener las sugerencias.",
+            variant: "destructive",
+        });
       }
       setSuggestionsLoading(false);
     };
 
     if (activeInput === 'origin') {
-      if (debouncedOriginQuery !== originQuery) setSuggestions([]);
-      else fetchSuggestions(debouncedOriginQuery);
+      fetchSuggestions(debouncedOriginQuery);
     } else if (activeInput === 'destination') {
-        if (debouncedDestinationQuery !== destinationQuery) setSuggestions([]);
-      else fetchSuggestions(debouncedDestinationQuery);
+      fetchSuggestions(debouncedDestinationQuery);
+    } else {
+      setSuggestions([]); // Clear suggestions when no input is active
     }
-  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, originQuery, destinationQuery]);
+  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, toast]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        originRef.current && !originRef.current.contains(target) &&
+        destinationRef.current && !destinationRef.current.contains(target)
+      ) {
         setActiveInput(null);
       }
     };
@@ -249,13 +262,19 @@ export default function FlightSearchPage() {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
-              <div className='lg:col-span-4 relative' ref={activeInput === 'origin' ? suggestionsRef : null}>
+              <div className='lg:col-span-4 relative' ref={originRef}>
                 <Label htmlFor="origin" className="text-sm font-semibold ml-2">Desde</Label>
                 <InputGroup>
                   <InputIcon><PlaneTakeoff className="h-4 w-4" /></InputIcon>
                   <Input id="origin" type="text" value={originQuery} 
-                      onChange={e => setOriginQuery(e.target.value)} 
-                      onFocus={() => { setActiveInput('origin'); setSuggestions([])}}
+                      onChange={e => {
+                        setOriginQuery(e.target.value);
+                        setActiveInput('origin');
+                      }} 
+                      onFocus={() => {
+                        setActiveInput('origin');
+                        setSuggestions([]);
+                      }}
                       placeholder="Ciudad o aeropuerto de origen" 
                       className="mt-1 pl-10" 
                       autoComplete="off"
@@ -263,13 +282,19 @@ export default function FlightSearchPage() {
                 </InputGroup>
                 {activeInput === 'origin' && <SuggestionsList type="origin" />}
               </div>
-              <div className='lg:col-span-4 relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
+              <div className='lg:col-span-4 relative' ref={destinationRef}>
                 <Label htmlFor="destination" className="text-sm font-semibold ml-2">A</Label>
                 <InputGroup>
                   <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
                   <Input id="destination" type="text" value={destinationQuery} 
-                      onChange={e => setDestinationQuery(e.target.value)}
-                      onFocus={() => { setActiveInput('destination'); setSuggestions([])}} 
+                      onChange={e => {
+                        setDestinationQuery(e.target.value);
+                        setActiveInput('destination');
+                      }}
+                      onFocus={() => {
+                        setActiveInput('destination');
+                        setSuggestions([]);
+                      }} 
                       placeholder="Ciudad o aeropuerto de destino" 
                       className="mt-1 pl-10" 
                       autoComplete="off"
