@@ -2,43 +2,64 @@
 
 import { FlightData } from '@/lib/types';
 import { z } from 'zod';
-import { unstable_cache } from 'next/cache';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 
-const getAmadeusToken = unstable_cache(
-  async () => {
-    if (!AMADEUS_API_KEY || !AMADEUS_API_SECRET) {
-      throw new Error('Amadeus API credentials are not configured in the environment variables.');
+// In-memory cache for Amadeus token
+let amadeusTokenCache = {
+  token: null as string | null,
+  expiresAt: 0 as number,
+};
+
+async function getAmadeusToken(): Promise<string> {
+  const now = Date.now();
+
+  // Return cached token if it's still valid (with a 100-second buffer)
+  if (amadeusTokenCache.token && now < amadeusTokenCache.expiresAt) {
+    return amadeusTokenCache.token;
+  }
+
+  if (!AMADEUS_API_KEY || !AMADEUS_API_SECRET) {
+    throw new Error('Amadeus API credentials are not configured in the environment variables.');
+  }
+
+  const tokenUrl = `${AMADEUS_BASE_URL}/v1/security/oauth2/token`;
+  const params = new URLSearchParams();
+  params.append('grant_type', 'client_credentials');
+  params.append('client_id', AMADEUS_API_KEY);
+  params.append('client_secret', AMADEUS_API_SECRET);
+
+  try {
+    const response = await fetch(tokenUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Failed to get Amadeus token', errorText);
+      throw new Error(`Invalid API credentials: ${response.statusText}`);
     }
 
-    const tokenUrl = `${AMADEUS_BASE_URL}/v1/security/oauth2/token`;
-    const params = new URLSearchParams();
-    params.append('grant_type', 'client_credentials');
-    params.append('client_id', AMADEUS_API_KEY);
-    params.append('client_secret', AMADEUS_API_SECRET);
-    try {
-      const response = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params,
-      });
-      if (!response.ok) {
-        console.error('Failed to get Amadeus token', await response.text());
-        throw new Error('Invalid API credentials.');
-      }
-      const data = await response.json();
-      return data.access_token as string;
-    } catch (err) {
-      console.error(err);
-      throw new Error('Could not retrieve API token.');
-    }
-  },
-  ['amadeus_token'],
-  { revalidate: 3500 } // Revalidate token slightly before it expires (default is 3600s)
-);
+    const data = await response.json();
+    const token = data.access_token as string;
+    // Amadeus token expires in 3600 seconds. We'll refresh it a bit earlier.
+    const expiresIn = (data.expires_in || 3600) - 100; // a buffer of 100 seconds
+    
+    amadeusTokenCache = {
+      token: token,
+      expiresAt: now + expiresIn * 1000,
+    };
+
+    return token;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Could not retrieve API token.');
+  }
+}
 
 
 const searchSchema = z.object({
