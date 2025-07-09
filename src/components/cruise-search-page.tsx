@@ -18,7 +18,7 @@ import { HeroSection } from './hero-section';
 
 const cruiseImages = [
   'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
-  'https://images.unsplash.com/photo-1563209883-8446c596fe28?q=80&w=2070&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1540496905033-a84b24e64626?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=80&w=2070&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1493558103817-58b2924bce98',
 ];
