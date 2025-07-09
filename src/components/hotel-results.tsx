@@ -10,6 +10,14 @@ interface HotelResultsProps {
     hotels: AmadeusHotelOffer[] | null;
 }
 
+const fallbackImages = [
+  "https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MjA3MzM2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://images.unsplash.com/photo-1607320895054-c5c543e9a069?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MjA3MzM2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://images.unsplash.com/photo-1570206986634-afd7cccb68d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MjA3MzM2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MjA3MzM2OHww&ixlib=rb-4.1.0&q=80&w=1080"
+];
+
+
 const renderStars = (rating: string | undefined) => {
     const starCount = parseInt(rating || '0', 10);
     if (starCount === 0) return null;
@@ -36,11 +44,11 @@ export function HotelResults({ hotels }: HotelResultsProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
-        {hotels.map((offer) => (
+        {hotels.map((offer, index) => (
           <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col">
             <div className="overflow-hidden relative">
               <Image 
-                src={offer.hotel.media?.[0]?.uri || 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MjA3MzM2OHww&ixlib=rb-4.1.0&q=80&w=1080'}
+                src={offer.hotel.media?.[0]?.uri || fallbackImages[index % fallbackImages.length]}
                 data-ai-hint="hotel exterior" 
                 alt={offer.hotel.name || 'Hotel image'} 
                 width={400} 
