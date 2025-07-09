@@ -12,7 +12,7 @@ const BeOnTripLogo = (props: SVGProps<SVGSVGElement>) => (
           <stop stopColor="#FF9933"/>
           <stop offset="1" stopColor="#FF6A00"/>
         </linearGradient>
-        <linearGradient id="blue-gradient" x1="75" y1="10" x2="130" y2="70" gradientUnits="userSpaceOnUse">
+        <linearGradient id="blue-gradient" x1="75" y1="10"x2="130" y2="70" gradientUnits="userSpaceOnUse">
           <stop stopColor="#3DB4F2"/>
           <stop offset="1" stopColor="#0099FF"/>
         </linearGradient>
