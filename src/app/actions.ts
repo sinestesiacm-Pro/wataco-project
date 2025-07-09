@@ -211,42 +211,73 @@ export async function searchHotels(params: {
   try {
     const token = await getAmadeusToken();
 
-    const searchParams = new URLSearchParams({
-      cityCode: cityCode.toUpperCase(),
-      checkInDate,
-      checkOutDate,
-      adults: adults.toString(),
-      currency: 'USD',
-      view: 'FULL',
-      'page[limit]': '30',
-    });
+    // Step 1: Get a list of hotel IDs for the given city and filters
+    const hotelListUrl = new URL(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city`);
+    hotelListUrl.searchParams.append('cityCode', cityCode.toUpperCase());
+    hotelListUrl.searchParams.append('radius', '42');
+    hotelListUrl.searchParams.append('radiusUnit', 'KM');
+    hotelListUrl.searchParams.append('hotelSource', 'ALL');
 
     if (ratings && ratings.length > 0) {
-      searchParams.append('ratings', ratings.join(','));
+      hotelListUrl.searchParams.append('ratings', ratings.join(','));
     }
-
     if (amenities && amenities.length > 0) {
-      searchParams.append('amenities', amenities.join(','));
+      hotelListUrl.searchParams.append('amenities', amenities.join(','));
     }
 
-    const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${searchParams.toString()}`, {
+    const hotelListResponse = await fetch(hotelListUrl.toString(), {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+    if (!hotelListResponse.ok) {
+        const errorBody = await hotelListResponse.json().catch(() => ({}));
+        console.error('Amadeus Hotel List Error:', errorBody);
+        const errorMessage = errorBody.errors?.[0]?.detail || 'Could not retrieve hotel list.';
+        return { success: false, error: errorMessage };
+    }
+    
+    const hotelListResult = await hotelListResponse.json();
+
+    if (!hotelListResult.data || hotelListResult.data.length === 0) {
+        return { success: true, data: [] }; // Return success with empty array
+    }
+
+    const hotelIds = hotelListResult.data.map((hotel: any) => hotel.hotelId).slice(0, 30);
+
+    if (hotelIds.length === 0) {
+        return { success: true, data: [] };
+    }
+
+    // Step 2: Get offers for the retrieved hotel IDs
+    const offerSearchParams = new URLSearchParams({
+        hotelIds: hotelIds.join(','),
+        adults: adults.toString(),
+        checkInDate,
+        checkOutDate,
+        currency: 'USD',
+        view: 'FULL',
+        'page[limit]': '30',
+    });
+
+    const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${offerSearchParams.toString()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    
     if (!response.ok) {
-      const errorBody = await response.json();
-      console.error('Amadeus Hotel Offers Error:', errorBody);
-      const errorMessage = errorBody.errors?.[0]?.detail || 'Error in hotel search.';
-      return { success: false, error: errorMessage };
+        const errorBody = await response.json();
+        console.error('Amadeus Hotel Offers Error:', errorBody);
+        const errorMessage = errorBody.errors?.[0]?.detail || 'Error in hotel search.';
+        return { success: false, error: errorMessage };
     }
 
     const result = await response.json();
 
     if (!result.data || result.data.length === 0) {
-      return { success: false, error: 'No hotel offers available for the selected criteria.' };
+        return { success: true, data: [] };
     }
 
     return { success: true, data: result.data };
+
   } catch (err: any) {
     console.error(err);
     return { success: false, error: err.message || 'An unexpected error occurred.' };
