@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'Tripify',
+  title: 'BE ON TRIP',
   description: 'Your ultimate travel planning companion',
 };
 

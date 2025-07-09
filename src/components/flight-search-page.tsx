@@ -17,6 +17,7 @@ import { Calendar as CalendarIcon, Users, Loader2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Switch } from './ui/switch';
 
 export default function FlightSearchPage() {
   const [origin, setOrigin] = useState('MAD');
@@ -26,18 +27,41 @@ export default function FlightSearchPage() {
     nextWeek.setDate(nextWeek.getDate() + 7);
     return nextWeek;
   });
+  const [returnDate, setReturnDate] = useState<Date | undefined>(() => {
+    const twoWeeks = new Date();
+    twoWeeks.setDate(twoWeeks.getDate() + 14);
+    return twoWeeks;
+  });
+  const [isRoundTrip, setIsRoundTrip] = useState(true);
   const [adults, setAdults] = useState(1);
   
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
+  const handleTripTypeChange = (checked: boolean) => {
+    setIsRoundTrip(checked);
+    if (!checked) {
+      setReturnDate(undefined);
+    } else {
+        const twoWeeks = new Date();
+        if (departureDate && departureDate > twoWeeks) {
+            const nextDate = new Date(departureDate);
+            nextDate.setDate(nextDate.getDate() + 7);
+            setReturnDate(nextDate);
+        } else {
+            twoWeeks.setDate(twoWeeks.getDate() + 14);
+            setReturnDate(twoWeeks);
+        }
+    }
+  };
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!origin || !destination || !departureDate) {
+    if (!origin || !destination || !departureDate || (isRoundTrip && !returnDate)) {
       toast({
         title: 'Missing Information',
-        description: 'Please fill in Origin, Destination, and Departure Date.',
+        description: 'Please fill in all required flight details.',
         variant: 'destructive',
       });
       return;
@@ -50,6 +74,7 @@ export default function FlightSearchPage() {
       origin,
       destination,
       departureDate: format(departureDate, 'yyyy-MM-dd'),
+      returnDate: isRoundTrip && returnDate ? format(returnDate, 'yyyy-MM-dd') : undefined,
       adults,
     });
 
@@ -80,7 +105,7 @@ export default function FlightSearchPage() {
       <header className="bg-card shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center gap-3">
           <Icons.logo className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold font-headline text-primary">Tripify</h1>
+          <h1 className="text-3xl font-bold font-headline text-primary">BE ON TRIP</h1>
         </div>
       </header>
       
@@ -92,19 +117,22 @@ export default function FlightSearchPage() {
         </section>
         
         <section className="bg-card p-4 sm:p-6 rounded-2xl shadow-lg -mx-4 sm:mx-0 sticky top-[73px] z-30">
-          <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-            <div>
+          <div className="flex items-center space-x-2 mb-4">
+            <Switch id="trip-type" checked={isRoundTrip} onCheckedChange={handleTripTypeChange} />
+            <Label htmlFor="trip-type" className="text-sm font-semibold">{isRoundTrip ? 'Round Trip' : 'One Way'}</Label>
+          </div>
+          <form onSubmit={handleSearch} className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+            <div className='lg:col-span-2'>
               <Label htmlFor="origin" className="text-sm font-semibold">Origin</Label>
               <Input id="origin" type="text" value={origin} onChange={e => setOrigin(e.target.value.toUpperCase())} placeholder="City or IATA" className="mt-1" maxLength={3} />
             </div>
-            <div>
+            <div className='lg:col-span-2'>
               <Label htmlFor="destination" className="text-sm font-semibold">Destination</Label>
               <Input id="destination" type="text" value={destination} onChange={e => setDestination(e.target.value.toUpperCase())} placeholder="City or IATA" className="mt-1" maxLength={3} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-               <div>
-                <Label htmlFor="departureDate" className="text-sm font-semibold">Depart</Label>
-                 <Popover>
+            <div className="lg:col-span-3">
+              <Label htmlFor="departureDate" className="text-sm font-semibold">Depart</Label>
+                <Popover>
                   <PopoverTrigger asChild>
                     <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !departureDate && "text-muted-foreground")}>
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -115,24 +143,37 @@ export default function FlightSearchPage() {
                     <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} initialFocus />
                   </PopoverContent>
                 </Popover>
-               </div>
-               <div>
-                <Label htmlFor="adults" className="text-sm font-semibold">Adults</Label>
-                <Select value={adults.toString()} onValueChange={(val) => setAdults(parseInt(val))}>
-                   <SelectTrigger className="mt-1">
-                      <Users className="mr-2 h-4 w-4" />
-                      <SelectValue placeholder="Adults" />
-                   </SelectTrigger>
-                   <SelectContent>
-                      {[...Array(8)].map((_, i) => (
-                        <SelectItem key={i+1} value={(i+1).toString()}>{i+1}</SelectItem>
-                      ))}
-                   </SelectContent>
-                </Select>
-               </div>
+            </div>
+            <div className="lg:col-span-3">
+              <Label htmlFor="returnDate" className="text-sm font-semibold">Return</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant={"outline"} disabled={!isRoundTrip} className={cn("w-full justify-start text-left font-normal mt-1", !returnDate && "text-muted-foreground")}>
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {returnDate ? format(returnDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar mode="single" selected={returnDate} onSelect={setReturnDate} initialFocus disabled={(date) => departureDate ? date < departureDate : false} />
+                  </PopoverContent>
+                </Popover>
+            </div>
+            <div className='lg:col-span-1'>
+              <Label htmlFor="adults" className="text-sm font-semibold">Adults</Label>
+              <Select value={adults.toString()} onValueChange={(val) => setAdults(parseInt(val))}>
+                  <SelectTrigger className="mt-1">
+                    <Users className="mr-2 h-4 w-4" />
+                    <SelectValue placeholder="Adults" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[...Array(8)].map((_, i) => (
+                      <SelectItem key={i+1} value={(i+1).toString()}>{i+1}</SelectItem>
+                    ))}
+                  </SelectContent>
+              </Select>
             </div>
 
-            <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90">
+            <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-1">
               {loading ? <Loader2 className="animate-spin" /> : 'Search'}
             </Button>
           </form>

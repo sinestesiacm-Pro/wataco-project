@@ -41,6 +41,7 @@ const searchSchema = z.object({
   origin: z.string().min(3).max(3),
   destination: z.string().min(3).max(3),
   departureDate: z.string(),
+  returnDate: z.string().optional(),
   adults: z.number().int().min(1),
 });
 
@@ -48,6 +49,7 @@ export async function searchFlights(params: {
   origin: string,
   destination: string,
   departureDate: string,
+  returnDate?: string,
   adults: number
 }): Promise<{ success: boolean; data?: FlightData; error?: string }> {
   
@@ -56,7 +58,7 @@ export async function searchFlights(params: {
     return { success: false, error: 'Invalid search parameters.' };
   }
 
-  const { origin, destination, departureDate, adults } = validation.data;
+  const { origin, destination, departureDate, returnDate, adults } = validation.data;
 
   try {
     const token = await getAmadeusToken();
@@ -69,6 +71,10 @@ export async function searchFlights(params: {
       max: '15',
       currencyCode: 'EUR',
     });
+
+    if (returnDate) {
+      searchParams.append('returnDate', returnDate);
+    }
 
     const response = await fetch(`${AMADEUS_BASE_URL}/v2/shopping/flight-offers?${searchParams.toString()}`, {
       headers: { Authorization: `Bearer ${token}` },
