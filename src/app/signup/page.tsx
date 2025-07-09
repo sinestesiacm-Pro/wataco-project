@@ -41,8 +41,8 @@ export default function SignupPage() {
     } catch (error: any) {
       console.error(error);
       let description = "No se pudo crear la cuenta. Por favor, inténtalo de nuevo.";
-       if (error.message.includes('auth/invalid-api-key')) {
-        description = "Las claves de API que proporcionaste no son válidas. Por favor, revisa tu archivo .env.";
+       if (error.code === 'auth/invalid-api-key') {
+        description = "La clave de API de Firebase no es válida. Revisa tu archivo .env y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
       }
       toast({
         title: 'Falló el registro',
@@ -65,9 +65,8 @@ export default function SignupPage() {
       let description = 'No se pudo registrar con Google. Por favor, inténtalo de nuevo.';
       if (error.code === 'auth/unauthorized-domain') {
           description = "El dominio de esta aplicación no está autorizado. Encuentra el dominio correcto en la barra de URL de la ventana de vista previa y agrégalo a la consola de Firebase en Authentication > Settings > Authorized domains.";
-      }
-      if (error.message.includes('auth/invalid-api-key')) {
-        description = "Las claves de API que proporcionaste no son válidas. Por favor, revisa tu archivo .env.";
+      } else if (error.code === 'auth/invalid-api-key') {
+        description = "La clave de API de Firebase no es válida. Revisa tu archivo .env y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
       }
       toast({
         title: 'Falló el registro con Google',

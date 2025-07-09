@@ -3,8 +3,8 @@
 import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData } from '@/lib/types';
 import { z } from 'zod';
 
-const AMADEUS_API_KEY = process.env.NEXT_PUBLIC_AMADEUS_API_KEY;
-const AMADEUS_API_SECRET = process.env.NEXT_PUBLIC_AMADEUS_API_SECRET;
+const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
+const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 
 // In-memory cache for Amadeus token

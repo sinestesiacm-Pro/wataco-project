@@ -47,11 +47,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
             {destinations.map((dest) => (
               <Card
                 key={dest.iata}
-                className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer border"
-                onClick={() => {
-                  const query = `${dest.city}, ${dest.country}`;
-                  setDestination({ iata: dest.iata, query });
-                }}
+                className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border"
               >
                 <div className="overflow-hidden relative">
                   <Image
@@ -72,7 +68,15 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                   <p className="text-sm text-muted-foreground font-body">
                     Vuelos desde <span className="font-bold text-lg text-accent">${dest.priceFrom}</span>
                   </p>
-                  <Button size="sm" variant="outline" className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20"
+                    onClick={() => {
+                      const query = `${dest.city}, ${dest.country}`;
+                      setDestination({ iata: dest.iata, query });
+                    }}
+                  >
                     Ver Vuelos
                     <ArrowRight className="ml-1.5 h-4 w-4" />
                   </Button>
