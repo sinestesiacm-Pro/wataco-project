@@ -66,48 +66,78 @@
   }
 }
 
-@keyframes colorize {
-  0%, 100% {
-    color: hsl(var(--primary));
-  }
-  50% {
-    color: hsl(var(--tertiary));
-  }
-}
-
-/* Hero Title Styles & Interactive Effect */
-.hero-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2.8rem, 7vw, 5rem);
-    font-weight: 700;
-    line-height: 1.1;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    color: hsl(var(--foreground));
-    animation: colorize 15s linear infinite;
-    transition: all 0.4s ease-in-out;
-}
-
-.hero-title:hover {
-  animation-play-state: paused;
-  color: transparent;
-  text-shadow: 0 0 8px hsla(var(--foreground), 0.6);
-}
-
-.hero-title > span {
-    display: inline-block;
+/* Hero Section Styling */
+.hero-section {
     position: relative;
-    margin: 0 0.2em; /* Add space between words */
+    width: 100%;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-image: url('https://images.unsplash.com/photo-1501785888041-af3ba6f60060?fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center center;
+    overflow: hidden;
 }
 
-/* The following are no longer needed for the new effect */
-.hero-title > span::before,
-.hero-title > span::after {
-    content: none;
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    width: 100%;
+    max-width: 1152px;
+    box-sizing: border-box;
+}
+
+.hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5em;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    margin-bottom: 10px;
+    line-height: 1.1;
+    font-weight: 700;
+}
 
 .hero-subtitle {
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2em;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 500px;
+    }
+    .hero-title {
+        font-size: 2.5em;
+    }
+    .hero-subtitle {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        height: 450px;
+    }
+    .hero-title {
+        font-size: 2em;
+    }
 }
