@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Card } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Label } from './ui/label';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 const navItems = [
   { name: 'Próximo Viaje', href: 'next-trip', icon: Plane },
@@ -23,8 +25,28 @@ export default function ProfileSidebar() {
   const searchParams = useSearchParams();
   const activeSection = searchParams.get('section') || 'next-trip';
   const { user } = useAuth();
+  const { toast } = useToast();
+
+  const [language, setLanguage] = useState('es');
+  const [currency, setCurrency] = useState('usd');
 
   const userInitial = user?.displayName ? user.displayName[0].toUpperCase() : <Users className="h-5 w-5" />;
+
+  const handleLanguageChange = (value: string) => {
+    setLanguage(value);
+    toast({
+        title: 'Idioma Actualizado',
+        description: `La selección de idioma es una demostración. La aplicación permanecerá en español.`,
+    });
+  };
+
+  const handleCurrencyChange = (value: string) => {
+    setCurrency(value);
+     toast({
+        title: 'Moneda Actualizada',
+        description: `La selección de moneda es una demostración. Los precios seguirán mostrándose en USD.`,
+    });
+  }
 
   return (
     <aside className="space-y-6 sticky top-24">
@@ -74,7 +96,7 @@ export default function ProfileSidebar() {
                 <Label htmlFor="language-select" className="flex items-center gap-2 mb-2 text-sm font-semibold">
                     <Globe className="h-4 w-4 text-muted-foreground" /> Idioma
                 </Label>
-                <Select defaultValue="es">
+                <Select value={language} onValueChange={handleLanguageChange}>
                     <SelectTrigger id="language-select">
                         <SelectValue placeholder="Seleccionar idioma" />
                     </SelectTrigger>
@@ -89,7 +111,7 @@ export default function ProfileSidebar() {
                 <Label htmlFor="currency-select" className="flex items-center gap-2 mb-2 text-sm font-semibold">
                     <CircleDollarSign className="h-4 w-4 text-muted-foreground" /> Moneda
                 </Label>
-                <Select defaultValue="usd">
+                <Select value={currency} onValueChange={handleCurrencyChange}>
                     <SelectTrigger id="currency-select">
                         <SelectValue placeholder="Seleccionar moneda" />
                     </SelectTrigger>
