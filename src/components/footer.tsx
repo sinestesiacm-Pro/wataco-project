@@ -8,7 +8,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="flex items-center justify-center md:justify-start">
-            <Icons.logo className="h-7 w-auto" />
+            <Icons.logo width={73} height={28} />
           </div>
           <div className="text-center text-sm text-muted-foreground">
             © {new Date().getFullYear()} Be On Trip. All rights reserved.
