@@ -239,7 +239,7 @@ export default function HotelSearchPage() {
         <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-              <div className='lg:col-span-5 relative' ref={suggestionsRef}>
+              <div className='lg:col-span-4 relative' ref={suggestionsRef}>
                 <Label htmlFor="destination" className="text-sm font-semibold ml-2">Destino</Label>
                 <InputGroup>
                   <InputIcon><BedDouble className="h-4 w-4" /></InputIcon>
@@ -254,7 +254,7 @@ export default function HotelSearchPage() {
                  {isSuggestionsOpen && debouncedDestinationQuery && <SuggestionsList />}
               </div>
               
-              <div className="lg:col-span-5">
+              <div className="lg:col-span-4">
                 <Label htmlFor="dates" className="text-sm font-semibold ml-2">Entrada y Salida</Label>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -328,7 +328,7 @@ export default function HotelSearchPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="lg:col-span-12">
+              <div className="lg:col-span-2">
                 {loading ? (
                   <Button
                     type="button"
@@ -338,11 +338,11 @@ export default function HotelSearchPage() {
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
-                    Cancelar Búsqueda
+                    Cancelar
                   </Button>
                 ) : (
                   <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                    Buscar Hoteles
+                    Buscar
                   </Button>
                 )}
               </div>

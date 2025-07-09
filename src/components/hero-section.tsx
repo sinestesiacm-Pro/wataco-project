@@ -21,7 +21,7 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
 
         return () => clearInterval(interval);
     }
-  }, [images]);
+  }, [images.length]);
 
   return (
     <section className="hero-section">
@@ -29,7 +29,7 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
         <Image
           key={index}
           src={image}
-          alt="Travel background"
+          alt={`Travel background ${index + 1}`}
           fill
           className={`hero-background-image ${index === currentImageIndex ? 'active' : ''}`}
           style={{ objectFit: 'cover', objectPosition: 'center' }}

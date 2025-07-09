@@ -176,22 +176,24 @@ export default function CruiseSearchPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              {loading ? (
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="lg"
-                  className="w-full text-lg font-bold lg:col-span-2 h-full mt-1 rounded-xl"
-                  onClick={handleCancelSearch}
-                >
-                  <X className="mr-2 h-5 w-5" />
-                  Cancelar
-                </Button>
-              ) : (
-                <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-2 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  <div className="flex items-center"><Ship className="mr-2 h-5 w-5" /> Buscar Cruceros</div>
-                </Button>
-              )}
+              <div className="lg:col-span-2">
+                {loading ? (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="lg"
+                    className="w-full text-lg font-bold h-full mt-1 rounded-xl"
+                    onClick={handleCancelSearch}
+                  >
+                    <X className="mr-2 h-5 w-5" />
+                    Cancelar
+                  </Button>
+                ) : (
+                  <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                    <Ship className="mr-2 h-5 w-5" /> Buscar
+                  </Button>
+                )}
+              </div>
             </div>
           </form>
         </div>

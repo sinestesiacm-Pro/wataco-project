@@ -238,8 +238,8 @@ export default function PackagesSearchPage() {
                 </InputGroup>
                 {activeInput === 'destination' && <SuggestionsList type="destination" />}
               </div>
-              <div className="lg:col-span-4">
-                <Label htmlFor="dates" className="text-sm font-semibold ml-2">Fechas del Viaje</Label>
+              <div className="lg:col-span-2">
+                <Label htmlFor="dates" className="text-sm font-semibold ml-2">Fechas</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -307,7 +307,7 @@ export default function PackagesSearchPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="lg:col-span-12">
+              <div className="lg:col-span-2">
                 {loading ? (
                   <Button
                     type="button"
@@ -321,7 +321,7 @@ export default function PackagesSearchPage() {
                   </Button>
                 ) : (
                   <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                     <div className="flex items-center"><Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes</div>
+                     <Luggage className="mr-2 h-5 w-5" /> Buscar
                   </Button>
                 )}
               </div>
