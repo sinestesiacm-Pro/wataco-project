@@ -2,8 +2,8 @@
 'use client';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { format } from 'date-fns';
-import type { Hotel, BookingDestination } from '@/lib/types';
-import { searchHotels, searchBookingDestinations } from '@/app/actions';
+import type { AmadeusHotelOffer, Airport } from '@/lib/types';
+import { searchHotels, searchAirports } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
 
 import { HotelResults } from '@/components/hotel-results';
@@ -28,7 +28,7 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function HotelSearchPage() {
-  const [destination, setDestination] = useState<BookingDestination | null>(null);
+  const [destination, setDestination] = useState<Airport | null>(null);
   const [destinationQuery, setDestinationQuery] = useState('');
   
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(() => {
@@ -42,13 +42,12 @@ export default function HotelSearchPage() {
     return twoWeeks;
   });
   const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
   
-  const [hotelData, setHotelData] = useState<Hotel[] | null>(null);
+  const [hotelData, setHotelData] = useState<AmadeusHotelOffer[] | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const [suggestions, setSuggestions] = useState<BookingDestination[]>([]);
+  const [suggestions, setSuggestions] = useState<Airport[]>([]);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
@@ -63,9 +62,9 @@ export default function HotelSearchPage() {
         return;
       }
       setSuggestionsLoading(true);
-      const result = await searchBookingDestinations(query);
+      const result = await searchAirports(query);
       if (result.success && result.data) {
-        setSuggestions(result.data);
+        setSuggestions(result.data.filter(a => a.subType === 'CITY'));
       } else {
         setSuggestions([]);
       }
@@ -85,9 +84,10 @@ export default function HotelSearchPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
-  const handleSelectSuggestion = (destination: BookingDestination) => {
-    setDestination(destination);
-    setDestinationQuery(destination.label);
+  const handleSelectSuggestion = (airport: Airport) => {
+    setDestination(airport);
+    const query = [airport.address.cityName, airport.address.countryName].filter(Boolean).join(', ');
+    setDestinationQuery(query);
     setIsSuggestionsOpen(false);
     setSuggestions([]);
   };
@@ -105,13 +105,13 @@ export default function HotelSearchPage() {
 
     setLoading(true);
     setHotelData(null);
-    setFilters({ stars: [] });
-
+    
     const result = await searchHotels({
-      dest_id: destination.dest_id,
-      arrival_date: format(checkInDate, 'yyyy-MM-dd'),
-      departure_date: format(checkOutDate, 'yyyy-MM-dd'),
+      cityCode: destination.iataCode,
+      checkInDate: format(checkInDate, 'yyyy-MM-dd'),
+      checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
       adults,
+      ratings: filters.stars,
     });
 
     if (result.success && result.data) {
@@ -133,9 +133,10 @@ export default function HotelSearchPage() {
   
   const filteredHotels = useMemo(() => {
     if (!hotelData) return null;
-    return hotelData.filter(hotel => {
-      if (filters.stars.length > 0 && !filters.stars.includes(hotel.stars || 0)) {
-        return false;
+    return hotelData.filter(offer => {
+      if (filters.stars.length > 0) {
+        const hotelRating = parseInt(offer.hotel.rating || '0', 10);
+        return filters.stars.includes(hotelRating);
       }
       return true;
     });
@@ -154,8 +155,7 @@ export default function HotelSearchPage() {
     </div>
   );
   
-  const totalTravelers = adults + children;
-  const travelerText = `${totalTravelers} guest${totalTravelers > 1 ? 's' : ''}`;
+  const travelerText = `${adults} adult${adults > 1 ? 's' : ''}`;
 
   const SuggestionsList = () => (
     <div className="absolute z-10 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
@@ -164,16 +164,16 @@ export default function HotelSearchPage() {
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Searching...
         </div>
       ) : (
-        suggestions.map((dest, index) => (
+        suggestions.map((airport, index) => (
           <div
-            key={`${dest.dest_id}-${index}`}
+            key={`${airport.iataCode}-${index}`}
             className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
-            onClick={() => handleSelectSuggestion(dest)}
+            onClick={() => handleSelectSuggestion(airport)}
           >
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-muted-foreground" />
               <div className="flex-grow">
-                <p className="font-semibold text-sm">{dest.label}</p>
+                <p className="font-semibold text-sm">{airport.address?.cityName}, {airport.address?.countryName}</p>
               </div>
             </div>
           </div>
@@ -250,8 +250,8 @@ export default function HotelSearchPage() {
                     <PopoverContent className="w-80" align="end">
                       <div className="grid gap-4">
                         <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Guests</h4>
-                          <p className="text-sm text-muted-foreground">Select number of guests per room.</p>
+                          <h4 className="font-medium leading-none">Adults</h4>
+                          <p className="text-sm text-muted-foreground">Select number of adults.</p>
                         </div>
                         <div className="grid gap-4">
                           <div className="flex items-center justify-between">
@@ -262,18 +262,6 @@ export default function HotelSearchPage() {
                               </Button>
                               <span className="font-bold text-lg w-4 text-center">{adults}</span>
                               <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}>
-                                <Plus className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                             <p className="font-medium">Children</p>
-                            <div className="flex items-center gap-2">
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="font-bold text-lg w-4 text-center">{children}</span>
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => v + 1)}>
                                 <Plus className="h-4 w-4" />
                               </Button>
                             </div>

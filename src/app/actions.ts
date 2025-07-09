@@ -1,17 +1,12 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, Hotel, HotelDetails, BookingDestination } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
-
-const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
-const RAPIDAPI_HOST = 'booking-com15.p.rapidapi.com';
-const RAPIDAPI_BASE_URL = 'https://booking-com15.p.rapidapi.com/api/v1/hotels';
-
 
 // In-memory cache for Amadeus token
 let amadeusTokenCache = {
@@ -176,8 +171,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 
     const data: AirportSearchResponse = await response.json();
     
-    // Filter out locations that don't have an iataCode or a name.
-    const filteredData = data.data.filter(location => location.iataCode && location.name);
+    const filteredData = data.data.filter(location => location.iataCode && location.name && location.address?.cityName);
     
     return { success: true, data: filteredData };
 
@@ -188,176 +182,101 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 }
 
 const hotelSearchSchema = z.object({
-  dest_id: z.string(),
-  arrival_date: z.string(),
-  departure_date: z.string(),
+  cityCode: z.string().min(3).max(3),
+  checkInDate: z.string(),
+  checkOutDate: z.string(),
   adults: z.number().int().min(1),
-  star_rating: z.string().optional(),
+  ratings: z.array(z.number()).optional(),
 });
 
 export async function searchHotels(params: {
-  dest_id: string;
-  arrival_date: string;
-  departure_date: string;
+  cityCode: string;
+  checkInDate: string;
+  checkOutDate: string;
   adults: number;
-  star_rating?: string;
-}): Promise<{ success: boolean; data?: Hotel[]; error?: string }> {
+  ratings?: number[];
+}): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
   const validation = hotelSearchSchema.safeParse(params);
   if (!validation.success) {
     return { success: false, error: 'Invalid hotel search parameters.' };
   }
-  
-  if (!RAPIDAPI_KEY) {
-    return { success: false, error: 'RapidAPI key is not configured in the environment variables.'};
-  }
 
-  const { dest_id, arrival_date, departure_date, adults, star_rating } = validation.data;
-  
-  const searchParams = new URLSearchParams({
-    dest_id,
-    arrival_date,
-    departure_date,
-    adults: adults.toString(),
-    room_qty: '1',
-    page_number: '1',
-    languagecode: 'en-us',
-    currency_code: 'USD',
-  });
-
-  if (star_rating) {
-    searchParams.append('star_rating', star_rating);
-  }
+  const { cityCode, checkInDate, checkOutDate, adults, ratings } = validation.data;
 
   try {
-    const response = await fetch(`${RAPIDAPI_BASE_URL}/searchHotels?${searchParams.toString()}`, {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-host': RAPIDAPI_HOST,
-        'x-rapidapi-key': RAPIDAPI_KEY,
-      },
+    const token = await getAmadeusToken();
+
+    const searchParams = new URLSearchParams({
+      cityCode: cityCode.toUpperCase(),
+      checkInDate,
+      checkOutDate,
+      adults: adults.toString(),
+      currency: 'EUR',
+      view: 'FULL_LIGHT',
+      bestRateOnly: 'true',
+    });
+
+    if (ratings && ratings.length > 0) {
+      searchParams.append('ratings', ratings.join(','));
+    }
+
+    const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${searchParams.toString()}`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!response.ok) {
       const errorBody = await response.json();
-      console.error('RapidAPI Hotel Search Error:', errorBody);
-      const errorMessage = errorBody.message || 'Error in hotel search.';
+      console.error('Amadeus Hotel Search Error:', errorBody);
+      const errorMessage = errorBody.errors?.[0]?.detail || 'Error in hotel search.';
       return { success: false, error: errorMessage };
     }
 
     const result = await response.json();
-    
-    if (!result.status || !result.data || !result.data.hotels || result.data.hotels.length === 0) {
+
+    if (!result.data || result.data.length === 0) {
       return { success: false, error: 'No hotels found for this destination.' };
-    }
-    
-    const validHotels = result.data.hotels.filter((hotel: any) => hotel && hotel.hotel_id && hotel.hotel_name);
-
-    const hotelsWithStars = validHotels.map((hotel: any) => ({
-      ...hotel,
-      stars: hotel.review_score ? Math.round(hotel.review_score / 2) : undefined,
-    }));
-
-    return { success: true, data: hotelsWithStars };
-
-  } catch (err: any) {
-    console.error(err);
-    return { success: false, error: err.message || 'An unexpected error occurred.' };
-  }
-}
-
-const bookingDestinationSearchSchema = z.object({
-  query: z.string().min(1),
-});
-
-export async function searchBookingDestinations(query: string): Promise<{ success: boolean; data?: BookingDestination[]; error?: string }> {
-  const validation = bookingDestinationSearchSchema.safeParse({ query });
-  if (!validation.success) {
-    return { success: false, error: 'Invalid destination search query.' };
-  }
-  
-  if (!RAPIDAPI_KEY) {
-     return { success: false, error: 'RapidAPI key is not configured in the environment variables.'};
-  }
-
-  const searchParams = new URLSearchParams({ query: validation.data.query });
-
-  try {
-    const response = await fetch(`${RAPIDAPI_BASE_URL}/searchDestination?${searchParams.toString()}`, {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-host': RAPIDAPI_HOST,
-        'x-rapidapi-key': RAPIDAPI_KEY,
-      },
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.json();
-      console.error('RapidAPI Destination Search Error:', errorBody);
-      const errorMessage = errorBody.message || 'Error in destination search.';
-      return { success: false, error: errorMessage };
-    }
-
-    const result = await response.json();
-    
-    if (!result.status || !result.data || result.data.length === 0) {
-      return { success: false, error: 'No destinations found.' };
     }
 
     return { success: true, data: result.data };
-
   } catch (err: any) {
     console.error(err);
     return { success: false, error: err.message || 'An unexpected error occurred.' };
   }
 }
 
-
 const hotelDetailsSchema = z.object({
-  hotel_id: z.string(),
+  offerId: z.string(),
 });
 
-export async function getHotelDetails(params: { hotel_id: string }): Promise<{ success: boolean; data?: HotelDetails; error?: string }> {
+export async function getHotelDetails(params: { offerId: string }): Promise<{ success: boolean; data?: AmadeusHotelOffer; error?: string }> {
   const validation = hotelDetailsSchema.safeParse(params);
   if (!validation.success) {
     return { success: false, error: 'Invalid hotel details parameters.' };
   }
 
-  if (!RAPIDAPI_KEY) {
-    return { success: false, error: 'RapidAPI key is not configured in the environment variables.'};
-  }
+  const { offerId } = validation.data;
 
-  const { hotel_id } = validation.data;
-  
-  const searchParams = new URLSearchParams({
-    hotel_id,
-    languagecode: 'en-us',
-    currency_code: 'EUR',
-  });
-  
   try {
-    const response = await fetch(`${RAPIDAPI_BASE_URL}/getHotelDetails?${searchParams.toString()}`, {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-host': RAPIDAPI_HOST,
-        'x-rapidapi-key': RAPIDAPI_KEY,
-      },
+    const token = await getAmadeusToken();
+
+    const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers/${offerId}`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!response.ok) {
       const errorBody = await response.json();
-      console.error('RapidAPI Hotel Details Error:', errorBody);
-      const errorMessage = errorBody.message || 'Error fetching hotel details.';
+      console.error('Amadeus Hotel Details Error:', errorBody);
+      const errorMessage = errorBody.errors?.[0]?.detail || 'Error fetching hotel details.';
       return { success: false, error: errorMessage };
     }
 
     const result = await response.json();
-    
-    if (!result.status || !result.data) {
+
+    if (!result.data) {
       return { success: false, error: 'Could not retrieve hotel details.' };
     }
 
     return { success: true, data: result.data };
-
   } catch (err: any) {
     console.error(err);
     return { success: false, error: err.message || 'An unexpected error occurred.' };

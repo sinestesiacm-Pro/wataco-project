@@ -1,4 +1,5 @@
 
+
 export interface FlightOffer {
   type: string;
   id: string;
@@ -97,8 +98,8 @@ export interface FlightData {
 }
 
 export interface AirportAddress {
-    cityName: string;
-    countryName: string;
+    cityName?: string;
+    countryName?: string;
 }
 
 export interface Airport {
@@ -112,64 +113,60 @@ export interface AirportSearchResponse {
   data: Airport[];
 }
 
-// Hotel Types
-export interface PriceBreakdown {
-  gross_price: string;
-  currency: string;
-}
-
-export interface Hotel {
-  hotel_id: string;
-  hotel_name?: string;
-  main_photo_url?: string;
-  review_score: number | null;
-  review_score_word?: string;
-  price_breakdown?: PriceBreakdown;
-  city?: string;
-  country_trans?: string;
-  url: string;
-  accommodation_type_name?: string;
-  review_nr?: number;
-  stars?: number;
-}
-
-export interface HotelSearchResponse {
-  status: boolean;
-  message: string;
-  data: {
-    hotels: Hotel[];
-  };
-}
-
-export interface BookingDestination {
-  dest_id: string;
-  dest_type: string;
-  city_name: string;
-  country: string;
-  label: string;
-}
-
-export interface HotelPhoto {
-  url_original: string;
-  url_max: string;
-}
-
-export interface HotelFacility {
+// Amadeus Hotel Types
+export interface AmadeusHotel {
+  hotelId: string;
   name: string;
-  facility_id: string;
+  rating?: string;
+  media?: {
+    uri: string;
+    category: string;
+  }[];
+  address: {
+    lines: string[];
+    postalCode: string;
+    cityName: string;
+    countryCode: string;
+  };
+  contact?: {
+      phone: string;
+      fax: string;
+  };
+  description?: {
+      lang: string;
+      text: string;
+  };
+  amenities?: string[];
 }
 
-export interface HotelDetails {
-  hotel_id: string;
-  hotel_name_trans: string;
-  description?: {
-    description: string;
-  };
-  photos: HotelPhoto[];
-  block?: {
-    facility_name: string;
-    facilities: HotelFacility[];
+export interface AmadeusHotelOffer {
+  type: "hotel-offer";
+  id: string;
+  hotel: AmadeusHotel;
+  available: boolean;
+  offers: {
+    id: string;
+    checkInDate: string;
+    checkOutDate: string;
+    price: {
+      currency: string;
+      total: string;
+      base: string;
+      variations?: {
+        average?: {
+          base: string;
+        }
+      }
+    };
+    room: {
+        description: {
+            text: string;
+        }
+    }
   }[];
-  url: string;
-  composite_price_breakdown?: PriceBreakdown;
+  self?: string;
+}
+
+export interface AmadeusHotelSearchResponse {
+  data: AmadeusHotelOffer[];
 }

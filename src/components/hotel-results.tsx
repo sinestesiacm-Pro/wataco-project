@@ -2,15 +2,26 @@
 'use client';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { BedDouble, Star } from 'lucide-react';
-import type { Hotel } from '@/lib/types';
-import { Badge } from './ui/badge';
+import { Star } from 'lucide-react';
+import type { AmadeusHotelOffer } from '@/lib/types';
 import { HotelDetailsDialog } from './hotel-details-dialog';
 
 interface HotelResultsProps {
-    hotels: Hotel[] | null;
+    hotels: AmadeusHotelOffer[] | null;
 }
+
+const renderStars = (rating: string | undefined) => {
+    const starCount = parseInt(rating || '0', 10);
+    if (starCount === 0) return null;
+    
+    return (
+        <div className="flex items-center">
+            {[...Array(starCount)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
+            ))}
+        </div>
+    );
+};
 
 export function HotelResults({ hotels }: HotelResultsProps) {
     if (!hotels || hotels.length === 0) {
@@ -25,51 +36,45 @@ export function HotelResults({ hotels }: HotelResultsProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
-        {hotels.map((hotel) => (
-          <Card key={hotel.hotel_id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col">
+        {hotels.map((offer) => (
+          <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card flex flex-col">
             <div className="overflow-hidden relative">
               <Image 
-                src={hotel.main_photo_url ? hotel.main_photo_url.replace('square60', 'square200') : 'https://placehold.co/400x300.png'}
-                data-ai-hint="hotel room" 
-                alt={hotel.hotel_name || 'Hotel image'} 
+                src={'https://placehold.co/400x300.png'}
+                data-ai-hint="hotel exterior" 
+                alt={offer.hotel.name || 'Hotel image'} 
                 width={400} 
                 height={300} 
                 className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-110" 
               />
                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                <div className="absolute bottom-4 left-4">
-                 <h3 className="text-xl font-bold font-headline text-white">{hotel.hotel_name}</h3>
-                 {hotel.city && hotel.country_trans && (
-                    <p className="text-sm text-white/90">{`${hotel.city}, ${hotel.country_trans}`}</p>
+                 <h3 className="text-xl font-bold font-headline text-white">{offer.hotel.name}</h3>
+                 {offer.hotel.address?.cityName && (
+                    <p className="text-sm text-white/90">{`${offer.hotel.address.cityName}`}</p>
                  )}
               </div>
             </div>
             
             <CardContent className="p-4 flex flex-col flex-grow">
               <div className='flex justify-between items-start mb-2'>
-                {hotel.accommodation_type_name && <Badge variant="secondary">{hotel.accommodation_type_name}</Badge>}
-                {hotel.review_score && hotel.review_nr && (
-                    <div className="flex items-center gap-1">
-                        <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <span className="font-bold">{hotel.review_score.toFixed(1)}</span>
-                        <span className="text-xs text-muted-foreground">({hotel.review_nr} reviews)</span>
-                    </div>
-                )}
+                {renderStars(offer.hotel.rating)}
               </div>
              
               <div className="flex-grow" />
 
               <div className="flex justify-between items-center mt-4 pt-4 border-t">
-                {hotel.price_breakdown?.gross_price ? (
+                {offer.offers?.[0]?.price?.total ? (
                     <div>
                         <p className="text-xs text-muted-foreground font-body">From</p>
-                        <p className="font-bold text-2xl text-accent">{hotel.price_breakdown.gross_price}</p>
+                        <p className="font-bold text-2xl text-accent">
+                          €{offer.offers[0].price.total}
+                        </p>
                     </div>
                 ) : <div />}
                 <HotelDetailsDialog
-                  hotelId={hotel.hotel_id}
-                  hotelName={hotel.hotel_name || 'Hotel'}
-                  bookingUrl={hotel.url}
+                  offerId={offer.id}
+                  hotelName={offer.hotel.name}
                 />
               </div>
             </CardContent>
