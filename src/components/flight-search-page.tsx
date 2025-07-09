@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { format } from 'date-fns';
 import { searchFlights } from '@/app/actions';
 import type { FlightData } from '@/lib/types';
@@ -116,7 +117,7 @@ export default function FlightSearchPage() {
       <header className="bg-card shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center">
-            <img src="https://firebasestorage.googleapis.com/v0/b/tripify-app.appspot.com/o/logo-with-text.png?alt=media" alt="Be On Trip Logo" className="h-10 w-auto" />
+            <Image src="https://firebasestorage.googleapis.com/v0/b/tripify-app.appspot.com/o/logo-with-text.png?alt=media" alt="Be On Trip Logo" className="h-10 w-auto" width={160} height={40} priority />
           </div>
           {/* Future Nav Links can go here */}
         </div>
@@ -182,7 +183,7 @@ export default function FlightSearchPage() {
                 </div>
                 <div className='lg:col-span-2'>
                   <Label htmlFor="adults" className="text-sm font-semibold ml-2">Adults</Label>
-                   <Select value={adults.toString()} onValueChange={(val) => setAdults(parseInt(val))}>
+                   <Select value={adults.toString()} onValuechange={(val) => setAdults(parseInt(val))}>
                       <SelectTrigger className="mt-1">
                         <Users className="mr-2 h-4 w-4" />
                         <SelectValue placeholder="Adults" />
