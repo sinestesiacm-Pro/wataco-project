@@ -9,8 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
-import { Loader2, Terminal } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Loader2 } from 'lucide-react';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -23,11 +22,8 @@ export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const isConfigMissing = !process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === 'YOUR_API_KEY';
-
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isConfigMissing) return;
 
     if (password !== confirmPassword) {
       toast({
@@ -55,8 +51,6 @@ export default function SignupPage() {
   };
 
   const handleGoogleSignIn = async () => {
-    if (isConfigMissing) return;
-
     setGoogleLoading(true);
     try {
       await signInWithGoogle();
@@ -82,17 +76,6 @@ export default function SignupPage() {
           <CardDescription>Join us and start planning your next adventure</CardDescription>
         </CardHeader>
         <CardContent>
-          {isConfigMissing && (
-            <Alert variant="destructive" className="mb-4">
-              <Terminal className="h-4 w-4" />
-              <AlertTitle>Firebase Not Configured</AlertTitle>
-              <AlertDescription>
-                Authentication is disabled. Please add your Firebase API keys to the
-                <code className="font-mono text-xs bg-muted text-destructive-foreground p-1 rounded-sm mx-1">.env</code>
-                file.
-              </AlertDescription>
-            </Alert>
-          )}
           <form onSubmit={handleSignup} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -103,7 +86,6 @@ export default function SignupPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={isConfigMissing}
               />
             </div>
             <div className="space-y-2">
@@ -114,7 +96,6 @@ export default function SignupPage() {
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={isConfigMissing}
               />
             </div>
              <div className="space-y-2">
@@ -125,10 +106,9 @@ export default function SignupPage() {
                 required 
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={isConfigMissing}
               />
             </div>
-            <Button type="submit" className="w-full font-bold" disabled={loading || isConfigMissing}>
+            <Button type="submit" className="w-full font-bold" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Sign Up
             </Button>
@@ -141,7 +121,7 @@ export default function SignupPage() {
               <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading || isConfigMissing}>
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
              {googleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Icons.logo width={20} height={20} className="mr-2" />}
             Google
           </Button>
