@@ -10,10 +10,10 @@ interface RecommendedDestinationsProps {
 }
 
 const destinations = [
-  { city: "Rome", country: "Italy", priceFrom: "89", iata: "FCO", hint: "rome colosseum" },
-  { city: "Lisbon", country: "Portugal", priceFrom: "75", iata: "LIS", hint: "lisbon tram" },
-  { city: "Paris", country: "France", priceFrom: "99", iata: "CDG", hint: "paris eiffel tower" },
-  { city: "Amsterdam", country: "Netherlands", priceFrom: "105", iata: "AMS", hint: "amsterdam canals" },
+  { city: "Rome", country: "Italy", priceFrom: "89", iata: "FCO", hint: "rome colosseum", image: "https://images.unsplash.com/photo-1668171321834-658179e37f5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb21lJTIwY29sb3NzZXVtfGVufDB8fHx8MTc1MjA2MjA4NHww&ixlib=rb-4.1.0&q=80&w=1080" },
+  { city: "Lisbon", country: "Portugal", priceFrom: "75", iata: "LIS", hint: "lisbon tram", image: "https://images.unsplash.com/photo-1571767750274-4795bdfcb642?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsaXNib24lMjB0cmFtfGVufDB8fHx8MTc1MjA2MjA4NHww&ixlib=rb-4.1.0&q=80&w=1080" },
+  { city: "Paris", country: "France", priceFrom: "99", iata: "CDG", hint: "paris eiffel tower", image: "https://images.unsplash.com/photo-1553455427-c38fa28dc586?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwYXJpcyUyMGVpZmZlbCUyMHRvd2VyfGVufDB8fHx8MTc1MjA2MjA4NHww&ixlib=rb-4.1.0&q=80&w=1080" },
+  { city: "Amsterdam", country: "Netherlands", priceFrom: "105", iata: "AMS", hint: "amsterdam canals", image: "https://images.unsplash.com/photo-1639889957348-1b5daeabe0c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxhbXN0ZXJkYW0lMjBjYW5hbHN8ZW58MHx8fHwxNzUyMDYyMDg0fDA&ixlib=rb-4.1.0&q=80&w=1080" },
 ];
 
 export function RecommendedDestinations({ setDestination }: RecommendedDestinationsProps) {
@@ -32,7 +32,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
           >
             <div className="overflow-hidden relative">
               <Image
-                src={`https://placehold.co/400x300.png`}
+                src={dest.image}
                 data-ai-hint={dest.hint}
                 alt={dest.city}
                 width={400}
