@@ -99,7 +99,10 @@ export default function FlightSearchPage() {
   }, []);
   
   const handleSelectSuggestion = (airport: Airport, type: 'origin' | 'destination') => {
-    const query = `${airport.address?.cityName || airport.name}, ${airport.address.countryName}`;
+    const locationName = airport.address?.cityName || airport.name;
+    const countryName = airport.address?.countryName || '';
+    const query = [locationName, countryName].filter(Boolean).join(', ');
+
     if (type === 'origin') {
       setOrigin(airport.iataCode);
       setOriginQuery(query);
@@ -195,7 +198,10 @@ export default function FlightSearchPage() {
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-muted-foreground" />
               <div className="flex-grow">
-                <p className="font-semibold text-sm">{airport.address?.cityName || airport.name}, {airport.address.countryName}</p>
+                <p className="font-semibold text-sm">
+                  {airport.address?.cityName || airport.name}
+                  {airport.address?.countryName ? `, ${airport.address.countryName}`: ''}
+                </p>
                 <p className="text-xs text-muted-foreground">{airport.name} ({airport.iataCode})</p>
               </div>
             </div>

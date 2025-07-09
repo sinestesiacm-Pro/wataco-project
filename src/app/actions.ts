@@ -170,7 +170,8 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 
     const data: AirportSearchResponse = await response.json();
     
-    const filteredData = data.data.filter(location => location.iataCode);
+    // Filter out locations that don't have an iataCode or an address, as they are unusable.
+    const filteredData = data.data.filter(location => location.iataCode && location.address);
     
     return { success: true, data: filteredData };
 
