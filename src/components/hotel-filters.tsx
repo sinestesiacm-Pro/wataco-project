@@ -15,9 +15,9 @@ interface HotelFiltersProps {
 const starOptions = [5, 4, 3, 2, 1];
 
 const amenityOptions: { id: string; label: string; icon: LucideIcon }[] = [
-  { id: 'SWIMMING_POOL', label: 'Swimming Pool', icon: Waves },
-  { id: 'FITNESS_CENTER', label: 'Gym', icon: Dumbbell },
-  { id: 'PARKING', label: 'Parking', icon: Car },
+  { id: 'SWIMMING_POOL', label: 'Piscina', icon: Waves },
+  { id: 'FITNESS_CENTER', label: 'Gimnasio', icon: Dumbbell },
+  { id: 'PARKING', label: 'Estacionamiento', icon: Car },
 ];
 
 export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
@@ -47,11 +47,11 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
   return (
     <Card className="sticky top-24">
       <CardHeader>
-        <CardTitle>Filter Results</CardTitle>
+        <CardTitle>Filtrar Resultados</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <h3 className="font-semibold mb-3 text-sm">Star Rating</h3>
+          <h3 className="font-semibold mb-3 text-sm">Clasificación por Estrellas</h3>
           <div className="space-y-2">
             {starOptions.map(star => (
               <div key={star} className="flex items-center space-x-2">
@@ -76,7 +76,7 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
         <Separator />
         
         <div>
-          <h3 className="font-semibold mb-3 text-sm">Amenities</h3>
+          <h3 className="font-semibold mb-3 text-sm">Servicios</h3>
           <div className="space-y-2">
             {amenityOptions.map(amenity => (
               <div key={amenity.id} className="flex items-center space-x-2">

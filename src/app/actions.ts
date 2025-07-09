@@ -347,7 +347,7 @@ export async function searchPackages(params: {
 
   // The actual Amadeus Flight+Hotel Search API is complex and may not be available in the standard test environment.
   // This is a placeholder response that informs the user.
-  return { success: false, error: "Package search feature is not available in this demo. Please search for flights and hotels separately." };
+  return { success: false, error: "La búsqueda de paquetes no está disponible en esta demostración. Por favor, busca vuelos y hoteles por separado." };
 }
 
 const cruiseSearchSchema = z.object({
@@ -368,5 +368,5 @@ export async function searchCruises(params: {
 
   // The Amadeus Cruise API is not available in the standard test environment.
   // This is a placeholder response.
-  return { success: false, error: "Cruise search feature is not available in this demo." };
+  return { success: false, error: "La búsqueda de cruceros no está disponible en esta demostración." };
 }

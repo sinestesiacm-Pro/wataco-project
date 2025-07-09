@@ -26,8 +26,8 @@ export function HotelResults({ hotels }: HotelResultsProps) {
     if (!hotels || hotels.length === 0) {
         return (
             <div className="text-center py-16">
-                <h3 className="text-xl font-semibold">No Hotels Found</h3>
-                <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+                <h3 className="text-xl font-semibold">No se Encontraron Hoteles</h3>
+                <p className="text-muted-foreground">Intenta ajustar tu búsqueda o filtros.</p>
             </div>
         );
     }
@@ -65,7 +65,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
               <div className="flex justify-between items-center mt-4 pt-4 border-t">
                 {offer.offers?.[0]?.price?.total ? (
                     <div>
-                        <p className="text-xs text-muted-foreground font-body">From</p>
+                        <p className="text-xs text-muted-foreground font-body">Desde</p>
                         <p className="font-bold text-2xl text-accent">
                           ${offer.offers[0].price.total}
                         </p>

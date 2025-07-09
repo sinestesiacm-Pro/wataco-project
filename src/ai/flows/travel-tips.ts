@@ -29,7 +29,7 @@ const prompt = ai.definePrompt({
   name: 'generateDestinationTravelTipsPrompt',
   input: {schema: GenerateDestinationTravelTipsInputSchema},
   output: {schema: GenerateDestinationTravelTipsOutputSchema},
-  prompt: `You are a travel expert. Generate a list of travel tips for {{destination}}.\n`,
+  prompt: `Eres un experto en viajes. Genera una lista de consejos de viaje para {{destination}}.\n`,
 });
 
 const generateDestinationTravelTipsFlow = ai.defineFlow(

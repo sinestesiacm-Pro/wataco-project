@@ -19,9 +19,7 @@ export function Header() {
   const activeTab = searchParams.get('tab') || 'Flights';
 
   const handleTabClick = (tab: string) => {
-    const params = new URLSearchParams();
-    params.set('tab', tab);
-    router.push(`/?${params.toString()}`);
+    router.push(`/?tab=${tab}`);
   };
 
   return (
@@ -35,31 +33,31 @@ export function Header() {
           </div>
           <nav className="hidden md:flex items-center space-x-1 bg-card/50 p-1 rounded-full border">
             <TabButton
-              label="Flights"
+              label="Vuelos"
               icon={<Plane className="h-4 w-4" />}
               isActive={isOnHomePage && activeTab === 'Flights'}
               onClick={() => handleTabClick('Flights')}
             />
             <TabButton
-              label="Hotels"
+              label="Hoteles"
               icon={<BedDouble className="h-4 w-4" />}
               isActive={isOnHomePage && activeTab === 'Hotels'}
               onClick={() => handleTabClick('Hotels')}
             />
             <TabButton
-              label="Packages"
+              label="Paquetes"
               icon={<Package className="h-4 w-4" />}
               isActive={isOnHomePage && activeTab === 'Packages'}
               onClick={() => handleTabClick('Packages')}
             />
             <TabButton
-              label="Cruises"
+              label="Cruceros"
               icon={<Ship className="h-4 w-4" />}
               isActive={isOnHomePage && activeTab === 'Cruises'}
               onClick={() => handleTabClick('Cruises')}
             />
             <TabButton
-              label="Activities"
+              label="Actividades"
               icon={<Zap className="h-4 w-4" />}
               isActive={isOnHomePage && activeTab === 'Activities'}
               onClick={() => handleTabClick('Activities')}
@@ -72,7 +70,7 @@ export function Header() {
               className="rounded-full hover:bg-primary/10 group transition-all duration-300"
             >
               <Search className="h-5 w-5 text-foreground/70 group-hover:text-primary group-hover:scale-110 transition-transform" />
-              <span className="sr-only">Search</span>
+              <span className="sr-only">Buscar</span>
             </Button>
             {user ? (
               <UserNav />
@@ -80,7 +78,7 @@ export function Header() {
               <Button asChild>
                 <Link href="/login">
                   <LogIn className="mr-2 h-4 w-4"/>
-                  Login
+                  Iniciar Sesión
                 </Link>
               </Button>
             )}

@@ -31,8 +31,8 @@ export function PackagesResults({ packagesData }: PackagesResultsProps) {
   if (!packages || packages.length === 0) {
     return (
       <div className="text-center py-16">
-        <h3 className="text-xl font-semibold">No Packages Found</h3>
-        <p className="text-muted-foreground">Try adjusting your search criteria.</p>
+        <h3 className="text-xl font-semibold">No se Encontraron Paquetes</h3>
+        <p className="text-muted-foreground">Intenta ajustar tus criterios de búsqueda.</p>
       </div>
     );
   }
@@ -40,7 +40,7 @@ export function PackagesResults({ packagesData }: PackagesResultsProps) {
   return (
     <div className="space-y-8">
        <h2 className="text-3xl font-headline font-bold text-gray-800">
-          Found {packages.length} Package Deal{packages.length > 1 ? 's' : ''}
+          Se encontraron {packages.length} Oferta{packages.length > 1 ? 's' : ''} de Paquete
         </h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {packages.map((pkg) => {
@@ -89,7 +89,7 @@ export function PackagesResults({ packagesData }: PackagesResultsProps) {
                                 {flight.itineraries[0].segments.slice(-1)[0].arrival.iataCode}
                             </p>
                         </div>
-                         <Badge variant="outline">Round Trip</Badge>
+                         <Badge variant="outline">Ida y Vuelta</Badge>
                     </div>
 
                     <Separator className="my-4"/>
@@ -99,13 +99,13 @@ export function PackagesResults({ packagesData }: PackagesResultsProps) {
                     {/* Price and Booking */}
                     <div className="flex justify-between items-center mt-4">
                         <div>
-                            <p className="text-xs text-muted-foreground">Package price per person</p>
+                            <p className="text-xs text-muted-foreground">Precio del paquete por persona</p>
                             <p className="text-3xl font-bold font-headline text-accent">
                                ${pkg.price.total}
                             </p>
                         </div>
                         <Button size="lg">
-                            View Deal
+                            Ver Oferta
                             <ArrowRight className="ml-2 h-5 w-5"/>
                         </Button>
                     </div>

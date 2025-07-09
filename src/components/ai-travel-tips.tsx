@@ -33,7 +33,7 @@ export function AITravelTips({ destination, destinationName }: AITravelTipsProps
       const result = await generateDestinationTravelTips({ destination: destinationName });
       setTips(result.tips);
     } catch (e) {
-      setError('Could not generate travel tips. Please try again later.');
+      setError('No se pudieron generar los consejos de viaje. Por favor, inténtalo de nuevo más tarde.');
       console.error(e);
     } finally {
       setLoading(false);
@@ -45,17 +45,17 @@ export function AITravelTips({ destination, destinationName }: AITravelTipsProps
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" onClick={() => !isOpen && handleGenerateTips()}>
           <Wand2 className="mr-2 h-4 w-4" />
-          AI Travel Tips for {destinationName}
+          Consejos de Viaje con IA para {destinationName}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] md:max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl flex items-center">
             <Wand2 className="mr-2 h-6 w-6 text-primary" />
-            AI Travel Tips for {destinationName}
+            Consejos de Viaje con IA para {destinationName}
           </DialogTitle>
           <DialogDescription>
-            Discover insider tips for your trip, powered by AI.
+            Descubre consejos de expertos para tu viaje, con la ayuda de IA.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">

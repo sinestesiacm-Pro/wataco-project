@@ -23,17 +23,20 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     setLoading(true);
     try {
       await signInWithEmail(email, password);
-      toast({ title: "Login successful!", description: "Welcome back!" });
+      toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido de vuelta!" });
       router.push('/');
     } catch (error: any) {
       console.error(error);
+      let description = "Por favor, revisa tus credenciales e inténtalo de nuevo.";
+      if (error.message.includes('auth/invalid-api-key')) {
+        description = "Las claves de API que proporcionaste no son válidas. Por favor, revisa tu archivo .env.";
+      }
       toast({
-        title: 'Login Failed',
-        description: error.message || 'Please check your credentials and try again.',
+        title: 'Falló el inicio de sesión',
+        description: description,
         variant: 'destructive',
       });
     } finally {
@@ -45,16 +48,19 @@ export default function LoginPage() {
     setGoogleLoading(true);
     try {
       await signInWithGoogle();
-      toast({ title: "Login successful!", description: "Welcome!" });
+      toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido!" });
       router.push('/');
     } catch (error: any) {
       console.error(error);
-      let description = error.message || 'Could not sign in with Google. Please try again.';
+      let description = "No se pudo iniciar sesión con Google. Por favor, inténtalo de nuevo.";
       if (error.code === 'auth/unauthorized-domain') {
-          description = "This app's domain is not authorized. Find the correct domain from the preview window's URL bar and add it to the Firebase console under Authentication > Settings > Authorized domains.";
+          description = "El dominio de esta aplicación no está autorizado. Encuentra el dominio correcto en la barra de URL de la ventana de vista previa y agrégalo a la consola de Firebase en Authentication > Settings > Authorized domains.";
+      }
+      if (error.message.includes('auth/invalid-api-key')) {
+        description = "Las claves de API que proporcionaste no son válidas. Por favor, revisa tu archivo .env.";
       }
       toast({
-        title: 'Google Sign-In Failed',
+        title: 'Falló el inicio de sesión con Google',
         description: description,
         variant: 'destructive',
       });
@@ -67,13 +73,13 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12 px-4">
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold font-headline">Welcome Back</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+          <CardTitle className="text-2xl font-bold font-headline">Bienvenido de Nuevo</CardTitle>
+          <CardDescription>Inicia sesión en tu cuenta para continuar</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Correo Electrónico</Label>
               <Input
                 id="email"
                 type="email"
@@ -84,7 +90,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Contraseña</Label>
               <Input 
                 id="password" 
                 type="password" 
@@ -95,7 +101,7 @@ export default function LoginPage() {
             </div>
             <Button type="submit" className="w-full font-bold" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Log In
+              Iniciar Sesión
             </Button>
           </form>
           <div className="relative my-6">
@@ -103,7 +109,7 @@ export default function LoginPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+              <span className="bg-background px-2 text-muted-foreground">O continúa con</span>
             </div>
           </div>
           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
@@ -111,9 +117,9 @@ export default function LoginPage() {
             Google
           </Button>
           <div className="mt-4 text-center text-sm">
-            Don't have an account?{' '}
+            ¿No tienes una cuenta?{' '}
             <Link href="/signup" className="underline text-primary">
-              Sign up
+              Regístrate
             </Link>
           </div>
         </CardContent>

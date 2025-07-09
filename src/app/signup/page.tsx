@@ -27,8 +27,8 @@ export default function SignupPage() {
 
     if (password !== confirmPassword) {
       toast({
-        title: "Passwords don't match",
-        description: "Please make sure your passwords match.",
+        title: "Las contraseñas no coinciden",
+        description: "Por favor, asegúrate de que tus contraseñas coinciden.",
         variant: 'destructive',
       });
       return;
@@ -36,13 +36,17 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await signUpWithEmail(email, password);
-      toast({ title: "Account created!", description: "Welcome! You have been successfully signed up." });
+      toast({ title: "¡Cuenta creada!", description: "¡Bienvenido! Te has registrado con éxito." });
       router.push('/');
     } catch (error: any) {
       console.error(error);
+      let description = "No se pudo crear la cuenta. Por favor, inténtalo de nuevo.";
+       if (error.message.includes('auth/invalid-api-key')) {
+        description = "Las claves de API que proporcionaste no son válidas. Por favor, revisa tu archivo .env.";
+      }
       toast({
-        title: 'Signup Failed',
-        description: error.message || 'Could not create an account. Please try again.',
+        title: 'Falló el registro',
+        description: description,
         variant: 'destructive',
       });
     } finally {
@@ -54,16 +58,19 @@ export default function SignupPage() {
     setGoogleLoading(true);
     try {
       await signInWithGoogle();
-      toast({ title: "Account created!", description: "Welcome!" });
+      toast({ title: "¡Cuenta creada!", description: "¡Bienvenido!" });
       router.push('/');
     } catch (error: any) {
       console.error(error);
-      let description = error.message || 'Could not sign up with Google. Please try again.';
+      let description = 'No se pudo registrar con Google. Por favor, inténtalo de nuevo.';
       if (error.code === 'auth/unauthorized-domain') {
-          description = "This app's domain is not authorized. Find the correct domain from the preview window's URL bar and add it to the Firebase console under Authentication > Settings > Authorized domains.";
+          description = "El dominio de esta aplicación no está autorizado. Encuentra el dominio correcto en la barra de URL de la ventana de vista previa y agrégalo a la consola de Firebase en Authentication > Settings > Authorized domains.";
+      }
+      if (error.message.includes('auth/invalid-api-key')) {
+        description = "Las claves de API que proporcionaste no son válidas. Por favor, revisa tu archivo .env.";
       }
       toast({
-        title: 'Google Sign-Up Failed',
+        title: 'Falló el registro con Google',
         description: description,
         variant: 'destructive',
       });
@@ -76,13 +83,13 @@ export default function SignupPage() {
     <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12 px-4">
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold font-headline">Create an Account</CardTitle>
-          <CardDescription>Join us and start planning your next adventure</CardDescription>
+          <CardTitle className="text-2xl font-bold font-headline">Crea una Cuenta</CardTitle>
+          <CardDescription>Únete a nosotros y empieza a planificar tu próxima aventura</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignup} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Correo Electrónico</Label>
               <Input
                 id="email"
                 type="email"
@@ -93,7 +100,7 @@ export default function SignupPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Contraseña</Label>
               <Input 
                 id="password" 
                 type="password" 
@@ -103,7 +110,7 @@ export default function SignupPage() {
               />
             </div>
              <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
               <Input 
                 id="confirm-password" 
                 type="password" 
@@ -114,7 +121,7 @@ export default function SignupPage() {
             </div>
             <Button type="submit" className="w-full font-bold" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign Up
+              Registrarse
             </Button>
           </form>
           <div className="relative my-6">
@@ -122,7 +129,7 @@ export default function SignupPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+              <span className="bg-background px-2 text-muted-foreground">O continúa con</span>
             </div>
           </div>
           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
@@ -130,9 +137,9 @@ export default function SignupPage() {
             Google
           </Button>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
+            ¿Ya tienes una cuenta?{' '}
             <Link href="/login" className="underline text-primary">
-              Log in
+              Inicia sesión
             </Link>
           </div>
         </CardContent>

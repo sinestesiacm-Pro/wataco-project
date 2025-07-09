@@ -11,7 +11,7 @@ export function Footer() {
             <Icons.logo width={100} height={27} />
           </div>
           <div className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Be On Trip. All rights reserved.
+            © {new Date().getFullYear()} Be On Trip. Todos los derechos reservados.
           </div>
           <div className="flex items-center justify-center md:justify-end space-x-6">
             <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">

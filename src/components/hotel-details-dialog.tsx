@@ -31,7 +31,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
       <DialogTrigger asChild>
         <Button>
           <BedDouble className="mr-2 h-4 w-4" />
-          View Deal
+          Ver Oferta
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
@@ -84,7 +84,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
                 <div className="space-y-4">
                   {details.hotel.description?.text && (
                     <>
-                      <h3 className="text-lg font-semibold font-headline">About this hotel</h3>
+                      <h3 className="text-lg font-semibold font-headline">Sobre este hotel</h3>
                       <ScrollArea className="h-48">
                         <p className="text-sm text-muted-foreground whitespace-pre-wrap font-body">
                           {details.hotel.description.text}
@@ -95,7 +95,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
 
                   {details.hotel.amenities && details.hotel.amenities.length > 0 && (
                     <div>
-                      <h3 className="text-lg font-semibold font-headline mb-2">Amenities</h3>
+                      <h3 className="text-lg font-semibold font-headline mb-2">Servicios</h3>
                       <div className="flex flex-wrap gap-2">
                         {details.hotel.amenities.slice(0, 15).map((amenity, index) => (
                           <Badge key={index} variant="secondary" className="flex items-center gap-1.5">
@@ -109,7 +109,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
 
                   {details.offers?.[0]?.room?.description?.text && (
                      <div>
-                        <h3 className="text-lg font-semibold font-headline mb-2">Room Details</h3>
+                        <h3 className="text-lg font-semibold font-headline mb-2">Detalles de la Habitación</h3>
                         <p className="text-sm text-muted-foreground font-body">
                           {details.offers[0].room.description.text}
                         </p>
@@ -120,20 +120,20 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
             <DialogFooter className="mt-auto pt-4 border-t flex justify-between items-center w-full">
               {details.offers?.[0]?.price?.total && (
                  <div>
-                    <p className="text-xs text-muted-foreground font-body">Total Price</p>
+                    <p className="text-xs text-muted-foreground font-body">Precio Total</p>
                     <p className="font-bold text-2xl text-accent">
                       ${details.offers[0].price.total}
                     </p>
                  </div>
               )}
-              <Button size="lg" onClick={() => alert('Booking functionality not implemented in this demo.')}>
-                Book Now
+              <Button size="lg" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>
+                Reservar Ahora
               </Button>
             </DialogFooter>
           </>
         ) : (
           <div className="flex items-center justify-center h-96">
-            <p>Could not load hotel details.</p>
+            <p>No se pudieron cargar los detalles del hotel.</p>
           </div>
         )}
       </DialogContent>

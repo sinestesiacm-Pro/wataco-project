@@ -133,8 +133,8 @@ export default function FlightSearchPage() {
     e.preventDefault();
     if (!origin || !destination || !departureDate || (isRoundTrip && !returnDate)) {
       toast({
-        title: 'Missing Information',
-        description: 'Please fill in all required flight details.',
+        title: 'Información Faltante',
+        description: 'Por favor, completa todos los detalles del vuelo requeridos.',
         variant: 'destructive',
       });
       return;
@@ -158,8 +158,8 @@ export default function FlightSearchPage() {
     } else {
       setFlightData(null); // Clear previous results on error
       toast({
-        title: 'Search Error',
-        description: result.error || 'Could not find flights. Try another search.',
+        title: 'Error de Búsqueda',
+        description: result.error || 'No se pudieron encontrar vuelos. Intenta otra búsqueda.',
         variant: 'destructive',
       });
     }
@@ -178,13 +178,13 @@ export default function FlightSearchPage() {
   );
   
   const totalTravelers = adults + children + infants;
-  const travelerText = `${totalTravelers} traveler${totalTravelers > 1 ? 's' : ''}`;
+  const travelerText = `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`;
 
   const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => (
     <div className="absolute z-10 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="h-5 w-5 animate-spin mr-2" /> Searching...
+          <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
         </div>
       ) : (
         suggestions.map((airport, index) => (
@@ -214,26 +214,26 @@ export default function FlightSearchPage() {
     <div className="w-full">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <section className="mb-12">
-          <h2 className="text-4xl lg:text-5xl font-bold font-headline text-center mb-4 text-gray-800">Your Next Adventure Awaits</h2>
-          <p className="text-center text-muted-foreground font-body text-lg mb-8 max-w-2xl mx-auto">Effortlessly find and book the best flights to anywhere in the world.</p>
+          <h2 className="text-4xl lg:text-5xl font-bold font-headline text-center mb-4 text-gray-800">Tu Próxima Aventura te Espera</h2>
+          <p className="text-center text-muted-foreground font-body text-lg mb-8 max-w-2xl mx-auto">Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo.</p>
           
           <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Switch id="trip-type" checked={isRoundTrip} onCheckedChange={handleTripTypeChange} />
-                  <Label htmlFor="trip-type" className="text-sm font-semibold">{isRoundTrip ? 'Round Trip' : 'One Way'}</Label>
+                  <Label htmlFor="trip-type" className="text-sm font-semibold">{isRoundTrip ? 'Ida y Vuelta' : 'Solo Ida'}</Label>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
                 <div className='lg:col-span-4 relative' ref={activeInput === 'origin' ? suggestionsRef : null}>
-                  <Label htmlFor="origin" className="text-sm font-semibold ml-2">From</Label>
+                  <Label htmlFor="origin" className="text-sm font-semibold ml-2">Desde</Label>
                   <InputGroup>
                     <InputIcon><PlaneTakeoff className="h-4 w-4" /></InputIcon>
                     <Input id="origin" type="text" value={originQuery} 
                         onChange={e => setOriginQuery(e.target.value)} 
                         onFocus={() => { setActiveInput('origin'); setSuggestions([])}}
-                        placeholder="Origin city or airport" 
+                        placeholder="Ciudad o aeropuerto de origen" 
                         className="mt-1 pl-10" 
                         autoComplete="off"
                     />
@@ -241,13 +241,13 @@ export default function FlightSearchPage() {
                    {activeInput === 'origin' && <SuggestionsList type="origin" />}
                 </div>
                 <div className='lg:col-span-4 relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
-                  <Label htmlFor="destination" className="text-sm font-semibold ml-2">To</Label>
+                  <Label htmlFor="destination" className="text-sm font-semibold ml-2">A</Label>
                   <InputGroup>
                     <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
                     <Input id="destination" type="text" value={destinationQuery} 
                         onChange={e => setDestinationQuery(e.target.value)}
                         onFocus={() => { setActiveInput('destination'); setSuggestions([])}} 
-                        placeholder="Destination city or airport" 
+                        placeholder="Ciudad o aeropuerto de destino" 
                         className="mt-1 pl-10" 
                         autoComplete="off"
                     />
@@ -256,12 +256,12 @@ export default function FlightSearchPage() {
                 </div>
                 <div className="lg:col-span-4 grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="departureDate" className="text-sm font-semibold ml-2">Depart</Label>
+                    <Label htmlFor="departureDate" className="text-sm font-semibold ml-2">Salida</Label>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !departureDate && "text-muted-foreground")}>
                           <CalendarIcon className="mr-2 h-4 w-4" />
-                          {departureDate ? format(departureDate, "MMM d") : <span>Pick a date</span>}
+                          {departureDate ? format(departureDate, "MMM d") : <span>Elige una fecha</span>}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
@@ -270,12 +270,12 @@ export default function FlightSearchPage() {
                     </Popover>
                   </div>
                   <div>
-                  <Label htmlFor="returnDate" className="text-sm font-semibold ml-2">Return</Label>
+                  <Label htmlFor="returnDate" className="text-sm font-semibold ml-2">Regreso</Label>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button variant={"outline"} disabled={!isRoundTrip} className={cn("w-full justify-start text-left font-normal mt-1", !returnDate && "text-muted-foreground")}>
                           <CalendarIcon className="mr-2 h-4 w-4" />
-                          {returnDate ? format(returnDate, "MMM d") : <span>Pick a date</span>}
+                          {returnDate ? format(returnDate, "MMM d") : <span>Elige una fecha</span>}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
@@ -285,7 +285,7 @@ export default function FlightSearchPage() {
                   </div>
                 </div>
                 <div className='lg:col-span-2'>
-                  <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Passengers</Label>
+                  <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Pasajeros</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
@@ -296,16 +296,16 @@ export default function FlightSearchPage() {
                     <PopoverContent className="w-80" align="end">
                       <div className="grid gap-4">
                         <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Travelers</h4>
+                          <h4 className="font-medium leading-none">Pasajeros</h4>
                           <p className="text-sm text-muted-foreground">
-                            Select the number of passengers.
+                            Selecciona el número de pasajeros.
                           </p>
                         </div>
                         <div className="grid gap-4">
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="font-medium">Adults</p>
-                              <p className="text-xs text-muted-foreground">Ages 12+</p>
+                              <p className="font-medium">Adultos</p>
+                              <p className="text-xs text-muted-foreground">Mayores de 12 años</p>
                             </div>
                             <div className="flex items-center gap-2">
                               <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1 || adults <= infants}>
@@ -319,8 +319,8 @@ export default function FlightSearchPage() {
                           </div>
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="font-medium">Children</p>
-                              <p className="text-xs text-muted-foreground">Ages 2-11</p>
+                              <p className="font-medium">Niños</p>
+                              <p className="text-xs text-muted-foreground">De 2 a 11 años</p>
                             </div>
                             <div className="flex items-center gap-2">
                               <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
@@ -334,8 +334,8 @@ export default function FlightSearchPage() {
                           </div>
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="font-medium">Infants</p>
-                              <p className="text-xs text-muted-foreground">Under 2</p>
+                              <p className="font-medium">Bebés</p>
+                              <p className="text-xs text-muted-foreground">Menores de 2 años</p>
                             </div>
                             <div className="flex items-center gap-2">
                               <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.max(0, v - 1))} disabled={infants <= 0}>
@@ -354,7 +354,7 @@ export default function FlightSearchPage() {
                 </div>
 
                 <Button type="submit" disabled={loading} size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 lg:col-span-2 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                  {loading ? <Loader2 className="animate-spin" /> : 'Search'}
+                  {loading ? <Loader2 className="animate-spin" /> : 'Buscar'}
                 </Button>
               </div>
             </form>
