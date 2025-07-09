@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { searchFlights } from '@/app/actions';
 import type { FlightData } from '@/lib/types';
-import { Icons } from '@/components/icons';
 
 import { RecommendedDestinations } from '@/components/recommended-destinations';
 import { FlightResults } from '@/components/flight-results';
@@ -122,22 +121,13 @@ export default function FlightSearchPage() {
 
 
   return (
-    <div className="w-full min-h-screen">
-      <header className="bg-card shadow-sm">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <div className="flex items-center">
-            <Icons.logo width={104} height={40} className="h-10 w-auto" />
-          </div>
-          {/* Future Nav Links can go here */}
-        </div>
-      </header>
-      
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div className="w-full">
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <section className="mb-12">
-          <h2 className="text-4xl lg:text-5xl font-bold font-headline text-center mb-4">Your Next Adventure Awaits</h2>
+          <h2 className="text-4xl lg:text-5xl font-bold font-headline text-center mb-4 text-gray-800">Your Next Adventure Awaits</h2>
           <p className="text-center text-muted-foreground font-body text-lg mb-8 max-w-2xl mx-auto">Effortlessly find and book the best flights to anywhere in the world.</p>
           
-          <div className="bg-card p-4 sm:p-6 rounded-2xl shadow-lg">
+          <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
@@ -280,7 +270,7 @@ export default function FlightSearchPage() {
              </>
           )}
         </section>
-      </main>
+      </div>
     </div>
   );
 }

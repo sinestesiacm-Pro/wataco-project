@@ -85,7 +85,7 @@ export function FlightResults({ flightData, destinationIata }: FlightResultsProp
             const isBestPrice = index === 0;
 
             return (
-              <Card key={flight.id} className="overflow-hidden transition-all duration-300 hover:shadow-xl rounded-2xl relative">
+              <Card key={flight.id} className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl relative border bg-card/95 backdrop-blur-sm">
                 {isBestPrice && (
                   <Badge variant="success" className="absolute top-4 -left-2 rounded-r-full rounded-l-none px-4 py-1.5 text-sm font-bold z-10 shadow-lg">
                     <Star className="w-4 h-4 mr-1.5" /> Best Price

@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { Footer } from '@/components/footer';
+import { Header } from '@/components/header';
 
 export const metadata: Metadata = {
   title: 'Be On Trip',
@@ -18,14 +19,15 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Poppins:wght@400;600;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
         <link rel="icon" href="https://i.ibb.co/8DdwvnW6/Chat-GPT-Image-9-lug-2025-14-16-37.png" type="image/png" />
       </head>
       <body className="font-body antialiased bg-background">
         <div className="flex flex-col min-h-screen">
-          <div className="flex-grow">
+          <Header />
+          <main className="flex-grow pt-20">
             {children}
-          </div>
+          </main>
           <Footer />
         </div>
         <Toaster />

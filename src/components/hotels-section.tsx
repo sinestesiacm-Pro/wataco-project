@@ -20,10 +20,10 @@ export function HotelsSection() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {hotels.map((hotel, index) => (
-          <Card key={index} className="rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border">
+          <Card key={index} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card">
             <div className="overflow-hidden relative">
-              <Image src={hotel.image} data-ai-hint={hotel.hint} alt={hotel.name} width={400} height={300} className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              <Image src={hotel.image} data-ai-hint={hotel.hint} alt={hotel.name} width={400} height={300} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent transition-all duration-300 group-hover:backdrop-blur-sm" />
               <div className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-semibold flex items-center gap-1">
                 <Star className="w-4 h-4 text-amber-400" />
                 {hotel.rating}
