@@ -17,11 +17,12 @@ const BeOnTripLogo = (props: SVGProps<SVGSVGElement>) => (
           <stop offset="1" stopColor="#0099FF"/>
         </linearGradient>
       </defs>
-      <g id="paper-plane-icon">
-        <path d="M15 65 L 40 70 L 110 70 L 75 95 Z" fill="#1F2C4B" />
-        <path d="M110 70 L 135 65 L 75 95 Z" fill="#3DBB6F" />
-        <path d="M75 10 L 135 65 L 110 70 Z" fill="url(#blue-gradient)" />
+      <g id="paper-plane-icon" transform="translate(0, 5)">
         <path d="M75 10 L 40 70 L 15 65 Z" fill="url(#orange-gradient)" />
+        <path d="M40 70 L 75 95 L 15 65 Z" fill="#FF6F61" />
+        <path d="M75 10 L 110 70 L 135 65 Z" fill="url(#blue-gradient)" />
+        <path d="M110 70 L 75 95 L 135 65 Z" fill="#3DBB6F" />
+        <path d="M40 70 L 110 70 L 75 95 Z" fill="#1F2C4B" />
       </g>
       <text
           x="75"
