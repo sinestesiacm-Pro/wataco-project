@@ -170,3 +170,7 @@ export interface AmadeusHotelOffer {
 export interface AmadeusHotelSearchResponse {
   data: AmadeusHotelOffer[];
 }
+
+export interface AmadeusHotelId {
+  hotelId: string;
+}

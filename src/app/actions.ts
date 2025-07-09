@@ -1,7 +1,7 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, AmadeusHotelId } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
@@ -181,6 +181,42 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
   }
 }
 
+const getHotelsByCitySchema = z.object({
+  cityCode: z.string().min(3).max(3),
+});
+
+async function getHotelsByCity(cityCode: string): Promise<{ success: boolean; data?: AmadeusHotelId[]; error?: string }> {
+  const validation = getHotelsByCitySchema.safeParse({ cityCode });
+  if (!validation.success) {
+    return { success: false, error: 'Invalid city code.' };
+  }
+  try {
+    const token = await getAmadeusToken();
+    const searchParams = new URLSearchParams({
+      cityCode: validation.data.cityCode.toUpperCase(),
+      radius: '20',
+      radiusUnit: 'KM',
+    });
+
+    const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city?${searchParams.toString()}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      console.error('Amadeus getHotelsByCity Error:', errorBody);
+      return { success: false, error: 'Could not retrieve hotel list.' };
+    }
+
+    const result = await response.json();
+    return { success: true, data: result.data };
+
+  } catch (err: any) {
+    console.error(err);
+    return { success: false, error: 'An unexpected error occurred while fetching hotel list.' };
+  }
+}
+
 const hotelSearchSchema = z.object({
   cityCode: z.string().min(3).max(3),
   checkInDate: z.string(),
@@ -204,10 +240,18 @@ export async function searchHotels(params: {
   const { cityCode, checkInDate, checkOutDate, adults, ratings } = validation.data;
 
   try {
+    // Step 1: Get list of hotel IDs for the given cityCode
+    const hotelListResponse = await getHotelsByCity(cityCode);
+    if (!hotelListResponse.success || !hotelListResponse.data || hotelListResponse.data.length === 0) {
+        return { success: false, error: 'No hotels found for this destination.' };
+    }
+    const hotelIds = hotelListResponse.data.map(hotel => hotel.hotelId);
+
+    // Step 2: Get offers for the found hotel IDs
     const token = await getAmadeusToken();
 
     const searchParams = new URLSearchParams({
-      cityCode: cityCode.toUpperCase(),
+      hotelIds: hotelIds.slice(0, 100).join(','),
       checkInDate,
       checkOutDate,
       adults: adults.toString(),
