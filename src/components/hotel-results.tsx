@@ -30,7 +30,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
               <Image 
                 src={hotel.main_photo_url ? hotel.main_photo_url.replace('square60', 'square200') : 'https://placehold.co/400x300.png'}
                 data-ai-hint="hotel room" 
-                alt={hotel.hotel_name} 
+                alt={hotel.hotel_name || 'Hotel image'} 
                 width={400} 
                 height={300} 
                 className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-110" 
