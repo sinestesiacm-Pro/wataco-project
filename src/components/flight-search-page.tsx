@@ -183,7 +183,7 @@ export default function FlightSearchPage() {
                 </div>
                 <div className='lg:col-span-2'>
                   <Label htmlFor="adults" className="text-sm font-semibold ml-2">Adults</Label>
-                   <Select value={adults.toString()} onValuechange={(val) => setAdults(parseInt(val))}>
+                   <Select value={adults.toString()} onValueChange={(val) => setAdults(parseInt(val))}>
                       <SelectTrigger className="mt-1">
                         <Users className="mr-2 h-4 w-4" />
                         <SelectValue placeholder="Adults" />
