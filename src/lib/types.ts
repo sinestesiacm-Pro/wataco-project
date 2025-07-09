@@ -97,15 +97,15 @@ export interface FlightData {
 }
 
 export interface AirportAddress {
-    cityName?: string;
-    countryName?: string;
+    cityName: string;
+    countryName: string;
 }
 
 export interface Airport {
   name: string;
   iataCode: string;
   subType: string;
-  address?: AirportAddress;
+  address: AirportAddress;
 }
 
 export interface AirportSearchResponse {
@@ -124,7 +124,7 @@ export interface Hotel {
   main_photo_url: string;
   review_score: number | null;
   review_score_word: string;
-  price_breakdown: PriceBreakdown;
+  price_breakdown?: PriceBreakdown;
   city: string;
   country_trans: string;
   url: string;

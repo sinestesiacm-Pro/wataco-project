@@ -57,10 +57,12 @@ export function HotelResults({ hotels }: HotelResultsProps) {
               <div className="flex-grow" />
 
               <div className="flex justify-between items-center mt-4 pt-4 border-t">
-                <div>
-                    <p className="text-xs text-muted-foreground font-body">From</p>
-                    <p className="font-bold text-2xl text-accent">{hotel.price_breakdown.gross_price}</p>
-                </div>
+                {hotel.price_breakdown?.gross_price ? (
+                    <div>
+                        <p className="text-xs text-muted-foreground font-body">From</p>
+                        <p className="font-bold text-2xl text-accent">{hotel.price_breakdown.gross_price}</p>
+                    </div>
+                ) : <div />}
                 <Button asChild>
                     <a href={hotel.url} target="_blank" rel="noopener noreferrer">
                         <BedDouble className="mr-2 h-4 w-4" />
