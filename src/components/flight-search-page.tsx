@@ -126,7 +126,7 @@ export default function FlightSearchPage() {
       <header className="bg-card shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center">
-            <Icons.logo className="h-10 w-auto" />
+            <Icons.logo width={104} height={40} className="h-10 w-auto" />
           </div>
           {/* Future Nav Links can go here */}
         </div>
