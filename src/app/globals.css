@@ -23,7 +23,6 @@
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 211 100% 50%;
-    --radius: 0.75rem;
     --success: 139 51% 53%; /* Added for success toast */
     --success-foreground: 0 0% 100%;
     --tertiary: 145 63% 49%; /* Added for hero animation */
@@ -85,46 +84,27 @@
     cursor: pointer;
     color: hsl(var(--foreground));
     animation: colorize 15s linear infinite;
+    transition: all 0.4s ease-in-out;
 }
 
 .hero-title:hover {
   animation-play-state: paused;
+  color: transparent;
+  text-shadow: 0 0 8px hsla(var(--foreground), 0.6);
 }
 
 .hero-title > span {
     display: inline-block;
     position: relative;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     margin: 0 0.2em; /* Add space between words */
 }
 
-.hero-title:hover > span {
-    transform: translateY(-3px) rotate(-2deg);
-}
-
+/* The following are no longer needed for the new effect */
 .hero-title > span::before,
 .hero-title > span::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: all 0.35s ease-out;
-    z-index: -1;
+    content: none;
 }
 
-.hero-title:hover > span::before {
-    transform: translate(-3px, -2px) skewX(10deg);
-    color: hsl(var(--tertiary));
-    opacity: 0.8;
-}
-
-.hero-title:hover > span::after {
-    transform: translate(3px, 2px) skewX(-10deg);
-    color: hsl(var(--primary)); /* Blue primary */
-    opacity: 0.8;
-}
 
 .hero-subtitle {
     font-size: clamp(1rem, 2.5vw, 1.25rem);
