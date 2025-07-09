@@ -14,6 +14,7 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    // When the images prop changes, reset the index to 0
     setCurrentImageIndex(0);
 
     if (images.length > 1) {
@@ -27,7 +28,7 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
 
   return (
     <section className="hero-section">
-       {images.map((image, index) => (
+      {images.map((image, index) => (
         <Image
           key={`${image}-${index}`}
           src={image}
@@ -35,7 +36,7 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
           fill
           className={`hero-background-image ${index === currentImageIndex ? 'active' : ''}`}
           style={{ objectFit: 'cover', objectPosition: 'center' }}
-          priority
+          priority={index === 0}
           sizes="100vw"
           data-ai-hint="travel background"
         />
