@@ -76,7 +76,6 @@
     align-items: center;
     text-align: center;
     overflow: hidden;
-    background-color: hsl(var(--muted)); /* Fallback color */
 }
 
 .hero-background-slide {

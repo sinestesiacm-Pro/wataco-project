@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { addDays, format } from 'date-fns';
 import type { AmadeusHotelOffer, Airport } from '@/lib/types';
 import { searchHotels, searchAirports } from '@/app/actions';
@@ -21,6 +21,7 @@ import React from 'react';
 import { RecommendedHotels } from './recommended-hotels';
 import { Card, CardContent } from './ui/card';
 import type { DateRange } from 'react-day-picker';
+import { HeroSection } from './hero-section';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -34,6 +35,13 @@ type HotelFiltersState = {
   stars: number[];
   amenities: string[];
 };
+
+const hotelImages = [
+  'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1582719508461-905c673771fd?fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1445019980597-93e8ac7246e7?fit=crop&w=1920&q=80',
+];
 
 export default function HotelSearchPage() {
   const [destination, setDestination] = useState<Airport | null>(null);
@@ -223,126 +231,127 @@ export default function HotelSearchPage() {
 
   return (
     <div className="w-full">
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <section className="mb-12">
-          <h2 className="text-4xl lg:text-5xl font-bold font-headline text-center mb-4 text-gray-800">Encuentra tu estancia perfecta</h2>
-          <p className="text-center text-muted-foreground font-body text-lg mb-8 max-w-2xl mx-auto">Busca y reserva hoteles, desde boutiques acogedoras hasta resorts de lujo.</p>
-          
-          <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
-            <form onSubmit={handleFormSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-                <div className='lg:col-span-5 relative' ref={suggestionsRef}>
-                  <Label htmlFor="destination" className="text-sm font-semibold ml-2">Destino</Label>
-                  <InputGroup>
-                    <InputIcon><BedDouble className="h-4 w-4" /></InputIcon>
-                    <Input id="destination" type="text" value={destinationQuery} 
-                        onChange={e => { setDestinationQuery(e.target.value); setIsSuggestionsOpen(true); }}
-                        onFocus={() => { setIsSuggestionsOpen(true); }}
-                        placeholder="Ej. Nueva York" 
-                        className="mt-1 pl-10" 
-                        autoComplete="off"
-                    />
-                  </InputGroup>
-                   {isSuggestionsOpen && debouncedDestinationQuery && <SuggestionsList />}
-                </div>
-                
-                <div className="lg:col-span-5">
-                  <Label htmlFor="dates" className="text-sm font-semibold ml-2">Entrada y Salida</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id="dates"
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal mt-1",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date?.from ? (
-                          date.to ? (
-                            <>
-                              {format(date.from, "dd LLL, y")} -{" "}
-                              {format(date.to, "dd LLL, y")}
-                            </>
-                          ) : (
-                            format(date.from, "dd LLL, y")
-                          )
+      <HeroSection
+        images={hotelImages}
+        title="Encuentra tu Estancia Perfecta"
+        subtitle="Busca y reserva hoteles, desde boutiques acogedoras hasta resorts de lujo."
+      >
+        <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
+          <form onSubmit={handleFormSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+              <div className='lg:col-span-5 relative' ref={suggestionsRef}>
+                <Label htmlFor="destination" className="text-sm font-semibold ml-2">Destino</Label>
+                <InputGroup>
+                  <InputIcon><BedDouble className="h-4 w-4" /></InputIcon>
+                  <Input id="destination" type="text" value={destinationQuery} 
+                      onChange={e => { setDestinationQuery(e.target.value); setIsSuggestionsOpen(true); }}
+                      onFocus={() => { setIsSuggestionsOpen(true); }}
+                      placeholder="Ej. Nueva York" 
+                      className="mt-1 pl-10" 
+                      autoComplete="off"
+                  />
+                </InputGroup>
+                 {isSuggestionsOpen && debouncedDestinationQuery && <SuggestionsList />}
+              </div>
+              
+              <div className="lg:col-span-5">
+                <Label htmlFor="dates" className="text-sm font-semibold ml-2">Entrada y Salida</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id="dates"
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left font-normal mt-1",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date?.from ? (
+                        date.to ? (
+                          <>
+                            {format(date.from, "dd LLL, y")} -{" "}
+                            {format(date.to, "dd LLL, y")}
+                          </>
                         ) : (
-                          <span>Elige tus fechas</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        initialFocus
-                        mode="range"
-                        defaultMonth={date?.from}
-                        selected={date}
-                        onSelect={setDate}
-                        numberOfMonths={2}
-                        disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                          format(date.from, "dd LLL, y")
+                        )
+                      ) : (
+                        <span>Elige tus fechas</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      initialFocus
+                      mode="range"
+                      defaultMonth={date?.from}
+                      selected={date}
+                      onSelect={setDate}
+                      numberOfMonths={2}
+                      disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
 
-                <div className='lg:col-span-2'>
-                  <Label htmlFor="guests" className="text-sm font-semibold ml-2">Huéspedes</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button id="guests" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
-                        <Users className="mr-2 h-4 w-4" />
-                        {travelerText}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80" align="end">
+              <div className='lg:col-span-2'>
+                <Label htmlFor="guests" className="text-sm font-semibold ml-2">Huéspedes</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button id="guests" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
+                      <Users className="mr-2 h-4 w-4" />
+                      {travelerText}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80" align="end">
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <h4 className="font-medium leading-none">Adultos</h4>
+                        <p className="text-sm text-muted-foreground">Selecciona el número de adultos.</p>
+                      </div>
                       <div className="grid gap-4">
-                        <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Adultos</h4>
-                          <p className="text-sm text-muted-foreground">Selecciona el número de adultos.</p>
-                        </div>
-                        <div className="grid gap-4">
-                          <div className="flex items-center justify-between">
-                            <p className="font-medium">Adultos</p>
-                            <div className="flex items-center gap-2">
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}>
-                                <Plus className="h-4 w-4" />
-                              </Button>
-                            </div>
+                        <div className="flex items-center justify-between">
+                          <p className="font-medium">Adultos</p>
+                          <div className="flex items-center gap-2">
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}>
+                              <Plus className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
                       </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="lg:col-span-12">
-                  {loading ? (
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="lg"
-                      className="w-full text-lg font-bold h-full mt-1 rounded-xl"
-                      onClick={handleCancelSearch}
-                    >
-                      <X className="mr-2 h-5 w-5" />
-                      Cancelar Búsqueda
-                    </Button>
-                  ) : (
-                    <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                      Buscar Hoteles
-                    </Button>
-                  )}
-                </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
-            </form>
-          </div>
-        </section>
-        
+              <div className="lg:col-span-12">
+                {loading ? (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="lg"
+                    className="w-full text-lg font-bold h-full mt-1 rounded-xl"
+                    onClick={handleCancelSearch}
+                  >
+                    <X className="mr-2 h-5 w-5" />
+                    Cancelar Búsqueda
+                  </Button>
+                ) : (
+                  <Button type="submit" size="lg" className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                    Buscar Hoteles
+                  </Button>
+                )}
+              </div>
+            </div>
+          </form>
+        </div>
+      </HeroSection>
+      
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <section className="mt-8">
           {loading && hotelData === null && <LoadingSkeleton />}
           
