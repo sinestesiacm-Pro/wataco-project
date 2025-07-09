@@ -2,17 +2,20 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Book, Plane, Images, Users, Settings } from 'lucide-react';
+import { Book, Plane, Images, Users, Settings, Gift, Globe, CircleDollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Card } from './ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Label } from './ui/label';
 
 const navItems = [
   { name: 'Próximo Viaje', href: 'next-trip', icon: Plane },
   { name: 'Reservas', href: 'bookings', icon: Book },
   { name: 'Álbumes', href: 'albums', icon: Images },
   { name: 'Social', href: 'social', icon: Users },
+  { name: 'Activar Bono', href: 'bonus', icon: Gift },
   { name: 'Configuración', href: 'settings', icon: Settings },
 ];
 
@@ -64,6 +67,39 @@ export default function ProfileSidebar() {
             </Link>
             ))}
         </nav>
+      </Card>
+       <Card className="shadow-lg p-4">
+        <div className="space-y-4">
+            <div>
+                <Label htmlFor="language-select" className="flex items-center gap-2 mb-2 text-sm font-semibold">
+                    <Globe className="h-4 w-4 text-muted-foreground" /> Idioma
+                </Label>
+                <Select defaultValue="es">
+                    <SelectTrigger id="language-select">
+                        <SelectValue placeholder="Seleccionar idioma" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="es">Español</SelectItem>
+                        <SelectItem value="en">English</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div>
+                <Label htmlFor="currency-select" className="flex items-center gap-2 mb-2 text-sm font-semibold">
+                    <CircleDollarSign className="h-4 w-4 text-muted-foreground" /> Moneda
+                </Label>
+                <Select defaultValue="usd">
+                    <SelectTrigger id="currency-select">
+                        <SelectValue placeholder="Seleccionar moneda" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="usd">USD - Dólar estadounidense</SelectItem>
+                        <SelectItem value="eur">EUR - Euro</SelectItem>
+                        <SelectItem value="cop">COP - Peso colombiano</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+        </div>
       </Card>
     </aside>
   );

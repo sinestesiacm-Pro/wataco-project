@@ -2,7 +2,9 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Book, Plane, Images, Users, Settings, Loader2 } from 'lucide-react';
+import { Book, Plane, Images, Users, Settings, Loader2, Gift } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 const SectionPlaceholder = ({ title, icon: Icon, children }: { title: string; icon: React.ElementType; children: React.ReactNode }) => (
     <Card className="shadow-lg">
@@ -42,6 +44,17 @@ const SocialSection = () => (
     </SectionPlaceholder>
 );
 
+const BonusSection = () => (
+    <SectionPlaceholder title="Activar Bono" icon={Gift}>
+        <p className="text-muted-foreground">Ingresa tu código de bono aquí para reclamar tu recompensa.</p>
+        <div className="mt-4 flex flex-col sm:flex-row gap-2">
+            <Input placeholder="Tu código de bono" className="flex-grow" />
+            <Button className="w-full sm:w-auto">Activar</Button>
+        </div>
+    </SectionPlaceholder>
+);
+
+
 const SettingsSection = () => (
     <SectionPlaceholder title="Configuración" icon={Settings}>
         <p className="text-muted-foreground">Gestiona tu cuenta, notificaciones y preferencias.</p>
@@ -60,6 +73,8 @@ function ProfileContent() {
             return <AlbumsSection />;
         case 'social':
             return <SocialSection />;
+        case 'bonus':
+            return <BonusSection />;
         case 'settings':
             return <SettingsSection />;
         case 'next-trip':
