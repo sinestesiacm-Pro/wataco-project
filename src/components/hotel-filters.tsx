@@ -1,16 +1,15 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Star, Coffee, UtensilsCrossed, Car, Waves, Dumbbell } from 'lucide-react';
+import { Star, Waves, Dumbbell, Car } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
 
 interface HotelFiltersProps {
-  onFilterChange: (filters: { stars: number[], amenities: string[], boardTypes: string[] }) => void;
+  onFilterChange: (filters: { stars: number[], amenities: string[] }) => void;
 }
 
 const starOptions = [5, 4, 3, 2, 1];
@@ -21,28 +20,20 @@ const amenityOptions: { id: string; label: string; icon: LucideIcon }[] = [
   { id: 'PARKING', label: 'Parking', icon: Car },
 ];
 
-const boardOptions: { id: string; label: string; icon: LucideIcon }[] = [
-  { id: 'BREAKFAST', label: 'Breakfast Included', icon: Coffee },
-  { id: 'ALL_INCLUSIVE', label: 'All Inclusive', icon: UtensilsCrossed },
-];
-
-
 export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
   const [selectedStars, setSelectedStars] = useState<number[]>([]);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [selectedBoards, setSelectedBoards] = useState<string[]>([]);
 
   useEffect(() => {
     onFilterChange({ 
       stars: selectedStars,
       amenities: selectedAmenities,
-      boardTypes: selectedBoards,
     });
-  }, [selectedStars, selectedAmenities, selectedBoards, onFilterChange]);
+  }, [selectedStars, selectedAmenities, onFilterChange]);
 
   const handleCheckboxChange = (
     value: string | number, 
-    type: 'star' | 'amenity' | 'board'
+    type: 'star' | 'amenity'
   ) => {
     const updater = (prev: any[]) => 
       prev.includes(value as never) 
@@ -51,7 +42,6 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
 
     if (type === 'star') setSelectedStars(updater);
     else if (type === 'amenity') setSelectedAmenities(updater);
-    else if (type === 'board') setSelectedBoards(updater);
   };
 
   return (
@@ -85,27 +75,6 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
 
         <Separator />
         
-        <div>
-          <h3 className="font-semibold mb-3 text-sm">Board</h3>
-          <div className="space-y-2">
-            {boardOptions.map(board => (
-              <div key={board.id} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`board-${board.id}`}
-                  onCheckedChange={() => handleCheckboxChange(board.id, 'board')}
-                  checked={selectedBoards.includes(board.id)}
-                />
-                 <Label htmlFor={`board-${board.id}`} className="flex items-center cursor-pointer gap-2 text-sm">
-                  <board.icon className="w-4 h-4 text-muted-foreground" />
-                  {board.label}
-                </Label>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        <Separator />
-
         <div>
           <h3 className="font-semibold mb-3 text-sm">Amenities</h3>
           <div className="space-y-2">

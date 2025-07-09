@@ -30,7 +30,6 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 type HotelFiltersState = {
   stars: number[];
   amenities: string[];
-  boardTypes: string[];
 };
 
 export default function HotelSearchPage() {
@@ -59,7 +58,7 @@ export default function HotelSearchPage() {
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  const [filters, setFilters] = useState<HotelFiltersState>({ stars: [], amenities: [], boardTypes: [] });
+  const [filters, setFilters] = useState<HotelFiltersState>({ stars: [], amenities: [] });
   const isInitialSearch = useRef(true);
 
   useEffect(() => {
@@ -122,7 +121,6 @@ export default function HotelSearchPage() {
       adults,
       ratings: filters.stars,
       amenities: filters.amenities,
-      boardTypes: filters.boardTypes,
     });
     
     isInitialSearch.current = false;
