@@ -3,14 +3,17 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-import { Search, Plane, BedDouble, Zap, Package, Ship } from 'lucide-react';
+import { Search, Plane, BedDouble, Zap, Package, Ship, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/auth-context';
+import { UserNav } from './user-nav';
 
 export function Header() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const { user } = useAuth();
   const activeTab = searchParams.get('tab') || 'Flights';
 
   const handleTabClick = (tab: string) => {
@@ -60,7 +63,7 @@ export function Header() {
               onClick={() => handleTabClick('Activities')}
             />
           </nav>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
@@ -69,6 +72,16 @@ export function Header() {
               <Search className="h-5 w-5 text-foreground/70 group-hover:text-primary group-hover:scale-110 transition-transform" />
               <span className="sr-only">Search</span>
             </Button>
+            {user ? (
+              <UserNav />
+            ) : (
+              <Button asChild>
+                <Link href="/login">
+                  <LogIn className="mr-2 h-4 w-4"/>
+                  Login
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
