@@ -1,6 +1,6 @@
 'use server';
 
-import { FlightData } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
@@ -131,6 +131,49 @@ export async function searchFlights(params: {
     }
 
     return { success: true, data };
+  } catch (err: any) {
+    console.error(err);
+    return { success: false, error: err.message || 'An unexpected error occurred.' };
+  }
+}
+
+
+const airportSearchSchema = z.object({
+  keyword: z.string().min(2),
+});
+
+export async function searchAirports(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
+  const validation = airportSearchSchema.safeParse({ keyword });
+  if (!validation.success) {
+    return { success: false, error: 'Invalid search keyword.' };
+  }
+
+  try {
+    const token = await getAmadeusToken();
+
+    const searchParams = new URLSearchParams({
+      keyword: validation.data.keyword,
+      subType: 'CITY,AIRPORT',
+      'page[limit]': '10',
+    });
+
+    const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations?${searchParams.toString()}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      console.error('Amadeus API Error (Airports):', errorBody);
+      const errorMessage = errorBody.errors?.[0]?.detail || 'Error in airport search.';
+      return { success: false, error: errorMessage };
+    }
+
+    const data: AirportSearchResponse = await response.json();
+    
+    const filteredData = data.data.filter(location => location.iataCode);
+    
+    return { success: true, data: filteredData };
+
   } catch (err: any) {
     console.error(err);
     return { success: false, error: err.message || 'An unexpected error occurred.' };

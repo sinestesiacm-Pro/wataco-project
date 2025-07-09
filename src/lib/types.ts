@@ -95,3 +95,17 @@ export interface FlightData {
     data: FlightOffer[];
     dictionaries: Dictionaries;
 }
+
+export interface Airport {
+  name: string;
+  iataCode: string;
+  subType: string;
+  address: {
+    cityName: string;
+    countryName: string;
+  };
+}
+
+export interface AirportSearchResponse {
+  data: Airport[];
+}

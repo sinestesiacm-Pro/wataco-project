@@ -1,8 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { searchFlights } from '@/app/actions';
-import type { FlightData } from '@/lib/types';
+import type { FlightData, Airport } from '@/lib/types';
+import { searchAirports } from '@/app/actions';
+import { useDebounce } from '@/hooks/use-debounce';
 
 import { RecommendedDestinations } from '@/components/recommended-destinations';
 import { FlightResults } from '@/components/flight-results';
@@ -11,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -32,6 +34,9 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 export default function FlightSearchPage() {
   const [origin, setOrigin] = useState('MAD');
   const [destination, setDestination] = useState('');
+  const [originQuery, setOriginQuery] = useState('Madrid, Spain');
+  const [destinationQuery, setDestinationQuery] = useState('');
+  
   const [departureDate, setDepartureDate] = useState<Date | undefined>(() => {
     const nextWeek = new Date();
     nextWeek.setDate(nextWeek.getDate() + 7);
@@ -50,6 +55,61 @@ export default function FlightSearchPage() {
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+
+  const [suggestions, setSuggestions] = useState<Airport[]>([]);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [activeInput, setActiveInput] = useState<'origin' | 'destination' | null>(null);
+  const debouncedOriginQuery = useDebounce(originQuery, 300);
+  const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchSuggestions = async (query: string) => {
+      if (query.length < 2) {
+        setSuggestions([]);
+        return;
+      }
+      setSuggestionsLoading(true);
+      const result = await searchAirports(query);
+      if (result.success && result.data) {
+        setSuggestions(result.data);
+      } else {
+        setSuggestions([]);
+      }
+      setSuggestionsLoading(false);
+    };
+
+    if (activeInput === 'origin') {
+      if (debouncedOriginQuery !== originQuery) setSuggestions([]);
+      else fetchSuggestions(debouncedOriginQuery);
+    } else if (activeInput === 'destination') {
+        if (debouncedDestinationQuery !== destinationQuery) setSuggestions([]);
+      else fetchSuggestions(debouncedDestinationQuery);
+    }
+  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, originQuery, destinationQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+        setActiveInput(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
+  const handleSelectSuggestion = (airport: Airport, type: 'origin' | 'destination') => {
+    const query = `${airport.name}, ${airport.address.countryName}`;
+    if (type === 'origin') {
+      setOrigin(airport.iataCode);
+      setOriginQuery(query);
+    } else {
+      setDestination(airport.iataCode);
+      setDestinationQuery(query);
+    }
+    setActiveInput(null);
+    setSuggestions([]);
+  };
 
   const handleTripTypeChange = (checked: boolean) => {
     setIsRoundTrip(checked);
@@ -119,6 +179,32 @@ export default function FlightSearchPage() {
   const totalTravelers = adults + children + infants;
   const travelerText = `${totalTravelers} traveler${totalTravelers > 1 ? 's' : ''}`;
 
+  const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => (
+    <div className="absolute z-10 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+      {suggestionsLoading ? (
+        <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
+          <Loader2 className="h-5 w-5 animate-spin mr-2" /> Searching...
+        </div>
+      ) : (
+        suggestions.map(airport => (
+          <div
+            key={`${airport.iataCode}-${airport.name}`}
+            className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
+            onClick={() => handleSelectSuggestion(airport, type)}
+          >
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-muted-foreground" />
+              <div className="flex-grow">
+                <p className="font-semibold text-sm">{airport.address.cityName}, {airport.address.countryName}</p>
+                <p className="text-xs text-muted-foreground">{airport.name} ({airport.iataCode})</p>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
+
 
   return (
     <div className="w-full">
@@ -136,19 +222,33 @@ export default function FlightSearchPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
-                <div className='lg:col-span-4'>
+                <div className='lg:col-span-4 relative' ref={activeInput === 'origin' ? suggestionsRef : null}>
                   <Label htmlFor="origin" className="text-sm font-semibold ml-2">From</Label>
                   <InputGroup>
                     <InputIcon><PlaneTakeoff className="h-4 w-4" /></InputIcon>
-                    <Input id="origin" type="text" value={origin} onChange={e => setOrigin(e.target.value.toUpperCase())} placeholder="Origin (e.g. MAD)" className="mt-1 pl-10" maxLength={3} />
+                    <Input id="origin" type="text" value={originQuery} 
+                        onChange={e => setOriginQuery(e.target.value)} 
+                        onFocus={() => { setActiveInput('origin'); setSuggestions([])}}
+                        placeholder="Origin city or airport" 
+                        className="mt-1 pl-10" 
+                        autoComplete="off"
+                    />
                   </InputGroup>
+                   {activeInput === 'origin' && <SuggestionsList type="origin" />}
                 </div>
-                <div className='lg:col-span-4'>
+                <div className='lg:col-span-4 relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
                   <Label htmlFor="destination" className="text-sm font-semibold ml-2">To</Label>
                   <InputGroup>
                     <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
-                    <Input id="destination" type="text" value={destination} onChange={e => setDestination(e.target.value.toUpperCase())} placeholder="Destination (e.g. FCO)" className="mt-1 pl-10" maxLength={3} />
+                    <Input id="destination" type="text" value={destinationQuery} 
+                        onChange={e => setDestinationQuery(e.target.value)}
+                        onFocus={() => { setActiveInput('destination'); setSuggestions([])}} 
+                        placeholder="Destination city or airport" 
+                        className="mt-1 pl-10" 
+                        autoComplete="off"
+                    />
                   </InputGroup>
+                  {activeInput === 'destination' && <SuggestionsList type="destination" />}
                 </div>
                 <div className="lg:col-span-4 grid grid-cols-2 gap-4">
                   <div>
