@@ -1,6 +1,6 @@
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData } from '@/lib/types';
 import { z } from 'zod';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
@@ -348,4 +348,25 @@ export async function searchPackages(params: {
   // The actual Amadeus Flight+Hotel Search API is complex and may not be available in the standard test environment.
   // This is a placeholder response that informs the user.
   return { success: false, error: "Package search feature is not available in this demo. Please search for flights and hotels separately." };
+}
+
+const cruiseSearchSchema = z.object({
+  destinationRegion: z.string(),
+  departureDate: z.string(),
+  adults: z.number().int().min(1),
+});
+
+export async function searchCruises(params: {
+  destinationRegion: string;
+  departureDate: string;
+  adults: number;
+}): Promise<{ success: boolean; data?: CruiseData; error?: string }> {
+  const validation = cruiseSearchSchema.safeParse(params);
+  if (!validation.success) {
+    return { success: false, error: 'Invalid cruise search parameters.' };
+  }
+
+  // The Amadeus Cruise API is not available in the standard test environment.
+  // This is a placeholder response.
+  return { success: false, error: "Cruise search feature is not available in this demo." };
 }

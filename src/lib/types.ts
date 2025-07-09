@@ -189,3 +189,24 @@ export interface PackageData {
     data: PackageOffer[];
     dictionaries: Dictionaries;
 }
+
+// Cruise Types (Placeholder)
+export interface CruiseOffer {
+    id: string;
+    provider: string;
+    shipName: string;
+    itinerary: {
+        name: string;
+        ports: string[];
+        durationDays: number;
+    };
+    price: {
+        currency: string;
+        total: string;
+    };
+    image: string;
+}
+
+export interface CruiseData {
+    data: CruiseOffer[];
+}

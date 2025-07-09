@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-import { Search, Plane, BedDouble, Zap, Package } from 'lucide-react';
+import { Search, Plane, BedDouble, Zap, Package, Ship } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -46,6 +46,12 @@ export function Header() {
               icon={<Package className="h-4 w-4" />}
               isActive={activeTab === 'Packages'}
               onClick={() => handleTabClick('Packages')}
+            />
+            <TabButton
+              label="Cruises"
+              icon={<Ship className="h-4 w-4" />}
+              isActive={activeTab === 'Cruises'}
+              onClick={() => handleTabClick('Cruises')}
             />
             <TabButton
               label="Activities"
