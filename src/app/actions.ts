@@ -4,12 +4,16 @@ import { FlightData } from '@/lib/types';
 import { z } from 'zod';
 import { unstable_cache } from 'next/cache';
 
-const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY || '8KbSUTGXfLXXnZhk3dvVJcAyhdL6uGKG';
-const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET || 'uLzV2uC2xTA9SGar';
+const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
+const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 
 const getAmadeusToken = unstable_cache(
   async () => {
+    if (!AMADEUS_API_KEY || !AMADEUS_API_SECRET) {
+      throw new Error('Amadeus API credentials are not configured in the environment variables.');
+    }
+
     const tokenUrl = `${AMADEUS_BASE_URL}/v1/security/oauth2/token`;
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
