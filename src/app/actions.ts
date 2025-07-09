@@ -3,8 +3,8 @@
 import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData } from '@/lib/types';
 import { z } from 'zod';
 
-const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
-const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
+const AMADEUS_API_KEY = process.env.NEXT_PUBLIC_AMADEUS_API_KEY;
+const AMADEUS_API_SECRET = process.env.NEXT_PUBLIC_AMADEUS_API_SECRET;
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 
 // In-memory cache for Amadeus token
@@ -22,7 +22,7 @@ async function getAmadeusToken(): Promise<string> {
   }
 
   if (!AMADEUS_API_KEY || !AMADEUS_API_SECRET) {
-    throw new Error('Amadeus API credentials are not configured in the environment variables.');
+    throw new Error('Las credenciales de la API de Amadeus no están configuradas. Por favor, añádelas a tu archivo .env.');
   }
 
   const tokenUrl = `${AMADEUS_BASE_URL}/v1/security/oauth2/token`;
@@ -42,7 +42,7 @@ async function getAmadeusToken(): Promise<string> {
       const errorBody = await response.json().catch(() => response.text());
       console.error('Failed to get Amadeus token', errorBody);
       const errorMessage = (errorBody as any)?.error_description || (errorBody as any)?.errors?.[0]?.detail || response.statusText;
-      throw new Error(`Amadeus token error: ${errorMessage}`);
+      throw new Error(`Error de token de Amadeus: ${errorMessage}`);
     }
 
     const data = await response.json();
@@ -59,9 +59,9 @@ async function getAmadeusToken(): Promise<string> {
   } catch (err) {
     console.error(err);
     if (err instanceof Error) {
-        throw new Error(`Could not retrieve API token. Reason: ${err.message}`);
+        throw new Error(`No se pudo obtener el token de la API. Razón: ${err.message}`);
     }
-    throw new Error('Could not retrieve API token due to an unknown error.');
+    throw new Error('No se pudo obtener el token de la API debido a un error desconocido.');
   }
 }
 
@@ -88,7 +88,7 @@ export async function searchFlights(params: {
   
   const validation = searchSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Invalid search parameters.' };
+    return { success: false, error: 'Parámetros de búsqueda inválidos.' };
   }
 
   const { origin, destination, departureDate, returnDate, adults, children, infants } = validation.data;
@@ -124,20 +124,20 @@ export async function searchFlights(params: {
     if (!response.ok) {
       const errorBody = await response.json();
       console.error('Amadeus API Error:', errorBody);
-      const errorMessage = errorBody.errors?.[0]?.detail || 'Error in flight search.';
+      const errorMessage = errorBody.errors?.[0]?.detail || 'Error en la búsqueda de vuelos.';
       return { success: false, error: errorMessage };
     }
 
     const data: FlightData = await response.json();
 
     if (!data.data || data.data.length === 0) {
-      return { success: false, error: 'No flights found for this route.' };
+      return { success: false, error: 'No se encontraron vuelos para esta ruta.' };
     }
 
     return { success: true, data };
   } catch (err: any) {
     console.error(err);
-    return { success: false, error: err.message || 'An unexpected error occurred.' };
+    return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
   }
 }
 
@@ -149,7 +149,7 @@ const airportSearchSchema = z.object({
 export async function searchAirports(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
   const validation = airportSearchSchema.safeParse({ keyword });
   if (!validation.success) {
-    return { success: false, error: 'Invalid search keyword.' };
+    return { success: false, error: 'Palabra clave de búsqueda inválida.' };
   }
 
   try {
@@ -168,7 +168,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
     if (!response.ok) {
       const errorBody = await response.json();
       console.error('Amadeus API Error (Airports):', errorBody);
-      const errorMessage = errorBody.errors?.[0]?.detail || 'Error in airport search.';
+      const errorMessage = errorBody.errors?.[0]?.detail || 'Error en la búsqueda de aeropuertos.';
       return { success: false, error: errorMessage };
     }
 
@@ -180,7 +180,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 
   } catch (err: any) {
     console.error(err);
-    return { success: false, error: err.message || 'An unexpected error occurred.' };
+    return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
   }
 }
 
@@ -203,7 +203,7 @@ export async function searchHotels(params: {
 }): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
   const validation = hotelSearchSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Invalid hotel search parameters.' };
+    return { success: false, error: 'Parámetros de búsqueda de hotel inválidos.' };
   }
 
   const { cityCode, checkInDate, checkOutDate, adults, ratings, amenities } = validation.data;
@@ -232,7 +232,7 @@ export async function searchHotels(params: {
     if (!hotelListResponse.ok) {
         const errorBody = await hotelListResponse.json().catch(() => ({}));
         console.error('Amadeus Hotel List Error:', errorBody);
-        const errorMessage = errorBody.errors?.[0]?.detail || 'Could not retrieve hotel list.';
+        const errorMessage = errorBody.errors?.[0]?.detail || 'No se pudo obtener la lista de hoteles.';
         return { success: false, error: errorMessage };
     }
     
@@ -266,7 +266,7 @@ export async function searchHotels(params: {
     if (!response.ok) {
         const errorBody = await response.json();
         console.error('Amadeus Hotel Offers Error:', errorBody);
-        const errorMessage = errorBody.errors?.[0]?.detail || 'Error in hotel search.';
+        const errorMessage = errorBody.errors?.[0]?.detail || 'Error en la búsqueda de hoteles.';
         return { success: false, error: errorMessage };
     }
 
@@ -280,7 +280,7 @@ export async function searchHotels(params: {
 
   } catch (err: any) {
     console.error(err);
-    return { success: false, error: err.message || 'An unexpected error occurred.' };
+    return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
   }
 }
 
@@ -292,7 +292,7 @@ const hotelDetailsSchema = z.object({
 export async function getHotelDetails(params: { offerId: string }): Promise<{ success: boolean; data?: AmadeusHotelOffer; error?: string }> {
   const validation = hotelDetailsSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Invalid hotel details parameters.' };
+    return { success: false, error: 'Parámetros de detalles de hotel inválidos.' };
   }
 
   const { offerId } = validation.data;
@@ -307,20 +307,20 @@ export async function getHotelDetails(params: { offerId: string }): Promise<{ su
     if (!response.ok) {
       const errorBody = await response.json();
       console.error('Amadeus Hotel Details Error:', errorBody);
-      const errorMessage = errorBody.errors?.[0]?.detail || 'Error fetching hotel details.';
+      const errorMessage = errorBody.errors?.[0]?.detail || 'Error al obtener los detalles del hotel.';
       return { success: false, error: errorMessage };
     }
 
     const result = await response.json();
 
     if (!result.data) {
-      return { success: false, error: 'Could not retrieve hotel details.' };
+      return { success: false, error: 'No se pudieron obtener los detalles del hotel.' };
     }
 
     return { success: true, data: result.data };
   } catch (err: any) {
     console.error(err);
-    return { success: false, error: err.message || 'An unexpected error occurred.' };
+    return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
   }
 }
 
@@ -342,7 +342,7 @@ export async function searchPackages(params: {
   
   const validation = packageSearchSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Invalid package search parameters.' };
+    return { success: false, error: 'Parámetros de búsqueda de paquete inválidos.' };
   }
 
   // The actual Amadeus Flight+Hotel Search API is complex and may not be available in the standard test environment.
@@ -363,7 +363,7 @@ export async function searchCruises(params: {
 }): Promise<{ success: boolean; data?: CruiseData; error?: string }> {
   const validation = cruiseSearchSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Invalid cruise search parameters.' };
+    return { success: false, error: 'Parámetros de búsqueda de crucero inválidos.' };
   }
 
   // The Amadeus Cruise API is not available in the standard test environment.
