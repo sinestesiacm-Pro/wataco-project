@@ -14,12 +14,14 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useAuth();
+  
+  const isOnHomePage = pathname === '/';
   const activeTab = searchParams.get('tab') || 'Flights';
 
   const handleTabClick = (tab: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
     params.set('tab', tab);
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`/?${params.toString()}`);
   };
 
   return (
@@ -35,31 +37,31 @@ export function Header() {
             <TabButton
               label="Flights"
               icon={<Plane className="h-4 w-4" />}
-              isActive={activeTab === 'Flights'}
+              isActive={isOnHomePage && activeTab === 'Flights'}
               onClick={() => handleTabClick('Flights')}
             />
             <TabButton
               label="Hotels"
               icon={<BedDouble className="h-4 w-4" />}
-              isActive={activeTab === 'Hotels'}
+              isActive={isOnHomePage && active-tab === 'Hotels'}
               onClick={() => handleTabClick('Hotels')}
             />
             <TabButton
               label="Packages"
               icon={<Package className="h-4 w-4" />}
-              isActive={activeTab === 'Packages'}
+              isActive={isOnHomePage && activeTab === 'Packages'}
               onClick={() => handleTabClick('Packages')}
             />
             <TabButton
               label="Cruises"
               icon={<Ship className="h-4 w-4" />}
-              isActive={activeTab === 'Cruises'}
+              isActive={isOnHomePage && activeTab === 'Cruises'}
               onClick={() => handleTabClick('Cruises')}
             />
             <TabButton
               label="Activities"
               icon={<Zap className="h-4 w-4" />}
-              isActive={activeTab === 'Activities'}
+              isActive={isOnHomePage && activeTab === 'Activities'}
               onClick={() => handleTabClick('Activities')}
             />
           </nav>
