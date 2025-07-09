@@ -60,6 +60,7 @@ export default function HotelSearchPage() {
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
   const [filters, setFilters] = useState<HotelFiltersState>({ stars: [], amenities: [], boardTypes: [] });
+  const isInitialSearch = useRef(true);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -98,8 +99,7 @@ export default function HotelSearchPage() {
     setSuggestions([]);
   };
 
-  const handleSearch = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSearch = useCallback(async () => {
     if (!destination || !checkInDate || !checkOutDate) {
       toast({
         title: 'Missing Information',
@@ -110,7 +110,10 @@ export default function HotelSearchPage() {
     }
 
     setLoading(true);
-    setHotelData(null);
+    // On initial search, clear previous results
+    if (isInitialSearch.current) {
+      setHotelData(null);
+    }
     
     const result = await searchHotels({
       cityCode: destination.iataCode,
@@ -121,11 +124,13 @@ export default function HotelSearchPage() {
       amenities: filters.amenities,
       boardTypes: filters.boardTypes,
     });
+    
+    isInitialSearch.current = false;
 
     if (result.success && result.data) {
       setHotelData(result.data);
     } else {
-      setHotelData(null);
+      setHotelData([]); // Set to empty array on error to show "No hotels" message
       toast({
         title: 'Search Error',
         description: result.error || 'Could not find hotels. Try another search.',
@@ -133,22 +138,27 @@ export default function HotelSearchPage() {
       });
     }
     setLoading(false);
-  };
+  }, [destination, checkInDate, checkOutDate, adults, filters, toast]);
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      isInitialSearch.current = true;
+      handleSearch();
+  }
 
   const handleFilterChange = useCallback((newFilters: HotelFiltersState) => {
     setFilters(newFilters);
   }, []);
   
-  // Re-run search when filters change, if a search has already been performed
+  // Re-run search when filters change, but not on initial load
   useEffect(() => {
-    if (hotelData || loading) {
-       // Debounce the search on filter change
+    if (!isInitialSearch.current) {
        const timer = setTimeout(() => {
         handleSearch();
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [filters]);
+  }, [filters, handleSearch]);
 
   const LoadingSkeleton = () => (
     <div className="grid md:grid-cols-12 gap-8 mt-8">
@@ -201,7 +211,7 @@ export default function HotelSearchPage() {
           <p className="text-center text-muted-foreground font-body text-lg mb-8 max-w-2xl mx-auto">Search and book hotels from cozy boutiques to luxury resorts.</p>
           
           <div className="bg-card/95 backdrop-blur-sm border p-4 sm:p-6 rounded-2xl shadow-2xl">
-            <form onSubmit={handleSearch} className="space-y-4">
+            <form onSubmit={handleFormSubmit} className="space-y-4">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
                 <div className='lg:col-span-5 relative' ref={suggestionsRef}>
                   <Label htmlFor="destination" className="text-sm font-semibold ml-2">Destination</Label>
@@ -314,3 +324,5 @@ export default function HotelSearchPage() {
     </div>
   );
 }
+
+    
