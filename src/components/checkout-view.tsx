@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { AlertCircle, Lock, CreditCard, Landmark, CheckCircle } from 'lucide-react';
+import { AlertCircle, Lock, CreditCard, Landmark, CheckCircle, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { format, differenceInDays } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -95,9 +95,10 @@ interface CheckoutViewProps {
   adults: number;
   children: number;
   numberOfRooms: number;
+  onBack: () => void;
 }
 
-export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numberOfRooms }: CheckoutViewProps) {
+export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numberOfRooms, onBack }: CheckoutViewProps) {
   const { toast } = useToast();
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(checkoutSchema),
@@ -125,6 +126,16 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
   };
 
   return (
+    <>
+        <div className="flex items-center justify-between mb-8">
+            <Button variant="outline" onClick={onBack}>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Volver a la selección de habitación
+            </Button>
+            <h2 className="hidden md:block text-2xl font-bold font-headline text-center">Revisa y Paga</h2>
+            <div className="w-32"></div>
+        </div>
+
      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-2 space-y-6">
@@ -268,5 +279,6 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
             </div>
         </div>
     </form>
+    </>
   );
 }

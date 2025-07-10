@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { searchFlights } from '@/app/actions';
 import type { FlightData, FlightOffer, Dictionaries } from '@/lib/types';
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import { FlightFilters } from '@/components/flight-filters';
 import { BookingProgressHeader } from '@/components/booking-progress-header';
 import { FlightSelectionList } from '@/components/flight-selection-list';
@@ -13,6 +13,8 @@ import { ReviewAndPay } from '@/components/review-and-pay';
 import { Card, CardContent } from '@/components/ui/card';
 import { FlightLoadingAnimation } from '@/components/flight-loading-animation';
 import { useDebounce } from '@/hooks/use-debounce';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
@@ -203,6 +205,12 @@ function FlightSelectionPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-green-50 to-orange-100 dark:from-blue-900/30 dark:via-green-900/30 dark:to-orange-900/30">
       <div className="min-h-screen bg-background/60 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <Button asChild variant="outline" className="mb-6 bg-background">
+                <Link href="/">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Volver a la Búsqueda
+                </Link>
+            </Button>
           <BookingProgressHeader 
               step={step} 
               isRoundTrip={!!returnDate}

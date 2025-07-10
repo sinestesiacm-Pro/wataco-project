@@ -38,7 +38,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
 
 // This is the Server Component that fetches data and handles params
 export default function HotelDetailPage({ params }: { params: { id: string } }) {
-  const { id } = use(params);
+  const { id } = params;
 
   return (
     <Suspense fallback={

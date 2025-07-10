@@ -7,6 +7,7 @@ import { Loader2 } from 'lucide-react';
 import { HotelDetailsView } from './hotel-details-view';
 import { RoomSelectionView } from './room-selection-view';
 import { CheckoutView } from './checkout-view';
+import { Button } from './ui/button';
 
 type BookingStep = 'details' | 'rooms' | 'checkout';
 
@@ -89,7 +90,7 @@ export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlow
             // This should not happen in normal flow, but it's a good fallback
             return <p>Error: No se ha seleccionado ninguna habitación. <Button onClick={handleBackToRooms}>Volver</Button></p>
         }
-        return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} />;
+        return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} onBack={handleBackToRooms} />;
       default:
         return null;
     }
