@@ -3,12 +3,13 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Zap } from 'lucide-react';
+import Link from 'next/link';
 
 const activities = [
-  { name: 'Tour a Pie por la Ciudad Histórica', description: 'Explora el casco antiguo con un guía local.', image: 'https://images.unsplash.com/photo-1744658069386-b4801e3d0c24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaXR5JTIwd2Fsa2luZyUyMHRvdXJ8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'city walking tour' },
-  { name: 'Clase de Cocina Local', description: 'Aprende a cocinar auténticos platos regionales.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb29raW5nJTIwY2xhc3N8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'cooking class' },
-  { name: 'Tirolesa en Parque de Aventuras', description: 'Vive la emoción de la tirolesa por el bosque.', image: 'https://images.unsplash.com/photo-1692205959816-d75d4a7b89d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx6aXBsaW5pbmclMjBhZHZlbnR1cmV8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'ziplining adventure' },
-  { name: 'Pase para Museos y Galerías de Arte', description: 'Accede a los principales lugares culturales.', image: 'https://images.unsplash.com/photo-1524014444623-194fde519952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhcnQlMjBtdXNldW18ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'art museum' },
+  { id: 'city-tour-1', name: 'Tour a Pie por la Ciudad Histórica', description: 'Explora el casco antiguo con un guía local.', image: 'https://images.unsplash.com/photo-1744658069386-b4801e3d0c24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaXR5JTIwd2Fsa2luZyUyMHRvdXJ8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'city walking tour' },
+  { id: 'cooking-class-1', name: 'Clase de Cocina Local', description: 'Aprende a cocinar auténticos platos regionales.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb29raW5nJTIwY2xhc3N8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'cooking class' },
+  { id: 'zipline-1', name: 'Tirolesa en Parque de Aventuras', description: 'Vive la emoción de la tirolesa por el bosque.', image: 'https://images.unsplash.com/photo-1692205959816-d75d4a7b89d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx6aXBsaW5pbmclMjBhZHZlbnR1cmV8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'ziplining adventure' },
+  { id: 'museum-pass-1', name: 'Pase para Museos y Galerías de Arte', description: 'Accede a los principales lugares culturales.', image: 'https://images.unsplash.com/photo-1524014444623-194fde519952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhcnQlMjBtdXNldW18ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'art museum' },
 ];
 
 export function ActivitiesSection() {
@@ -30,9 +31,11 @@ export function ActivitiesSection() {
             </div>
             <CardContent className="p-4 flex flex-col flex-grow">
               <p className="text-sm text-muted-foreground mb-4 flex-grow">{activity.description}</p>
-              <Button variant="secondary" className="w-full">
-                <Zap className="mr-2 h-4 w-4" />
-                Reservar Experiencia
+              <Button asChild variant="secondary" className="w-full">
+                <Link href={`/activities/${activity.id}`}>
+                    <Zap className="mr-2 h-4 w-4" />
+                    Reservar Experiencia
+                </Link>
               </Button>
             </CardContent>
           </Card>

@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { FlightDetailsDialog } from './flight-details-dialog';
+import Link from 'next/link';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -123,7 +123,11 @@ export function FlightResults({ flightData, destinationIata }: { flightData: Fli
                       <p className="text-3xl font-bold font-headline text-tertiary">${flight.price.total}</p>
                       <p className="text-xs text-muted-foreground">Precio total, {flight.oneWay ? 'solo ida' : 'ida y vuelta'}</p>
                     </div>
-                    <FlightDetailsDialog flight={flight} dictionaries={dictionaries} />
+                    <Button asChild size="sm" className="w-full font-semibold">
+                      <Link href={`/flights/${flight.id}`}>
+                        Seleccionar
+                      </Link>
+                    </Button>
                 </div>
             </CardContent>
           </Card>

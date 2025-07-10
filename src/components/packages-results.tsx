@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Plane, BedDouble, Star, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from './ui/separator';
+import Link from 'next/link';
 
 interface PackagesResultsProps {
   packagesData: PackageData;
@@ -95,9 +96,11 @@ export function PackagesResults({ packagesData }: PackagesResultsProps) {
                                ${pkg.price.total}
                             </p>
                         </div>
-                        <Button size="lg">
-                            Ver Oferta
-                            <ArrowRight className="ml-2 h-5 w-5"/>
+                        <Button asChild size="lg">
+                            <Link href={`/packages/${pkg.id}`}>
+                                Ver Oferta
+                                <ArrowRight className="ml-2 h-5 w-5"/>
+                            </Link>
                         </Button>
                     </div>
                 </CardContent>
