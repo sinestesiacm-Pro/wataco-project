@@ -37,7 +37,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
     const [mealPlan, setMealPlan] = useState(hasBreakfast ? 'breakfast' : 'none');
 
     return (
-        <div className="flex flex-col md:flex-row border-t first:border-t-0">
+        <div className="flex flex-col md:flex-row border-t first:border-t-0 flex-grow">
             {/* Options Column */}
             <div className="w-full md:w-1/2 p-4 space-y-4">
                 {isRecommended && (
