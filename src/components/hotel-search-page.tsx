@@ -19,7 +19,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
-import { RecommendedHotels } from './recommended-hotels';
 import { Card, CardContent } from './ui/card';
 import type { DateRange } from 'react-day-picker';
 import { HeroSection } from './hero-section';
@@ -368,10 +367,6 @@ export default function HotelSearchPage() {
         <section className="mt-8">
           {loading && hotelData === null && <LoadingSkeleton />}
           
-          {!loading && hotelData === null && (
-              <RecommendedHotels />
-          )}
-
           {hotelData !== null && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-3">

@@ -9,7 +9,6 @@ const recommendedPackages = [
   { name: 'Descubrimiento Cultural en Kioto', description: 'Vuelo + 7 noches con tours', price: '1800', image: 'https://images.unsplash.com/photo-1669954791579-15a45890449f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxreW90byUyMHRlbXBsZXxlbnwwfHx8fDE3NTIwODMxNDN8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'kyoto temple' },
   { name: 'Patagonia Salvaje', description: 'Vuelo + traslados + 6 noches', price: '2200', image: 'https://images.unsplash.com/photo-1743562904402-1c4938592041?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwYXRhZ29uaWElMjBtb3VudGFpbnN8ZW58MHx8fHwxNzUyMDgzMTQzfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'patagonia mountains' },
   { name: 'Maravillas de Egipto', description: 'Vuelo + crucero por el Nilo', price: '1500', image: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxlZ3lwdCUyMHB5cmFtaWRzfGVufDB8fHx8MTc1MjA4MzE0M3ww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'egypt pyramids' },
-  { name: 'Capitales Europeas', description: 'Vuelo + Tren + 10 noches', price: '2100', image: 'https://images.unsplash.com/photo-1531846802951-1d5450875a61?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxldXJvcGVhbiUyMGNpdGllc3xlbnwwfHx8fDE3NTIyMzQ0MDh8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'european cities' },
 ];
 
 export function RecommendedPackages() {
@@ -19,7 +18,7 @@ export function RecommendedPackages() {
         <h2 className="text-3xl font-headline font-bold text-gray-800">Paquetes Destacados</h2>
         <p className="text-muted-foreground mt-2">Reserva tu Vuelo + Hotel y ahorra en tu próxima gran aventura.</p>
       </div>
-      <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
+      <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4 justify-center">
         {recommendedPackages.map((pkg, index) => (
           <div key={index} className="flex-shrink-0 w-[280px]">
             <div className="airplane-window">
