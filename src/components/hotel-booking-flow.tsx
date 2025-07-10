@@ -13,18 +13,16 @@ type BookingStep = 'details' | 'rooms' | 'checkout';
 
 interface HotelBookingFlowProps {
   offerId: string;
+  adults: number;
+  children: number;
 }
 
-export function HotelBookingFlow({ offerId }: HotelBookingFlowProps) {
-  const searchParams = useSearchParams();
+export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlowProps) {
   const [step, setStep] = useState<BookingStep>('details');
   const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const adults = parseInt(searchParams.get('adults') || '1', 10);
-  const children = parseInt(searchParams.get('children') || '0', 10);
 
   useEffect(() => {
     const fetchDetails = async () => {

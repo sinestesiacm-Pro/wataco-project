@@ -25,6 +25,7 @@ import Link from 'next/link';
 interface HotelDetailsDialogProps {
   offer: AmadeusHotelOffer;
   children: React.ReactNode;
+  searchParams: URLSearchParams;
 }
 
 const amenityIcons: { [key: string]: LucideIcon } = {
@@ -44,10 +45,12 @@ const formatAmenity = (amenity: string) => {
   return amenity.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 }
 
-export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps) {
+export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const details = offer;
   
+  const bookingLink = `/hotels/${offer.id}?${searchParams.toString()}`;
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -156,7 +159,7 @@ export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps)
                           </div>
                         )}
                         <Button asChild size="lg" className="w-full bg-green-500 hover:bg-green-600 text-white">
-                           <Link href={`/hotels/${offer.id}`}>
+                           <Link href={bookingLink}>
                               Reservar Ahora
                            </Link>
                         </Button>

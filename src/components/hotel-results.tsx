@@ -7,9 +7,11 @@ import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import { HotelDetailsDialog } from './hotel-details-dialog';
 import { Button } from './ui/button';
+import Link from 'next/link';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
+    searchParams: URLSearchParams;
 }
 
 const renderStars = (rating: string | undefined) => {
@@ -30,7 +32,7 @@ const formatAmenity = (amenity: string) => {
   return amenity.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 }
 
-export function HotelResults({ hotels }: HotelResultsProps) {
+export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
     <div className="space-y-4">
        <h2 className="text-3xl font-headline font-bold text-gray-800">
@@ -87,7 +89,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
                       ${offer.offers?.[0]?.price?.total}
                     </p>
                 </div>
-                 <HotelDetailsDialog offer={offer}>
+                 <HotelDetailsDialog offer={offer} searchParams={searchParams}>
                     <Button size="lg" className="bg-primary hover:bg-primary/90">
                        Ver Oferta
                     </Button>

@@ -31,6 +31,7 @@ function HotelResultsPage() {
     const checkInDate = searchParams.get('checkInDate') || '';
     const checkOutDate = searchParams.get('checkOutDate') || '';
     const adults = searchParams.get('adults') || '1';
+    const children = searchParams.get('children') || '0';
     const destinationName = searchParams.get('destinationName') || 'tu destino';
 
     useEffect(() => {
@@ -130,7 +131,7 @@ function HotelResultsPage() {
               </div>
               <div className="lg:col-span-9">
                 {filteredHotels && filteredHotels.length > 0 ? (
-                    <HotelResults hotels={filteredHotels} />
+                    <HotelResults hotels={filteredHotels} searchParams={searchParams} />
                 ) : (
                     <Card>
                         <CardContent className="pt-6 text-center text-muted-foreground">

@@ -12,6 +12,8 @@ import { useSearchParams } from 'next/navigation';
 function HotelDetailPageContent({ id }: { id: string }) {
   const searchParams = useSearchParams();
   const destinationName = searchParams.get('destinationName') || 'tu destino';
+  const adults = searchParams.get('adults') || '1';
+  const children = searchParams.get('children') || '0';
 
   const backLinkHref = `/hotels/search?${searchParams.toString()}`;
 
@@ -24,7 +26,11 @@ function HotelDetailPageContent({ id }: { id: string }) {
             Volver a la Búsqueda
           </Link>
         </Button>
-        <HotelBookingFlow offerId={id} />
+        <HotelBookingFlow 
+          offerId={id} 
+          adults={parseInt(adults, 10)} 
+          children={parseInt(children, 10)} 
+        />
       </div>
     </div>
   );
