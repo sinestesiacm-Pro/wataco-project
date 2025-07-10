@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
-import { ArrowLeft, ArrowRight, Clock, Luggage, Plane } from 'lucide-react';
+import { ArrowLeft, Clock, Luggage, Plane } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO } from 'date-fns';
 
@@ -165,14 +165,13 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
     <Dialog>
       <DialogTrigger asChild>
         <Button 
-            size="lg"
-            className="w-full font-bold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
+            size="sm"
+            className="w-full font-semibold"
         >
             Seleccionar
-            <ArrowRight className="ml-2 h-5 w-5"/>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col bg-card/60 backdrop-blur-2xl border border-white/20 shadow-2xl rounded-3xl">
           <DialogHeader>
             <DialogTitle className="font-headline text-2xl">Detalles del Vuelo</DialogTitle>
           </DialogHeader>

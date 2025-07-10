@@ -151,23 +151,60 @@
     }
 }
 
-.plane-orbit {
+.flight-path {
   position: absolute;
   top: 50%;
-  left: 50%;
-  width: 160px; /* orbit size */
-  height: 160px;
-  margin-top: -80px; /* half of height */
-  margin-left: -80px; /* half of width */
-  border-radius: 50%;
-  animation: orbit 3s linear infinite;
+  left: 0;
+  width: 100%;
+  height: 1px;
 }
 
-@keyframes orbit {
-  from {
-    transform: rotate(0deg);
+.plane-animation {
+  position: absolute;
+  top: 0;
+  left: -10%; /* Start off-screen */
+  transform: translateY(-50%);
+  animation: fly-path 6s linear infinite, fly-up-down 3s ease-in-out infinite;
+}
+
+.cloud-animation {
+  animation: move-clouds 10s linear infinite;
+}
+
+@keyframes fly-path {
+  0% {
+    left: -10%;
+    opacity: 0;
   }
-  to {
-    transform: rotate(360deg);
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes fly-up-down {
+  0% {
+    transform: translateY(-50%) translateY(-20px) rotate(15deg);
+  }
+  50% {
+    transform: translateY(-50%) translateY(20px) rotate(15deg);
+  }
+  100% {
+    transform: translateY(-50%) translateY(-20px) rotate(15deg);
+  }
+}
+
+@keyframes move-clouds {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-250%);
   }
 }
