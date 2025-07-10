@@ -72,6 +72,15 @@ export default function FlightSearchPage() {
   const destinationRef = useRef<HTMLDivElement>(null);
   const searchIdRef = useRef(0);
 
+  const originUrl = searchParams.get('origin');
+  const destinationUrl = searchParams.get('destination');
+  const originQueryUrl = searchParams.get('origin_query');
+  const destinationQueryUrl = searchParams.get('destination_query');
+  const fromDateUrl = searchParams.get('from_date');
+  const toDateUrl = searchParams.get('to_date');
+  const adultsUrl = searchParams.get('adults');
+  const autosearchUrl = searchParams.get('autosearch');
+
   const handleSearch = async (searchDetails: {
       origin: string;
       destination: string;
@@ -107,32 +116,23 @@ export default function FlightSearchPage() {
   };
 
   useEffect(() => {
-    const originParam = searchParams.get('origin');
-    const destinationParam = searchParams.get('destination');
-    const originQueryParam = searchParams.get('origin_query');
-    const destinationQueryParam = searchParams.get('destination_query');
-    const fromDateParam = searchParams.get('from_date');
-    const toDateParam = searchParams.get('to_date');
-    const adultsParam = searchParams.get('adults');
-    const shouldSearch = searchParams.get('autosearch') === 'true';
+    if (autosearchUrl === 'true' && originUrl && destinationUrl && fromDateUrl) {
+      const fromDate = parse(fromDateUrl, 'yyyy-MM-dd', new Date());
+      const toDate = toDateUrl ? parse(toDateUrl, 'yyyy-MM-dd', new Date()) : undefined;
 
-    if (shouldSearch && originParam && destinationParam && fromDateParam) {
-      const fromDate = parse(fromDateParam, 'yyyy-MM-dd', new Date());
-      const toDate = toDateParam ? parse(toDateParam, 'yyyy-MM-dd', new Date()) : undefined;
-
-      setOrigin(originParam);
-      setDestination(destinationParam);
-      setOriginQuery(originQueryParam || originParam);
-      setDestinationQuery(destinationQueryParam || destinationParam);
+      setOrigin(originUrl);
+      setDestination(destinationUrl);
+      setOriginQuery(originQueryUrl || originUrl);
+      setDestinationQuery(destinationQueryUrl || destinationUrl);
       setDate({ from: fromDate, to: toDate });
-      setAdults(adultsParam ? parseInt(adultsParam, 10) : 1);
+      setAdults(adultsUrl ? parseInt(adultsUrl, 10) : 1);
       
       handleSearch({
-        origin: originParam,
-        destination: destinationParam,
+        origin: originUrl,
+        destination: destinationUrl,
         departureDate: format(fromDate, 'yyyy-MM-dd'),
         returnDate: toDate ? format(toDate, 'yyyy-MM-dd') : undefined,
-        adults: adultsParam ? parseInt(adultsParam, 10) : 1,
+        adults: adultsUrl ? parseInt(adultsUrl, 10) : 1,
         children: 0,
         infants: 0,
       });
@@ -140,7 +140,7 @@ export default function FlightSearchPage() {
       router.replace('/', { scroll: false });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [originUrl, destinationUrl, fromDateUrl, toDateUrl, adultsUrl, autosearchUrl]);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -452,7 +452,7 @@ export default function FlightSearchPage() {
                     <Button
                         type="button"
                         size="lg"
-                        className="w-full text-lg font-bold h-full mt-1 rounded-xl shadow-md bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                        className="w-full text-lg font-bold h-full mt-1 rounded-xl shadow-md bg-accent hover:bg-accent/90 text-accent-foreground"
                         onClick={handleCancelSearch}
                     >
                         <X className="mr-2 h-5 w-5" />
@@ -462,7 +462,7 @@ export default function FlightSearchPage() {
                     <Button
                         type="submit"
                         size="lg"
-                        className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
+                        className="w-full text-lg font-bold bg-success hover:bg-success/90 h-full mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
                     >
                         Buscar
                     </Button>

@@ -226,7 +226,7 @@ export default function PackagesSearchPage() {
                  {activeInput === 'origin' && <SuggestionsList type="origin" />}
               </div>
               <div className='lg:col-span-4 relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
-                <Label htmlFor="destination" className="text-sm font-semibold ml-2">A</Label>
+                <Label htmlFor="destination" className="text-sm font-semibold ml-2">Hasta</Label>
                 <InputGroup>
                   <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
                   <Input id="destination" type="text" value={destinationQuery} 
@@ -312,14 +312,14 @@ export default function PackagesSearchPage() {
                 {loading ? (
                   <Button
                     type="button"
-                    className="w-full lg:w-auto font-bold mt-1 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
+                    className="w-full lg:w-auto font-bold mt-1 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
                     Cancelar
                   </Button>
                 ) : (
-                  <Button type="submit" className="w-full lg:w-auto font-bold bg-tertiary hover:bg-tertiary/90 mt-1 text-tertiary-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                  <Button type="submit" className="w-full lg:w-auto font-bold bg-success hover:bg-success/90 mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
                      <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
                   </Button>
                 )}
