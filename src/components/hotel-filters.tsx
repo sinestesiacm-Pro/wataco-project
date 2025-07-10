@@ -60,7 +60,14 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
   });
 
   useEffect(() => {
-    onFilterChange(filters);
+    // This effect now correctly debounces the filter changes.
+    const handler = setTimeout(() => {
+      onFilterChange(filters);
+    }, 500); // Debounce time of 500ms
+
+    return () => {
+      clearTimeout(handler);
+    };
   }, [filters, onFilterChange]);
 
   const handleCheckboxChange = (
@@ -89,7 +96,7 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
               defaultValue={filters.priceRange}
               max={1000}
               step={10}
-              onValueChange={(value) => setFilters(prev => ({...prev, priceRange: value}))}
+              onValueCommit={(value) => setFilters(prev => ({...prev, priceRange: value}))}
               className="w-full"
           />
           <div className="flex justify-between text-sm text-muted-foreground mt-2">
