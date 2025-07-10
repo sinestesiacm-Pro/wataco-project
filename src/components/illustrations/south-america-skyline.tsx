@@ -1,40 +1,337 @@
-import React from 'react';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-export function SouthAmericaSkyline() {
-  return (
-    <svg
-      width="100%"
-      height="120"
-      viewBox="0 0 1600 120"
-      preserveAspectRatio="xMidYMid slice"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <defs>
-        <linearGradient id="sa-sky" x1="0.5" y1="0" x2="0.5" y2="1">
-          <stop offset="0%" stopColor="#4CAF50" stopOpacity="0.4" />
-          <stop offset="60%" stopColor="#FFC107" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#F5F7FA" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <rect width="1600" height="120" fill="url(#sa-sky)" />
-      <g transform="translate(0, 100) scale(1, -1)" fill="#6D4C41" opacity="0.6">
-        {/* Andes Mountains */}
-        <path d="M0,20 L150,70 L300,30 L450,80 L600,40 L750,90 L900,20 Z" />
-        <path d="M800,30 L950,80 L1100,40 L1250,70 L1400,30 L1550,60 L1600,20 Z" fill="#A1887F" />
-        {/* Machu Picchu style silhouette */}
-        <rect x="400" y="40" width="100" height="10" />
-        <rect x="420" y="30" width="60" height="10" />
-        <rect x="440" y="20" width="20" height="10" />
-        {/* Palm Trees */}
-        <path d="M100,10 L100,50 M100,50 C80,60 120,60 100,50 M100,45 C85,50 115,50 100,45" stroke="#2E7D32" strokeWidth="2" fill="none" />
-        <path d="M1200,15 L1200,60 M1200,60 C1180,70 1220,70 1200,60 M1200,55 C1185,60 1215,60 1200,55" stroke="#2E7D32" strokeWidth="2.5" fill="none" />
-        {/* Colonial Building */}
-        <rect x="800" y="20" width="120" height="40" />
-        <rect x="830" y="10" width="60" height="10" fill="#D7CCC8" />
-        <path d="M850,60 A20,10 0 0,1 890,60" fill="#A1887F" />
-      </g>
-    </svg>
-  );
+@layer base {
+  :root {
+    --background: 216 33% 97%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 211 100% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 6% 10%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 36 100% 50%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 211 100% 50%;
+    --success: 139 51% 53%; /* Added for success toast */
+    --success-foreground: 0 0% 100%;
+    --tertiary: 145 63% 49%; /* Added for hero animation */
+    --tertiary-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 211 100% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 36 100% 50%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 211 100% 50%;
+    --success: 139 51% 53%;
+    --success-foreground: 0 0% 100%;
+    --tertiary: 145 63% 49%;
+    --tertiary-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Hero Section Styling */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-background-image {
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    z-index: 0;
+}
+
+.hero-background-image.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 20px;
+    width: 100%;
+    max-width: 1152px;
+    box-sizing: border-box;
+}
+
+.hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5em;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    margin-bottom: 10px;
+    line-height: 1.1;
+    font-weight: 700;
+}
+
+.hero-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2em;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 500px;
+    }
+    .hero-title {
+        font-size: 2.5em;
+    }
+    .hero-subtitle {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        height: 450px;
+    }
+    .hero-title {
+        font-size: 2em;
+    }
+}
+
+.flight-path {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+}
+
+.plane-animation {
+  position: absolute;
+  top: 0;
+  left: -10%; /* Start off-screen */
+  transform: translateY(-50%);
+  animation: fly-path 6s linear infinite, fly-up-down 3s ease-in-out infinite;
+}
+
+.cloud-animation {
+  animation: move-clouds 10s linear infinite;
+}
+
+@keyframes fly-path {
+  0% {
+    left: -10%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes fly-up-down {
+  0% {
+    transform: translateY(-50%) translateY(-5px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-50%) translateY(5px) rotate(2deg);
+  }
+  100% {
+    transform: translateY(-50%) translateY(-5px) rotate(2deg);
+  }
+}
+
+@keyframes move-clouds {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-250%);
+  }
+}
+
+@keyframes pulse-text {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-text {
+  animation: pulse-text 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* New Airplane Window Style */
+.airplane-window {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  padding: 8%; /* Adjust padding to control the frame thickness */
+  background: linear-gradient(145deg, hsl(var(--secondary)) 0%, hsl(var(--card)) 100%);
+  border-radius: 45% / 50%;
+  box-shadow: 
+    0 10px 25px rgba(0,0,0,0.1), /* Outer soft shadow */
+    inset 0 0 15px rgba(0,0,0,0.05); /* Inner soft shadow */
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.airplane-window:hover {
+  transform: scale(1.03);
+  box-shadow: 
+    0 15px 35px rgba(0,0,0,0.15),
+    inset 0 0 20px rgba(0,0,0,0.08);
+}
+
+.airplane-window-inner-bevel {
+  position: absolute;
+  top: 8%;
+  left: 8%;
+  right: 8%;
+  bottom: 8%;
+  border-radius: 40% / 45%;
+  background: hsl(var(--background));
+  box-shadow: 
+    inset 4px 4px 8px rgba(0,0,0,0.1), /* Inner shadow for depth */
+    inset -4px -4px 8px rgba(255,255,255,0.8); /* Inner highlight for 3D effect */
+  padding: 2%;
+}
+
+.airplane-window-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 35% / 40%;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5); /* Shadow inside the window pane */
+}
+
+.airplane-window-view img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.airplane-window:hover .airplane-window-view img {
+  transform: scale(1.1);
+}
+
+.airplane-window-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%; /* Start partially open */
+  background: linear-gradient(to bottom, hsl(var(--secondary)) 80%, hsl(var(--muted)) 100%);
+  border-bottom: 1px solid hsl(var(--border));
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border-radius: 35% 35% 20px 20px / 40% 40% 20px 20px;
+  transform: translateY(0);
+  transition: transform 0.4s ease-in-out;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.airplane-window:hover .airplane-window-shade {
+  transform: translateY(-100%);
+}
+
+/* Handle on the shade */
+.airplane-window-shade::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 0.5rem;
+  background-color: hsl(var(--muted-foreground));
+  border-radius: 4px;
+  opacity: 0.3;
+}
+
+.airplane-window-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+  color: white;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 40%, transparent 100%);
+  z-index: 1;
+  height: 100%;
+  border-radius: 35% / 40%;
+  box-sizing: border-box;
+}
+
+.mask-fade {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
 }

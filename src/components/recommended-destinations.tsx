@@ -3,9 +3,6 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { EuropeSkyline } from './illustrations/europe-skyline';
-import { SouthAmericaSkyline } from './illustrations/south-america-skyline';
-import { AsiaSkyline } from './illustrations/asia-skyline';
 
 interface RecommendedDestinationsProps {
   setDestination: (destination: { iata: string; query: string }) => void;
@@ -26,17 +23,33 @@ const destinationsByContinent = {
   ],
   "Asia": [
     { city: "Tokio", country: "Japón", priceFrom: "680", iata: "NRT", hint: "tokyo street", image: "https://images.unsplash.com/photo-1587653263995-422546a7a569?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0b2t5byUyMHN0cmVldHxlbnwwfHx8fDE3NTIwNjc4MDB8MA&ixlib=rb-4.1.0&q=80&w=1080" },
-    { city: "Bangkok", country: "Tailandia", priceFrom: "550", iata: "BKK", hint: "bangkok temple", image: "https://images.unsplash.com/photo-1691089185062-db320716e48b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiYW5na29rJTIwdGVtcGxlfGVufDB8fHx8MTc1MjA2NzgwMXww&ixlib=rb-4.1.0&q=80&w=1080" },
+    { city: "Bangkok", country: "Tailandia", priceFrom: "550", iata: "BKK", hint: "bangkok temple", image: "https://images.unsplash.com/photo-1691089185062-db320716e48b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiYW5na29rJTIwdGVtcGxlfGVufDB8fHx8fDE3NTIwNjc4MDF8MA&ixlib=rb-4.1.0&q=80&w=1080" },
     { city: "Seúl", country: "Corea del Sur", priceFrom: "620", iata: "ICN", hint: "seoul palace", image: "https://images.unsplash.com/photo-1740799346223-01af399faa0e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c2VvdWwlMjBwYWxhY2V8ZW58MHx8fHwxNzUyMDY3ODAwfDA&ixlib=rb-4.1.0&q=80&w=1080" },
     { city: "Singapur", country: "Singapur", priceFrom: "590", iata: "SIN", hint: "singapore marina bay", image: "https://images.unsplash.com/photo-1599919445953-c604dbd413a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzaW5nYXBvcmUlMjBtYXJpbmElMjBiYXl8ZW58MHx8fHwxNzUyMDY3ODAxfDA&ixlib=rb-4.1.0&q=80&w=1080" },
   ],
 };
 
-const continentDividers: { [key: string]: React.ElementType } = {
-  "Europa": EuropeSkyline,
-  "América del Sur": SouthAmericaSkyline,
-  "Asia": AsiaSkyline,
+const continentDividers: { [key: string]: { image: string, hint: string } } = {
+  "Europa": { image: 'https://images.unsplash.com/photo-1534430480-95b341271b48?q=80&w=2574&auto=format&fit=crop', hint: 'europe landmarks' },
+  "América del Sur": { image: 'https://images.unsplash.com/photo-1516026672322-78ab2db9a8e2?q=80&w=2670&auto=format&fit=crop', hint: 'patagonia landscape' },
+  "Asia": { image: 'https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=2692&auto=format&fit=crop', hint: 'japan temple' },
 };
+
+const ContinentDivider = ({ name, image, hint }: { name: string, image: string, hint: string }) => (
+    <div className="relative w-full h-32 my-8 rounded-lg overflow-hidden">
+        <Image 
+            src={image} 
+            alt={`Divider for ${name}`}
+            data-ai-hint={hint}
+            fill
+            className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background mask-fade" />
+        <div className="absolute inset-0 flex items-center justify-center">
+            <h2 className="text-4xl font-headline font-bold text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}>{name}</h2>
+        </div>
+    </div>
+);
 
 export function RecommendedDestinations({ setDestination }: RecommendedDestinationsProps) {
   return (
@@ -47,14 +60,10 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
       </div>
 
       {Object.entries(destinationsByContinent).map(([continent, destinations]) => {
-        const Divider = continentDividers[continent];
+        const divider = continentDividers[continent];
         return (
           <div key={continent} className="space-y-6">
-            {Divider && (
-              <div className="my-8">
-                  <Divider />
-              </div>
-            )}
+            {divider && <ContinentDivider name={continent} image={divider.image} hint={divider.hint} />}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
               {destinations.map((dest) => (
                 <div
@@ -79,7 +88,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                             <h3 className="text-xl font-bold font-headline text-white">{dest.city}</h3>
                             <p className="text-sm text-white/80">{dest.country}</p>
                           </div>
-                          <div className="flex flex-col items-center gap-2 mt-4">
+                          <div className="flex flex-col items-center gap-2 mt-2">
                               <p className="text-sm text-white/90 font-body">
                                   Desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
                               </p>
