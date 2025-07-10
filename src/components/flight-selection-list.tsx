@@ -28,6 +28,9 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
+    const originCity = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
+    const destinationCity = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
+
     const stops = itinerary.segments.length - 1;
 
     return (
@@ -47,7 +50,8 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
                              <div className="flex items-center justify-between">
                                 <div className="font-semibold text-left">
                                     <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
-                                    <p className="text-sm text-muted-foreground">{firstSegment.departure.iataCode}</p>
+                                    <p className="font-semibold text-muted-foreground">{firstSegment.departure.iataCode}</p>
+                                    <p className="text-xs text-muted-foreground">{originCity}</p>
                                 </div>
                                 <div className="flex-grow flex flex-col items-center text-muted-foreground px-2">
                                     <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
@@ -58,11 +62,12 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
                                 </div>
                                 <div className="font-semibold text-right">
                                     <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
-                                    <p className="text-sm text-muted-foreground">{lastSegment.arrival.iataCode}</p>
+                                     <p className="font-semibold text-muted-foreground">{lastSegment.arrival.iataCode}</p>
+                                     <p className="text-xs text-muted-foreground">{destinationCity}</p>
                                 </div>
                             </div>
                             <div className="flex items-center justify-between mt-3 pt-3 border-t border-dashed">
-                                <p className="text-xs text-muted-foreground">{airlineName}</p>
+                                <p className="text-xs text-muted-foreground">{airlineName} &middot; {firstSegment.carrierCode} {firstSegment.number}</p>
                                 <FlightBaggageInfo flight={flight} />
                             </div>
                         </div>

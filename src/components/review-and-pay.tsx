@@ -4,8 +4,9 @@ import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Plane, Lock, CheckCircle, XCircle } from 'lucide-react';
+import { Plane, Lock } from 'lucide-react';
 import Image from 'next/image';
+import { FlightBaggageInfo } from './flight-baggage-info';
 
 interface ReviewAndPayProps {
     outboundFlight: FlightOffer;
@@ -23,6 +24,8 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
+    const originCity = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
+    const destinationCity = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
 
     return (
         <Card className="bg-card/80">
@@ -41,13 +44,14 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
                     />
                     <div>
                         <p className="font-semibold">{formatDate(firstSegment.departure.at)}</p>
-                        <p className="text-sm text-muted-foreground">{airlineName}</p>
+                        <p className="text-sm text-muted-foreground">{airlineName} &middot; {firstSegment.carrierCode} {firstSegment.number}</p>
                     </div>
                 </div>
                 <div className="flex items-center justify-between">
                      <div className="text-center">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-muted-foreground">{firstSegment.departure.iataCode}</p>
+                        <p className="text-xs text-muted-foreground">{originCity}</p>
                     </div>
                     <div className="flex-grow flex flex-col items-center text-muted-foreground px-4">
                         <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
@@ -59,6 +63,7 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
                      <div className="text-center">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-muted-foreground">{lastSegment.arrival.iataCode}</p>
+                        <p className="text-xs text-muted-foreground">{destinationCity}</p>
                     </div>
                 </div>
             </CardContent>
@@ -145,10 +150,12 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOut
                     <CardHeader>
                         <CardTitle className="text-xl font-headline">Equipaje</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2">
-                        <div className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-success"/><span>Artículo personal (bolso pequeño)</span></div>
-                        <div className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-success"/><span>Equipaje de mano (hasta 10kg)</span></div>
-                        <div className="flex items-center gap-2"><XCircle className="h-5 w-5 text-destructive"/><span>Equipaje facturado (añadir con recargo)</span></div>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center gap-4">
+                            <span className="font-semibold">Tu vuelo incluye:</span>
+                            <FlightBaggageInfo flight={outboundFlight} />
+                        </div>
+                        <Button variant="outline">Añadir más equipaje</Button>
                     </CardContent>
                 </Card>
             </div>
