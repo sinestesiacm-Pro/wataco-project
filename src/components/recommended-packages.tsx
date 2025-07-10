@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Luggage, MoveUp } from 'lucide-react';
+import { Luggage } from 'lucide-react';
 
 const recommendedPackages = [
   { name: 'Aventura en la Riviera Maya', description: 'Vuelo + 5 noches todo incluido', price: '750', image: 'https://images.unsplash.com/photo-1620615748664-9cc920e4150d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyaXZpZXJhJTIwbWF5YSUyMGJlYWNofGVufDB8fHx8MTc1MjA4MzE0M3ww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'riviera maya beach' },
@@ -30,7 +30,6 @@ export function RecommendedPackages() {
               <div className="airplane-window-shade">
                   <h3 className="text-xl font-bold font-headline">{pkg.name}</h3>
                   <p className="text-sm text-muted-foreground text-center">{pkg.description}</p>
-                  <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="airplane-window-content">
                   <div className="flex flex-col items-center gap-2">

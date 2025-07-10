@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { BedDouble, MoveUp } from 'lucide-react';
+import { BedDouble } from 'lucide-react';
 
 const recommendedHotels = [
   { name: 'Hotel de Lujo con Vistas al Mar', city: 'Cancún, México', price: '250', image: 'https://images.unsplash.com/photo-1669123548650-0e0200ef47f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxsdXh1cnklMjBob3RlbCUyMG9jZWFufGVufDB8fHx8MTc1MjA4MzA2NXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'luxury hotel ocean' },
@@ -30,7 +30,6 @@ export function RecommendedHotels() {
               <div className="airplane-window-shade">
                   <h3 className="text-xl font-bold font-headline">{hotel.name}</h3>
                   <p className="text-sm text-muted-foreground">{hotel.city}</p>
-                  <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="airplane-window-content">
                   <div className="flex flex-col items-center gap-2">

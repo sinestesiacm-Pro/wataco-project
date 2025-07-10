@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, MoveUp } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface RecommendedDestinationsProps {
   setDestination: (destination: { iata: string; query: string }) => void;
@@ -62,7 +62,6 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                 <div className="airplane-window-shade">
                     <h3 className="text-2xl font-bold font-headline">{dest.city}</h3>
                     <p className="text-sm text-muted-foreground">{dest.country}</p>
-                    <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <div className="airplane-window-content">
                     <div className="flex flex-col items-center gap-2">

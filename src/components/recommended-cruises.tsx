@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Ship, MoveUp } from 'lucide-react';
+import { Ship } from 'lucide-react';
 
 const recommendedCruises = [
   { name: 'Caribe Occidental', ship: 'Symphony of the Seas', duration: '7 Noches', image: 'https://images.unsplash.com/photo-1678377402066-f09f89c267d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjcnVpc2UlMjBzaGlwJTIwY2FyaWJiZWFufGVufDB8fHx8MTc1MjA4NDA0OHww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'cruise ship caribbean' },
@@ -30,7 +30,6 @@ export function RecommendedCruises() {
               <div className="airplane-window-shade">
                   <h3 className="text-xl font-bold font-headline">{cruise.name}</h3>
                   <p className="text-sm text-muted-foreground">{cruise.ship}</p>
-                  <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="airplane-window-content">
                   <div className="flex flex-col items-center gap-2">
