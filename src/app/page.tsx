@@ -10,6 +10,7 @@ import { RecommendedDestinations } from '@/components/recommended-destinations';
 import { RecommendedHotels } from '@/components/recommended-hotels';
 import { RecommendedPackages } from '@/components/recommended-packages';
 import { RecommendedCruises } from '@/components/recommended-cruises';
+import { FuselageSection } from '@/components/fuselage-section';
 
 function PageContent({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -45,15 +46,22 @@ function RecommendedContent({ tab }: { tab?: string }) {
       return <RecommendedCruises />;
     case 'Flights':
     default:
-      // A placeholder as FlightSearchPage handles its own recommendations
-      // We pass a dummy setDestination to avoid prop errors.
-      return <RecommendedDestinations setDestination={() => {}} />;
+      // In the new layout, RecommendedDestinations is part of FlightSearchPage
+      // This part is inside the fuselage, so we can return other recommendations or nothing
+      return null;
   }
 }
 
 
 export default function Home({ searchParams }: { searchParams?: { tab?: string } }) {
   const isFlightSearch = !searchParams?.tab || searchParams.tab === 'Flights';
+
+  const fuselageImages = [
+    'https://images.unsplash.com/photo-1528747045269-3906333af562?fit=crop&w=1920&q=80',
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?fit=crop&w=1920&q=80',
+    'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?fit=crop&w=1920&q=80',
+    'https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?fit=crop&w=1920&q=80',
+  ];
 
   return (
     <>
@@ -65,18 +73,19 @@ export default function Home({ searchParams }: { searchParams?: { tab?: string }
         <PageContent tab={searchParams?.tab} />
       </Suspense>
 
-      {/* Render recommendations outside of the main search page if not on Flights tab */}
-      {!isFlightSearch && (
-        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <RecommendedContent tab={searchParams?.tab} />
-        </div>
-      )}
-      
-      <div className="fuselage-background">
+      <FuselageSection images={fuselageImages}>
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 relative z-10">
           <TestimonialsSection />
+          
+          {/* Render Flight recommendations inside the fuselage ONLY on the flights tab */}
+          {isFlightSearch && <RecommendedDestinations setDestination={() => {}} />}
+
+          {/* Render other recommendations if not on flights tab */}
+          {!isFlightSearch && (
+              <RecommendedContent tab={searchParams?.tab} />
+          )}
         </div>
-      </div>
+      </FuselageSection>
     </>
   );
 }

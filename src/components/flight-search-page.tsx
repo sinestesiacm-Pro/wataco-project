@@ -431,12 +431,11 @@ export default function FlightSearchPage() {
           {flightData && flightData.data.length > 0 && (
             <FlightResults flightData={flightData} destinationIata={destination} />
           )}
+          {/* RecommendedDestinations is now shown below the testimonials section */}
           {!loading && !flightData && (
-             <div className="fuselage-background -mx-4 sm:-mx-6 lg:-mx-8">
-                <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 relative z-10">
-                    <RecommendedDestinations setDestination={handleSetRecommendedDestination} />
-                </div>
-              </div>
+             <div className="text-center py-16">
+                <p className="text-muted-foreground">Encuentra tu próximo destino a continuación o realiza una nueva búsqueda.</p>
+             </div>
           )}
         </section>
       </div>
