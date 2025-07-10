@@ -30,7 +30,6 @@ export function RecommendedPackages() {
                         fill 
                         className="object-cover"
                     />
-                    <div className="airplane-window-shade" />
                     <div className="airplane-window-content">
                         <div>
                         <h3 className="text-xl font-bold font-headline text-white">{pkg.name}</h3>
