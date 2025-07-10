@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { AuthProvider } from '@/contexts/auth-context';
+import { ChatWidget } from '@/components/chat-widget';
 
 export const metadata: Metadata = {
   title: 'Be On Trip',
@@ -33,6 +34,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <Toaster />
+          <ChatWidget />
         </AuthProvider>
       </body>
     </html>
