@@ -82,11 +82,9 @@ function FlightSelectionPage() {
     window.scrollTo(0, 0);
   }, []);
   
-  const debouncedSetFilters = useDebounce(setFilters, 300);
-
   const handleFilterChange = useCallback((newFilters: FiltersState) => {
-    debouncedSetFilters(newFilters);
-  }, [debouncedSetFilters]);
+    setFilters(newFilters);
+  }, []);
 
   const getFlightsForStep = (step: BookingStep) => {
     if (!flightData) return [];
