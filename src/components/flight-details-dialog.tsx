@@ -6,7 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -196,7 +195,7 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
             Seleccionar
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
           <DialogHeader className="p-6 pb-4">
             <DialogTitle className="font-headline text-2xl">Detalles del Vuelo</DialogTitle>
           </DialogHeader>
