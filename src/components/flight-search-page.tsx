@@ -1,14 +1,10 @@
-
-
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { addDays, format, parse } from 'date-fns';
-import { searchFlights } from '@/app/actions';
-import type { FlightData, Airport } from '@/lib/types';
+import type { Airport } from '@/lib/types';
 import { searchAirports } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
 
-import { FlightResults } from '@/components/flight-results';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -44,39 +40,21 @@ export default function FlightSearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const originUrl = searchParams.get('origin');
-  const destinationUrl = searchParams.get('destination');
-  const originQueryUrl = searchParams.get('origin_query');
-  const destinationQueryUrl = searchParams.get('destination_query');
-  const fromDateUrl = searchParams.get('from_date');
-  const toDateUrl = searchParams.get('to_date');
-  const adultsUrl = searchParams.get('adults');
-  const autosearchUrl = searchParams.get('autosearch');
-
-  const [origin, setOrigin] = useState(originUrl || '');
-  const [destination, setDestination] = useState(destinationUrl || '');
-  const [originQuery, setOriginQuery] = useState(originQueryUrl || '');
-  const [destinationQuery, setDestinationQuery] = useState(destinationQueryUrl ||'');
+  const [origin, setOrigin] = useState('');
+  const [destination, setDestination] = useState('');
+  const [originQuery, setOriginQuery] = useState('');
+  const [destinationQuery, setDestinationQuery] = useState('');
   
-  const [date, setDate] = useState<DateRange | undefined>(() => {
-    if (fromDateUrl) {
-      const from = parse(fromDateUrl, 'yyyy-MM-dd', new Date());
-      const to = toDateUrl ? parse(toDateUrl, 'yyyy-MM-dd', new Date()) : undefined;
-      return { from, to };
-    }
-    return {
+  const [date, setDate] = useState<DateRange | undefined>({
       from: addDays(new Date(), 7),
       to: addDays(new Date(), 14),
-    }
   });
 
-  const [isRoundTrip, setIsRoundTrip] = useState(toDateUrl !== null);
-  const [adults, setAdults] = useState(adultsUrl ? parseInt(adultsUrl, 10) : 1);
+  const [isRoundTrip, setIsRoundTrip] = useState(true);
+  const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
   
-  const [flightData, setFlightData] = useState<FlightData | null>(null);
-  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   const [suggestions, setSuggestions] = useState<Airport[]>([]);
@@ -86,70 +64,32 @@ export default function FlightSearchPage() {
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   const originRef = useRef<HTMLDivElement>(null);
   const destinationRef = useRef<HTMLDivElement>(null);
-  const searchIdRef = useRef(0);
-
-  const handleSearch = async (searchDetails: {
-      origin: string;
-      destination: string;
-      originQuery: string;
-      destinationQuery: string;
-      departureDate: string;
-      returnDate?: string;
-      adults: number;
-      children: number;
-      infants: number;
-  }) => {
-    setLoading(true);
-    setFlightData(null);
-
-    const searchId = ++searchIdRef.current;
-
-    const result = await searchFlights({
-      origin: searchDetails.origin,
-      destination: searchDetails.destination,
-      departureDate: searchDetails.departureDate,
-      returnDate: searchDetails.returnDate,
-      adults: searchDetails.adults,
-      children: searchDetails.children,
-      infants: searchDetails.infants,
-    });
-
-    if (searchId !== searchIdRef.current) {
-      return;
-    }
-
-    if (result.success && result.data) {
-      setFlightData(result.data);
-    } else {
-      setFlightData(null); // Clear previous results on error
-      toast({
-        title: 'Error de Búsqueda',
-        description: result.error || 'No se pudieron encontrar vuelos. Intenta otra búsqueda.',
-        variant: 'destructive',
-      });
-    }
-
-    setLoading(false);
-  };
 
   useEffect(() => {
-    if (autosearchUrl === 'true' && originUrl && destinationUrl && fromDateUrl) {
-      handleSearch({
-        origin: originUrl,
-        destination: destinationUrl,
-        originQuery: originQuery,
-        destinationQuery: destinationQuery,
-        departureDate: fromDateUrl,
-        returnDate: toDateUrl || undefined,
-        adults: parseInt(adultsUrl || '1', 10),
-        children: 0,
-        infants: 0,
+    // This effect handles auto-search from promotion cards
+    const urlOrigin = searchParams.get('origin');
+    const urlDestination = searchParams.get('destination');
+    const urlFromDate = searchParams.get('from_date');
+    const urlToDate = searchParams.get('to_date');
+    const urlAdults = searchParams.get('adults');
+    const autoSearch = searchParams.get('autosearch');
+
+    if (autoSearch === 'true' && urlOrigin && urlDestination && urlFromDate) {
+      const query = new URLSearchParams({
+        origin: urlOrigin,
+        destination: urlDestination,
+        departureDate: urlFromDate,
+        adults: urlAdults || '1',
+        originQuery: searchParams.get('origin_query') || urlOrigin,
+        destinationQuery: searchParams.get('destination_query') || urlDestination,
       });
-      // Clean URL after search
-      router.replace('/', { scroll: false });
+      if (urlToDate) {
+        query.set('returnDate', urlToDate);
+      }
+      router.push(`/flights/select?${query.toString()}`);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autosearchUrl, originUrl, destinationUrl, fromDateUrl, toDateUrl, adultsUrl, router]);
+  }, [searchParams, router]);
+
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -160,17 +100,11 @@ export default function FlightSearchPage() {
       setSuggestionsLoading(true);
       const result = await searchAirports(query);
       if (result.success && result.data) {
-        // Check activeInput again to prevent race conditions if user blurs input quickly
         if (activeInput) {
             setSuggestions(result.data);
         }
       } else {
         setSuggestions([]);
-        toast({
-            title: "Error de Búsqueda de Aeropuerto",
-            description: result.error || "No se pudieron obtener las sugerencias.",
-            variant: "destructive",
-        });
       }
       setSuggestionsLoading(false);
     };
@@ -180,9 +114,9 @@ export default function FlightSearchPage() {
     } else if (activeInput === 'destination' && destinationQuery.length > 1) {
       fetchSuggestions(debouncedDestinationQuery);
     } else {
-      setSuggestions([]); // Clear suggestions when no input is active or query is too short
+      setSuggestions([]);
     }
-  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, originQuery, destinationQuery, toast]);
+  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, originQuery, destinationQuery]);
 
 
   useEffect(() => {
@@ -218,15 +152,12 @@ export default function FlightSearchPage() {
   const handleTripTypeChange = (checked: boolean) => {
     setIsRoundTrip(checked);
     if (!checked) {
-      // For one-way, we only need a `from` date. Clear `to`.
       setDate(current => (current?.from ? { from: current.from, to: undefined } : undefined));
     } else {
-      // When switching to round-trip, if there's no `to` date, add one.
       setDate(current => {
         if (current?.from && !current?.to) {
           return { from: current.from, to: addDays(current.from, 7) };
         }
-        // If no dates at all, set default range
         if (!current?.from) {
             return { from: addDays(new Date(), 7), to: addDays(new Date(), 14) };
         }
@@ -246,22 +177,21 @@ export default function FlightSearchPage() {
       return;
     }
     
-    handleSearch({
-      origin,
-      destination,
-      originQuery,
-      destinationQuery,
-      departureDate: date.from ? format(date.from, 'yyyy-MM-dd') : '',
-      returnDate: isRoundTrip && date.to ? format(date.to, 'yyyy-MM-dd') : undefined,
-      adults,
-      children,
-      infants,
+    const query = new URLSearchParams({
+        origin,
+        destination,
+        departureDate: format(date.from, 'yyyy-MM-dd'),
+        adults: adults.toString(),
+        originQuery,
+        destinationQuery,
     });
-  };
-  
-  const handleCancelSearch = () => {
-    searchIdRef.current++;
-    setLoading(false);
+    if (isRoundTrip && date.to) {
+        query.set('returnDate', format(date.to, 'yyyy-MM-dd'))
+    }
+    if (children > 0) query.set('children', children.toString());
+    if (infants > 0) query.set('infants', infants.toString());
+    
+    router.push(`/flights/select?${query.toString()}`);
   };
 
   const totalTravelers = adults + children + infants;
@@ -393,7 +323,7 @@ export default function FlightSearchPage() {
                     <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Pasajeros</Label>
                     <Popover>
                     <PopoverTrigger asChild>
-                        <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1 hover:bg-accent/10">
+                        <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
                         <Users className="mr-2 h-4 w-4" />
                         {travelerText}
                         </Button>
@@ -459,17 +389,6 @@ export default function FlightSearchPage() {
                 </div>
 
                 <div className="lg:col-span-2 flex items-end">
-                    {loading ? (
-                    <Button
-                        type="button"
-                        size="lg"
-                        className="w-full text-lg font-bold h-full mt-1 rounded-xl shadow-md bg-accent hover:bg-accent/90 text-accent-foreground"
-                        onClick={handleCancelSearch}
-                    >
-                        <X className="mr-2 h-5 w-5" />
-                        Cancelar
-                    </Button>
-                    ) : (
                     <Button
                         type="submit"
                         size="lg"
@@ -477,7 +396,6 @@ export default function FlightSearchPage() {
                     >
                         Buscar
                     </Button>
-                    )}
                 </div>
             </div>
           </form>
@@ -486,16 +404,9 @@ export default function FlightSearchPage() {
       
       <div className="max-w-7xl mx-auto py-0 px-4 sm:px-6 lg:px-8">
         <section className="mt-8">
-          {loading && <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />}
-          {flightData && flightData.data.length > 0 && (
-            <FlightResults flightData={flightData} destinationIata={destination} />
-          )}
-          {!loading && !flightData && (
-             <div className="h-16" />
-          )}
+            <div className="h-16" />
         </section>
       </div>
     </div>
   );
 }
-
