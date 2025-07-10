@@ -1,4 +1,5 @@
 
+
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { addDays, format } from 'date-fns';
@@ -425,17 +426,14 @@ export default function FlightSearchPage() {
         </div>
       </HeroSection>
       
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-0 px-4 sm:px-6 lg:px-8">
         <section className="mt-8">
           {loading && <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />}
           {flightData && flightData.data.length > 0 && (
             <FlightResults flightData={flightData} destinationIata={destination} />
           )}
-          {/* RecommendedDestinations is now shown below the testimonials section */}
           {!loading && !flightData && (
-             <div className="text-center py-16">
-                <p className="text-muted-foreground">Encuentra tu próximo destino a continuación o realiza una nueva búsqueda.</p>
-             </div>
+             <div className="h-16" />
           )}
         </section>
       </div>

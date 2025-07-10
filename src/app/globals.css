@@ -333,4 +333,18 @@
   box-sizing: border-box;
 }
 
+.fuselage-gradient {
+    position: relative;
+}
+.fuselage-gradient::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at 50% -50%, hsl(var(--card)) 40%, hsla(var(--background), 0) 80%);
+    pointer-events: none;
+    z-index: 0;
+}
     
