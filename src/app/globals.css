@@ -292,7 +292,7 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   border-radius: 35% 35% 20px 20px / 40% 40% 20px 20px;
   transform: translateY(0);
-  transition: transform 0.4s ease-in-out;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 2;
   display: flex;
   align-items: flex-end;
@@ -334,7 +334,7 @@
 }
 
 .mask-fade {
-  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
 }
     
