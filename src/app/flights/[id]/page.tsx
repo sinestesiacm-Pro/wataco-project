@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense } from 'react';
@@ -29,13 +30,14 @@ function FlightDetailPageContent({ id }: { id: string }) {
 }
 
 export default function FlightDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     }>
-      <FlightDetailPageContent id={params.id} />
+      <FlightDetailPageContent id={id} />
     </Suspense>
   );
 }
