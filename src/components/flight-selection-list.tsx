@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plane } from 'lucide-react';
 import { AITravelTips } from './ai-travel-tips';
+import { FlightBaggageInfo } from './flight-baggage-info';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -57,7 +58,10 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
                                 <span className="text-sm text-muted-foreground ml-1">{lastSegment.arrival.iataCode}</span>
                             </div>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">{airlineName}</p>
+                         <div className="flex items-center justify-between mt-2">
+                            <p className="text-xs text-muted-foreground">{airlineName}</p>
+                            <FlightBaggageInfo flight={flight} />
+                        </div>
                     </div>
                 </div>
                  <div className="w-full md:w-1/3 flex flex-col items-center md:items-end gap-3">
