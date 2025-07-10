@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Suspense } from 'react';
 import { Loader2 } from "lucide-react";
@@ -44,6 +44,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
   );
 }
 
+// This is the Server Component that fetches data and handles params
 export default function HotelDetailPage({ params }: { params: { id: string } }) {
   return (
     <Suspense fallback={
