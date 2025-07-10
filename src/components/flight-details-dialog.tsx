@@ -132,20 +132,19 @@ const ItineraryCard = ({ itinerary, dictionaries, title }: { itinerary: Itinerar
 const BaggageInfo = ({ flight }: { flight: FlightOffer }) => {
     const travelerPricing = flight.travelerPricings[0];
     const baggage = travelerPricing.fareDetailsBySegment[0].includedCheckedBags;
-    // Amadeus Test API rarely provides cabin bag info. We'll make an assumption.
     const cabinBagText = "1 pieza de equipaje de mano";
     const checkedBagText = baggage ? `${baggage.quantity} maleta${baggage.quantity > 1 ? 's' : ''} documentada${baggage.quantity > 1 ? 's' : ''}` : 'Equipaje documentado no incluido';
 
     return (
         <Card className="bg-muted/50 p-4 rounded-xl">
-            <h3 className="font-headline font-bold text-lg mb-2">Equipaje Incluido</h3>
-            <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2">
-                    <Luggage className="w-4 h-4 text-primary" />
+            <h3 className="font-headline font-bold text-lg mb-4">Equipaje Incluido</h3>
+            <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-3">
+                    <Luggage className="w-5 h-5 text-primary" />
                     <span>{cabinBagText}</span>
                 </div>
-                 <div className="flex items-center gap-2">
-                    <Luggage className="w-4 h-4 text-primary" />
+                 <div className="flex items-center gap-3">
+                    <Luggage className="w-5 h-5 text-primary" />
                     <span>{checkedBagText}</span>
                 </div>
             </div>
@@ -171,7 +170,7 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
             <ArrowRight className="ml-2 h-5 w-5"/>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col bg-card/95 backdrop-blur-sm">
           <DialogHeader>
             <DialogTitle className="font-headline text-2xl">Detalles del Vuelo</DialogTitle>
           </DialogHeader>

@@ -120,7 +120,7 @@ export function FlightResults({ flightData, destinationIata }: { flightData: Fli
                 <div className="w-full md:w-1/3 flex flex-col items-center md:items-end gap-4">
                     <CabinSelector flight={flight} />
                     <div className="text-center md:text-right">
-                      <p className="text-3xl font-bold font-headline text-accent">${flight.price.total}</p>
+                      <p className="text-3xl font-bold font-headline text-tertiary">${flight.price.total}</p>
                       <p className="text-xs text-muted-foreground">Precio total, {flight.oneWay ? 'solo ida' : 'ida y vuelta'}</p>
                     </div>
                     <FlightDetailsDialog flight={flight} dictionaries={dictionaries} />
