@@ -29,39 +29,41 @@ const destinationsByContinent = {
 
 const DestinationWindow = ({ dest, onClick }: { dest: typeof destinationsByContinent.Europa[0], onClick: () => void }) => (
     <div
-        className="airplane-window animate-in fade-in slide-in-from-bottom-5 duration-500"
+        className="flex-shrink-0 w-[280px]"
         onClick={onClick}
     >
-        <div className="airplane-window-inner-bevel">
-        <div className="airplane-window-view">
-            <Image
-                src={dest.image}
-                data-ai-hint={dest.hint}
-                alt={dest.city}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-            <div className="airplane-window-shade" />
-            <div className="airplane-window-content">
-                <div>
-                <h3 className="text-2xl font-bold font-headline text-white">{dest.city}</h3>
-                <p className="text-sm text-white/80 -mt-1">{dest.country}</p>
-                </div>
-                <div className="flex justify-between items-end w-full mt-4">
-                    <p className="text-sm text-white/90 font-body">
-                        Desde <span className="font-bold text-xl text-tertiary">${dest.priceFrom}</span>
-                    </p>
-                    <Button 
-                        size="sm" 
-                        variant="secondary"
-                        className="bg-white/20 hover:bg-white/30 text-white rounded-full pointer-events-none text-xs"
-                    >
-                        Ver Vuelos
-                        <ArrowRight className="ml-1.5 h-3 w-3" />
-                    </Button>
+        <div className="airplane-window animate-in fade-in slide-in-from-bottom-5 duration-500">
+            <div className="airplane-window-inner-bevel">
+            <div className="airplane-window-view">
+                <Image
+                    src={dest.image}
+                    data-ai-hint={dest.hint}
+                    alt={dest.city}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div className="airplane-window-shade" />
+                <div className="airplane-window-content">
+                    <div>
+                    <h3 className="text-2xl font-bold font-headline text-white">{dest.city}</h3>
+                    <p className="text-sm text-white/80 -mt-1">{dest.country}</p>
+                    </div>
+                    <div className="flex justify-between items-end w-full mt-4">
+                        <p className="text-sm text-white/90 font-body">
+                            Desde <span className="font-bold text-xl text-tertiary">${dest.priceFrom}</span>
+                        </p>
+                        <Button 
+                            size="sm" 
+                            variant="secondary"
+                            className="bg-white/20 hover:bg-white/30 text-white rounded-full pointer-events-none text-xs"
+                        >
+                            Ver Vuelos
+                            <ArrowRight className="ml-1.5 h-3 w-3" />
+                        </Button>
+                    </div>
                 </div>
             </div>
-        </div>
+            </div>
         </div>
     </div>
 );
@@ -90,7 +92,7 @@ export function RecommendedDestinations() {
         
         {Object.entries(destinationsByContinent).map(([continent, destinations]) => (
             <TabsContent key={continent} value={continent} className="data-[state=active]:animate-in data-[state=active]:fade-in-50 duration-500">
-                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 mt-12">
+                 <div className="flex space-x-8 pb-4 mt-12 overflow-x-auto scrollbar-hide -mx-4 px-4">
                     {destinations.map((dest) => (
                         <DestinationWindow 
                             key={dest.iata}

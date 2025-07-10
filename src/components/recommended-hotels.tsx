@@ -9,6 +9,7 @@ const recommendedHotels = [
   { name: 'Boutique Hotel en el Centro Histórico', city: 'Cuzco, Perú', price: '120', image: 'https://images.unsplash.com/photo-1687677929096-e55dd0bb17f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxib3V0aXF1ZSUyMGhvdGVsJTIwaGlzdG9yaWNhbHxlbnwwfHx8fDE3NTIwODMwNjV8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'boutique hotel historical' },
   { name: 'Resort Todo Incluido Familiar', city: 'Punta Cana, R. Dominicana', price: '300', image: 'https://images.unsplash.com/photo-1623718649591-311775a30c43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxyZXNvcnQlMjBwb29sfGVufDB8fHx8MTc1MjA4MzA2NXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'resort pool' },
   { name: 'Apartamento Moderno con Terraza', city: 'Medellín, Colombia', price: '90', image: 'https://images.unsplash.com/photo-1678891527680-7bb2a6155cde?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBhcGFydG1lbnQlMjBjaXR5fGVufDB8fHx8MTc1MjA4MzA2NXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'modern apartment city' },
+  { name: 'Cabaña Rústica en el Bosque', city: 'Bariloche, Argentina', price: '150', image: 'https://images.unsplash.com/photo-1621287638669-def225e5b610?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmb3Jlc3QlMjBjYWJpbnxlbnwwfHx8fDE3NTIyMzQyOTB8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'forest cabin' },
 ];
 
 export function RecommendedHotels() {
@@ -18,34 +19,36 @@ export function RecommendedHotels() {
         <h2 className="text-3xl font-headline font-bold text-gray-800">Estancias Populares que te Encantarán</h2>
         <p className="text-muted-foreground mt-2">Hoteles con excelentes valoraciones para una experiencia única.</p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+      <div className="flex space-x-8 pb-4 overflow-x-auto scrollbar-hide -mx-4 px-4">
         {recommendedHotels.map((hotel, index) => (
-          <div key={index} className="airplane-window">
-            <div className="airplane-window-inner-bevel">
-              <div className="airplane-window-view">
-                <Image 
-                    src={hotel.image} 
-                    data-ai-hint={hotel.hint} 
-                    alt={hotel.name} 
-                    fill 
-                />
-                <div className="airplane-window-shade" />
-                <div className="airplane-window-content">
-                    <div>
-                        <h3 className="text-xl font-bold font-headline text-white">{hotel.name}</h3>
-                        <p className="text-sm text-white/80">{hotel.city}</p>
-                    </div>
-                    <div className="flex flex-col items-center gap-2 mt-4">
-                        <p className="text-sm text-white/90 font-body">
-                            Desde <span className="font-bold text-lg text-tertiary">${hotel.price}</span>/noche
-                        </p>
-                        <Button size="sm" variant="secondary" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
-                            <BedDouble className="mr-1.5 h-4 w-4" />
-                            Ver Hotel
-                        </Button>
+          <div key={index} className="flex-shrink-0 w-[280px]">
+            <div className="airplane-window">
+                <div className="airplane-window-inner-bevel">
+                <div className="airplane-window-view">
+                    <Image 
+                        src={hotel.image} 
+                        data-ai-hint={hotel.hint} 
+                        alt={hotel.name} 
+                        fill 
+                    />
+                    <div className="airplane-window-shade" />
+                    <div className="airplane-window-content">
+                        <div>
+                            <h3 className="text-xl font-bold font-headline text-white">{hotel.name}</h3>
+                            <p className="text-sm text-white/80">{hotel.city}</p>
+                        </div>
+                        <div className="flex flex-col items-center gap-2 mt-4">
+                            <p className="text-sm text-white/90 font-body">
+                                Desde <span className="font-bold text-lg text-tertiary">${hotel.price}</span>/noche
+                            </p>
+                            <Button size="sm" variant="secondary" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                                <BedDouble className="mr-1.5 h-4 w-4" />
+                                Ver Hotel
+                            </Button>
+                        </div>
                     </div>
                 </div>
-              </div>
+                </div>
             </div>
           </div>
         ))}
