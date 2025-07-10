@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
-import { Clock, Luggage, Plane, Settings2, QrCode } from 'lucide-react';
+import { Clock, Luggage, Plane, Settings2, QrCode, CheckCircle } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO, format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -149,10 +149,11 @@ const PriceCard = ({ flight }: { flight: FlightOffer }) => {
     return (
         <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
             <p className="text-sm text-muted-foreground">Precio total</p>
-            <p className="text-4xl font-bold text-tertiary my-2">${flight.price.total}</p>
+            <p className="text-4xl font-bold text-accent my-2">${flight.price.total}</p>
             <div className="flex flex-col gap-2 mt-4">
                 <Button asChild
-                    className="w-full bg-blue-500 hover:bg-blue-600"
+                    variant="outline"
+                    className="w-full"
                 >
                     <Link href={`/flights/${flight.id}`}>
                         <Settings2 className="mr-2 h-4 w-4" />
@@ -160,9 +161,10 @@ const PriceCard = ({ flight }: { flight: FlightOffer }) => {
                     </Link>
                 </Button>
                 <Button asChild
-                    className="w-full bg-green-500 hover:bg-green-600 text-white"
+                    className="w-full bg-success hover:bg-success/90 text-success-foreground"
                 >
                      <Link href={`/flights/${flight.id}`}>
+                        <CheckCircle className="mr-2 h-4 w-4" />
                         Confirmar Reserva
                     </Link>
                 </Button>
@@ -207,3 +209,5 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
     </Dialog>
   );
 }
+
+    

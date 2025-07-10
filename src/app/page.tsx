@@ -52,20 +52,23 @@ function RecommendedContent({ tab }: { tab?: string }) {
 
 export default function Home({ searchParams }: { searchParams?: { tab?: string } }) {
   return (
-    <>
-      <Suspense fallback={
+    // Suspense boundary wraps the dynamic content to handle loading states gracefully
+    <Suspense fallback={
         <div className="flex items-center justify-center min-h-[calc(100vh-20rem)]">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
       }>
-        <PageContent tab={searchParams?.tab} />
-      </Suspense>
-
-      <div className="max-w-7xl mx-auto pt-0 pb-8 px-4 sm:px-6 lg:px-8 fuselage-gradient">
-        <RecommendedContent tab={searchParams?.tab} />
+      <PageContent tab={searchParams?.tab} />
+      
+      <div className="bg-card pt-0 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 fuselage-gradient">
+            <RecommendedContent tab={searchParams?.tab} />
+        </div>
       </div>
 
       <TestimonialsSection />
-    </>
+    </Suspense>
   );
 }
+
+    

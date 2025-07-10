@@ -5,27 +5,27 @@
 
 @layer base {
   :root {
-    --background: 240 10% 97.5%;
+    --background: 220 20% 97%; /* #F5F7FA */
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 205 90% 45%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 211 100% 50%; /* Azul #007BFF */
+    --primary-foreground: 0 0% 100%;
     --secondary: 240 5% 96%;
     --secondary-foreground: 240 6% 10%;
     --muted: 240 5% 90%;
     --muted-foreground: 240 4% 46%;
-    --accent: 36 100% 50%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 25 100% 50%; /* Naranja #FF6B00 */
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 220 13% 85%;
     --input: 220 13% 88%;
-    --ring: 205 90% 45%;
+    --ring: 211 100% 50%;
     --radius: 1.25rem;
-    --success: 139 51% 53%;
+    --success: 145 63% 42%; /* Verde #28A745 */
     --success-foreground: 0 0% 100%;
     --tertiary: 145 63% 49%;
     --tertiary-foreground: 0 0% 100%;
@@ -38,21 +38,21 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 205 90% 55%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 22.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 36 100% 55%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 25 100% 50%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 27.5%;
     --input: 217.2 32.6% 27.5%;
-    --ring: 205 90% 55%;
+    --ring: 211 100% 50%;
     --radius: 1.25rem;
-    --success: 139 51% 53%;
+    --success: 145 63% 42%;
     --success-foreground: 0 0% 100%;
     --tertiary: 145 63% 49%;
     --tertiary-foreground: 0 0% 100%;
@@ -370,3 +370,5 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+
+    

@@ -2,13 +2,12 @@
 
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { addDays, format } from 'date-fns';
+import { addDays, format, parse } from 'date-fns';
 import { searchFlights } from '@/app/actions';
 import type { FlightData, Airport } from '@/lib/types';
 import { searchAirports } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
 
-import { RecommendedDestinations } from '@/components/recommended-destinations';
 import { FlightResults } from '@/components/flight-results';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +22,8 @@ import React from 'react';
 import type { DateRange } from 'react-day-picker';
 import { HeroSection } from './hero-section';
 import { FlightLoadingAnimation } from './flight-loading-animation';
+import { useSearchParams, useRouter } from 'next/navigation';
+
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -40,6 +41,9 @@ const flightImages = [
 ];
 
 export default function FlightSearchPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [origin, setOrigin] = useState('MAD');
   const [destination, setDestination] = useState('');
   const [originQuery, setOriginQuery] = useState('Madrid, Spain');
@@ -67,6 +71,84 @@ export default function FlightSearchPage() {
   const originRef = useRef<HTMLDivElement>(null);
   const destinationRef = useRef<HTMLDivElement>(null);
   const searchIdRef = useRef(0);
+
+  const handleSearch = async (searchDetails: {
+      origin: string;
+      destination: string;
+      departureDate: string;
+      returnDate?: string;
+      adults: number;
+      children: number;
+      infants: number;
+  }) => {
+    setLoading(true);
+    setFlightData(null);
+
+    const searchId = ++searchIdRef.current;
+
+    const result = await searchFlights(searchDetails);
+
+    if (searchId !== searchIdRef.current) {
+      return;
+    }
+
+    if (result.success && result.data) {
+      setFlightData(result.data);
+    } else {
+      setFlightData(null); // Clear previous results on error
+      toast({
+        title: 'Error de Búsqueda',
+        description: result.error || 'No se pudieron encontrar vuelos. Intenta otra búsqueda.',
+        variant: 'destructive',
+      });
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    const autoSearch = async () => {
+      const originParam = searchParams.get('origin');
+      const destinationParam = searchParams.get('destination');
+      const fromDateParam = searchParams.get('from_date');
+      const toDateParam = searchParams.get('to_date');
+      const adultsParam = searchParams.get('adults');
+      const shouldSearch = searchParams.get('autosearch') === 'true';
+
+      if (shouldSearch && originParam && destinationParam && fromDateParam && toDateParam && adultsParam) {
+        setOrigin(originParam);
+        setDestination(destinationParam);
+        const fromDate = parse(fromDateParam, 'yyyy-MM-dd', new Date());
+        const toDate = parse(toDateParam, 'yyyy-MM-dd', new Date());
+        setDate({ from: fromDate, to: toDate });
+        setAdults(parseInt(adultsParam, 10));
+        
+        // Fetch full airport details to populate query inputs
+        const [originAirport, destAirport] = await Promise.all([searchAirports(originParam), searchAirports(destinationParam)]);
+        if (originAirport.success && originAirport.data?.[0]) {
+            setOriginQuery(`${originAirport.data[0].address?.cityName || originAirport.data[0].name}, ${originAirport.data[0].address?.countryName}`);
+        }
+        if (destAirport.success && destAirport.data?.[0]) {
+            setDestinationQuery(`${destAirport.data[0].address?.cityName || destAirport.data[0].name}, ${destAirport.data[0].address?.countryName}`);
+        }
+        
+        await handleSearch({
+          origin: originParam,
+          destination: destinationParam,
+          departureDate: fromDateParam,
+          returnDate: toDateParam,
+          adults: parseInt(adultsParam, 10),
+          children: 0,
+          infants: 0
+        });
+
+        // Clean URL after search
+        router.replace('/', undefined);
+      }
+    };
+    autoSearch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -152,7 +234,7 @@ export default function FlightSearchPage() {
     }
   };
 
-  const handleSearch = async (e: React.FormEvent) => {
+  const handleManualSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!origin || !destination || !date?.from || (isRoundTrip && !date?.to)) {
       toast({
@@ -162,13 +244,8 @@ export default function FlightSearchPage() {
       });
       return;
     }
-
-    setLoading(true);
-    setFlightData(null);
-
-    const searchId = ++searchIdRef.current;
-
-    const result = await searchFlights({
+    
+    handleSearch({
       origin,
       destination,
       departureDate: date.from ? format(date.from, 'yyyy-MM-dd') : '',
@@ -177,33 +254,11 @@ export default function FlightSearchPage() {
       children,
       infants,
     });
-
-    if (searchId !== searchIdRef.current) {
-      return;
-    }
-
-    if (result.success && result.data) {
-      setFlightData(result.data);
-    } else {
-      setFlightData(null); // Clear previous results on error
-      toast({
-        title: 'Error de Búsqueda',
-        description: result.error || 'No se pudieron encontrar vuelos. Intenta otra búsqueda.',
-        variant: 'destructive',
-      });
-    }
-
-    setLoading(false);
   };
   
   const handleCancelSearch = () => {
     searchIdRef.current++;
     setLoading(false);
-  };
-
-  const handleSetRecommendedDestination = (destination: { iata: string; query: string }) => {
-    setDestination(destination.iata);
-    setDestinationQuery(destination.query);
   };
 
   const totalTravelers = adults + children + infants;
@@ -249,7 +304,7 @@ export default function FlightSearchPage() {
         subtitle="Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo."
       >
         <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleSearch} className="space-y-4">
+          <form onSubmit={handleManualSearch} className="space-y-4">
              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
                 <div className="lg:col-span-12">
                     <div className="flex items-center space-x-4">
@@ -335,7 +390,7 @@ export default function FlightSearchPage() {
                     <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Pasajeros</Label>
                     <Popover>
                     <PopoverTrigger asChild>
-                        <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1 hover:bg-primary/10">
+                        <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1 hover:bg-accent/10">
                         <Users className="mr-2 h-4 w-4" />
                         {travelerText}
                         </Button>
@@ -405,7 +460,7 @@ export default function FlightSearchPage() {
                     <Button
                         type="button"
                         size="lg"
-                        className="w-full text-lg font-bold h-full mt-1 rounded-xl shadow-md bg-primary hover:bg-primary/90 text-primary-foreground"
+                        className="w-full text-lg font-bold h-full mt-1 rounded-xl shadow-md bg-destructive hover:bg-destructive/90 text-destructive-foreground"
                         onClick={handleCancelSearch}
                     >
                         <X className="mr-2 h-5 w-5" />
@@ -415,7 +470,7 @@ export default function FlightSearchPage() {
                     <Button
                         type="submit"
                         size="lg"
-                        className="w-full text-lg font-bold bg-tertiary hover:bg-tertiary/90 h-full mt-1 text-tertiary-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
+                        className="w-full text-lg font-bold bg-accent hover:bg-accent/90 h-full mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
                     >
                         Buscar
                     </Button>
@@ -440,3 +495,5 @@ export default function FlightSearchPage() {
     </div>
   );
 }
+
+    
