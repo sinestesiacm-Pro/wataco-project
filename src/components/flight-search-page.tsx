@@ -116,12 +116,15 @@ export default function FlightSearchPage() {
       const shouldSearch = searchParams.get('autosearch') === 'true';
 
       if (shouldSearch && originParam && destinationParam && fromDateParam && toDateParam && adultsParam) {
-        setOrigin(originParam);
-        setDestination(destinationParam);
+        
         const fromDate = parse(fromDateParam, 'yyyy-MM-dd', new Date());
         const toDate = parse(toDateParam, 'yyyy-MM-dd', new Date());
+        const adultsNum = parseInt(adultsParam, 10);
+        
+        setOrigin(originParam);
+        setDestination(destinationParam);
         setDate({ from: fromDate, to: toDate });
-        setAdults(parseInt(adultsParam, 10));
+        setAdults(adultsNum);
         
         // Fetch full airport details to populate query inputs
         const [originAirport, destAirport] = await Promise.all([searchAirports(originParam), searchAirports(destinationParam)]);
@@ -130,23 +133,22 @@ export default function FlightSearchPage() {
         if (originAirport.success && originAirport.data?.[0]) {
             const airport = originAirport.data[0];
             tempOriginQuery = `${airport.address?.cityName || airport.name}, ${airport.address?.countryName}`;
-            setOriginQuery(tempOriginQuery);
+            setOriginQuery(tempOriginQuery); // Update state here
         }
 
         let tempDestQuery = destinationParam;
         if (destAirport.success && destAirport.data?.[0]) {
             const airport = destAirport.data[0];
             tempDestQuery = `${airport.address?.cityName || airport.name}, ${airport.address?.countryName}`;
-            setDestinationQuery(tempDestQuery);
+            setDestinationQuery(tempDestQuery); // Update state here
         }
         
-        // We must pass the queries to handleSearch for the loading animation
         await handleSearch({
           origin: originParam,
           destination: destinationParam,
           departureDate: fromDateParam,
           returnDate: toDateParam,
-          adults: parseInt(adultsParam, 10),
+          adults: adultsNum,
           children: 0,
           infants: 0
         });
@@ -504,5 +506,3 @@ export default function FlightSearchPage() {
     </div>
   );
 }
-
-    
