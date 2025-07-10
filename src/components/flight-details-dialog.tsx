@@ -196,7 +196,7 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
-          <DialogHeader className="p-6 pb-4">
+          <DialogHeader className="p-6 pb-4 border-b-0">
             <DialogTitle className="font-headline text-2xl">Detalles del Vuelo</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6 pt-0">
