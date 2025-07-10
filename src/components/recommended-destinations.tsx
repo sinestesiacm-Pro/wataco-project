@@ -42,42 +42,45 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
           <h3 className="text-2xl font-bold font-headline text-gray-700 border-b-2 border-primary/20 pb-2">
             {continent}
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
             {destinations.map((dest) => (
               <div
                 key={dest.iata}
-                className="aspect-[3/4] airplane-window group"
+                className="airplane-window"
                 onClick={() => {
                   const query = `${dest.city}, ${dest.country}`;
                   setDestination({ iata: dest.iata, query });
                 }}
               >
-                <Image
-                    src={dest.image}
-                    data-ai-hint={dest.hint}
-                    alt={dest.city}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="airplane-window-shade" />
-                <div className="airplane-window-content">
-                    <div className="text-center mb-4">
-                       <h3 className="text-xl font-bold font-headline text-white">{dest.city}</h3>
-                       <p className="text-sm text-white/80">{dest.country}</p>
+                <div className="airplane-window-inner-bevel">
+                  <div className="airplane-window-view">
+                    <Image
+                        src={dest.image}
+                        data-ai-hint={dest.hint}
+                        alt={dest.city}
+                        fill
+                    />
+                    <div className="airplane-window-shade" />
+                    <div className="airplane-window-content">
+                        <div>
+                          <h3 className="text-xl font-bold font-headline text-white">{dest.city}</h3>
+                          <p className="text-sm text-white/80">{dest.country}</p>
+                        </div>
+                        <div className="flex flex-col items-center gap-2 mt-4">
+                            <p className="text-sm text-white/90 font-body">
+                                Desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
+                            </p>
+                            <Button 
+                                size="sm" 
+                                variant="secondary"
+                                className="bg-white/20 hover:bg-white/30 text-white rounded-full pointer-events-none"
+                            >
+                                Ver Vuelos
+                                <ArrowRight className="ml-1.5 h-4 w-4" />
+                            </Button>
+                        </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2">
-                        <p className="text-sm text-white/90 font-body">
-                            Desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
-                        </p>
-                        <Button 
-                            size="sm" 
-                            variant="secondary"
-                            className="bg-white/20 hover:bg-white/30 text-white rounded-full pointer-events-none"
-                        >
-                            Ver Vuelos
-                            <ArrowRight className="ml-1.5 h-4 w-4" />
-                        </Button>
-                    </div>
+                  </div>
                 </div>
               </div>
             ))}

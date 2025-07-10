@@ -17,29 +17,33 @@ export function RecommendedCruises() {
         <h2 className="text-3xl font-headline font-bold text-gray-800">Cruceros de Ensueño</h2>
         <p className="text-muted-foreground mt-2">Explora el mundo desde el mar con estas rutas espectaculares.</p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
         {recommendedCruises.map((cruise, index) => (
-          <div key={index} className="aspect-[3/4] airplane-window group">
-              <Image 
-                  src={cruise.image} 
-                  data-ai-hint={cruise.hint} 
-                  alt={cruise.name} 
-                  fill 
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="airplane-window-shade" />
-              <div className="airplane-window-content">
-                  <div className="text-center mb-4">
-                     <h3 className="text-xl font-bold font-headline text-white">{cruise.name}</h3>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                      <p className="font-bold text-md text-white/90">{cruise.duration}</p>
-                      <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
-                          <Ship className="mr-2 h-4 w-4" />
-                          Ver Crucero
-                      </Button>
-                  </div>
+          <div key={index} className="airplane-window">
+            <div className="airplane-window-inner-bevel">
+              <div className="airplane-window-view">
+                <Image 
+                    src={cruise.image} 
+                    data-ai-hint={cruise.hint} 
+                    alt={cruise.name} 
+                    fill 
+                />
+                <div className="airplane-window-shade" />
+                <div className="airplane-window-content">
+                    <div>
+                      <h3 className="text-xl font-bold font-headline text-white">{cruise.name}</h3>
+                      <p className="text-sm text-white/80">{cruise.ship}</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-2 mt-4">
+                        <p className="font-bold text-md text-white/90">{cruise.duration}</p>
+                        <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                            <Ship className="mr-2 h-4 w-4" />
+                            Ver Crucero
+                        </Button>
+                    </div>
+                </div>
               </div>
+            </div>
           </div>
         ))}
       </div>
