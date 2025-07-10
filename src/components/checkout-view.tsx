@@ -1,3 +1,4 @@
+
 'use client';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -45,7 +46,7 @@ const BookingSummary = ({ hotelOffer, selectedRoom }: { hotelOffer: AmadeusHotel
                     />
                 </div>
                 <CardTitle>{hotelOffer.hotel.name}</CardTitle>
-                <CardDescription>{selectedRoom.description.text}</CardDescription>
+                <CardDescription>{selectedRoom.room.description.text}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <Separator />
