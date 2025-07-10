@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
-import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, Info, XCircle, Star } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, Info, XCircle, Star, Users, BedDouble, Square } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
 
@@ -41,9 +41,17 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
                 <CheckCircle2 className="h-5 w-5" />
                 <span>Cancelación gratuita (hasta 24h antes)</span>
             </div>
-             <div className="flex items-center gap-2 text-muted-foreground">
-                <XCircle className="h-5 w-5" />
-                <span>No incluye plan de comidas</span>
+            
+            <Separator className="my-4"/>
+
+            <div>
+              <p className="font-semibold text-sm mb-2">Extras incluidos:</p>
+              <div className="space-y-2">
+                 <div className="flex items-center gap-2 text-muted-foreground">
+                    <XCircle className="h-5 w-5" />
+                    <span>No incluye plan de comidas</span>
+                </div>
+              </div>
             </div>
             
         </div>
@@ -100,7 +108,14 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack }: RoomSe
                     data-ai-hint="hotel room"
                   />
                </div>
-               <h3 className="text-lg font-bold font-headline mb-2">{roomOffer.room.description.text}</h3>
+               <h3 className="text-lg font-bold font-headline mb-3">{roomOffer.room.description.text}</h3>
+               
+               <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground mb-4">
+                    <div className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /><span>2 Huéspedes</span></div>
+                    <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-primary" /><span>1 Cama Doble</span></div>
+                    <div className="flex items-center gap-2"><Square className="h-4 w-4 text-primary" /><span>25 m²</span></div>
+               </div>
+
                {roomOffer.room.amenities && (
                     <div className="space-y-2 mt-4 text-sm text-muted-foreground">
                         {roomOffer.room.amenities.map(amenity => {
@@ -119,7 +134,7 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack }: RoomSe
             {/* Options & Price Wrapper */}
             <div className="md:col-span-7 flex flex-col">
                 {/* For this demo, we'll simulate one option per room type. A real app would map over different rate plans for the same room type. */}
-                <RoomOption roomOffer={roomOffer} onSelect={() => onRoomSelected(roomOffer)} isRecommended={true} />
+                <RoomOption roomOffer={roomOffer} onSelect={() => onRoomSelected(roomOffer)} isRecommended={index === 0} />
             </div>
 
           </div>
