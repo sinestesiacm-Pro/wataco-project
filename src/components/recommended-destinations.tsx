@@ -36,13 +36,13 @@ const continentDividers: { [key: string]: { image: string, hint: string } } = {
 };
 
 const ContinentDivider = ({ name, image, hint }: { name: string, image: string, hint: string }) => (
-    <div className="relative w-full h-32 my-8 rounded-lg overflow-hidden mask-fade">
+    <div className="relative w-full h-32 my-8 rounded-2xl shadow-lg overflow-hidden">
         <Image 
             src={image} 
             alt={`Divider for ${name}`}
             data-ai-hint={hint}
             fill
-            className="object-cover"
+            className="object-cover blur-sm"
         />
         <div className="absolute inset-0 flex items-center justify-center">
             <h2 className="text-4xl font-headline font-bold text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}>{name}</h2>
