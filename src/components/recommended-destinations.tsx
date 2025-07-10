@@ -56,13 +56,13 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
       {Object.entries(destinationsByContinent).map(([continent, destinations]) => {
         let dividerImage, dividerHint;
         if (continent === "Europa") {
-          dividerImage = "https://images.unsplash.com/photo-17347911872323-fd59d37ef358?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxldXJvcGUlMjBsYW5kbWFya3N8ZW58MHx8fHwxNzUyMTU0MDY4fDA&ixlib=rb-4.1.0&q=80&w=1080";
+          dividerImage = "https://images.unsplash.com/photo-1734791187323-fd59d37ef358?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxldXJvcGUlMjBsYW5kbWFya3N8ZW58MHx8fHwxNzUyMTU0MDY4fDA&ixlib=rb-4.1.0&q=80&w=1080";
           dividerHint = "europe landmarks";
         } else if (continent === "América del Sur") {
           dividerImage = "https://images.unsplash.com/photo-1670761624726-c6f3bb48f575?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwYXRhZ29uaWElMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzUyMTU0MDY4fDA&ixlib=rb-4.1.0&q=80&w=1080";
           dividerHint = "patagonia landscape";
         } else { // Asia
-          dividerImage = "https://images.unsplash.com/photo-1688717217024-80d6b734aad1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxqYXBhbiUyMHRlbXBsZXxlbnwwfHx8fDE3NTIxNTQwNjh8MA&ixlib=rb-4.1.0&q=80&w=1080";
+          dividerImage = "https://images.unsplash.com/photo-1532236395709-7d70320fec2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8YXNpYXxlbnwwfHx8fDE3NTIxNTU3NDh8MA&ixlib=rb-4.1.0&q=80&w=1080";
           dividerHint = "japan temple";
         }
         
