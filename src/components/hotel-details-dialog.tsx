@@ -8,18 +8,37 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import type { AmadeusHotelOffer } from '@/lib/types';
-import { BedDouble, CheckCircle, Star, MapPin } from 'lucide-react';
+import { BedDouble, Star, MapPin, Wifi, Car, Waves, Utensils, GlassWater, Wind, Dumbbell, Sparkles, Dog, Plane, CheckCircle2 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Badge } from './ui/badge';
 import { Card } from './ui/card';
 import { HotelMapDialog } from './hotel-map-dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 
 interface HotelDetailsDialogProps {
   offer: AmadeusHotelOffer;
   children: React.ReactNode;
+}
+
+const amenityIcons: { [key: string]: LucideIcon } = {
+  SWIMMING_POOL: Waves,
+  SPA: Sparkles,
+  WIFI: Wifi,
+  RESTAURANT: Utensils,
+  PARKING: Car,
+  FITNESS_CENTER: Dumbbell,
+  BAR: GlassWater,
+  AIR_CONDITIONING: Wind,
+  PETS_ALLOWED: Dog,
+  AIRPORT_SHUTTLE: Plane,
+};
+
+const formatAmenity = (amenity: string) => {
+  return amenity.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 }
 
 export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps) {
@@ -99,18 +118,29 @@ export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps)
                       )}
 
                       {details.hotel.amenities && details.hotel.amenities.length > 0 && (
-                        <div className="mt-auto">
-                          <h3 className="text-lg font-semibold font-headline mb-2">Servicios</h3>
-                          <div className="flex flex-wrap gap-2">
-                            {details.hotel.amenities.slice(0, 15).map((amenity, index) => (
-                              <Badge key={index} variant="secondary" className="flex items-center gap-1.5">
-                                <CheckCircle className="h-3 w-3 text-green-500" />
-                                {amenity.replace(/_/g, ' ')}
-                              </Badge>
-                            ))}
+                          <div className="mt-auto">
+                            <h3 className="text-lg font-semibold font-headline mb-2">Servicios</h3>
+                             <TooltipProvider>
+                                <div className="flex flex-wrap gap-2">
+                                  {details.hotel.amenities.slice(0, 15).map((amenity, index) => {
+                                      const Icon = amenityIcons[amenity] || CheckCircle2;
+                                      return (
+                                          <Tooltip key={index}>
+                                              <TooltipTrigger asChild>
+                                                  <Badge variant="secondary" className="flex items-center justify-center p-2 h-10 w-10">
+                                                      <Icon className="h-5 w-5 text-muted-foreground" />
+                                                  </Badge>
+                                              </TooltipTrigger>
+                                              <TooltipContent>
+                                                  <p>{formatAmenity(amenity)}</p>
+                                              </TooltipContent>
+                                          </Tooltip>
+                                      )
+                                  })}
+                                </div>
+                             </TooltipProvider>
                           </div>
-                        </div>
-                      )}
+                        )}
                     </Card>
 
                      <Card className="bg-card p-6 rounded-2xl shadow-sm">
@@ -122,7 +152,7 @@ export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps)
                               </p>
                           </div>
                         )}
-                        <Button size="lg" className="w-full bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>
+                        <Button size="lg" className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>
                           Reservar Ahora
                         </Button>
                      </Card>
