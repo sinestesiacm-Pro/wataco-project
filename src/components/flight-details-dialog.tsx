@@ -108,7 +108,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
 
                 {/* QR Code Stub */}
                 <div className="bg-muted/40 w-32 flex-shrink-0 border-l-2 border-dashed border-border flex flex-col items-center justify-center p-4">
-                     <p className="font-headline font-bold text-sm mb-2 text-center">Boarding Pass</p>
+                     <p className="font-headline font-bold text-primary text-sm mb-2 text-center animate-pulse-text">Casi Listo</p>
                      <div className="bg-white p-1 rounded-md shadow-inner">
                         <QrCode className="w-16 h-16 text-black" />
                      </div>
@@ -185,7 +185,7 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
             Seleccionar
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-gradient-to-br from-background via-secondary/20 to-background p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
           <DialogHeader className="p-6 pb-4">
             <DialogTitle className="font-headline text-3xl">Detalles del Vuelo</DialogTitle>
           </DialogHeader>
