@@ -23,7 +23,7 @@ export function ChatWidget() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -31,15 +31,11 @@ export function ChatWidget() {
         { id: 'initial', text: '¡Hola! Soy TripGenius. ¿Cómo puedo ayudarte a planificar tu próxima aventura?', sender: 'ai' },
       ]);
     }
-  }, [isOpen]);
+  }, [isOpen, messages.length]);
 
   useEffect(() => {
-    // Scroll to bottom when new messages are added
-    if (scrollAreaRef.current) {
-        const scrollableView = scrollAreaRef.current.children[0] as HTMLElement;
-        if(scrollableView) {
-            scrollableView.scrollTop = scrollableView.scrollHeight;
-        }
+    if (viewportRef.current) {
+      viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -98,7 +94,7 @@ export function ChatWidget() {
             </Button>
           </CardHeader>
           <CardContent className="flex-grow p-4 overflow-hidden">
-            <ScrollArea className="h-full" ref={scrollAreaRef}>
+            <ScrollArea className="h-full" viewportRef={viewportRef}>
               <div className="space-y-4 pr-4">
                 {messages.map((message) => (
                   <div key={message.id} className={cn("flex items-start gap-3", message.sender === 'user' && 'justify-end')}>
