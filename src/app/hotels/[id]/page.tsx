@@ -45,8 +45,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function HotelDetailPage({ params: { id } }: { params: { id: string } }) {
 
   return (
     <Suspense fallback={
