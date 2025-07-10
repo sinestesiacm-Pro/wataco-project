@@ -4,6 +4,8 @@ import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -53,8 +55,8 @@ export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps)
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
         {details ? (
           <>
-            <div className="p-6 pb-4">
-              <h2 className="font-headline text-2xl">{details.hotel.name}</h2>
+            <DialogHeader className="p-6 pb-4">
+              <DialogTitle className="font-headline text-2xl text-left">{details.hotel.name}</DialogTitle>
               <div className="flex items-center gap-4 mt-2">
                   {details.hotel.rating && (
                     <div className="flex items-center">
@@ -69,7 +71,7 @@ export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps)
                   </div>
                    <HotelMapDialog hotelName={details.hotel.name || 'Ubicación'} />
               </div>
-            </div>
+            </DialogHeader>
             
             <ScrollArea className="overflow-y-auto">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 pt-0">
