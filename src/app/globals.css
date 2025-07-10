@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -280,15 +281,15 @@
 
 .airplane-window-shade {
   position: absolute;
-  top: 8%;
-  left: 8%;
-  right: 8%;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 30%; /* Start partially open */
-  background: linear-gradient(to bottom, hsl(var(--secondary)) 0%, hsl(var(--muted)) 100%);
+  background: linear-gradient(to bottom, hsl(var(--secondary)) 80%, hsl(var(--muted)) 100%);
   border-bottom: 1px solid hsl(var(--border));
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   border-radius: 35% 35% 20px 20px / 40% 40% 20px 20px;
-  transform: translateY(-20%);
+  transform: translateY(0);
   transition: transform 0.4s ease-in-out;
   z-index: 2;
   display: flex;
@@ -314,11 +315,10 @@
 
 .airplane-window-content {
   position: absolute;
-  bottom: 8%;
-  left: 8%;
-  right: 8%;
-  padding: 1.5rem;
-  padding-top: 4rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -327,5 +327,8 @@
   color: white;
   background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 40%, transparent 100%);
   z-index: 1;
+  height: 100%;
   border-radius: 0 0 35% 35% / 0 0 40% 40%;
 }
+
+    
