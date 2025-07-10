@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           <AlertTitle>Error de Configuración de Firebase</AlertTitle>
           <AlertDescription>
             Las variables de entorno de Firebase no están configuradas correctamente. 
-            Por favor, asegúrate de que tu archivo <strong>.env</strong> o <strong>.env.local</strong> 
+            Por favor, asegúrate de que tu archivo <strong>.env.local</strong> 
             contiene todas las variables <code>NEXT_PUBLIC_FIREBASE_*</code> requeridas.
           </AlertDescription>
         </Alert>
