@@ -35,7 +35,11 @@ export function ChatWidget() {
 
   useEffect(() => {
     if (viewportRef.current) {
-      viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
+      setTimeout(() => {
+        if (viewportRef.current) {
+           viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
+        }
+      }, 100);
     }
   }, [messages]);
 
@@ -44,12 +48,23 @@ export function ChatWidget() {
     if (!input.trim()) return;
 
     const userMessage: Message = { id: Date.now().toString(), text: input, sender: 'user' };
-    setMessages(prev => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInput('');
     setLoading(true);
 
     try {
-      const result = await chatWithTravelAssistant({ message: input });
+      const history = newMessages
+        .filter(m => m.id !== 'initial' && m.id !== 'error')
+        .map(m => ({
+          role: m.sender === 'user' ? 'user' : 'model',
+          content: m.text,
+        }));
+      
+      const result = await chatWithTravelAssistant({ 
+        history: history.slice(0, -1), // Send all but the last message as history
+        message: input // Send the last message as the new prompt
+      });
       const aiMessage: Message = { id: (Date.now() + 1).toString(), text: result.response, sender: 'ai' };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
@@ -83,11 +98,13 @@ export function ChatWidget() {
           isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'
         )}
       >
-        <Card className="flex flex-col h-[60vh] shadow-2xl rounded-2xl">
+        <Card className="flex flex-col h-[60vh] shadow-2xl rounded-2xl bg-background/80 backdrop-blur-xl border">
           <CardHeader className="flex flex-row items-center justify-between border-b">
             <div className="flex items-center gap-3">
-               <Bot className="h-6 w-6 text-primary" />
-               <CardTitle className="font-headline">TripGenius</CardTitle>
+               <Avatar className="h-8 w-8 border-2 border-primary/50">
+                  <AvatarFallback className="bg-primary/20"><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
+               </Avatar>
+               <CardTitle className="font-headline text-lg">TripGenius</CardTitle>
             </div>
             <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
               <X className="h-4 w-4" />
@@ -100,13 +117,13 @@ export function ChatWidget() {
                   <div key={message.id} className={cn("flex items-start gap-3", message.sender === 'user' && 'justify-end')}>
                     {message.sender === 'ai' && (
                        <Avatar className="h-8 w-8 border-2 border-primary/50">
-                            <AvatarFallback><Bot className="h-5 w-5" /></AvatarFallback>
+                            <AvatarFallback className="bg-primary/20"><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
                        </Avatar>
                     )}
                     <div
                       className={cn(
-                        'rounded-xl px-4 py-2 max-w-xs text-sm',
-                        message.sender === 'ai' ? 'bg-muted' : 'bg-primary text-primary-foreground'
+                        'rounded-xl px-4 py-2 max-w-xs text-sm shadow-md',
+                        message.sender === 'ai' ? 'bg-card' : 'bg-primary text-primary-foreground'
                       )}
                     >
                       {message.text}
@@ -114,7 +131,7 @@ export function ChatWidget() {
                      {message.sender === 'user' && (
                        <Avatar className="h-8 w-8">
                             <AvatarImage src={user?.photoURL || ''} />
-                            <AvatarFallback>{user?.displayName?.[0] || 'U'}</AvatarFallback>
+                            <AvatarFallback>{user?.displayName?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
                        </Avatar>
                     )}
                   </div>
@@ -122,9 +139,9 @@ export function ChatWidget() {
                 {loading && (
                     <div className="flex items-start gap-3">
                         <Avatar className="h-8 w-8 border-2 border-primary/50">
-                            <AvatarFallback><Bot className="h-5 w-5" /></AvatarFallback>
+                            <AvatarFallback className="bg-primary/20"><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
                         </Avatar>
-                        <div className="rounded-xl px-4 py-2 max-w-xs text-sm bg-muted flex items-center">
+                        <div className="rounded-xl px-4 py-2 max-w-xs text-sm bg-card flex items-center shadow-md">
                             <Loader2 className="h-5 w-5 animate-spin text-primary" />
                         </div>
                     </div>
@@ -132,7 +149,7 @@ export function ChatWidget() {
               </div>
             </ScrollArea>
           </CardContent>
-          <CardFooter className="border-t p-4">
+          <CardFooter className="border-t p-4 bg-card/50">
             <div className="flex w-full items-center space-x-2">
               <Input
                 placeholder="Escribe tu pregunta..."
@@ -140,6 +157,7 @@ export function ChatWidget() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 disabled={loading}
+                className="bg-background"
               />
               <Button onClick={handleSend} disabled={loading}>
                 <Send className="h-4 w-4" />

@@ -10,8 +10,14 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
+const ChatMessageSchema = z.object({
+  role: z.enum(['user', 'model']),
+  content: z.string(),
+});
+
 const ChatInputSchema = z.object({
-  message: z.string().describe('The user message to the travel assistant.'),
+  history: z.array(ChatMessageSchema).describe('The conversation history.'),
+  message: z.string().describe('The latest user message to the travel assistant.'),
 });
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 
@@ -31,6 +37,14 @@ const prompt = ai.definePrompt({
   prompt: `Eres "TripGenius", un asistente de viajes experto y amigable de la aplicación "BE ON TRIP".
 Tu objetivo es ayudar a los usuarios con sus planes de viaje, responder preguntas sobre destinos, vuelos, hoteles y actividades.
 Sé conciso, útil y mantén un tono positivo y aventurero.
+
+{{#each history}}
+  {{#if (eq role 'user')}}
+    Usuario: {{content}}
+  {{else}}
+    Asistente: {{content}}
+  {{/if}}
+{{/each}}
 
 Usuario: {{message}}
 Asistente:`,
