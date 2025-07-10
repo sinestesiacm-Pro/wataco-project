@@ -33,39 +33,44 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
 
     return (
         <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border bg-card/95 backdrop-blur-sm">
-            <CardContent className="p-4 md:p-6 flex flex-col md:flex-row items-center gap-6">
-                <div className="w-full md:w-2/3 flex items-center gap-4">
-                     <Image
-                        src={`https://images.kiwi.com/airlines/64/${firstSegment.carrierCode}.png`}
-                        alt={airlineName}
-                        width={48}
-                        height={48}
-                        className="rounded-full bg-white p-1 shadow-md"
-                    />
-                    <div className="flex-grow">
-                        <div className="flex items-center gap-4">
-                            <div className="font-semibold">
-                                <span className="text-xl">{formatTime(firstSegment.departure.at)}</span>
-                                <span className="text-sm text-muted-foreground ml-1">{firstSegment.departure.iataCode}</span>
+            <div className="flex">
+                {/* Main boarding pass section */}
+                <div className="flex-grow p-4 md:p-6">
+                    <div className="flex items-center gap-4">
+                        <Image
+                            src={`https://images.kiwi.com/airlines/64/${firstSegment.carrierCode}.png`}
+                            alt={airlineName}
+                            width={48}
+                            height={48}
+                            className="rounded-full bg-white p-1 shadow-md"
+                        />
+                        <div className="flex-grow flex items-center justify-between">
+                            <div className="font-semibold text-center">
+                                <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
+                                <p className="text-sm text-muted-foreground">{firstSegment.departure.iataCode}</p>
                             </div>
-                            <div className="flex flex-col items-center">
-                                <span className="text-xs text-muted-foreground">{formatDuration(itinerary.duration)}</span>
-                                <div className="w-16 h-px bg-border my-1"></div>
-                                <span className="text-xs text-primary font-semibold">{stops === 0 ? 'Directo' : `${stops} escala(s)`}</span>
+                            <div className="flex-grow flex flex-col items-center text-muted-foreground px-2">
+                                <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
+                                <div className="w-full h-px bg-border relative my-1">
+                                    <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-muted-foreground p-0.5 rounded-full"/>
+                                </div>
+                                <p className="text-xs text-primary font-semibold">{stops === 0 ? 'Directo' : `${stops} escala(s)`}</p>
                             </div>
-                            <div className="font-semibold">
-                                <span className="text-xl">{formatTime(lastSegment.arrival.at)}</span>
-                                <span className="text-sm text-muted-foreground ml-1">{lastSegment.arrival.iataCode}</span>
+                            <div className="font-semibold text-center">
+                                <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
+                                <p className="text-sm text-muted-foreground">{lastSegment.arrival.iataCode}</p>
                             </div>
-                        </div>
-                         <div className="flex items-center justify-between mt-2">
-                            <p className="text-xs text-muted-foreground">{airlineName}</p>
-                            <FlightBaggageInfo flight={flight} />
                         </div>
                     </div>
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-dashed">
+                        <p className="text-xs text-muted-foreground">{airlineName}</p>
+                        <FlightBaggageInfo flight={flight} />
+                    </div>
                 </div>
-                 <div className="w-full md:w-1/3 flex flex-col items-center md:items-end gap-3">
-                    <div className="text-center md:text-right">
+
+                {/* Tear-off stub */}
+                <div className="flex-shrink-0 w-48 bg-muted/30 border-l-2 border-dashed border-border/70 flex flex-col items-center justify-center p-4 gap-3">
+                    <div className="text-center">
                         <p className="text-2xl font-bold font-headline text-success">
                             ${flight.price.total}
                         </p>
@@ -79,7 +84,7 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
                         Seleccionar
                     </Button>
                 </div>
-            </CardContent>
+            </div>
         </Card>
     );
 };
