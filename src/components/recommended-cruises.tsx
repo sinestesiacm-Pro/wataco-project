@@ -27,10 +27,11 @@ export function RecommendedCruises() {
                   fill 
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
-              <div className="airplane-window-shade">
-                  <h3 className="text-xl font-bold font-headline text-center px-2">{cruise.name}</h3>
-              </div>
+              <div className="airplane-window-shade" />
               <div className="airplane-window-content">
+                  <div className="text-center mb-4">
+                     <h3 className="text-xl font-bold font-headline text-white">{cruise.name}</h3>
+                  </div>
                   <div className="flex flex-col items-center gap-2">
                       <p className="font-bold text-md text-white/90">{cruise.duration}</p>
                       <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">

@@ -250,6 +250,7 @@
     height: 3.5rem; /* Height of the shade */
     background-color: hsl(var(--secondary));
     border-bottom: 2px solid hsl(var(--border));
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     display: flex;
     justify-content: center;
     align-items: center;

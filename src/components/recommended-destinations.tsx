@@ -59,10 +59,12 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="airplane-window-shade">
-                    <h3 className="text-xl font-bold font-headline text-center px-2">{dest.city}</h3>
-                </div>
+                <div className="airplane-window-shade" />
                 <div className="airplane-window-content">
+                    <div className="text-center mb-4">
+                       <h3 className="text-xl font-bold font-headline text-white">{dest.city}</h3>
+                       <p className="text-sm text-white/80">{dest.country}</p>
+                    </div>
                     <div className="flex flex-col items-center gap-2">
                         <p className="text-sm text-white/90 font-body">
                             Desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
