@@ -1,11 +1,12 @@
 'use client';
 
+import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function PackageDetailPage({ params: { id } }: { params: { id: string } }) {
+function PackageDetailPageContent({ id }: { id: string }) {
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <Button asChild variant="outline" className="mb-4">
@@ -24,5 +25,17 @@ export default function PackageDetailPage({ params: { id } }: { params: { id: st
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PackageDetailPage({ params: { id } }: { params: { id: string } }) {
+  return (
+     <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    }>
+      <PackageDetailPageContent id={id} />
+    </Suspense>
   );
 }
