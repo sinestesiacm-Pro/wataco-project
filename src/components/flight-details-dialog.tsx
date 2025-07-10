@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -161,14 +162,14 @@ const PriceCard = ({ flight }: { flight: FlightOffer }) => {
             <p className="text-4xl font-bold text-primary my-2">${flight.price.total}</p>
             <div className="flex flex-col gap-2 mt-4">
                 <Button
-                    className="w-full"
+                    className="w-full bg-blue-500 hover:bg-blue-600"
                     onClick={() => alert('La funcionalidad de personalizar no está implementada en esta demostración.')}
                 >
                     <Settings2 className="mr-2 h-4 w-4" />
                     Personalizar Vuelo
                 </Button>
                 <Button
-                    className="w-full bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground"
+                    className="w-full bg-green-500 hover:bg-green-600 text-white"
                     onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}
                 >
                     Confirmar Reserva
