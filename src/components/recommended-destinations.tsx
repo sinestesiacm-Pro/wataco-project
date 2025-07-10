@@ -26,16 +26,16 @@ const destinationsByContinent = {
     { city: "Río de Janeiro", country: "Brasil", priceFrom: "380", iata: "GIG", hint: "rio de janeiro", image: "https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyaW8lMjBkZSUyMGphbmVpcm98ZW58MHx8fHwxNzUyMDY3ODAwfDA&ixlib-rb-4.1.0&q=80&w=1080" },
   ],
   "Asia": [
-    { city: "Tokio", country: "Japón", priceFrom: "680", iata: "NRT", hint: "tokyo street", image: "https://images.unsplash.com/photo-1611125162305-ea7550c59dff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx0b2t5byUyMHN0cmVldHxlbnwwfHx8fDE3NTIwNjc4MDB8MA&ixlib-rb-4.1.0&q=80&w=1080" },
-    { city: "Bangkok", country: "Tailandia", priceFrom: "550", iata: "BKK", hint: "bangkok temple", image: "https://images.unsplash.com/photo-1691089185062-db320716e48b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiYW5na29rJTIwdGVtcGxlfGVufDB8fHx8MTc1MjA2NzgwMXww&ixlib=rb-4.1.0&q=80&w=1080" },
+    { city: "Tokio", country: "Japón", priceFrom: "680", iata: "NRT", hint: "tokyo street", image: "https://images.unsplash.com/photo-1611125162305-ea7550c59dff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx0b2t5byUyMHN0cmVldHxlbnwwfHx8fDE3NTIwNjc4MDB8MA&ixlib=rb-4.1.0&q=80&w=1080" },
+    { city: "Bangkok", country: "Tailandia", priceFrom: "550", iata: "BKK", hint: "bangkok temple", image: "https://images.unsplash.com/photo-1691089185062-db320716e48b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiYW5na29rJTIwdGVtcGxlfGVufDB8fHx8MTc1MjA2NzgwMXww&ixlib-rb-4.1.0&q=80&w=1080" },
     { city: "Seúl", country: "Corea del Sur", priceFrom: "620", iata: "ICN", hint: "seoul palace", image: "https://images.unsplash.com/photo-1601710124519-705a3571e43c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzZW91bCUyMHBhbGFjZXxlbnwwfHx8fDE3NTIwNjc4MDB8MA&ixlib-rb-4.1.0&q=80&w=1080" },
-    { city: "Singapur", country: "Singapur", priceFrom: "590", iata: "SIN", hint: "singapore marina bay", image: "https://images.unsplash.com/photo-1686455746257-7f063846e3cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaW5nYXBvcmUlMjBtYXJpbmElMjBiYXl8ZW58MHx8fHwxNzUyMDY3ODAxfDA&ixlib=rb-4.1.0&q=80&w=1080" },
+    { city: "Singapur", country: "Singapur", priceFrom: "590", iata: "SIN", hint: "singapore marina bay", image: "https://images.unsplash.com/photo-1686455746257-7f063846e3cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaW5nYXBvcmUlMjBtYXJpbmElMjBiYXl8ZW58MHx8fHwxNzUyMDY3ODAxfDA&ixlib-rb-4.1.0&q=80&w=1080" },
   ],
   "África": [
     { city: "Marrakech", country: "Marruecos", priceFrom: "180", iata: "RAK", hint: "marrakech market", image: "https://images.unsplash.com/photo-1588675701631-7bc33367b165?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYXJyYWtlY2glMjBtYXJrZXR8ZW58MHx8fHwxNzUyNDY0MTk3fDA&ixlib=rb-4.1.0&q=80&w=1080" },
     { city: "El Cairo", country: "Egipto", priceFrom: "250", iata: "CAI", hint: "cairo pyramids", image: "https://images.unsplash.com/photo-1569033429699-d459a98b488f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYWlybyUyMHB5cmFtaWRzfGVufDB8fHx8fDE3NTI0NjQxOTd8MA&ixlib=rb-4.1.0&q=80&w=1080" },
     { city: "Ciudad del Cabo", country: "Sudáfrica", priceFrom: "650", iata: "CPT", hint: "cape town", image: "https://images.unsplash.com/photo-1576483649514-c2153579571f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYXBlJTIwdG93bnxlbnwwfHx8fDE3NTI0NjQxOTd8MA&ixlib=rb-4.1.0&q=80&w=1080" },
-    { city: "Zanzíbar", country: "Tanzania", priceFrom: "720", iata: "ZNZ", hint: "zanzibar beach", image: "https://images.unsplash.com/photo-1610212586414-9272667520c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxaYW56aWJhciUyMGJlYWNofGVufDB8fHx8fDE3NTI0NjQxOTd8MA&ixlib=rb-4.1.0&q=80&w=1080" },
+    { city: "Zanzíbar", country: "Tanzania", priceFrom: "720", iata: "ZNZ", hint: "zanzibar beach", image: "https://images.unsplash.com/photo-1610212586414-9272667520c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxaYW56aWJhciUyMGJlYWNofGVufDB8fHx8fDE3NTI0NjQxOTd8MA&ixlib-rb-4.1.0&q=80&w=1080" },
   ],
 };
 
@@ -105,7 +105,7 @@ export function RecommendedDestinations() {
             </TabsList>
         </div>
         
-        <div className="mt-8">
+        <div className="mt-8 pt-8">
             {Object.entries(destinationsByContinent).map(([continent, destinations]) => (
                 <TabsContent 
                     key={continent} 
