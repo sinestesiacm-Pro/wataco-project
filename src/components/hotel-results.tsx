@@ -1,12 +1,12 @@
 'use client';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
-import { Star, MapPin, BedDouble } from 'lucide-react';
+import { Star, MapPin } from 'lucide-react';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
+import { HotelDetailsDialog } from './hotel-details-dialog';
 import { Button } from './ui/button';
-import Link from 'next/link';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
@@ -87,12 +87,11 @@ export function HotelResults({ hotels }: HotelResultsProps) {
                       ${offer.offers?.[0]?.price?.total}
                     </p>
                 </div>
-                <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
-                    <Link href={`/hotels/${offer.id}`}>
-                        <BedDouble className="mr-2 h-4 w-4" />
-                        Ver Oferta
-                    </Link>
-                </Button>
+                 <HotelDetailsDialog offer={offer}>
+                    <Button size="lg" className="bg-primary hover:bg-primary/90">
+                       Ver Oferta
+                    </Button>
+                </HotelDetailsDialog>
               </div>
             </div>
         </Card>

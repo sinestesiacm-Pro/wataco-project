@@ -19,6 +19,7 @@ import { Badge } from './ui/badge';
 import { Card } from './ui/card';
 import { HotelMapDialog } from './hotel-map-dialog';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import Link from 'next/link';
 
 
 interface HotelDetailsDialogProps {
@@ -154,8 +155,10 @@ export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps)
                               </p>
                           </div>
                         )}
-                        <Button size="lg" className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>
-                          Reservar Ahora
+                        <Button asChild size="lg" className="w-full bg-green-500 hover:bg-green-600 text-white">
+                           <Link href={`/hotels/${offer.id}`}>
+                              Reservar Ahora
+                           </Link>
                         </Button>
                      </Card>
                   </div>
