@@ -9,11 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { AlertCircle, Lock } from 'lucide-react';
+import { AlertCircle, Lock, CreditCard, Landmark, CheckCircle } from 'lucide-react';
 import Image from 'next/image';
 import { format, differenceInDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+import { Icons } from './icons';
 
 const checkoutSchema = z.object({
   firstName: z.string().min(2, 'El nombre es requerido'),
@@ -21,6 +23,11 @@ const checkoutSchema = z.object({
   email: z.string().email('El correo electrónico no es válido'),
   confirmEmail: z.string().email(),
   phone: z.string().min(5, 'El número de teléfono es requerido'),
+  paymentMethod: z.enum(['credit-card', 'paypal']),
+  cardNumber: z.string().optional(),
+  cardHolder: z.string().optional(),
+  cardExpiry: z.string().optional(),
+  cardCvc: z.string().optional(),
 }).refine(data => data.email === data.confirmEmail, {
   message: 'Los correos electrónicos no coinciden',
   path: ['confirmEmail'],
@@ -85,7 +92,18 @@ export function CheckoutView({ hotelOffer, selectedRoom }: CheckoutViewProps) {
   const { toast } = useToast();
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(checkoutSchema),
-    defaultValues: { firstName: '', lastName: '', email: '', confirmEmail: '', phone: '' },
+    defaultValues: { 
+        firstName: '', 
+        lastName: '', 
+        email: '', 
+        confirmEmail: '', 
+        phone: '',
+        paymentMethod: 'credit-card' as const,
+        cardNumber: '',
+        cardHolder: '',
+        cardExpiry: '',
+        cardCvc: '',
+    },
   });
 
   const onSubmit = (data: z.infer<typeof checkoutSchema>) => {
@@ -98,15 +116,15 @@ export function CheckoutView({ hotelOffer, selectedRoom }: CheckoutViewProps) {
   };
 
   return (
-    <div className="grid lg:grid-cols-3 gap-8 items-start">
-        <div className="lg:col-span-2 space-y-6">
-            <Card>
-                <CardHeader>
-                    <CardTitle>¿Quién se hospeda?</CardTitle>
-                    <CardDescription>Ingresa los datos del huésped principal.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+     <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid lg:grid-cols-3 gap-8 items-start">
+            <div className="lg:col-span-2 space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><CheckCircle className="text-primary"/> ¿Quién se hospeda?</CardTitle>
+                        <CardDescription>Ingresa los datos del huésped principal.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
                          <div className="grid sm:grid-cols-2 gap-4">
                             <div>
                                 <Label htmlFor="firstName">Nombre</Label>
@@ -155,23 +173,91 @@ export function CheckoutView({ hotelOffer, selectedRoom }: CheckoutViewProps) {
                             />
                             {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone.message}</p>}
                         </div>
-                         <div className="flex items-center justify-between pt-4">
-                            <div className="text-xs text-muted-foreground flex items-center gap-2">
-                                <AlertCircle className="h-4 w-4" />
-                                <span>Revisa los detalles antes de confirmar.</span>
-                            </div>
-                            <Button type="submit" size="lg" className="bg-success hover:bg-success/90">
-                                <Lock className="mr-2 h-4 w-4" />
-                                Confirmar Reserva
-                            </Button>
+                    </CardContent>
+                </Card>
+                
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><CreditCard className="text-primary"/> Método de Pago</CardTitle>
+                        <CardDescription>Esta es una demostración. No se procesarán pagos reales.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Controller
+                            name="paymentMethod"
+                            control={control}
+                            render={({ field }) => (
+                                <RadioGroup 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value} 
+                                    className="mb-4 grid grid-cols-2 gap-4"
+                                >
+                                    <Label htmlFor="credit-card" className="flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary">
+                                        <RadioGroupItem value="credit-card" id="credit-card" />
+                                        <CreditCard />
+                                        <span>Tarjeta de crédito</span>
+                                    </Label>
+                                     <Label htmlFor="paypal" className="flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary">
+                                        <RadioGroupItem value="paypal" id="paypal" />
+                                        <Landmark />
+                                        <span>PayPal</span>
+                                     </Label>
+                                </RadioGroup>
+                            )}
+                        />
+                        <div className="space-y-4">
+                             <div>
+                                <Label htmlFor="cardHolder">Nombre en la tarjeta</Label>
+                                <Controller
+                                    name="cardHolder"
+                                    control={control}
+                                    render={({ field }) => <Input id="cardHolder" {...field} placeholder="J. Doe" />}
+                                />
+                             </div>
+                             <div>
+                                <Label htmlFor="cardNumber">Número de tarjeta</Label>
+                                 <Controller
+                                    name="cardNumber"
+                                    control={control}
+                                    render={({ field }) => <Input id="cardNumber" {...field} placeholder="**** **** **** 1234" />}
+                                />
+                             </div>
+                             <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label htmlFor="cardExpiry">Vencimiento</Label>
+                                     <Controller
+                                        name="cardExpiry"
+                                        control={control}
+                                        render={({ field }) => <Input id="cardExpiry" {...field} placeholder="MM/AA" />}
+                                    />
+                                </div>
+                                 <div>
+                                    <Label htmlFor="cardCvc">CVC</Label>
+                                     <Controller
+                                        name="cardCvc"
+                                        control={control}
+                                        render={({ field }) => <Input id="cardCvc" {...field} placeholder="123" />}
+                                    />
+                                </div>
+                             </div>
                         </div>
-                    </form>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
+
+                <div className="flex items-center justify-between pt-4">
+                    <div className="text-xs text-muted-foreground flex items-center gap-2">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>Revisa los detalles antes de confirmar.</span>
+                    </div>
+                    <Button type="submit" size="lg" className="bg-success hover:bg-success/90">
+                        <Lock className="mr-2 h-4 w-4" />
+                        Confirmar Reserva
+                    </Button>
+                </div>
+            </div>
+            <div className="lg:col-span-1">
+                <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} />
+            </div>
         </div>
-        <div className="lg:col-span-1">
-            <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} />
-        </div>
-    </div>
+    </form>
   );
 }
