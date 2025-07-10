@@ -1,6 +1,6 @@
 'use client';
 
-import { Cloud, PlaneTakeoff } from "lucide-react";
+import { Cloud, Plane } from "lucide-react";
 
 interface FlightLoadingAnimationProps {
     originName: string;
@@ -15,7 +15,7 @@ export function FlightLoadingAnimation({ originName, destinationName }: FlightLo
         <div className="flex flex-col items-center justify-center text-center py-16 space-y-8 overflow-hidden">
             <div className="relative w-full max-w-md h-48">
                 <div className="flight-path">
-                    <PlaneTakeoff className="plane-animation w-12 h-12 text-primary" />
+                    <Plane className="plane-animation w-12 h-12 text-primary" />
                 </div>
                 {/* Clouds */}
                 <Cloud className="cloud-animation w-16 h-16 text-muted-foreground/30 absolute" style={{ top: '10%', left: '80%', animationDelay: '0s' }} />

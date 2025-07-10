@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
-import { ArrowLeft, Clock, Luggage, Plane } from 'lucide-react';
+import { ArrowLeft, Clock, Luggage, Plane, Settings2 } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO } from 'date-fns';
 
@@ -188,7 +188,21 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
                   <Card className="bg-card p-4 rounded-xl shadow-sm border-primary/50">
                       <p className="text-sm text-muted-foreground">Precio total</p>
                       <p className="text-3xl font-bold text-primary">${flight.price.total}</p>
-                      <Button className="w-full mt-4" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>Confirmar Reserva</Button>
+                       <div className="flex flex-col gap-2 mt-4">
+                            <Button 
+                                className="w-full" 
+                                onClick={() => alert('La funcionalidad de personalizar no está implementada en esta demostración.')}
+                            >
+                                <Settings2 className="mr-2 h-4 w-4" />
+                                Personalizar Vuelo
+                            </Button>
+                            <Button 
+                                className="w-full bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground" 
+                                onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}
+                            >
+                                Confirmar Reserva
+                            </Button>
+                        </div>
                   </Card>
               </div>
           </div>
