@@ -6,11 +6,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
-import { Clock, Luggage, Plane, Settings2 } from 'lucide-react';
+import { Clock, Luggage, Plane, Settings2, X } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO } from 'date-fns';
 
@@ -199,9 +200,14 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
           
           <DialogHeader className="flex-row items-center justify-between p-6 pb-4">
             <DialogTitle className="font-headline text-2xl">Detalles del Vuelo</DialogTitle>
+             <DialogClose asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                    <X className="h-4 w-4" />
+                </Button>
+            </DialogClose>
           </DialogHeader>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6 pt-0">
               <div className="md:col-span-7 space-y-6">
                   {flight.itineraries.map((itinerary, index) => (
                       <ItineraryCard key={index} itinerary={itinerary} dictionaries={dictionaries} title={index === 0 ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}/>
