@@ -5,14 +5,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
-import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, Info, XCircle, Star, Users, BedDouble, Square } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, Info, XCircle, Star, Users, BedDouble, Square, ShieldCheck, Coffee } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
 
 const roomAmenityIcons: { [key: string]: LucideIcon } = {
   WIFI: Wifi,
   MINIBAR: Utensils,
-  SAFE: CheckCircle2,
+  SAFE: ShieldCheck,
   BALCONY: Tv,
   KITCHENETTE: Utensils,
   DESK: Tv,
@@ -28,47 +28,88 @@ interface RoomSelectionViewProps {
   onBack: () => void;
 }
 
-const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, onSelect: () => void, isRecommended: boolean }) => (
-    <div className="flex flex-col md:flex-row border-t first:border-t-0">
-        {/* Options Column */}
-        <div className="w-full md:w-5/12 p-4 space-y-3">
-             {isRecommended && (
-                <Badge variant="default" className="bg-accent hover:bg-accent/90 mb-2">
-                    <Star className="mr-2 h-4 w-4 fill-white" /> Recomendado
-                </Badge>
-            )}
-            <div className="flex items-center gap-2 text-green-600 font-semibold">
-                <CheckCircle2 className="h-5 w-5" />
-                <span>Cancelación gratuita (hasta 24h antes)</span>
-            </div>
-            
-            <Separator className="my-4"/>
+const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, onSelect: () => void, isRecommended: boolean }) => {
+    // Demo logic for cancellation and meal plan
+    const isFreeCancellation = true; 
+    const hasBreakfast = roomOffer.room.type !== 'STANDARD_ROOM';
 
-            <div>
-              <p className="font-semibold text-sm mb-2">Extras incluidos:</p>
-              <div className="space-y-2">
-                 <div className="flex items-center gap-2 text-muted-foreground">
-                    <XCircle className="h-5 w-5" />
-                    <span>No incluye plan de comidas</span>
+    return (
+        <div className="flex flex-col md:flex-row border-t first:border-t-0">
+            {/* Options Column */}
+            <div className="w-full md:w-5/12 p-4 space-y-3">
+                {isRecommended && (
+                    <Badge variant="default" className="bg-accent hover:bg-accent/90 mb-2">
+                        <Star className="mr-2 h-4 w-4 fill-white" /> Recomendado
+                    </Badge>
+                )}
+                <div className="flex items-center gap-2 text-green-600 font-semibold">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span>{isFreeCancellation ? 'Cancelación gratuita (hasta 24h antes)' : 'No reembolsable'}</span>
                 </div>
-              </div>
+                
+                <Separator className="my-4"/>
+
+                <div>
+                <p className="font-semibold text-sm mb-2">Extras incluidos:</p>
+                <div className="space-y-2">
+                    {hasBreakfast ? (
+                         <div className="flex items-center gap-2 text-muted-foreground">
+                            <CheckCircle2 className="h-5 w-5 text-green-600" />
+                            <span>Desayuno incluido</span>
+                        </div>
+                    ) : (
+                         <div className="flex items-center gap-2 text-muted-foreground">
+                            <XCircle className="h-5 w-5" />
+                            <span>No incluye plan de comidas</span>
+                        </div>
+                    )}
+                </div>
+                </div>
+                
             </div>
             
-        </div>
-        
-        {/* Price Column */}
-        <div className="w-full md:w-7/12 p-4 flex flex-col items-end justify-center bg-muted/30">
-            <div className="text-right mb-3">
-                <p className="text-xs text-muted-foreground">Precio por noche</p>
-                <p className="text-3xl font-bold text-primary">${roomOffer.price.total}</p>
-                <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
+            {/* Price Column */}
+            <div className="w-full md:w-7/12 p-4 flex flex-col justify-between bg-muted/30">
+                <div className="text-right mb-3">
+                    <p className="text-xs text-muted-foreground">Precio por noche</p>
+                    <p className="text-3xl font-bold text-primary">${roomOffer.price.total}</p>
+                    <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
+                </div>
+                <Button size="lg" className="w-full" onClick={onSelect}>
+                    Continuar
+                </Button>
+                 <div className="mt-4 text-left space-y-1">
+                    {isFreeCancellation ? (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <CheckCircle2 className="h-4 w-4 text-green-600" />
+                            <span>Cancelación gratuita</span>
+                        </div>
+                    ) : (
+                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <XCircle className="h-4 w-4" />
+                            <span>No reembolsable</span>
+                        </div>
+                    )}
+                     {hasBreakfast ? (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <Coffee className="h-4 w-4" />
+                            <span>Desayuno incluido</span>
+                        </div>
+                     ) : (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <Coffee className="h-4 w-4" />
+                            <span>Solo alojamiento</span>
+                        </div>
+                     )}
+                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Info className="h-4 w-4" />
+                        <span>Paga ahora</span>
+                     </div>
+                </div>
             </div>
-            <Button size="lg" className="w-full" onClick={onSelect}>
-                Continuar
-            </Button>
         </div>
-    </div>
-);
+    )
+};
 
 
 export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack }: RoomSelectionViewProps) {
