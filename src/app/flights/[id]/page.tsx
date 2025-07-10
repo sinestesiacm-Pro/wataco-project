@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function FlightDetailPage({ params }: { params: { id: string } }) {
+export default function FlightDetailPage({ params: { id } }: { params: { id: string } }) {
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
        <Button asChild variant="outline" className="mb-4">
@@ -19,7 +19,7 @@ export default function FlightDetailPage({ params }: { params: { id: string } })
           <CardTitle className="text-3xl font-headline">Detalle del Vuelo</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Mostrando detalles para el vuelo con ID: {params.id}</p>
+          <p className="text-muted-foreground">Mostrando detalles para el vuelo con ID: {id}</p>
           <p className="mt-4">Aquí se mostrará una vista detallada del itinerario del vuelo, información de equipaje, políticas de la aerolínea y el desglose de precios final antes de proceder al pago.</p>
         </CardContent>
       </Card>
