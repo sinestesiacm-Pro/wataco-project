@@ -201,7 +201,7 @@ const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         rating: '4',
         media: [
           { uri: 'https://images.unsplash.com/photo-1568495248636-6432b97bd949?fit=crop&w=800&q=80', category: 'EXTERIOR' },
-          { uri: 'https://images.unsplash.com/photo-1590490360181-a75d1f88a652?fit=crop&w=800&q=80', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?fit=crop&w=800&q=80', category: 'LOBBY' },
           { uri: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['456 Central St'], postalCode: '10001', cityName: 'New York', countryCode: 'US' },
