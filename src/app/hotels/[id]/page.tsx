@@ -1,7 +1,7 @@
 
 'use client'
 
-import { Suspense, use } from 'react';
+import { Suspense } from 'react';
 import { Loader2 } from "lucide-react";
 import { HotelBookingFlow } from '@/components/hotel-booking-flow';
 import { Button } from '@/components/ui/button';
