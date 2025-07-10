@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Loader2, Plane } from 'lucide-react';
+import { ArrowRight, Plane } from 'lucide-react';
 import { searchFlights } from '@/app/actions';
 import { addMonths, addDays, format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -62,7 +62,9 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
         }
         
         const buttonHref = price !== 'No disponible' && dates ?
-             `/?origin=${route.origin}&destination=${route.destination}&from_date=${dates.from}&to_date=${dates.to}&adults=1&autosearch=true` : '#';
+             `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${dates.from}&to_date=${dates.to}&adults=1&autosearch=true`
+             : '#';
+
 
         return (
              <div className="flex flex-col items-center gap-2 mt-4">
@@ -124,5 +126,3 @@ export function RecommendedDestinations() {
     </div>
   );
 }
-
-    
