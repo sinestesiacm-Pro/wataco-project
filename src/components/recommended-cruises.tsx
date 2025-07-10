@@ -23,25 +23,30 @@ export function RecommendedCruises() {
         {recommendedCruises.map((cruise, index) => (
           <div key={index} className="flex-shrink-0 w-[280px]">
             <div className="airplane-window">
-                <div className="airplane-window-view">
-                    <Image 
-                        src={cruise.image} 
-                        data-ai-hint={cruise.hint} 
-                        alt={cruise.name} 
-                        fill 
-                        className="object-cover"
-                    />
-                    <div className="airplane-window-content">
-                        <div>
-                        <h3 className="text-xl font-bold font-headline text-white">{cruise.name}</h3>
-                        <p className="text-sm text-white/80">{cruise.ship}</p>
+                <div className="airplane-window-inner-bevel">
+                    <div className="airplane-window-view">
+                        <Image 
+                            src={cruise.image} 
+                            data-ai-hint={cruise.hint} 
+                            alt={cruise.name} 
+                            fill 
+                            className="object-cover"
+                        />
+                         <div className="airplane-window-shade-container">
+                            <div className="airplane-window-shade"></div>
                         </div>
-                        <div className="flex flex-col items-center gap-2 mt-4">
-                            <p className="font-bold text-md text-white/90">{cruise.duration}</p>
-                            <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
-                                <Ship className="mr-2 h-4 w-4" />
-                                Ver Crucero
-                            </Button>
+                        <div className="airplane-window-content">
+                            <div>
+                            <h3 className="text-xl font-bold font-headline text-white">{cruise.name}</h3>
+                            <p className="text-sm text-white/80">{cruise.ship}</p>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 mt-4">
+                                <p className="font-bold text-md text-white/90">{cruise.duration}</p>
+                                <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                                    <Ship className="mr-2 h-4 w-4" />
+                                    Ver Crucero
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -18,31 +18,36 @@ export function RecommendedPackages() {
         <h2 className="text-3xl font-headline font-bold text-gray-800">Paquetes Destacados</h2>
         <p className="text-muted-foreground mt-2">Reserva tu Vuelo + Hotel y ahorra en tu próxima gran aventura.</p>
       </div>
-      <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4 justify-center">
+      <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
         {recommendedPackages.map((pkg, index) => (
           <div key={index} className="flex-shrink-0 w-[280px]">
             <div className="airplane-window">
-                <div className="airplane-window-view">
-                    <Image 
-                        src={pkg.image} 
-                        data-ai-hint={pkg.hint} 
-                        alt={pkg.name} 
-                        fill 
-                        className="object-cover"
-                    />
-                    <div className="airplane-window-content">
-                        <div>
-                        <h3 className="text-xl font-bold font-headline text-white">{pkg.name}</h3>
-                        <p className="text-sm text-white/80">{pkg.description}</p>
+                <div className="airplane-window-inner-bevel">
+                    <div className="airplane-window-view">
+                        <Image 
+                            src={pkg.image} 
+                            data-ai-hint={pkg.hint} 
+                            alt={pkg.name} 
+                            fill 
+                            className="object-cover"
+                        />
+                        <div className="airplane-window-shade-container">
+                            <div className="airplane-window-shade"></div>
                         </div>
-                        <div className="flex flex-col items-center gap-2 mt-4">
-                            <p className="text-sm text-white/90 font-body">
-                                Desde <span className="font-bold text-lg text-tertiary">${pkg.price}</span>
-                            </p>
-                            <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
-                                <Luggage className="mr-2 h-4 w-4" />
-                                Ver Paquete
-                            </Button>
+                        <div className="airplane-window-content">
+                            <div>
+                            <h3 className="text-xl font-bold font-headline text-white">{pkg.name}</h3>
+                            <p className="text-sm text-white/80">{pkg.description}</p>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 mt-4">
+                                <p className="text-sm text-white/90 font-body">
+                                    Desde <span className="font-bold text-lg text-tertiary">${pkg.price}</span>
+                                </p>
+                                <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                                    <Luggage className="mr-2 h-4 w-4" />
+                                    Ver Paquete
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
