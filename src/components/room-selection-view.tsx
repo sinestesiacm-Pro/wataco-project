@@ -29,16 +29,17 @@ const formatAmenity = (amenity: string) => {
 
 interface RoomSelectionViewProps {
   hotelOffer: AmadeusHotelOffer;
-  onRoomSelected: (room: Room) => void;
+  onRoomSelected: (room: Room, numberOfRooms: number) => void;
   onBack: () => void;
   adults: number;
   children: number;
 }
 
-const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { roomOffer: Room, onSelect: () => void, isRecommended: boolean, adults: number, children: number }) => {
+const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { roomOffer: Room, onSelect: (numberOfRooms: number) => void, isRecommended: boolean, adults: number, children: number }) => {
     const isFreeCancellation = true; 
     const hasBreakfast = roomOffer.room.type !== 'STANDARD_ROOM';
     const [mealPlan, setMealPlan] = useState(hasBreakfast ? 'breakfast' : 'none');
+    const [numberOfRooms, setNumberOfRooms] = useState(1);
 
     const totalGuests = adults + children;
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
@@ -98,7 +99,11 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                  <div className="flex flex-col gap-4 mt-auto pt-4">
                     <div>
                         <Label className="text-xs font-semibold">Habitaciones</Label>
-                        <Select defaultValue="1" disabled={adults <= 1 && children === 0}>
+                        <Select 
+                            defaultValue="1" 
+                            onValueChange={(value) => setNumberOfRooms(parseInt(value, 10))}
+                            disabled={adults <= 1 && children === 0}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Seleccionar" />
                           </SelectTrigger>
@@ -109,7 +114,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                           </SelectContent>
                         </Select>
                     </div>
-                    <Button size="lg" className="w-full" onClick={onSelect}>
+                    <Button size="lg" className="w-full" onClick={() => onSelect(numberOfRooms)}>
                         Continuar
                     </Button>
                     <div className="mt-2 text-left space-y-2 text-xs text-muted-foreground">
@@ -197,7 +202,7 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack, adults, 
             <div className="md:col-span-7 flex flex-col">
                 <RoomOption 
                     roomOffer={roomOffer} 
-                    onSelect={() => onRoomSelected(roomOffer)} 
+                    onSelect={(numRooms) => onRoomSelected(roomOffer, numRooms)} 
                     isRecommended={index === 0}
                     adults={adults}
                     children={children}

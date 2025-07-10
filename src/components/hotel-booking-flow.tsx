@@ -7,7 +7,6 @@ import { Loader2 } from 'lucide-react';
 import { HotelDetailsView } from './hotel-details-view';
 import { RoomSelectionView } from './room-selection-view';
 import { CheckoutView } from './checkout-view';
-import { useSearchParams } from 'next/navigation';
 
 type BookingStep = 'details' | 'rooms' | 'checkout';
 
@@ -21,6 +20,7 @@ export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlow
   const [step, setStep] = useState<BookingStep>('details');
   const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  const [numberOfRooms, setNumberOfRooms] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,8 +49,9 @@ export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlow
     window.scrollTo(0, 0);
   };
   
-  const handleRoomSelected = (room: Room) => {
+  const handleRoomSelected = (room: Room, numRooms: number) => {
     setSelectedRoom(room);
+    setNumberOfRooms(numRooms);
     setStep('checkout');
     window.scrollTo(0, 0);
   };
@@ -88,7 +89,7 @@ export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlow
             // This should not happen in normal flow, but it's a good fallback
             return <p>Error: No se ha seleccionado ninguna habitación. <Button onClick={handleBackToRooms}>Volver</Button></p>
         }
-        return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} />;
+        return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} />;
       default:
         return null;
     }

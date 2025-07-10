@@ -33,13 +33,15 @@ const checkoutSchema = z.object({
   path: ['confirmEmail'],
 });
 
-const BookingSummary = ({ hotelOffer, selectedRoom, adults, children }: { hotelOffer: AmadeusHotelOffer, selectedRoom: Room, adults: number, children: number }) => {
+const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRooms }: { hotelOffer: AmadeusHotelOffer, selectedRoom: Room, adults: number, children: number, numberOfRooms: number }) => {
     const checkInDate = hotelOffer.offers[0].checkInDate;
     const checkOutDate = hotelOffer.offers[0].checkOutDate;
     const nights = differenceInDays(new Date(checkOutDate), new Date(checkInDate));
-    const price = parseFloat(selectedRoom.price.total);
-    const taxes = price * 0.19; // Simulate 19% tax
-    const total = price + taxes;
+    
+    const pricePerRoom = parseFloat(selectedRoom.price.total);
+    const accommodationPrice = pricePerRoom * numberOfRooms;
+    const taxes = accommodationPrice * 0.19; // Simulate 19% tax
+    const total = accommodationPrice + taxes;
     
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
 
@@ -64,12 +66,13 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children }: { hotelO
                     <p><strong>Check-out:</strong> {format(new Date(checkOutDate), 'd MMM, yyyy', { locale: es })}</p>
                     <p><strong>Huéspedes:</strong> {guestsText}</p>
                     <p><strong>Noches:</strong> {nights}</p>
+                    <p><strong>Habitaciones:</strong> {numberOfRooms}</p>
                 </div>
                 <Separator />
                 <div className="space-y-2">
                      <div className="flex justify-between text-muted-foreground">
-                        <span>Alojamiento x {nights} noches</span>
-                        <span>${price.toFixed(2)}</span>
+                        <span>Alojamiento ({numberOfRooms} hab. x {nights} noches)</span>
+                        <span>${accommodationPrice.toFixed(2)}</span>
                     </div>
                      <div className="flex justify-between text-muted-foreground">
                         <span>Impuestos y tasas</span>
@@ -91,9 +94,10 @@ interface CheckoutViewProps {
   selectedRoom: Room;
   adults: number;
   children: number;
+  numberOfRooms: number;
 }
 
-export function CheckoutView({ hotelOffer, selectedRoom, adults, children }: CheckoutViewProps) {
+export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numberOfRooms }: CheckoutViewProps) {
   const { toast } = useToast();
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(checkoutSchema),
@@ -260,7 +264,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children }: Che
                 </div>
             </div>
             <div className="lg:col-span-1">
-                <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} />
+                <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} />
             </div>
         </div>
     </form>
