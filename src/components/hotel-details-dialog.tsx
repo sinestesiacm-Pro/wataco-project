@@ -113,12 +113,12 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
               {details.offers?.[0]?.price?.total && (
                  <div>
                     <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
-                    <p className="font-bold text-2xl text-primary">
+                    <p className="font-bold text-2xl text-blue-700">
                       ${details.offers[0].price.total}
                     </p>
                  </div>
               )}
-              <Button size="lg" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>
+              <Button size="lg" className="bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>
                 Reservar Ahora
               </Button>
             </DialogFooter>
