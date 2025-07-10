@@ -226,50 +226,48 @@
   animation: pulse-text 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* New Airplane Window Style */
+/* Realistic Airplane Window Style */
 .airplane-window {
   position: relative;
-  overflow: hidden;
-  border-radius: var(--radius);
-  background: hsl(var(--card));
+  aspect-ratio: 3 / 4;
+  padding: 8%; /* Adjust padding to control the frame thickness */
+  background: linear-gradient(145deg, hsl(var(--secondary)) 0%, hsl(var(--card)) 100%);
+  border-radius: 45% / 50%;
   box-shadow: 
-    0 1px 2px rgba(0,0,0,0.04),
-    0 4px 8px rgba(0,0,0,0.04),
-    0 10px 20px rgba(0,0,0,0.04);
-  transition: all 0.3s ease-in-out;
+    0 10px 25px rgba(0,0,0,0.1), /* Outer soft shadow */
+    inset 0 0 15px rgba(0,0,0,0.05); /* Inner soft shadow */
+  transition: all 0.4s ease;
   cursor: pointer;
 }
 
-.airplane-window::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
 .airplane-window:hover {
-  transform: translateY(-5px);
+  transform: scale(1.03);
   box-shadow: 
-    0 2px 4px rgba(0,0,0,0.05),
-    0 8px 16px rgba(0,0,0,0.05),
-    0 20px 40px rgba(0,0,0,0.05);
+    0 15px 35px rgba(0,0,0,0.15),
+    inset 0 0 20px rgba(0,0,0,0.08);
 }
 
-.airplane-window:hover::before {
-  opacity: 1;
+.airplane-window-inner-bevel {
+  position: absolute;
+  top: 8%;
+  left: 8%;
+  right: 8%;
+  bottom: 8%;
+  border-radius: 40% / 45%;
+  background: hsl(var(--background));
+  box-shadow: 
+    inset 4px 4px 8px rgba(0,0,0,0.1), /* Inner shadow for depth */
+    inset -4px -4px 8px rgba(255,255,255,0.8); /* Inner highlight for 3D effect */
+  padding: 2%;
 }
 
 .airplane-window-view {
   position: relative;
   width: 100%;
-  height: 280px; /* Taller card */
+  height: 100%;
+  border-radius: 35% / 40%;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5); /* Shadow inside the window pane */
 }
 
 .airplane-window-view img {
@@ -280,7 +278,40 @@
 }
 
 .airplane-window:hover .airplane-window-view img {
-  transform: scale(1.05);
+  transform: scale(1.1);
+}
+
+.airplane-window-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(to bottom, hsl(var(--secondary)) 80%, hsl(var(--muted)) 100%);
+  border-bottom: 1px solid hsl(var(--border));
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border-radius: 35% 35% 20px 20px / 40% 40% 20px 20px;
+  transform: translateY(0);
+  transition: transform 0.4s ease-in-out;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.airplane-window:hover .airplane-window-shade {
+  transform: translateY(-100%);
+}
+
+.airplane-window-shade::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 0.5rem;
+  background-color: hsl(var(--muted-foreground));
+  border-radius: 4px;
+  opacity: 0.3;
 }
 
 .airplane-window-content {
@@ -288,22 +319,22 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1.5rem; /* More padding */
+  padding: 1rem 1.5rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-start; /* Align text to the left */
-  text-align: left;
+  align-items: center;
+  text-align: center;
   color: white;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 30%, transparent 100%);
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 40%, transparent 100%);
   z-index: 1;
   height: 100%;
+  border-radius: 35% / 40%;
   box-sizing: border-box;
 }
 
 .mask-fade {
-  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
 }
     
-
