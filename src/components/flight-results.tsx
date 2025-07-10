@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { FlightDetailsDialog } from './flight-details-dialog';
+import { cn } from '@/lib/utils';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -95,6 +96,9 @@ function CabinSelector({ flight }: { flight: FlightOffer }) {
 export function FlightResults({ flightData, destinationIata }: { flightData: FlightData; destinationIata: string; }) {
   const { data: flights, dictionaries } = flightData;
   const destinationName = dictionaries.locations?.[destinationIata]?.cityCode;
+  
+  // Find the cheapest flight price
+  const cheapestPrice = Math.min(...flights.map(f => parseFloat(f.price.total)));
 
   return (
     <div className="space-y-6">
@@ -108,29 +112,35 @@ export function FlightResults({ flightData, destinationIata }: { flightData: Fli
       </div>
 
       <div className="space-y-4">
-        {flights.map((flight) => (
-          <Card key={flight.id} className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border bg-card/95 backdrop-blur-sm">
-            <CardContent className="p-4 md:p-6 flex flex-col md:flex-row items-center gap-6">
-                <div className="w-full md:w-2/3 divide-y divide-border">
-                    {flight.itineraries.map((itinerary, i) => (
-                        <ItineraryDetails key={i} itinerary={itinerary} dictionaries={dictionaries} />
-                    ))}
-                </div>
-                
-                <div className="w-full md:w-1/3 flex flex-col items-center md:items-end gap-4">
-                    <CabinSelector flight={flight} />
-                    <div className="text-center md:text-right">
-                      <p className="text-3xl font-bold font-headline text-accent">${flight.price.total}</p>
-                      <p className="text-xs text-muted-foreground">Precio total, {flight.oneWay ? 'solo ida' : 'ida y vuelta'}</p>
-                    </div>
-                    <FlightDetailsDialog flight={flight} dictionaries={dictionaries} />
-                </div>
-            </CardContent>
-          </Card>
-        ))}
+        {flights.map((flight) => {
+          const isCheapest = parseFloat(flight.price.total) === cheapestPrice;
+          return (
+            <Card key={flight.id} className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border bg-card/95 backdrop-blur-sm">
+              <CardContent className="p-4 md:p-6 flex flex-col md:flex-row items-center gap-6">
+                  <div className="w-full md:w-2/3 divide-y divide-border">
+                      {flight.itineraries.map((itinerary, i) => (
+                          <ItineraryDetails key={i} itinerary={itinerary} dictionaries={dictionaries} />
+                      ))}
+                  </div>
+                  
+                  <div className="w-full md:w-1/3 flex flex-col items-center md:items-end gap-4">
+                      <CabinSelector flight={flight} />
+                      <div className="text-center md:text-right">
+                        <p className={cn(
+                          "text-3xl font-bold font-headline",
+                          isCheapest ? "text-success" : "text-accent"
+                        )}>
+                          ${flight.price.total}
+                        </p>
+                        <p className="text-xs text-muted-foreground">Precio total, {flight.oneWay ? 'solo ida' : 'ida y vuelta'}</p>
+                      </div>
+                      <FlightDetailsDialog flight={flight} dictionaries={dictionaries} />
+                  </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
 }
-
-    

@@ -95,12 +95,20 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 
   try {
     const token = await getAmadeusToken();
+    const validatedKeyword = validation.data.keyword;
 
     const searchParams = new URLSearchParams({
-      keyword: validation.data.keyword,
       subType: 'CITY,AIRPORT',
       'page[limit]': '50',
     });
+    
+    // If the keyword is likely an IATA code, prioritize a location search by that code.
+    if (validatedKeyword.length === 3 && validatedKeyword.toUpperCase() === validatedKeyword) {
+      searchParams.append('locationType', 'CITY');
+      searchParams.append('keyword', validatedKeyword);
+    } else {
+      searchParams.append('keyword', validatedKeyword);
+    }
 
     const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations?${searchParams.toString()}`, {
       headers: { Authorization: `Bearer ${token}` },
