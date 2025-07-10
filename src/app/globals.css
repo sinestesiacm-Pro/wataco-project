@@ -23,6 +23,7 @@
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 211 100% 50%;
+    --radius: 0.75rem;
     --success: 139 51% 53%; /* Added for success toast */
     --success-foreground: 0 0% 100%;
     --tertiary: 145 63% 49%; /* Added for hero animation */
@@ -49,7 +50,6 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 211 100% 50%;
-    --radius: 0.75rem;
     --success: 139 51% 53%;
     --success-foreground: 0 0% 100%;
     --tertiary: 145 63% 49%;
