@@ -38,14 +38,16 @@ const prompt = ai.definePrompt({
 Tu objetivo es ayudar a los usuarios con sus planes de viaje, responder preguntas sobre destinos, vuelos, hoteles y actividades.
 Sé conciso, útil y mantén un tono positivo y aventurero.
 
+Historial de la conversación:
 {{#each history}}
-  {{#if (eq role 'user')}}
-    Usuario: {{content}}
+  {{#if (eq this.role 'user')}}
+    Usuario: {{this.content}}
   {{else}}
-    Asistente: {{content}}
+    Asistente: {{this.content}}
   {{/if}}
 {{/each}}
 
+Nuevo mensaje:
 Usuario: {{message}}
 Asistente:`,
 });
@@ -57,7 +59,26 @@ const chatFlow = ai.defineFlow(
     outputSchema: ChatOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt(input);
+    // Handlebars doesn't have a built-in 'eq' helper. We need to manually format the history.
+    // However, a simpler prompt structure is often more effective.
+    const historyText = input.history
+      .map(msg => (msg.role === 'user' ? `Usuario: ${msg.content}` : `Asistente: ${msg.content}`))
+      .join('\n');
+      
+    const effectivePrompt = `Eres "TripGenius", un asistente de viajes experto y amigable de la aplicación "BE ON TRIP".
+Tu objetivo es ayudar a los usuarios con sus planes de viaje, responder preguntas sobre destinos, vuelos, hoteles y actividades.
+Sé conciso, útil y mantén un tono positivo y aventurero.
+
+${historyText}
+
+Usuario: ${input.message}
+Asistente:`;
+
+    const { output } = await ai.generate({
+        prompt: effectivePrompt,
+        output: { schema: ChatOutputSchema }
+    });
+    
     return output!;
   }
 );
