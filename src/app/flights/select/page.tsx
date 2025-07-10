@@ -11,6 +11,7 @@ import { BookingProgressHeader } from '@/components/booking-progress-header';
 import { FlightSelectionList } from '@/components/flight-selection-list';
 import { ReviewAndPay } from '@/components/review-and-pay';
 import { Card, CardContent } from '@/components/ui/card';
+import { FlightLoadingAnimation } from '@/components/flight-loading-animation';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
@@ -86,16 +87,10 @@ function FlightSelectionPage() {
 
   const getFlightsForStep = (step: BookingStep) => {
     if (!flightData) return [];
-    // For simplicity, this example assumes the API returns separate offers for one-way parts of a round trip.
-    // A real implementation would need more complex logic to pair outbound/return flights.
-    // Here, we simulate by filtering based on the first segment's departure airport.
-    if (step === 'outbound') {
-      return flightData.data.filter(f => f.itineraries[0]?.segments[0]?.departure.iataCode === origin);
-    }
-    if (step === 'return' && returnDate) {
-      return flightData.data.filter(f => f.itineraries[0]?.segments[0]?.departure.iataCode === destination);
-    }
-    return [];
+    // For round trips, Amadeus returns offers containing both itineraries.
+    // So for the "return" step, we can show the same list. 
+    // The selection in the UI will determine which one is the "return" flight for the final review.
+    return flightData.data;
   };
 
   const applyFilters = (flights: FlightOffer[]) => {
@@ -109,16 +104,15 @@ function FlightSelectionPage() {
     });
   };
 
-  const outboundFlights = useMemo(() => applyFilters(getFlightsForStep('outbound')), [flightData, filters, origin]);
-  const returnFlights = useMemo(() => applyFilters(getFlightsForStep('return')), [flightData, filters, destination]);
+  const outboundFlights = useMemo(() => applyFilters(getFlightsForStep('outbound')), [flightData, filters]);
+  const returnFlights = useMemo(() => applyFilters(getFlightsForStep('return')), [flightData, filters]);
   const availableAirlines = useMemo(() => flightData?.dictionaries.carriers || {}, [flightData]);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-4 text-lg">Buscando los mejores vuelos...</p>
-      </div>
+        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
+            <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />
+        </div>
     );
   }
 
