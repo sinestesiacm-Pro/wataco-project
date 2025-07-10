@@ -17,7 +17,7 @@
     --secondary-foreground: 240 6% 10%;
     --muted: 240 5% 90%;
     --muted-foreground: 240 4% 46%;
-    --accent: 25 100% 50%; /* Naranja #FF6B00 */
+    --accent: 180 82% 45%; /* Cian #14B8A6 */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -44,7 +44,7 @@
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 22.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 25 100% 50%;
+    --accent: 180 82% 45%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -150,6 +150,9 @@
     }
     .hero-title {
         font-size: 2em;
+    }
+    .hero-subtitle {
+        font-size: 1em;
     }
 }
 
@@ -386,3 +389,5 @@
   background-size: 2px 8px;
   background-repeat: repeat-y;
 }
+
+    
