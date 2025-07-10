@@ -33,7 +33,6 @@ const DestinationWindow = ({ dest, onClick }: { dest: typeof destinationsByConti
         onClick={onClick}
     >
         <div className="airplane-window animate-in fade-in slide-in-from-bottom-5 duration-500">
-            <div className="airplane-window-inner-bevel">
             <div className="airplane-window-view">
                 <Image
                     src={dest.image}
@@ -62,7 +61,6 @@ const DestinationWindow = ({ dest, onClick }: { dest: typeof destinationsByConti
                         </Button>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
@@ -107,3 +105,4 @@ export function RecommendedDestinations() {
     </div>
   );
 }
+

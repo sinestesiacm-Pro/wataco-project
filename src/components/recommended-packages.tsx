@@ -19,11 +19,10 @@ export function RecommendedPackages() {
         <h2 className="text-3xl font-headline font-bold text-gray-800">Paquetes Destacados</h2>
         <p className="text-muted-foreground mt-2">Reserva tu Vuelo + Hotel y ahorra en tu próxima gran aventura.</p>
       </div>
-      <div className="flex space-x-8 pb-4 overflow-x-auto scrollbar-hide -mx-4 px-4">
+      <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
         {recommendedPackages.map((pkg, index) => (
           <div key={index} className="flex-shrink-0 w-[280px]">
             <div className="airplane-window">
-                <div className="airplane-window-inner-bevel">
                 <div className="airplane-window-view">
                     <Image 
                         src={pkg.image} 
@@ -47,7 +46,6 @@ export function RecommendedPackages() {
                             </Button>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
           </div>

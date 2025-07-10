@@ -19,11 +19,10 @@ export function RecommendedCruises() {
         <h2 className="text-3xl font-headline font-bold text-gray-800">Cruceros de Ensueño</h2>
         <p className="text-muted-foreground mt-2">Explora el mundo desde el mar con estas rutas espectaculares.</p>
       </div>
-      <div className="flex space-x-8 pb-4 overflow-x-auto scrollbar-hide -mx-4 px-4">
+      <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
         {recommendedCruises.map((cruise, index) => (
           <div key={index} className="flex-shrink-0 w-[280px]">
             <div className="airplane-window">
-                <div className="airplane-window-inner-bevel">
                 <div className="airplane-window-view">
                     <Image 
                         src={cruise.image} 
@@ -45,7 +44,6 @@ export function RecommendedCruises() {
                             </Button>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
           </div>
