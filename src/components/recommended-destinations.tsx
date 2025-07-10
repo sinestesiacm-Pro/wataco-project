@@ -4,11 +4,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowRight } from 'lucide-react';
-
-interface RecommendedDestinationsProps {
-  setDestination: (destination: { iata: string; query: string }) => void;
-}
+import { ArrowRight, Globe } from 'lucide-react';
 
 const destinationsByContinent = {
   "Europa": [
@@ -71,7 +67,13 @@ const DestinationWindow = ({ dest, onClick }: { dest: typeof destinationsByConti
 );
 
 
-export function RecommendedDestinations({ setDestination }: RecommendedDestinationsProps) {
+export function RecommendedDestinations() {
+  const handleDestinationClick = (dest: { iata: string; city: string; country: string }) => {
+    // This function can be used for analytics or other client-side logic in the future.
+    // For now, it doesn't need to update parent state.
+    console.log(`Clicked on ${dest.city}`);
+  };
+
   return (
     <div className="space-y-8">
       <div className="text-center">
@@ -93,10 +95,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                         <DestinationWindow 
                             key={dest.iata}
                             dest={dest}
-                            onClick={() => {
-                                const query = `${dest.city}, ${dest.country}`;
-                                setDestination({ iata: dest.iata, query });
-                            }}
+                            onClick={() => handleDestinationClick(dest)}
                         />
                     ))}
                 </div>

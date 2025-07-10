@@ -78,7 +78,7 @@ export default function Home({ searchParams }: { searchParams?: { tab?: string }
           <TestimonialsSection />
           
           {/* Render Flight recommendations inside the fuselage ONLY on the flights tab */}
-          {isFlightSearch && <RecommendedDestinations setDestination={() => {}} />}
+          {isFlightSearch && <RecommendedDestinations />}
 
           {/* Render other recommendations if not on flights tab */}
           {!isFlightSearch && (
