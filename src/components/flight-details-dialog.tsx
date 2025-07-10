@@ -14,6 +14,7 @@ import { Clock, Luggage, Plane, Settings2, QrCode } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO, format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
+import Link from 'next/link';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -150,18 +151,20 @@ const PriceCard = ({ flight }: { flight: FlightOffer }) => {
             <p className="text-sm text-muted-foreground">Precio total</p>
             <p className="text-4xl font-bold text-tertiary my-2">${flight.price.total}</p>
             <div className="flex flex-col gap-2 mt-4">
-                <Button
+                <Button asChild
                     className="w-full bg-blue-500 hover:bg-blue-600"
-                    onClick={() => alert('La funcionalidad de personalizar no está implementada en esta demostración.')}
                 >
-                    <Settings2 className="mr-2 h-4 w-4" />
-                    Personalizar Vuelo
+                    <Link href={`/flights/${flight.id}`}>
+                        <Settings2 className="mr-2 h-4 w-4" />
+                        Personalizar Vuelo
+                    </Link>
                 </Button>
-                <Button
+                <Button asChild
                     className="w-full bg-green-500 hover:bg-green-600 text-white"
-                    onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}
                 >
-                    Confirmar Reserva
+                     <Link href={`/flights/${flight.id}`}>
+                        Confirmar Reserva
+                    </Link>
                 </Button>
             </div>
         </Card>
