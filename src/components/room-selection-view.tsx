@@ -44,7 +44,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
 
     return (
-        <div className="flex flex-col md:flex-row border-t first:border-t-0 flex-grow">
+        <div className="flex flex-col md:flex-row flex-grow">
             {/* Options Column */}
             <div className="w-full md:w-1/2 p-4 flex flex-col">
                  <div className="space-y-4">
@@ -95,10 +95,10 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                     <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
                 </div>
                 
-                 <div className="mt-auto pt-4 flex flex-col gap-4">
+                 <div className="flex flex-col gap-4 mt-auto pt-4">
                     <div>
                         <Label className="text-xs font-semibold">Habitaciones</Label>
-                        <Select defaultValue="1">
+                        <Select defaultValue="1" disabled={adults <= 1 && children === 0}>
                           <SelectTrigger>
                             <SelectValue placeholder="Seleccionar" />
                           </SelectTrigger>
@@ -156,8 +156,8 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack, adults, 
         </div>
 
       {rooms.map((roomOffer, index) => (
-        <Card key={roomOffer.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-          <div className="grid grid-cols-1 md:grid-cols-12">
+        <Card key={roomOffer.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col">
+          <div className="grid grid-cols-1 md:grid-cols-12 flex-grow">
 
             {/* Room Type Column */}
             <div className="md:col-span-5 p-4">
