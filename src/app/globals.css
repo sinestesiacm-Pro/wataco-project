@@ -150,3 +150,24 @@
         font-size: 2em;
     }
 }
+
+.plane-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160px; /* orbit size */
+  height: 160px;
+  margin-top: -80px; /* half of height */
+  margin-left: -80px; /* half of width */
+  border-radius: 50%;
+  animation: orbit 3s linear infinite;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { PlaneTakeoff, PlaneLanding, Star, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { AITravelTips } from './ai-travel-tips';
-import { Separator } from './ui/separator';
 
 interface FlightResultsProps {
   flightData: FlightData;
@@ -38,15 +37,6 @@ function ItineraryDetails({ itinerary, dictionaries }: { itinerary: Itinerary, d
       
       <div className="flex-grow text-center">
         <div className="text-xs text-muted-foreground">{formatDuration(itinerary.duration)}</div>
-        <div className="relative w-full h-px bg-border my-1">
-          <div className="absolute w-full -top-0.5 flex justify-center">
-            {itinerary.segments.length > 1 && (
-              [...Array(itinerary.segments.length - 1)].map((_, i) => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full bg-border mx-1" />
-              ))
-            )}
-          </div>
-        </div>
         <div className="text-xs text-primary font-semibold">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</div>
       </div>
 
@@ -111,7 +101,6 @@ export function FlightResults({ flightData, destinationIata }: FlightResultsProp
                             itinerary={itinerary} 
                             dictionaries={dictionaries} 
                           />
-                          {i === 0 && flight.itineraries.length > 1 && <Separator className="my-4" />}
                         </div>
                       ))}
                   </div>
