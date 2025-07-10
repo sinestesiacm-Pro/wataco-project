@@ -113,7 +113,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
               {details.offers?.[0]?.price?.total && (
                  <div>
                     <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
-                    <p className="font-bold text-2xl text-accent">
+                    <p className="font-bold text-2xl text-tertiary">
                       ${details.offers[0].price.total}
                     </p>
                  </div>
