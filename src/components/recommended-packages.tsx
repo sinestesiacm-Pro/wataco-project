@@ -28,8 +28,7 @@ export function RecommendedPackages() {
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
               <div className="airplane-window-shade">
-                  <h3 className="text-xl font-bold font-headline">{pkg.name}</h3>
-                  <p className="text-sm text-muted-foreground text-center">{pkg.description}</p>
+                  <h3 className="text-xl font-bold font-headline text-center px-2">{pkg.name}</h3>
               </div>
               <div className="airplane-window-content">
                   <div className="flex flex-col items-center gap-2">
