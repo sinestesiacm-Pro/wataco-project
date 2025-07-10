@@ -33,8 +33,7 @@ const destinationsByContinent = {
 const ContinentDivider = ({ name }: { name: string; }) => (
     <div className="relative flex items-center justify-center my-16 animate-in fade-in slide-in-from-bottom-5 duration-500">
       <div className="flex-grow h-px bg-gray-200"></div>
-      <h2 className="flex-shrink-0 px-8 text-3xl font-headline font-bold text-gray-800 flex items-center justify-center gap-3">
-        <Globe className="w-7 h-7 text-primary/80" />
+      <h2 className="flex-shrink-0 px-8 text-3xl font-headline font-semibold text-gray-800 flex items-center justify-center gap-3">
         {name}
       </h2>
       <div className="flex-grow h-px bg-gray-200"></div>
@@ -103,5 +102,6 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
     </div>
   );
 }
+
 
 
