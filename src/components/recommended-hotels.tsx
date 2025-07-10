@@ -29,6 +29,7 @@ export function RecommendedHotels() {
                         data-ai-hint={hotel.hint} 
                         alt={hotel.name} 
                         fill 
+                        className="object-cover"
                     />
                     <div className="airplane-window-shade" />
                     <div className="airplane-window-content">

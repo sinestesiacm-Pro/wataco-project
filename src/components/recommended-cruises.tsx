@@ -29,6 +29,7 @@ export function RecommendedCruises() {
                         data-ai-hint={cruise.hint} 
                         alt={cruise.name} 
                         fill 
+                        className="object-cover"
                     />
                     <div className="airplane-window-shade" />
                     <div className="airplane-window-content">

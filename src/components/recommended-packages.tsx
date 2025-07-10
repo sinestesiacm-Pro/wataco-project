@@ -29,6 +29,7 @@ export function RecommendedPackages() {
                         data-ai-hint={pkg.hint} 
                         alt={pkg.name} 
                         fill 
+                        className="object-cover"
                     />
                     <div className="airplane-window-shade" />
                     <div className="airplane-window-content">
