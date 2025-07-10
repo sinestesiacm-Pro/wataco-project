@@ -170,7 +170,7 @@
 }
 
 .cloud-animation {
-  animation: move-clouds 10s linear infinite;
+  animation: move-clouds linear infinite;
 }
 
 @keyframes fly-path {
@@ -203,11 +203,11 @@
 }
 
 @keyframes move-clouds {
-  0% {
-    transform: translateX(0);
+  from {
+    transform: translateX(0px);
   }
-  100% {
-    transform: translateX(-250%);
+  to {
+    transform: translateX(-200%);
   }
 }
 
@@ -370,5 +370,3 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
-
-    

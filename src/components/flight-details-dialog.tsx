@@ -145,7 +145,7 @@ const BaggageInfo = ({ flight }: { flight: FlightOffer }) => {
     )
 }
 
-const PriceCard = ({ flight }: { flight: FlightOffer }) => {
+const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFlight: (flight: FlightOffer) => void }) => {
     return (
         <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
             <p className="text-sm text-muted-foreground">Precio total</p>
@@ -160,13 +160,13 @@ const PriceCard = ({ flight }: { flight: FlightOffer }) => {
                         Personalizar Vuelo
                     </Link>
                 </Button>
-                <Button asChild
+                <Button
                     className="w-full bg-success hover:bg-success/90 text-success-foreground"
+                    onClick={() => onSelectFlight(flight)}
                 >
-                     <Link href={`/flights/${flight.id}`}>
+                     
                         <CheckCircle className="mr-2 h-4 w-4" />
                         Confirmar Reserva
-                    </Link>
                 </Button>
             </div>
         </Card>
@@ -176,9 +176,10 @@ const PriceCard = ({ flight }: { flight: FlightOffer }) => {
 interface FlightDetailsDialogProps {
   flight: FlightOffer;
   dictionaries: Dictionaries;
+  onSelectFlight: (flight: FlightOffer) => void;
 }
 
-export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialogProps) {
+export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: FlightDetailsDialogProps) {
   
   return (
     <Dialog>
@@ -201,7 +202,7 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
                   ))}
               </div>
               <div className="md:col-span-5 space-y-6">
-                  <PriceCard flight={flight} />
+                  <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
                   <BaggageInfo flight={flight} />
               </div>
           </div>
@@ -209,5 +210,3 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
     </Dialog>
   );
 }
-
-    

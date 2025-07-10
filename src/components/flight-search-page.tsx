@@ -49,6 +49,7 @@ export default function FlightSearchPage() {
       from: addDays(new Date(), 7),
       to: addDays(new Date(), 14),
   });
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const [isRoundTrip, setIsRoundTrip] = useState(true);
   const [adults, setAdults] = useState(1);
@@ -72,6 +73,8 @@ export default function FlightSearchPage() {
     const urlFromDate = searchParams.get('from_date');
     const urlToDate = searchParams.get('to_date');
     const urlAdults = searchParams.get('adults');
+    const urlOriginQuery = searchParams.get('origin_query');
+    const urlDestinationQuery = searchParams.get('destination_query');
     const autoSearch = searchParams.get('autosearch');
 
     if (autoSearch === 'true' && urlOrigin && urlDestination && urlFromDate) {
@@ -80,8 +83,8 @@ export default function FlightSearchPage() {
         destination: urlDestination,
         departureDate: urlFromDate,
         adults: urlAdults || '1',
-        originQuery: searchParams.get('origin_query') || urlOrigin,
-        destinationQuery: searchParams.get('destination_query') || urlDestination,
+        originQuery: urlOriginQuery || urlOrigin,
+        destinationQuery: urlDestinationQuery || urlDestination,
       });
       if (urlToDate) {
         query.set('returnDate', urlToDate);
@@ -280,42 +283,45 @@ export default function FlightSearchPage() {
 
                 <div className="lg:col-span-4">
                     <Label htmlFor="dates" className="text-sm font-semibold ml-2">{isRoundTrip ? 'Salida y Regreso' : 'Salida'}</Label>
-                    <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                        id="dates"
-                        variant={"outline"}
-                        className={cn(
-                            "w-full justify-start text-left font-normal mt-1",
-                            !date && "text-muted-foreground"
-                        )}
-                        >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date?.from ? (
-                            date.to && isRoundTrip ? (
-                            <>
-                                {format(date.from, "dd LLL, y")} -{" "}
-                                {format(date.to, "dd LLL, y")}
-                            </>
-                            ) : (
-                            format(date.from, "dd LLL, y")
-                            )
-                        ) : (
-                            <span>Elige tus fechas</span>
-                        )}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                        initialFocus
-                        mode="range"
-                        defaultMonth={date?.from}
-                        selected={date}
-                        onSelect={setDate}
-                        numberOfMonths={2}
-                        disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
-                        />
-                    </PopoverContent>
+                    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                        <PopoverTrigger asChild>
+                            <Button
+                                id="dates"
+                                variant={"outline"}
+                                className={cn(
+                                    "w-full justify-start text-left font-normal mt-1",
+                                    !date && "text-muted-foreground"
+                                )}
+                            >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {date?.from ? (
+                                    date.to && isRoundTrip ? (
+                                        <>
+                                            {format(date.from, "dd LLL, y")} -{" "}
+                                            {format(date.to, "dd LLL, y")}
+                                        </>
+                                    ) : (
+                                        format(date.from, "dd LLL, y")
+                                    )
+                                ) : (
+                                    <span>Elige tus fechas</span>
+                                )}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                                initialFocus
+                                mode="range"
+                                defaultMonth={date?.from}
+                                selected={date}
+                                onSelect={setDate}
+                                numberOfMonths={2}
+                                disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+                            />
+                             <div className="p-3 border-t">
+                                <Button onClick={() => setIsCalendarOpen(false)} className="w-full">Listo</Button>
+                            </div>
+                        </PopoverContent>
                     </Popover>
                 </div>
                 

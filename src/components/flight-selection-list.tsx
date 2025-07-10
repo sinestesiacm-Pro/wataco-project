@@ -65,17 +65,12 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
                 </div>
                  <div className="w-full md:w-1/3 flex flex-col items-center md:items-end gap-3">
                     <div className="text-center md:text-right">
-                        <p className="text-2xl font-bold font-headline text-accent">
+                        <p className="text-2xl font-bold font-headline text-success">
                             ${flight.price.total}
                         </p>
                         <p className="text-xs text-muted-foreground">Precio total, ida y vuelta</p>
                     </div>
-                     <div className="flex gap-2">
-                        <FlightDetailsDialog flight={flight} dictionaries={dictionaries} />
-                        <Button onClick={() => onSelectFlight(flight)}>
-                            Seleccionar
-                        </Button>
-                    </div>
+                    <FlightDetailsDialog flight={flight} dictionaries={dictionaries} onSelectFlight={onSelectFlight} />
                 </div>
             </CardContent>
         </Card>
@@ -100,7 +95,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
                 <div className="flex items-center gap-3">
                     <Plane className="h-5 w-5 text-primary"/>
                     <p className="font-semibold">
-                        Vuelo de ida seleccionado: {selectedOutboundFlight.itineraries[0].segments[0].departure.iataCode} - {selectedOutboundFlight.itineraries[0].segments.slice(-1)[0].arrival.iataCode}}
+                        Vuelo de ida seleccionado: {selectedOutboundFlight.itineraries[0].segments[0].departure.iataCode} - {selectedOutboundFlight.itineraries[0].segments.slice(-1)[0].arrival.iataCode}
                     </p>
                 </div>
                 <p className="font-bold text-lg text-primary">${selectedOutboundFlight.price.total}</p>
