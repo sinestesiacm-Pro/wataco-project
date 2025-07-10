@@ -5,6 +5,9 @@ import { User, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmail
 import { auth } from '@/lib/firebase';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Terminal } from 'lucide-react';
+
 
 interface AuthContextType {
   user: User | null;
@@ -16,6 +19,11 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const firebaseConfigValid = 
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -42,6 +50,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    if (!firebaseConfigValid) {
+        setLoading(false);
+        return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
@@ -49,6 +61,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return () => unsubscribe();
   }, []);
+
+  if (!firebaseConfigValid) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background p-4">
+        <Alert variant="destructive" className="max-w-2xl">
+          <Terminal className="h-4 w-4" />
+          <AlertTitle>Error de Configuración de Firebase</AlertTitle>
+          <AlertDescription>
+            Las variables de entorno de Firebase no están configuradas correctamente. 
+            Por favor, asegúrate de que tu archivo <strong>.env</strong> o <strong>.env.local</strong> 
+            contiene todas las variables <code>NEXT_PUBLIC_FIREBASE_*</code> requeridas.
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
+  }
 
   if (loading) {
     return (

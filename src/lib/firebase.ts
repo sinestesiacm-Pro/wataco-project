@@ -13,6 +13,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+// Initialize auth only if the config is valid
 const auth = getAuth(app);
+
 
 export { app, auth };
