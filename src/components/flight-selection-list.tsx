@@ -4,11 +4,8 @@ import Image from 'next/image';
 import type { FlightOffer, Itinerary, Dictionaries } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Plane, Clock, Briefcase } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from './ui/separator';
+import { Plane } from 'lucide-react';
 import { AITravelTips } from './ai-travel-tips';
-import { FlightDetailsDialog } from './flight-details-dialog';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -70,7 +67,13 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
                         </p>
                         <p className="text-xs text-muted-foreground">Precio total, ida y vuelta</p>
                     </div>
-                    <FlightDetailsDialog flight={flight} dictionaries={dictionaries} onSelectFlight={onSelectFlight} />
+                    <Button 
+                        size="sm"
+                        className="w-full font-semibold"
+                        onClick={() => onSelectFlight(flight)}
+                    >
+                        Seleccionar
+                    </Button>
                 </div>
             </CardContent>
         </Card>

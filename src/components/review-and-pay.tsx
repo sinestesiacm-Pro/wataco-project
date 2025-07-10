@@ -4,7 +4,7 @@ import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { ArrowRight, Plane, User, Lock, Tag, ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
+import { Plane, Lock, CheckCircle, XCircle } from 'lucide-react';
 import Image from 'next/image';
 
 interface ReviewAndPayProps {
@@ -86,11 +86,15 @@ const FareUpgradeCard = () => (
 );
 
 const PriceSummaryCard = ({outboundFlight, returnFlight}: {outboundFlight: FlightOffer, returnFlight: FlightOffer | null}) => {
-    const outboundPrice = parseFloat(outboundFlight.price.total);
-    const returnPrice = returnFlight ? parseFloat(returnFlight.price.total) : 0;
-    const basePrice = parseFloat(outboundFlight.price.base) + (returnFlight ? parseFloat(returnFlight.price.base) : 0);
-    const total = outboundPrice + returnPrice;
+    // A round trip offer in Amadeus already contains the total price.
+    // If it's a one-way trip, selectedReturn will be null, and we use the outbound price.
+    // If it's a round trip, selectedReturn will be the same as selectedOutbound,
+    // and its price is the total for the round trip.
+    const finalOffer = returnFlight || outboundFlight;
+    const total = parseFloat(finalOffer.price.total);
+    const basePrice = parseFloat(finalOffer.price.base);
     const taxes = total - basePrice;
+
 
     return (
         <Card className="sticky top-24 shadow-lg">
@@ -129,7 +133,8 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOut
                 <FlightSummaryCard title="Vuelo de Ida" itinerary={outboundFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onOutboundChange} />
                 
                 {returnFlight && onReturnChange && (
-                    <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onReturnChange} />
+                     // In Amadeus round-trip search, itineraries[1] is the return leg
+                    <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnFlight.itineraries[1]} dictionaries={dictionaries} onChangeClick={onReturnChange} />
                 )}
 
                 <Separator />
