@@ -1,8 +1,7 @@
 'use client';
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BedDouble } from 'lucide-react';
+import { BedDouble, MoveUp } from 'lucide-react';
 
 const recommendedHotels = [
   { name: 'Hotel de Lujo con Vistas al Mar', city: 'Cancún, México', price: '250', image: 'https://images.unsplash.com/photo-1669123548650-0e0200ef47f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxsdXh1cnklMjBob3RlbCUyMG9jZWFufGVufDB8fHx8MTc1MjA4MzA2NXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'luxury hotel ocean' },
@@ -20,25 +19,31 @@ export function RecommendedHotels() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {recommendedHotels.map((hotel, index) => (
-          <Card key={index} className="airplane-window overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border-0 flex flex-col bg-card">
-            <div className="overflow-hidden relative h-full">
-              <Image src={hotel.image} data-ai-hint={hotel.hint} alt={hotel.name} width={400} height={400} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              <div className="absolute bottom-0 p-4 w-full">
-                <h3 className="text-xl font-bold font-headline text-white">{hotel.name}</h3>
-                <p className="text-sm text-white/90">{hotel.city}</p>
-                <div className="flex justify-between items-center mt-4">
-                    <p className="text-sm text-white/90 font-body">
-                        Desde <span className="font-bold text-lg text-tertiary">${hotel.price}</span>/noche
-                    </p>
-                    <Button size="sm" variant="secondary" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
-                        <BedDouble className="mr-1.5 h-4 w-4" />
-                        Ver Hotel
-                    </Button>
-                </div>
+          <div key={index} className="aspect-[3/4] airplane-window group">
+              <Image 
+                  src={hotel.image} 
+                  data-ai-hint={hotel.hint} 
+                  alt={hotel.name} 
+                  fill 
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="airplane-window-shade">
+                  <h3 className="text-xl font-bold font-headline">{hotel.name}</h3>
+                  <p className="text-sm text-muted-foreground">{hotel.city}</p>
+                  <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
               </div>
-            </div>
-          </Card>
+              <div className="airplane-window-content">
+                  <div className="flex justify-between items-center">
+                      <p className="text-sm text-white/90 font-body">
+                          Desde <span className="font-bold text-lg text-tertiary">${hotel.price}</span>/noche
+                      </p>
+                      <Button size="sm" variant="secondary" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                          <BedDouble className="mr-1.5 h-4 w-4" />
+                          Ver Hotel
+                      </Button>
+                  </div>
+              </div>
+          </div>
         ))}
       </div>
     </div>

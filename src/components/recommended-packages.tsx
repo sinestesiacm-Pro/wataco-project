@@ -1,8 +1,7 @@
 'use client';
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Luggage } from 'lucide-react';
+import { Luggage, MoveUp } from 'lucide-react';
 
 const recommendedPackages = [
   { name: 'Aventura en la Riviera Maya', description: 'Vuelo + 5 noches todo incluido', price: '750', image: 'https://images.unsplash.com/photo-1620615748664-9cc920e4150d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyaXZpZXJhJTIwbWF5YSUyMGJlYWNofGVufDB8fHx8MTc1MjA4MzE0M3ww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'riviera maya beach' },
@@ -20,25 +19,31 @@ export function RecommendedPackages() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {recommendedPackages.map((pkg, index) => (
-          <Card key={index} className="airplane-window overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border-0 flex flex-col bg-card">
-            <div className="overflow-hidden relative h-full">
-              <Image src={pkg.image} data-ai-hint={pkg.hint} alt={pkg.name} width={400} height={400} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-               <div className="absolute bottom-0 p-4 w-full">
-                 <h3 className="text-xl font-bold font-headline text-white">{pkg.name}</h3>
-                 <p className="text-sm text-white/90 mb-4">{pkg.description}</p>
+          <div key={index} className="aspect-[3/4] airplane-window group">
+              <Image 
+                  src={pkg.image} 
+                  data-ai-hint={pkg.hint} 
+                  alt={pkg.name} 
+                  fill 
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="airplane-window-shade">
+                  <h3 className="text-xl font-bold font-headline">{pkg.name}</h3>
+                  <p className="text-sm text-muted-foreground text-center">{pkg.description}</p>
+                  <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div className="airplane-window-content">
                   <div className="flex justify-between items-center">
-                     <p className="text-sm text-white/90 font-body">
-                        Desde <span className="font-bold text-lg text-tertiary">${pkg.price}</span>
+                      <p className="text-sm text-white/90 font-body">
+                          Desde <span className="font-bold text-lg text-tertiary">${pkg.price}</span>
                       </p>
-                    <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
-                      <Luggage className="mr-2 h-4 w-4" />
-                      Ver Paquete
-                    </Button>
+                      <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                          <Luggage className="mr-2 h-4 w-4" />
+                          Ver Paquete
+                      </Button>
                   </div>
               </div>
-            </div>
-          </Card>
+          </div>
         ))}
       </div>
     </div>

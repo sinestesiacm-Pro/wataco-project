@@ -1,9 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, MoveUp } from 'lucide-react';
 
 interface RecommendedDestinationsProps {
   setDestination: (destination: { iata: string; query: string }) => void;
@@ -45,43 +44,42 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {destinations.map((dest) => (
-              <Card
+              <div
                 key={dest.iata}
-                className="airplane-window overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 border-0"
+                className="aspect-[3/4] airplane-window group"
+                onClick={() => {
+                  const query = `${dest.city}, ${dest.country}`;
+                  setDestination({ iata: dest.iata, query });
+                }}
               >
-                <div className="overflow-hidden relative h-full flex flex-col">
-                  <Image
+                <Image
                     src={dest.image}
                     data-ai-hint={dest.hint}
                     alt={dest.city}
-                    width={400}
-                    height={400}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                  <div className="absolute bottom-0 left-0 p-4 w-full">
-                    <h3 className="text-2xl font-bold font-headline text-white">{dest.city}</h3>
-                    <p className="text-sm text-white/90">{dest.country}</p>
-                     <div className="flex justify-between items-center mt-4">
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="airplane-window-shade">
+                    <h3 className="text-2xl font-bold font-headline">{dest.city}</h3>
+                    <p className="text-sm text-muted-foreground">{dest.country}</p>
+                    <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <div className="airplane-window-content">
+                    <div className="flex justify-between items-center">
                         <p className="text-sm text-white/90 font-body">
                             Desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
                         </p>
                         <Button 
                             size="sm" 
                             variant="secondary"
-                            className="bg-white/20 hover:bg-white/30 text-white rounded-full"
-                            onClick={() => {
-                            const query = `${dest.city}, ${dest.country}`;
-                            setDestination({ iata: dest.iata, query });
-                            }}
+                            className="bg-white/20 hover:bg-white/30 text-white rounded-full pointer-events-none"
                         >
                             Ver Vuelos
                             <ArrowRight className="ml-1.5 h-4 w-4" />
                         </Button>
                     </div>
-                  </div>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
