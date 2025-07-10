@@ -10,9 +10,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
-import { Clock, Luggage, Plane, Settings2 } from 'lucide-react';
+import { Clock, Luggage, Plane, Settings2, QrCode } from 'lucide-react';
 import Image from 'next/image';
-import { parseISO } from 'date-fns';
+import { parseISO, format as formatDate } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -24,7 +25,6 @@ const formatTime = (dateString: string) => {
 
 const SegmentDetails = ({ segment, dictionaries }: { segment: Segment, dictionaries: Dictionaries }) => {
     const airlineName = dictionaries.carriers[segment.carrierCode] || segment.carrierCode;
-    const aircraftName = dictionaries.aircraft[segment.aircraft.code] || `Aeronave ${segment.aircraft.code}`;
     
     return (
         <div className="flex gap-4 items-start relative pl-8">
@@ -52,77 +52,67 @@ const SegmentDetails = ({ segment, dictionaries }: { segment: Segment, dictionar
                         <p className="font-semibold text-muted-foreground text-lg">{segment.arrival.iataCode}</p>
                     </div>
                 </div>
-                <div className="text-sm text-muted-foreground mt-2 flex items-center gap-2">
-                    <Image
-                        src={`https://images.kiwi.com/airlines/32/${segment.carrierCode}.png`}
-                        alt={airlineName}
-                        width={20}
-                        height={20}
-                        className="rounded-full bg-white"
-                    />
-                    <span>{airlineName} &middot; {segment.carrierCode} {segment.number} &middot; {aircraftName}</span>
+                <div className="text-sm text-muted-foreground mt-2 flex items-center justify-between">
+                    <span>{airlineName} &middot; {segment.carrierCode} {segment.number}</span>
+                     <span className="font-medium">{dictionaries.aircraft[segment.aircraft.code] || `Aeronave ${segment.aircraft.code}`}</span>
                 </div>
             </div>
         </div>
     )
 }
 
-const ItineraryCard = ({ itinerary, dictionaries, title }: { itinerary: Itinerary, dictionaries: Dictionaries, title: string }) => {
-    const totalDuration = formatDuration(itinerary.duration);
-    const stopCount = itinerary.segments.length - 1;
+const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itinerary, dictionaries: Dictionaries, title: string }) => {
+    const firstSegment = itinerary.segments[0];
+    const lastSegment = itinerary.segments[itinerary.segments.length - 1];
+    const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
+    const departureDate = formatDate(parseISO(firstSegment.departure.at), "d MMM, yyyy", { locale: es });
 
     return (
-        <Card className="bg-card p-6 rounded-2xl shadow-sm">
-            <div className="flex justify-between items-center mb-6">
-                <h3 className="font-headline font-bold text-xl">{title}</h3>
-                <div className="flex gap-4 text-sm font-medium">
-                    <div className="flex items-center gap-1.5">
-                        <Clock className="w-4 h-4 text-muted-foreground" />
-                        <span>{totalDuration}</span>
+        <Card className="bg-card/80 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10">
+            <div className="flex">
+                {/* Main flight info */}
+                <div className="flex-grow p-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <div>
+                            <p className="font-headline font-bold text-xl text-primary">{title}</p>
+                            <p className="text-sm font-semibold text-muted-foreground">{departureDate}</p>
+                        </div>
+                        <Image
+                            src={`https://images.kiwi.com/airlines/64/${firstSegment.carrierCode}.png`}
+                            alt={airlineName}
+                            width={48}
+                            height={48}
+                            className="rounded-full bg-white p-1 shadow-md"
+                        />
                     </div>
-                    <div className="flex items-center gap-1.5">
-                        <Plane className="w-4 h-4 text-muted-foreground" />
-                        <span>{stopCount > 0 ? `${stopCount} escala${stopCount > 1 ? 's' : ''}` : 'Directo'}</span>
+                    
+                    <div className="flex items-center justify-between my-6">
+                        <div className="text-center">
+                            <p className="text-4xl font-bold font-headline">{firstSegment.departure.iataCode}</p>
+                            <p className="text-lg font-semibold">{formatTime(firstSegment.departure.at)}</p>
+                        </div>
+                        <div className="flex flex-col items-center text-muted-foreground">
+                            <p className="text-sm font-semibold">{formatDuration(itinerary.duration)}</p>
+                            <Plane className="w-6 h-6 my-1 text-primary" />
+                             <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-4xl font-bold font-headline">{lastSegment.arrival.iataCode}</p>
+                             <p className="text-lg font-semibold">{formatTime(lastSegment.arrival.at)}</p>
+                        </div>
+                    </div>
+                     <div className="text-xs text-muted-foreground text-center">
+                        Operado por {airlineName}
                     </div>
                 </div>
-            </div>
-            <div className="space-y-6">
-                {itinerary.segments.map((segment, index) => {
-                    const isLastSegment = index === itinerary.segments.length - 1;
-                    let layoverDuration = '';
-                    if (!isLastSegment) {
-                        const nextSegment = itinerary.segments[index + 1];
-                        if (nextSegment) {
-                            const arrivalTime = parseISO(segment.arrival.at);
-                            const departureTime = parseISO(nextSegment.departure.at);
-                            const diffMs = departureTime.getTime() - arrivalTime.getTime();
-                            const hours = Math.floor(diffMs / 3600000);
-                            const minutes = Math.floor((diffMs % 3600000) / 60000);
-                            layoverDuration = `PT${hours}H${minutes}M`;
-                        }
-                    }
 
-                    return (
-                        <div key={segment.id}>
-                            <SegmentDetails segment={segment} dictionaries={dictionaries} />
-                            {!isLastSegment && (
-                                <div className="relative pl-8 py-4">
-                                    <div className="absolute left-[3px] top-0 flex flex-col items-center h-full">
-                                        <div className="flex-grow w-px bg-border"></div>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-sm font-semibold text-primary ml-[18px] bg-primary/10 px-3 py-1.5 rounded-lg">
-                                        <Clock className="w-4 h-4" />
-                                        <span>Escala en {segment.arrival.iataCode}: {formatDuration(layoverDuration)}</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )
-                })}
-                <div className="relative pl-8 h-1">
-                    <div className="absolute left-[3px] top-0 flex flex-col items-center">
-                        <div className="w-3 h-3 rounded-full bg-primary border-2 border-card ring-4 ring-card"></div>
-                    </div>
+                {/* QR Code Stub */}
+                <div className="bg-muted/40 w-32 flex-shrink-0 border-l-2 border-dashed border-border flex flex-col items-center justify-center p-4">
+                     <p className="font-headline font-bold text-sm mb-2 text-center">Boarding Pass</p>
+                     <div className="bg-white p-1 rounded-md shadow-inner">
+                        <QrCode className="w-16 h-16 text-black" />
+                     </div>
+                     <p className="text-xs font-mono mt-2 text-center">{firstSegment.carrierCode} {firstSegment.number}</p>
                 </div>
             </div>
         </Card>
@@ -136,9 +126,9 @@ const BaggageInfo = ({ flight }: { flight: FlightOffer }) => {
     const checkedBagText = baggage?.quantity > 0 ? `${baggage.quantity} maleta${baggage.quantity !== 1 ? 's' : ''} documentada${baggage.quantity !== 1 ? 's' : ''}` : 'Equipaje documentado no incluido';
 
     return (
-        <Card className="bg-card p-6 rounded-2xl shadow-sm">
+        <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
             <CardHeader className="p-0 mb-4">
-              <h3 className="font-headline font-bold text-xl">Equipaje Incluido</h3>
+              <h3 className="font-headline font-bold text-xl text-primary">Equipaje Incluido</h3>
             </CardHeader>
             <CardContent className="p-0 space-y-3 text-base">
                 <div className="flex items-center gap-3">
@@ -156,7 +146,7 @@ const BaggageInfo = ({ flight }: { flight: FlightOffer }) => {
 
 const PriceCard = ({ flight }: { flight: FlightOffer }) => {
     return (
-        <Card className="bg-card p-6 rounded-2xl shadow-sm">
+        <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
             <p className="text-sm text-muted-foreground">Precio total</p>
             <p className="text-4xl font-bold text-primary my-2">${flight.price.total}</p>
             <div className="flex flex-col gap-2 mt-4">
@@ -195,19 +185,19 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
             Seleccionar
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-gradient-to-br from-background via-secondary/20 to-background p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
           <DialogHeader className="p-6 pb-4">
-            <DialogTitle className="font-headline text-2xl">Detalles del Vuelo</DialogTitle>
+            <DialogTitle className="font-headline text-3xl">Detalles del Vuelo</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6 pt-0">
               <div className="md:col-span-7 space-y-6">
                   {flight.itineraries.map((itinerary, index) => (
-                      <ItineraryCard key={index} itinerary={itinerary} dictionaries={dictionaries} title={index === 0 ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}/>
+                      <BoardingPassCard key={index} itinerary={itinerary} dictionaries={dictionaries} title={index === 0 ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}/>
                   ))}
               </div>
               <div className="md:col-span-5 space-y-6">
-                  <BaggageInfo flight={flight} />
                   <PriceCard flight={flight} />
+                  <BaggageInfo flight={flight} />
               </div>
           </div>
       </DialogContent>
