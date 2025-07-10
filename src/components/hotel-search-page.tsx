@@ -346,14 +346,14 @@ export default function HotelSearchPage() {
                 {loading && isInitialSearch.current ? (
                   <Button
                     type="button"
-                    className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
+                    className="w-full font-bold rounded-xl bg-orange-500 hover:bg-orange-600 text-white"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
                     Cancelar
                   </Button>
                 ) : (
-                  <Button type="submit" className="w-full font-bold bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                  <Button type="submit" className="w-full font-bold bg-primary hover:bg-primary/90 rounded-xl shadow-md hover:shadow-lg transition-all">
                     Buscar
                   </Button>
                 )}

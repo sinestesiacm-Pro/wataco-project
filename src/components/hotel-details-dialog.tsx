@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -113,7 +112,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
               {details.offers?.[0]?.price?.total && (
                  <div>
                     <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
-                    <p className="font-bold text-2xl text-tertiary">
+                    <p className="font-bold text-2xl text-primary">
                       ${details.offers[0].price.total}
                     </p>
                  </div>

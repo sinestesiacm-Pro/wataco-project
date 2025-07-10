@@ -82,7 +82,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
               <div className="p-6 bg-muted/30 flex flex-col sm:flex-row justify-between items-center gap-4">
                  <div className="text-center sm:text-left">
                     <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
-                    <p className="font-bold text-3xl text-accent">
+                    <p className="font-bold text-3xl text-tertiary">
                       ${offer.offers?.[0]?.price?.total}
                     </p>
                 </div>
