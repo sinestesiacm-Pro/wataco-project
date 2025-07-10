@@ -125,13 +125,22 @@ export default function FlightSearchPage() {
         
         // Fetch full airport details to populate query inputs
         const [originAirport, destAirport] = await Promise.all([searchAirports(originParam), searchAirports(destinationParam)]);
+        
+        let tempOriginQuery = originParam;
         if (originAirport.success && originAirport.data?.[0]) {
-            setOriginQuery(`${originAirport.data[0].address?.cityName || originAirport.data[0].name}, ${originAirport.data[0].address?.countryName}`);
+            const airport = originAirport.data[0];
+            tempOriginQuery = `${airport.address?.cityName || airport.name}, ${airport.address?.countryName}`;
+            setOriginQuery(tempOriginQuery);
         }
+
+        let tempDestQuery = destinationParam;
         if (destAirport.success && destAirport.data?.[0]) {
-            setDestinationQuery(`${destAirport.data[0].address?.cityName || destAirport.data[0].name}, ${destAirport.data[0].address?.countryName}`);
+            const airport = destAirport.data[0];
+            tempDestQuery = `${airport.address?.cityName || airport.name}, ${airport.address?.countryName}`;
+            setDestinationQuery(tempDestQuery);
         }
         
+        // We must pass the queries to handleSearch for the loading animation
         await handleSearch({
           origin: originParam,
           destination: destinationParam,
@@ -331,7 +340,7 @@ export default function FlightSearchPage() {
                 </div>
 
                 <div className='lg:col-span-4 relative' ref={destinationRef}>
-                    <Label htmlFor="destination" className="text-sm font-semibold ml-2">A</Label>
+                    <Label htmlFor="destination" className="text-sm font-semibold ml-2">Hasta</Label>
                     <InputGroup>
                     <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
                     <Input id="destination" type="text" value={destinationQuery} 
