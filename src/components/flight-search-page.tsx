@@ -44,18 +44,34 @@ export default function FlightSearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const [origin, setOrigin] = useState('');
-  const [destination, setDestination] = useState('');
-  const [originQuery, setOriginQuery] = useState('');
-  const [destinationQuery, setDestinationQuery] = useState('');
+  const originUrl = searchParams.get('origin');
+  const destinationUrl = searchParams.get('destination');
+  const originQueryUrl = searchParams.get('origin_query');
+  const destinationQueryUrl = searchParams.get('destination_query');
+  const fromDateUrl = searchParams.get('from_date');
+  const toDateUrl = searchParams.get('to_date');
+  const adultsUrl = searchParams.get('adults');
+  const autosearchUrl = searchParams.get('autosearch');
+
+  const [origin, setOrigin] = useState(originUrl || '');
+  const [destination, setDestination] = useState(destinationUrl || '');
+  const [originQuery, setOriginQuery] = useState(originQueryUrl || '');
+  const [destinationQuery, setDestinationQuery] = useState(destinationQueryUrl ||'');
   
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: addDays(new Date(), 7),
-    to: addDays(new Date(), 14),
+  const [date, setDate] = useState<DateRange | undefined>(() => {
+    if (fromDateUrl) {
+      const from = parse(fromDateUrl, 'yyyy-MM-dd', new Date());
+      const to = toDateUrl ? parse(toDateUrl, 'yyyy-MM-dd', new Date()) : undefined;
+      return { from, to };
+    }
+    return {
+      from: addDays(new Date(), 7),
+      to: addDays(new Date(), 14),
+    }
   });
 
-  const [isRoundTrip, setIsRoundTrip] = useState(true);
-  const [adults, setAdults] = useState(1);
+  const [isRoundTrip, setIsRoundTrip] = useState(toDateUrl !== null);
+  const [adults, setAdults] = useState(adultsUrl ? parseInt(adultsUrl, 10) : 1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
   
@@ -72,18 +88,11 @@ export default function FlightSearchPage() {
   const destinationRef = useRef<HTMLDivElement>(null);
   const searchIdRef = useRef(0);
 
-  const originUrl = searchParams.get('origin');
-  const destinationUrl = searchParams.get('destination');
-  const originQueryUrl = searchParams.get('origin_query');
-  const destinationQueryUrl = searchParams.get('destination_query');
-  const fromDateUrl = searchParams.get('from_date');
-  const toDateUrl = searchParams.get('to_date');
-  const adultsUrl = searchParams.get('adults');
-  const autosearchUrl = searchParams.get('autosearch');
-
   const handleSearch = async (searchDetails: {
       origin: string;
       destination: string;
+      originQuery: string;
+      destinationQuery: string;
       departureDate: string;
       returnDate?: string;
       adults: number;
@@ -95,7 +104,15 @@ export default function FlightSearchPage() {
 
     const searchId = ++searchIdRef.current;
 
-    const result = await searchFlights(searchDetails);
+    const result = await searchFlights({
+      origin: searchDetails.origin,
+      destination: searchDetails.destination,
+      departureDate: searchDetails.departureDate,
+      returnDate: searchDetails.returnDate,
+      adults: searchDetails.adults,
+      children: searchDetails.children,
+      infants: searchDetails.infants,
+    });
 
     if (searchId !== searchIdRef.current) {
       return;
@@ -117,22 +134,14 @@ export default function FlightSearchPage() {
 
   useEffect(() => {
     if (autosearchUrl === 'true' && originUrl && destinationUrl && fromDateUrl) {
-      const fromDate = parse(fromDateUrl, 'yyyy-MM-dd', new Date());
-      const toDate = toDateUrl ? parse(toDateUrl, 'yyyy-MM-dd', new Date()) : undefined;
-
-      setOrigin(originUrl);
-      setDestination(destinationUrl);
-      setOriginQuery(originQueryUrl || originUrl);
-      setDestinationQuery(destinationQueryUrl || destinationUrl);
-      setDate({ from: fromDate, to: toDate });
-      setAdults(adultsUrl ? parseInt(adultsUrl, 10) : 1);
-      
       handleSearch({
         origin: originUrl,
         destination: destinationUrl,
-        departureDate: format(fromDate, 'yyyy-MM-dd'),
-        returnDate: toDate ? format(toDate, 'yyyy-MM-dd') : undefined,
-        adults: adultsUrl ? parseInt(adultsUrl, 10) : 1,
+        originQuery: originQuery,
+        destinationQuery: destinationQuery,
+        departureDate: fromDateUrl,
+        returnDate: toDateUrl || undefined,
+        adults: parseInt(adultsUrl || '1', 10),
         children: 0,
         infants: 0,
       });
@@ -140,7 +149,7 @@ export default function FlightSearchPage() {
       router.replace('/', { scroll: false });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [originUrl, destinationUrl, fromDateUrl, toDateUrl, adultsUrl, autosearchUrl]);
+  }, [autosearchUrl, originUrl, destinationUrl, fromDateUrl, toDateUrl, adultsUrl, router]);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
@@ -240,6 +249,8 @@ export default function FlightSearchPage() {
     handleSearch({
       origin,
       destination,
+      originQuery,
+      destinationQuery,
       departureDate: date.from ? format(date.from, 'yyyy-MM-dd') : '',
       returnDate: isRoundTrip && date.to ? format(date.to, 'yyyy-MM-dd') : undefined,
       adults,
@@ -487,3 +498,4 @@ export default function FlightSearchPage() {
     </div>
   );
 }
+
