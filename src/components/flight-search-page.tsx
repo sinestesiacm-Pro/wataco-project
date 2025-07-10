@@ -246,7 +246,7 @@ export default function FlightSearchPage() {
         title={<>Tu Próxima Aventura<br />te Espera</>}
         subtitle="Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo."
       >
-        <div className="bg-card/80 backdrop-blur-xl border p-4 sm:p-6 rounded-2xl shadow-2xl">
+        <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
           <form onSubmit={handleSearch} className="space-y-4">
              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
                 <div className="lg:col-span-12">
