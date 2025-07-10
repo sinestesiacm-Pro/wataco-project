@@ -30,7 +30,7 @@ const formatDate = (dateString: string) => {
 
 const SegmentDetails = ({ segment, dictionaries }: { segment: Segment, dictionaries: Dictionaries }) => {
     const airlineName = dictionaries.carriers[segment.carrierCode] || segment.carrierCode;
-    const aircraftName = dictionaries.aircraft[segment.aircraft.code] || `Aircraft ${segment.aircraft.code}`;
+    const aircraftName = dictionaries.aircraft[segment.g_code] || `Aircraft ${segment.aircraft.code}`;
     
     return (
         <div className="flex gap-4 items-start relative pl-8">
