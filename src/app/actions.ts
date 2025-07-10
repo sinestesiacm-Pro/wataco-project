@@ -76,7 +76,6 @@ const searchSchema = z.object({
   adults: z.number().int().min(1),
   children: z.number().int().min(0).optional(),
   infants: z.number().int().min(0).optional(),
-  travelClass: z.nativeEnum(['ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST']).optional(),
 });
 
 export async function searchFlights(params: {
@@ -87,7 +86,6 @@ export async function searchFlights(params: {
   adults: number,
   children?: number,
   infants?: number,
-  travelClass?: 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST';
 }): Promise<{ success: boolean; data?: FlightData; error?: string }> {
   
   const validation = searchSchema.safeParse(params);
@@ -95,7 +93,7 @@ export async function searchFlights(params: {
     return { success: false, error: 'Parámetros de búsqueda inválidos.' };
   }
 
-  const { origin, destination, departureDate, returnDate, adults, children, infants, travelClass } = validation.data;
+  const { origin, destination, departureDate, returnDate, adults, children, infants } = validation.data;
 
   try {
     const token = await getAmadeusToken();
@@ -119,10 +117,6 @@ export async function searchFlights(params: {
 
     if (infants && infants > 0) {
       searchParams.append('infants', infants.toString());
-    }
-
-    if (travelClass) {
-      searchParams.append('travelClass', travelClass);
     }
 
     const response = await fetch(`${AMADEUS_BASE_URL}/v2/shopping/flight-offers?${searchParams.toString()}`, {

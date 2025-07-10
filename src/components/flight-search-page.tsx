@@ -13,14 +13,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, X, Diamond } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Switch } from './ui/switch';
 import React from 'react';
 import type { DateRange } from 'react-day-picker';
 import { HeroSection } from './hero-section';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { FlightLoadingAnimation } from './flight-loading-animation';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
@@ -53,7 +52,6 @@ export default function FlightSearchPage() {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
-  const [travelClass, setTravelClass] = useState<'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST'>('ECONOMY');
   
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -176,7 +174,6 @@ export default function FlightSearchPage() {
       adults,
       children,
       infants,
-      travelClass,
     });
 
     if (searchId !== searchIdRef.current) {
@@ -332,7 +329,7 @@ export default function FlightSearchPage() {
                     </Popover>
                 </div>
                 
-                <div className='lg:col-span-5'>
+                <div className='lg:col-span-10'>
                     <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Pasajeros</Label>
                     <Popover>
                     <PopoverTrigger asChild>
@@ -400,23 +397,6 @@ export default function FlightSearchPage() {
                     </PopoverContent>
                     </Popover>
                 </div>
-
-                 <div className="lg:col-span-5">
-                    <Label htmlFor="travel-class" className="text-sm font-semibold ml-2">Clase</Label>
-                    <Select value={travelClass} onValueChange={(value) => setTravelClass(value as any)}>
-                        <SelectTrigger id="travel-class" className="mt-1">
-                            <Diamond className="mr-2 h-4 w-4" />
-                            <SelectValue placeholder="Clase" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="ECONOMY">Económica</SelectItem>
-                            <SelectItem value="PREMIUM_ECONOMY">Económica Premium</SelectItem>
-                            <SelectItem value="BUSINESS">Negocios</SelectItem>
-                            <SelectItem value="FIRST">Primera</SelectItem>
-                        </SelectContent>
-                    </Select>
-                 </div>
-
 
                 <div className="lg:col-span-2 flex items-end">
                     {loading ? (

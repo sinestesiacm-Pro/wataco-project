@@ -1,17 +1,20 @@
 'use client';
 
 import Image from 'next/image';
-import { FlightData, FlightOffer, Itinerary, Segment } from '@/lib/types';
+import { FlightData, FlightOffer, Itinerary } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PlaneTakeoff, PlaneLanding, Star, ArrowRight } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { AITravelTips } from './ai-travel-tips';
-
-interface FlightResultsProps {
-  flightData: FlightData;
-  destinationIata: string;
-}
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -24,35 +27,71 @@ const formatTime = (dateString: string) => {
 function ItineraryDetails({ itinerary, dictionaries }: { itinerary: Itinerary, dictionaries: FlightData['dictionaries'] }) {
   const firstSegment = itinerary.segments[0];
   const lastSegment = itinerary.segments[itinerary.segments.length - 1];
+  const airlineCode = firstSegment.carrierCode;
+  const airlineName = dictionaries.carriers[airlineCode] || airlineCode;
   
   return (
-    <div className="flex items-center justify-between w-full gap-4">
-      <div className="flex items-center gap-3 text-center">
-        <PlaneTakeoff className="w-5 h-5 text-primary" />
-        <div>
-          <p className="text-xl font-bold font-headline">{formatTime(firstSegment.departure.at)}</p>
-          <p className="text-sm font-semibold">{firstSegment.departure.iataCode}</p>
+    <div className="flex items-center gap-4 py-2">
+       <Image
+          src={`https://images.kiwi.com/airlines/64/${airlineCode}.png`}
+          alt={airlineName}
+          width={40}
+          height={40}
+          className="rounded-full bg-white p-1 shadow-md"
+        />
+        <div className="flex items-center gap-2">
+           <div className="text-center">
+              <p className="text-lg font-bold">{formatTime(firstSegment.departure.at)}</p>
+              <p className="text-sm font-semibold">{firstSegment.departure.iataCode}</p>
+           </div>
+           <ArrowRight className="w-4 h-4 text-muted-foreground" />
+            <div className="text-center">
+              <p className="text-lg font-bold">{formatTime(lastSegment.arrival.at)}</p>
+              <p className="text-sm font-semibold">{lastSegment.arrival.iataCode}</p>
+            </div>
         </div>
-      </div>
-      
-      <div className="flex-grow text-center">
-        <div className="text-xs text-muted-foreground">{formatDuration(itinerary.duration)}</div>
-        <div className="text-xs text-primary font-semibold">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</div>
-      </div>
-
-      <div className="flex items-center gap-3 text-center">
-         <div>
-          <p className="text-xl font-bold font-headline">{formatTime(lastSegment.arrival.at)}</p>
-          <p className="text-sm font-semibold">{lastSegment.arrival.iataCode}</p>
+        <div className="flex-grow text-center">
+            <p className="text-sm font-semibold">{formatDuration(itinerary.duration)}</p>
+            <p className="text-xs text-muted-foreground">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
         </div>
-        <PlaneLanding className="w-5 h-5 text-primary" />
-      </div>
     </div>
   )
 }
 
+function CabinSelector({ flight }: { flight: FlightOffer }) {
+    // Determine the cabin class from the first traveler's first fare detail
+    const cabin = flight.travelerPricings[0]?.fareDetailsBySegment[0]?.cabin || 'ECONOMY';
+    
+    // Helper to format cabin names for display
+    const formatCabinName = (cabin: string) => {
+        const name = cabin.replace('_', ' ').toLowerCase();
+        return name.charAt(0).toUpperCase() + name.slice(1);
+    }
 
-export function FlightResults({ flightData, destinationIata }: FlightResultsProps) {
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-full md:w-[180px] justify-between font-semibold">
+                    {formatCabinName(cabin)}
+                    <ChevronDown className="h-4 w-4 opacity-50" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[180px]">
+                <DropdownMenuLabel>Seleccionar Clase</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {/* For this demo, only the current option is enabled as API returns one class */}
+                <DropdownMenuRadioGroup value={cabin}>
+                    <DropdownMenuRadioItem value="ECONOMY" disabled={cabin !== 'ECONOMY'}>Económica</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="PREMIUM_ECONOMY" disabled={cabin !== 'PREMIUM_ECONOMY'}>Premium Economy</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="BUSINESS" disabled={cabin !== 'BUSINESS'}>Negocios</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="FIRST" disabled={cabin !== 'FIRST'}>Primera</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+
+export function FlightResults({ flightData, destinationIata }: { flightData: FlightData; destinationIata: string; }) {
   const { data: flights, dictionaries } = flightData;
   const destinationName = dictionaries.locations?.[destinationIata]?.cityCode;
 
@@ -67,61 +106,34 @@ export function FlightResults({ flightData, destinationIata }: FlightResultsProp
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-12 space-y-4">
-          {flights.map((flight, index) => {
-            const airlineCode = flight.validatingAirlineCodes[0];
-            const airlineName = dictionaries.carriers[airlineCode];
-            const isBestPrice = index === 0;
-
-            return (
-              <Card key={flight.id} className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl relative border bg-card/95 backdrop-blur-sm">
-                {isBestPrice && (
-                  <Badge variant="success" className="absolute top-4 -left-2 rounded-r-full rounded-l-none px-4 py-1.5 text-sm font-bold z-10 shadow-lg">
-                    <Star className="w-4 h-4 mr-1.5" /> Mejor Precio
-                  </Badge>
-                )}
-                <CardContent className="p-4 md:p-6 flex flex-col md:flex-row items-stretch gap-6">
-                  <div className="md:w-1/5 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r pb-4 md:pb-0 md:pr-6">
-                     <Image
-                        src={`https://images.kiwi.com/airlines/64/${airlineCode}.png`}
-                        alt={airlineName || airlineCode}
-                        width={48}
-                        height={48}
-                        className="rounded-full bg-white p-1 shadow-md mb-2"
-                      />
-                      <p className="font-semibold font-body text-center">{airlineName}</p>
-                      <p className="text-xs text-muted-foreground">{flight.oneWay ? 'Solo Ida' : 'Ida y Vuelta'}</p>
-                  </div>
-                  
-                  <div className="flex-grow w-full space-y-4">
-                      {flight.itineraries.map((itinerary, i) => (
-                        <div key={i}>
-                          <ItineraryDetails 
-                            itinerary={itinerary} 
-                            dictionaries={dictionaries} 
-                          />
-                        </div>
-                      ))}
-                  </div>
-                  
-                  <div className="md:w-1/4 w-full text-center md:text-right flex-shrink-0 flex flex-col justify-center items-center md:items-end mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l md:pl-6">
-                      <p className="text-4xl font-bold font-headline text-accent">${flight.price.total}</p>
-                      <p className="text-xs text-muted-foreground mb-3">Total para {flight.travelerPricings.length} pasajero(s)</p>
-                      <Button 
+      <div className="space-y-4">
+        {flights.map((flight) => (
+          <Card key={flight.id} className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border bg-card/95 backdrop-blur-sm">
+            <CardContent className="p-4 md:p-6 flex flex-col md:flex-row items-center gap-6">
+                <div className="w-full md:w-2/3 divide-y divide-border">
+                    {flight.itineraries.map((itinerary, i) => (
+                        <ItineraryDetails key={i} itinerary={itinerary} dictionaries={dictionaries} />
+                    ))}
+                </div>
+                
+                <div className="w-full md:w-1/3 flex flex-col items-center md:items-end gap-4">
+                    <CabinSelector flight={flight} />
+                    <div className="text-center md:text-right">
+                      <p className="text-3xl font-bold font-headline text-accent">${flight.price.total}</p>
+                      <p className="text-xs text-muted-foreground">Precio total, {flight.oneWay ? 'solo ida' : 'ida y vuelta'}</p>
+                    </div>
+                    <Button 
                         size="lg"
-                        className="w-full md:w-auto font-bold bg-accent hover:bg-accent/90 text-accent-foreground text-lg rounded-xl shadow-md hover:shadow-lg transition-all"
-                        onClick={() => alert(`Redirigiendo para reservar vuelo a ${flight.itineraries[0].segments[flight.itineraries[0].segments.length-1].arrival.iataCode}...`)}
-                      >
-                        Reservar Ahora
+                        className="w-full font-bold bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
+                        onClick={() => alert(`La funcionalidad de reserva no está implementada en esta demostración.`)}
+                    >
+                        Seleccionar
                         <ArrowRight className="ml-2 h-5 w-5"/>
-                      </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                    </Button>
+                </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );
