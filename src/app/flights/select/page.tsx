@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { searchFlights } from '@/app/actions';
-import type { FlightData, FlightOffer } from '@/lib/types';
+import type { FlightData, FlightOffer, Dictionaries } from '@/lib/types';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Loader2 } from 'lucide-react';
 import { FlightFilters } from '@/components/flight-filters';
@@ -12,6 +12,7 @@ import { FlightSelectionList } from '@/components/flight-selection-list';
 import { ReviewAndPay } from '@/components/review-and-pay';
 import { Card, CardContent } from '@/components/ui/card';
 import { FlightLoadingAnimation } from '@/components/flight-loading-animation';
+import { useDebounce } from '@/hooks/use-debounce';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
