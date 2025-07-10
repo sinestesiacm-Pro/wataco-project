@@ -32,14 +32,12 @@ interface RoomSelectionViewProps {
 }
 
 const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, onSelect: () => void, isRecommended: boolean }) => {
-    // Demo logic for cancellation and meal plan
     const isFreeCancellation = true; 
     const hasBreakfast = roomOffer.room.type !== 'STANDARD_ROOM';
-
     const [mealPlan, setMealPlan] = useState(hasBreakfast ? 'breakfast' : 'none');
 
     return (
-        <div className="flex flex-col md:flex-row border-t first:border-t-0 md:divide-x">
+        <div className="flex flex-col md:flex-row border-t first:border-t-0">
             {/* Options Column */}
             <div className="w-full md:w-1/2 p-4 space-y-4">
                 {isRecommended && (
@@ -81,7 +79,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
             
             {/* Price Column */}
             <div className="w-full md:w-1/2 p-4 flex flex-col justify-between bg-muted/30">
-                <div className="text-right mb-3">
+                <div className="text-right mb-4">
                     <p className="text-xs text-muted-foreground">Precio por noche</p>
                     <p className="text-3xl font-bold text-primary">${roomOffer.price.total}</p>
                     <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
@@ -89,21 +87,22 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
                 <Button size="lg" className="w-full" onClick={onSelect}>
                     Continuar
                 </Button>
+                
                  <div className="mt-4 text-left space-y-2 text-xs text-muted-foreground">
                     <div className="flex items-center gap-2">
-                        {isFreeCancellation ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4" />}
+                        {isFreeCancellation ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4 text-destructive" />}
                         <span>{isFreeCancellation ? 'Cancelación gratuita' : 'No reembolsable'}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                         {mealPlan === 'breakfast' ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4" />}
+                         {mealPlan === 'breakfast' ? <Coffee className="h-4 w-4 text-primary" /> : <Salad className="h-4 w-4 text-primary" />}
                          <span>{mealPlan === 'breakfast' ? 'Desayuno incluido' : 'Solo alojamiento'}</span>
                     </div>
                      <div className="flex items-center gap-2">
-                        <Info className="h-4 w-4" />
+                        <Info className="h-4 w-4 text-primary" />
                         <span>Paga ahora</span>
                      </div>
                       <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4" />
+                        <Users className="h-4 w-4 text-primary" />
                         <span>Tarifa para 2 huéspedes</span>
                      </div>
                 </div>
@@ -175,7 +174,6 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack }: RoomSe
 
             {/* Options & Price Wrapper */}
             <div className="md:col-span-7 flex flex-col">
-                {/* For this demo, we'll simulate one option per room type. A real app would map over different rate plans for the same room type. */}
                 <RoomOption roomOffer={roomOffer} onSelect={() => onRoomSelected(roomOffer)} isRecommended={index === 0} />
             </div>
 
