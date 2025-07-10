@@ -4,18 +4,16 @@ import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import type { AmadeusHotelOffer } from '@/lib/types';
-import { BedDouble, CheckCircle, Star } from 'lucide-react';
+import { BedDouble, CheckCircle, Star, MapPin } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Badge } from './ui/badge';
 import { Card } from './ui/card';
+import { HotelMapDialog } from './hotel-map-dialog';
 
 
 interface HotelDetailsDialogProps {
@@ -28,25 +26,26 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
   
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button size="lg" className="bg-primary hover:bg-primary/90">
-          <BedDouble className="mr-2 h-4 w-4" />
-          Ver Oferta
-        </Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
         {details ? (
           <>
-            <DialogHeader className="p-6 pb-4">
-              <DialogTitle className="font-headline text-2xl">{details.hotel.name}</DialogTitle>
-              {details.hotel.rating && (
-                <div className="flex items-center">
-                    {[...Array(parseInt(details.hotel.rating))].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
-                    ))}
-                </div>
-              )}
-            </DialogHeader>
+            <div className="p-6 pb-4">
+              <h2 className="font-headline text-2xl">{details.hotel.name}</h2>
+              <div className="flex items-center gap-4 mt-2">
+                  {details.hotel.rating && (
+                    <div className="flex items-center">
+                        {[...Array(parseInt(details.hotel.rating))].map((_, i) => (
+                            <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
+                        ))}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <MapPin className="w-4 h-4" />
+                    <span>{details.hotel.address.cityName}, {details.hotel.address.countryCode}</span>
+                  </div>
+                   <HotelMapDialog hotelName={details.hotel.name || 'Ubicación'} />
+              </div>
+            </div>
             
             <ScrollArea className="overflow-y-auto">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 pt-0">
