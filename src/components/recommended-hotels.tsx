@@ -31,7 +31,7 @@ export function RecommendedHotels() {
             </div>
             <CardContent className="p-4 flex justify-between items-center bg-card">
               <p className="text-sm text-muted-foreground font-body">
-                Desde <span className="font-bold text-lg text-accent">${hotel.price}</span>/noche
+                Desde <span className="font-bold text-lg text-tertiary">${hotel.price}</span>/noche
               </p>
               <Button size="sm" variant="secondary">
                 <BedDouble className="mr-1.5 h-4 w-4" />

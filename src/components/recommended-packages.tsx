@@ -32,7 +32,7 @@ export function RecommendedPackages() {
               <p className="text-sm text-muted-foreground mb-4 flex-grow">{pkg.description}</p>
               <div className="flex justify-between items-center">
                  <p className="text-sm text-muted-foreground font-body">
-                    Desde <span className="font-bold text-lg text-accent">${pkg.price}</span>
+                    Desde <span className="font-bold text-lg text-tertiary">${pkg.price}</span>
                   </p>
                 <Button variant="secondary">
                   <Luggage className="mr-2 h-4 w-4" />

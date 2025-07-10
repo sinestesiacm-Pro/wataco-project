@@ -30,7 +30,7 @@ export function RecommendedCruises() {
               </div>
             </div>
             <CardContent className="p-4 flex justify-between items-center bg-card">
-                <p className="font-bold text-md text-accent">{cruise.duration}</p>
+                <p className="font-bold text-md text-muted-foreground">{cruise.duration}</p>
                 <Button variant="secondary">
                   <Ship className="mr-2 h-4 w-4" />
                   Ver Crucero

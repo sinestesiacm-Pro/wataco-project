@@ -66,7 +66,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                 </div>
                 <CardContent className="p-4 flex justify-between items-center bg-card">
                   <p className="text-sm text-muted-foreground font-body">
-                    Vuelos desde <span className="font-bold text-lg text-accent">${dest.priceFrom}</span>
+                    Vuelos desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
                   </p>
                   <Button 
                     size="sm" 

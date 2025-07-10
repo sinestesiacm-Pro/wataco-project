@@ -91,7 +91,7 @@ export function PackagesResults({ packagesData }: PackagesResultsProps) {
                     <div className="flex justify-between items-center mt-4">
                         <div>
                             <p className="text-xs text-muted-foreground">Precio del paquete por persona</p>
-                            <p className="text-3xl font-bold font-headline text-accent">
+                            <p className="text-3xl font-bold font-headline text-tertiary">
                                ${pkg.price.total}
                             </p>
                         </div>

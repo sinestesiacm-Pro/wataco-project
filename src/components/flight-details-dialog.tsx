@@ -148,7 +148,7 @@ const PriceCard = ({ flight }: { flight: FlightOffer }) => {
     return (
         <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
             <p className="text-sm text-muted-foreground">Precio total</p>
-            <p className="text-4xl font-bold text-primary my-2">${flight.price.total}</p>
+            <p className="text-4xl font-bold text-tertiary my-2">${flight.price.total}</p>
             <div className="flex flex-col gap-2 mt-4">
                 <Button
                     className="w-full bg-blue-500 hover:bg-blue-600"
