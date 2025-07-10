@@ -110,7 +110,7 @@ export default function CruiseSearchPage() {
         title="Embárcate en tu Próxima Aventura"
         subtitle="Descubre y reserva increíbles vacaciones en crucero por todo el mundo."
       >
-        <div className="bg-card/80 backdrop-blur-md border p-4 sm:p-6 rounded-2xl shadow-2xl">
+        <div className="bg-card/60 backdrop-blur-md border p-4 sm:p-6 rounded-2xl shadow-2xl">
           <form onSubmit={handleSearch} className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
               <div className='lg:col-span-5'>
