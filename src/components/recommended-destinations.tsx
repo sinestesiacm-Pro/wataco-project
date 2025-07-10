@@ -29,7 +29,7 @@ const destinationsByContinent = {
 
 const DestinationWindow = ({ dest, onClick }: { dest: typeof destinationsByContinent.Europa[0], onClick: () => void }) => (
     <div
-        className="airplane-window"
+        className="airplane-window animate-in fade-in slide-in-from-bottom-5 duration-500"
         onClick={onClick}
     >
         <div className="airplane-window-inner-bevel">
@@ -75,10 +75,10 @@ export function RecommendedDestinations() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 mt-12">
       <div className="text-center">
-        <h2 className="text-3xl font-headline font-bold text-gray-800">Inspira tu Próximo Viaje</h2>
-        <p className="text-muted-foreground mt-2">Descubre destinos populares para despertar tus ideas de viaje.</p>
+        <h2 className="text-4xl font-headline font-bold text-gray-800">Inspira tu Próximo Viaje</h2>
+        <p className="text-lg text-muted-foreground mt-2">Descubre destinos populares para despertar tus ideas de viaje.</p>
       </div>
 
       <Tabs defaultValue="Europa" className="w-full">
