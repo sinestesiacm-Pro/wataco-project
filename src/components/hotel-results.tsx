@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Star, MapPin } from 'lucide-react';
 import type { AmadeusHotelOffer } from '@/lib/types';
-import { HotelDetailsDialog } from './hotel-details-dialog';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
+import { HotelResultPopover } from './hotel-result-popover';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
@@ -86,9 +86,7 @@ export function HotelResults({ hotels }: HotelResultsProps) {
                       ${offer.offers?.[0]?.price?.total}
                     </p>
                 </div>
-                <HotelDetailsDialog
-                  offer={offer}
-                />
+                <HotelResultPopover offer={offer} />
               </div>
             </div>
         </Card>

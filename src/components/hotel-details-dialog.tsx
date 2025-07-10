@@ -4,6 +4,7 @@ import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import type { AmadeusHotelOffer } from '@/lib/types';
@@ -18,14 +19,18 @@ import { HotelMapDialog } from './hotel-map-dialog';
 
 interface HotelDetailsDialogProps {
   offer: AmadeusHotelOffer;
+  children: React.ReactNode;
 }
 
-export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
+export function HotelDetailsDialog({ offer, children }: HotelDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const details = offer;
   
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
         {details ? (
           <>
