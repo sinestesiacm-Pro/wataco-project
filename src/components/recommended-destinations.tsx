@@ -3,7 +3,8 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Globe } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ArrowRight } from 'lucide-react';
 
 interface RecommendedDestinationsProps {
   setDestination: (destination: { iata: string; query: string }) => void;
@@ -30,15 +31,45 @@ const destinationsByContinent = {
   ],
 };
 
-const ContinentDivider = ({ name }: { name: string; }) => (
-    <div className="relative flex items-center justify-center my-16 animate-in fade-in slide-in-from-bottom-5 duration-500">
-      <div className="flex-grow h-px bg-gray-200"></div>
-      <h2 className="flex-shrink-0 px-8 text-3xl font-headline font-semibold text-gray-800 flex items-center justify-center gap-3">
-        {name}
-      </h2>
-      <div className="flex-grow h-px bg-gray-200"></div>
+const DestinationWindow = ({ dest, onClick }: { dest: typeof destinationsByContinent.Europa[0], onClick: () => void }) => (
+    <div
+        className="airplane-window"
+        onClick={onClick}
+    >
+        <div className="airplane-window-inner-bevel">
+        <div className="airplane-window-view">
+            <Image
+                src={dest.image}
+                data-ai-hint={dest.hint}
+                alt={dest.city}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+            <div className="airplane-window-shade" />
+            <div className="airplane-window-content">
+                <div>
+                <h3 className="text-2xl font-bold font-headline text-white">{dest.city}</h3>
+                <p className="text-sm text-white/80 -mt-1">{dest.country}</p>
+                </div>
+                <div className="flex justify-between items-end w-full mt-4">
+                    <p className="text-sm text-white/90 font-body">
+                        Desde <span className="font-bold text-xl text-tertiary">${dest.priceFrom}</span>
+                    </p>
+                    <Button 
+                        size="sm" 
+                        variant="secondary"
+                        className="bg-white/20 hover:bg-white/30 text-white rounded-full pointer-events-none text-xs"
+                    >
+                        Ver Vuelos
+                        <ArrowRight className="ml-1.5 h-3 w-3" />
+                    </Button>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
-  );
+);
+
 
 export function RecommendedDestinations({ setDestination }: RecommendedDestinationsProps) {
   return (
@@ -48,60 +79,30 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
         <p className="text-muted-foreground mt-2">Descubre destinos populares para despertar tus ideas de viaje.</p>
       </div>
 
-      {Object.entries(destinationsByContinent).map(([continent, destinations]) => {
-        return (
-          <div key={continent} className="space-y-8">
-            <ContinentDivider name={continent} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
-              {destinations.map((dest) => (
-                <div
-                  key={dest.iata}
-                  className="airplane-window"
-                  onClick={() => {
-                    const query = `${dest.city}, ${dest.country}`;
-                    setDestination({ iata: dest.iata, query });
-                  }}
-                >
-                  <div className="airplane-window-inner-bevel">
-                    <div className="airplane-window-view">
-                      <Image
-                          src={dest.image}
-                          data-ai-hint={dest.hint}
-                          alt={dest.city}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                      <div className="airplane-window-shade" />
-                      <div className="airplane-window-content">
-                          <div>
-                            <h3 className="text-2xl font-bold font-headline text-white">{dest.city}</h3>
-                            <p className="text-sm text-white/80 -mt-1">{dest.country}</p>
-                          </div>
-                          <div className="flex justify-between items-end w-full mt-4">
-                              <p className="text-sm text-white/90 font-body">
-                                  Desde <span className="font-bold text-xl text-tertiary">${dest.priceFrom}</span>
-                              </p>
-                              <Button 
-                                  size="sm" 
-                                  variant="secondary"
-                                  className="bg-white/20 hover:bg-white/30 text-white rounded-full pointer-events-none text-xs"
-                              >
-                                  Ver Vuelos
-                                  <ArrowRight className="ml-1.5 h-3 w-3" />
-                              </Button>
-                          </div>
-                      </div>
-                    </div>
-                  </div>
+      <Tabs defaultValue="Europa" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 max-w-lg mx-auto bg-card/80 backdrop-blur-sm">
+            {Object.keys(destinationsByContinent).map(continent => (
+                 <TabsTrigger key={continent} value={continent}>{continent}</TabsTrigger>
+            ))}
+        </TabsList>
+        
+        {Object.entries(destinationsByContinent).map(([continent, destinations]) => (
+            <TabsContent key={continent} value={continent} className="data-[state=active]:animate-in data-[state=active]:fade-in-50 duration-500">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 mt-12">
+                    {destinations.map((dest) => (
+                        <DestinationWindow 
+                            key={dest.iata}
+                            dest={dest}
+                            onClick={() => {
+                                const query = `${dest.city}, ${dest.country}`;
+                                setDestination({ iata: dest.iata, query });
+                            }}
+                        />
+                    ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        )
-      })}
+            </TabsContent>
+        ))}
+      </Tabs>
     </div>
   );
 }
-
-
-

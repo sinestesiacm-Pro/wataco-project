@@ -6,6 +6,10 @@ import { ActivitiesSection } from '@/components/activities-section';
 import { TestimonialsSection } from '@/components/testimonials-section';
 import { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
+import { RecommendedDestinations } from '@/components/recommended-destinations';
+import { RecommendedHotels } from '@/components/recommended-hotels';
+import { RecommendedPackages } from '@/components/recommended-packages';
+import { RecommendedCruises } from '@/components/recommended-cruises';
 
 function PageContent({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -29,7 +33,28 @@ function PageContent({ tab }: { tab?: string }) {
   }
 }
 
+function RecommendedContent({ tab }: { tab?: string }) {
+  const activeTab = tab || 'Flights';
+
+  switch (activeTab) {
+    case 'Hotels':
+      return <RecommendedHotels />;
+    case 'Packages':
+      return <RecommendedPackages />;
+    case 'Cruises':
+      return <RecommendedCruises />;
+    case 'Flights':
+    default:
+      // A placeholder as FlightSearchPage handles its own recommendations
+      // We pass a dummy setDestination to avoid prop errors.
+      return <RecommendedDestinations setDestination={() => {}} />;
+  }
+}
+
+
 export default function Home({ searchParams }: { searchParams?: { tab?: string } }) {
+  const isFlightSearch = !searchParams?.tab || searchParams.tab === 'Flights';
+
   return (
     <>
       <Suspense fallback={
@@ -39,7 +64,19 @@ export default function Home({ searchParams }: { searchParams?: { tab?: string }
       }>
         <PageContent tab={searchParams?.tab} />
       </Suspense>
-      <TestimonialsSection />
+
+      {/* Render recommendations outside of the main search page if not on Flights tab */}
+      {!isFlightSearch && (
+        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <RecommendedContent tab={searchParams?.tab} />
+        </div>
+      )}
+      
+      <div className="fuselage-background">
+        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 relative z-10">
+          <TestimonialsSection />
+        </div>
+      </div>
     </>
   );
 }

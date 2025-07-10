@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { addDays, format } from 'date-fns';
@@ -431,9 +432,11 @@ export default function FlightSearchPage() {
             <FlightResults flightData={flightData} destinationIata={destination} />
           )}
           {!loading && !flightData && (
-             <>
-                <RecommendedDestinations setDestination={handleSetRecommendedDestination} />
-             </>
+             <div className="fuselage-background -mx-4 sm:-mx-6 lg:-mx-8">
+                <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 relative z-10">
+                    <RecommendedDestinations setDestination={handleSetRecommendedDestination} />
+                </div>
+              </div>
           )}
         </section>
       </div>
