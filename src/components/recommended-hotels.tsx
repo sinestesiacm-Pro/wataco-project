@@ -19,10 +19,10 @@ const hotelsByCategory = {
     { name: 'Resort de Montaña y Spa', city: 'Bariloche, Argentina', price: '280', image: 'https://images.unsplash.com/photo-1542314831-068cd1dbb563?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMHNwYSUyMHJlc29ydHxlbnwwfHx8fDE3NTIzOTY4OTB8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'mountain spa resort' },
   ],
   "Apartamentos": [
-    { name: 'Apartamento Moderno con Terraza', city: 'Medellín, Colombia', price: '90', image: 'https://images.unsplash.com/photo-1678891527680-7bb2a6155cde?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBhcGFydG1lbnQlMjBjaXR5fGVufDB8fHx8MTc1MjA4MzA2NXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'modern apartment city' },
-    { name: 'Cabaña Rústica en el Bosque', city: 'Bariloche, Argentina', price: '150', image: 'https://images.unsplash.com/photo-1621287638669-def225e5b610?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmb3Jlc3QlMjBjYWJpbnxlbnwwfHx8fDE3NTIyMzQyOTB8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'forest cabin' },
-    { name: 'Loft en Distrito de Arte', city: 'Miami, USA', price: '180', image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcnQlMjBkaXN0cmljdCUyMGxvZnR8ZW58MHx8fHwxNzUyMzk2OTMwfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'art district loft' },
-    { name: 'Apartamento con Vista a la Ciudad', city: 'Santiago, Chile', price: '100', image: 'https://images.unsplash.com/photo-1604108415419-2cb79477e613?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcGFydG1lbnQlMjBjaXR5JTIwdmlld3xlbnwwfHx8fDE3NTIzOTY5NTB8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'apartment city view' },
+    { name: 'Apartamento Moderno con Terraza', city: 'Medellín, Colombia', price: '90', image: 'https://images.unsplash.com/photo-1732998139753-b19877e0c181?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBhcGFydG1lbnQlMjBjaXR5fGVufDB8fHx8MTc1MjA4MzA2NXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'modern apartment city' },
+    { name: 'Cabaña Rústica en el Bosque', city: 'Bariloche, Argentina', price: '150', image: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmb3Jlc3QlMjBjYWJpbnxlbnwwfHx8fDE3NTIxNjkzNjd8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'forest cabin' },
+    { name: 'Loft en Distrito de Arte', city: 'Miami, USA', price: '180', image: 'https://images.unsplash.com/photo-1573760464283-3ba64302271f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcnQlMjBkaXN0cmljdCUyMGxvZnR8ZW58MHx8fHwxNzUyMTY5MzY3fDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'art district loft' },
+    { name: 'Apartamento con Vista a la Ciudad', city: 'Santiago, Chile', price: '100', image: 'https://images.unsplash.com/photo-1511963039483-c8c419fa95db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxhcGFydG1lbnQlMjBjaXR5JTIwdmlld3xlbnwwfHx8fDE3NTIxNjkzNjd8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'apartment city view' },
   ]
 };
 
@@ -80,7 +80,7 @@ export function RecommendedHotels() {
         
         {Object.entries(hotelsByCategory).map(([category, hotels]) => (
             <TabsContent key={category} value={category} className="data-[state=active]:animate-in data-[state=active]:fade-in-50 duration-500">
-                 <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
+                 <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4 mask-fade">
                     {hotels.map((hotel, index) => (
                         <HotelWindow key={index} hotel={hotel} />
                     ))}
