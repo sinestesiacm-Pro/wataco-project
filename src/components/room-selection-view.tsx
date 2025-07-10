@@ -5,9 +5,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
-import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, Info, XCircle, Star, Users, BedDouble, Square, ShieldCheck, Coffee } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, Info, XCircle, Star, Users, BedDouble, Square, ShieldCheck, Coffee, Salad, Wine } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+import { Label } from './ui/label';
+import { useState } from 'react';
 
 const roomAmenityIcons: { [key: string]: LucideIcon } = {
   WIFI: Wifi,
@@ -33,43 +36,51 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
     const isFreeCancellation = true; 
     const hasBreakfast = roomOffer.room.type !== 'STANDARD_ROOM';
 
+    const [mealPlan, setMealPlan] = useState(hasBreakfast ? 'breakfast' : 'none');
+
     return (
-        <div className="flex flex-col md:flex-row border-t first:border-t-0">
+        <div className="flex flex-col md:flex-row border-t first:border-t-0 md:divide-x">
             {/* Options Column */}
-            <div className="w-full md:w-5/12 p-4 space-y-3">
+            <div className="w-full md:w-1/2 p-4 space-y-4">
                 {isRecommended && (
                     <Badge variant="default" className="bg-accent hover:bg-accent/90 mb-2">
                         <Star className="mr-2 h-4 w-4 fill-white" /> Recomendado
                     </Badge>
                 )}
-                <div className="flex items-center gap-2 text-green-600 font-semibold">
+                 <div className="flex items-center gap-2 text-green-600 font-semibold">
                     <CheckCircle2 className="h-5 w-5" />
                     <span>{isFreeCancellation ? 'Cancelación gratuita (hasta 24h antes)' : 'No reembolsable'}</span>
                 </div>
                 
-                <Separator className="my-4"/>
+                <Separator />
 
                 <div>
-                <p className="font-semibold text-sm mb-2">Extras incluidos:</p>
-                <div className="space-y-2">
-                    {hasBreakfast ? (
-                         <div className="flex items-center gap-2 text-muted-foreground">
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
-                            <span>Desayuno incluido</span>
+                    <p className="font-semibold text-sm mb-3">Elige tu régimen de comidas:</p>
+                    <RadioGroup value={mealPlan} onValueChange={setMealPlan}>
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="breakfast" id={`breakfast-${roomOffer.id}`} disabled={!hasBreakfast} />
+                            <Label htmlFor={`breakfast-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground has-[:disabled]:opacity-50">
+                               <Coffee className="h-4 w-4"/> Desayuno incluido
+                            </Label>
                         </div>
-                    ) : (
-                         <div className="flex items-center gap-2 text-muted-foreground">
-                            <XCircle className="h-5 w-5" />
-                            <span>No incluye plan de comidas</span>
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="none" id={`none-${roomOffer.id}`} />
+                            <Label htmlFor={`none-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground">
+                               <Salad className="h-4 w-4"/> Solo alojamiento
+                            </Label>
                         </div>
-                    )}
+                         <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="all-inclusive" id={`all-${roomOffer.id}`} disabled/>
+                            <Label htmlFor={`all-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground has-[:disabled]:opacity-50">
+                               <Wine className="h-4 w-4"/> Todo Incluido <span className="text-xs">(+ $150.00)</span>
+                            </Label>
+                        </div>
+                    </RadioGroup>
                 </div>
-                </div>
-                
             </div>
             
             {/* Price Column */}
-            <div className="w-full md:w-7/12 p-4 flex flex-col justify-between bg-muted/30">
+            <div className="w-full md:w-1/2 p-4 flex flex-col justify-between bg-muted/30">
                 <div className="text-right mb-3">
                     <p className="text-xs text-muted-foreground">Precio por noche</p>
                     <p className="text-3xl font-bold text-primary">${roomOffer.price.total}</p>
@@ -78,32 +89,22 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
                 <Button size="lg" className="w-full" onClick={onSelect}>
                     Continuar
                 </Button>
-                 <div className="mt-4 text-left space-y-1">
-                    {isFreeCancellation ? (
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <CheckCircle2 className="h-4 w-4 text-green-600" />
-                            <span>Cancelación gratuita</span>
-                        </div>
-                    ) : (
-                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <XCircle className="h-4 w-4" />
-                            <span>No reembolsable</span>
-                        </div>
-                    )}
-                     {hasBreakfast ? (
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <Coffee className="h-4 w-4" />
-                            <span>Desayuno incluido</span>
-                        </div>
-                     ) : (
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <Coffee className="h-4 w-4" />
-                            <span>Solo alojamiento</span>
-                        </div>
-                     )}
-                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                 <div className="mt-4 text-left space-y-2 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                        {isFreeCancellation ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4" />}
+                        <span>{isFreeCancellation ? 'Cancelación gratuita' : 'No reembolsable'}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                         {mealPlan === 'breakfast' ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4" />}
+                         <span>{mealPlan === 'breakfast' ? 'Desayuno incluido' : 'Solo alojamiento'}</span>
+                    </div>
+                     <div className="flex items-center gap-2">
                         <Info className="h-4 w-4" />
                         <span>Paga ahora</span>
+                     </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4" />
+                        <span>Tarifa para 2 huéspedes</span>
                      </div>
                 </div>
             </div>
@@ -129,8 +130,8 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack }: RoomSe
         <div className="hidden md:grid grid-cols-12 px-4 text-sm font-semibold text-muted-foreground uppercase">
             <div className="col-span-5">Tipo de Habitación</div>
             <div className="col-span-7 grid grid-cols-12">
-                <div className="col-span-5">Opciones</div>
-                <div className="col-span-7 text-right pr-4">Precio</div>
+                <div className="col-span-6">Opciones</div>
+                <div className="col-span-6 text-right pr-4">Precio</div>
             </div>
         </div>
 
