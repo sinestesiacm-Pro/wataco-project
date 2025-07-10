@@ -39,7 +39,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
 
       {Object.entries(destinationsByContinent).map(([continent, destinations]) => (
         <div key={continent} className="space-y-6">
-          <h3 className="text-2xl font-bold font-headline text-gray-700 border-b-2 border-primary/20 pb-2">
+          <h3 className="text-2xl font-bold font-headline text-gray-700 pb-2 bg-gradient-to-b from-transparent to-black/5 shadow-b-sm">
             {continent}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
