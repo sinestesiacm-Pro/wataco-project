@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Globe } from 'lucide-react';
 
 interface RecommendedDestinationsProps {
   setDestination: (destination: { iata: string; query: string }) => void;
@@ -30,18 +30,13 @@ const destinationsByContinent = {
   ],
 };
 
-const ContinentDivider = ({ name, image, hint }: { name: string; image: string; hint: string }) => (
-    <div className="relative group w-full h-32 my-12 rounded-2xl shadow-lg overflow-hidden">
-      <Image
-        src={image}
-        alt={`Divider for ${name}`}
-        data-ai-hint={hint}
-        fill
-        className="object-cover blur group-hover:blur-none transition-all duration-300"
-      />
-      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-        <h2 className="text-4xl font-headline font-bold text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}>{name}</h2>
-      </div>
+const ContinentDivider = ({ name }: { name: string; }) => (
+    <div className="text-center my-16 animate-in fade-in slide-in-from-bottom-5 duration-500">
+      <h2 className="text-3xl font-headline font-bold text-gray-800 flex items-center justify-center gap-3">
+        <Globe className="w-7 h-7 text-primary/80" />
+        {name}
+      </h2>
+      <hr className="w-1/2 mx-auto mt-4 border-gray-200" />
     </div>
   );
 
@@ -54,21 +49,9 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
       </div>
 
       {Object.entries(destinationsByContinent).map(([continent, destinations]) => {
-        let dividerImage, dividerHint;
-        if (continent === "Europa") {
-          dividerImage = "https://images.unsplash.com/photo-1734791187323-fd59d37ef358?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxldXJvcGUlMjBsYW5kbWFya3N8ZW58MHx8fHwxNzUyMTU0MDY4fDA&ixlib=rb-4.1.0&q=80&w=1080";
-          dividerHint = "europe landmarks";
-        } else if (continent === "América del Sur") {
-          dividerImage = "https://images.unsplash.com/photo-1670761624726-c6f3bb48f575?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwYXRhZ29uaWElMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzUyMTU0MDY4fDA&ixlib=rb-4.1.0&q=80&w=1080";
-          dividerHint = "patagonia landscape";
-        } else { // Asia
-          dividerImage = "https://images.unsplash.com/photo-1532236395709-7d70320fec2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8YXNpYXxlbnwwfHx8fDE3NTIxNTU3NDh8MA&ixlib=rb-4.1.0&q=80&w=1080";
-          dividerHint = "japan temple";
-        }
-        
         return (
           <div key={continent} className="space-y-8">
-            <ContinentDivider name={continent} image={dividerImage} hint={dividerHint} />
+            <ContinentDivider name={continent} />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
               {destinations.map((dest) => (
                 <div
@@ -119,3 +102,4 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
     </div>
   );
 }
+
