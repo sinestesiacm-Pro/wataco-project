@@ -15,7 +15,16 @@ function HotelDetailPageContent({ id }: { id: string }) {
   const adults = searchParams.get('adults') || '1';
   const children = searchParams.get('children') || '0';
 
-  const backLinkHref = `/hotels/search?${searchParams.toString()}`;
+  // We build a new URLSearchParams object to ensure it's up-to-date
+  const backSearchParams = new URLSearchParams();
+  if (searchParams.get('cityCode')) backSearchParams.set('cityCode', searchParams.get('cityCode')!);
+  if (searchParams.get('checkInDate')) backSearchParams.set('checkInDate', searchParams.get('checkInDate')!);
+  if (searchParams.get('checkOutDate')) backSearchParams.set('checkOutDate', searchParams.get('checkOutDate')!);
+  if (adults) backSearchParams.set('adults', adults);
+  if (children) backSearchParams.set('children', children);
+  if (destinationName) backSearchParams.set('destinationName', destinationName);
+
+  const backLinkHref = `/hotels/search?${backSearchParams.toString()}`;
 
   return (
     <div className="w-full bg-muted/20 min-h-[calc(100vh-80px)]">
@@ -36,7 +45,6 @@ function HotelDetailPageContent({ id }: { id: string }) {
   );
 }
 
-// This is the Server Component that fetches data and handles params
 export default function HotelDetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
 
