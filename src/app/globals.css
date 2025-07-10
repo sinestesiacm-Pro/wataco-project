@@ -246,24 +246,24 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: 60%; /* Initially covers the bottom part */
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 100%);
-    opacity: 1;
-    transition: opacity 0.4s ease-in, transform 0.5s cubic-bezier(0.86, 0, 0.07, 1);
-    z-index: 2;
+    right: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    text-align: center;
-    padding: 1rem 1.5rem 2rem;
+    padding: 2rem 1.5rem 1.5rem;
     color: white;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out, transform 0.4s ease-in-out;
+    z-index: 2;
+    transform: translateY(0);
 }
 
 .airplane-window:hover .airplane-window-shade {
     opacity: 0;
     transform: translateY(100%);
+    transition-delay: 0s, 0s;
 }
 
 .airplane-window-content {
@@ -271,12 +271,17 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1rem 1.5rem 2rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 2rem 1.5rem 1.5rem;
     color: white;
-    z-index: 1;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
     opacity: 0;
-    transition: opacity 0.4s 0.2s ease-in;
+    transition: opacity 0.3s ease-in-out;
+    transition-delay: 0.2s;
+    z-index: 1;
 }
 
 .airplane-window:hover .airplane-window-content {
