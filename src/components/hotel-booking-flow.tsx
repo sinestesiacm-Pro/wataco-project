@@ -7,6 +7,7 @@ import { Loader2 } from 'lucide-react';
 import { HotelDetailsView } from './hotel-details-view';
 import { RoomSelectionView } from './room-selection-view';
 import { CheckoutView } from './checkout-view';
+import { useSearchParams } from 'next/navigation';
 
 type BookingStep = 'details' | 'rooms' | 'checkout';
 
@@ -15,11 +16,15 @@ interface HotelBookingFlowProps {
 }
 
 export function HotelBookingFlow({ offerId }: HotelBookingFlowProps) {
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<BookingStep>('details');
   const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const adults = parseInt(searchParams.get('adults') || '1', 10);
+  const children = parseInt(searchParams.get('children') || '0', 10);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -79,13 +84,13 @@ export function HotelBookingFlow({ offerId }: HotelBookingFlowProps) {
       case 'details':
         return <HotelDetailsView hotelOffer={hotelOffer} onSeeRooms={handleSelectRooms} />;
       case 'rooms':
-        return <RoomSelectionView hotelOffer={hotelOffer} onRoomSelected={handleRoomSelected} onBack={handleBackToDetails} />;
+        return <RoomSelectionView hotelOffer={hotelOffer} onRoomSelected={handleRoomSelected} onBack={handleBackToDetails} adults={adults} children={children} />;
       case 'checkout':
         if (!selectedRoom) {
             // This should not happen in normal flow, but it's a good fallback
             return <p>Error: No se ha seleccionado ninguna habitación. <Button onClick={handleBackToRooms}>Volver</Button></p>
         }
-        return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRoom} />;
+        return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} />;
       default:
         return null;
     }

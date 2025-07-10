@@ -1,21 +1,25 @@
 
+'use client'
+
 import { Suspense, use } from 'react';
 import { Loader2 } from "lucide-react";
 import { HotelBookingFlow } from '@/components/hotel-booking-flow';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
-// This is the Client Component part of the page
-// It receives the `id` as a prop from the server component
 function HotelDetailPageContent({ id }: { id: string }) {
-  'use client';
-  
+  const searchParams = useSearchParams();
+  const destinationName = searchParams.get('destinationName') || 'tu destino';
+
+  const backLinkHref = `/hotels/search?${searchParams.toString()}`;
+
   return (
     <div className="w-full bg-muted/20 min-h-[calc(100vh-80px)]">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <Button asChild variant="outline" className="mb-6 bg-background">
-          <Link href="/?tab=Hotels">
+          <Link href={backLinkHref}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a la Búsqueda
           </Link>
@@ -26,9 +30,8 @@ function HotelDetailPageContent({ id }: { id: string }) {
   );
 }
 
-
 // This is the Server Component that fetches data and handles params
-export default function HotelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function HotelDetailPage({ params }: { params: { id: string } }) {
   const { id } = use(params);
 
   return (

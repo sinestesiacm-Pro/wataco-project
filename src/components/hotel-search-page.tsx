@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, Minus, Plus, MapPin, BedDouble, X } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, Minus, Plus, MapPin, BedDouble, X, Baby } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,7 @@ import React from 'react';
 import { Card, CardContent } from './ui/card';
 import type { DateRange } from 'react-day-picker';
 import { HeroSection } from './hero-section';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex items-center">{children}</div>
@@ -44,6 +45,9 @@ const hotelImages = [
 ];
 
 export default function HotelSearchPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [destination, setDestination] = useState<Airport | null>(null);
   const [destinationQuery, setDestinationQuery] = useState('');
   
@@ -52,6 +56,7 @@ export default function HotelSearchPage() {
     to: addDays(new Date(), 14),
   });
   const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
   
   const [hotelData, setHotelData] = useState<AmadeusHotelOffer[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -181,8 +186,16 @@ export default function HotelSearchPage() {
         });
         return;
       }
-      isInitialSearch.current = true;
-      handleSearch();
+      // Instead of calling handleSearch directly, we navigate to the details page with search params
+      const params = new URLSearchParams({
+        cityCode: destination.iataCode,
+        checkInDate: format(date.from, 'yyyy-MM-dd'),
+        checkOutDate: format(date.to, 'yyyy-MM-dd'),
+        adults: adults.toString(),
+        children: children.toString(),
+        destinationName: destinationQuery,
+      });
+      router.push(`/hotels/search?${params.toString()}`);
   }
 
   const handleFilterChange = useCallback((newFilters: HotelFiltersState) => {
@@ -211,7 +224,9 @@ export default function HotelSearchPage() {
     </div>
   );
   
-  const travelerText = `${adults} adulto${adults > 1 ? 's' : ''}`;
+  const totalGuests = adults + children;
+  const travelerText = `${totalGuests} huésped${totalGuests > 1 ? 'es' : ''}`;
+
 
   const SuggestionsList = () => (
     <div className="absolute z-20 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
@@ -319,12 +334,12 @@ export default function HotelSearchPage() {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-80" align="end">
-                    <div className="grid gap-4">
+                     <div className="grid gap-4">
                       <div className="space-y-2">
-                        <h4 className="font-medium leading-none">Adultos</h4>
-                        <p className="text-sm text-muted-foreground">Selecciona el número de adultos.</p>
+                        <h4 className="font-medium leading-none">Huéspedes</h4>
+                        <p className="text-sm text-muted-foreground">Selecciona el número de huéspedes.</p>
                       </div>
-                      <div className="grid gap-4">
+                       <div className="grid gap-4">
                         <div className="flex items-center justify-between">
                           <p className="font-medium">Adultos</p>
                           <div className="flex items-center gap-2">
@@ -337,26 +352,30 @@ export default function HotelSearchPage() {
                             </Button>
                           </div>
                         </div>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Baby className="h-5 w-5" />
+                            <p className="font-medium">Niños</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="font-bold text-lg w-4 text-center">{children}</span>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => v + 1)}>
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </PopoverContent>
                 </Popover>
               </div>
               <div className="lg:col-span-2 flex items-end">
-                {loading && isInitialSearch.current ? (
-                  <Button
-                    type="button"
-                    className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
-                    onClick={handleCancelSearch}
-                  >
-                    <X className="mr-2 h-5 w-5" />
-                    Cancelar
-                  </Button>
-                ) : (
-                  <Button type="submit" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                <Button type="submit" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
                     Buscar
-                  </Button>
-                )}
+                </Button>
               </div>
             </div>
           </form>
@@ -365,32 +384,13 @@ export default function HotelSearchPage() {
       
       <div className="max-w-7xl mx-auto py-0 px-4 sm:px-6 lg:px-8">
         <section className="mt-8">
-          {loading && hotelData === null && <LoadingSkeleton />}
-          
           {hotelData !== null && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-3">
                 <HotelFilters onFilterChange={handleFilterChange} />
               </div>
               <div className="lg:col-span-9">
-                {loading ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
-                        {[...Array(6)].map((_, i) => (
-                            <Skeleton key={i} className="h-96 w-full rounded-2xl" />
-                        ))}
-                    </div>
-                ) : (
-                    hotelData.length > 0 ? (
-                        <HotelResults hotels={hotelData} />
-                    ) : (
-                        <Card>
-                            <CardContent className="pt-6 text-center text-muted-foreground">
-                                <p>No se encontraron hoteles para tu búsqueda.</p>
-                                <p>Intenta ajustar los filtros o buscar otro destino.</p>
-                            </CardContent>
-                        </Card>
-                    )
-                )}
+                 <HotelResults hotels={hotelData} />
               </div>
             </div>
           )}

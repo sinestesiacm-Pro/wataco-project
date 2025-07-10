@@ -5,20 +5,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
-import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, Info, XCircle, Star, Users, BedDouble, Square, ShieldCheck, Coffee, Salad, Wine } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, XCircle, Star, Users, BedDouble, Square, Coffee, Salad, Wine, Building } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Label } from './ui/label';
 import { useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+
 
 const roomAmenityIcons: { [key: string]: LucideIcon } = {
   WIFI: Wifi,
   MINIBAR: Utensils,
-  SAFE: ShieldCheck,
-  BALCONY: Tv,
+  SAFE: Tv, // Placeholder, no hay icono 'SAFE'
+  BALCONY: Tv, // Placeholder
   KITCHENETTE: Utensils,
-  DESK: Tv,
+  DESK: Tv, // Placeholder
 };
 
 const formatAmenity = (amenity: string) => {
@@ -29,52 +31,60 @@ interface RoomSelectionViewProps {
   hotelOffer: AmadeusHotelOffer;
   onRoomSelected: (room: Room) => void;
   onBack: () => void;
+  adults: number;
+  children: number;
 }
 
-const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, onSelect: () => void, isRecommended: boolean }) => {
+const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { roomOffer: Room, onSelect: () => void, isRecommended: boolean, adults: number, children: number }) => {
     const isFreeCancellation = true; 
     const hasBreakfast = roomOffer.room.type !== 'STANDARD_ROOM';
     const [mealPlan, setMealPlan] = useState(hasBreakfast ? 'breakfast' : 'none');
 
+    const totalGuests = adults + children;
+    const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
+
     return (
         <div className="flex flex-col md:flex-row border-t first:border-t-0 flex-grow">
             {/* Options Column */}
-            <div className="w-full md:w-1/2 p-4 space-y-4">
-                {isRecommended && (
-                    <Badge variant="default" className="bg-accent hover:bg-accent/90 mb-2">
-                        <Star className="mr-2 h-4 w-4 fill-white" /> Recomendado
-                    </Badge>
-                )}
-                 <div className="flex items-center gap-2 text-green-600 font-semibold">
-                    <CheckCircle2 className="h-5 w-5" />
-                    <span>{isFreeCancellation ? 'Cancelación gratuita (hasta 24h antes)' : 'No reembolsable'}</span>
-                </div>
-                
-                <Separator />
+            <div className="w-full md:w-1/2 p-4 flex flex-col">
+                 <div className="space-y-4">
+                    {isRecommended && (
+                        <Badge variant="default" className="bg-accent hover:bg-accent/90 mb-2">
+                            <Star className="mr-2 h-4 w-4 fill-white" /> Recomendado
+                        </Badge>
+                    )}
+                     <div className="flex items-center gap-2 text-green-600 font-semibold">
+                        <CheckCircle2 className="h-5 w-5" />
+                        <span>{isFreeCancellation ? 'Cancelación gratuita (hasta 24h antes)' : 'No reembolsable'}</span>
+                    </div>
+                    
+                    <Separator />
 
-                <div>
-                    <p className="font-semibold text-sm mb-3">Elige tu régimen de comidas:</p>
-                    <RadioGroup value={mealPlan} onValueChange={setMealPlan}>
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="breakfast" id={`breakfast-${roomOffer.id}`} disabled={!hasBreakfast} />
-                            <Label htmlFor={`breakfast-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground has-[:disabled]:opacity-50">
-                               <Coffee className="h-4 w-4"/> Desayuno incluido
-                            </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="none" id={`none-${roomOffer.id}`} />
-                            <Label htmlFor={`none-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground">
-                               <Salad className="h-4 w-4"/> Solo alojamiento
-                            </Label>
-                        </div>
-                         <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="all-inclusive" id={`all-${roomOffer.id}`} disabled/>
-                            <Label htmlFor={`all-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground has-[:disabled]:opacity-50">
-                               <Wine className="h-4 w-4"/> Todo Incluido <span className="text-xs">(+ $150.00)</span>
-                            </Label>
-                        </div>
-                    </RadioGroup>
-                </div>
+                    <div>
+                        <p className="font-semibold text-sm mb-3">Elige tu régimen de comidas:</p>
+                        <RadioGroup value={mealPlan} onValueChange={setMealPlan}>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="breakfast" id={`breakfast-${roomOffer.id}`} disabled={!hasBreakfast} />
+                                <Label htmlFor={`breakfast-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground has-[:disabled]:opacity-50">
+                                   <Coffee className="h-4 w-4"/> Desayuno incluido
+                                </Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="none" id={`none-${roomOffer.id}`} />
+                                <Label htmlFor={`none-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground">
+                                   <Salad className="h-4 w-4"/> Solo alojamiento
+                                </Label>
+                            </div>
+                             <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="all-inclusive" id={`all-${roomOffer.id}`} disabled/>
+                                <Label htmlFor={`all-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground has-[:disabled]:opacity-50">
+                                   <Wine className="h-4 w-4"/> Todo Incluido <span className="text-xs">(+ $150.00)</span>
+                                </Label>
+                            </div>
+                        </RadioGroup>
+                    </div>
+                 </div>
+                 <div className="flex-grow"></div>
             </div>
             
             {/* Price Column */}
@@ -84,11 +94,25 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
                     <p className="text-3xl font-bold text-primary">${roomOffer.price.total}</p>
                     <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
                 </div>
-                 <div className="mt-auto pt-4">
+                
+                 <div className="mt-auto pt-4 flex flex-col gap-4">
+                    <div>
+                        <Label className="text-xs font-semibold">Habitaciones</Label>
+                        <Select defaultValue="1">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1 habitación</SelectItem>
+                            <SelectItem value="2">2 habitaciones</SelectItem>
+                            <SelectItem value="3">3 habitaciones</SelectItem>
+                          </SelectContent>
+                        </Select>
+                    </div>
                     <Button size="lg" className="w-full" onClick={onSelect}>
                         Continuar
                     </Button>
-                    <div className="mt-4 text-left space-y-2 text-xs text-muted-foreground">
+                    <div className="mt-2 text-left space-y-2 text-xs text-muted-foreground">
                         <div className="flex items-center gap-2">
                             {isFreeCancellation ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4 text-destructive" />}
                             <span>{isFreeCancellation ? 'Cancelación gratuita' : 'No reembolsable'}</span>
@@ -98,12 +122,8 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
                             <span>{mealPlan === 'breakfast' ? 'Desayuno incluido' : 'Solo alojamiento'}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Info className="h-4 w-4 text-primary" />
-                            <span>Paga ahora</span>
-                        </div>
-                        <div className="flex items-center gap-2">
                             <Users className="h-4 w-4 text-primary" />
-                            <span>Tarifa para 2 huéspedes</span>
+                            <span>Tarifa para {guestsText}</span>
                         </div>
                     </div>
                  </div>
@@ -113,7 +133,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
 };
 
 
-export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack }: RoomSelectionViewProps) {
+export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack, adults, children }: RoomSelectionViewProps) {
   const rooms = hotelOffer.offers;
 
   return (
@@ -175,7 +195,13 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack }: RoomSe
 
             {/* Options & Price Wrapper */}
             <div className="md:col-span-7 flex flex-col">
-                <RoomOption roomOffer={roomOffer} onSelect={() => onRoomSelected(roomOffer)} isRecommended={index === 0} />
+                <RoomOption 
+                    roomOffer={roomOffer} 
+                    onSelect={() => onRoomSelected(roomOffer)} 
+                    isRecommended={index === 0}
+                    adults={adults}
+                    children={children}
+                />
             </div>
 
           </div>

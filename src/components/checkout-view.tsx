@@ -1,4 +1,5 @@
 
+
 'use client';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -15,7 +16,6 @@ import { format, differenceInDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { Icons } from './icons';
 
 const checkoutSchema = z.object({
   firstName: z.string().min(2, 'El nombre es requerido'),
@@ -33,13 +33,15 @@ const checkoutSchema = z.object({
   path: ['confirmEmail'],
 });
 
-const BookingSummary = ({ hotelOffer, selectedRoom }: { hotelOffer: AmadeusHotelOffer, selectedRoom: Room }) => {
+const BookingSummary = ({ hotelOffer, selectedRoom, adults, children }: { hotelOffer: AmadeusHotelOffer, selectedRoom: Room, adults: number, children: number }) => {
     const checkInDate = hotelOffer.offers[0].checkInDate;
     const checkOutDate = hotelOffer.offers[0].checkOutDate;
     const nights = differenceInDays(new Date(checkOutDate), new Date(checkInDate));
     const price = parseFloat(selectedRoom.price.total);
     const taxes = price * 0.19; // Simulate 19% tax
     const total = price + taxes;
+    
+    const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
 
     return (
         <Card className="sticky top-28 shadow-lg">
@@ -60,6 +62,7 @@ const BookingSummary = ({ hotelOffer, selectedRoom }: { hotelOffer: AmadeusHotel
                 <div>
                     <p><strong>Check-in:</strong> {format(new Date(checkInDate), 'd MMM, yyyy', { locale: es })}</p>
                     <p><strong>Check-out:</strong> {format(new Date(checkOutDate), 'd MMM, yyyy', { locale: es })}</p>
+                    <p><strong>Huéspedes:</strong> {guestsText}</p>
                     <p><strong>Noches:</strong> {nights}</p>
                 </div>
                 <Separator />
@@ -86,9 +89,11 @@ const BookingSummary = ({ hotelOffer, selectedRoom }: { hotelOffer: AmadeusHotel
 interface CheckoutViewProps {
   hotelOffer: AmadeusHotelOffer;
   selectedRoom: Room;
+  adults: number;
+  children: number;
 }
 
-export function CheckoutView({ hotelOffer, selectedRoom }: CheckoutViewProps) {
+export function CheckoutView({ hotelOffer, selectedRoom, adults, children }: CheckoutViewProps) {
   const { toast } = useToast();
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(checkoutSchema),
@@ -255,7 +260,7 @@ export function CheckoutView({ hotelOffer, selectedRoom }: CheckoutViewProps) {
                 </div>
             </div>
             <div className="lg:col-span-1">
-                <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} />
+                <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} />
             </div>
         </div>
     </form>

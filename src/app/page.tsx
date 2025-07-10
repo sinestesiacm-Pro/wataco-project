@@ -1,3 +1,5 @@
+'use client';
+
 import FlightSearchPage from '@/components/flight-search-page';
 import HotelSearchPage from '@/components/hotel-search-page';
 import PackagesSearchPage from '@/components/packages-search-page';
@@ -10,6 +12,7 @@ import { RecommendedDestinations } from '@/components/recommended-destinations';
 import { RecommendedHotels } from '@/components/recommended-hotels';
 import { RecommendedPackages } from '@/components/recommended-packages';
 import { RecommendedCruises } from '@/components/recommended-cruises';
+import { useSearchParams } from 'next/navigation';
 
 function PageContent({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -49,26 +52,34 @@ function RecommendedContent({ tab }: { tab?: string }) {
   }
 }
 
+function HomePageContent() {
+    const searchParams = useSearchParams();
+    const tab = searchParams.get('tab');
 
-export default function Home({ searchParams }: { searchParams?: { tab?: string } }) {
+    return (
+        <>
+            <PageContent tab={tab ?? undefined} />
+      
+            <div className="bg-card pt-0 pb-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 fuselage-gradient">
+                    <RecommendedContent tab={tab ?? undefined} />
+                </div>
+            </div>
+
+            <TestimonialsSection />
+        </>
+    )
+}
+
+
+export default function Home() {
   return (
-    // Suspense boundary wraps the dynamic content to handle loading states gracefully
     <Suspense fallback={
         <div className="flex items-center justify-center min-h-[calc(100vh-20rem)]">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
       }>
-      <PageContent tab={searchParams?.tab} />
-      
-      <div className="bg-card pt-0 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 fuselage-gradient">
-            <RecommendedContent tab={searchParams?.tab} />
-        </div>
-      </div>
-
-      <TestimonialsSection />
+      <HomePageContent />
     </Suspense>
   );
 }
-
-    
