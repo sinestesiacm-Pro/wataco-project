@@ -270,7 +270,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1rem 1.5rem; /* Increased horizontal padding */
+    padding: 1rem 1.5rem 2rem;
     background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 100%);
     color: white;
     z-index: 1;
