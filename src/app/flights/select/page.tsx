@@ -95,6 +95,7 @@ function FlightSelectionPage() {
   };
 
   const applyFilters = (flights: FlightOffer[]) => {
+    if (!filters) return flights;
     return flights.filter(flight => {
         // Stops filter
         const stopCount = flight.itineraries[0].segments.length - 1;
@@ -199,8 +200,8 @@ function FlightSelectionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cover bg-center" style={{backgroundImage: "url('/gradient-mesh-background.svg')"}}>
-      <div className="min-h-screen bg-background/60 backdrop-blur-xl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-green-50 to-orange-100 dark:from-blue-900/30 dark:via-green-900/30 dark:to-orange-900/30">
+      <div className="min-h-screen bg-background/60 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <BookingProgressHeader 
               step={step} 
