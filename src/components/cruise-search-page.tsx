@@ -17,10 +17,10 @@ import { RecommendedCruises } from './recommended-cruises';
 import { HeroSection } from './hero-section';
 
 const cruiseImages = [
-  'https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0cmF2ZWwlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc1MjE1NzAxMHww&ixlib=rb-4.1.0&q=80&w=1080',
-  'https://images.unsplash.com/photo-1626460189233-7c6d5cc04ff8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx0cmF2ZWwlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc1MjE1NzAxMHww&ixlib=rb-4.1.0&q=80&w=1080',
-  'https://images.unsplash.com/photo-1494783367193-149034c05e8f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0cmF2ZWwlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc1MjE1NzAxMHww&ixlib=rb-4.1.0&q=80&w=1080',
-  'https://images.unsplash.com/photo-1494783367193-149034c05e8f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0cmF2ZWwlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc1MjE1NzAxMHww&ixlib=rb-4.1.0&q=80&w=1080',
+  'https://images.unsplash.com/photo-1540340061722-9293d5163008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjdXJpc2UlMjBzaGlwfGVufDB8fHx8MTc1MjE1NzI4MHww&ixlib=rb-4.1.0&q=80&w=1080',
+  'https://images.unsplash.com/photo-1599827551381-e2a4a75a898b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjdXJpc2UlMjBzaGlwfGVufDB8fHx8MTc1MjE1NzI4MHww&ixlib=rb-4.1.0&q=80&w=1080',
+  'https://images.unsplash.com/photo-1621361253013-b5133d2663d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjdXJpc2UlMjBzaGlwfGVufDB8fHx8MTc1MjE1NzI4MHww&ixlib=rb-4.1.0&q=80&w=1080',
+  'https://images.unsplash.com/photo-1606114933589-a9a7a0a03379?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjdXJpc2UlMjBzaGlwfGVufDB8fHx8MTc1MjE1NzI4MHww&ixlib=rb-4.1.0&q=80&w=1080',
 ];
 
 export default function CruiseSearchPage() {
