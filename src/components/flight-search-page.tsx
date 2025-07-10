@@ -44,18 +44,32 @@ export default function FlightSearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [origin, setOrigin] = useState('MAD');
-  const [destination, setDestination] = useState('');
-  const [originQuery, setOriginQuery] = useState('Madrid, Spain');
-  const [destinationQuery, setDestinationQuery] = useState('');
+  // Initialize with URL params or empty strings
+  const [origin, setOrigin] = useState(() => searchParams.get('origin') || '');
+  const [destination, setDestination] = useState(() => searchParams.get('destination') || '');
+  const [originQuery, setOriginQuery] = useState(() => searchParams.get('origin_query') || '');
+  const [destinationQuery, setDestinationQuery] = useState(() => searchParams.get('destination_query') || '');
   
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: addDays(new Date(), 7),
-    to: addDays(new Date(), 14),
+  const [date, setDate] = useState<DateRange | undefined>(() => {
+    const fromDateParam = searchParams.get('from_date');
+    const toDateParam = searchParams.get('to_date');
+    if (fromDateParam && toDateParam) {
+      return {
+        from: parse(fromDateParam, 'yyyy-MM-dd', new Date()),
+        to: parse(toDateParam, 'yyyy-MM-dd', new Date()),
+      };
+    }
+    return {
+      from: addDays(new Date(), 7),
+      to: addDays(new Date(), 14),
+    };
   });
 
   const [isRoundTrip, setIsRoundTrip] = useState(true);
-  const [adults, setAdults] = useState(1);
+  const [adults, setAdults] = useState(() => {
+      const adultsParam = searchParams.get('adults');
+      return adultsParam ? parseInt(adultsParam, 10) : 1;
+  });
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
   
@@ -108,58 +122,24 @@ export default function FlightSearchPage() {
 
   useEffect(() => {
     const autoSearch = async () => {
-      const originParam = searchParams.get('origin');
-      const destinationParam = searchParams.get('destination');
-      const fromDateParam = searchParams.get('from_date');
-      const toDateParam = searchParams.get('to_date');
-      const adultsParam = searchParams.get('adults');
       const shouldSearch = searchParams.get('autosearch') === 'true';
-
-      if (shouldSearch && originParam && destinationParam && fromDateParam && toDateParam && adultsParam) {
-        
-        const fromDate = parse(fromDateParam, 'yyyy-MM-dd', new Date());
-        const toDate = parse(toDateParam, 'yyyy-MM-dd', new Date());
-        const adultsNum = parseInt(adultsParam, 10);
-        
-        setOrigin(originParam);
-        setDestination(destinationParam);
-        setDate({ from: fromDate, to: toDate });
-        setAdults(adultsNum);
-        
-        // Fetch full airport details to populate query inputs
-        const [originAirport, destAirport] = await Promise.all([searchAirports(originParam), searchAirports(destinationParam)]);
-        
-        let tempOriginQuery = originParam;
-        if (originAirport.success && originAirport.data?.[0]) {
-            const airport = originAirport.data[0];
-            tempOriginQuery = `${airport.address?.cityName || airport.name}, ${airport.address?.countryName}`;
-            setOriginQuery(tempOriginQuery); // Update state here
-        }
-
-        let tempDestQuery = destinationParam;
-        if (destAirport.success && destAirport.data?.[0]) {
-            const airport = destAirport.data[0];
-            tempDestQuery = `${airport.address?.cityName || airport.name}, ${airport.address?.countryName}`;
-            setDestinationQuery(tempDestQuery); // Update state here
-        }
-        
+      if (shouldSearch && origin && destination && date?.from && date?.to) {
         await handleSearch({
-          origin: originParam,
-          destination: destinationParam,
-          departureDate: fromDateParam,
-          returnDate: toDateParam,
-          adults: adultsNum,
-          children: 0,
-          infants: 0
+          origin,
+          destination,
+          departureDate: format(date.from, 'yyyy-MM-dd'),
+          returnDate: format(date.to, 'yyyy-MM-dd'),
+          adults,
+          children,
+          infants,
         });
-
         // Clean URL after search
         router.replace('/', undefined);
       }
     };
     autoSearch();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
