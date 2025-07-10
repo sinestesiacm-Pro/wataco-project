@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -30,8 +30,9 @@ function CruiseDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function CruiseDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
+  
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">

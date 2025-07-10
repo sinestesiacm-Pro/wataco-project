@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Loader2 } from "lucide-react";
 import { HotelBookingFlow } from '@/components/hotel-booking-flow';
 import { Button } from '@/components/ui/button';
@@ -45,8 +45,8 @@ function HotelDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function HotelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
 
   return (
     <Suspense fallback={
