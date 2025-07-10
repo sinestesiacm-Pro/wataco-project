@@ -33,7 +33,7 @@ export function RecommendedCruises() {
                   <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="airplane-window-content">
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col items-center gap-2">
                       <p className="font-bold text-md text-white/90">{cruise.duration}</p>
                       <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
                           <Ship className="mr-2 h-4 w-4" />

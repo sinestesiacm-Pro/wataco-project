@@ -65,7 +65,7 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
                     <MoveUp className="h-6 w-6 mt-4 opacity-50 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <div className="airplane-window-content">
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col items-center gap-2">
                         <p className="text-sm text-white/90 font-body">
                             Desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
                         </p>
