@@ -77,7 +77,7 @@ export function RecommendedDestinations() {
   };
 
   return (
-    <div className="space-y-8 mt-12">
+    <div className="space-y-8 mt-8">
       <div className="text-center">
         <h2 className="text-4xl font-headline font-bold text-gray-800">Inspira tu Próximo Viaje</h2>
         <p className="text-lg text-muted-foreground mt-2">Descubre destinos populares para despertar tus ideas de viaje.</p>
@@ -92,7 +92,7 @@ export function RecommendedDestinations() {
         
         {Object.entries(destinationsByContinent).map(([continent, destinations]) => (
             <TabsContent key={continent} value={continent} className="data-[state=active]:animate-in data-[state=active]:fade-in-50 duration-500">
-                 <div className="flex space-x-8 pb-4 mt-12 overflow-x-auto scrollbar-hide -mx-4 px-4">
+                 <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
                     {destinations.map((dest) => (
                         <DestinationWindow 
                             key={dest.iata}
