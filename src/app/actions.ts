@@ -159,6 +159,116 @@ export async function searchHotelDestinations(keyword: string): Promise<{ succes
     return { success: true, data: filteredData };
 }
 
+const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
+    {
+      type: 'hotel-offer',
+      id: 'HB001',
+      hotel: {
+        hotelId: 'HB1',
+        name: 'The Grand Resort',
+        rating: '5',
+        media: [
+          { uri: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?fit=crop&w=800&q=80', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?fit=crop&w=800&q=80', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?fit=crop&w=800&q=80', category: 'ROOM' },
+        ],
+        address: { lines: ['123 Luxury Ave'], postalCode: '33139', cityName: 'Miami Beach', countryCode: 'US' },
+        description: { lang: 'es', text: 'Experimenta el máximo lujo en The Grand Resort, donde un servicio impecable y vistas impresionantes al océano te esperan. Disfruta de nuestra piscina infinita, spa de clase mundial y opciones gastronómicas gourmet.' },
+        amenities: ['SWIMMING_POOL', 'SPA', 'WIFI', 'FITNESS_CENTER', 'RESTAURANT', 'PARKING']
+      },
+      available: true,
+      offers: [{
+        id: 'offer-1',
+        checkInDate: '2024-10-10',
+        checkOutDate: '2024-10-15',
+        price: { currency: 'USD', total: '475.00', base: '420.00' },
+        room: { type: 'DELUXE_ROOM', description: { text: 'Suite con vista al mar y balcón privado.' }, amenities: ['WIFI', 'MINIBAR', 'SAFE'] }
+      },{
+        id: 'offer-1-standard',
+        checkInDate: '2024-10-10',
+        checkOutDate: '2024-10-15',
+        price: { currency: 'USD', total: '350.00', base: '300.00' },
+        room: { type: 'STANDARD_ROOM', description: { text: 'Habitación estándar con vistas al jardín.' }, amenities: ['WIFI', 'SAFE'] }
+      }]
+    },
+    {
+      type: 'hotel-offer',
+      id: 'HB002',
+      hotel: {
+        hotelId: 'HB2',
+        name: 'City Center Boutique Hotel',
+        rating: '4',
+        media: [
+          { uri: 'https://images.unsplash.com/photo-1568495248636-6432b97bd949?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1590490360181-a75d1f88a652?fit=crop&w=800&q=80', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=800&q=80', category: 'ROOM' },
+        ],
+        address: { lines: ['456 Central St'], postalCode: '10001', cityName: 'New York', countryCode: 'US' },
+        description: { lang: 'es', text: 'Ubicado en el corazón de la acción, nuestro hotel boutique ofrece un diseño elegante y un ambiente acogedor. Perfecto para viajeros de negocios y de placer que buscan explorar la ciudad.' },
+        amenities: ['WIFI', 'RESTAURANT', 'BAR', 'AIR_CONDITIONING']
+      },
+      available: true,
+      offers: [{
+        id: 'offer-2',
+        checkInDate: '2024-10-10',
+        checkOutDate: '2024-10-15',
+        price: { currency: 'USD', total: '320.00', base: '280.00' },
+        room: { type: 'DOUBLE_ROOM', description: { text: 'Habitación doble estándar con escritorio.' }, amenities: ['WIFI', 'DESK'] }
+      }]
+    },
+    {
+      type: 'hotel-offer',
+      id: 'HB003',
+      hotel: {
+        hotelId: 'HB3',
+        name: 'Mountain View Lodge',
+        rating: '3',
+        media: [
+            { uri: 'https://images.unsplash.com/photo-1575586232388-26154f2c8f8a?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+            { uri: 'https://images.unsplash.com/photo-1616594039964-ae9124a35e23?fit=crop&w=800&q=80', category: 'VIEW' },
+            { uri: 'https://images.unsplash.com/photo-1598928922559-052a3539818d?fit=crop&w=800&q=80', category: 'ROOM' },
+        ],
+        address: { lines: ['789 Peak Rd'], postalCode: '80202', cityName: 'Denver', countryCode: 'US' },
+        description: { lang: 'es', text: 'Escápate a la tranquilidad de las montañas. Nuestro albergue rústico ofrece un refugio acogedor con fácil acceso a rutas de senderismo y esquí. Disfruta de la chimenea en nuestra sala común.' },
+        amenities: ['PARKING', 'WIFI', 'PETS_ALLOWED']
+      },
+      available: true,
+      offers: [{
+        id: 'offer-3',
+        checkInDate: '2024-10-10',
+        checkOutDate: '2024-10-15',
+        price: { currency: 'USD', total: '150.00', base: '130.00' },
+        room: { type: 'CABIN', description: { text: 'Cabaña acogedora con cocina pequeña.' }, amenities: ['KITCHENETTE', 'WIFI'] }
+      }]
+    },
+     {
+      type: 'hotel-offer',
+      id: 'HB004',
+      hotel: {
+        hotelId: 'HB4',
+        name: 'Playa Paraiso All-Inclusive',
+        rating: '5',
+        media: [
+          { uri: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?fit=crop&w=800&q=80', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=800&q=80', category: 'BEACH' },
+          { uri: 'https://images.unsplash.com/photo-1559539343-a8c63ce577b8?fit=crop&w=800&q=80', category: 'RESTAURANT' },
+        ],
+        address: { lines: ['1 Paradise Beach'], postalCode: '77710', cityName: 'Playa del Carmen', countryCode: 'MX' },
+        description: { lang: 'es', text: 'Sumérgete en el paraíso en nuestro resort todo incluido. Con múltiples piscinas, restaurantes y acceso directo a una playa de arena blanca, tus vacaciones de ensueño comienzan aquí.' },
+        amenities: ['SWIMMING_POOL', 'RESTAURANT', 'BAR', 'AIR_CONDITIONING', 'BEACH_ACCESS']
+      },
+      available: true,
+      offers: [{
+        id: 'offer-4',
+        checkInDate: '2024-10-10',
+        checkOutDate: '2024-10-15',
+        price: { currency: 'USD', total: '380.00', base: '350.00' },
+        room: { type: 'JUNIOR_SUITE', description: { text: 'Junior Suite con todo incluido.' }, amenities: ['BALCONY', 'WIFI'] }
+      }]
+    }
+  ];
+
 const hotelSearchSchema = z.object({
   cityCode: z.string().min(3).max(3),
   checkInDate: z.string(),
@@ -187,113 +297,10 @@ export async function searchHotels(params: {
 
   // NOTE: This is a mocked response to demonstrate the UI with Hotelbeds-like data.
   // A real integration would involve calls to Hotelbeds API endpoints.
-  const mockHotelsData: AmadeusHotelOffer[] = [
-    {
-      type: 'hotel-offer',
-      id: 'HB001',
-      hotel: {
-        hotelId: 'HB1',
-        name: 'The Grand Resort',
-        rating: '5',
-        media: [
-          { uri: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=800&q=80', category: 'EXTERIOR' },
-          { uri: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?fit=crop&w=800&q=80', category: 'LOBBY' },
-          { uri: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?fit=crop&w=800&q=80', category: 'POOL' },
-          { uri: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?fit=crop&w=800&q=80', category: 'ROOM' },
-        ],
-        address: { lines: ['123 Luxury Ave'], postalCode: '33139', cityName: 'Miami Beach', countryCode: 'US' },
-        description: { lang: 'es', text: 'Experimenta el máximo lujo en The Grand Resort, donde un servicio impecable y vistas impresionantes al océano te esperan. Disfruta de nuestra piscina infinita, spa de clase mundial y opciones gastronómicas gourmet.' },
-        amenities: ['SWIMMING_POOL', 'SPA', 'WIFI', 'FITNESS_CENTER', 'RESTAURANT', 'PARKING']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-1',
-        checkInDate: params.checkInDate,
-        checkOutDate: params.checkOutDate,
-        price: { currency: 'USD', total: '475.00', base: '420.00' },
-        room: { description: { text: 'Suite con vista al mar y balcón privado.' } }
-      }]
-    },
-    {
-      type: 'hotel-offer',
-      id: 'HB002',
-      hotel: {
-        hotelId: 'HB2',
-        name: 'City Center Boutique Hotel',
-        rating: '4',
-        media: [
-          { uri: 'https://images.unsplash.com/photo-1568495248636-6432b97bd949?fit=crop&w=800&q=80', category: 'EXTERIOR' },
-          { uri: 'https://images.unsplash.com/photo-1590490360181-a75d1f88a652?fit=crop&w=800&q=80', category: 'LOBBY' },
-          { uri: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=800&q=80', category: 'ROOM' },
-        ],
-        address: { lines: ['456 Central St'], postalCode: '10001', cityName: 'New York', countryCode: 'US' },
-        description: { lang: 'es', text: 'Ubicado en el corazón de la acción, nuestro hotel boutique ofrece un diseño elegante y un ambiente acogedor. Perfecto para viajeros de negocios y de placer que buscan explorar la ciudad.' },
-        amenities: ['WIFI', 'RESTAURANT', 'BAR', 'AIR_CONDITIONING']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-2',
-        checkInDate: params.checkInDate,
-        checkOutDate: params.checkOutDate,
-        price: { currency: 'USD', total: '320.00', base: '280.00' },
-        room: { description: { text: 'Habitación doble estándar con escritorio.' } }
-      }]
-    },
-    {
-      type: 'hotel-offer',
-      id: 'HB003',
-      hotel: {
-        hotelId: 'HB3',
-        name: 'Mountain View Lodge',
-        rating: '3',
-        media: [
-            { uri: 'https://images.unsplash.com/photo-1575586232388-26154f2c8f8a?fit=crop&w=800&q=80', category: 'EXTERIOR' },
-            { uri: 'https://images.unsplash.com/photo-1616594039964-ae9124a35e23?fit=crop&w=800&q=80', category: 'VIEW' },
-            { uri: 'https://images.unsplash.com/photo-1598928922559-052a3539818d?fit=crop&w=800&q=80', category: 'ROOM' },
-        ],
-        address: { lines: ['789 Peak Rd'], postalCode: '80202', cityName: 'Denver', countryCode: 'US' },
-        description: { lang: 'es', text: 'Escápate a la tranquilidad de las montañas. Nuestro albergue rústico ofrece un refugio acogedor con fácil acceso a rutas de senderismo y esquí. Disfruta de la chimenea en nuestra sala común.' },
-        amenities: ['PARKING', 'WIFI', 'PETS_ALLOWED']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-3',
-        checkInDate: params.checkInDate,
-        checkOutDate: params.checkOutDate,
-        price: { currency: 'USD', total: '150.00', base: '130.00' },
-        room: { description: { text: 'Cabaña acogedora con cocina pequeña.' } }
-      }]
-    },
-     {
-      type: 'hotel-offer',
-      id: 'HB004',
-      hotel: {
-        hotelId: 'HB4',
-        name: 'Playa Paraiso All-Inclusive',
-        rating: '5',
-        media: [
-          { uri: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?fit=crop&w=800&q=80', category: 'POOL' },
-          { uri: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=800&q=80', category: 'BEACH' },
-          { uri: 'https://images.unsplash.com/photo-1559539343-a8c63ce577b8?fit=crop&w=800&q=80', category: 'RESTAURANT' },
-        ],
-        address: { lines: ['1 Paradise Beach'], postalCode: '77710', cityName: 'Playa del Carmen', countryCode: 'MX' },
-        description: { lang: 'es', text: 'Sumérgete en el paraíso en nuestro resort todo incluido. Con múltiples piscinas, restaurantes y acceso directo a una playa de arena blanca, tus vacaciones de ensueño comienzan aquí.' },
-        amenities: ['SWIMMING_POOL', 'RESTAURANT', 'BAR', 'AIR_CONDITIONING', 'BEACH_ACCESS']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-4',
-        checkInDate: params.checkInDate,
-        checkOutDate: params.checkOutDate,
-        price: { currency: 'USD', total: '380.00', base: '350.00' },
-        room: { description: { text: 'Junior Suite con todo incluido.' } }
-      }]
-    }
-  ];
   
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  return { success: true, data: mockHotelsData };
+  return { success: true, data: MOCK_HOTELS_DATA };
 }
 
 
@@ -309,31 +316,18 @@ export async function getHotelDetails(params: { offerId: string }): Promise<{ su
 
   const { offerId } = validation.data;
 
-  try {
-    const token = await getAmadeusToken();
+  // In a real app, you would fetch from Amadeus or another API.
+  // Here, we find the hotel from our mocked data for the demo.
+  const hotelOffer = MOCK_HOTELS_DATA.find(offer => offer.id === offerId);
 
-    const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers/${offerId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.json();
-      console.error('Amadeus Hotel Details Error:', errorBody);
-      const errorMessage = errorBody.errors?.[0]?.detail || 'Error al obtener los detalles del hotel.';
-      return { success: false, error: errorMessage };
-    }
-
-    const result = await response.json();
-
-    if (!result.data) {
-      return { success: false, error: 'No se pudieron obtener los detalles del hotel.' };
-    }
-
-    return { success: true, data: result.data };
-  } catch (err: any) {
-    console.error(err);
-    return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
+  if (!hotelOffer) {
+    return { success: false, error: 'No se pudieron obtener los detalles del hotel.' };
   }
+  
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  return { success: true, data: hotelOffer };
 }
 
 const packageSearchSchema = z.object({

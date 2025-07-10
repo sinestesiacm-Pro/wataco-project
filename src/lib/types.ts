@@ -113,6 +113,32 @@ export interface AirportSearchResponse {
   data: Airport[];
 }
 
+// Room and Hotel Offer types
+export interface Room {
+  id: string;
+  checkInDate: string;
+  checkOutDate: string;
+  boardType?: string;
+  price: {
+    currency: string;
+    total: string;
+    base: string;
+    variations?: {
+      average?: {
+        base: string;
+      };
+    };
+  };
+  room: {
+    type: string;
+    description: {
+      text: string;
+    };
+    amenities?: string[];
+  };
+}
+
+
 // Amadeus Hotel Types
 export interface AmadeusHotel {
   hotelId: string;
@@ -144,27 +170,7 @@ export interface AmadeusHotelOffer {
   id: string;
   hotel: AmadeusHotel;
   available: boolean;
-  offers: {
-    id: string;
-    checkInDate: string;
-    checkOutDate: string;
-    boardType?: string;
-    price: {
-      currency: string;
-      total: string;
-      base: string;
-      variations?: {
-        average?: {
-          base: string;
-        }
-      }
-    };
-    room: {
-        description: {
-            text: string;
-        }
-    }
-  }[];
+  offers: Room[];
   self?: string;
 }
 
