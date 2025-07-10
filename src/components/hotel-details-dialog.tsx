@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -16,6 +15,8 @@ import { ScrollArea } from './ui/scroll-area';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Badge } from './ui/badge';
+import { Card } from './ui/card';
+
 
 interface HotelDetailsDialogProps {
   offer: AmadeusHotelOffer;
@@ -47,81 +48,83 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
               )}
             </DialogHeader>
             
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6 pt-0">
-                <div className="md:col-span-7 space-y-4">
-                  <Carousel className="w-full rounded-2xl overflow-hidden shadow-lg">
-                    <CarouselContent>
-                      {details.hotel.media && details.hotel.media.length > 0 ? (
-                        details.hotel.media.map((photo, index) => (
-                            <CarouselItem key={index}>
-                            <Image
-                                src={photo.uri}
-                                alt={`${details.hotel.name} photo ${index + 1}`}
-                                width={800}
-                                height={600}
-                                className="w-full h-auto aspect-[4/3] object-cover"
-                                data-ai-hint="hotel interior"
-                            />
-                            </CarouselItem>
-                        ))
-                      ) : (
-                        <CarouselItem>
-                            <Image
-                                src="https://placehold.co/800x600.png"
-                                alt="Placeholder hotel image"
-                                width={800}
-                                height={600}
-                                className="w-full h-auto object-cover rounded-lg"
-                                data-ai-hint="hotel interior"
-                            />
-                        </CarouselItem>
-                      )}
-                    </CarouselContent>
-                    <CarouselPrevious className="left-4" />
-                    <CarouselNext className="right-4" />
-                  </Carousel>
-                </div>
-                <div className="md:col-span-5 space-y-4">
-                  <div className="bg-card p-6 rounded-2xl shadow-sm h-full flex flex-col">
-                    <h3 className="text-lg font-semibold font-headline mb-2">Sobre este hotel</h3>
-                    {details.hotel.description?.text && (
-                      <ScrollArea className="h-32 mb-4">
-                        <p className="text-sm text-muted-foreground whitespace-pre-wrap font-body">
-                          {details.hotel.description.text}
-                        </p>
-                      </ScrollArea>
-                    )}
-
-                    {details.hotel.amenities && details.hotel.amenities.length > 0 && (
-                      <div className="mt-auto">
-                        <h3 className="text-lg font-semibold font-headline mb-2">Servicios</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {details.hotel.amenities.slice(0, 15).map((amenity, index) => (
-                            <Badge key={index} variant="secondary" className="flex items-center gap-1.5">
-                              <CheckCircle className="h-3 w-3 text-green-500" />
-                              {amenity.replace(/_/g, ' ')}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+            <ScrollArea className="overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 pt-0">
+                  <div className="md:col-span-7 space-y-4">
+                    <Carousel className="w-full rounded-2xl overflow-hidden shadow-lg">
+                      <CarouselContent>
+                        {details.hotel.media && details.hotel.media.length > 0 ? (
+                          details.hotel.media.map((photo, index) => (
+                              <CarouselItem key={index}>
+                              <Image
+                                  src={photo.uri}
+                                  alt={`${details.hotel.name} photo ${index + 1}`}
+                                  width={800}
+                                  height={600}
+                                  className="w-full h-auto aspect-[4/3] object-cover"
+                                  data-ai-hint="hotel interior"
+                              />
+                              </CarouselItem>
+                          ))
+                        ) : (
+                          <CarouselItem>
+                              <Image
+                                  src="https://placehold.co/800x600.png"
+                                  alt="Placeholder hotel image"
+                                  width={800}
+                                  height={600}
+                                  className="w-full h-auto object-cover rounded-lg"
+                                  data-ai-hint="hotel interior"
+                              />
+                          </CarouselItem>
+                        )}
+                      </CarouselContent>
+                      <CarouselPrevious className="left-4" />
+                      <CarouselNext className="right-4" />
+                    </Carousel>
                   </div>
-                </div>
-            </div>
+                  <div className="md:col-span-5 space-y-6">
+                    <Card className="bg-card p-6 rounded-2xl shadow-sm h-full flex flex-col">
+                      <h3 className="text-lg font-semibold font-headline mb-2">Sobre este hotel</h3>
+                      {details.hotel.description?.text && (
+                        <ScrollArea className="h-32 mb-4">
+                          <p className="text-sm text-muted-foreground whitespace-pre-wrap font-body">
+                            {details.hotel.description.text}
+                          </p>
+                        </ScrollArea>
+                      )}
 
-            <DialogFooter className="mt-auto p-6 border-t border-white/20 flex justify-between items-center w-full">
-              {details.offers?.[0]?.price?.total && (
-                 <div>
-                    <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
-                    <p className="font-bold text-2xl text-blue-700">
-                      ${details.offers[0].price.total}
-                    </p>
-                 </div>
-              )}
-              <Button size="lg" className="bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>
-                Reservar Ahora
-              </Button>
-            </DialogFooter>
+                      {details.hotel.amenities && details.hotel.amenities.length > 0 && (
+                        <div className="mt-auto">
+                          <h3 className="text-lg font-semibold font-headline mb-2">Servicios</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {details.hotel.amenities.slice(0, 15).map((amenity, index) => (
+                              <Badge key={index} variant="secondary" className="flex items-center gap-1.5">
+                                <CheckCircle className="h-3 w-3 text-green-500" />
+                                {amenity.replace(/_/g, ' ')}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </Card>
+
+                     <Card className="bg-card p-6 rounded-2xl shadow-sm">
+                        {details.offers?.[0]?.price?.total && (
+                          <div className="mb-4">
+                              <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
+                              <p className="font-bold text-3xl text-primary">
+                                ${details.offers[0].price.total}
+                              </p>
+                          </div>
+                        )}
+                        <Button size="lg" className="w-full bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground" onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}>
+                          Reservar Ahora
+                        </Button>
+                     </Card>
+                  </div>
+              </div>
+            </ScrollArea>
           </>
         ) : (
           <div className="flex items-center justify-center h-96">
