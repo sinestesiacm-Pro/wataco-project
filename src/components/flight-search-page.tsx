@@ -402,9 +402,8 @@ export default function FlightSearchPage() {
                     {loading ? (
                     <Button
                         type="button"
-                        variant="destructive"
                         size="lg"
-                        className="w-full text-lg font-bold h-full mt-1 rounded-xl shadow-md"
+                        className="w-full text-lg font-bold h-full mt-1 rounded-xl shadow-md bg-accent hover:bg-accent/90 text-accent-foreground"
                         onClick={handleCancelSearch}
                     >
                         <X className="mr-2 h-5 w-5" />

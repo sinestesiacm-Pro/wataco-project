@@ -346,8 +346,7 @@ export default function HotelSearchPage() {
                 {loading && isInitialSearch.current ? (
                   <Button
                     type="button"
-                    variant="destructive"
-                    className="w-full font-bold rounded-xl"
+                    className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />

@@ -311,8 +311,7 @@ export default function PackagesSearchPage() {
                 {loading ? (
                   <Button
                     type="button"
-                    variant="destructive"
-                    className="w-full lg:w-auto font-bold mt-1 rounded-xl"
+                    className="w-full lg:w-auto font-bold mt-1 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
