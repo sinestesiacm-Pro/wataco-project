@@ -84,10 +84,10 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
                     </Carousel>
                   </div>
                   <div className="md:col-span-5 space-y-6">
-                    <Card className="bg-card p-6 rounded-2xl shadow-sm h-full flex flex-col">
+                    <Card className="bg-card p-6 rounded-2xl shadow-sm flex flex-col">
                       <h3 className="text-lg font-semibold font-headline mb-2">Sobre este hotel</h3>
                       {details.hotel.description?.text && (
-                        <ScrollArea className="h-32 mb-4">
+                        <ScrollArea className="h-20 mb-4">
                           <p className="text-sm text-muted-foreground whitespace-pre-wrap font-body">
                             {details.hotel.description.text}
                           </p>
@@ -113,7 +113,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
                         {details.offers?.[0]?.price?.total && (
                           <div className="mb-4">
                               <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
-                              <p className="font-bold text-3xl text-primary">
+                              <p className="font-bold text-3xl text-foreground">
                                 ${details.offers[0].price.total}
                               </p>
                           </div>
