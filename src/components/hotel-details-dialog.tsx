@@ -16,7 +16,6 @@ import { ScrollArea } from './ui/scroll-area';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Badge } from './ui/badge';
-import { Separator } from './ui/separator';
 
 interface HotelDetailsDialogProps {
   offer: AmadeusHotelOffer;
@@ -34,7 +33,7 @@ export function HotelDetailsDialog({ offer }: HotelDetailsDialogProps) {
           Ver Oferta
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
         {details ? (
           <>
             <DialogHeader className="p-6 pb-4">
