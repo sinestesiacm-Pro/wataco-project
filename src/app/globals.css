@@ -226,7 +226,7 @@
   animation: pulse-text 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Realistic Airplane Window Style */
+/* New Airplane Window Style */
 .airplane-window {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -234,19 +234,27 @@
   background: linear-gradient(145deg, hsl(var(--secondary)) 0%, hsl(var(--card)) 100%);
   border-radius: 45% / 50%;
   box-shadow: 
-    0 10px 25px rgba(0,0,0,0.1), /* Outer soft shadow */
-    inset 0 2px 3px rgba(255, 255, 255, 0.8), /* Inner top highlight */
-    inset 0 -5px 15px rgba(0,0,0,0.15); /* Inner bottom shadow */
+    0 8px 30px rgba(0,0,0,0.12);
   transition: all 0.4s ease;
   cursor: pointer;
 }
 
 .airplane-window:hover {
-  transform: scale(1.03);
+  transform: scale(1.05);
   box-shadow: 
-    0 15px 35px rgba(0,0,0,0.15),
-    inset 0 2px 3px rgba(255, 255, 255, 0.8),
-    inset 0 -5px 20px rgba(0,0,0,0.2);
+    0 15px 40px rgba(0,0,0,0.18);
+}
+
+.airplane-window-inner-bevel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 40% / 45%;
+  background: hsl(var(--background));
+  box-shadow: 
+    inset 0 4px 8px rgba(0,0,0,0.1), /* Inner shadow for depth */
+    inset 0 -4px 8px rgba(255,255,255,0.8); /* Inner highlight for 3D effect */
+  padding: 2%;
 }
 
 .airplane-window-view {
@@ -255,7 +263,7 @@
   height: 100%;
   border-radius: 35% / 40%;
   overflow: hidden;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.3); /* Soft inner shadow for the glass */
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.4); /* Soft inner shadow for the glass */
 }
 
 .airplane-window-view img {
@@ -346,4 +354,12 @@
     scrollbar-width: none;  /* Firefox */
 }
 
+.mask-fade {
+  mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+}
 
+
+
+
+    
