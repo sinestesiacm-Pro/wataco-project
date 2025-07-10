@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -7,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from './ui/separator';
 import type { Dictionaries } from '@/lib/types';
 import type { FiltersState } from '@/app/flights/select/page';
+import { useDebounce } from '@/hooks/use-debounce';
 
 interface FlightFiltersProps {
   availableAirlines: Dictionaries['carriers'];
@@ -23,33 +25,42 @@ const FilterSection = ({ title, children }: { title: string, children: React.Rea
 );
 
 export function FlightFilters({ availableAirlines, onFilterChange }: FlightFiltersProps) {
-  
-  const handleStopChange = (value: string) => {
-    const stopValue = parseInt(value, 10);
-     onFilterChange({
-        stops: [stopValue], // Assuming radio buttons for now
-        airlines: [],
-        bags: [],
-    });
-  };
+  const [filters, setFilters] = useState<FiltersState>({
+    stops: [],
+    airlines: [],
+    bags: []
+  });
 
-  const handleAirlineChange = (checked: boolean, airlineCode: string) => {
-    onFilterChange({
-        stops: [],
-        airlines: checked 
-          ? [airlineCode] // Replace with real logic to append to array
-          : [],
-        bags: [],
+  const debouncedFilters = useDebounce(filters, 500);
+
+  useEffect(() => {
+    onFilterChange(debouncedFilters);
+  }, [debouncedFilters, onFilterChange]);
+
+  const handleStopChange = useCallback((value: string) => {
+    // Radio group for stops, so it's always one or none.
+    const stopValue = value ? [parseInt(value, 10)] : [];
+    setFilters(prev => ({ ...prev, stops: stopValue }));
+  }, []);
+
+  const handleAirlineChange = useCallback((checked: boolean, airlineCode: string) => {
+    setFilters(prev => {
+      const newAirlines = checked
+        ? [...prev.airlines, airlineCode]
+        : prev.airlines.filter(code => code !== airlineCode);
+      return { ...prev, airlines: newAirlines };
     });
-  };
+  }, []);
   
-  const handleBagsChange = (checked: boolean, bagType: string) => {
-     onFilterChange({
-        stops: [],
-        airlines: [],
-        bags: checked ? [bagType] : []
+  const handleBagsChange = useCallback((checked: boolean, bagType: string) => {
+    setFilters(prev => {
+        const newBags = checked
+            ? [...prev.bags, bagType]
+            : prev.bags.filter(type => type !== bagType);
+        return { ...prev, bags: newBags };
     });
-  }
+  }, []);
+
 
   return (
     <Card className="sticky top-24 shadow-lg">
@@ -79,7 +90,11 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
         <FilterSection title="Aerolíneas">
             {Object.entries(availableAirlines).slice(0, 5).map(([code, name]) => (
                  <div key={code} className="flex items-center space-x-2">
-                    <Checkbox id={`airline-${code}`} onCheckedChange={(checked) => handleAirlineChange(!!checked, code)} />
+                    <Checkbox 
+                      id={`airline-${code}`} 
+                      onCheckedChange={(checked) => handleAirlineChange(!!checked, code)} 
+                      checked={filters.airlines.includes(code)}
+                    />
                     <Label htmlFor={`airline-${code}`}>{name}</Label>
                 </div>
             ))}
@@ -89,11 +104,19 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
 
         <FilterSection title="Equipaje">
             <div className="flex items-center space-x-2">
-                <Checkbox id="bags-carry-on" onCheckedChange={(checked) => handleBagsChange(!!checked, 'carry-on')} />
+                <Checkbox 
+                  id="bags-carry-on" 
+                  onCheckedChange={(checked) => handleBagsChange(!!checked, 'carry-on')} 
+                  checked={filters.bags.includes('carry-on')}
+                />
                 <Label htmlFor="bags-carry-on">Equipaje de mano</Label>
             </div>
             <div className="flex items-center space-x-2">
-                <Checkbox id="bags-checked" onCheckedChange={(checked) => handleBagsChange(!!checked, 'checked')}/>
+                <Checkbox 
+                  id="bags-checked" 
+                  onCheckedChange={(checked) => handleBagsChange(!!checked, 'checked')}
+                  checked={filters.bags.includes('checked')}
+                />
                 <Label htmlFor="bags-checked">Equipaje facturado</Label>
             </div>
         </FilterSection>

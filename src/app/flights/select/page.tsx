@@ -95,18 +95,43 @@ function FlightSelectionPage() {
 
   const applyFilters = (flights: FlightOffer[]) => {
     return flights.filter(flight => {
-      const stopsFilter = filters.stops.length === 0 || filters.stops.includes(flight.itineraries[0].segments.length - 1);
-      const airlineFilter = filters.airlines.length === 0 || filters.airlines.includes(flight.itineraries[0].segments[0].carrierCode);
-      const bagsFilter = filters.bags.length === 0 || 
-        (filters.bags.includes('carry-on') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) >= 0) || // Assuming carry-on is always included
-        (filters.bags.includes('checked') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) > 0);
-      return stopsFilter && airlineFilter && bagsFilter;
+        // Stops filter: If no stops are selected, pass all. Otherwise, check if the flight's stop count is in the selected list.
+        const stopsFilter = filters.stops.length === 0 || 
+                            filters.stops.includes(flight.itineraries[0].segments.length - 1);
+        
+        // Airlines filter: If no airlines selected, pass all. Otherwise, check if the flight's airline is in the selected list.
+        const airlineFilter = filters.airlines.length === 0 || 
+                              filters.airlines.includes(flight.itineraries[0].segments[0].carrierCode);
+
+        // Bags filter: If no bag options are selected, pass all.
+        const bagsFilter = filters.bags.length === 0 || 
+            // Check if "carry-on" is selected (assuming always true for this app's logic)
+            (filters.bags.includes('carry-on') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) >= 0) ||
+            // Check if "checked" is selected and included bags are > 0
+            (filters.bags.includes('checked') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) > 0);
+
+        return stopsFilter && airlineFilter && bagsFilter;
     });
-  };
+};
+
 
   const outboundFlights = useMemo(() => applyFilters(getFlightsForStep('outbound')), [flightData, filters]);
   const returnFlights = useMemo(() => applyFilters(getFlightsForStep('return')), [flightData, filters]);
-  const availableAirlines = useMemo(() => flightData?.dictionaries.carriers || {}, [flightData]);
+  const availableAirlines = useMemo(() => {
+    if (!flightData) return {};
+    const carriers = new Set<string>();
+    flightData.data.forEach(flight => {
+        carriers.add(flight.validatingAirlineCodes[0]);
+    });
+    const result: Dictionaries['carriers'] = {};
+    carriers.forEach(code => {
+        if (flightData.dictionaries.carriers[code]) {
+            result[code] = flightData.dictionaries.carriers[code];
+        }
+    });
+    return result;
+  }, [flightData]);
+
 
   if (loading) {
     return (
