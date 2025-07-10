@@ -20,6 +20,7 @@ import { Card } from './ui/card';
 import { HotelMapDialog } from './hotel-map-dialog';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
+import { Separator } from './ui/separator';
 
 
 interface HotelDetailsDialogProps {
@@ -113,19 +114,19 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                     </Carousel>
                   </div>
                   <div className="md:col-span-5 space-y-6">
-                    <Card className="bg-card p-6 rounded-2xl shadow-sm flex flex-col">
-                      <h3 className="text-lg font-semibold font-headline mb-2">Sobre este hotel</h3>
-                      {details.hotel.description?.text && (
-                        <ScrollArea className="h-20 mb-4">
-                          <p className="text-sm text-muted-foreground whitespace-pre-wrap font-body">
-                            {details.hotel.description.text}
-                          </p>
-                        </ScrollArea>
-                      )}
+                    <Card className="bg-card p-6 rounded-2xl shadow-sm flex flex-col h-full">
+                      <div>
+                        <h3 className="text-lg font-semibold font-headline mb-2">Sobre este hotel</h3>
+                        {details.hotel.description?.text && (
+                            <p className="text-sm text-muted-foreground font-body max-h-24 overflow-y-auto">
+                                {details.hotel.description.text}
+                            </p>
+                        )}
+                      </div>
 
                       {details.hotel.amenities && details.hotel.amenities.length > 0 && (
-                          <div className="mt-auto">
-                            <h3 className="text-lg font-semibold font-headline mb-2">Servicios</h3>
+                          <div className="mt-4">
+                            <h3 className="text-lg font-semibold font-headline mb-3">Servicios</h3>
                              <TooltipProvider>
                                 <div className="flex flex-wrap gap-2">
                                   {details.hotel.amenities.slice(0, 15).map((amenity, index) => {
@@ -147,23 +148,25 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                              </TooltipProvider>
                           </div>
                         )}
-                    </Card>
+                        
+                        <div className="flex-grow"></div>
+                        
+                        <Separator className="my-6" />
 
-                     <Card className="bg-card p-6 rounded-2xl shadow-sm">
                         {details.offers?.[0]?.price?.total && (
-                          <div className="mb-4">
+                          <div className="mb-4 text-right">
                               <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
                               <p className="font-bold text-3xl text-foreground">
                                 ${details.offers[0].price.total}
                               </p>
                           </div>
                         )}
-                        <Button asChild size="lg" className="w-full bg-green-500 hover:bg-green-600 text-white">
+                        <Button asChild size="lg" className="w-full bg-success hover:bg-success/90 text-success-foreground">
                            <Link href={bookingLink}>
                               Reservar Ahora
                            </Link>
                         </Button>
-                     </Card>
+                    </Card>
                   </div>
               </div>
             </ScrollArea>
