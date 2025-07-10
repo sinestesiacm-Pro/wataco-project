@@ -28,14 +28,14 @@ function FlightDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function FlightDetailPage({ params: { id } }: { params: { id: string } }) {
+export default function FlightDetailPage({ params }: { params: { id: string } }) {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     }>
-      <FlightDetailPageContent id={id} />
+      <FlightDetailPageContent id={params.id} />
     </Suspense>
   );
 }
