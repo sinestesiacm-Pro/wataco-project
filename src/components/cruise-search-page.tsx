@@ -180,7 +180,7 @@ export default function CruiseSearchPage() {
                 {loading ? (
                   <Button
                     type="button"
-                    className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
+                    className="w-full font-bold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />

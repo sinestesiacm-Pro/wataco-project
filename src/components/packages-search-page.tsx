@@ -311,14 +311,14 @@ export default function PackagesSearchPage() {
                 {loading ? (
                   <Button
                     type="button"
-                    className="w-full lg:w-auto font-bold mt-1 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
+                    className="w-full lg:w-auto font-bold mt-1 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
                     Cancelar
                   </Button>
                 ) : (
-                  <Button type="submit" className="w-full lg:w-auto font-bold bg-accent hover:bg-accent/90 mt-1 text-accent-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                  <Button type="submit" className="w-full lg:w-auto font-bold bg-tertiary hover:bg-tertiary/90 mt-1 text-tertiary-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
                      <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
                   </Button>
                 )}
