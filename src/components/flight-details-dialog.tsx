@@ -6,12 +6,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
-import { Clock, Luggage, Plane, Settings2, X, ArrowRight } from 'lucide-react';
+import { Clock, Luggage, Plane, Settings2 } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO } from 'date-fns';
 
@@ -21,10 +20,6 @@ const formatDuration = (duration: string) => {
 
 const formatTime = (dateString: string) => {
   return new Date(dateString).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
-};
-
-const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
 };
 
 const SegmentDetails = ({ segment, dictionaries }: { segment: Segment, dictionaries: Dictionaries }) => {
@@ -200,15 +195,10 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
             Seleccionar
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl p-0 border-0 shadow-2xl rounded-3xl">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/60 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl">
           
-          <DialogHeader className="flex-row items-center justify-between p-6 pb-4 border-b">
+          <DialogHeader className="flex-row items-center justify-between p-6 pb-4">
             <DialogTitle className="font-headline text-2xl">Detalles del Vuelo</DialogTitle>
-            <DialogClose asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                    <X className="h-5 w-5" />
-                </Button>
-            </DialogClose>
           </DialogHeader>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6">
