@@ -207,13 +207,34 @@ export function FlightDetailsDialog({ flight, dictionaries }: FlightDetailsDialo
               </div>
           </div>
           
-          <DialogFooter className="mt-auto pt-4 border-t border-border/20">
+          <DialogFooter className="mt-auto pt-4 border-t border-border/20 flex justify-between items-center sm:flex-row sm:space-x-0">
             <DialogClose asChild>
                 <Button className="bg-accent hover:bg-accent/90 text-accent-foreground border-0">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Atrás
                 </Button>
             </DialogClose>
+            <div className="flex items-center gap-4">
+                <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Precio total</p>
+                    <p className="text-3xl font-bold text-primary">${flight.price.total}</p>
+                </div>
+                <div className="flex flex-col gap-2">
+                    <Button 
+                        className="w-full" 
+                        onClick={() => alert('La funcionalidad de personalizar no está implementada en esta demostración.')}
+                    >
+                        <Settings2 className="mr-2 h-4 w-4" />
+                        Personalizar Vuelo
+                    </Button>
+                    <Button 
+                        className="w-full bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground" 
+                        onClick={() => alert('La funcionalidad de reserva no está implementada en esta demostración.')}
+                    >
+                        Confirmar Reserva
+                    </Button>
+                </div>
+            </div>
           </DialogFooter>
       </DialogContent>
     </Dialog>

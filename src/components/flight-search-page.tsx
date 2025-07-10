@@ -333,7 +333,7 @@ export default function FlightSearchPage() {
                     <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Pasajeros</Label>
                     <Popover>
                     <PopoverTrigger asChild>
-                        <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
+                        <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1 hover:bg-primary/10">
                         <Users className="mr-2 h-4 w-4" />
                         {travelerText}
                         </Button>
