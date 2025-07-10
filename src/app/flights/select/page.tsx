@@ -81,9 +81,11 @@ function FlightSelectionPage() {
     window.scrollTo(0, 0);
   }, []);
   
+  const debouncedSetFilters = useDebounce(setFilters, 300);
+
   const handleFilterChange = useCallback((newFilters: FiltersState) => {
-    setFilters(newFilters);
-  }, []);
+    debouncedSetFilters(newFilters);
+  }, [debouncedSetFilters]);
 
   const getFlightsForStep = (step: BookingStep) => {
     if (!flightData) return [];
@@ -95,19 +97,18 @@ function FlightSelectionPage() {
 
   const applyFilters = (flights: FlightOffer[]) => {
     return flights.filter(flight => {
-        // Stops filter: If no stops are selected, pass all. Otherwise, check if the flight's stop count is in the selected list.
+        // Stops filter
+        const stopCount = flight.itineraries[0].segments.length - 1;
         const stopsFilter = filters.stops.length === 0 || 
-                            filters.stops.includes(flight.itineraries[0].segments.length - 1);
+                            (filters.stops.includes(2) ? stopCount >= 2 : filters.stops.includes(stopCount));
         
-        // Airlines filter: If no airlines selected, pass all. Otherwise, check if the flight's airline is in the selected list.
+        // Airlines filter
         const airlineFilter = filters.airlines.length === 0 || 
-                              filters.airlines.includes(flight.itineraries[0].segments[0].carrierCode);
+                              filters.airlines.includes(flight.validatingAirlineCodes[0]);
 
-        // Bags filter: If no bag options are selected, pass all.
+        // Bags filter
         const bagsFilter = filters.bags.length === 0 || 
-            // Check if "carry-on" is selected (assuming always true for this app's logic)
             (filters.bags.includes('carry-on') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) >= 0) ||
-            // Check if "checked" is selected and included bags are > 0
             (filters.bags.includes('checked') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) > 0);
 
         return stopsFilter && airlineFilter && bagsFilter;
@@ -199,27 +200,29 @@ function FlightSelectionPage() {
   }
 
   return (
-    <div className="bg-muted/40 min-h-screen">
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <BookingProgressHeader 
-            step={step} 
-            isRoundTrip={!!returnDate}
-            origin={originQuery}
-            destination={destinationQuery}
-        />
-        
-        <div className="lg:grid lg:grid-cols-12 lg:gap-8 mt-8">
-            <aside className={`lg:col-span-3 ${step === 'review' ? 'hidden lg:block' : ''}`}>
-               <FlightFilters 
-                availableAirlines={availableAirlines}
-                onFilterChange={handleFilterChange}
-               />
-            </aside>
-            <main className={`lg:col-span-9 ${step === 'review' ? 'lg:col-span-12' : ''}`}>
-                {renderStepContent()}
-            </main>
-        </div>
+    <div className="min-h-screen bg-cover bg-center" style={{backgroundImage: "url('/gradient-mesh-background.svg')"}}>
+      <div className="min-h-screen bg-background/60 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <BookingProgressHeader 
+              step={step} 
+              isRoundTrip={!!returnDate}
+              origin={originQuery}
+              destination={destinationQuery}
+          />
+          
+          <div className="lg:grid lg:grid-cols-12 lg:gap-8 mt-8">
+              <aside className={`lg:col-span-3 ${step === 'review' ? 'hidden lg:block' : ''}`}>
+                 <FlightFilters 
+                  availableAirlines={availableAirlines}
+                  onFilterChange={handleFilterChange}
+                 />
+              </aside>
+              <main className={`lg:col-span-9 ${step === 'review' ? 'lg:col-span-12' : ''}`}>
+                  {renderStepContent()}
+              </main>
+          </div>
 
+        </div>
       </div>
     </div>
   );
