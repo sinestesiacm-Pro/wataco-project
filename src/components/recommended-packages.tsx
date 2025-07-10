@@ -20,26 +20,24 @@ export function RecommendedPackages() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {recommendedPackages.map((pkg, index) => (
-          <Card key={index} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border flex flex-col bg-card">
-            <div className="overflow-hidden relative">
-              <Image src={pkg.image} data-ai-hint={pkg.hint} alt={pkg.name} width={400} height={300} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+          <Card key={index} className="airplane-window overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border-0 flex flex-col bg-card">
+            <div className="overflow-hidden relative h-full">
+              <Image src={pkg.image} data-ai-hint={pkg.hint} alt={pkg.name} width={400} height={400} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-               <div className="absolute bottom-4 left-4">
+               <div className="absolute bottom-0 p-4 w-full">
                  <h3 className="text-xl font-bold font-headline text-white">{pkg.name}</h3>
+                 <p className="text-sm text-white/90 mb-4">{pkg.description}</p>
+                  <div className="flex justify-between items-center">
+                     <p className="text-sm text-white/90 font-body">
+                        Desde <span className="font-bold text-lg text-tertiary">${pkg.price}</span>
+                      </p>
+                    <Button variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                      <Luggage className="mr-2 h-4 w-4" />
+                      Ver Paquete
+                    </Button>
+                  </div>
               </div>
             </div>
-            <CardContent className="p-4 flex flex-col flex-grow">
-              <p className="text-sm text-muted-foreground mb-4 flex-grow">{pkg.description}</p>
-              <div className="flex justify-between items-center">
-                 <p className="text-sm text-muted-foreground font-body">
-                    Desde <span className="font-bold text-lg text-tertiary">${pkg.price}</span>
-                  </p>
-                <Button variant="secondary">
-                  <Luggage className="mr-2 h-4 w-4" />
-                  Ver Paquete
-                </Button>
-              </div>
-            </CardContent>
           </Card>
         ))}
       </div>

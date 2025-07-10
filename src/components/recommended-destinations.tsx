@@ -47,39 +47,40 @@ export function RecommendedDestinations({ setDestination }: RecommendedDestinati
             {destinations.map((dest) => (
               <Card
                 key={dest.iata}
-                className="rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 border-0"
+                className="airplane-window overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 border-0"
               >
-                <div className="overflow-hidden relative">
+                <div className="overflow-hidden relative h-full flex flex-col">
                   <Image
                     src={dest.image}
                     data-ai-hint={dest.hint}
                     alt={dest.city}
                     width={400}
-                    height={300}
-                    className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    height={400}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                  <div className="absolute bottom-4 left-4">
+                  <div className="absolute bottom-0 left-0 p-4 w-full">
                     <h3 className="text-2xl font-bold font-headline text-white">{dest.city}</h3>
                     <p className="text-sm text-white/90">{dest.country}</p>
+                     <div className="flex justify-between items-center mt-4">
+                        <p className="text-sm text-white/90 font-body">
+                            Desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
+                        </p>
+                        <Button 
+                            size="sm" 
+                            variant="secondary"
+                            className="bg-white/20 hover:bg-white/30 text-white rounded-full"
+                            onClick={() => {
+                            const query = `${dest.city}, ${dest.country}`;
+                            setDestination({ iata: dest.iata, query });
+                            }}
+                        >
+                            Ver Vuelos
+                            <ArrowRight className="ml-1.5 h-4 w-4" />
+                        </Button>
+                    </div>
                   </div>
                 </div>
-                <CardContent className="p-4 flex justify-between items-center bg-card">
-                  <p className="text-sm text-muted-foreground font-body">
-                    Vuelos desde <span className="font-bold text-lg text-tertiary">${dest.priceFrom}</span>
-                  </p>
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => {
-                      const query = `${dest.city}, ${dest.country}`;
-                      setDestination({ iata: dest.iata, query });
-                    }}
-                  >
-                    Ver Vuelos
-                    <ArrowRight className="ml-1.5 h-4 w-4" />
-                  </Button>
-                </CardContent>
               </Card>
             ))}
           </div>

@@ -222,3 +222,8 @@
 .animate-pulse-text {
   animation: pulse-text 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Airplane Window Style */
+.airplane-window {
+  border-radius: 45% 45% 35% 35% / 60% 60% 40% 40%;
+}
