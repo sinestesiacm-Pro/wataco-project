@@ -43,33 +43,19 @@ const flightImages = [
 export default function FlightSearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  // Initialize with URL params or empty strings
-  const [origin, setOrigin] = useState(() => searchParams.get('origin') || '');
-  const [destination, setDestination] = useState(() => searchParams.get('destination') || '');
-  const [originQuery, setOriginQuery] = useState(() => searchParams.get('origin_query') || '');
-  const [destinationQuery, setDestinationQuery] = useState(() => searchParams.get('destination_query') || '');
   
-  const [date, setDate] = useState<DateRange | undefined>(() => {
-    const fromDateParam = searchParams.get('from_date');
-    const toDateParam = searchParams.get('to_date');
-    if (fromDateParam && toDateParam) {
-      return {
-        from: parse(fromDateParam, 'yyyy-MM-dd', new Date()),
-        to: parse(toDateParam, 'yyyy-MM-dd', new Date()),
-      };
-    }
-    return {
-      from: addDays(new Date(), 7),
-      to: addDays(new Date(), 14),
-    };
+  const [origin, setOrigin] = useState('');
+  const [destination, setDestination] = useState('');
+  const [originQuery, setOriginQuery] = useState('');
+  const [destinationQuery, setDestinationQuery] = useState('');
+  
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: addDays(new Date(), 7),
+    to: addDays(new Date(), 14),
   });
 
   const [isRoundTrip, setIsRoundTrip] = useState(true);
-  const [adults, setAdults] = useState(() => {
-      const adultsParam = searchParams.get('adults');
-      return adultsParam ? parseInt(adultsParam, 10) : 1;
-  });
+  const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
   
@@ -121,25 +107,40 @@ export default function FlightSearchPage() {
   };
 
   useEffect(() => {
-    const autoSearch = async () => {
-      const shouldSearch = searchParams.get('autosearch') === 'true';
-      if (shouldSearch && origin && destination && date?.from && date?.to) {
-        await handleSearch({
-          origin,
-          destination,
-          departureDate: format(date.from, 'yyyy-MM-dd'),
-          returnDate: format(date.to, 'yyyy-MM-dd'),
-          adults,
-          children,
-          infants,
-        });
-        // Clean URL after search
-        router.replace('/', undefined);
-      }
-    };
-    autoSearch();
+    const originParam = searchParams.get('origin');
+    const destinationParam = searchParams.get('destination');
+    const originQueryParam = searchParams.get('origin_query');
+    const destinationQueryParam = searchParams.get('destination_query');
+    const fromDateParam = searchParams.get('from_date');
+    const toDateParam = searchParams.get('to_date');
+    const adultsParam = searchParams.get('adults');
+    const shouldSearch = searchParams.get('autosearch') === 'true';
+
+    if (shouldSearch && originParam && destinationParam && fromDateParam) {
+      const fromDate = parse(fromDateParam, 'yyyy-MM-dd', new Date());
+      const toDate = toDateParam ? parse(toDateParam, 'yyyy-MM-dd', new Date()) : undefined;
+
+      setOrigin(originParam);
+      setDestination(destinationParam);
+      setOriginQuery(originQueryParam || originParam);
+      setDestinationQuery(destinationQueryParam || destinationParam);
+      setDate({ from: fromDate, to: toDate });
+      setAdults(adultsParam ? parseInt(adultsParam, 10) : 1);
+      
+      handleSearch({
+        origin: originParam,
+        destination: destinationParam,
+        departureDate: format(fromDate, 'yyyy-MM-dd'),
+        returnDate: toDate ? format(toDate, 'yyyy-MM-dd') : undefined,
+        adults: adultsParam ? parseInt(adultsParam, 10) : 1,
+        children: 0,
+        infants: 0,
+      });
+      // Clean URL after search
+      router.replace('/', { scroll: false });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchSuggestions = async (query: string) => {
