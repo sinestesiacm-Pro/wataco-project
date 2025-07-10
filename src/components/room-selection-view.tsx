@@ -78,34 +78,35 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended }: { roomOffer: Room, o
             </div>
             
             {/* Price Column */}
-            <div className="w-full md:w-1/2 p-4 flex flex-col justify-between bg-muted/30">
-                <div className="text-right mb-4">
+            <div className="w-full md:w-1/2 p-4 flex flex-col bg-muted/30">
+                <div className="text-right">
                     <p className="text-xs text-muted-foreground">Precio por noche</p>
                     <p className="text-3xl font-bold text-primary">${roomOffer.price.total}</p>
                     <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
                 </div>
-                <Button size="lg" className="w-full" onClick={onSelect}>
-                    Continuar
-                </Button>
-                
-                 <div className="mt-4 text-left space-y-2 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                        {isFreeCancellation ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4 text-destructive" />}
-                        <span>{isFreeCancellation ? 'Cancelación gratuita' : 'No reembolsable'}</span>
+                 <div className="mt-auto pt-4">
+                    <Button size="lg" className="w-full" onClick={onSelect}>
+                        Continuar
+                    </Button>
+                    <div className="mt-4 text-left space-y-2 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                            {isFreeCancellation ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4 text-destructive" />}
+                            <span>{isFreeCancellation ? 'Cancelación gratuita' : 'No reembolsable'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {mealPlan === 'breakfast' ? <Coffee className="h-4 w-4 text-primary" /> : <Salad className="h-4 w-4 text-primary" />}
+                            <span>{mealPlan === 'breakfast' ? 'Desayuno incluido' : 'Solo alojamiento'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Info className="h-4 w-4 text-primary" />
+                            <span>Paga ahora</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Users className="h-4 w-4 text-primary" />
+                            <span>Tarifa para 2 huéspedes</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                         {mealPlan === 'breakfast' ? <Coffee className="h-4 w-4 text-primary" /> : <Salad className="h-4 w-4 text-primary" />}
-                         <span>{mealPlan === 'breakfast' ? 'Desayuno incluido' : 'Solo alojamiento'}</span>
-                    </div>
-                     <div className="flex items-center gap-2">
-                        <Info className="h-4 w-4 text-primary" />
-                        <span>Paga ahora</span>
-                     </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-primary" />
-                        <span>Tarifa para 2 huéspedes</span>
-                     </div>
-                </div>
+                 </div>
             </div>
         </div>
     )
