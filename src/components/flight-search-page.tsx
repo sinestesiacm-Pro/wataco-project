@@ -192,7 +192,7 @@ export default function FlightSearchPage() {
   const travelerText = `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`;
 
   const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => (
-    <div className="absolute z-20 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+    <div className="absolute z-20 w-full mt-1 bg-card/80 backdrop-blur-xl border rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
@@ -201,17 +201,17 @@ export default function FlightSearchPage() {
         suggestions.map((airport, index) => (
           <div
             key={`${airport.iataCode}-${airport.name}-${index}`}
-            className="px-3 py-2 hover:bg-accent cursor-pointer border-b last:border-b-0"
+            className="px-3 py-2 hover:bg-accent/50 cursor-pointer border-b border-white/10 last:border-b-0"
             onClick={() => handleSelectSuggestion(airport, type)}
           >
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-muted-foreground" />
               <div className="flex-grow">
-                <p className="font-semibold text-sm">
+                <p className="font-normal text-sm">
                   {airport.address?.cityName || airport.name}
                   {airport.address?.countryName ? `, ${airport.address.countryName}`: ''}
                 </p>
-                <p className="text-xs text-muted-foreground">{airport.name} ({airport.iataCode})</p>
+                <p className="text-xs text-muted-foreground/90">{airport.name} ({airport.iataCode})</p>
               </div>
             </div>
           </div>
