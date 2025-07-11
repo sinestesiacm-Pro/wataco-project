@@ -4,7 +4,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-import { Search, Plane, BedDouble, Zap, Luggage, Ship, LogIn } from 'lucide-react';
+import { Search, Plane, BedDouble, Zap, Luggage, Ship, LogIn, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
@@ -29,6 +29,7 @@ export function Header() {
     { id: 'Packages', label: 'Paquetes', icon: Luggage },
     { id: 'Cruises', label: 'Cruceros', icon: Ship },
     { id: 'Activities', label: 'Actividades', icon: Zap },
+    { id: 'Social', label: 'Social', icon: Users },
   ];
 
   return (
@@ -42,7 +43,7 @@ export function Header() {
           </div>
           
           {/* Desktop Tabs */}
-          <div className="flex-1 min-w-0 px-2 sm:px-4 hidden sm:block">
+          <div className="flex-1 min-w-0 px-2 sm:px-4 hidden md:block">
             <nav className="flex items-center justify-center space-x-1 bg-card/50 p-1 rounded-full border w-max mx-auto">
               {tabsConfig.map(({ id, label, icon: Icon }) => (
                 <TabButton

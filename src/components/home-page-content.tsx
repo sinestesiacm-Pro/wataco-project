@@ -13,17 +13,7 @@ import { RecommendedPackages } from '@/components/recommended-packages';
 import { RecommendedCruises } from '@/components/recommended-cruises';
 import { useSearchParams } from 'next/navigation';
 import { FuselageSection } from '@/components/fuselage-section';
-import {
-  Plane,
-  BedDouble,
-  Luggage,
-  Ship,
-  Zap,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
-import { SearchContainer } from '@/components/search-container';
+import { SocialFeedSection } from './social-feed-section';
 
 function RecommendedContent({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -35,6 +25,10 @@ function RecommendedContent({ tab }: { tab?: string }) {
       return <RecommendedPackages />;
     case 'Cruises':
       return <RecommendedCruises />;
+    case 'Social':
+      return <SocialFeedSection />;
+    case 'Activities':
+       return <ActivitiesSection />;
     case 'Flights':
     default:
       return <RecommendedDestinations />;
@@ -44,28 +38,13 @@ function RecommendedContent({ tab }: { tab?: string }) {
 
 export function HomePageContent() {
     const searchParams = useSearchParams();
-    const router = useRouter();
     const tab = searchParams.get('tab') || 'Flights';
-    
-    const handleTabClick = (tab: string) => {
-        router.push(`/?tab=${tab}`);
-    };
-
-    const tabsConfig = [
-        { id: 'Flights', label: 'Vuelos', icon: Plane },
-        { id: 'Hotels', label: 'Hoteles', icon: BedDouble },
-        { id: 'Packages', label: 'Paquetes', icon: Luggage },
-        { id: 'Cruises', label: 'Cruceros', icon: Ship },
-        { id: 'Activities', label: 'Actividades', icon: Zap },
-    ];
 
     const tabSpecifics = {
       Flights: {
         images: [
           'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?fit=crop&w=1920&q=80',
           'https://images.unsplash.com/photo-1488085061387-422e29b40080?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?fit=crop&w=1920&q=80',
         ],
         title: <>Tu Próxima Aventura<br />te Espera</>,
         subtitle: "Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo.",
@@ -74,8 +53,6 @@ export function HomePageContent() {
         images: [
           'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?fit=crop&w=1920&q=80',
           'https://images.unsplash.com/photo-1618773928121-c32242e63f39?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1582719508461-905c673771fd?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=1920&q=80',
         ],
         title: "Encuentra tu Estancia Perfecta",
         subtitle: "Desde hoteles de lujo hasta acogedores apartamentos, tenemos el lugar ideal para ti.",
@@ -84,8 +61,6 @@ export function HomePageContent() {
         images: [
           'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?fit=crop&w=1920&q=80',
           'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1530789253388-582c481c54b0?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?fit=crop&w=1920&q=80',
         ],
         title: "Paquetes de Viaje Completos",
         subtitle: "Reserva tu vuelo y hotel juntos para ahorrar tiempo y dinero.",
@@ -100,11 +75,14 @@ export function HomePageContent() {
       Activities: {
         images: [
           'https://images.unsplash.com/photo-1692205959816-d75d4a7b89d4?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1524014444623-194fde519952?fit=crop&w=1920&q=80',
         ],
         title: "Vive Experiencias Únicas",
         subtitle: "Reserva tours, atracciones y actividades inolvidables en tu destino.",
+      },
+      Social: {
+        images: [],
+        title: '',
+        subtitle: ''
       }
     };
     
@@ -112,58 +90,38 @@ export function HomePageContent() {
         return tabSpecifics[tab as keyof typeof tabSpecifics] || tabSpecifics.Flights;
     }, [tab]);
 
+    const SearchForm = () => {
+        switch (tab) {
+            case 'Flights': return <FlightSearchPage />;
+            case 'Hotels': return <HotelSearchPage />;
+            case 'Packages': return <PackagesSearchPage />;
+            case 'Cruises': return <CruiseSearchPage />;
+            default: return null;
+        }
+    };
+
 
     return (
         <div className="w-full">
-            <div className="relative">
-                <FuselageSection 
-                    images={currentTabInfo.images} 
-                    title={currentTabInfo.title} 
-                    subtitle={currentTabInfo.subtitle} 
-                />
-                <SearchContainer>
-                    {/* Mobile tabs inside the search card */}
-                    <div className="sm:hidden mb-2 flex justify-center px-4">
-                        <div className="overflow-x-auto scrollbar-hide w-full">
-                            <div className="flex justify-center space-x-1 w-max pb-1">
-                                {tabsConfig.map(({ id, label, icon: Icon }) => (
-                                    <Button 
-                                        key={id} 
-                                        variant="ghost" 
-                                        size="sm" 
-                                        onClick={() => handleTabClick(id)}
-                                        className={cn(
-                                            "flex-col h-auto p-2 rounded-lg",
-                                            tab === id ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
-                                        )}
-                                    >
-                                        <Icon className="h-5 w-5 mb-1" />
-                                        <span className="text-[10px] font-semibold">{label}</span>
-                                    </Button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="p-2 sm:p-4 rounded-2xl bg-card/60">
-                         <div className={cn(tab !== 'Flights' && 'hidden')}>
-                           <FlightSearchPage />
-                         </div>
-                         <div className={cn(tab !== 'Hotels' && 'hidden')}>
-                           <HotelSearchPage />
-                         </div>
-                          <div className={cn(tab !== 'Packages' && 'hidden')}>
-                           <PackagesSearchPage />
-                         </div>
-                         <div className={cn(tab !== 'Cruises' && 'hidden')}>
-                           <CruiseSearchPage />
-                         </div>
-                    </div>
-                </SearchContainer>
+            {tab !== 'Social' && (
+              <FuselageSection 
+                  images={currentTabInfo.images} 
+                  title={currentTabInfo.title} 
+                  subtitle={currentTabInfo.subtitle} 
+              />
+            )}
+            
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-[-100px] relative z-10">
+              {tab !== 'Social' && tab !== 'Activities' && (
+                <div className="bg-white/20 backdrop-blur-lg border border-white/20 p-2 sm:p-4 rounded-3xl shadow-2xl">
+                    <SearchForm />
+                </div>
+              )}
             </div>
       
-            <div className="bg-background pt-16 pb-16">
+            <div className="bg-transparent pt-16 pb-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                     {tab === 'Activities' ? <ActivitiesSection /> : <RecommendedContent tab={tab} />}
+                     <RecommendedContent tab={tab} />
                 </div>
             </div>
 

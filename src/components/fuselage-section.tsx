@@ -57,10 +57,7 @@ const FuselageSectionComponent = ({ images, title, subtitle }: FuselageSectionPr
     <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
       <BackgroundCarousel images={images} />
       <div 
-        className="absolute inset-0"
-        style={{ 
-           backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        }}
+        className="absolute inset-0 hero-overlay"
       />
       <div className="relative z-10 px-4 w-full">
          <div className="relative mt-[-150px] sm:mt-[-100px]">

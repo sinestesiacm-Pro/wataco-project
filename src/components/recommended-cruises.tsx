@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Ship } from 'lucide-react';
 import Link from 'next/link';
+import { Card, CardContent } from './ui/card';
 
 const recommendedCruises = [
   { id: 'caribbean-1', name: 'Caribe Occidental', ship: 'Symphony of the Seas', duration: '7 Noches', image: 'https://images.unsplash.com/photo-1678377402066-f09f89c267d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjcnVpc2UlMjBzaGlwJTIwY2FyaWJiZWFufGVufDB8fHx8MTc1MjA4NDA0OHww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'cruise ship caribbean' },
@@ -13,6 +14,29 @@ const recommendedCruises = [
   { id: 'mediterranean-1', name: 'Mediterráneo Clásico', ship: 'Sun Princess', duration: '7 Noches', image: 'https://images.unsplash.com/photo-1559302500-7b6d5f958c89?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtZWRpdGVycmFuZWFuJTIwY29hc3R8ZW58MHx8fHwxNzUyMjM0NDg1fDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'mediterranean coast' },
 ];
 
+const CruiseCard = ({ cruise }: { cruise: typeof recommendedCruises[0] }) => (
+    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border-0 bg-transparent flex flex-col w-full">
+        <div className="overflow-hidden relative h-80 rounded-2xl">
+          <Image src={cruise.image} data-ai-hint={cruise.hint} alt={cruise.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4">
+             <h3 className="text-xl font-bold font-headline text-white">{cruise.name}</h3>
+             <p className="text-sm text-white/80">{cruise.ship}</p>
+              <div className="flex items-center justify-between mt-4">
+                <p className="font-bold text-md text-white/90">{cruise.duration}</p>
+                <Button asChild variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                    <Link href={`/cruises/${cruise.id}`}>
+                        <Ship className="mr-2 h-4 w-4" />
+                        Ver Crucero
+                    </Link>
+                </Button>
+            </div>
+          </div>
+        </div>
+    </Card>
+);
+
+
 export function RecommendedCruises() {
   return (
     <div className="space-y-8 mt-8">
@@ -20,41 +44,9 @@ export function RecommendedCruises() {
         <h2 className="text-3xl font-headline font-bold text-gray-800">Cruceros de Ensueño</h2>
         <p className="text-muted-foreground mt-2">Explora el mundo desde el mar con estas rutas espectaculares.</p>
       </div>
-      <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4 mask-fade">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {recommendedCruises.map((cruise, index) => (
-          <div key={index} className="flex-shrink-0 w-[280px]">
-            <div className="airplane-window">
-                <div className="airplane-window-inner-bevel">
-                    <div className="airplane-window-view">
-                        <Image 
-                            src={cruise.image} 
-                            data-ai-hint={cruise.hint} 
-                            alt={cruise.name} 
-                            fill 
-                            className="object-cover"
-                        />
-                        <div className="airplane-window-shade-container">
-                            <div className="airplane-window-shade"></div>
-                        </div>
-                        <div className="airplane-window-content">
-                            <div>
-                            <h3 className="text-xl font-bold font-headline text-white">{cruise.name}</h3>
-                            <p className="text-sm text-white/80">{cruise.ship}</p>
-                            </div>
-                            <div className="flex flex-col items-center gap-2 mt-4">
-                                <p className="font-bold text-md text-white/90">{cruise.duration}</p>
-                                <Button asChild variant="secondary" size="sm" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
-                                    <Link href={`/cruises/${cruise.id}`}>
-                                        <Ship className="mr-2 h-4 w-4" />
-                                        Ver Crucero
-                                    </Link>
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          </div>
+          <CruiseCard key={index} cruise={cruise} />
         ))}
       </div>
     </div>
