@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -126,7 +127,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
                 ))}
             </div>
             
-            <ScrollArea className="flex-grow pr-3 -mr-3 mb-4">
+            <div className="flex-grow pr-3 -mr-3 mb-4 min-h-[80px]">
               <ul className="text-sm space-y-2">
                   {selectedFareOption?.features.map(feature => (
                       <li key={feature} className="flex items-center gap-2">
@@ -135,9 +136,8 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
                       </li>
                   ))}
               </ul>
-            </ScrollArea>
+            </div>
             
-
             <div className="flex-grow"></div>
 
             <Separator className="my-4"/>
@@ -186,7 +186,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
             <DialogTitle className="font-headline text-2xl sm:text-3xl">Detalles de tu Selección</DialogTitle>
           </DialogHeader>
           
-          <div className="flex-grow overflow-hidden">
+          <div className="flex-grow overflow-y-auto">
             <ScrollArea className="h-full">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 p-4 sm:p-6 pt-0">
                   <div className="md:col-span-7 space-y-6">
