@@ -7,7 +7,7 @@ import PackagesSearchPage from '@/components/packages-search-page';
 import CruiseSearchPage from '@/components/cruise-search-page';
 import { ActivitiesSection } from '@/components/activities-section';
 import { TestimonialsSection } from '@/components/testimonials-section';
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 import { RecommendedDestinations } from '@/components/recommended-destinations';
 import { RecommendedHotels } from '@/components/recommended-hotels';
@@ -110,7 +110,9 @@ function HomePageContent() {
       }
     };
     
-    const currentTabInfo = tabSpecifics[tab as keyof typeof tabSpecifics] || tabSpecifics.Flights;
+    const currentTabInfo = useMemo(() => {
+        return tabSpecifics[tab as keyof typeof tabSpecifics] || tabSpecifics.Flights;
+    }, [tab]);
 
 
     return (

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
@@ -48,7 +48,7 @@ const BackgroundCarousel = ({ images }: { images: string[] }) => {
   );
 };
 
-export function FuselageSection({ images, title, subtitle }: FuselageSectionProps) {
+function FuselageSectionComponent({ images, title, subtitle }: FuselageSectionProps) {
   return (
     <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
       <BackgroundCarousel images={images} />
@@ -65,3 +65,5 @@ export function FuselageSection({ images, title, subtitle }: FuselageSectionProp
     </section>
   );
 }
+
+export const FuselageSection = memo(FuselageSectionComponent);
