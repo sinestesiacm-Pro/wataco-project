@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense, useEffect, useState, useCallback } from "react";
@@ -14,6 +15,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import HotelSearchPage from "@/components/hotel-search-page";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type HotelFiltersState = {
   stars: number[];
