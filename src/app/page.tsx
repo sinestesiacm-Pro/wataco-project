@@ -27,28 +27,6 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { SearchContainer } from '@/components/search-container';
 
-function PageContent({ tab }: { tab?: string }) {
-  const activeTab = tab || 'Flights';
-
-  switch (activeTab) {
-    case 'Hotels':
-      return <HotelSearchPage />;
-    case 'Packages':
-      return <PackagesSearchPage />;
-    case 'Cruises':
-      return <CruiseSearchPage />;
-    case 'Activities':
-      return (
-          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-              <ActivitiesSection />
-          </div>
-      )
-    case 'Flights':
-    default:
-      return <FlightSearchPage />;
-  }
-}
-
 function RecommendedContent({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
@@ -165,14 +143,25 @@ function HomePageContent() {
                          </div>
                     </div>
                     <div className="p-2 sm:p-4 rounded-2xl bg-card/60">
-                         <PageContent tab={tab} />
+                         <div className={cn(tab !== 'Flights' && 'hidden')}>
+                           <FlightSearchPage />
+                         </div>
+                         <div className={cn(tab !== 'Hotels' && 'hidden')}>
+                           <HotelSearchPage />
+                         </div>
+                          <div className={cn(tab !== 'Packages' && 'hidden')}>
+                           <PackagesSearchPage />
+                         </div>
+                         <div className={cn(tab !== 'Cruises' && 'hidden')}>
+                           <CruiseSearchPage />
+                         </div>
                     </div>
               </SearchContainer>
             </FuselageSection>
       
             <div className="bg-background pt-16 pb-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <RecommendedContent tab={tab} />
+                     {tab === 'Activities' ? <ActivitiesSection /> : <RecommendedContent tab={tab} />}
                 </div>
             </div>
 
