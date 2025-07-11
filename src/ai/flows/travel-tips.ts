@@ -17,7 +17,7 @@ const GenerateDestinationTravelTipsInputSchema = z.object({
 export type GenerateDestinationTravelTipsInput = z.infer<typeof GenerateDestinationTravelTipsInputSchema>;
 
 const GenerateDestinationTravelTipsOutputSchema = z.object({
-  tips: z.string().describe('A list of travel tips for the destination.'),
+  tips: z.string().describe('A list of travel tips for the destination, formatted as a markdown list.'),
 });
 export type GenerateDestinationTravelTipsOutput = z.infer<typeof GenerateDestinationTravelTipsOutputSchema>;
 
@@ -29,7 +29,15 @@ const prompt = ai.definePrompt({
   name: 'generateDestinationTravelTipsPrompt',
   input: {schema: GenerateDestinationTravelTipsInputSchema},
   output: {schema: GenerateDestinationTravelTipsOutputSchema},
-  prompt: `Eres un experto en viajes. Genera una lista de consejos de viaje para {{destination}}.\n`,
+  prompt: `Eres un experto en viajes y un historiador apasionado. Genera una lista de 5 consejos de viaje y datos curiosos para un turista que visita {{destination}}.
+  
+  Formatea tu respuesta en una lista de markdown. Incluye una mezcla de consejos prácticos (ej. transporte, comida) y datos históricos o culturales interesantes y poco conocidos.
+  
+  Ejemplo de formato:
+  - **Mejor época para visitar:** Evita la temporada de lluvias de junio a agosto para disfrutar de cielos despejados.
+  - **Joya oculta:** Visita el mercado de San Telmo un domingo por la mañana para encontrar antigüedades únicas.
+  - **Dato curioso:** ¿Sabías que el Obelisco fue construido en solo 31 días?
+  `,
 });
 
 const generateDestinationTravelTipsFlow = ai.defineFlow(
