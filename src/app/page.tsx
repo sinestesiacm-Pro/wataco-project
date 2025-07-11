@@ -25,6 +25,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { SearchContainer } from '@/components/search-container';
 
 function PageContent({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -140,8 +141,8 @@ function HomePageContent() {
     return (
         <div className="w-full">
             <FuselageSection images={currentTabInfo.images} title={currentTabInfo.title} subtitle={currentTabInfo.subtitle}>
-                 <div className="bg-card/80 backdrop-blur-xl border p-2 sm:p-4 rounded-3xl shadow-2xl w-full max-w-5xl mx-auto">
-                    {/* Mobile tabs inside the search card */}
+              <SearchContainer>
+                 {/* Mobile tabs inside the search card */}
                      <div className="sm:hidden mb-2 flex justify-center px-4">
                          <div className="overflow-x-auto scrollbar-hide w-full">
                              <div className="flex justify-start space-x-1 w-max pb-1">
@@ -163,14 +164,13 @@ function HomePageContent() {
                              </div>
                          </div>
                     </div>
-                    
                     <div className="p-2 sm:p-4 rounded-2xl bg-card/60">
                          <PageContent tab={tab} />
                     </div>
-                 </div>
+              </SearchContainer>
             </FuselageSection>
       
-            <div className="bg-background pt-8 pb-16">
+            <div className="bg-background pt-16 pb-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <RecommendedContent tab={tab} />
                 </div>
