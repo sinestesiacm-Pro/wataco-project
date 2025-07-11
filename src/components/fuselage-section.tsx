@@ -38,7 +38,7 @@ const BackgroundCarousel = ({ images }: { images: string[] }) => {
           alt={`Travel background ${index + 1}`}
           fill
           className={cn(
-            'hero-background-image',
+            'hero-background-image filter blur-sm',
             index === currentImageIndex ? 'active' : ''
           )}
           style={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -59,7 +59,7 @@ const FuselageSectionComponent = ({ images, title, subtitle }: FuselageSectionPr
       <div 
         className="absolute inset-0"
         style={{ 
-           backgroundColor: 'rgba(0, 0, 0, 0.3)',
+           backgroundColor: 'rgba(0, 0, 0, 0.2)',
         }}
       />
       <div className="relative z-10 px-4 w-full">
