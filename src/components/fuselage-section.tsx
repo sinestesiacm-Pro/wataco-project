@@ -11,10 +11,13 @@ interface FuselageSectionProps {
   subtitle: string;
 }
 
+// SOLUCIÓN: El componente se define FUERA del componente padre.
+// Esto asegura que React lo trate como un tipo de componente estable y no lo vuelva a montar en cada render.
 const BackgroundCarousel = ({ images }: { images: string[] }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    // Cuando las imágenes cambian, reinicia el índice a 0.
     setCurrentImageIndex(0);
     
     if (images.length > 1) {
@@ -48,7 +51,8 @@ const BackgroundCarousel = ({ images }: { images: string[] }) => {
   );
 };
 
-function FuselageSectionComponent({ images, title, subtitle }: FuselageSectionProps) {
+// Se aplica React.memo como buena práctica para evitar re-renderizados si las props no cambian.
+const FuselageSectionComponent = ({ images, title, subtitle }: FuselageSectionProps) => {
   return (
     <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
       <BackgroundCarousel images={images} />
@@ -58,9 +62,11 @@ function FuselageSectionComponent({ images, title, subtitle }: FuselageSectionPr
            backgroundColor: 'rgba(0, 0, 0, 0.3)',
         }}
       />
-      <div className="relative px-4 w-full mt-[-150px] sm:mt-[-100px]">
-         <h1 className="hero-title">{title}</h1>
-         <p className="hero-subtitle">{subtitle}</p>
+      <div className="relative z-10 px-4 w-full">
+         <div className="relative mt-[-150px] sm:mt-[-100px]">
+           <h1 className="hero-title">{title}</h1>
+           <p className="hero-subtitle">{subtitle}</p>
+         </div>
       </div>
     </section>
   );
