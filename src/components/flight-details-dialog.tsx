@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';
-import { Clock, Luggage, Plane, QrCode, CheckCircle, ArrowRight, Armchair, PlusCircle, Briefcase, Star } from 'lucide-react';
+import { Clock, Luggage, Plane, QrCode, CheckCircle, ArrowRight, Armchair, PlusCircle, Briefcase, Star, Check } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO, format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -93,13 +93,13 @@ const fareOptions = [
     {
         name: "Plus",
         priceModifier: 45,
-        features: ["1 objeto personal", "1 equipaje de mano", "1 equipaje facturado (23kg)"],
+        features: ["1 objeto personal", "1 equipaje de mano", "1 equipaje facturado (23kg)", "Selección de asiento estándar"],
         icon: Luggage,
     },
     {
         name: "Premium",
         priceModifier: 120,
-        features: ["Todo lo de Plus", "Asiento preferencial", "Embarque prioritario"],
+        features: ["Todo lo de Plus", "Embarque prioritario", "Flexibilidad para cambios"],
         icon: Star,
     },
 ];
@@ -128,7 +128,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
             <ul className="text-sm space-y-2 mb-4">
                 {selectedFareOption?.features.map(feature => (
                     <li key={feature} className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <Check className="h-4 w-4 text-green-500" />
                         <span>{feature}</span>
                     </li>
                 ))}
@@ -145,7 +145,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
                     onClick={() => onSelectFlight(flight, addonsPrice)}
                 >
                     <CheckCircle className="mr-2 h-4 w-4" />
-                    Confirmar Reserva
+                    Confirmar Selección
                 </Button>
             </DialogClose>
         </Card>
@@ -156,10 +156,15 @@ interface FlightDetailsDialogProps {
   flight: FlightOffer;
   dictionaries: Dictionaries;
   onSelectFlight: (flight: FlightOffer, addons: number) => void;
+  dialogTitle: string;
 }
 
-export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: FlightDetailsDialogProps) {
+export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dialogTitle }: FlightDetailsDialogProps) {
   
+  const itineraryToShow = flight.itineraries.length > 1 && dialogTitle.toLowerCase().includes('vuelta')
+    ? flight.itineraries[1]
+    : flight.itineraries[0];
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -176,9 +181,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: Fl
           </DialogHeader>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6 pt-0">
               <div className="md:col-span-7 space-y-6">
-                  {flight.itineraries.map((itinerary, index) => (
-                      <BoardingPassCard key={index} itinerary={itinerary} dictionaries={dictionaries} title={index === 0 ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}/>
-                  ))}
+                  <BoardingPassCard itinerary={itineraryToShow} dictionaries={dictionaries} title={dialogTitle}/>
               </div>
               <div className="md:col-span-5 space-y-6">
                   <PriceCard flight={flight} onSelectFlight={onSelectFlight} />

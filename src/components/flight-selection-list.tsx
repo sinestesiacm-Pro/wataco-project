@@ -24,7 +24,7 @@ interface FlightSelectionListProps {
   selectedOutboundFlight?: FlightOffer | null;
 }
 
-const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void }) => {
+const FlightCard = ({ flight, dictionaries, onSelectFlight, title }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void, title: string }) => {
     const itinerary = flight.itineraries[0];
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
@@ -87,6 +87,7 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
                         flight={flight}
                         dictionaries={dictionaries}
                         onSelectFlight={onSelectFlight}
+                        dialogTitle={title.includes('ida') ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}
                     />
                 </div>
             </div>
@@ -122,7 +123,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
       {flights.length > 0 ? (
           <div className="space-y-4">
             {flights.map((flight) => (
-              <FlightCard key={flight.id} flight={flight} dictionaries={dictionaries} onSelectFlight={onSelectFlight} />
+              <FlightCard key={flight.id} flight={flight} dictionaries={dictionaries} onSelectFlight={onSelectFlight} title={title} />
             ))}
           </div>
       ) : (
