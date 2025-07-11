@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -18,6 +19,7 @@ import { es } from 'date-fns/locale';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
+import { ScrollArea } from './ui/scroll-area';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -36,7 +38,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
     return (
         <Card className="bg-card/80 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10">
             <div className="flex">
-                <div className="flex-grow p-6">
+                <div className="flex-grow p-4 sm:p-6">
                     <div className="flex justify-between items-center mb-4">
                         <div>
                             <p className="font-headline font-bold text-xl text-primary">{title}</p>
@@ -53,17 +55,17 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                     
                     <div className="flex items-center justify-between my-6">
                         <div className="text-center">
-                            <p className="text-4xl font-bold font-headline">{firstSegment.departure.iataCode}</p>
-                            <p className="text-lg font-semibold">{formatTime(firstSegment.departure.at)}</p>
+                            <p className="text-2xl sm:text-4xl font-bold font-headline">{firstSegment.departure.iataCode}</p>
+                            <p className="text-base sm:text-lg font-semibold">{formatTime(firstSegment.departure.at)}</p>
                         </div>
-                        <div className="flex flex-col items-center text-muted-foreground">
+                        <div className="flex flex-col items-center text-muted-foreground px-2">
                             <p className="text-sm font-semibold">{formatDuration(itinerary.duration)}</p>
                             <Plane className="w-6 h-6 my-1 text-primary" />
                              <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-4xl font-bold font-headline">{lastSegment.arrival.iataCode}</p>
-                             <p className="text-lg font-semibold">{formatTime(lastSegment.arrival.at)}</p>
+                            <p className="text-2xl sm:text-4xl font-bold font-headline">{lastSegment.arrival.iataCode}</p>
+                             <p className="text-base sm:text-lg font-semibold">{formatTime(lastSegment.arrival.at)}</p>
                         </div>
                     </div>
                      <div className="text-xs text-muted-foreground text-center">
@@ -71,10 +73,10 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                     </div>
                 </div>
 
-                <div className="bg-muted/40 w-32 flex-shrink-0 border-l-2 border-dashed border-border flex flex-col items-center justify-center p-4">
+                <div className="bg-muted/40 w-24 sm:w-32 flex-shrink-0 border-l-2 border-dashed border-border flex flex-col items-center justify-center p-2 sm:p-4">
                      <p className="font-headline font-bold text-primary text-sm mb-2 text-center animate-pulse-text">Casi Listo</p>
                      <div className="bg-white p-1 rounded-md shadow-inner">
-                        <QrCode className="w-16 h-16 text-black" />
+                        <QrCode className="w-12 h-12 sm:w-16 sm:h-16 text-black" />
                      </div>
                      <p className="text-xs font-mono mt-2 text-center">{firstSegment.carrierCode} {firstSegment.number}</p>
                 </div>
@@ -113,7 +115,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
     const totalPrice = basePrice + addonsPrice;
 
     return (
-        <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
+        <Card className="bg-card/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10">
             <h3 className="font-headline font-bold text-xl text-primary mb-4">Elige tu Tarifa</h3>
             <div className="grid grid-cols-3 gap-2 mb-4">
                 {fareOptions.map(fare => (
@@ -137,7 +139,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
             <Separator className="my-4"/>
 
             <p className="text-sm text-muted-foreground">Precio total</p>
-            <p className="text-4xl font-bold text-accent my-2">${totalPrice.toFixed(2)}</p>
+            <p className="text-3xl sm:text-4xl font-bold text-accent my-2">${totalPrice.toFixed(2)}</p>
             
             <DialogClose asChild>
                 <Button
@@ -175,18 +177,20 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
             Seleccionar
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
-          <DialogHeader className="p-6 pb-4">
-            <DialogTitle className="font-headline text-3xl">Detalles de tu Selección</DialogTitle>
+      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl p-0 border-0 shadow-2xl rounded-3xl">
+          <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0">
+            <DialogTitle className="font-headline text-2xl sm:text-3xl">Detalles de tu Selección</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6 pt-0">
-              <div className="md:col-span-7 space-y-6">
-                  <BoardingPassCard itinerary={itineraryToShow} dictionaries={dictionaries} title={dialogTitle}/>
-              </div>
-              <div className="md:col-span-5 space-y-6">
-                  <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
-              </div>
-          </div>
+          <ScrollArea className="flex-grow overflow-y-auto">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 p-4 sm:p-6 pt-0">
+                <div className="md:col-span-7 space-y-6">
+                    <BoardingPassCard itinerary={itineraryToShow} dictionaries={dictionaries} title={dialogTitle}/>
+                </div>
+                <div className="md:col-span-5 space-y-6">
+                    <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
+                </div>
+            </div>
+          </ScrollArea>
       </DialogContent>
     </Dialog>
   );
