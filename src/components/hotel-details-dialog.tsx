@@ -16,7 +16,7 @@ import { ScrollArea } from './ui/scroll-area';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Badge } from './ui/badge';
-import { Card } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { HotelMapDialog } from './hotel-map-dialog';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
@@ -40,6 +40,7 @@ const amenityIcons: { [key: string]: LucideIcon } = {
   AIR_CONDITIONING: Wind,
   PETS_ALLOWED: Dog,
   AIRPORT_SHUTTLE: Plane,
+  BEACH_ACCESS: Waves,
 };
 
 const formatAmenity = (amenity: string) => {
@@ -50,7 +51,10 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
   const [isOpen, setIsOpen] = useState(false);
   const details = offer;
   
-  const bookingLink = `/hotels/${offer.id}?${searchParams.toString()}`;
+  // Add step=rooms to the query to go directly to room selection
+  const bookingLinkParams = new URLSearchParams(searchParams.toString());
+  bookingLinkParams.set('step', 'rooms');
+  const bookingLink = `/hotels/${offer.id}?${bookingLinkParams.toString()}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -115,16 +119,15 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                   </div>
                   <div className="md:col-span-5 space-y-6">
                     <Card className="bg-card p-6 rounded-2xl shadow-sm flex flex-col h-full">
-                      <div>
+                      <div className="flex-grow">
                         <h3 className="text-lg font-semibold font-headline mb-2">Sobre este hotel</h3>
                         {details.hotel.description?.text && (
                             <p className="text-sm text-muted-foreground font-body max-h-24 overflow-y-auto">
                                 {details.hotel.description.text}
                             </p>
                         )}
-                      </div>
-
-                      {details.hotel.amenities && details.hotel.amenities.length > 0 && (
+                      
+                        {details.hotel.amenities && details.hotel.amenities.length > 0 && (
                           <div className="mt-4">
                             <h3 className="text-lg font-semibold font-headline mb-3">Servicios</h3>
                              <TooltipProvider>
@@ -148,24 +151,23 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                              </TooltipProvider>
                           </div>
                         )}
-                        
-                        <div className="flex-grow"></div>
-                        
-                        <Separator className="my-6" />
+                      </div>
+                      
+                      <Separator className="my-6" />
 
-                        {details.offers?.[0]?.price?.total && (
-                          <div className="mb-4 text-right">
-                              <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
-                              <p className="font-bold text-3xl text-foreground">
-                                ${details.offers[0].price.total}
-                              </p>
-                          </div>
-                        )}
-                        <Button asChild size="lg" className="w-full bg-success hover:bg-success/90 text-success-foreground">
-                           <Link href={bookingLink}>
-                              Reservar Ahora
-                           </Link>
-                        </Button>
+                      {details.offers?.[0]?.price?.total && (
+                        <div className="mb-4 text-right">
+                            <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
+                            <p className="font-bold text-3xl text-foreground">
+                              ${details.offers[0].price.total}
+                            </p>
+                        </div>
+                      )}
+                      <Button asChild size="lg" className="w-full bg-success hover:bg-success/90 text-success-foreground">
+                         <Link href={bookingLink}>
+                            Ver Habitaciones
+                         </Link>
+                      </Button>
                     </Card>
                   </div>
               </div>

@@ -8,6 +8,7 @@ import { HotelDetailsView } from './hotel-details-view';
 import { RoomSelectionView } from './room-selection-view';
 import { CheckoutView } from './checkout-view';
 import { Button } from './ui/button';
+import { useSearchParams } from 'next/navigation';
 
 type BookingStep = 'details' | 'rooms' | 'checkout';
 
@@ -18,7 +19,10 @@ interface HotelBookingFlowProps {
 }
 
 export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlowProps) {
-  const [step, setStep] = useState<BookingStep>('details');
+  const searchParams = useSearchParams();
+  const initialStep = searchParams.get('step') === 'rooms' ? 'rooms' : 'details';
+  
+  const [step, setStep] = useState<BookingStep>(initialStep);
   const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [numberOfRooms, setNumberOfRooms] = useState(1);
