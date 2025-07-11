@@ -46,8 +46,8 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
       <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-card/80 backdrop-blur-2xl p-0 border-0 shadow-2xl rounded-3xl">
         {offer ? (
           <>
-            <DialogHeader className="p-4 md:p-8 pb-0 text-left flex-shrink-0">
-                <DialogTitle className="font-headline text-3xl font-semibold text-primary">{offer.hotel.name}</DialogTitle>
+            <DialogHeader className="p-4 md:p-6 pb-2 text-left flex-shrink-0">
+                <DialogTitle className="font-headline text-2xl sm:text-3xl font-semibold text-primary">{offer.hotel.name}</DialogTitle>
                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                     {offer.hotel.rating && (
                         <div className="flex items-center">
@@ -65,10 +65,10 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
             </DialogHeader>
             <div className="flex-grow min-h-0">
                 <ScrollArea className="h-full">
-                    <div className="p-4 md:p-8 pt-4">
-                      <div className="flex flex-col md:flex-row gap-6">
-                          {/* Main Content Area (Now contains the tear-off stub as well) */}
-                          <div className="flex-grow space-y-6">
+                    <div className="p-4 md:p-6 pt-2">
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                          {/* Main Content Area */}
+                          <div className="md:col-span-7 space-y-6">
                               <div className="w-full h-64 relative rounded-xl overflow-hidden shadow-lg">
                                   <Image
                                       src={offer.hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png'}
@@ -115,27 +115,29 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                           </div>
 
                           {/* Tear-off Stub Area */}
-                          <div className="w-full md:w-64 flex-shrink-0 bg-muted/40 ticket-tear flex flex-col items-center justify-between p-6 rounded-lg mt-6 md:mt-0">
-                              <div className="text-center">
-                                  <h3 className="font-headline font-semibold text-lg">Tu Reserva</h3>
-                                  <div className="bg-card p-2 rounded-lg mt-2 shadow-inner">
-                                      <QrCode className="w-20 h-20 text-foreground" />
-                                  </div>
-                              </div>
-                              
-                              <div className="text-center w-full mt-4 md:mt-0">
-                                  <div>
-                                      <p className="text-xs text-muted-foreground font-body">Precio por noche desde</p>
-                                      <p className="font-bold text-4xl text-tertiary">
-                                      ${offer.offers?.[0]?.price?.total}
-                                      </p>
-                                  </div>
-                                  <p className="text-sm font-semibold text-primary animate-pulse-text my-3">¡Ya casi está listo!</p>
-                                  <Button asChild size="lg" className="w-full mt-2 bg-success hover:bg-success/90 text-success-foreground font-semibold">
-                                      <Link href={bookingLink}>
-                                          Ver Habitaciones <ArrowRight className="ml-2 h-4 w-4"/>
-                                      </Link>
-                                  </Button>
+                          <div className="md:col-span-5 flex flex-col">
+                              <div className="bg-muted/40 ticket-tear flex flex-col items-center justify-between p-6 rounded-lg flex-grow">
+                                <div className="text-center w-full">
+                                    <h3 className="font-headline font-semibold text-lg">Tu Reserva</h3>
+                                    <div className="bg-card p-2 rounded-lg mt-2 shadow-inner inline-block">
+                                        <QrCode className="w-20 h-20 text-foreground" />
+                                    </div>
+                                </div>
+                                
+                                <div className="text-center w-full mt-4">
+                                    <div>
+                                        <p className="text-xs text-muted-foreground font-body">Precio por noche desde</p>
+                                        <p className="font-bold text-4xl text-tertiary">
+                                        ${offer.offers?.[0]?.price?.total}
+                                        </p>
+                                    </div>
+                                    <p className="text-sm font-semibold text-primary animate-pulse-text my-3">¡Ya casi está listo!</p>
+                                    <Button asChild size="lg" className="w-full mt-2 bg-success hover:bg-success/90 text-success-foreground font-semibold">
+                                        <Link href={bookingLink}>
+                                            Ver Habitaciones <ArrowRight className="ml-2 h-4 w-4"/>
+                                        </Link>
+                                    </Button>
+                                </div>
                               </div>
                           </div>
                       </div>
