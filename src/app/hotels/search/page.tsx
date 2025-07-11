@@ -1,10 +1,10 @@
 'use client';
 
-import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { Loader2, Filter } from "lucide-react";
+import { Suspense, useEffect, useState, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Loader2, Filter, Settings2 } from "lucide-react";
 import { searchHotels } from "@/app/actions";
-import type { AmadeusHotelOffer } from "@/lib/types";
+import type { AmadeusHotelOffer, Airport } from "@/lib/types";
 import { HotelResults } from "@/components/hotel-results";
 import { HotelFilters } from "@/components/hotel-filters";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +12,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AITravelTips } from "@/components/ai-travel-tips";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import HotelSearchPage from "@/components/hotel-search-page";
 
 type HotelFiltersState = {
   stars: number[];
@@ -19,7 +21,8 @@ type HotelFiltersState = {
   priceRange: number[];
 };
 
-function HotelResultsPage() {
+function HotelResultsPageContent() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const [hotels, setHotels] = useState<AmadeusHotelOffer[] | null>(null);
     const [filteredHotels, setFilteredHotels] = useState<AmadeusHotelOffer[] | null>(null);
@@ -32,26 +35,30 @@ function HotelResultsPage() {
     const adults = searchParams.get('adults') || '1';
     const children = searchParams.get('children') || '0';
     const destinationName = searchParams.get('destinationName') || 'tu destino';
-
-    useEffect(() => {
+    
+    const runSearch = useCallback(async () => {
         if (cityCode && checkInDate && checkOutDate) {
             setLoading(true);
-            searchHotels({
+            const result = await searchHotels({
                 cityCode,
                 checkInDate,
                 checkOutDate,
                 adults: parseInt(adults, 10),
-            }).then(result => {
-                if(result.success && result.data) {
-                    setHotels(result.data);
-                    setFilteredHotels(result.data);
-                } else {
-                    setError(result.error || 'No se encontraron hoteles para tu búsqueda.');
-                }
-                setLoading(false);
-            })
+            });
+            if(result.success && result.data) {
+                setHotels(result.data);
+                setFilteredHotels(result.data);
+            } else {
+                setError(result.error || 'No se encontraron hoteles para tu búsqueda.');
+            }
+            setLoading(false);
         }
     }, [cityCode, checkInDate, checkOutDate, adults]);
+
+
+    useEffect(() => {
+        runSearch();
+    }, [runSearch]);
     
     const handleFilterChange = (filters: HotelFiltersState) => {
         if (!hotels) return;
@@ -115,15 +122,32 @@ function HotelResultsPage() {
     return (
         <div className="w-full bg-muted/30 min-h-screen">
           <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <div className="mb-6">
-                <h1 className="text-4xl font-bold font-headline">Hoteles en {destinationName}</h1>
-                <div className="flex justify-between items-center mt-2">
-                    <p className="text-muted-foreground">
-                        {filteredHotels ? `${filteredHotels.length} resultados encontrados` : ''}
-                    </p>
-                    <AITravelTips destination={cityCode} destinationName={destinationName} />
-                </div>
+             <Collapsible className="mb-6 bg-card p-4 rounded-2xl border">
+                 <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl sm:text-4xl font-bold font-headline">Hoteles en {destinationName}</h1>
+                        <p className="text-muted-foreground mt-1">
+                            {filteredHotels ? `${filteredHotels.length} resultados encontrados` : ''}
+                        </p>
+                    </div>
+                    <CollapsibleTrigger asChild>
+                      <Button variant="outline">
+                        <Settings2 className="mr-2 h-4 w-4" />
+                        Modificar Búsqueda
+                      </Button>
+                    </CollapsibleTrigger>
+                 </div>
+                <CollapsibleContent>
+                  <div className="mt-6 pt-6 border-t">
+                    <HotelSearchPage />
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            
+            <div className="flex justify-end items-center mb-6">
+                 <AITravelTips destination={cityCode} destinationName={destinationName} />
             </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <aside className="hidden lg:block lg:col-span-3">
                 <HotelFilters onFilterChange={handleFilterChange} />
@@ -137,7 +161,9 @@ function HotelResultsPage() {
                          </Button>
                       </SheetTrigger>
                       <SheetContent side="bottom" className="h-[80vh]">
-                        <HotelFilters onFilterChange={handleFilterChange} />
+                         <ScrollArea className="h-full pr-4">
+                            <HotelFilters onFilterChange={handleFilterChange} />
+                         </ScrollArea>
                       </SheetContent>
                     </Sheet>
                   </div>
@@ -166,7 +192,7 @@ export default function HotelSearchPageWrapper() {
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
     }>
-        <HotelResultsPage />
+        <HotelResultsPageContent />
     </Suspense>
   )
 }

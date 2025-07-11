@@ -209,7 +209,7 @@ export default function PackagesSearchPage() {
       >
         <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
           <form onSubmit={handleSearch} className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <InputGroup className='relative' ref={activeInput === 'origin' ? suggestionsRef : null}>
                     <Label htmlFor="origin" className="text-sm font-semibold ml-2 mb-1">Desde</Label>
                     <div className="relative flex items-center">
@@ -239,7 +239,7 @@ export default function PackagesSearchPage() {
                     {activeInput === 'destination' && <SuggestionsList type="destination" />}
                   </InputGroup>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <InputGroup>
                     <Label htmlFor="dates" className="text-sm font-semibold ml-2 mb-1">Fechas</Label>
                     <Popover>
@@ -310,23 +310,9 @@ export default function PackagesSearchPage() {
                     </Popover>
                   </InputGroup>
               </div>
-              <div className="flex justify-end">
-                {loading ? (
-                  <Button
-                    type="button"
-                    size="lg"
-                    className="w-full lg:w-auto font-bold mt-1 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
-                    onClick={handleCancelSearch}
-                  >
-                    <X className="mr-2 h-5 w-5" />
-                    Cancelar
-                  </Button>
-                ) : (
-                  <Button type="submit" size="lg" className="w-full lg:w-auto font-bold bg-success hover:bg-success/90 mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                     <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
-                  </Button>
-                )}
-              </div>
+              <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-12">
+                 <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
+              </Button>
           </form>
         </div>
       </HeroSection>
