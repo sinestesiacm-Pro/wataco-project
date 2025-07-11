@@ -20,6 +20,7 @@ import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { amenityIcons } from '@/lib/amenity-icons';
+import { Card, CardContent } from '@/components/ui/card';
 
 
 const formatAmenity = (amenity: string) => {
