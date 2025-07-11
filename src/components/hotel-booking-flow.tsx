@@ -4,13 +4,11 @@ import { useState, useEffect } from 'react';
 import { getHotelDetails } from '@/app/actions';
 import { AmadeusHotelOffer, Room } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
-import { HotelDetailsView } from './hotel-details-view';
 import { RoomSelectionView } from './room-selection-view';
 import { CheckoutView } from './checkout-view';
 import { Button } from './ui/button';
-import { useSearchParams } from 'next/navigation';
 
-type BookingStep = 'details' | 'rooms' | 'checkout';
+type BookingStep = 'rooms' | 'checkout';
 
 interface HotelBookingFlowProps {
   offerId: string;
@@ -19,10 +17,7 @@ interface HotelBookingFlowProps {
 }
 
 export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlowProps) {
-  const searchParams = useSearchParams();
-  const initialStep = searchParams.get('step') === 'rooms' ? 'rooms' : 'details';
-  
-  const [step, setStep] = useState<BookingStep>(initialStep);
+  const [step, setStep] = useState<BookingStep>('rooms');
   const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [numberOfRooms, setNumberOfRooms] = useState(1);
@@ -49,22 +44,12 @@ export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlow
     fetchDetails();
   }, [offerId]);
 
-  const handleSelectRooms = () => {
-    setStep('rooms');
-    window.scrollTo(0, 0);
-  };
-  
   const handleRoomSelected = (room: Room, numRooms: number) => {
     setSelectedRoom(room);
     setNumberOfRooms(numRooms);
     setStep('checkout');
     window.scrollTo(0, 0);
   };
-
-  const handleBackToDetails = () => {
-    setStep('details');
-    window.scrollTo(0, 0);
-  }
 
   const handleBackToRooms = () => {
     setStep('rooms');
@@ -85,10 +70,8 @@ export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlow
 
   const renderStep = () => {
     switch (step) {
-      case 'details':
-        return <HotelDetailsView hotelOffer={hotelOffer} onSeeRooms={handleSelectRooms} />;
       case 'rooms':
-        return <RoomSelectionView hotelOffer={hotelOffer} onRoomSelected={handleRoomSelected} onBack={handleBackToDetails} adults={adults} children={children} />;
+        return <RoomSelectionView hotelOffer={hotelOffer} onRoomSelected={handleRoomSelected} adults={adults} children={children} />;
       case 'checkout':
         if (!selectedRoom) {
             // This should not happen in normal flow, but it's a good fallback

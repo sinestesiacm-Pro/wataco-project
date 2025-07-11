@@ -30,7 +30,6 @@ const formatAmenity = (amenity: string) => {
 interface RoomSelectionViewProps {
   hotelOffer: AmadeusHotelOffer;
   onRoomSelected: (room: Room, numberOfRooms: number) => void;
-  onBack: () => void;
   adults: number;
   children: number;
 }
@@ -138,17 +137,13 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
 };
 
 
-export function RoomSelectionView({ hotelOffer, onRoomSelected, onBack, adults, children }: RoomSelectionViewProps) {
+export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children }: RoomSelectionViewProps) {
   const rooms = hotelOffer.offers;
 
   return (
     <div className="space-y-6">
        <div className="flex items-center justify-between mb-8">
-            <Button variant="outline" onClick={onBack}>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Volver a Detalles
-            </Button>
-            <h2 className="hidden md:block text-2xl font-bold font-headline text-center">{hotelOffer.hotel.name} - Elige tu habitación</h2>
+            <h2 className="text-2xl font-bold font-headline text-center">{hotelOffer.hotel.name} - Elige tu habitación</h2>
              <div className="w-32"></div>
        </div>
 
