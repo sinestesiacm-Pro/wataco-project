@@ -141,23 +141,27 @@ function HomePageContent() {
         <div className="w-full">
             <FuselageSection images={currentTabInfo.images} title={currentTabInfo.title} subtitle={currentTabInfo.subtitle}>
                  <div className="bg-card/80 backdrop-blur-xl border p-2 sm:p-4 rounded-3xl shadow-2xl w-full max-w-5xl mx-auto">
-                    {/* Tabs for mobile */}
-                    <div className="sm:hidden grid grid-cols-5 gap-1 mb-2">
-                         {tabsConfig.map(({ id, label, icon: Icon }) => (
-                            <Button 
-                                key={id} 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => handleTabClick(id)}
-                                className={cn(
-                                    "flex-col h-auto p-1 rounded-lg",
-                                    tab === id ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
-                                )}
-                            >
-                                <Icon className="h-5 w-5 mb-1" />
-                                <span className="text-[10px] font-semibold">{label}</span>
-                            </Button>
-                        ))}
+                    {/* Mobile tabs inside the search card */}
+                    <div className="sm:hidden mb-2">
+                         <div className="overflow-x-auto scrollbar-hide mask-fade">
+                             <div className="flex justify-start space-x-1 w-max pb-1">
+                                {tabsConfig.map(({ id, label, icon: Icon }) => (
+                                    <Button 
+                                        key={id} 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        onClick={() => handleTabClick(id)}
+                                        className={cn(
+                                            "flex-col h-auto p-2 rounded-lg",
+                                            tab === id ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
+                                        )}
+                                    >
+                                        <Icon className="h-5 w-5 mb-1" />
+                                        <span className="text-[10px] font-semibold">{label}</span>
+                                    </Button>
+                                ))}
+                             </div>
+                         </div>
                     </div>
                     
                     <div className="p-2 sm:p-4 rounded-2xl bg-card/60">

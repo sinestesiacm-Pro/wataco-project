@@ -125,15 +125,18 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
                     </button>
                 ))}
             </div>
-
-            <ul className="text-sm space-y-2 mb-4">
-                {selectedFareOption?.features.map(feature => (
-                    <li key={feature} className="flex items-center gap-2">
-                        <Check className="h-4 w-4 text-green-500" />
-                        <span>{feature}</span>
-                    </li>
-                ))}
-            </ul>
+            
+            <ScrollArea className="flex-grow pr-3 -mr-3 mb-4">
+              <ul className="text-sm space-y-2">
+                  {selectedFareOption?.features.map(feature => (
+                      <li key={feature} className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                          <span>{feature}</span>
+                      </li>
+                  ))}
+              </ul>
+            </ScrollArea>
+            
 
             <div className="flex-grow"></div>
 
@@ -182,16 +185,19 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
           <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0">
             <DialogTitle className="font-headline text-2xl sm:text-3xl">Detalles de tu Selección</DialogTitle>
           </DialogHeader>
-          <ScrollArea className="flex-grow">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 p-4 sm:p-6 pt-0">
-                <div className="md:col-span-7 space-y-6">
-                    <BoardingPassCard itinerary={itineraryToShow} dictionaries={dictionaries} title={dialogTitle}/>
-                </div>
-                <div className="md:col-span-5 space-y-6">
-                    <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
-                </div>
-            </div>
-          </ScrollArea>
+          
+          <div className="flex-grow overflow-hidden">
+            <ScrollArea className="h-full">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 p-4 sm:p-6 pt-0">
+                  <div className="md:col-span-7 space-y-6">
+                      <BoardingPassCard itinerary={itineraryToShow} dictionaries={dictionaries} title={dialogTitle}/>
+                  </div>
+                  <div className="md:col-span-5 space-y-6">
+                      <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
+                  </div>
+              </div>
+            </ScrollArea>
+          </div>
       </DialogContent>
     </Dialog>
   );

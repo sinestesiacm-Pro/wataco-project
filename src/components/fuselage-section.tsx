@@ -46,7 +46,7 @@ export function FuselageSection({ images, title, subtitle, children }: FuselageS
       <div 
         className="absolute inset-0 z-10"
         style={{ 
-          background: 'linear-gradient(to top, hsl(var(--background)) 0%, transparent 50%, transparent 100%)'
+          background: 'linear-gradient(to top, hsl(var(--background)) 5%, transparent 50%, transparent 100%)'
         }}
       />
       <div 
