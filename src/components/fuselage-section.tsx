@@ -11,13 +11,13 @@ interface FuselageSectionProps {
   subtitle: string;
 }
 
-// SOLUCIÓN: El componente se define FUERA del componente padre.
-// Esto asegura que React lo trate como un tipo de componente estable y no lo vuelva a montar en cada render.
+// This component is defined OUTSIDE the parent component.
+// This ensures React treats it as a stable component type and doesn't remount it on every render.
 const BackgroundCarousel = ({ images }: { images: string[] }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    // Cuando las imágenes cambian, reinicia el índice a 0.
+    // When the images change, reset the index to 0.
     setCurrentImageIndex(0);
     
     if (images.length > 1) {
@@ -51,10 +51,10 @@ const BackgroundCarousel = ({ images }: { images: string[] }) => {
   );
 };
 
-// Se aplica React.memo como buena práctica para evitar re-renderizados si las props no cambian.
+// React.memo is applied as a best practice to prevent re-renders if the props haven't changed.
 const FuselageSectionComponent = ({ images, title, subtitle }: FuselageSectionProps) => {
   return (
-    <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden mask-fade">
+    <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
       <BackgroundCarousel images={images} />
       <div 
         className="absolute inset-0"
