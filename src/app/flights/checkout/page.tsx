@@ -116,10 +116,10 @@ const ContactInfoForm = () => {
                     <Label htmlFor="phone">Número de Teléfono</Label>
                     <div className="flex gap-2 mt-1">
                         <Select defaultValue="us">
-                            <SelectTrigger className="w-[150px]">
+                            <SelectTrigger className="w-[120px]">
                                 <SelectValue placeholder="Código" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="min-w-[250px]">
                                 {countryCodes.map(country => (
                                      <SelectItem key={country.code} value={country.code}>
                                         <div className="flex items-center gap-2">
