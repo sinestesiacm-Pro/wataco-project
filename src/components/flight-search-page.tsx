@@ -412,7 +412,7 @@ export default function FlightSearchPage() {
       
       <div className="max-w-7xl mx-auto py-0 px-4 sm:px-6 lg:px-8">
         <section className="mt-8">
-            <div className="h-16" />
+            {/* Content can be added here in the future */}
         </section>
       </div>
     </div>
