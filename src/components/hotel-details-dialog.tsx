@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -66,7 +67,7 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                 <ScrollArea className="h-full">
                     <div className="p-4 md:p-8 pt-4">
                       <div className="flex flex-col md:flex-row gap-6">
-                          {/* Main Content Area */}
+                          {/* Main Content Area (Now contains the tear-off stub as well) */}
                           <div className="flex-grow space-y-6">
                               <div className="w-full h-64 relative rounded-xl overflow-hidden shadow-lg">
                                   <Image
@@ -114,7 +115,7 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                           </div>
 
                           {/* Tear-off Stub Area */}
-                          <div className="w-full md:w-64 flex-shrink-0 bg-muted/40 ticket-tear flex flex-col items-center justify-between p-6 rounded-lg">
+                          <div className="w-full md:w-64 flex-shrink-0 bg-muted/40 ticket-tear flex flex-col items-center justify-between p-6 rounded-lg mt-6 md:mt-0">
                               <div className="text-center">
                                   <h3 className="font-headline font-semibold text-lg">Tu Reserva</h3>
                                   <div className="bg-card p-2 rounded-lg mt-2 shadow-inner">
