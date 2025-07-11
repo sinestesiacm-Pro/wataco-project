@@ -1,5 +1,3 @@
-
-
 'use client';
 import { useState, useRef } from 'react';
 import { format } from 'date-fns';
@@ -113,86 +111,88 @@ export default function CruiseSearchPage() {
         subtitle="Descubre y reserva increíbles vacaciones en crucero por todo el mundo."
       >
         <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleSearch} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-              <div className='lg:col-span-5'>
-                <Label htmlFor="destination-region" className="text-sm font-semibold ml-2">Navegando Hacia</Label>
-                <Select onValueChange={setDestinationRegion} value={destinationRegion}>
-                  <SelectTrigger id="destination-region" className="mt-1">
-                    <Sailboat className="h-4 w-4 text-muted-foreground mr-2" />
-                    <SelectValue placeholder="Selecciona un destino" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cruiseRegions.map(region => (
-                      <SelectItem key={region.value} value={region.value}>{region.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="lg:col-span-3">
-                <Label htmlFor="departureDate" className="text-sm font-semibold ml-2">Navegando Después de</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !departureDate && "text-muted-foreground")}>
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {departureDate ? format(departureDate, "MMM yyyy") : <span>Elige una fecha</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} initialFocus />
-                  </PopoverContent>
-                </Popover>
-              </div>
+          <form onSubmit={handleSearch} className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+                <div className="w-full lg:col-span-5">
+                  <Label htmlFor="destination-region" className="text-sm font-semibold ml-2">Navegando Hacia</Label>
+                  <Select onValueChange={setDestinationRegion} value={destinationRegion}>
+                    <SelectTrigger id="destination-region" className="mt-1">
+                      <Sailboat className="h-4 w-4 text-muted-foreground mr-2" />
+                      <SelectValue placeholder="Selecciona un destino" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {cruiseRegions.map(region => (
+                        <SelectItem key={region.value} value={region.value}>{region.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="w-full lg:col-span-3">
+                  <Label htmlFor="departureDate" className="text-sm font-semibold ml-2">Navegando Después de</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !departureDate && "text-muted-foreground")}>
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {departureDate ? format(departureDate, "MMM yyyy") : <span>Elige una fecha</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} initialFocus />
+                    </PopoverContent>
+                  </Popover>
+                </div>
 
-              <div className='lg:col-span-2'>
-                <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Huéspedes</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
-                      <Users className="mr-2 h-4 w-4" />
-                      {travelerText}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-80" align="end">
-                     <div className="grid gap-4">
-                      <div className="space-y-2">
-                        <h4 className="font-medium leading-none">Huéspedes</h4>
-                        <p className="text-sm text-muted-foreground">Selecciona el número de huéspedes.</p>
-                      </div>
-                      <div className="grid gap-4">
-                        <div className="flex items-center justify-between">
-                          <p className="font-medium">Adultos</p>
-                          <div className="flex items-center gap-2">
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
-                              <Minus className="h-4 w-4" />
-                            </Button>
-                            <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)} disabled={adults >= 8}>
-                              <Plus className="h-4 w-4" />
-                            </Button>
+                <div className="w-full lg:col-span-2">
+                  <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Huéspedes</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
+                        <Users className="mr-2 h-4 w-4" />
+                        {travelerText}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80" align="end">
+                       <div className="grid gap-4">
+                        <div className="space-y-2">
+                          <h4 className="font-medium leading-none">Huéspedes</h4>
+                          <p className="text-sm text-muted-foreground">Selecciona el número de huéspedes.</p>
+                        </div>
+                        <div className="grid gap-4">
+                          <div className="flex items-center justify-between">
+                            <p className="font-medium">Adultos</p>
+                            <div className="flex items-center gap-2">
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)} disabled={adults >= 8}>
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div className="lg:col-span-2 flex items-end">
-                {loading ? (
-                  <Button
-                    type="button"
-                    size="lg"
-                    className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground h-10 mt-1"
-                    onClick={handleCancelSearch}
-                  >
-                    <X className="mr-2 h-5 w-5" />
-                    Cancelar
-                  </Button>
-                ) : (
-                  <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-10 mt-1">
-                    <Ship className="mr-2 h-5 w-5" /> Buscar Cruceros
-                  </Button>
-                )}
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="w-full lg:col-span-2">
+                  {loading ? (
+                    <Button
+                      type="button"
+                      size="lg"
+                      className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground h-10"
+                      onClick={handleCancelSearch}
+                    >
+                      <X className="mr-2 h-5 w-5" />
+                      Cancelar
+                    </Button>
+                  ) : (
+                    <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-10">
+                      <Ship className="mr-2 h-5 w-5" /> Buscar Cruceros
+                    </Button>
+                  )}
+                </div>
               </div>
           </form>
         </div>
