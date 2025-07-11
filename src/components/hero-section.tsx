@@ -45,7 +45,9 @@ export function HeroSection({ images, title, subtitle, children }: HeroSectionPr
       <div className="hero-content">
         <h1 className="hero-title">{title}</h1>
         <p className="hero-subtitle">{subtitle}</p>
-        {children}
+        <div className="w-full max-w-5xl mx-auto">
+         {children}
+        </div>
       </div>
     </section>
   );

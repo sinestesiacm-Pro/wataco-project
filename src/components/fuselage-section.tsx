@@ -23,7 +23,7 @@ export function FuselageSection({ images, children }: FuselageSectionProps) {
   }, [images]);
 
   return (
-    <section className="hero-section" style={{ height: 'auto', minHeight: '100vh' }}>
+    <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
       {images.map((image, index) => (
         <Image
           key={`${image}-${index}`}
@@ -36,17 +36,25 @@ export function FuselageSection({ images, children }: FuselageSectionProps) {
           )}
           style={{ objectFit: 'cover', objectPosition: 'center' }}
           sizes="100vw"
+          priority={index === 0}
           data-ai-hint="travel destination"
         />
       ))}
       <div 
-        className="hero-overlay" 
+        className="absolute inset-0 z-10"
         style={{ 
-          backgroundColor: 'rgba(238, 242, 245, 0.8)', // Light fuselage color with opacity
-          backdropFilter: 'blur(8px)' 
+          background: 'linear-gradient(to top, hsl(var(--background)) 0%, transparent 40%, transparent 100%)'
         }}
       />
-      <div className="hero-content fuselage-background">
+      <div 
+        className="absolute inset-0 z-0"
+        style={{ 
+           backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        }}
+      />
+      <div className="relative z-20 px-4 w-full">
+         <h1 className="hero-title">Tu Próxima Aventura<br />te Espera</h1>
+         <p className="hero-subtitle">Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo.</p>
         {children}
       </div>
     </section>

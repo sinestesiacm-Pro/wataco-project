@@ -16,25 +16,15 @@ import { cn } from '@/lib/utils';
 import { Switch } from './ui/switch';
 import React from 'react';
 import type { DateRange } from 'react-day-picker';
-import { HeroSection } from './hero-section';
-import { FlightLoadingAnimation } from './flight-loading-animation';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-
-const InputGroup = ({ children }: { children: React.ReactNode }) => (
-  <div className="relative flex items-center">{children}</div>
+const InputGroup = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+  <div className={cn("relative flex flex-col w-full", className)}>{children}</div>
 );
 
 const InputIcon = ({ children }: { children: React.ReactNode }) => (
   <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{children}</div>
 );
-
-const flightImages = [
-  'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1488085061387-422e29b40080?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?fit=crop&w=1920&q=80',
-];
 
 export default function FlightSearchPage() {
   const searchParams = useSearchParams();
@@ -233,180 +223,169 @@ export default function FlightSearchPage() {
 
 
   return (
-    <div className="w-full">
-      <HeroSection
-        images={flightImages}
-        title={<>Tu Próxima Aventura<br />te Espera</>}
-        subtitle="Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo."
-      >
-        <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleManualSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
-              <div className="col-span-12">
-                  <div className="flex items-center space-x-4">
-                      <div className="flex items-center space-x-2">
-                          <Switch id="trip-type" checked={isRoundTrip} onCheckedChange={handleTripTypeChange} />
-                          <Label htmlFor="trip-type" className="text-sm font-semibold">{isRoundTrip ? 'Ida y Vuelta' : 'Solo Ida'}</Label>
-                      </div>
-                  </div>
-              </div>
-
-              <div className='lg:col-span-6 relative' ref={originRef}>
-                  <Label htmlFor="origin" className="text-sm font-semibold ml-2">Desde</Label>
-                  <InputGroup>
-                  <InputIcon><PlaneTakeoff className="h-4 w-4" /></InputIcon>
-                  <Input id="origin" type="text" value={originQuery} 
-                      onChange={e => setOriginQuery(e.target.value)} 
-                      onFocus={() => setActiveInput('origin')}
-                      placeholder="Ciudad o aeropuerto de origen" 
-                      className="mt-1 pl-10" 
-                      autoComplete="off"
-                  />
-                  </InputGroup>
-                  {activeInput === 'origin' && <SuggestionsList type="origin" />}
-              </div>
-
-              <div className='lg:col-span-6 relative' ref={destinationRef}>
-                  <Label htmlFor="destination" className="text-sm font-semibold ml-2">Hasta</Label>
-                  <InputGroup>
-                  <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
-                  <Input id="destination" type="text" value={destinationQuery} 
-                      onChange={e => setDestinationQuery(e.target.value)}
-                      onFocus={() => setActiveInput('destination')} 
-                      placeholder="Ciudad o aeropuerto de destino" 
-                      className="mt-1 pl-10" 
-                      autoComplete="off"
-                  />
-                  </InputGroup>
-                  {activeInput === 'destination' && <SuggestionsList type="destination" />}
-              </div>
-              
-              <div className="col-span-12 sm:col-span-1 lg:col-span-4">
-                  <Label htmlFor="dates" className="text-sm font-semibold ml-2">{isRoundTrip ? 'Salida y Regreso' : 'Salida'}</Label>
-                  <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                      <PopoverTrigger asChild>
-                          <Button
-                              id="dates"
-                              variant={"outline"}
-                              className={cn(
-                                  "w-full justify-start text-left font-normal mt-1",
-                                  !date && "text-muted-foreground"
-                              )}
-                          >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {date?.from ? (
-                                  date.to && isRoundTrip ? (
-                                      <>
-                                          {format(date.from, "dd LLL, y")} -{" "}
-                                          {format(date.to, "dd LLL, y")}
-                                      </>
-                                  ) : (
-                                      format(date.from, "dd LLL, y")
-                                  )
-                              ) : (
-                                  <span>Elige tus fechas</span>
-                              )}
-                          </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                              initialFocus
-                              mode="range"
-                              defaultMonth={date?.from}
-                              selected={date}
-                              onSelect={setDate}
-                              numberOfMonths={2}
-                              disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
-                          />
-                          <div className="p-3 border-t">
-                              <Button onClick={() => setIsCalendarOpen(false)} className="w-full">Listo</Button>
-                          </div>
-                      </PopoverContent>
-                  </Popover>
-              </div>
-          
-              <div className='col-span-12 sm:col-span-1 lg:col-span-4'>
-                  <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Pasajeros</Label>
-                  <Popover>
-                  <PopoverTrigger asChild>
-                      <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
-                      <Users className="mr-2 h-4 w-4" />
-                      {travelerText}
-                      </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-80" align="end">
-                      <div className="grid gap-4">
-                      <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Pasajeros</h4>
-                          <p className="text-sm text-muted-foreground">
-                          Selecciona el número de pasajeros.
-                          </p>
-                      </div>
-                      <div className="grid gap-4">
-                          <div className="flex items-center justify-between">
-                          <div>
-                              <p className="font-medium">Adultos</p>
-                              <p className="text-xs text-muted-foreground">Mayores de 12 años</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1 || adults <= infants}>
-                              <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
-                              <Plus className="h-4 w-4" />
-                              </Button>
-                          </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                          <div>
-                              <p className="font-medium">Niños</p>
-                              <p className="text-xs text-muted-foreground">De 2 a 11 años</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
-                              <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="font-bold text-lg w-4 text-center">{children}</span>
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
-                              <Plus className="h-4 w-4" />
-                              </Button>
-                          </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                          <div>
-                              <p className="font-medium">Bebés</p>
-                              <p className="text-xs text-muted-foreground">Menores de 2 años</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.max(0, v - 1))} disabled={infants <= 0}>
-                              <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="font-bold text-lg w-4 text-center">{infants}</span>
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8 || infants >= adults}>
-                              <Plus className="h-4 w-4" />
-                              </Button>
-                          </div>
-                          </div>
-                      </div>
-                      </div>
-                  </PopoverContent>
-                  </Popover>
-              </div>
-
-              <div className="col-span-12 lg:col-span-4 flex items-end">
-                  <Button
-                      type="submit"
-                      size="lg"
-                      className="w-full text-lg font-bold bg-success hover:bg-success/90 h-full mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
-                  >
-                     <Plane className="mr-2 h-5 w-5" />
-                     Buscar Vuelos
-                  </Button>
-              </div>
-
-          </form>
+      <form onSubmit={handleManualSearch} className="flex flex-col gap-4">
+        <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+                <Switch id="trip-type" checked={isRoundTrip} onCheckedChange={handleTripTypeChange} />
+                <Label htmlFor="trip-type" className="text-sm font-semibold">{isRoundTrip ? 'Ida y Vuelta' : 'Solo Ida'}</Label>
+            </div>
         </div>
-      </HeroSection>
-    </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InputGroup className="relative" ref={originRef}>
+                <Label htmlFor="origin" className="text-sm font-semibold ml-2 mb-1">Desde</Label>
+                <div className="relative flex items-center">
+                    <InputIcon><PlaneTakeoff className="h-4 w-4" /></InputIcon>
+                    <Input id="origin" type="text" value={originQuery} 
+                        onChange={e => setOriginQuery(e.target.value)} 
+                        onFocus={() => setActiveInput('origin')}
+                        placeholder="Ciudad o aeropuerto" 
+                        className="pl-10" 
+                        autoComplete="off"
+                    />
+                </div>
+                {activeInput === 'origin' && <SuggestionsList type="origin" />}
+            </InputGroup>
+
+            <InputGroup className='relative' ref={destinationRef}>
+                <Label htmlFor="destination" className="text-sm font-semibold ml-2 mb-1">Hasta</Label>
+                 <div className="relative flex items-center">
+                    <InputIcon><PlaneLanding className="h-4 w-4" /></InputIcon>
+                    <Input id="destination" type="text" value={destinationQuery} 
+                        onChange={e => setDestinationQuery(e.target.value)}
+                        onFocus={() => setActiveInput('destination')} 
+                        placeholder="Ciudad o aeropuerto" 
+                        className="pl-10" 
+                        autoComplete="off"
+                    />
+                </div>
+                {activeInput === 'destination' && <SuggestionsList type="destination" />}
+            </InputGroup>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InputGroup>
+                <Label htmlFor="dates" className="text-sm font-semibold ml-2 mb-1">{isRoundTrip ? 'Salida y Regreso' : 'Salida'}</Label>
+                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                    <PopoverTrigger asChild>
+                        <Button
+                            id="dates"
+                            variant={"outline"}
+                            className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !date && "text-muted-foreground"
+                            )}
+                        >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date?.from ? (
+                                date.to && isRoundTrip ? (
+                                    <>
+                                        {format(date.from, "dd LLL, y")} -{" "}
+                                        {format(date.to, "dd LLL, y")}
+                                    </>
+                                ) : (
+                                    format(date.from, "dd LLL, y")
+                                )
+                            ) : (
+                                <span>Elige tus fechas</span>
+                            )}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                            initialFocus
+                            mode="range"
+                            defaultMonth={date?.from}
+                            selected={date}
+                            onSelect={setDate}
+                            numberOfMonths={2}
+                            disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+                        />
+                        <div className="p-3 border-t">
+                            <Button onClick={() => setIsCalendarOpen(false)} className="w-full">Listo</Button>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+            </InputGroup>
+        
+            <InputGroup>
+                <Label htmlFor="passengers" className="text-sm font-semibold ml-2 mb-1">Pasajeros</Label>
+                <Popover>
+                <PopoverTrigger asChild>
+                    <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal">
+                    <Users className="mr-2 h-4 w-4" />
+                    {travelerText}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80" align="end">
+                    <div className="grid gap-4">
+                    <div className="space-y-2">
+                        <h4 className="font-medium leading-none">Pasajeros</h4>
+                        <p className="text-sm text-muted-foreground">
+                        Selecciona el número de pasajeros.
+                        </p>
+                    </div>
+                    <div className="grid gap-4">
+                        <div className="flex items-center justify-between">
+                        <div>
+                            <p className="font-medium">Adultos</p>
+                            <p className="text-xs text-muted-foreground">Mayores de 12 años</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1 || adults <= infants}>
+                            <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
+                            <Plus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                        <div>
+                            <p className="font-medium">Niños</p>
+                            <p className="text-xs text-muted-foreground">De 2 a 11 años</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
+                            <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="font-bold text-lg w-4 text-center">{children}</span>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
+                            <Plus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                        <div>
+                            <p className="font-medium">Bebés</p>
+                            <p className="text-xs text-muted-foreground">Menores de 2 años</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.max(0, v - 1))} disabled={infants <= 0}>
+                            <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="font-bold text-lg w-4 text-center">{infants}</span>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8 || infants >= adults}>
+                            <Plus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </PopoverContent>
+                </Popover>
+            </InputGroup>
+        </div>
+
+        <Button
+            type="submit"
+            size="lg"
+            className="w-full text-lg font-bold bg-success hover:bg-success/90 h-12 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all"
+        >
+           <Plane className="mr-2 h-5 w-5" />
+           Buscar Vuelos
+        </Button>
+      </form>
   );
 }

@@ -1,5 +1,4 @@
 
-
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { addDays, format } from 'date-fns';
@@ -25,7 +24,7 @@ import { HeroSection } from './hero-section';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
-  <div className="relative flex items-center">{children}</div>
+  <div className="relative flex flex-col w-full">{children}</div>
 );
 
 const InputIcon = ({ children }: { children: React.ReactNode }) => (
@@ -259,142 +258,118 @@ export default function HotelSearchPage() {
   );
 
   return (
-    <div className="w-full">
-      <HeroSection
-        images={hotelImages}
-        title="Encuentra tu Estancia Perfecta"
-        subtitle="Busca y reserva hoteles, desde boutiques acogedoras hasta resorts de lujo."
-      >
-        <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleFormSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-              <div className='lg:col-span-5 relative' ref={destinationRef}>
-                <Label htmlFor="destination" className="text-sm font-semibold ml-2">Destino</Label>
-                <InputGroup>
-                  <InputIcon><BedDouble className="h-4 w-4" /></InputIcon>
-                  <Input id="destination" type="text" value={destinationQuery} 
-                      onChange={e => setDestinationQuery(e.target.value)}
-                      onFocus={() => setActiveInput('destination')}
-                      placeholder="Ej. Nueva York" 
-                      className="mt-1 pl-10" 
-                      autoComplete="off"
-                  />
-                </InputGroup>
-                 {activeInput === 'destination' && <SuggestionsList />}
-              </div>
-              
-              <div className="lg:col-span-3">
-                <Label htmlFor="dates" className="text-sm font-semibold ml-2">Entrada y Salida</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      id="dates"
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal mt-1",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date?.from ? (
-                        date.to ? (
-                          <>
-                            {format(date.from, "dd LLL, y")} -{" "}
-                            {format(date.to, "dd LLL, y")}
-                          </>
-                        ) : (
-                          format(date.from, "dd LLL, y")
-                        )
-                      ) : (
-                        <span>Elige tus fechas</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      initialFocus
-                      mode="range"
-                      defaultMonth={date?.from}
-                      selected={date}
-                      onSelect={setDate}
-                      numberOfMonths={2}
-                      disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
+    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <InputGroup ref={destinationRef}>
+          <Label htmlFor="destination" className="text-sm font-semibold ml-2 mb-1">Destino</Label>
+          <div className="relative flex items-center">
+            <InputIcon><BedDouble className="h-4 w-4" /></InputIcon>
+            <Input id="destination" type="text" value={destinationQuery} 
+                onChange={e => setDestinationQuery(e.target.value)}
+                onFocus={() => setActiveInput('destination')}
+                placeholder="Ej. Nueva York" 
+                className="pl-10" 
+                autoComplete="off"
+            />
+          </div>
+          {activeInput === 'destination' && <SuggestionsList />}
+        </InputGroup>
 
-              <div className='lg:col-span-2'>
-                <Label htmlFor="guests" className="text-sm font-semibold ml-2">Huéspedes</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button id="guests" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
-                      <Users className="mr-2 h-4 w-4" />
-                      {travelerText}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-80" align="end">
-                     <div className="grid gap-4">
-                      <div className="space-y-2">
-                        <h4 className="font-medium leading-none">Huéspedes</h4>
-                        <p className="text-sm text-muted-foreground">Selecciona el número de huéspedes.</p>
-                      </div>
-                       <div className="grid gap-4">
-                        <div className="flex items-center justify-between">
-                          <p className="font-medium">Adultos</p>
-                          <div className="flex items-center gap-2">
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
-                              <Minus className="h-4 w-4" />
-                            </Button>
-                            <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}>
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Baby className="h-5 w-5" />
-                            <p className="font-medium">Niños</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
-                              <Minus className="h-4 w-4" />
-                            </Button>
-                            <span className="font-bold text-lg w-4 text-center">{children}</span>
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => v + 1)}>
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div className="lg:col-span-2 flex items-end">
-                <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-10 mt-1">
-                    <BedDouble className="mr-2 h-5 w-5" />
-                    Buscar Hoteles
-                </Button>
-              </div>
-          </form>
-        </div>
-      </HeroSection>
-      
-      <div className="max-w-7xl mx-auto py-0 px-4 sm:px-6 lg:px-8">
-        <section className="mt-8">
-          {hotelData !== null && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              <div className="lg:col-span-3">
-                <HotelFilters onFilterChange={handleFilterChange} />
-              </div>
-              <div className="lg:col-span-9">
-                 <HotelResults hotels={hotelData} />
-              </div>
-            </div>
-          )}
-        </section>
+        <InputGroup>
+          <Label htmlFor="dates" className="text-sm font-semibold ml-2 mb-1">Entrada y Salida</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                id="dates"
+                variant={"outline"}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !date && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {date?.from ? (
+                  date.to ? (
+                    <>
+                      {format(date.from, "dd LLL, y")} -{" "}
+                      {format(date.to, "dd LLL, y")}
+                    </>
+                  ) : (
+                    format(date.from, "dd LLL, y")
+                  )
+                ) : (
+                  <span>Elige tus fechas</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={date?.from}
+                selected={date}
+                onSelect={setDate}
+                numberOfMonths={2}
+                disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+              />
+            </PopoverContent>
+          </Popover>
+        </InputGroup>
       </div>
-    </div>
+
+      <InputGroup>
+          <Label htmlFor="guests" className="text-sm font-semibold ml-2 mb-1">Huéspedes</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button id="guests" variant={"outline"} className="w-full justify-start text-left font-normal">
+                <Users className="mr-2 h-4 w-4" />
+                {travelerText}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80" align="end">
+                <div className="grid gap-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">Huéspedes</h4>
+                  <p className="text-sm text-muted-foreground">Selecciona el número de huéspedes.</p>
+                </div>
+                  <div className="grid gap-4">
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium">Adultos</p>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}>
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Baby className="h-5 w-5" />
+                      <p className="font-medium">Niños</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="font-bold text-lg w-4 text-center">{children}</span>
+                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => v + 1)}>
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </InputGroup>
+
+        <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-12">
+            <BedDouble className="mr-2 h-5 w-5" />
+            Buscar Hoteles
+        </Button>
+    </form>
   );
 }

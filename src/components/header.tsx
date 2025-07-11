@@ -22,6 +22,14 @@ export function Header() {
     router.push(`/?tab=${tab}`);
   };
 
+  const tabsConfig = [
+    { id: 'Flights', label: 'Vuelos', icon: Plane },
+    { id: 'Hotels', label: 'Hoteles', icon: BedDouble },
+    { id: 'Packages', label: 'Paquetes', icon: Luggage },
+    { id: 'Cruises', label: 'Cruceros', icon: Ship },
+    { id: 'Activities', label: 'Actividades', icon: Zap },
+  ];
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,44 +39,22 @@ export function Header() {
               <Icons.logo width={100} height={27} />
             </Link>
           </div>
-          <div className="flex-1 min-w-0 px-2 sm:px-4">
-            <div className="relative">
-              <div className="overflow-x-auto scrollbar-hide mask-fade">
-                <nav className="flex items-center justify-start sm:justify-center space-x-1 bg-card/50 p-1 rounded-full border w-max mx-auto">
-                  <TabButton
-                    label="Vuelos"
-                    icon={<Plane className="h-4 w-4" />}
-                    isActive={isOnHomePage && activeTab === 'Flights'}
-                    onClick={() => handleTabClick('Flights')}
-                  />
-                  <TabButton
-                    label="Hoteles"
-                    icon={<BedDouble className="h-4 w-4" />}
-                    isActive={isOnHomePage && activeTab === 'Hotels'}
-                    onClick={() => handleTabClick('Hotels')}
-                  />
-                  <TabButton
-                    label="Paquetes"
-                    icon={<Luggage className="h-4 w-4" />}
-                    isActive={isOnHomePage && activeTab === 'Packages'}
-                    onClick={() => handleTabClick('Packages')}
-                  />
-                  <TabButton
-                    label="Cruceros"
-                    icon={<Ship className="h-4 w-4" />}
-                    isActive={isOnHomePage && activeTab === 'Cruises'}
-                    onClick={() => handleTabClick('Cruises')}
-                  />
-                  <TabButton
-                    label="Actividades"
-                    icon={<Zap className="h-4 w-4" />}
-                    isActive={isOnHomePage && activeTab === 'Activities'}
-                    onClick={() => handleTabClick('Activities')}
-                  />
-                </nav>
-              </div>
-            </div>
+          
+          {/* Desktop Tabs */}
+          <div className="flex-1 min-w-0 px-2 sm:px-4 hidden sm:block">
+            <nav className="flex items-center justify-center space-x-1 bg-card/50 p-1 rounded-full border w-max mx-auto">
+              {tabsConfig.map(({ id, label, icon: Icon }) => (
+                <TabButton
+                  key={id}
+                  label={label}
+                  icon={<Icon className="h-4 w-4" />}
+                  isActive={isOnHomePage && activeTab === id}
+                  onClick={() => handleTabClick(id)}
+                />
+              ))}
+            </nav>
           </div>
+
           <div className="flex-shrink-0 flex items-center gap-2">
             <Button
               variant="ghost"
