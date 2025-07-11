@@ -9,13 +9,15 @@ interface FuselageSectionProps {
   images: string[];
   title: React.ReactNode;
   subtitle: string;
-  children: React.ReactNode;
 }
 
-export function FuselageSection({ images, title, subtitle, children }: FuselageSectionProps) {
+export function FuselageSection({ images, title, subtitle }: FuselageSectionProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    // When images change, reset to the first one
+    setCurrentImageIndex(0);
+    
     if (images.length > 1) {
       const interval = setInterval(() => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -46,19 +48,12 @@ export function FuselageSection({ images, title, subtitle, children }: FuselageS
       <div 
         className="absolute inset-0"
         style={{ 
-          background: 'linear-gradient(to top, hsl(var(--background)) 5%, transparent 50%, transparent 100%)'
-        }}
-      />
-      <div 
-        className="absolute inset-0"
-        style={{ 
            backgroundColor: 'rgba(0, 0, 0, 0.3)',
         }}
       />
-      <div className="relative px-4 w-full">
+      <div className="relative px-4 w-full mt-[-150px] sm:mt-[-100px]">
          <h1 className="hero-title">{title}</h1>
          <p className="hero-subtitle">{subtitle}</p>
-        {children}
       </div>
     </section>
   );

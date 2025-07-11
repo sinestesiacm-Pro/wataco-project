@@ -95,9 +95,6 @@ function HomePageContent() {
       Cruises: {
         images: [
           'https://images.unsplash.com/photo-1540340061722-9293d5163008?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1599827551381-e2a4a75a898b?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1621361253013-b5133d2663d2?fit=crop&w=1920&q=80',
-          'https://images.unsplash.com/photo-1606114933589-a9a7a0a03379?fit=crop&w=1920&q=80',
         ],
         title: "Embárcate en tu Próxima Aventura",
         subtitle: "Descubre y reserva increíbles vacaciones en crucero por todo el mundo.",
@@ -118,12 +115,17 @@ function HomePageContent() {
 
     return (
         <div className="w-full">
-            <FuselageSection images={currentTabInfo.images} title={currentTabInfo.title} subtitle={currentTabInfo.subtitle}>
-              <SearchContainer>
-                 {/* Mobile tabs inside the search card */}
-                     <div className="sm:hidden mb-2 flex justify-center px-4">
-                         <div className="overflow-x-auto scrollbar-hide w-full">
-                             <div className="flex justify-start space-x-1 w-max pb-1">
+            <div className="relative">
+                <FuselageSection 
+                    images={currentTabInfo.images} 
+                    title={currentTabInfo.title} 
+                    subtitle={currentTabInfo.subtitle} 
+                />
+                <SearchContainer>
+                    {/* Mobile tabs inside the search card */}
+                    <div className="sm:hidden mb-2 flex justify-center px-4">
+                        <div className="overflow-x-auto scrollbar-hide w-full">
+                            <div className="flex justify-center space-x-1 w-max pb-1">
                                 {tabsConfig.map(({ id, label, icon: Icon }) => (
                                     <Button 
                                         key={id} 
@@ -139,8 +141,8 @@ function HomePageContent() {
                                         <span className="text-[10px] font-semibold">{label}</span>
                                     </Button>
                                 ))}
-                             </div>
-                         </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="p-2 sm:p-4 rounded-2xl bg-card/60">
                          <div className={cn(tab !== 'Flights' && 'hidden')}>
@@ -156,8 +158,8 @@ function HomePageContent() {
                            <CruiseSearchPage />
                          </div>
                     </div>
-              </SearchContainer>
-            </FuselageSection>
+                </SearchContainer>
+            </div>
       
             <div className="bg-background pt-16 pb-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
