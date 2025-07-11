@@ -39,7 +39,6 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
   }, [debouncedFilters, onFilterChange]);
 
   const handleStopChange = useCallback((value: string) => {
-    // Radio group for stops, so it's always one or none.
     const stopValue = value ? [parseInt(value, 10)] : [];
     setFilters(prev => ({ ...prev, stops: stopValue }));
   }, []);
@@ -86,29 +85,6 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                  <div className="flex items-center space-x-2">
                     <RadioGroupItem value="2" id="stops-2" />
                     <Label htmlFor="stops-2">2 o más escalas</Label>
-                </div>
-            </RadioGroup>
-        </FilterSection>
-
-        <Separator />
-        
-        <FilterSection title="Cabina">
-            <RadioGroup onValueChange={(v) => handleCabinChange(v as FareDetailsBySegment['cabin'])}>
-                <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="ECONOMY" id="cabin-economy" />
-                    <Label htmlFor="cabin-economy">Económica</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="PREMIUM_ECONOMY" id="cabin-premium" />
-                    <Label htmlFor="cabin-premium">Premium</Label>
-                </div>
-                 <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="BUSINESS" id="cabin-business" />
-                    <Label htmlFor="cabin-business">Business</Label>
-                </div>
-                 <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="FIRST" id="cabin-first" />
-                    <Label htmlFor="cabin-first">Primera Clase</Label>
                 </div>
             </RadioGroup>
         </FilterSection>

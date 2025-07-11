@@ -6,11 +6,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
-import { Clock, Luggage, Plane, Settings2, QrCode, CheckCircle } from 'lucide-react';
+import { Clock, Luggage, Plane, Settings2, QrCode, CheckCircle, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO, format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -23,44 +24,6 @@ const formatDuration = (duration: string) => {
 const formatTime = (dateString: string) => {
   return new Date(dateString).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
 };
-
-const SegmentDetails = ({ segment, dictionaries }: { segment: Segment, dictionaries: Dictionaries }) => {
-    const airlineName = dictionaries.carriers[segment.carrierCode] || segment.carrierCode;
-    
-    return (
-        <div className="flex gap-4 items-start relative pl-8">
-            <div className="absolute left-[3px] top-1.5 flex flex-col items-center h-full">
-                <div className="w-3 h-3 rounded-full bg-primary border-2 border-card ring-4 ring-card"></div>
-                <div className="flex-grow w-px bg-border my-2"></div>
-            </div>
-
-            <div className="w-full">
-                <div className="flex items-center gap-4 mt-2">
-                    <div className="text-left">
-                        <p className="text-2xl font-bold">{formatTime(segment.departure.at)}</p>
-                        <p className="font-semibold text-muted-foreground text-lg">{segment.departure.iataCode}</p>
-                    </div>
-                    
-                    <div className="flex-grow flex flex-col items-center text-muted-foreground pt-1">
-                        <p className="text-xs font-semibold mb-1">{formatDuration(segment.duration)}</p>
-                        <div className="w-full h-px bg-border relative">
-                           <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-muted-foreground p-0.5 rounded-full"/>
-                        </div>
-                    </div>
-
-                    <div className="text-right">
-                        <p className="text-2xl font-bold">{formatTime(segment.arrival.at)}</p>
-                        <p className="font-semibold text-muted-foreground text-lg">{segment.arrival.iataCode}</p>
-                    </div>
-                </div>
-                <div className="text-sm text-muted-foreground mt-2 flex items-center justify-between">
-                    <span>{airlineName} &middot; {segment.carrierCode} {segment.number}</span>
-                     <span className="font-medium">{dictionaries.aircraft[segment.aircraft.code] || `Aeronave ${segment.aircraft.code}`}</span>
-                </div>
-            </div>
-        </div>
-    )
-}
 
 const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itinerary, dictionaries: Dictionaries, title: string }) => {
     const firstSegment = itinerary.segments[0];
@@ -160,14 +123,16 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
                         Personalizar Vuelo
                     </Link>
                 </Button>
-                <Button
-                    className="w-full bg-success hover:bg-success/90 text-success-foreground"
-                    onClick={() => onSelectFlight(flight)}
-                >
-                     
-                        <CheckCircle className="mr-2 h-4 w-4" />
-                        Confirmar Reserva
-                </Button>
+                 <DialogClose asChild>
+                    <Button
+                        className="w-full bg-success hover:bg-success/90 text-success-foreground"
+                        onClick={() => onSelectFlight(flight)}
+                    >
+                         
+                            <CheckCircle className="mr-2 h-4 w-4" />
+                            Confirmar Reserva
+                    </Button>
+                </DialogClose>
             </div>
         </Card>
     )

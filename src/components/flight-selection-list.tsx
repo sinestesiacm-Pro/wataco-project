@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plane } from 'lucide-react';
 import { FlightBaggageInfo } from './flight-baggage-info';
+import { FlightDetailsDialog } from './flight-details-dialog';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -82,13 +83,11 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOf
                         </p>
                         <p className="text-xs text-muted-foreground">Precio total, ida y vuelta</p>
                     </div>
-                    <Button 
-                        size="sm"
-                        className="w-full font-semibold"
-                        onClick={() => onSelectFlight(flight)}
-                    >
-                        Seleccionar
-                    </Button>
+                    <FlightDetailsDialog
+                        flight={flight}
+                        dictionaries={dictionaries}
+                        onSelectFlight={onSelectFlight}
+                    />
                 </div>
             </div>
         </Card>

@@ -115,7 +115,7 @@ function FlightSelectionPage() {
             (filters.bags.includes('carry-on') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) >= 0) ||
             (filters.bags.includes('checked') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) > 0);
         
-        // Cabin filter
+        // Cabin filter - This is no longer directly used for filtering but kept in state for potential future use
         const cabinClass = flight.travelerPricings[0].fareDetailsBySegment[0].cabin;
         const cabinFilter = !filters.cabin || cabinClass === filters.cabin;
 
