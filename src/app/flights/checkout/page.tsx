@@ -8,8 +8,9 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Lock, CreditCard, User, Calendar as CalendarIcon, ArrowLeft, Landmark } from 'lucide-react';
+import { Lock, CreditCard, User, Mail, Phone, ArrowLeft, Landmark } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -25,11 +26,11 @@ const PassengerForm = () => {
             <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <Label htmlFor="firstName">Nombre</Label>
+                        <Label htmlFor="firstName">Nombre(s)</Label>
                         <Input id="firstName" placeholder="John" />
                     </div>
                     <div>
-                        <Label htmlFor="lastName">Apellido</Label>
+                        <Label htmlFor="lastName">Apellido(s)</Label>
                         <Input id="lastName" placeholder="Doe" />
                     </div>
                 </div>
@@ -37,10 +38,78 @@ const PassengerForm = () => {
                     <Label htmlFor="birthDate">Fecha de Nacimiento</Label>
                     <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" />
                 </div>
+                <div>
+                    <Label>Género</Label>
+                     <RadioGroup defaultValue="female" className="flex items-center gap-4 pt-2">
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="female" id="female" />
+                            <Label htmlFor="female">Femenino</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="male" id="male" />
+                            <Label htmlFor="male">Masculino</Label>
+                        </div>
+                    </RadioGroup>
+                </div>
+                <div>
+                  <Label htmlFor="residence-country">País de Residencia</Label>
+                   <Select>
+                        <SelectTrigger id="residence-country">
+                            <SelectValue placeholder="Selecciona un país" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="co">Colombia</SelectItem>
+                            <SelectItem value="ar">Argentina</SelectItem>
+                            <SelectItem value="cl">Chile</SelectItem>
+                            <SelectItem value="mx">México</SelectItem>
+                            <SelectItem value="es">España</SelectItem>
+                             <SelectItem value="us">Estados Unidos</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <Label htmlFor="document-type">Tipo de Documento</Label>
+                        <Select>
+                            <SelectTrigger id="document-type">
+                                <SelectValue placeholder="Seleccionar" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="passport">Pasaporte</SelectItem>
+                                <SelectItem value="id">Cédula de Identidad</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                     <div>
+                        <Label htmlFor="document-number">Número de Documento</Label>
+                        <Input id="document-number" placeholder="AB1234567" />
+                    </div>
+                </div>
             </CardContent>
         </Card>
     );
 };
+
+const ContactInfoForm = () => {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><Mail /> Información de Contacto</CardTitle>
+                <CardDescription>Te enviaremos la confirmación de tu reserva a este correo.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div>
+                    <Label htmlFor="email">Correo Electrónico</Label>
+                    <Input id="email" type="email" placeholder="john.doe@example.com" />
+                </div>
+                <div>
+                    <Label htmlFor="phone">Número de Teléfono</Label>
+                    <Input id="phone" type="tel" placeholder="+1 234 567 890" />
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
 
 const PaymentForm = () => {
     return (
@@ -83,6 +152,38 @@ const PaymentForm = () => {
                             <Label htmlFor="cardCvc">CVC</Label>
                             <Input id="cardCvc" placeholder="123" />
                         </div>
+                    </div>
+                     <Separator className="my-4"/>
+                     <CardTitle className="text-lg">Dirección de Facturación</CardTitle>
+                     <div>
+                        <Label htmlFor="billing-address">Dirección</Label>
+                        <Input id="billing-address" placeholder="123 Main St" />
+                    </div>
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <Label htmlFor="billing-city">Ciudad</Label>
+                            <Input id="billing-city" placeholder="New York" />
+                        </div>
+                        <div>
+                            <Label htmlFor="billing-zip">Código Postal</Label>
+                            <Input id="billing-zip" placeholder="10001" />
+                        </div>
+                    </div>
+                     <div>
+                        <Label htmlFor="billing-country">País</Label>
+                        <Select>
+                            <SelectTrigger id="billing-country">
+                                <SelectValue placeholder="Selecciona un país" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="co">Colombia</SelectItem>
+                                <SelectItem value="ar">Argentina</SelectItem>
+                                <SelectItem value="cl">Chile</SelectItem>
+                                <SelectItem value="mx">México</SelectItem>
+                                <SelectItem value="es">España</SelectItem>
+                                <SelectItem value="us">Estados Unidos</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
             </CardContent>
@@ -163,6 +264,7 @@ function CheckoutPageContent() {
                 <div className="grid lg:grid-cols-3 gap-8 items-start">
                     <div className="lg:col-span-2 space-y-6">
                         <PassengerForm />
+                        <ContactInfoForm />
                         <PaymentForm />
                         <div className="flex justify-end pt-4">
                             <Button type="submit" size="lg" className="bg-success hover:bg-success/90 w-full sm:w-auto">
