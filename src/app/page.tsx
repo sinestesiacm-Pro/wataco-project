@@ -142,8 +142,8 @@ function HomePageContent() {
             <FuselageSection images={currentTabInfo.images} title={currentTabInfo.title} subtitle={currentTabInfo.subtitle}>
                  <div className="bg-card/80 backdrop-blur-xl border p-2 sm:p-4 rounded-3xl shadow-2xl w-full max-w-5xl mx-auto">
                     {/* Mobile tabs inside the search card */}
-                     <div className="sm:hidden mb-2 flex justify-center">
-                         <div className="overflow-x-auto scrollbar-hide mask-fade">
+                     <div className="sm:hidden mb-2 flex justify-center px-4">
+                         <div className="overflow-x-auto scrollbar-hide w-full">
                              <div className="flex justify-start space-x-1 w-max pb-1">
                                 {tabsConfig.map(({ id, label, icon: Icon }) => (
                                     <Button 

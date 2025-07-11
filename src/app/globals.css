@@ -389,9 +389,3 @@
   background-size: 2px 8px;
   background-repeat: repeat-y;
 }
-
-.mask-fade {
-  -webkit-mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
-  mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
-}
-    
