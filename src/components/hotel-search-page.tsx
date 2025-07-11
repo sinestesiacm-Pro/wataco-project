@@ -272,7 +272,7 @@ export default function HotelSearchPage() {
                 autoComplete="off"
             />
           </div>
-          {activeInput === 'destination' && <SuggestionsList />}
+          {activeInput === 'destination' && destinationQuery.length > 1 && <SuggestionsList />}
         </InputGroup>
 
         <InputGroup>
