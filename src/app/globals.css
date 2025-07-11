@@ -389,3 +389,8 @@
   background-size: 2px 8px;
   background-repeat: repeat-y;
 }
+
+.mask-fade {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+}

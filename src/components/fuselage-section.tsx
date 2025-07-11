@@ -38,7 +38,7 @@ const BackgroundCarousel = ({ images }: { images: string[] }) => {
           alt={`Travel background ${index + 1}`}
           fill
           className={cn(
-            'hero-background-image filter blur-sm',
+            'hero-background-image',
             index === currentImageIndex ? 'active' : ''
           )}
           style={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -54,7 +54,7 @@ const BackgroundCarousel = ({ images }: { images: string[] }) => {
 // Se aplica React.memo como buena práctica para evitar re-renderizados si las props no cambian.
 const FuselageSectionComponent = ({ images, title, subtitle }: FuselageSectionProps) => {
   return (
-    <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
+    <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden mask-fade">
       <BackgroundCarousel images={images} />
       <div 
         className="absolute inset-0"
