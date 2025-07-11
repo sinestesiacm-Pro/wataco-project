@@ -31,38 +31,42 @@ export function Header() {
               <Icons.logo width={100} height={27} />
             </Link>
           </div>
-          <nav className="hidden md:flex items-center space-x-1 bg-card/50 p-1 rounded-full border">
-            <TabButton
-              label="Vuelos"
-              icon={<Plane className="h-4 w-4" />}
-              isActive={isOnHomePage && activeTab === 'Flights'}
-              onClick={() => handleTabClick('Flights')}
-            />
-            <TabButton
-              label="Hoteles"
-              icon={<BedDouble className="h-4 w-4" />}
-              isActive={isOnHomePage && activeTab === 'Hotels'}
-              onClick={() => handleTabClick('Hotels')}
-            />
-            <TabButton
-              label="Paquetes"
-              icon={<Luggage className="h-4 w-4" />}
-              isActive={isOnHomePage && activeTab === 'Packages'}
-              onClick={() => handleTabClick('Packages')}
-            />
-            <TabButton
-              label="Cruceros"
-              icon={<Ship className="h-4 w-4" />}
-              isActive={isOnHomePage && activeTab === 'Cruises'}
-              onClick={() => handleTabClick('Cruises')}
-            />
-            <TabButton
-              label="Actividades"
-              icon={<Zap className="h-4 w-4" />}
-              isActive={isOnHomePage && activeTab === 'Activities'}
-              onClick={() => handleTabClick('Activities')}
-            />
-          </nav>
+          <div className="flex-1 min-w-0 px-4 md:flex md:justify-center">
+            <div className="w-full max-w-lg overflow-x-auto scrollbar-hide">
+              <nav className="flex items-center space-x-1 bg-card/50 p-1 rounded-full border w-max md:w-full">
+                <TabButton
+                  label="Vuelos"
+                  icon={<Plane className="h-4 w-4" />}
+                  isActive={isOnHomePage && activeTab === 'Flights'}
+                  onClick={() => handleTabClick('Flights')}
+                />
+                <TabButton
+                  label="Hoteles"
+                  icon={<BedDouble className="h-4 w-4" />}
+                  isActive={isOnHomePage && activeTab === 'Hotels'}
+                  onClick={() => handleTabClick('Hotels')}
+                />
+                <TabButton
+                  label="Paquetes"
+                  icon={<Luggage className="h-4 w-4" />}
+                  isActive={isOnHomePage && activeTab === 'Packages'}
+                  onClick={() => handleTabClick('Packages')}
+                />
+                <TabButton
+                  label="Cruceros"
+                  icon={<Ship className="h-4 w-4" />}
+                  isActive={isOnHomePage && activeTab === 'Cruises'}
+                  onClick={() => handleTabClick('Cruises')}
+                />
+                <TabButton
+                  label="Actividades"
+                  icon={<Zap className="h-4 w-4" />}
+                  isActive={isOnHomePage && activeTab === 'Activities'}
+                  onClick={() => handleTabClick('Activities')}
+                />
+              </nav>
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
@@ -78,7 +82,7 @@ export function Header() {
               <Button asChild>
                 <Link href="/login">
                   <LogIn className="mr-2 h-4 w-4"/>
-                  Iniciar Sesión
+                  <span className="hidden sm:inline">Iniciar Sesión</span>
                 </Link>
               </Button>
             )}
@@ -95,7 +99,7 @@ const TabButton = ({ label, icon, isActive, onClick }: { label: string, icon: Re
       variant="ghost"
       onClick={onClick}
       className={cn(
-        "rounded-full px-6 py-2 text-sm font-semibold flex items-center gap-2 transition-all duration-300",
+        "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap",
         isActive
           ? "bg-primary text-primary-foreground shadow-lg"
           : "bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground"
