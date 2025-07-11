@@ -4,9 +4,14 @@ import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Plane, Lock } from 'lucide-react';
+import { Plane, Lock, ShieldCheck, UserCheck, Armchair } from 'lucide-react';
 import Image from 'next/image';
 import { FlightBaggageInfo } from './flight-baggage-info';
+import { Switch } from './ui/switch';
+import { Label } from './ui/label';
+import { useState } from 'react';
+import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 interface ReviewAndPayProps {
     outboundFlight: FlightOffer;
@@ -71,35 +76,66 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
     );
 };
 
-const FareUpgradeCard = () => (
-    <Card className="border-primary bg-primary/5">
-        <CardHeader>
-            <CardTitle className="text-xl font-headline">Mejora tu Tarifa</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-                <p className="font-semibold">Optima: Más flexibilidad y equipaje</p>
-                <ul className="text-sm text-muted-foreground list-disc pl-5 mt-2">
-                    <li>Selección de asiento estándar incluida</li>
-                    <li>1 maleta facturada de 23 kg</li>
-                    <li>Cambios permitidos (puede aplicarse diferencia de tarifa)</li>
-                </ul>
-            </div>
-            <Button className="w-full sm:w-auto">+ $85.00</Button>
-        </CardContent>
-    </Card>
-);
+const additionalServices = [
+    { id: 'insurance', name: 'Seguro de Viaje Completo', description: 'Cobertura médica, de equipaje y cancelación.', price: 45.50, icon: ShieldCheck },
+    { id: 'priority', name: 'Embarque Prioritario', description: 'Sube al avión primero y asegura espacio para tu equipaje.', price: 15.00, icon: UserCheck },
+    { id: 'assistance', name: 'Asistencia Especial', description: 'Soporte para movilidad reducida o necesidades especiales.', price: 0, icon: Armchair },
+];
 
-const PriceSummaryCard = ({outboundFlight, returnFlight}: {outboundFlight: FlightOffer, returnFlight: FlightOffer | null}) => {
-    // A round trip offer in Amadeus already contains the total price.
-    // If it's a one-way trip, selectedReturn will be null, and we use the outbound price.
-    // If it's a round trip, selectedReturn will be the same as selectedOutbound,
-    // and its price is the total for the round trip.
+
+const AdditionalServicesCard = ({ onPriceChange }: { onPriceChange: (price: number) => void }) => {
+    const { toast } = useToast();
+
+    const handleServiceToggle = (checked: boolean, price: number) => {
+        onPriceChange(checked ? price : -price);
+        if (checked) {
+            toast({
+                title: "Servicio añadido",
+                description: `El servicio ha sido añadido a tu reserva.`,
+                variant: 'success'
+            })
+        }
+    }
+    
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-xl font-headline">Servicios Adicionales</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {additionalServices.map(service => (
+                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-muted/20">
+                        <div className="flex items-center gap-4">
+                           <service.icon className="h-8 w-8 text-primary" />
+                           <div>
+                             <Label htmlFor={service.id} className="font-semibold">{service.name}</Label>
+                             <p className="text-xs text-muted-foreground">{service.description}</p>
+                           </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <span className="font-semibold text-lg text-tertiary">
+                                {service.price > 0 ? `$${service.price.toFixed(2)}` : 'Gratis'}
+                            </span>
+                             <Switch 
+                                id={service.id} 
+                                onCheckedChange={(checked) => handleServiceToggle(checked, service.price)}
+                             />
+                        </div>
+                    </div>
+                ))}
+            </CardContent>
+        </Card>
+    )
+};
+
+
+const PriceSummaryCard = ({outboundFlight, returnFlight, additionalServicesPrice }: {outboundFlight: FlightOffer, returnFlight: FlightOffer | null, additionalServicesPrice: number }) => {
     const finalOffer = returnFlight || outboundFlight;
-    const total = parseFloat(finalOffer.price.total);
     const basePrice = parseFloat(finalOffer.price.base);
-    const taxes = total - basePrice;
+    const taxes = parseFloat(finalOffer.price.total) - basePrice;
+    const total = parseFloat(finalOffer.price.total) + additionalServicesPrice;
 
+    const checkoutLink = `/flights/checkout?outboundId=${outboundFlight.id}${returnFlight ? `&returnId=${returnFlight.id}` : ''}&addons=${additionalServicesPrice}`;
 
     return (
         <Card className="sticky top-24 shadow-lg">
@@ -111,18 +147,26 @@ const PriceSummaryCard = ({outboundFlight, returnFlight}: {outboundFlight: Fligh
                     <span className="text-muted-foreground">Vuelos</span>
                     <span>${basePrice.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between">
+                 <div className="flex justify-between">
                     <span className="text-muted-foreground">Impuestos y tasas</span>
                     <span>${taxes.toFixed(2)}</span>
                 </div>
+                 {additionalServicesPrice > 0 && (
+                    <div className="flex justify-between text-primary font-medium">
+                        <span >Servicios Adicionales</span>
+                        <span>${additionalServicesPrice.toFixed(2)}</span>
+                    </div>
+                 )}
                 <Separator />
                 <div className="flex justify-between font-bold text-xl">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                 </div>
-                 <Button size="lg" className="w-full mt-4 bg-success hover:bg-success/90">
-                    <Lock className="mr-2 h-5 w-5" />
-                    Ir a la página de pago
+                 <Button asChild size="lg" className="w-full mt-4 bg-success hover:bg-success/90">
+                    <Link href={checkoutLink}>
+                        <Lock className="mr-2 h-5 w-5" />
+                        Ir al Pago
+                    </Link>
                 </Button>
             </CardContent>
         </Card>
@@ -130,6 +174,8 @@ const PriceSummaryCard = ({outboundFlight, returnFlight}: {outboundFlight: Fligh
 }
 
 export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOutboundChange, onReturnChange }: ReviewAndPayProps) {
+    const [additionalServicesPrice, setAdditionalServicesPrice] = useState(0);
+
     return (
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-8 space-y-6">
@@ -138,13 +184,12 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOut
                 <FlightSummaryCard title="Vuelo de Ida" itinerary={outboundFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onOutboundChange} />
                 
                 {returnFlight && onReturnChange && (
-                     // In Amadeus round-trip search, itineraries[1] is the return leg
                     <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnFlight.itineraries[1]} dictionaries={dictionaries} onChangeClick={onReturnChange} />
                 )}
 
                 <Separator />
                 
-                <FareUpgradeCard />
+                <AdditionalServicesCard onPriceChange={(price) => setAdditionalServicesPrice(prev => prev + price)} />
 
                  <Card>
                     <CardHeader>
@@ -160,7 +205,11 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOut
                 </Card>
             </div>
             <aside className="lg:col-span-4 mt-8 lg:mt-0">
-                <PriceSummaryCard outboundFlight={outboundFlight} returnFlight={returnFlight} />
+                <PriceSummaryCard 
+                    outboundFlight={outboundFlight} 
+                    returnFlight={returnFlight} 
+                    additionalServicesPrice={additionalServicesPrice}
+                />
             </aside>
         </div>
     );

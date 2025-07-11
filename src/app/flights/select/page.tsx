@@ -15,6 +15,7 @@ import { FlightLoadingAnimation } from '@/components/flight-loading-animation';
 import { useDebounce } from '@/hooks/use-debounce';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import React from 'react';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
@@ -219,13 +220,15 @@ function FlightSelectionPage() {
           />
           
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 mt-8">
-              <aside className={`lg:col-span-3 ${step === 'review' ? 'hidden lg:block' : ''}`}>
-                 <FlightFilters 
-                  availableAirlines={availableAirlines}
-                  onFilterChange={handleFilterChange}
-                 />
-              </aside>
-              <main className={`lg:col-span-9 ${step === 'review' ? 'lg:col-span-12' : ''}`}>
+              {step !== 'review' && (
+                <aside className="lg:col-span-3">
+                    <FlightFilters 
+                        availableAirlines={availableAirlines}
+                        onFilterChange={handleFilterChange}
+                    />
+                </aside>
+              )}
+              <main className={step !== 'review' ? 'lg:col-span-9' : 'lg:col-span-12'}>
                   {renderStepContent()}
               </main>
           </div>
