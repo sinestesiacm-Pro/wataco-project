@@ -36,16 +36,8 @@ type HotelFiltersState = {
   amenities: string[];
 };
 
-const hotelImages = [
-  'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1618773928121-c32242e63f39?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1582719508461-905c673771fd?fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=1920&q=80',
-];
-
 export default function HotelSearchPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [destination, setDestination] = useState<Airport | null>(null);
   const [destinationQuery, setDestinationQuery] = useState('');
@@ -57,8 +49,6 @@ export default function HotelSearchPage() {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   
-  const [hotelData, setHotelData] = useState<AmadeusHotelOffer[] | null>(null);
-  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   const [suggestions, setSuggestions] = useState<Airport[]>([]);
@@ -67,10 +57,6 @@ export default function HotelSearchPage() {
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   const destinationRef = useRef<HTMLDivElement>(null);
   
-  const [filters, setFilters] = useState<HotelFiltersState>({ stars: [], amenities: [] });
-  const isInitialSearch = useRef(true);
-  const searchIdRef = useRef(0);
-
   const checkInDate = date?.from;
   const checkOutDate = date?.to;
 
@@ -123,58 +109,6 @@ export default function HotelSearchPage() {
     setSuggestions([]);
   };
 
-  const handleSearch = useCallback(async () => {
-    if (!destination || !checkInDate || !checkOutDate) {
-      if (!isInitialSearch.current) {
-        toast({
-            title: 'Información Faltante',
-            description: 'Por favor, selecciona un destino y las fechas.',
-            variant: 'destructive',
-        });
-      }
-      return;
-    }
-
-    setLoading(true);
-    if (isInitialSearch.current) {
-      setHotelData(null);
-    }
-    
-    const searchId = ++searchIdRef.current;
-
-    const result = await searchHotels({
-      cityCode: destination.iataCode,
-      checkInDate: format(checkInDate, 'yyyy-MM-dd'),
-      checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
-      adults,
-      ratings: filters.stars,
-      amenities: filters.amenities,
-    });
-    
-    if (searchId !== searchIdRef.current) {
-        return;
-    }
-
-    isInitialSearch.current = false;
-
-    if (result.success && result.data) {
-      setHotelData(result.data);
-    } else {
-      setHotelData([]); 
-      toast({
-        title: 'Error de Búsqueda',
-        description: result.error || 'No se pudieron encontrar hoteles. Intenta otra búsqueda.',
-        variant: 'destructive',
-      });
-    }
-    setLoading(false);
-  }, [destination, checkInDate, checkOutDate, adults, filters, toast]);
-  
-  const handleCancelSearch = () => {
-    searchIdRef.current++;
-    setLoading(false);
-  };
-
   const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       if (!destination || !date?.from || !date?.to) {
@@ -185,7 +119,6 @@ export default function HotelSearchPage() {
         });
         return;
       }
-      // Instead of calling handleSearch directly, we navigate to the details page with search params
       const params = new URLSearchParams({
         cityCode: destination.iataCode,
         checkInDate: format(date.from, 'yyyy-MM-dd'),
@@ -196,32 +129,6 @@ export default function HotelSearchPage() {
       });
       router.push(`/hotels/search?${params.toString()}`);
   }
-
-  const handleFilterChange = useCallback((newFilters: HotelFiltersState) => {
-    setFilters(newFilters);
-  }, []);
-  
-  useEffect(() => {
-    if (!isInitialSearch.current) {
-       const timer = setTimeout(() => {
-        handleSearch();
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [filters, handleSearch]);
-
-  const LoadingSkeleton = () => (
-    <div className="grid md:grid-cols-12 gap-8 mt-8">
-        <div className="md:col-span-3">
-             <Skeleton className="h-96 w-full rounded-2xl" />
-        </div>
-        <div className="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[...Array(6)].map((_, i) => (
-                <Skeleton key={i} className="h-72 w-full rounded-2xl" />
-            ))}
-        </div>
-    </div>
-  );
   
   const totalGuests = adults + children;
   const travelerText = `${totalGuests} huésped${totalGuests > 1 ? 'es' : ''}`;
