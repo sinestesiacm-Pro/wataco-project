@@ -71,7 +71,7 @@ export function RecommendedDestinations() {
         <p className="text-lg text-muted-foreground mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
       </div>
       
-      <div className="flex space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
+      <div className="flex justify-center space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
         {flightRoutes.map((route) => (
             <DestinationCard key={`${route.origin}-${route.destination}`} route={route} />
         ))}
