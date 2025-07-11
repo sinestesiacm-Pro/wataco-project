@@ -45,6 +45,12 @@ const nextConfig: NextConfig = {
         hostname: 'pdt.multimediarepository.testing.amadeus.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

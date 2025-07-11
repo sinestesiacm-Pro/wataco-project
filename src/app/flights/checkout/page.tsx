@@ -8,13 +8,23 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Lock, CreditCard, User, Mail, Phone, ArrowLeft, Landmark } from 'lucide-react';
+import { Lock, CreditCard, User, Mail, ArrowLeft, Landmark } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
+
+const countryCodes = [
+    { code: 'co', name: 'Colombia', dial: '+57' },
+    { code: 'ar', name: 'Argentina', dial: '+54' },
+    { code: 'cl', name: 'Chile', dial: '+56' },
+    { code: 'mx', name: 'Mexico', dial: '+52' },
+    { code: 'es', name: 'Spain', dial: '+34' },
+    { code: 'us', name: 'United States', dial: '+1' },
+];
 
 const PassengerForm = () => {
     return (
@@ -106,16 +116,23 @@ const ContactInfoForm = () => {
                     <Label htmlFor="phone">Número de Teléfono</Label>
                     <div className="flex gap-2 mt-1">
                         <Select defaultValue="us">
-                            <SelectTrigger className="w-[120px]">
+                            <SelectTrigger className="w-[150px]">
                                 <SelectValue placeholder="Código" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="co">CO +57</SelectItem>
-                                <SelectItem value="ar">AR +54</SelectItem>
-                                <SelectItem value="cl">CL +56</SelectItem>
-                                <SelectItem value="mx">MX +52</SelectItem>
-                                <SelectItem value="es">ES +34</SelectItem>
-                                <SelectItem value="us">US +1</SelectItem>
+                                {countryCodes.map(country => (
+                                     <SelectItem key={country.code} value={country.code}>
+                                        <div className="flex items-center gap-2">
+                                            <Image 
+                                                src={`https://flagcdn.com/w20/${country.code}.png`}
+                                                alt={`${country.name} flag`}
+                                                width={20}
+                                                height={15}
+                                            />
+                                            <span>{country.name} ({country.dial})</span>
+                                        </div>
+                                    </SelectItem>
+                                ))}
                             </SelectContent>
                         </Select>
                         <Input id="phone" type="tel" placeholder="234 567 890" className="flex-grow" />
