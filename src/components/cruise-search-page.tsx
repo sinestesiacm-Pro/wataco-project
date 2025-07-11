@@ -1,4 +1,5 @@
 
+
 'use client';
 import { useState, useRef } from 'react';
 import { format } from 'date-fns';
@@ -112,8 +113,7 @@ export default function CruiseSearchPage() {
         subtitle="Descubre y reserva increíbles vacaciones en crucero por todo el mundo."
       >
         <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleSearch} className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+          <form onSubmit={handleSearch} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
               <div className='lg:col-span-5'>
                 <Label htmlFor="destination-region" className="text-sm font-semibold ml-2">Navegando Hacia</Label>
                 <Select onValueChange={setDestinationRegion} value={destinationRegion}>
@@ -181,19 +181,19 @@ export default function CruiseSearchPage() {
                 {loading ? (
                   <Button
                     type="button"
-                    className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
+                    size="lg"
+                    className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground h-10 mt-1"
                     onClick={handleCancelSearch}
                   >
                     <X className="mr-2 h-5 w-5" />
                     Cancelar
                   </Button>
                 ) : (
-                  <Button type="submit" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                    <Ship className="mr-2 h-5 w-5" /> Buscar
+                  <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-10 mt-1">
+                    <Ship className="mr-2 h-5 w-5" /> Buscar Cruceros
                   </Button>
                 )}
               </div>
-            </div>
           </form>
         </div>
       </HeroSection>

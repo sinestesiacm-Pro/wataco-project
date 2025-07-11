@@ -266,8 +266,7 @@ export default function HotelSearchPage() {
         subtitle="Busca y reserva hoteles, desde boutiques acogedoras hasta resorts de lujo."
       >
         <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleFormSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+          <form onSubmit={handleFormSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
               <div className='lg:col-span-5 relative' ref={destinationRef}>
                 <Label htmlFor="destination" className="text-sm font-semibold ml-2">Destino</Label>
                 <InputGroup>
@@ -373,11 +372,11 @@ export default function HotelSearchPage() {
                 </Popover>
               </div>
               <div className="lg:col-span-2 flex items-end">
-                <Button type="submit" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
-                    Buscar
+                <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-10 mt-1">
+                    <BedDouble className="mr-2 h-5 w-5" />
+                    Buscar Hoteles
                 </Button>
               </div>
-            </div>
           </form>
         </div>
       </HeroSection>

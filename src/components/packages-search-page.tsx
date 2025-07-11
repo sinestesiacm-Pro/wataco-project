@@ -1,4 +1,5 @@
 
+
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { addDays, format } from 'date-fns';
@@ -209,8 +210,7 @@ export default function PackagesSearchPage() {
         subtitle="Reserva tu vuelo y hotel juntos para ahorrar."
       >
         <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleSearch} className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+          <form onSubmit={handleSearch} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
               <div className='lg:col-span-3 relative' ref={activeInput === 'origin' ? suggestionsRef : null}>
                 <Label htmlFor="origin" className="text-sm font-semibold ml-2">Desde</Label>
                 <InputGroup>
@@ -308,7 +308,7 @@ export default function PackagesSearchPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="lg:col-span-12 flex justify-end">
+              <div className="col-span-12 flex items-end justify-end">
                 {loading ? (
                   <Button
                     type="button"
@@ -319,12 +319,11 @@ export default function PackagesSearchPage() {
                     Cancelar
                   </Button>
                 ) : (
-                  <Button type="submit" className="w-full lg:w-auto font-bold bg-success hover:bg-success/90 mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
+                  <Button type="submit" size="lg" className="w-full lg:w-auto font-bold bg-success hover:bg-success/90 mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all">
                      <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
                   </Button>
                 )}
               </div>
-            </div>
           </form>
         </div>
       </HeroSection>
