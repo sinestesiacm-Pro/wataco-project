@@ -63,7 +63,7 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                     <HotelMapDialog hotelName={offer.hotel.name || 'Ubicación'} />
                 </div>
             </DialogHeader>
-            <div className="flex-grow min-h-0">
+            <div className="flex-grow overflow-y-auto">
                 <ScrollArea className="h-full">
                     <div className="p-4 md:p-6 pt-2">
                       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
