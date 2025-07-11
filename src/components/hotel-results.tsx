@@ -40,7 +40,7 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
         </h2>
       {hotels.map((offer) => (
         <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card/95 backdrop-blur-sm flex flex-col md:flex-row">
-            <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4">
+            <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4 flex-shrink-0">
                 <Image 
                     src={offer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
                     data-ai-hint="hotel exterior" 
@@ -50,12 +50,12 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                 />
             </div>
             
-            <div className="md:w-2/3 xl:w-3/4 flex flex-col">
+            <div className="flex flex-col flex-grow">
               <div className="p-6 flex-grow">
                 <div className="flex justify-between items-start">
                     <div>
                         <h3 className="text-2xl font-semibold font-headline text-primary">{offer.hotel.name}</h3>
-                        <div className="flex items-center gap-4 mt-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
                             {renderStars(offer.hotel.rating)}
                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                 <MapPin className="w-4 h-4" />
@@ -80,9 +80,9 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                  )}
               </div>
               
-              <Separator />
+              <Separator className="mt-auto" />
 
-              <div className="p-6 bg-muted/30 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="p-4 sm:p-6 bg-muted/30 flex flex-col sm:flex-row justify-between items-center gap-4">
                  <div className="text-center sm:text-left">
                     <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
                     <p className="font-semibold text-3xl text-tertiary">
@@ -90,7 +90,7 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                     </p>
                 </div>
                  <HotelDetailsDialog offer={offer} searchParams={searchParams}>
-                    <Button size="lg" className="bg-primary hover:bg-primary/90 font-semibold">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 font-semibold w-full sm:w-auto">
                        Ver Oferta
                     </Button>
                 </HotelDetailsDialog>

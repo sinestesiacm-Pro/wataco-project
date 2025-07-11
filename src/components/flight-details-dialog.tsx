@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -73,7 +72,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                     </div>
                 </div>
 
-                <div className="bg-muted/40 w-24 sm:w-32 flex-shrink-0 border-l-2 border-dashed border-border flex flex-col items-center justify-center p-2 sm:p-4">
+                <div className="bg-muted/40 w-24 sm:w-32 flex-shrink-0 border-l-2 border-dashed border-border flex-col items-center justify-center p-2 sm:p-4 hidden sm:flex">
                      <p className="font-headline font-bold text-primary text-sm mb-2 text-center animate-pulse-text">Casi Listo</p>
                      <div className="bg-white p-1 rounded-md shadow-inner">
                         <QrCode className="w-12 h-12 sm:w-16 sm:h-16 text-black" />
@@ -181,7 +180,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
           <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0">
             <DialogTitle className="font-headline text-2xl sm:text-3xl">Detalles de tu Selección</DialogTitle>
           </DialogHeader>
-          <ScrollArea className="flex-grow overflow-y-auto">
+          <ScrollArea className="flex-grow">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 p-4 sm:p-6 pt-0">
                 <div className="md:col-span-7 space-y-6">
                     <BoardingPassCard itinerary={itineraryToShow} dictionaries={dictionaries} title={dialogTitle}/>

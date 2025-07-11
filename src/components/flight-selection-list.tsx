@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Plane } from 'lucide-react';
 import { FlightBaggageInfo } from './flight-baggage-info';
 import { FlightDetailsDialog } from './flight-details-dialog';
+import { cn } from '@/lib/utils';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -36,7 +37,7 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight, title }: { flight: F
 
     return (
         <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border bg-card/95 backdrop-blur-sm">
-            <div className="flex">
+            <div className="flex flex-col sm:flex-row">
                 {/* Main boarding pass section */}
                 <div className="flex-grow p-4 md:p-6">
                     <div className="flex items-start gap-4">
@@ -59,7 +60,7 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight, title }: { flight: F
                                     <div className="w-full h-px bg-border relative my-1">
                                         <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-muted-foreground p-0.5 rounded-full"/>
                                     </div>
-                                    <p className="text-xs text-primary font-semibold">{stops === 0 ? 'Directo' : `${stops} escala(s)`}</p>
+                                    <p className={cn("text-xs font-semibold", stops > 0 ? "text-amber-600" : "text-primary")}>{stops === 0 ? 'Directo' : `${stops} escala(s)`}</p>
                                 </div>
                                 <div className="font-semibold text-right">
                                     <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
@@ -76,12 +77,12 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight, title }: { flight: F
                 </div>
 
                 {/* Tear-off stub */}
-                <div className="flex-shrink-0 w-48 bg-muted/30 ticket-tear flex flex-col items-center justify-center p-4 gap-3">
+                <div className="flex-shrink-0 w-full sm:w-48 bg-muted/30 ticket-tear flex sm:flex-col items-center justify-between sm:justify-center p-4 gap-3">
                     <div className="text-center">
-                        <p className="text-2xl font-bold font-headline text-success">
+                        <p className="text-xs sm:text-sm text-muted-foreground">Precio total</p>
+                        <p className="text-2xl sm:text-3xl font-bold font-headline text-success">
                             ${flight.price.total}
                         </p>
-                        <p className="text-xs text-muted-foreground">Precio total, ida y vuelta</p>
                     </div>
                     <FlightDetailsDialog
                         flight={flight}

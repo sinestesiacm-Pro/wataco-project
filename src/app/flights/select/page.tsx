@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { searchFlights } from '@/app/actions';
 import type { FlightData, FlightOffer, Dictionaries, FareDetailsBySegment } from '@/lib/types';
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Filter } from 'lucide-react';
 import { FlightFilters } from '@/components/flight-filters';
 import { BookingProgressHeader } from '@/components/booking-progress-header';
 import { FlightSelectionList } from '@/components/flight-selection-list';
@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
@@ -245,12 +246,30 @@ function FlightSelectionPage() {
           
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 mt-8">
               {step !== 'review' && (
-                <aside className="lg:col-span-3">
-                    <FlightFilters 
-                        availableAirlines={availableAirlines}
-                        onFilterChange={handleFilterChange}
-                    />
-                </aside>
+                <>
+                  <aside className="hidden lg:block lg:col-span-3">
+                      <FlightFilters 
+                          availableAirlines={availableAirlines}
+                          onFilterChange={handleFilterChange}
+                      />
+                  </aside>
+                  <div className="lg:hidden fixed bottom-6 right-6 z-50">
+                    <Sheet>
+                      <SheetTrigger asChild>
+                         <Button size="lg" className="rounded-full shadow-lg">
+                           <Filter className="mr-2 h-5 w-5"/>
+                           Filtros
+                         </Button>
+                      </SheetTrigger>
+                      <SheetContent side="bottom" className="h-[80vh]">
+                        <FlightFilters 
+                            availableAirlines={availableAirlines}
+                            onFilterChange={handleFilterChange}
+                        />
+                      </SheetContent>
+                    </Sheet>
+                  </div>
+                </>
               )}
               <main className={step !== 'review' ? 'lg:col-span-9' : 'lg:col-span-12'}>
                   {renderStepContent()}

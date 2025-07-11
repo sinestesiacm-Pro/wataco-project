@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -12,11 +11,9 @@ import {
 import { Button } from '@/components/ui/button';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { BedDouble, Star, MapPin, CheckCircle2, QrCode, ArrowRight } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import Image from 'next/image';
 import { HotelMapDialog } from './hotel-map-dialog';
 import Link from 'next/link';
-import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { amenityIcons } from '@/lib/amenity-icons';

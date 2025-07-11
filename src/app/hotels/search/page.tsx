@@ -1,11 +1,8 @@
-// This is a new file for showing hotel search results
-// src/app/hotels/search/page.tsx
-
 'use client';
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Filter } from "lucide-react";
 import { searchHotels } from "@/app/actions";
 import type { AmadeusHotelOffer } from "@/lib/types";
 import { HotelResults } from "@/components/hotel-results";
@@ -13,6 +10,8 @@ import { HotelFilters } from "@/components/hotel-filters";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AITravelTips } from "@/components/ai-travel-tips";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 type HotelFiltersState = {
   stars: number[];
@@ -85,7 +84,7 @@ function HotelResultsPage() {
 
     const LoadingSkeleton = () => (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-3">
+          <div className="hidden lg:block lg:col-span-3">
                <Skeleton className="h-96 w-full rounded-2xl" />
           </div>
           <div className="lg:col-span-9 space-y-4">
@@ -126,10 +125,23 @@ function HotelResultsPage() {
                 </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              <div className="lg:col-span-3">
+              <aside className="hidden lg:block lg:col-span-3">
                 <HotelFilters onFilterChange={handleFilterChange} />
-              </div>
-              <div className="lg:col-span-9">
+              </aside>
+              <div className="lg:hidden fixed bottom-6 right-6 z-50">
+                    <Sheet>
+                      <SheetTrigger asChild>
+                         <Button size="lg" className="rounded-full shadow-lg">
+                           <Filter className="mr-2 h-5 w-5"/>
+                           Filtros
+                         </Button>
+                      </SheetTrigger>
+                      <SheetContent side="bottom" className="h-[80vh]">
+                        <HotelFilters onFilterChange={handleFilterChange} />
+                      </SheetContent>
+                    </Sheet>
+                  </div>
+              <main className="lg:col-span-9">
                 {filteredHotels && filteredHotels.length > 0 ? (
                     <HotelResults hotels={filteredHotels} searchParams={searchParams} />
                 ) : (
@@ -140,7 +152,7 @@ function HotelResultsPage() {
                         </CardContent>
                     </Card>
                 )}
-              </div>
+              </main>
             </div>
           </div>
         </div>
