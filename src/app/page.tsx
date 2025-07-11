@@ -60,8 +60,8 @@ function HomePageContent() {
         <>
             <PageContent tab={tab ?? undefined} />
       
-            <div className="bg-card pt-0 pb-8">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 fuselage-gradient">
+            <div className="bg-card pt-0 pb-8 fuselage-gradient">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <RecommendedContent tab={tab ?? undefined} />
                 </div>
             </div>

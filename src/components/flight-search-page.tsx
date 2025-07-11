@@ -240,7 +240,7 @@ export default function FlightSearchPage() {
         subtitle="Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo."
       >
         <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleManualSearch} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <form onSubmit={handleManualSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
               <div className="col-span-12">
                   <div className="flex items-center space-x-4">
                       <div className="flex items-center space-x-2">
@@ -280,7 +280,7 @@ export default function FlightSearchPage() {
                   {activeInput === 'destination' && <SuggestionsList type="destination" />}
               </div>
               
-              <div className="lg:col-span-4">
+              <div className="col-span-12 sm:col-span-1 lg:col-span-4">
                   <Label htmlFor="dates" className="text-sm font-semibold ml-2">{isRoundTrip ? 'Salida y Regreso' : 'Salida'}</Label>
                   <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                       <PopoverTrigger asChild>
@@ -324,7 +324,7 @@ export default function FlightSearchPage() {
                   </Popover>
               </div>
           
-              <div className='lg:col-span-4'>
+              <div className='col-span-12 sm:col-span-1 lg:col-span-4'>
                   <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Pasajeros</Label>
                   <Popover>
                   <PopoverTrigger asChild>
@@ -393,7 +393,7 @@ export default function FlightSearchPage() {
                   </Popover>
               </div>
 
-              <div className="lg:col-span-4 flex items-end">
+              <div className="col-span-12 lg:col-span-4 flex items-end">
                   <Button
                       type="submit"
                       size="lg"
@@ -407,12 +407,6 @@ export default function FlightSearchPage() {
           </form>
         </div>
       </HeroSection>
-      
-      <div className="max-w-7xl mx-auto py-0 px-4 sm:px-6 lg:px-8">
-        <section className="mt-8">
-            {/* Content can be added here in the future */}
-        </section>
-      </div>
     </div>
   );
 }

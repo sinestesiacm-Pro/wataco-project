@@ -31,40 +31,42 @@ export function Header() {
               <Icons.logo width={100} height={27} />
             </Link>
           </div>
-          <div className="flex-1 min-w-0 px-2 sm:px-4 flex justify-center">
-            <div className="w-full max-w-lg overflow-x-auto scrollbar-hide">
-              <nav className="flex items-center space-x-1 bg-card/50 p-1 rounded-full border w-max mx-auto">
-                <TabButton
-                  label="Vuelos"
-                  icon={<Plane className="h-4 w-4" />}
-                  isActive={isOnHomePage && activeTab === 'Flights'}
-                  onClick={() => handleTabClick('Flights')}
-                />
-                <TabButton
-                  label="Hoteles"
-                  icon={<BedDouble className="h-4 w-4" />}
-                  isActive={isOnHomePage && activeTab === 'Hotels'}
-                  onClick={() => handleTabClick('Hotels')}
-                />
-                <TabButton
-                  label="Paquetes"
-                  icon={<Luggage className="h-4 w-4" />}
-                  isActive={isOnHomePage && activeTab === 'Packages'}
-                  onClick={() => handleTabClick('Packages')}
-                />
-                <TabButton
-                  label="Cruceros"
-                  icon={<Ship className="h-4 w-4" />}
-                  isActive={isOnHomePage && activeTab === 'Cruises'}
-                  onClick={() => handleTabClick('Cruises')}
-                />
-                <TabButton
-                  label="Actividades"
-                  icon={<Zap className="h-4 w-4" />}
-                  isActive={isOnHomePage && activeTab === 'Activities'}
-                  onClick={() => handleTabClick('Activities')}
-                />
-              </nav>
+          <div className="flex-1 min-w-0 px-2 sm:px-4">
+            <div className="relative">
+              <div className="overflow-x-auto scrollbar-hide mask-fade">
+                <nav className="flex items-center justify-start sm:justify-center space-x-1 bg-card/50 p-1 rounded-full border w-max mx-auto">
+                  <TabButton
+                    label="Vuelos"
+                    icon={<Plane className="h-4 w-4" />}
+                    isActive={isOnHomePage && activeTab === 'Flights'}
+                    onClick={() => handleTabClick('Flights')}
+                  />
+                  <TabButton
+                    label="Hoteles"
+                    icon={<BedDouble className="h-4 w-4" />}
+                    isActive={isOnHomePage && activeTab === 'Hotels'}
+                    onClick={() => handleTabClick('Hotels')}
+                  />
+                  <TabButton
+                    label="Paquetes"
+                    icon={<Luggage className="h-4 w-4" />}
+                    isActive={isOnHomePage && activeTab === 'Packages'}
+                    onClick={() => handleTabClick('Packages')}
+                  />
+                  <TabButton
+                    label="Cruceros"
+                    icon={<Ship className="h-4 w-4" />}
+                    isActive={isOnHomePage && activeTab === 'Cruises'}
+                    onClick={() => handleTabClick('Cruises')}
+                  />
+                  <TabButton
+                    label="Actividades"
+                    icon={<Zap className="h-4 w-4" />}
+                    isActive={isOnHomePage && activeTab === 'Activities'}
+                    onClick={() => handleTabClick('Activities')}
+                  />
+                </nav>
+              </div>
             </div>
           </div>
           <div className="flex-shrink-0 flex items-center gap-2">
@@ -99,15 +101,14 @@ const TabButton = ({ label, icon, isActive, onClick }: { label: string, icon: Re
       variant="ghost"
       onClick={onClick}
       className={cn(
-        "rounded-full px-3 sm:px-6 py-2 text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap",
+        "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap",
         isActive
           ? "bg-primary text-primary-foreground shadow-lg"
           : "bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground"
       )}
     >
       {icon}
-      <span className="hidden sm:inline">{label}</span>
-      <span className="sm:hidden">{label.substring(0,6)}</span>
+      <span>{label}</span>
     </Button>
   );
 };
