@@ -103,14 +103,14 @@ export default function FlightSearchPage() {
       setSuggestionsLoading(false);
     };
 
-    if (activeInput === 'origin' && originQuery.length > 1) {
+    if (activeInput === 'origin' && debouncedOriginQuery) {
       fetchSuggestions(debouncedOriginQuery);
-    } else if (activeInput === 'destination' && destinationQuery.length > 1) {
+    } else if (activeInput === 'destination' && debouncedDestinationQuery) {
       fetchSuggestions(debouncedDestinationQuery);
     } else {
       setSuggestions([]);
     }
-  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, originQuery, destinationQuery]);
+  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput]);
 
 
   useEffect(() => {
@@ -191,36 +191,41 @@ export default function FlightSearchPage() {
   const totalTravelers = adults + children + infants;
   const travelerText = `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`;
 
-  const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => (
-    <div className="absolute z-20 w-full mt-1 bg-card/80 backdrop-blur-xl border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-      {suggestionsLoading ? (
-        <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
-        </div>
-      ) : suggestions.length > 0 ? (
-        suggestions.map((airport, index) => (
-          <div
-            key={`${airport.iataCode}-${airport.name}-${index}`}
-            className="px-3 py-2 hover:bg-accent/50 cursor-pointer border-b border-white/10 last:border-b-0"
-            onClick={() => handleSelectSuggestion(airport, type)}
-          >
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-muted-foreground" />
-              <div className="flex-grow">
-                <p className="font-normal text-sm">
-                  {airport.address?.cityName || airport.name}
-                  {airport.address?.countryName ? `, ${airport.address.countryName}`: ''}
-                </p>
-                <p className="text-xs text-muted-foreground/90">{airport.name} ({airport.iataCode})</p>
+  const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => {
+    const query = type === 'origin' ? originQuery : destinationQuery;
+    if (query.length < 2) return null;
+
+    return (
+      <div className="absolute z-20 w-full mt-1 bg-card/80 backdrop-blur-xl border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        {suggestionsLoading ? (
+          <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
+            <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
+          </div>
+        ) : suggestions.length > 0 ? (
+          suggestions.map((airport, index) => (
+            <div
+              key={`${airport.iataCode}-${airport.name}-${index}`}
+              className="px-3 py-2 hover:bg-accent/50 cursor-pointer border-b border-white/10 last:border-b-0"
+              onClick={() => handleSelectSuggestion(airport, type)}
+            >
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-muted-foreground" />
+                <div className="flex-grow">
+                  <p className="font-normal text-sm">
+                    {airport.address?.cityName || airport.name}
+                    {airport.address?.countryName ? `, ${airport.address.countryName}`: ''}
+                  </p>
+                  <p className="text-xs text-muted-foreground/90">{airport.name} ({airport.iataCode})</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))
-      ) : (
-         <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
-      )}
-    </div>
-  );
+          ))
+        ) : (
+           <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
+        )}
+      </div>
+    );
+  }
 
 
   return (
