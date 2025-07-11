@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -22,7 +22,7 @@ const countryCodes = [
     { code: 'ar', name: 'Argentina', dial: '+54' },
     { code: 'cl', name: 'Chile', dial: '+56' },
     { code: 'mx', name: 'Mexico', dial: '+52' },
-    { code: 'es', name: 'Spain', dial: '+34' },
+    { code: 'es', name: 'España', dial: '+34' },
     { code: 'us', name: 'United States', dial: '+1' },
 ];
 
@@ -101,6 +101,24 @@ const PassengerForm = () => {
 };
 
 const ContactInfoForm = () => {
+    const [selectedCountryCode, setSelectedCountryCode] = useState('us');
+
+    const SelectedCountryDisplay = ({ code }: { code: string }) => {
+        const country = countryCodes.find(c => c.code === code);
+        if (!country) return null;
+        return (
+            <div className="flex items-center gap-2">
+                <Image 
+                    src={`https://flagcdn.com/w20/${country.code}.png`}
+                    alt={`${country.name} flag`}
+                    width={20}
+                    height={15}
+                />
+                <span>{country.dial}</span>
+            </div>
+        )
+    }
+
     return (
         <Card>
             <CardHeader>
@@ -115,9 +133,11 @@ const ContactInfoForm = () => {
                 <div>
                     <Label htmlFor="phone">Número de Teléfono</Label>
                     <div className="flex gap-2 mt-1">
-                        <Select defaultValue="us">
+                        <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
                             <SelectTrigger className="w-[120px]">
-                                <SelectValue placeholder="Código" />
+                                <SelectValue asChild>
+                                    <SelectedCountryDisplay code={selectedCountryCode} />
+                                </SelectValue>
                             </SelectTrigger>
                             <SelectContent className="min-w-[250px]">
                                 {countryCodes.map(country => (
@@ -326,3 +346,5 @@ export default function CheckoutPage() {
         </Suspense>
     )
 }
+
+    
