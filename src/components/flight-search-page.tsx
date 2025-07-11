@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { addDays, format, parse } from 'date-fns';
@@ -200,7 +201,7 @@ export default function FlightSearchPage() {
         suggestions.map((airport, index) => (
           <div
             key={`${airport.iataCode}-${airport.name}-${index}`}
-            className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
+            className="px-3 py-2 hover:bg-accent cursor-pointer border-b last:border-b-0"
             onClick={() => handleSelectSuggestion(airport, type)}
           >
             <div className="flex items-center gap-2">

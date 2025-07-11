@@ -11,24 +11,23 @@ interface FuselageSectionProps {
   subtitle: string;
 }
 
-export function FuselageSection({ images, title, subtitle }: FuselageSectionProps) {
+const BackgroundCarousel = ({ images }: { images: string[] }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    // When images change, reset to the first one
     setCurrentImageIndex(0);
     
     if (images.length > 1) {
       const interval = setInterval(() => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-      }, 5000); // Change image every 5 seconds
+      }, 5000);
 
       return () => clearInterval(interval);
     }
   }, [images]);
 
   return (
-    <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
+    <>
       {images.map((image, index) => (
         <Image
           key={`${image}-${index}`}
@@ -45,6 +44,14 @@ export function FuselageSection({ images, title, subtitle }: FuselageSectionProp
           data-ai-hint="travel destination"
         />
       ))}
+    </>
+  );
+};
+
+export function FuselageSection({ images, title, subtitle }: FuselageSectionProps) {
+  return (
+    <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
+      <BackgroundCarousel images={images} />
       <div 
         className="absolute inset-0"
         style={{ 
