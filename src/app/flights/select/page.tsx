@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { searchFlights } from '@/app/actions';
-import type { FlightData, FlightOffer, Dictionaries } from '@/lib/types';
+import type { FlightData, FlightOffer, Dictionaries, FareDetailsBySegment } from '@/lib/types';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { FlightFilters } from '@/components/flight-filters';
@@ -22,6 +22,7 @@ export type FiltersState = {
   stops: number[];
   airlines: string[];
   bags: string[];
+  cabin: FareDetailsBySegment['cabin'] | null;
 };
 
 function FlightSelectionPage() {
@@ -34,7 +35,7 @@ function FlightSelectionPage() {
   const [step, setStep] = useState<BookingStep>('outbound');
   const [selectedOutbound, setSelectedOutbound] = useState<FlightOffer | null>(null);
   const [selectedReturn, setSelectedReturn] = useState<FlightOffer | null>(null);
-  const [filters, setFilters] = useState<FiltersState>({ stops: [], airlines: [], bags: [] });
+  const [filters, setFilters] = useState<FiltersState>({ stops: [], airlines: [], bags: [], cabin: null });
 
   const origin = searchParams.get('origin')!;
   const destination = searchParams.get('destination')!;
@@ -113,8 +114,13 @@ function FlightSelectionPage() {
         const bagsFilter = filters.bags.length === 0 || 
             (filters.bags.includes('carry-on') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) >= 0) ||
             (filters.bags.includes('checked') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) > 0);
+        
+        // Cabin filter
+        const cabinClass = flight.travelerPricings[0].fareDetailsBySegment[0].cabin;
+        const cabinFilter = !filters.cabin || cabinClass === filters.cabin;
 
-        return stopsFilter && airlineFilter && bagsFilter;
+
+        return stopsFilter && airlineFilter && bagsFilter && cabinFilter;
     });
 };
 

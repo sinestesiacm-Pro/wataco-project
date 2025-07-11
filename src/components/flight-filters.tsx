@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from './ui/separator';
-import type { Dictionaries } from '@/lib/types';
+import type { Dictionaries, FareDetailsBySegment } from '@/lib/types';
 import type { FiltersState } from '@/app/flights/select/page';
 import { useDebounce } from '@/hooks/use-debounce';
 
@@ -28,7 +28,8 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
   const [filters, setFilters] = useState<FiltersState>({
     stops: [],
     airlines: [],
-    bags: []
+    bags: [],
+    cabin: null,
   });
 
   const debouncedFilters = useDebounce(filters, 500);
@@ -61,6 +62,10 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
     });
   }, []);
 
+  const handleCabinChange = useCallback((value: FareDetailsBySegment['cabin']) => {
+    setFilters(prev => ({ ...prev, cabin: value }));
+  }, []);
+
 
   return (
     <Card className="sticky top-24 shadow-lg">
@@ -81,6 +86,29 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                  <div className="flex items-center space-x-2">
                     <RadioGroupItem value="2" id="stops-2" />
                     <Label htmlFor="stops-2">2 o más escalas</Label>
+                </div>
+            </RadioGroup>
+        </FilterSection>
+
+        <Separator />
+        
+        <FilterSection title="Cabina">
+            <RadioGroup onValueChange={(v) => handleCabinChange(v as FareDetailsBySegment['cabin'])}>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="ECONOMY" id="cabin-economy" />
+                    <Label htmlFor="cabin-economy">Económica</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="PREMIUM_ECONOMY" id="cabin-premium" />
+                    <Label htmlFor="cabin-premium">Premium</Label>
+                </div>
+                 <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="BUSINESS" id="cabin-business" />
+                    <Label htmlFor="cabin-business">Business</Label>
+                </div>
+                 <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="FIRST" id="cabin-first" />
+                    <Label htmlFor="cabin-first">Primera Clase</Label>
                 </div>
             </RadioGroup>
         </FilterSection>
