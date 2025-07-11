@@ -1,3 +1,4 @@
+
 'use client';
 
 import FlightSearchPage from '@/components/flight-search-page';
@@ -137,7 +138,7 @@ function HomePageContent() {
 
 
     return (
-        <>
+        <div className="w-full">
             <FuselageSection images={currentTabInfo.images} title={currentTabInfo.title} subtitle={currentTabInfo.subtitle}>
                  <div className="bg-card/80 backdrop-blur-xl border p-2 sm:p-4 rounded-3xl shadow-2xl w-full max-w-5xl mx-auto">
                     {/* Tabs for mobile */}
@@ -165,14 +166,14 @@ function HomePageContent() {
                  </div>
             </FuselageSection>
       
-            <div className="bg-background pt-8 pb-8">
+            <div className="bg-background pt-8 pb-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <RecommendedContent tab={tab} />
                 </div>
             </div>
 
             <TestimonialsSection />
-        </>
+        </div>
     )
 }
 
