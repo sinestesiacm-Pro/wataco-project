@@ -82,7 +82,7 @@ export default function SignupPage() {
     <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12 px-4">
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold font-headline">Crea una Cuenta</CardTitle>
+          <CardTitle className="text-2xl font-semibold font-headline">Crea una Cuenta</CardTitle>
           <CardDescription>Únete a nosotros y empieza a planificar tu próxima aventura</CardDescription>
         </CardHeader>
         <CardContent>
@@ -118,7 +118,7 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
-            <Button type="submit" className="w-full font-bold" disabled={loading}>
+            <Button type="submit" className="w-full font-semibold" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Registrarse
             </Button>

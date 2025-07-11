@@ -58,7 +58,7 @@ export default function ProfileSidebar() {
                 <AvatarFallback className="text-3xl">{userInitial}</AvatarFallback>
             </Avatar>
             <div>
-                <h2 className="text-xl font-bold font-headline">{user.displayName}</h2>
+                <h2 className="text-xl font-semibold font-headline">{user.displayName}</h2>
                 <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
             </div>
@@ -71,7 +71,7 @@ export default function ProfileSidebar() {
                 key={item.name}
                 href={`/profile?section=${item.href}`}
                 className={cn(
-                'group flex items-center px-3 py-3 text-sm font-semibold rounded-md transition-colors duration-200',
+                'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors duration-200',
                 item.href === activeSection
                     ? 'bg-primary text-primary-foreground shadow-md'
                     : 'text-foreground hover:bg-muted'
@@ -93,7 +93,7 @@ export default function ProfileSidebar() {
        <Card className="shadow-lg p-4">
         <div className="space-y-4">
             <div>
-                <Label htmlFor="language-select" className="flex items-center gap-2 mb-2 text-sm font-semibold">
+                <Label htmlFor="language-select" className="flex items-center gap-2 mb-2 text-sm font-medium">
                     <Globe className="h-4 w-4 text-muted-foreground" /> Idioma
                 </Label>
                 <Select value={language} onValueChange={handleLanguageChange}>
@@ -108,7 +108,7 @@ export default function ProfileSidebar() {
                 </Select>
             </div>
             <div>
-                <Label htmlFor="currency-select" className="flex items-center gap-2 mb-2 text-sm font-semibold">
+                <Label htmlFor="currency-select" className="flex items-center gap-2 mb-2 text-sm font-medium">
                     <CircleDollarSign className="h-4 w-4 text-muted-foreground" /> Moneda
                 </Label>
                 <Select value={currency} onValueChange={handleCurrencyChange}>

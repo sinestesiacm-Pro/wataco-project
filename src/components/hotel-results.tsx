@@ -23,7 +23,7 @@ const renderStars = (rating: string | undefined) => {
             {[...Array(starCount)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
             ))}
-            <span className="text-sm font-bold">{starCount}.0</span>
+            <span className="text-sm font-semibold">{starCount}.0</span>
         </div>
     );
 };
@@ -35,7 +35,7 @@ const formatAmenity = (amenity: string) => {
 export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
     <div className="space-y-4">
-       <h2 className="text-3xl font-headline font-bold text-gray-800">
+       <h2 className="text-3xl font-headline font-semibold text-gray-800">
           Mostrando {hotels.length} hotel{hotels.length !== 1 && 'es'}
         </h2>
       {hotels.map((offer) => (
@@ -54,7 +54,7 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
               <div className="p-6 flex-grow">
                 <div className="flex justify-between items-start">
                     <div>
-                        <h3 className="text-2xl font-bold font-headline text-primary">{offer.hotel.name}</h3>
+                        <h3 className="text-2xl font-semibold font-headline text-primary">{offer.hotel.name}</h3>
                         <div className="flex items-center gap-4 mt-1">
                             {renderStars(offer.hotel.rating)}
                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -85,12 +85,12 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
               <div className="p-6 bg-muted/30 flex flex-col sm:flex-row justify-between items-center gap-4">
                  <div className="text-center sm:text-left">
                     <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
-                    <p className="font-bold text-3xl text-tertiary">
+                    <p className="font-semibold text-3xl text-tertiary">
                       ${offer.offers?.[0]?.price?.total}
                     </p>
                 </div>
                  <HotelDetailsDialog offer={offer} searchParams={searchParams}>
-                    <Button size="lg" className="bg-primary hover:bg-primary/90">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 font-semibold">
                        Ver Oferta
                     </Button>
                 </HotelDetailsDialog>

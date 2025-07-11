@@ -72,7 +72,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12 px-4">
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold font-headline">Bienvenido de Nuevo</CardTitle>
+          <CardTitle className="text-2xl font-semibold font-headline">Bienvenido de Nuevo</CardTitle>
           <CardDescription>Inicia sesión en tu cuenta para continuar</CardDescription>
         </CardHeader>
         <CardContent>
@@ -98,7 +98,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button type="submit" className="w-full font-bold" disabled={loading}>
+            <Button type="submit" className="w-full font-semibold" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Iniciar Sesión
             </Button>
