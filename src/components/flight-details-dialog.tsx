@@ -9,13 +9,12 @@ import {
   DialogClose
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { FlightOffer, Dictionaries, Itinerary, Segment } from '@/lib/types';
-import { Clock, Luggage, Plane, Settings2, QrCode, CheckCircle, ArrowRight, Armchair, PlusCircle } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';
+import { Clock, Luggage, Plane, QrCode, CheckCircle, ArrowRight, Armchair, PlusCircle, Briefcase, Star } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO, format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
-import Link from 'next/link';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
@@ -89,23 +88,25 @@ const fareOptions = [
         name: "Light",
         priceModifier: 0,
         features: ["1 objeto personal"],
-        icon: Luggage,
+        icon: Briefcase,
     },
     {
         name: "Plus",
         priceModifier: 45,
-        features: ["1 objeto personal", "1 equipaje de mano", "1 equipaje facturado"],
-        icon: Armchair,
+        features: ["1 objeto personal", "1 equipaje de mano", "1 equipaje facturado (23kg)"],
+        icon: Luggage,
     },
     {
         name: "Premium",
         priceModifier: 120,
         features: ["Todo lo de Plus", "Asiento preferencial", "Embarque prioritario"],
-        icon: PlusCircle,
+        icon: Star,
     },
 ];
 
-const PriceCard = ({ flight, onSelectFlight, selectedFare, onFareSelect }: { flight: FlightOffer, onSelectFlight: (flight: FlightOffer, addons: number) => void, selectedFare: string, onFareSelect: (fareName: string) => void }) => {
+const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFlight: (flight: FlightOffer, addons: number) => void }) => {
+    const [selectedFare, setSelectedFare] = useState("Light");
+    
     const basePrice = parseFloat(flight.price.total);
     const selectedFareOption = fareOptions.find(f => f.name === selectedFare);
     const addonsPrice = selectedFareOption?.priceModifier || 0;
@@ -113,9 +114,10 @@ const PriceCard = ({ flight, onSelectFlight, selectedFare, onFareSelect }: { fli
 
     return (
         <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
+            <h3 className="font-headline font-bold text-xl text-primary mb-4">Elige tu Tarifa</h3>
             <div className="grid grid-cols-3 gap-2 mb-4">
                 {fareOptions.map(fare => (
-                    <button key={fare.name} onClick={() => onFareSelect(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/10" : "bg-card hover:bg-muted")}>
+                    <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/10" : "bg-card hover:bg-muted")}>
                         <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-muted-foreground")} />
                         <p className="font-semibold text-sm">{fare.name}</p>
                         <p className="text-xs text-muted-foreground">+${fare.priceModifier}</p>
@@ -157,7 +159,6 @@ interface FlightDetailsDialogProps {
 }
 
 export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: FlightDetailsDialogProps) {
-  const [selectedFare, setSelectedFare] = useState("Light");
   
   return (
     <Dialog>
@@ -171,7 +172,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: Fl
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
           <DialogHeader className="p-6 pb-4">
-            <DialogTitle className="font-headline text-3xl">Elige tu Tarifa</DialogTitle>
+            <DialogTitle className="font-headline text-3xl">Detalles de tu Selección</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6 pt-0">
               <div className="md:col-span-7 space-y-6">
@@ -180,7 +181,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: Fl
                   ))}
               </div>
               <div className="md:col-span-5 space-y-6">
-                  <PriceCard flight={flight} onSelectFlight={onSelectFlight} selectedFare={selectedFare} onFareSelect={setSelectedFare} />
+                  <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
               </div>
           </div>
       </DialogContent>

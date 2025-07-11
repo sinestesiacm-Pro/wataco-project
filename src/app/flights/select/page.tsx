@@ -12,21 +12,21 @@ import { FlightSelectionList } from '@/components/flight-selection-list';
 import { ReviewAndPay } from '@/components/review-and-pay';
 import { Card, CardContent } from '@/components/ui/card';
 import { FlightLoadingAnimation } from '@/components/flight-loading-animation';
-import { useDebounce } from '@/hooks/use-debounce';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
   stops: number[];
   airlines: string[];
   bags: string[];
-  cabin: FareDetailsBySegment['cabin'] | null;
 };
 
 function FlightSelectionPage() {
   const searchParams = useSearchParams();
+  const { toast } = useToast();
 
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,8 +35,11 @@ function FlightSelectionPage() {
   const [step, setStep] = useState<BookingStep>('outbound');
   const [selectedOutbound, setSelectedOutbound] = useState<FlightOffer | null>(null);
   const [selectedReturn, setSelectedReturn] = useState<FlightOffer | null>(null);
-  const [addonsPrice, setAddonsPrice] = useState(0);
-  const [filters, setFilters] = useState<FiltersState>({ stops: [], airlines: [], bags: [], cabin: null });
+  
+  const [outboundAddons, setOutboundAddons] = useState(0);
+  const [returnAddons, setReturnAddons] = useState(0);
+
+  const [filters, setFilters] = useState<FiltersState>({ stops: [], airlines: [], bags: [] });
 
   const origin = searchParams.get('origin')!;
   const destination = searchParams.get('destination')!;
@@ -73,18 +76,23 @@ function FlightSelectionPage() {
 
   const handleOutboundSelect = useCallback((flight: FlightOffer, addons: number) => {
     setSelectedOutbound(flight);
-    setAddonsPrice(addons);
+    setOutboundAddons(addons);
     if (returnDate) {
       setStep('return');
+      toast({
+        title: "Vuelo de Ida Seleccionado",
+        description: "Ahora, por favor elige tu vuelo de vuelta.",
+        variant: "success",
+      });
     } else {
       setStep('review');
     }
     window.scrollTo(0, 0);
-  }, [returnDate]);
+  }, [returnDate, toast]);
 
   const handleReturnSelect = useCallback((flight: FlightOffer, addons: number) => {
     setSelectedReturn(flight);
-    setAddonsPrice(prev => prev + addons); // Assuming addons are cumulative for return
+    setReturnAddons(addons);
     setStep('review');
     window.scrollTo(0, 0);
   }, []);
@@ -118,18 +126,18 @@ function FlightSelectionPage() {
             (filters.bags.includes('carry-on') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) >= 0) ||
             (filters.bags.includes('checked') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) > 0);
         
-        // Cabin filter
-        const cabinClass = flight.travelerPricings[0].fareDetailsBySegment[0].cabin;
-        const cabinFilter = !filters.cabin || cabinClass === filters.cabin;
-
-
-        return stopsFilter && airlineFilter && bagsFilter && cabinFilter;
+        return stopsFilter && airlineFilter && bagsFilter;
     });
 };
 
 
   const outboundFlights = useMemo(() => applyFilters(getFlightsForStep('outbound')), [flightData, filters]);
-  const returnFlights = useMemo(() => applyFilters(getFlightsForStep('return')), [flightData, filters]);
+  const returnFlights = useMemo(() => {
+     if (!selectedOutbound) return applyFilters(getFlightsForStep('return'));
+     // Filter out the exact same flight if it's shown for return
+     return applyFilters(getFlightsForStep('return')).filter(f => f.id !== selectedOutbound.id);
+  }, [flightData, filters, selectedOutbound]);
+
   const availableAirlines = useMemo(() => {
     if (!flightData) return {};
     const carriers = new Set<string>();
@@ -161,6 +169,12 @@ function FlightSelectionPage() {
           <CardContent className="pt-6 text-center">
             <h2 className="text-xl font-bold text-destructive">Error de Búsqueda</h2>
             <p className="text-muted-foreground mt-2">{error}</p>
+             <Button asChild variant="outline" className="mt-4">
+                <Link href="/">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Volver a la Búsqueda
+                </Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -199,7 +213,7 @@ function FlightSelectionPage() {
                 outboundFlight={selectedOutbound}
                 returnFlight={selectedReturn}
                 dictionaries={flightData.dictionaries}
-                addonsPrice={addonsPrice}
+                addonsPrice={outboundAddons + returnAddons}
                 onOutboundChange={() => {
                     setSelectedReturn(null);
                     setStep('outbound');
