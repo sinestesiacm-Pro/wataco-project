@@ -17,6 +17,7 @@ interface ReviewAndPayProps {
     outboundFlight: FlightOffer;
     returnFlight: FlightOffer | null;
     dictionaries: Dictionaries;
+    addonsPrice: number;
     onOutboundChange: () => void;
     onReturnChange?: () => void;
 }
@@ -129,13 +130,15 @@ const AdditionalServicesCard = ({ onPriceChange }: { onPriceChange: (price: numb
 };
 
 
-const PriceSummaryCard = ({outboundFlight, returnFlight, additionalServicesPrice }: {outboundFlight: FlightOffer, returnFlight: FlightOffer | null, additionalServicesPrice: number }) => {
+const PriceSummaryCard = ({outboundFlight, returnFlight, addonsPrice }: {outboundFlight: FlightOffer, returnFlight: FlightOffer | null, addonsPrice: number }) => {
     const finalOffer = returnFlight || outboundFlight;
     const basePrice = parseFloat(finalOffer.price.base);
     const taxes = parseFloat(finalOffer.price.total) - basePrice;
-    const total = parseFloat(finalOffer.price.total) + additionalServicesPrice;
+    const [additionalServicesPrice, setAdditionalServicesPrice] = useState(0);
 
-    const checkoutLink = `/flights/checkout?outboundId=${outboundFlight.id}${returnFlight ? `&returnId=${returnFlight.id}` : ''}&addons=${additionalServicesPrice}`;
+    const total = basePrice + taxes + addonsPrice + additionalServicesPrice;
+
+    const checkoutLink = `/flights/checkout?outboundId=${outboundFlight.id}${returnFlight ? `&returnId=${returnFlight.id}` : ''}&addons=${addonsPrice + additionalServicesPrice}`;
 
     return (
         <Card className="sticky top-24 shadow-lg">
@@ -151,6 +154,12 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, additionalServicesPrice
                     <span className="text-muted-foreground">Impuestos y tasas</span>
                     <span>${taxes.toFixed(2)}</span>
                 </div>
+                 {addonsPrice > 0 && (
+                    <div className="flex justify-between text-primary font-medium">
+                        <span >Tarifa Seleccionada</span>
+                        <span>${addonsPrice.toFixed(2)}</span>
+                    </div>
+                 )}
                  {additionalServicesPrice > 0 && (
                     <div className="flex justify-between text-primary font-medium">
                         <span >Servicios Adicionales</span>
@@ -173,8 +182,8 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, additionalServicesPrice
     )
 }
 
-export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOutboundChange, onReturnChange }: ReviewAndPayProps) {
-    const [additionalServicesPrice, setAdditionalServicesPrice] = useState(0);
+export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addonsPrice, onOutboundChange, onReturnChange }: ReviewAndPayProps) {
+    const [extraServicesPrice, setExtraServicesPrice] = useState(0);
 
     return (
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
@@ -184,12 +193,12 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOut
                 <FlightSummaryCard title="Vuelo de Ida" itinerary={outboundFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onOutboundChange} />
                 
                 {returnFlight && onReturnChange && (
-                    <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnFlight.itineraries[1]} dictionaries={dictionaries} onChangeClick={onReturnChange} />
+                    <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnFlight.itineraries[1] || returnFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onReturnChange} />
                 )}
 
                 <Separator />
                 
-                <AdditionalServicesCard onPriceChange={(price) => setAdditionalServicesPrice(prev => prev + price)} />
+                <AdditionalServicesCard onPriceChange={(price) => setExtraServicesPrice(prev => prev + price)} />
 
                  <Card>
                     <CardHeader>
@@ -200,7 +209,7 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOut
                             <span className="font-semibold">Tu vuelo incluye:</span>
                             <FlightBaggageInfo flight={outboundFlight} />
                         </div>
-                        <Button variant="outline">Añadir más equipaje</Button>
+                        <Button variant="outline" disabled>Añadir más equipaje (Próximamente)</Button>
                     </CardContent>
                 </Card>
             </div>
@@ -208,7 +217,7 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, onOut
                 <PriceSummaryCard 
                     outboundFlight={outboundFlight} 
                     returnFlight={returnFlight} 
-                    additionalServicesPrice={additionalServicesPrice}
+                    addonsPrice={addonsPrice + extraServicesPrice}
                 />
             </aside>
         </div>

@@ -35,6 +35,7 @@ function FlightSelectionPage() {
   const [step, setStep] = useState<BookingStep>('outbound');
   const [selectedOutbound, setSelectedOutbound] = useState<FlightOffer | null>(null);
   const [selectedReturn, setSelectedReturn] = useState<FlightOffer | null>(null);
+  const [addonsPrice, setAddonsPrice] = useState(0);
   const [filters, setFilters] = useState<FiltersState>({ stops: [], airlines: [], bags: [], cabin: null });
 
   const origin = searchParams.get('origin')!;
@@ -70,8 +71,9 @@ function FlightSelectionPage() {
     }
   }, [origin, destination, departureDate, returnDate, adults]);
 
-  const handleOutboundSelect = useCallback((flight: FlightOffer) => {
+  const handleOutboundSelect = useCallback((flight: FlightOffer, addons: number) => {
     setSelectedOutbound(flight);
+    setAddonsPrice(addons);
     if (returnDate) {
       setStep('return');
     } else {
@@ -80,8 +82,9 @@ function FlightSelectionPage() {
     window.scrollTo(0, 0);
   }, [returnDate]);
 
-  const handleReturnSelect = useCallback((flight: FlightOffer) => {
+  const handleReturnSelect = useCallback((flight: FlightOffer, addons: number) => {
     setSelectedReturn(flight);
+    setAddonsPrice(prev => prev + addons); // Assuming addons are cumulative for return
     setStep('review');
     window.scrollTo(0, 0);
   }, []);
@@ -115,7 +118,7 @@ function FlightSelectionPage() {
             (filters.bags.includes('carry-on') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) >= 0) ||
             (filters.bags.includes('checked') && (flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags?.quantity ?? 0) > 0);
         
-        // Cabin filter - This is no longer directly used for filtering but kept in state for potential future use
+        // Cabin filter
         const cabinClass = flight.travelerPricings[0].fareDetailsBySegment[0].cabin;
         const cabinFilter = !filters.cabin || cabinClass === filters.cabin;
 
@@ -196,6 +199,7 @@ function FlightSelectionPage() {
                 outboundFlight={selectedOutbound}
                 returnFlight={selectedReturn}
                 dictionaries={flightData.dictionaries}
+                addonsPrice={addonsPrice}
                 onOutboundChange={() => {
                     setSelectedReturn(null);
                     setStep('outbound');

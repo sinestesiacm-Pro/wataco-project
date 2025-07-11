@@ -9,13 +9,16 @@ import {
   DialogClose
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
-import { Clock, Luggage, Plane, Settings2, QrCode, CheckCircle, ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { FlightOffer, Dictionaries, Itinerary, Segment } from '@/lib/types';
+import { Clock, Luggage, Plane, Settings2, QrCode, CheckCircle, ArrowRight, Armchair, PlusCircle } from 'lucide-react';
 import Image from 'next/image';
 import { parseISO, format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
 import Link from 'next/link';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { Separator } from './ui/separator';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -34,7 +37,6 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
     return (
         <Card className="bg-card/80 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10">
             <div className="flex">
-                {/* Main flight info */}
                 <div className="flex-grow p-6">
                     <div className="flex justify-between items-center mb-4">
                         <div>
@@ -70,7 +72,6 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                     </div>
                 </div>
 
-                {/* QR Code Stub */}
                 <div className="bg-muted/40 w-32 flex-shrink-0 border-l-2 border-dashed border-border flex flex-col items-center justify-center p-4">
                      <p className="font-headline font-bold text-primary text-sm mb-2 text-center animate-pulse-text">Casi Listo</p>
                      <div className="bg-white p-1 rounded-md shadow-inner">
@@ -83,57 +84,68 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
     );
 };
 
-const BaggageInfo = ({ flight }: { flight: FlightOffer }) => {
-    const travelerPricing = flight.travelerPricings[0];
-    const baggage = travelerPricing.fareDetailsBySegment[0].includedCheckedBags;
-    const cabinBagText = "1 pieza de equipaje de mano";
-    const checkedBagText = baggage?.quantity > 0 ? `${baggage.quantity} maleta${baggage.quantity !== 1 ? 's' : ''} documentada${baggage.quantity !== 1 ? 's' : ''}` : 'Equipaje documentado no incluido';
+const fareOptions = [
+    {
+        name: "Light",
+        priceModifier: 0,
+        features: ["1 objeto personal"],
+        icon: Luggage,
+    },
+    {
+        name: "Plus",
+        priceModifier: 45,
+        features: ["1 objeto personal", "1 equipaje de mano", "1 equipaje facturado"],
+        icon: Armchair,
+    },
+    {
+        name: "Premium",
+        priceModifier: 120,
+        features: ["Todo lo de Plus", "Asiento preferencial", "Embarque prioritario"],
+        icon: PlusCircle,
+    },
+];
+
+const PriceCard = ({ flight, onSelectFlight, selectedFare, onFareSelect }: { flight: FlightOffer, onSelectFlight: (flight: FlightOffer, addons: number) => void, selectedFare: string, onFareSelect: (fareName: string) => void }) => {
+    const basePrice = parseFloat(flight.price.total);
+    const selectedFareOption = fareOptions.find(f => f.name === selectedFare);
+    const addonsPrice = selectedFareOption?.priceModifier || 0;
+    const totalPrice = basePrice + addonsPrice;
 
     return (
         <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
-            <CardHeader className="p-0 mb-4">
-              <h3 className="font-headline font-bold text-xl text-primary">Equipaje Incluido</h3>
-            </CardHeader>
-            <CardContent className="p-0 space-y-3 text-base">
-                <div className="flex items-center gap-3">
-                    <Luggage className="w-5 h-5 text-primary" />
-                    <span>{cabinBagText}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                    <Luggage className="w-5 h-5 text-primary" />
-                    <span>{checkedBagText}</span>
-                </div>
-            </CardContent>
-        </Card>
-    )
-}
-
-const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFlight: (flight: FlightOffer) => void }) => {
-    return (
-        <Card className="bg-card/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border-2 border-primary/10">
-            <p className="text-sm text-muted-foreground">Precio total</p>
-            <p className="text-4xl font-bold text-accent my-2">${flight.price.total}</p>
-            <div className="flex flex-col gap-2 mt-4">
-                <Button asChild
-                    variant="outline"
-                    className="w-full"
-                >
-                    <Link href={`/flights/${flight.id}`}>
-                        <Settings2 className="mr-2 h-4 w-4" />
-                        Personalizar Vuelo
-                    </Link>
-                </Button>
-                 <DialogClose asChild>
-                    <Button
-                        className="w-full bg-success hover:bg-success/90 text-success-foreground"
-                        onClick={() => onSelectFlight(flight)}
-                    >
-                         
-                            <CheckCircle className="mr-2 h-4 w-4" />
-                            Confirmar Reserva
-                    </Button>
-                </DialogClose>
+            <div className="grid grid-cols-3 gap-2 mb-4">
+                {fareOptions.map(fare => (
+                    <button key={fare.name} onClick={() => onFareSelect(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/10" : "bg-card hover:bg-muted")}>
+                        <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-muted-foreground")} />
+                        <p className="font-semibold text-sm">{fare.name}</p>
+                        <p className="text-xs text-muted-foreground">+${fare.priceModifier}</p>
+                    </button>
+                ))}
             </div>
+
+            <ul className="text-sm space-y-2 mb-4">
+                {selectedFareOption?.features.map(feature => (
+                    <li key={feature} className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span>{feature}</span>
+                    </li>
+                ))}
+            </ul>
+
+            <Separator className="my-4"/>
+
+            <p className="text-sm text-muted-foreground">Precio total</p>
+            <p className="text-4xl font-bold text-accent my-2">${totalPrice.toFixed(2)}</p>
+            
+            <DialogClose asChild>
+                <Button
+                    className="w-full bg-success hover:bg-success/90 text-success-foreground mt-4"
+                    onClick={() => onSelectFlight(flight, addonsPrice)}
+                >
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    Confirmar Reserva
+                </Button>
+            </DialogClose>
         </Card>
     )
 }
@@ -141,10 +153,11 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
 interface FlightDetailsDialogProps {
   flight: FlightOffer;
   dictionaries: Dictionaries;
-  onSelectFlight: (flight: FlightOffer) => void;
+  onSelectFlight: (flight: FlightOffer, addons: number) => void;
 }
 
 export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: FlightDetailsDialogProps) {
+  const [selectedFare, setSelectedFare] = useState("Light");
   
   return (
     <Dialog>
@@ -158,7 +171,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: Fl
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl p-0 border-0 shadow-2xl rounded-3xl overflow-hidden">
           <DialogHeader className="p-6 pb-4">
-            <DialogTitle className="font-headline text-3xl">Detalles del Vuelo</DialogTitle>
+            <DialogTitle className="font-headline text-3xl">Elige tu Tarifa</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto p-6 pt-0">
               <div className="md:col-span-7 space-y-6">
@@ -167,8 +180,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight }: Fl
                   ))}
               </div>
               <div className="md:col-span-5 space-y-6">
-                  <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
-                  <BaggageInfo flight={flight} />
+                  <PriceCard flight={flight} onSelectFlight={onSelectFlight} selectedFare={selectedFare} onFareSelect={setSelectedFare} />
               </div>
           </div>
       </DialogContent>

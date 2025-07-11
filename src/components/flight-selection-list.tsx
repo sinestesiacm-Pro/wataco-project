@@ -19,12 +19,12 @@ const formatTime = (dateString: string) => {
 interface FlightSelectionListProps {
   flights: FlightOffer[];
   dictionaries: Dictionaries;
-  onSelectFlight: (flight: FlightOffer) => void;
+  onSelectFlight: (flight: FlightOffer, addons: number) => void;
   title: string;
   selectedOutboundFlight?: FlightOffer | null;
 }
 
-const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer) => void }) => {
+const FlightCard = ({ flight, dictionaries, onSelectFlight }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void }) => {
     const itinerary = flight.itineraries[0];
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
