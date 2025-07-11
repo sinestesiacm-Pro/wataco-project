@@ -81,17 +81,65 @@ function HomePageContent() {
         { id: 'Activities', label: 'Actividades', icon: Zap },
     ];
 
-    const flightImages = [
-        'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?fit=crop&w=1920&q=80',
-        'https://images.unsplash.com/photo-1488085061387-422e29b40080?fit=crop&w=1920&q=80',
-        'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?fit=crop&w=1920&q=80',
-        'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?fit=crop&w=1920&q=80',
-    ];
+    const tabSpecifics = {
+      Flights: {
+        images: [
+          'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1488085061387-422e29b40080?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?fit=crop&w=1920&q=80',
+        ],
+        title: <>Tu Próxima Aventura<br />te Espera</>,
+        subtitle: "Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo.",
+      },
+      Hotels: {
+        images: [
+          'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1618773928121-c32242e63f39?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1582719508461-905c673771fd?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=1920&q=80',
+        ],
+        title: "Encuentra tu Estancia Perfecta",
+        subtitle: "Desde hoteles de lujo hasta acogedores apartamentos, tenemos el lugar ideal para ti.",
+      },
+       Packages: {
+        images: [
+          'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1530789253388-582c481c54b0?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?fit=crop&w=1920&q=80',
+        ],
+        title: "Paquetes de Viaje Completos",
+        subtitle: "Reserva tu vuelo y hotel juntos para ahorrar tiempo y dinero.",
+      },
+      Cruises: {
+        images: [
+          'https://images.unsplash.com/photo-1540340061722-9293d5163008?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1599827551381-e2a4a75a898b?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1621361253013-b5133d2663d2?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1606114933589-a9a7a0a03379?fit=crop&w=1920&q=80',
+        ],
+        title: "Embárcate en tu Próxima Aventura",
+        subtitle: "Descubre y reserva increíbles vacaciones en crucero por todo el mundo.",
+      },
+      Activities: {
+        images: [
+          'https://images.unsplash.com/photo-1692205959816-d75d4a7b89d4?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?fit=crop&w=1920&q=80',
+          'https://images.unsplash.com/photo-1524014444623-194fde519952?fit=crop&w=1920&q=80',
+        ],
+        title: "Vive Experiencias Únicas",
+        subtitle: "Reserva tours, atracciones y actividades inolvidables en tu destino.",
+      }
+    };
+    
+    const currentTabInfo = tabSpecifics[tab as keyof typeof tabSpecifics] || tabSpecifics.Flights;
+
 
     return (
         <>
-            <FuselageSection images={flightImages}>
-                 <div className="bg-card/80 backdrop-blur-xl border p-2 sm:p-4 rounded-3xl shadow-2xl w-full max-w-2xl mx-auto">
+            <FuselageSection images={currentTabInfo.images} title={currentTabInfo.title} subtitle={currentTabInfo.subtitle}>
+                 <div className="bg-card/80 backdrop-blur-xl border p-2 sm:p-4 rounded-3xl shadow-2xl w-full max-w-5xl mx-auto">
                     {/* Tabs for mobile */}
                     <div className="sm:hidden grid grid-cols-5 gap-1 mb-2">
                          {tabsConfig.map(({ id, label, icon: Icon }) => (

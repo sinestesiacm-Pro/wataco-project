@@ -114,7 +114,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
     const totalPrice = basePrice + addonsPrice;
 
     return (
-        <Card className="bg-card/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10">
+        <Card className="bg-card/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10 flex flex-col h-full">
             <h3 className="font-headline font-bold text-xl text-primary mb-4">Elige tu Tarifa</h3>
             <div className="grid grid-cols-3 gap-2 mb-4">
                 {fareOptions.map(fare => (
@@ -134,6 +134,8 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
                     </li>
                 ))}
             </ul>
+
+            <div className="flex-grow"></div>
 
             <Separator className="my-4"/>
 

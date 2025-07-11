@@ -6,10 +6,12 @@ import { cn } from '@/lib/utils';
 
 interface FuselageSectionProps {
   images: string[];
+  title: React.ReactNode;
+  subtitle: string;
   children: React.ReactNode;
 }
 
-export function FuselageSection({ images, children }: FuselageSectionProps) {
+export function FuselageSection({ images, title, subtitle, children }: FuselageSectionProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -53,8 +55,8 @@ export function FuselageSection({ images, children }: FuselageSectionProps) {
         }}
       />
       <div className="relative z-20 px-4 w-full">
-         <h1 className="hero-title">Tu Próxima Aventura<br />te Espera</h1>
-         <p className="hero-subtitle">Encuentra y reserva sin esfuerzo los mejores vuelos a cualquier parte del mundo.</p>
+         <h1 className="hero-title">{title}</h1>
+         <p className="hero-subtitle">{subtitle}</p>
         {children}
       </div>
     </section>

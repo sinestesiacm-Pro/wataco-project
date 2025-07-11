@@ -12,16 +12,6 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { Label } from './ui/label';
-import { Skeleton } from './ui/skeleton';
-import { RecommendedCruises } from './recommended-cruises';
-import { HeroSection } from './hero-section';
-
-const cruiseImages = [
-  'https://images.unsplash.com/photo-1540340061722-9293d5163008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjdXJpc2UlMjBzaGlwfGVufDB8fHx8MTc1MjE1NzI4MHww&ixlib=rb-4.1.0&q=80&w=1080',
-  'https://images.unsplash.com/photo-1599827551381-e2a4a75a898b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjdXJpc2UlMjBzaGlwfGVufDB8fHx8MTc1MjE1NzI4MHww&ixlib=rb-4.1.0&q=80&w=1080',
-  'https://images.unsplash.com/photo-1621361253013-b5133d2663d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjdXJpc2UlMjBzaGlwfGVufDB8fHx8MTc1MjE1NzI4MHww&ixlib=rb-4.1.0&q=80&w=1080',
-  'https://images.unsplash.com/photo-1606114933589-a9a7a0a03379?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjdXJpc2UlMjBzaGlwfGVufDB8fHx8MTc1MjE1NzI4MHww&ixlib=rb-4.1.0&q=80&w=1080',
-];
 
 export default function CruiseSearchPage() {
   const [destinationRegion, setDestinationRegion] = useState('');
@@ -81,16 +71,6 @@ export default function CruiseSearchPage() {
     searchIdRef.current++;
     setLoading(false);
   };
-
-  const LoadingSkeleton = () => (
-    <div className="space-y-6 mt-8">
-      <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
-          <Skeleton key={i} className="h-56 w-full rounded-2xl" />
-        ))}
-      </div>
-    </div>
-  );
   
   const travelerText = `${adults} pasajero${adults > 1 ? 's' : ''}`;
   
@@ -104,109 +84,89 @@ export default function CruiseSearchPage() {
   ];
 
   return (
-    <div className="w-full">
-      <HeroSection
-        images={cruiseImages}
-        title="Embárcate en tu Próxima Aventura"
-        subtitle="Descubre y reserva increíbles vacaciones en crucero por todo el mundo."
-      >
-        <div className="bg-card/80 backdrop-blur-2xl border p-4 sm:p-6 rounded-3xl shadow-2xl">
-          <form onSubmit={handleSearch} className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
-                <div className="w-full lg:col-span-5">
-                  <Label htmlFor="destination-region" className="text-sm font-semibold ml-2">Navegando Hacia</Label>
-                  <Select onValueChange={setDestinationRegion} value={destinationRegion}>
-                    <SelectTrigger id="destination-region" className="mt-1">
-                      <Sailboat className="h-4 w-4 text-muted-foreground mr-2" />
-                      <SelectValue placeholder="Selecciona un destino" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {cruiseRegions.map(region => (
-                        <SelectItem key={region.value} value={region.value}>{region.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="w-full lg:col-span-3">
-                  <Label htmlFor="departureDate" className="text-sm font-semibold ml-2">Navegando Después de</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !departureDate && "text-muted-foreground")}>
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {departureDate ? format(departureDate, "MMM yyyy") : <span>Elige una fecha</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} initialFocus />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+    <form onSubmit={handleSearch} className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+          <div className="w-full lg:col-span-5">
+            <Label htmlFor="destination-region" className="text-sm font-semibold ml-2">Navegando Hacia</Label>
+            <Select onValueChange={setDestinationRegion} value={destinationRegion}>
+              <SelectTrigger id="destination-region" className="mt-1">
+                <Sailboat className="h-4 w-4 text-muted-foreground mr-2" />
+                <SelectValue placeholder="Selecciona un destino" />
+              </SelectTrigger>
+              <SelectContent>
+                {cruiseRegions.map(region => (
+                  <SelectItem key={region.value} value={region.value}>{region.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="w-full lg:col-span-3">
+            <Label htmlFor="departureDate" className="text-sm font-semibold ml-2">Navegando Después de</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !departureDate && "text-muted-foreground")}>
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {departureDate ? format(departureDate, "MMM yyyy") : <span>Elige una fecha</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} initialFocus />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-                <div className="w-full lg:col-span-2">
-                  <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Huéspedes</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
-                        <Users className="mr-2 h-4 w-4" />
-                        {travelerText}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80" align="end">
-                       <div className="grid gap-4">
-                        <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Huéspedes</h4>
-                          <p className="text-sm text-muted-foreground">Selecciona el número de huéspedes.</p>
-                        </div>
-                        <div className="grid gap-4">
-                          <div className="flex items-center justify-between">
-                            <p className="font-medium">Adultos</p>
-                            <div className="flex items-center gap-2">
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)} disabled={adults >= 8}>
-                                <Plus className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
+          <div className="w-full lg:col-span-2">
+            <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Huéspedes</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
+                  <Users className="mr-2 h-4 w-4" />
+                  {travelerText}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80" align="end">
+                  <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium leading-none">Huéspedes</h4>
+                    <p className="text-sm text-muted-foreground">Selecciona el número de huéspedes.</p>
+                  </div>
+                  <div className="grid gap-4">
+                    <div className="flex items-center justify-between">
+                      <p className="font-medium">Adultos</p>
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)} disabled={adults >= 8}>
+                          <Plus className="h-4 w-4" />
+                        </Button>
                       </div>
-                    </PopoverContent>
-                  </Popover>
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full lg:col-span-2">
-                  {loading ? (
-                    <Button
-                      type="button"
-                      size="lg"
-                      className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground h-10"
-                      onClick={handleCancelSearch}
-                    >
-                      <X className="mr-2 h-5 w-5" />
-                      Cancelar
-                    </Button>
-                  ) : (
-                    <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-10">
-                      <Ship className="mr-2 h-5 w-5" /> Buscar Cruceros
-                    </Button>
-                  )}
-                </div>
-              </div>
-          </form>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="w-full lg:col-span-2">
+            {loading ? (
+              <Button
+                type="button"
+                size="lg"
+                className="w-full font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground h-10"
+                onClick={handleCancelSearch}
+              >
+                <X className="mr-2 h-5 w-5" />
+                Cancelar
+              </Button>
+            ) : (
+              <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-10">
+                <Ship className="mr-2 h-5 w-5" /> Buscar Cruceros
+              </Button>
+            )}
+          </div>
         </div>
-      </HeroSection>
-      
-      <div className="max-w-7xl mx-auto py-0 px-4 sm:px-6 lg:px-8">
-        <section className="mt-8">
-          {loading && <LoadingSkeleton />}
-          {/* {cruiseData && <CruiseResults cruiseData={cruiseData} />} */}
-          {!loading && !cruiseData && (
-             <RecommendedCruises />
-          )}
-        </section>
-      </div>
-    </div>
+    </form>
   );
 }

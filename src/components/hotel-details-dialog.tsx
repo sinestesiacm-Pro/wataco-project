@@ -44,7 +44,7 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] bg-transparent p-0 border-0 shadow-none">
+      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-transparent p-0 border-0 shadow-none">
         {details ? (
             <ScrollArea className="h-full">
                 <div className="bg-card/80 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border">
