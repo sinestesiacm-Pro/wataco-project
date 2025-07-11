@@ -104,7 +104,22 @@ const ContactInfoForm = () => {
                 </div>
                 <div>
                     <Label htmlFor="phone">Número de Teléfono</Label>
-                    <Input id="phone" type="tel" placeholder="+1 234 567 890" />
+                    <div className="flex gap-2 mt-1">
+                        <Select defaultValue="us">
+                            <SelectTrigger className="w-[120px]">
+                                <SelectValue placeholder="Código" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="co">CO +57</SelectItem>
+                                <SelectItem value="ar">AR +54</SelectItem>
+                                <SelectItem value="cl">CL +56</SelectItem>
+                                <SelectItem value="mx">MX +52</SelectItem>
+                                <SelectItem value="es">ES +34</SelectItem>
+                                <SelectItem value="us">US +1</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <Input id="phone" type="tel" placeholder="234 567 890" className="flex-grow" />
+                    </div>
                 </div>
             </CardContent>
         </Card>
