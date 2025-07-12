@@ -1,3 +1,4 @@
+
 'use client';
 
 import { AmadeusHotelOffer, Room } from '@/lib/types';
@@ -143,7 +144,7 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children
   return (
     <div className="space-y-6">
        <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold font-headline text-center">{hotelOffer.hotel.name} - Elige tu habitación</h2>
+            <h2 className="text-2xl font-bold font-headline text-white">{hotelOffer.hotel.name} - Elige tu habitación</h2>
              <div className="w-32"></div>
        </div>
 

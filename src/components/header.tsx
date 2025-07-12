@@ -1,31 +1,41 @@
+
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Icons } from '@/components/icons';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { LogIn, User as UserIcon, Settings, MapPin } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { LogIn, Settings, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
 import { UserNav } from './user-nav';
 
 export function Header() {
-  const searchParams = useSearchParams();
   const pathname = usePathname();
   const { user } = useAuth();
   
-  const activeTab = searchParams.get('tab') || 'Flights';
+  const getTitleFromPath = (path: string): string => {
+    if (path.startsWith('/hotels')) return 'Hoteles';
+    if (path.startsWith('/flights')) return 'Vuelos';
+    if (path.startsWith('/packages')) return 'Paquetes';
+    if (path.startsWith('/cruises')) return 'Cruceros';
+    if (path.startsWith('/activities')) return 'Actividades';
+    if (path.startsWith('/social')) return 'Comunidad';
+    if (path.startsWith('/profile')) return 'Mi Perfil';
 
-  const tabLabels: { [key: string]: string } = {
-    'Flights': 'Vuelos',
-    'Hotels': 'Hoteles',
-    'Packages': 'Paquetes',
-    'Cruises': 'Cruceros',
-    'Activities': 'Actividades',
-    'Social': 'Comunidad',
+    // Fallback for home page based on tab
+    if (typeof window !== 'undefined') {
+        const searchParams = new URLSearchParams(window.location.search);
+        const tab = searchParams.get('tab');
+        if (tab === 'Hotels') return 'Hoteles';
+        if (tab === 'Packages') return 'Paquetes';
+        if (tab === 'Cruises') return 'Cruceros';
+        if (tab === 'Activities') return 'Actividades';
+        if (tab === 'Social') return 'Comunidad';
+    }
+    
+    return 'Vuelos';
   }
 
-  const currentTitle = tabLabels[activeTab] || 'Be On Trip';
+  const currentTitle = getTitleFromPath(pathname);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-black/50 backdrop-blur-sm shadow-lg border-b border-white/10">

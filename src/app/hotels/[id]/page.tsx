@@ -28,7 +28,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
   const backLinkHref = `/hotels/search?${backSearchParams.toString()}`;
 
   return (
-    <div className={cn('w-full min-h-screen pt-24 pb-24 md:pb-8', 'bg-hotels-gradient background-pan-animation')}>
+    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-gradient background-pan-animation')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
           <Link href={backLinkHref}>
