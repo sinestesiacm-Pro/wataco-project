@@ -28,13 +28,15 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="icon" href="https://i.ibb.co/jK8GBnB/Chat-GPT-Image-9-lug-2025-14-16-37-removebg-preview.png" type="image/png" />
       </head>
-      <body className="font-body antialiased">
+      <body className="font-body antialiased flex flex-col min-h-screen">
         <AuthProvider>
             <Header />
-            <main className="flex-grow"> 
+            <main className="flex flex-col flex-grow">
+              <div className="flex-grow">
                 {children}
+              </div>
+              <Footer />
             </main>
-            <Footer />
             <Toaster />
             <ChatWidget />
             <BottomNavbar />

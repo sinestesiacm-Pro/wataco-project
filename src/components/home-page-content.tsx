@@ -97,8 +97,8 @@ export function HomePageContent() {
     }
 
     return (
-        <div className={cn('w-full min-h-screen transition-all duration-500 background-pan-animation', getBackgroundClass())}>
-            <div className="pt-20 pb-20 md:pb-0">
+        <div className={cn('w-full flex flex-col min-h-full transition-all duration-500 background-pan-animation', getBackgroundClass())}>
+            <div className="pt-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                   <div className="hidden md:flex justify-center mb-8">
                     <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
@@ -115,7 +115,7 @@ export function HomePageContent() {
                   {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
                 </div>
           
-                <div className="pt-16 pb-16">
+                <div className="pt-16">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                          <RecommendedContent tab={tab} />
                     </div>
