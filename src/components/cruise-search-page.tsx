@@ -87,10 +87,10 @@ export default function CruiseSearchPage() {
     <form onSubmit={handleSearch} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
           <div className="w-full lg:col-span-5">
-            <Label htmlFor="destination-region" className="text-sm font-semibold ml-2">Navegando Hacia</Label>
+            <Label htmlFor="destination-region" className="text-sm font-semibold ml-2 text-white/80">Navegando Hacia</Label>
             <Select onValueChange={setDestinationRegion} value={destinationRegion}>
-              <SelectTrigger id="destination-region" className="mt-1">
-                <Sailboat className="h-4 w-4 text-muted-foreground mr-2" />
+              <SelectTrigger id="destination-region" className="mt-1 bg-transparent text-white border-white/20">
+                <Sailboat className="h-4 w-4 text-white/70 mr-2" />
                 <SelectValue placeholder="Selecciona un destino" />
               </SelectTrigger>
               <SelectContent>
@@ -102,10 +102,10 @@ export default function CruiseSearchPage() {
           </div>
           
           <div className="w-full lg:col-span-3">
-            <Label htmlFor="departureDate" className="text-sm font-semibold ml-2">Navegando Después de</Label>
+            <Label htmlFor="departureDate" className="text-sm font-semibold ml-2 text-white/80">Navegando Después de</Label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1", !departureDate && "text-muted-foreground")}>
+                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1 bg-transparent text-white border-white/20", !departureDate && "text-white/70")}>
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {departureDate ? format(departureDate, "MMM yyyy") : <span>Elige una fecha</span>}
                 </Button>
@@ -117,11 +117,11 @@ export default function CruiseSearchPage() {
           </div>
 
           <div className="w-full lg:col-span-2">
-            <Label htmlFor="passengers" className="text-sm font-semibold ml-2">Huéspedes</Label>
+            <Label htmlFor="passengers" className="text-sm font-semibold ml-2 text-white/80">Huéspedes</Label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
-                  <Users className="mr-2 h-4 w-4" />
+                <Button id="passengers" variant={"outline"} className="w-full justify-start text-left font-normal mt-1 bg-transparent text-white border-white/20">
+                  <Users className="mr-2 h-4 w-4 text-white/70" />
                   {travelerText}
                 </Button>
               </PopoverTrigger>

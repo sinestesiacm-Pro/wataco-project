@@ -30,22 +30,8 @@ const TABS = [
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
-  const getBackgroundColor = () => {
-    switch(activeTab) {
-      case 'Flights':
-      case 'Cruises':
-        return 'bg-primary/10';
-      case 'Hotels':
-        return 'bg-success/10';
-      case 'Packages':
-        return 'bg-tertiary/10';
-      default:
-        return 'bg-black/10';
-    }
-  }
-
   return (
-    <div className={cn("backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl", getBackgroundColor())}>
+    <div className="backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl bg-black/10">
       {activeTab === 'Flights' && <FlightSearchPage />}
       {activeTab === 'Hotels' && <HotelSearchPage />}
       {activeTab === 'Packages' && <PackagesSearchPage />}

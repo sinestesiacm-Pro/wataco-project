@@ -5,8 +5,6 @@ import { Header } from '@/components/header';
 import { AuthProvider } from '@/contexts/auth-context';
 import { ChatWidget } from '@/components/chat-widget';
 import { BottomNavbar } from '@/components/bottom-navbar';
-import { cn } from '@/lib/utils';
-import { HomePageContent } from '@/components/home-page-content';
 
 export const metadata: Metadata = {
   title: 'Be On Trip',
@@ -27,7 +25,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="icon" href="https://i.ibb.co/jK8GBnB/Chat-GPT-Image-9-lug-2025-14-16-37-removebg-preview.png" type="image/png" />
       </head>
-      <body className="font-body antialiased flex flex-col min-h-screen">
+      <body className="font-body antialiased">
         <AuthProvider>
             <Header />
             <main className="flex-grow flex flex-col">

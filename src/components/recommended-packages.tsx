@@ -24,19 +24,19 @@ const PackageCard = ({ pkg }: { pkg: typeof recommendedPackages[0] }) => (
         </div>
         <div className="flex flex-col flex-grow">
             <div className="flex justify-between items-start">
-              <h3 className="font-bold text-lg">{pkg.name}</h3>
-              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0">
+              <h3 className="font-bold text-lg text-white">{pkg.name}</h3>
+              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white hover:text-white">
                   <Heart className="h-5 w-5" />
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground">{pkg.description}</p>
+            <p className="text-sm text-white/70">{pkg.description}</p>
             <p className="font-semibold text-primary text-xl mt-1">${pkg.price}/persona</p>
             <div className="flex items-center gap-2 mt-auto text-sm">
                 <div className="flex items-center gap-1 text-amber-400">
                     {[...Array(pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                    {[...Array(5 - pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-muted-foreground/30" />)}
+                    {[...Array(5 - pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-white/30" />)}
                 </div>
-                <p className="text-muted-foreground">({pkg.reviews} reviews)</p>
+                <p className="text-white/70">({pkg.reviews} reviews)</p>
             </div>
         </div>
     </Card>
@@ -45,7 +45,7 @@ const PackageCard = ({ pkg }: { pkg: typeof recommendedPackages[0] }) => (
 export function RecommendedPackages() {
   return (
      <div className="space-y-6">
-      <h2 className="text-2xl font-bold font-headline">Paquetes Populares</h2>
+      <h2 className="text-3xl font-bold font-headline text-white">Paquetes Populares</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {recommendedPackages.map((pkg, index) => (
           <PackageCard key={index} pkg={pkg} />

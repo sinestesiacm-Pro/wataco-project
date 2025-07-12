@@ -44,9 +44,13 @@ export function SocialFeedSection() {
   return (
     <div className="relative">
       <div className="max-w-xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold font-headline text-white">Comunidad de Viajeros</h2>
+            <p className="text-white/80 mt-2">Conecta, comparte y descubre con otros aventureros.</p>
+        </div>
         <div className="space-y-8">
           {feedItems.map((item, index) => (
-            <Card key={index} className="rounded-3xl bg-black/10 backdrop-blur-xl border border-white/20 text-foreground shadow-lg">
+            <Card key={index} className="rounded-3xl bg-black/10 backdrop-blur-xl border border-white/20 text-white shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3 mb-4">
                   <Avatar>
@@ -59,16 +63,16 @@ export function SocialFeedSection() {
                   <Image src={item.image} alt={item.hint} data-ai-hint={item.hint} fill className="object-cover" />
                 </div>
                 <p className="text-sm mb-4 px-2">{item.caption}</p>
-                <div className="flex justify-around items-center text-sm text-muted-foreground">
-                  <Button variant="ghost" className="flex items-center gap-2 hover:text-primary">
+                <div className="flex justify-around items-center text-sm text-white/70">
+                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-primary">
                     <Heart className="h-5 w-5" />
                     <span>{item.likes}</span>
                   </Button>
-                  <Button variant="ghost" className="flex items-center gap-2 hover:text-primary">
+                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-primary">
                     <MessageSquare className="h-5 w-5" />
                     <span>{item.comments}</span>
                   </Button>
-                  <Button variant="ghost" className="flex items-center gap-2 hover:text-primary">
+                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-primary">
                     <Share2 className="h-5 w-5" />
                     <span>Compartir</span>
                   </Button>
