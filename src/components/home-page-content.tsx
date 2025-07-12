@@ -83,7 +83,7 @@ export function HomePageContent() {
     }
 
     return (
-        <div className={cn('w-full min-h-full', getBackgroundClass(), 'background-pan-animation')}>
+        <div className={cn('w-full min-h-full')}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
               <div className="hidden md:flex justify-center mb-8">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
@@ -97,7 +97,7 @@ export function HomePageContent() {
                   </TabsList>
                 </Tabs>
               </div>
-              <SearchSection tab={tab} />
+              {tab !== 'Activities' && <SearchSection tab={tab} />}
             </div>
       
             <div className="pt-16 pb-16">

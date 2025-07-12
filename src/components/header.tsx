@@ -28,7 +28,7 @@ export function Header() {
   const currentTitle = tabLabels[activeTab] || 'Be On Trip';
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-transparent shadow-lg border-b border-white/5">
+    <header className="fixed top-0 left-0 right-0 z-40 bg-black/50 backdrop-blur-sm shadow-lg border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
@@ -39,7 +39,7 @@ export function Header() {
           </div>
           
           <div className="flex-1 text-center">
-            <h1 className="text-2xl font-bold font-headline tracking-wider">{currentTitle}</h1>
+            <h1 className="text-2xl font-bold font-headline tracking-wider text-white">{currentTitle}</h1>
           </div>
           
           <div className="flex-1 flex items-center justify-end gap-2">
