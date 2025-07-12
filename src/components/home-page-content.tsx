@@ -21,7 +21,7 @@ function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   return (
-    <div className="backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl bg-white/10">
+    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl">
       {activeTab === 'Flights' && <FlightSearchPage />}
       {activeTab === 'Hotels' && <HotelSearchPage />}
       {activeTab === 'Packages' && <PackagesSearchPage />}
@@ -58,17 +58,17 @@ export function HomePageContent() {
     const getBackgroundClass = () => {
         switch(tab) {
             case 'Flights': return 'bg-flights-gradient';
-            case 'Cruises': return 'bg-flights-gradient';
             case 'Hotels': return 'bg-hotels-gradient';
             case 'Packages': return 'bg-packages-gradient';
-            case 'Activities': return 'bg-multicolor-gradient';
-            case 'Social': return 'bg-multicolor-gradient';
+            case 'Cruises': return 'bg-cruises-gradient';
+            case 'Activities': return 'bg-activities-gradient';
+            case 'Social': return 'bg-activities-gradient';
             default: return 'bg-flights-gradient';
         }
     }
 
     return (
-        <div className={cn('w-full flex flex-col flex-grow', getBackgroundClass())}>
+        <div className={cn('w-full flex flex-col flex-grow', getBackgroundClass(), 'background-pan-animation')}>
             <div className="pt-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                   {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
