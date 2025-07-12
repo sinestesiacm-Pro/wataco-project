@@ -190,7 +190,7 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   /* The double radius creates a more realistic curve for the top part */
   border-radius: 35% 35% 20px 20px / 40% 40% 20px 20px;
-  transform: translateY(1px);
+  transform: translateY(0);
   transition: transform 0.4s ease-in-out;
   pointer-events: auto;
 }
