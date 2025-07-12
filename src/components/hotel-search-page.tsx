@@ -146,7 +146,7 @@ export default function HotelSearchPage() {
 
 
   const SuggestionsList = () => (
-    <div className="absolute z-20 w-full mt-1 bg-card/80 backdrop-blur-2xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+    <div className="absolute z-20 w-full mt-1 bg-black/50 backdrop-blur-xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...

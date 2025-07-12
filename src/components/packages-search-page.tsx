@@ -147,7 +147,7 @@ export default function PackagesSearchPage() {
   const travelerText = `${adults} pasajero${adults > 1 ? 's' : ''}`;
 
   const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => (
-    <div className="absolute z-10 w-full mt-1 bg-card/80 backdrop-blur-2xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+    <div className="absolute z-10 w-full mt-1 bg-black/50 backdrop-blur-xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
