@@ -95,7 +95,7 @@
    background-image: linear-gradient(to top, #005A32 0%, #00A651 100%);
 }
 .bg-packages-gradient {
-  background-image: linear-gradient(to top, #9D5000 0%, #FF8C00 100%);
+  background-color: #FF8C00;
 }
 .bg-cruises-gradient {
   background-image: linear-gradient(to top, #2C004F 0%, #8A2BE2 100%);
