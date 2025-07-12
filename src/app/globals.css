@@ -14,7 +14,7 @@
     --popover: 200 60% 12%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 200 90% 50%; /* #0D9DE3 */
+    --primary: 208 100% 50%; /* #1C88FF */
     --primary-foreground: 210 40% 98%;
 
     --secondary: 200 30% 25%; /* #2D4A59 */
@@ -47,7 +47,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 200 60% 12%;
     --popover-foreground: 210 40% 98%;
-    --primary: 200 90% 50%; /* #0D9DE3 */
+    --primary: 208 100% 50%; /* #1C88FF */
     --primary-foreground: 210 40% 98%;
     --secondary: 200 30% 25%; /* #2D4A59 */
     --secondary-foreground: 210 40% 98%;
@@ -95,7 +95,7 @@
    background-image: radial-gradient(circle at center, #005a4d 0%, #004d40 70%);
 }
 .bg-packages-gradient {
-  background-color: #D2691E; /* Vibrant Orange matching reference */
+  background-color: #D2691E;
 }
 
 @keyframes animate-multicolor {
@@ -107,7 +107,6 @@
 .bg-multicolor-gradient {
   animation: animate-multicolor 30s ease-in-out infinite;
 }
-
 
 /* Airplane Window Style - REALISTIC */
 .airplane-window {
@@ -141,11 +140,12 @@
   right: 8%;
   bottom: 8%;
   border-radius: 40% / 45%;
-  background: hsl(var(--card));
+  background: hsl(0, 0%, 100%);
   box-shadow: 
     inset 3px 3px 6px rgba(0,0,0,0.2), /* Inner shadow for depth */
     inset -2px -2px 5px hsla(0, 0%, 100%, 0.1); /* Inner highlight for 3D effect */
   padding: 2%;
+  z-index: -1;
 }
 
 .airplane-window-view {
