@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -39,7 +40,7 @@ const accommodationTypes: { id: string; label: string; }[] = [
 ];
 
 const FilterSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
-    <Card className="bg-card/50 shadow-none border-0">
+    <Card className="bg-transparent shadow-none border-0 text-white">
         <CardHeader className="p-4">
             <CardTitle className="text-lg font-headline">{title}</CardTitle>
         </CardHeader>
@@ -84,8 +85,8 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
   };
 
   return (
-    <div className="sticky top-24 space-y-4">
-      <Card>
+    <div className="sticky top-24 space-y-4 bg-black/10 backdrop-blur-xl border border-white/20 rounded-2xl p-2">
+      <Card className="bg-transparent shadow-none border-0 text-white">
         <CardHeader>
             <CardTitle className="text-xl font-bold">Filtrar Resultados</CardTitle>
         </CardHeader>
@@ -99,13 +100,13 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
               onValueCommit={(value) => setFilters(prev => ({...prev, priceRange: value}))}
               className="w-full"
           />
-          <div className="flex justify-between text-sm text-muted-foreground mt-2">
+          <div className="flex justify-between text-sm text-white/70 mt-2">
               <span>${filters.priceRange[0]}</span>
               <span>${filters.priceRange[1] === 1000 ? '1000+' : filters.priceRange[1]}</span>
           </div>
       </FilterSection>
       
-      <Separator />
+      <Separator className="bg-white/20" />
 
       <FilterSection title="Clasificación por Estrellas">
         <div className="space-y-2">
@@ -115,17 +116,18 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
                 id={`star-${star}`}
                 onCheckedChange={() => handleCheckboxChange(star, 'stars')}
                 checked={filters.stars.includes(star)}
+                className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
               <Label htmlFor={`star-${star}`} className="flex items-center cursor-pointer gap-1">
                 {[...Array(star)].map((_, i) => ( <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" /> ))}
-                {[...Array(5 - star)].map((_, i) => ( <Star key={i} className="w-4 h-4 text-gray-300" /> ))}
+                {[...Array(5 - star)].map((_, i) => ( <Star key={i} className="w-4 h-4 text-white/30" /> ))}
               </Label>
             </div>
           ))}
         </div>
       </FilterSection>
       
-      <Separator />
+      <Separator className="bg-white/20" />
 
       <FilterSection title="Calificación de los usuarios">
          <RadioGroup 
@@ -133,13 +135,13 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
             onValueChange={(value) => setFilters(prev => ({...prev, userRating: value ? Number(value) : null}))}
             className="space-y-2"
         >
-            <div className="flex items-center space-x-2"><RadioGroupItem value="9" id="r1" /><Label htmlFor="r1">Excelente: 9+</Label></div>
-            <div className="flex items-center space-x-2"><RadioGroupItem value="8" id="r2" /><Label htmlFor="r2">Muy bien: 8+</Label></div>
-            <div className="flex items-center space-x-2"><RadioGroupItem value="7" id="r3" /><Label htmlFor="r3">Bueno: 7+</Label></div>
+            <div className="flex items-center space-x-2"><RadioGroupItem value="9" id="r1" className="border-white/50 text-primary" /><Label htmlFor="r1">Excelente: 9+</Label></div>
+            <div className="flex items-center space-x-2"><RadioGroupItem value="8" id="r2" className="border-white/50 text-primary" /><Label htmlFor="r2">Muy bien: 8+</Label></div>
+            <div className="flex items-center space-x-2"><RadioGroupItem value="7" id="r3" className="border-white/50 text-primary" /><Label htmlFor="r3">Bueno: 7+</Label></div>
         </RadioGroup>
       </FilterSection>
 
-      <Separator />
+      <Separator className="bg-white/20" />
       
       <FilterSection title="Servicios">
         <div className="space-y-2">
@@ -149,9 +151,10 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
                 id={`amenity-${amenity.id}`}
                 onCheckedChange={() => handleCheckboxChange(amenity.id, 'amenities')}
                 checked={filters.amenities.includes(amenity.id)}
+                 className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
               <Label htmlFor={`amenity-${amenity.id}`} className="flex items-center cursor-pointer gap-2 text-sm">
-                <amenity.icon className="w-4 h-4 text-muted-foreground" />
+                <amenity.icon className="w-4 h-4 text-white/70" />
                 {amenity.label}
               </Label>
             </div>
@@ -159,7 +162,7 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
         </div>
       </FilterSection>
       
-      <Separator />
+      <Separator className="bg-white/20" />
 
       <FilterSection title="Tipo de Alojamiento">
         <div className="space-y-2">
@@ -169,9 +172,10 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
                 id={`type-${type.id}`}
                 onCheckedChange={() => handleCheckboxChange(type.id, 'accommodationTypes')}
                 checked={filters.accommodationTypes.includes(type.id)}
+                 className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
               <Label htmlFor={`type-${type.id}`} className="flex items-center cursor-pointer gap-2 text-sm">
-                <Building2 className="w-4 h-4 text-muted-foreground" />
+                <Building2 className="w-4 h-4 text-white/70" />
                 {type.label}
               </Label>
             </div>
@@ -179,7 +183,7 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
         </div>
       </FilterSection>
 
-      <Separator />
+      <Separator className="bg-white/20" />
 
       <FilterSection title="Distancia al centro">
          <RadioGroup disabled className="space-y-2">

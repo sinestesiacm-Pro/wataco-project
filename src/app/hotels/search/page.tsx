@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import HotelSearchPage from "@/components/hotel-search-page";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 type HotelFiltersState = {
   stars: number[];
@@ -122,25 +123,25 @@ function HotelResultsPageContent() {
     }
     
     return (
-        <div className="w-full bg-muted/30 min-h-screen">
-          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-             <Collapsible className="mb-6 bg-card p-4 rounded-2xl border">
+        <div className={cn('w-full min-h-screen pt-24 pb-24 md:pb-8', 'bg-hotels-gradient background-pan-animation')}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+             <Collapsible className="mb-6 bg-black/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl">
                  <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-3xl sm:text-4xl font-bold font-headline">Hoteles en {destinationName}</h1>
-                        <p className="text-muted-foreground mt-1">
+                        <h1 className="text-3xl sm:text-4xl font-bold font-headline text-white">Hoteles en {destinationName}</h1>
+                        <p className="text-white/80 mt-1">
                             {filteredHotels ? `${filteredHotels.length} resultados encontrados` : ''}
                         </p>
                     </div>
                     <CollapsibleTrigger asChild>
-                      <Button variant="outline">
+                      <Button variant="outline" className="text-white bg-transparent border-white/20 hover:bg-white/10 hover:text-white">
                         <Settings2 className="mr-2 h-4 w-4" />
                         Modificar Búsqueda
                       </Button>
                     </CollapsibleTrigger>
                  </div>
                 <CollapsibleContent>
-                  <div className="mt-6 pt-6 border-t">
+                  <div className="mt-6 pt-6 border-t border-white/20">
                     <HotelSearchPage />
                   </div>
                 </CollapsibleContent>
@@ -154,7 +155,7 @@ function HotelResultsPageContent() {
               <aside className="hidden lg:block lg:col-span-3">
                 <HotelFilters onFilterChange={handleFilterChange} />
               </aside>
-              <div className="lg:hidden fixed bottom-6 right-6 z-50">
+              <div className="lg:hidden fixed bottom-24 right-6 z-50">
                     <Sheet>
                       <SheetTrigger asChild>
                          <Button size="lg" className="rounded-full shadow-lg">
@@ -162,7 +163,7 @@ function HotelResultsPageContent() {
                            Filtros
                          </Button>
                       </SheetTrigger>
-                      <SheetContent side="bottom" className="h-[80vh]">
+                      <SheetContent side="bottom" className="h-[80vh] bg-card/80 backdrop-blur-xl border-none">
                          <ScrollArea className="h-full pr-4">
                             <HotelFilters onFilterChange={handleFilterChange} />
                          </ScrollArea>
@@ -173,8 +174,8 @@ function HotelResultsPageContent() {
                 {filteredHotels && filteredHotels.length > 0 ? (
                     <HotelResults hotels={filteredHotels} searchParams={searchParams} />
                 ) : (
-                    <Card>
-                        <CardContent className="pt-6 text-center text-muted-foreground">
+                    <Card className="bg-black/10 backdrop-blur-xl border border-white/20">
+                        <CardContent className="pt-6 text-center text-white/70">
                             <p>No se encontraron hoteles que coincidan con tus filtros.</p>
                             <p>Intenta ajustar o eliminar algunos filtros para ver más resultados.</p>
                         </CardContent>
@@ -190,8 +191,8 @@ function HotelResultsPageContent() {
 export default function HotelSearchPageWrapper() {
   return (
     <Suspense fallback={
-        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] bg-hotels-gradient">
+            <Loader2 className="h-12 w-12 animate-spin text-white" />
         </div>
     }>
         <HotelResultsPageContent />

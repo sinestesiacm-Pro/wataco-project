@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 function HotelDetailPageContent({ id }: { id: string }) {
   const searchParams = useSearchParams();
@@ -27,9 +28,9 @@ function HotelDetailPageContent({ id }: { id: string }) {
   const backLinkHref = `/hotels/search?${backSearchParams.toString()}`;
 
   return (
-    <div className="w-full bg-muted/20 min-h-[calc(100vh-80px)]">
+    <div className={cn('w-full min-h-screen pt-24 pb-24 md:pb-8', 'bg-hotels-gradient background-pan-animation')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <Button asChild variant="outline" className="mb-6 bg-background">
+        <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
           <Link href={backLinkHref}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a la Búsqueda
@@ -50,8 +51,8 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
 
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-hotels-gradient">
+        <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
       <HotelDetailPageContent id={id} />

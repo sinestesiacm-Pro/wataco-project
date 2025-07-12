@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
@@ -23,7 +24,7 @@ const renderStars = (rating: string | undefined) => {
             {[...Array(starCount)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
             ))}
-            <span className="text-sm font-semibold">{starCount}.0</span>
+            <span className="text-sm font-semibold text-white">{starCount}.0</span>
         </div>
     );
 };
@@ -35,11 +36,8 @@ const formatAmenity = (amenity: string) => {
 export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
     <div className="space-y-4">
-       <h2 className="text-3xl font-headline font-semibold text-gray-800">
-          Mostrando {hotels.length} hotel{hotels.length !== 1 && 'es'}
-        </h2>
       {hotels.map((offer) => (
-        <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border bg-card/95 backdrop-blur-sm flex flex-col md:flex-row">
+        <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-black/10 backdrop-blur-xl border border-white/20 flex flex-col md:flex-row">
             <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4 flex-shrink-0">
                 <Image 
                     src={offer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
@@ -57,14 +55,14 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                         <h3 className="text-2xl font-semibold font-headline text-primary">{offer.hotel.name}</h3>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
                             {renderStars(offer.hotel.rating)}
-                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1 text-sm text-white/80">
                                 <MapPin className="w-4 h-4" />
                                 {offer.hotel.address.cityName}, {offer.hotel.address.countryCode}
                             </div>
                         </div>
                     </div>
                 </div>
-                 <p className="text-sm text-muted-foreground mt-4 line-clamp-2">
+                 <p className="text-sm text-white/70 mt-4 line-clamp-2">
                     {offer.hotel.description?.text}
                  </p>
                  {offer.hotel.amenities && offer.hotel.amenities.length > 0 && (
@@ -80,11 +78,11 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                  )}
               </div>
               
-              <Separator className="mt-auto" />
+              <Separator className="mt-auto bg-white/20" />
 
-              <div className="p-4 sm:p-6 bg-muted/30 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="p-4 sm:p-6 bg-black/20 flex flex-col sm:flex-row justify-between items-center gap-4">
                  <div className="text-center sm:text-left">
-                    <p className="text-xs text-muted-foreground font-body">Precio por noche</p>
+                    <p className="text-xs text-white/70 font-body">Precio por noche</p>
                     <p className="font-semibold text-3xl text-tertiary">
                       ${offer.offers?.[0]?.price?.total}
                     </p>
