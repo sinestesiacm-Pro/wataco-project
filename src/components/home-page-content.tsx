@@ -29,8 +29,22 @@ const TABS = [
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
+  const getBackgroundColor = () => {
+    switch(activeTab) {
+      case 'Flights':
+      case 'Cruises':
+        return 'bg-primary/10';
+      case 'Hotels':
+        return 'bg-success/10';
+      case 'Packages':
+        return 'bg-tertiary/10';
+      default:
+        return 'bg-black/10';
+    }
+  }
+
   return (
-    <div className="bg-black/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl">
+    <div className={cn("backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl", getBackgroundColor())}>
       {activeTab === 'Flights' && <FlightSearchPage />}
       {activeTab === 'Hotels' && <HotelSearchPage />}
       {activeTab === 'Packages' && <PackagesSearchPage />}
@@ -83,7 +97,7 @@ export function HomePageContent() {
     }
 
     return (
-        <div className={cn('w-full min-h-full')}>
+        <div className={cn('w-full min-h-full transition-all duration-500 background-pan-animation', getBackgroundClass())}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
               <div className="hidden md:flex justify-center mb-8">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
@@ -97,7 +111,7 @@ export function HomePageContent() {
                   </TabsList>
                 </Tabs>
               </div>
-              {tab !== 'Activities' && <SearchSection tab={tab} />}
+              {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
             </div>
       
             <div className="pt-16 pb-16">

@@ -159,7 +159,7 @@ function FlightSelectionPage() {
 
   if (loading) {
     return (
-        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
+      <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] bg-flights-gradient background-pan-animation">
             <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />
         </div>
     );
@@ -233,7 +233,7 @@ function FlightSelectionPage() {
     <div className={cn('min-h-screen w-full', 'bg-flights-gradient background-pan-animation')}>
       <div className="min-h-screen bg-transparent">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <Button asChild variant="outline" className="mb-6 bg-transparent">
+            <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
                 <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Volver a la Búsqueda
@@ -255,7 +255,7 @@ function FlightSelectionPage() {
                           onFilterChange={handleFilterChange}
                       />
                   </aside>
-                  <div className="lg:hidden fixed bottom-6 right-6 z-50">
+                  <div className="lg:hidden fixed bottom-20 right-6 z-50">
                     <Sheet>
                       <SheetTrigger asChild>
                          <Button size="lg" className="rounded-full shadow-lg">

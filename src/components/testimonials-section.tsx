@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
@@ -57,7 +58,7 @@ export function TestimonialsSection() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
-                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-[#004d40]/40 backdrop-blur-sm border border-white/10">
+                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-black/10 backdrop-blur-xl border border-white/10">
                     <CardContent className="p-6 flex flex-col flex-grow text-left">
                     <div className="flex items-center mb-4">
                         <Avatar className="h-14 w-14 mr-4 border-2 border-primary">

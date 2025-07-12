@@ -73,7 +73,7 @@
     @apply border-border;
   }
   body {
-    background-color: #004d40; /* Verde oscuro sólido como fondo global */
+    background-color: #0E1D2A; /* Fallback dark blue */
     @apply text-foreground;
   }
 }
@@ -93,28 +93,22 @@
   background-image: radial-gradient(circle at 20% 20%, hsl(200, 80%, 30%), #0E1D2A 50%);
 }
 .bg-hotels-gradient {
-   background-color: #004d40; /* Solid green background */
-   background-image: radial-gradient(circle at center, #005a4d 0%, #004d40 70%); /* Subtle gradient */
+   background-image: radial-gradient(circle at center, #005a4d 0%, #004d40 70%);
 }
 .bg-packages-gradient {
-  background-image: radial-gradient(circle at 20% 80%, hsl(35, 80%, 25%), hsl(35, 80%, 15%) 50%);
+  background-image: radial-gradient(circle at 20% 80%, hsl(35, 80%, 35%), hsl(35, 80%, 15%) 60%);
+}
+
+@keyframes animate-multicolor {
+  0%, 100% { background-color: hsl(200, 80%, 15%); }
+  33% { background-color: hsl(160, 100%, 15%); }
+  66% { background-color: hsl(35, 80%, 20%); }
 }
 
 .bg-multicolor-gradient {
   animation: animate-multicolor 30s ease-in-out infinite;
 }
 
-@keyframes animate-multicolor {
-  0%, 100% {
-    background-color: #0E1D2A;
-  }
-  33% {
-    background-color: #004d40;
-  }
-  66% {
-    background-color: #4a2511;
-  }
-}
 
 /* Airplane Window Style - Preserved as requested */
 .airplane-window {
