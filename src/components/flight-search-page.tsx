@@ -177,7 +177,7 @@ export default function FlightSearchPage() {
   const travelerText = `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`;
 
   const renderSuggestions = (type: 'origin' | 'destination') => (
-      <div ref={popoverContentRef} className="bg-black/20 backdrop-blur-xl border border-white/20 rounded-lg shadow-lg max-h-60 overflow-y-auto w-full">
+      <div ref={popoverContentRef} className="bg-card/80 backdrop-blur-2xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto w-full">
         <Input 
           autoFocus
           className="m-2 w-[calc(100%-1rem)]"
