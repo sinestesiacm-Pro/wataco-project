@@ -40,70 +40,36 @@ const renderStars = (rating: number) => {
                 <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
             ))}
             {[...Array(5 - rating)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 text-gray-300" />
+                <Star key={i} className="w-4 h-4 text-gray-600" />
             ))}
         </div>
     );
 };
 
-const backgroundImages = [
-    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1528747045269-3906333af562?fit=crop&w=1920&q=80',
-]
-
 export function TestimonialsSection() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
-      }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
-    <section className="relative py-16 text-center overflow-hidden">
-        {backgroundImages.map((image, index) => (
-            <Image
-            key={`${image}-${index}`}
-            src={image}
-            alt={`Testimonial background ${index + 1}`}
-            fill
-            className={cn(
-                'hero-background-image',
-                index === currentImageIndex ? 'active' : ''
-            )}
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-            sizes="100vw"
-            data-ai-hint="travel landscape"
-            />
-        ))}
-        <div 
-            className="absolute inset-0 bg-[#0C2534]/80 backdrop-blur-sm z-10"
-        />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+    <section className="py-16 text-center bg-card">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-                <h2 className="text-3xl font-headline font-bold text-white">Lo que dicen nuestros viajeros</h2>
-                <p className="text-white/80 mt-2">Historias reales de aventuras inolvidables.</p>
+                <h2 className="text-3xl font-headline font-bold">Lo que dicen nuestros viajeros</h2>
+                <p className="text-muted-foreground mt-2">Historias reales de aventuras inolvidables.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
-                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white/10 backdrop-blur-md border-white/20">
+                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-background border-border">
                     <CardContent className="p-6 flex flex-col flex-grow text-left">
                     <div className="flex items-center mb-4">
-                        <Avatar className="h-14 w-14 mr-4 border-2 border-primary/50">
+                        <Avatar className="h-14 w-14 mr-4 border-2 border-primary">
                         <AvatarImage src={testimonial.avatar} data-ai-hint={testimonial.hint} alt={testimonial.name} />
                         <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
-                        <h3 className="font-bold font-headline text-lg text-white">{testimonial.name}</h3>
-                        <p className="text-sm text-white/70">{testimonial.location}</p>
+                        <h3 className="font-bold font-headline text-lg">{testimonial.name}</h3>
+                        <p className="text-sm text-muted-foreground">{testimonial.location}</p>
                         </div>
                     </div>
-                    <blockquote className="text-white/80 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
+                    <blockquote className="text-foreground/80 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
                     {renderStars(testimonial.rating)}
                     </CardContent>
                 </Card>

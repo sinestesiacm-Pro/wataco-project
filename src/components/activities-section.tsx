@@ -1,44 +1,55 @@
 'use client';
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Zap } from 'lucide-react';
+import { Heart, Star, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 const activities = [
-  { id: 'city-tour-1', name: 'Tour a Pie por la Ciudad Histórica', description: 'Explora el casco antiguo con un guía local.', image: 'https://images.unsplash.com/photo-1744658069386-b4801e3d0c24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaXR5JTIwd2Fsa2luZyUyMHRvdXJ8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'city walking tour' },
-  { id: 'cooking-class-1', name: 'Clase de Cocina Local', description: 'Aprende a cocinar auténticos platos regionales.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb29raW5nJTIwY2xhc3N8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'cooking class' },
-  { id: 'zipline-1', name: 'Tirolesa en Parque de Aventuras', description: 'Vive la emoción de la tirolesa por el bosque.', image: 'https://images.unsplash.com/photo-1692205959816-d75d4a7b89d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx6aXBsaW5pbmclMjBhZHZlbnR1cmV8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'ziplining adventure' },
-  { id: 'museum-pass-1', name: 'Pase para Museos y Galerías de Arte', description: 'Accede a los principales lugares culturales.', image: 'https://images.unsplash.com/photo-1524014444623-194fde519952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhcnQlMjBtdXNldW18ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'art museum' },
+  { id: 'city-tour-1', name: 'Tour por la Ciudad Histórica', description: 'Explora el casco antiguo.', image: 'https://images.unsplash.com/photo-1744658069386-b4801e3d0c24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaXR5JTIwd2Fsa2luZyUyMHRvdXJ8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'city walking tour', rating: 5, reviews: 543, price: '50' },
+  { id: 'cooking-class-1', name: 'Clase de Cocina Local', description: 'Aprende platos regionales.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb29raW5nJTIwY2xhc3N8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'cooking class', rating: 5, reviews: 211, price: '85' },
+  { id: 'zipline-1', name: 'Tirolesa de Aventura', description: 'Emoción en el bosque.', image: 'https://images.unsplash.com/photo-1692205959816-d75d4a7b89d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx6aXBsaW5pbmclMjBhZHZlbnR1cmV8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'ziplining adventure', rating: 4, reviews: 345, price: '70' },
+  { id: 'museum-pass-1', name: 'Pase para Museos de Arte', description: 'Accede a lugares culturales.', image: 'https://images.unsplash.com/photo-1524014444623-194fde519952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhcnQlMjBtdXNldW18ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'art museum', rating: 5, reviews: 689, price: '40' },
 ];
+
+const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
+    <Card className="bg-card rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-secondary/50">
+        <div className="relative w-28 h-28 flex-shrink-0">
+            <Image 
+                src={activity.image} 
+                data-ai-hint={activity.hint} 
+                alt={activity.name} 
+                fill 
+                className="object-cover rounded-xl"
+            />
+        </div>
+        <div className="flex flex-col flex-grow">
+            <div className="flex justify-between items-start">
+              <h3 className="font-bold text-lg">{activity.name}</h3>
+              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0">
+                  <Heart className="h-5 w-5" />
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">{activity.description}</p>
+            <p className="font-semibold text-primary text-xl mt-1">${activity.price}/persona</p>
+            <div className="flex items-center gap-2 mt-auto text-sm">
+                <div className="flex items-center gap-1 text-amber-400">
+                    {[...Array(activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                    {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-muted-foreground/30" />)}
+                </div>
+                <p className="text-muted-foreground">({activity.reviews} reviews)</p>
+            </div>
+        </div>
+    </Card>
+);
 
 export function ActivitiesSection() {
   return (
-    <div className="space-y-8 mt-16">
-      <div className="text-center">
-        <h2 className="text-3xl font-headline font-bold text-white">Actividades Inolvidables</h2>
-        <p className="text-white/80 mt-2">Reserva tours, atracciones y experiencias únicas para tu viaje.</p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold font-headline">Actividades y Experiencias</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {activities.map((activity, index) => (
-          <Card key={index} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-white/10 backdrop-blur-md border-0 flex flex-col">
-            <div className="overflow-hidden relative">
-              <Image src={activity.image} data-ai-hint={activity.hint} alt={activity.name} width={400} height={300} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-all duration-300 group-hover:backdrop-blur-sm" />
-               <div className="absolute bottom-4 left-4">
-                 <h3 className="text-xl font-bold font-headline text-white">{activity.name}</h3>
-              </div>
-            </div>
-            <CardContent className="p-4 flex flex-col flex-grow">
-              <p className="text-sm text-white/80 mb-4 flex-grow">{activity.description}</p>
-              <Button asChild variant="secondary" className="w-full">
-                <Link href={`/activities/${activity.id}`}>
-                    <Zap className="mr-2 h-4 w-4" />
-                    Reservar Experiencia
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+          <ActivityCard key={index} activity={activity} />
         ))}
       </div>
     </div>

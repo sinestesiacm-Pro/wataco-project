@@ -26,7 +26,6 @@ export default function RootLayout({
         <link rel="icon" href="https://i.ibb.co/jK8GBnB/Chat-GPT-Image-9-lug-2025-14-16-37-removebg-preview.png" type="image/png" />
       </head>
       <body className="font-body antialiased">
-        <div className="background-gradient" />
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <Header />

@@ -3,7 +3,6 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Plane, BedDouble, Zap, Luggage, Ship, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 
 export function BottomNavbar() {
   const searchParams = useSearchParams();
@@ -14,10 +13,9 @@ export function BottomNavbar() {
   const activeTab = searchParams.get('tab') || 'Flights';
 
   const handleTabClick = (tab: string) => {
-    // We create a new URLSearchParams object to preserve other query params if any
     const params = new URLSearchParams(window.location.search);
     params.set('tab', tab);
-    router.push(`?${params.toString()}`);
+    router.push(`/?${params.toString()}`);
   };
 
   const tabsConfig = [
@@ -30,15 +28,15 @@ export function BottomNavbar() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-black/10 backdrop-blur-lg md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-t border-border md:hidden">
       <div className="flex justify-around items-center h-16">
         {tabsConfig.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => handleTabClick(id)}
             className={cn(
-              "flex flex-col items-center justify-center gap-1 w-full h-full text-white/70 transition-colors",
-              isOnHomePage && activeTab === id ? "text-white scale-110" : ""
+              "flex flex-col items-center justify-center gap-1 w-full h-full text-muted-foreground transition-colors",
+              isOnHomePage && activeTab === id ? "text-primary scale-110" : "text-foreground/60"
             )}
           >
             <Icon className="h-5 w-5" />
