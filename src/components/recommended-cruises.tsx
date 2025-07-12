@@ -1,8 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Heart, Ship, Star } from 'lucide-react';
-import Link from 'next/link';
+import { Heart, Star } from 'lucide-react';
 import { Card } from './ui/card';
 
 const recommendedCruises = [
@@ -13,7 +12,7 @@ const recommendedCruises = [
 ];
 
 const CruiseCard = ({ cruise }: { cruise: typeof recommendedCruises[0] }) => (
-    <Card className="bg-card rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-secondary/50">
+    <Card className="bg-black/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-black/20">
         <div className="relative w-28 h-28 flex-shrink-0">
             <Image 
                 src={cruise.image} 

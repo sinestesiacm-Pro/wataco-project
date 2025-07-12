@@ -2,8 +2,7 @@
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, Star, Zap } from 'lucide-react';
-import Link from 'next/link';
+import { Heart, Star } from 'lucide-react';
 
 const activities = [
   { id: 'city-tour-1', name: 'Tour por la Ciudad Histórica', description: 'Explora el casco antiguo.', image: 'https://images.unsplash.com/photo-1744658069386-b4801e3d0c24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaXR5JTIwd2Fsa2luZyUyMHRvdXJ8ZW58MHx8fHwxNzUyMDY3OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'city walking tour', rating: 5, reviews: 543, price: '50' },
@@ -13,7 +12,7 @@ const activities = [
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
-    <Card className="bg-card rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-secondary/50">
+    <Card className="bg-black/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-black/20">
         <div className="relative w-28 h-28 flex-shrink-0">
             <Image 
                 src={activity.image} 

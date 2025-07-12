@@ -29,7 +29,7 @@ function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   return (
-    <div className="bg-card/30 backdrop-blur-lg p-6 rounded-3xl border border-white/10 shadow-2xl">
+    <div className="bg-black/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl">
       {activeTab === 'Flights' && <FlightSearchPage />}
       {activeTab === 'Hotels' && <HotelSearchPage />}
       {activeTab === 'Packages' && <PackagesSearchPage />}

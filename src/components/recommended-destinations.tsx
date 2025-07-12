@@ -67,7 +67,7 @@ export function RecommendedDestinations() {
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold text-gray-800">Ofertas que no Puedes Dejar Pasar</h2>
+        <h2 className="text-4xl font-headline font-bold">Ofertas que no Puedes Dejar Pasar</h2>
         <p className="text-lg text-muted-foreground mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
       </div>
       

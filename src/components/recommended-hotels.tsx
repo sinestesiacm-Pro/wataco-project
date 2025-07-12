@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { BedDouble, Heart, Star } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { Card } from './ui/card';
 
 const recommendedHotels = [
@@ -12,7 +12,7 @@ const recommendedHotels = [
 ];
 
 const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
-    <Card className="bg-card rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-secondary/50">
+    <Card className="bg-black/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-black/20">
         <div className="relative w-28 h-28 flex-shrink-0">
             <Image 
                 src={hotel.image} 
