@@ -1,3 +1,4 @@
+
 'use client';
 
 import FlightSearchPage from '@/components/flight-search-page';
@@ -82,7 +83,7 @@ export function HomePageContent() {
     }
 
     return (
-        <div className={cn('w-full min-h-full', getBackgroundClass(), tab !== 'Activities' && tab !== 'Social' ? 'background-pan-animation' : '')}>
+        <div className={cn('w-full min-h-full', getBackgroundClass(), 'background-pan-animation')}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
               <div className="hidden md:flex justify-center mb-8">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">

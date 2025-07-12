@@ -25,11 +25,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="icon" href="https://i.ibb.co/jK8GBnB/Chat-GPT-Image-9-lug-2025-14-16-37-removebg-preview.png" type="image/png" />
       </head>
-      <body className="font-body antialiased">
+      <body className="font-body antialiased bg-background">
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow pt-20 pb-20"> {/* Add padding bottom for bottom navbar */}
+            <main className="flex-grow pt-20 pb-20"> 
               {children}
             </main>
             <Footer />
