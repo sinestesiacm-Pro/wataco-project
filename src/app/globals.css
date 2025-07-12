@@ -173,20 +173,33 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 35% / 40%;
-  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
-  pointer-events: auto;
-  opacity: 1;
+  height: 30%; /* Partially closed by default */
+  background: linear-gradient(to bottom, hsl(210, 15%, 95%) 80%, hsl(210, 10%, 85%) 100%);
+  border-bottom: 1px solid hsl(210, 10%, 80%);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border-radius: 35% 35% 20px 20px / 40% 40% 20px 20px;
+  transform: translateY(0);
+  transition: transform 0.4s ease-in-out;
   z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+/* Handle on the shade */
+.airplane-window-shade::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 0.5rem;
+  background-color: hsl(210, 10%, 60%);
+  border-radius: 4px;
+  opacity: 0.3;
 }
 
 .group.is-hovered .airplane-window-shade {
-  opacity: 0;
-  pointer-events: none;
+  transform: translateY(-100%);
 }
 
 .airplane-window-content {
