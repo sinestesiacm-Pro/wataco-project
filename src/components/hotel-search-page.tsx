@@ -110,7 +110,7 @@ export default function HotelSearchPage() {
 
   const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-      if (!destination || !date?.from || !date?.to) {
+      if ((!destination && !destinationQuery) || !date?.from || !date?.to) {
         toast({
             title: 'Información Faltante',
             description: 'Por favor, selecciona un destino y las fechas.',
@@ -118,8 +118,20 @@ export default function HotelSearchPage() {
         });
         return;
       }
+      
+      const cityCode = destination?.iataCode || (destinationQuery.toLowerCase().includes('nueva york') ? 'NYC' : '');
+
+       if (!cityCode) {
+         toast({
+            title: 'Destino no válido',
+            description: 'Por favor, selecciona un destino de la lista o escribe un destino conocido.',
+            variant: 'destructive',
+        });
+        return;
+      }
+
       const params = new URLSearchParams({
-        cityCode: destination.iataCode,
+        cityCode: cityCode,
         checkInDate: format(date.from, 'yyyy-MM-dd'),
         checkOutDate: format(date.to, 'yyyy-MM-dd'),
         adults: adults.toString(),
