@@ -177,7 +177,7 @@ export default function FlightSearchPage() {
   const travelerText = `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`;
 
   const renderSuggestions = (type: 'origin' | 'destination') => (
-      <div ref={popoverContentRef} className="bg-black/50 backdrop-blur-xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto w-full">
+      <div ref={popoverContentRef} className="absolute z-20 w-full mt-1 bg-black/50 backdrop-blur-xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto">
         <Input 
           autoFocus
           className="m-2 w-[calc(100%-1rem)]"
@@ -242,7 +242,7 @@ export default function FlightSearchPage() {
                 </Button>
             </PopoverTrigger>
           </div>
-          <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+          <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
               {activeInput && renderSuggestions(activeInput)}
           </PopoverContent>
         </Popover>

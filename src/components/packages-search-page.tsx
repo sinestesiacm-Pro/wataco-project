@@ -147,7 +147,7 @@ export default function PackagesSearchPage() {
   const travelerText = `${adults} pasajero${adults > 1 ? 's' : ''}`;
 
   const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => (
-    <div className="absolute z-10 w-full mt-1 bg-black/50 backdrop-blur-xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+    <div ref={suggestionsRef} className="absolute z-20 w-full mt-1 bg-black/50 backdrop-blur-xl border border-white/10 rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
@@ -178,7 +178,7 @@ export default function PackagesSearchPage() {
   return (
     <form onSubmit={handleSearch} className="flex flex-col gap-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InputGroup className='relative' ref={activeInput === 'origin' ? suggestionsRef : null}>
+          <InputGroup className='relative'>
             <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('origin')}>
                 <div className="flex items-center w-full">
                     <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
@@ -197,7 +197,7 @@ export default function PackagesSearchPage() {
             </Button>
             {activeInput === 'origin' && <SuggestionsList type="origin" />}
           </InputGroup>
-          <InputGroup className='relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
+          <InputGroup className='relative'>
             <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
                 <div className="flex items-center w-full">
                     <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
