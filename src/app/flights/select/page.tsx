@@ -17,6 +17,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
@@ -228,10 +229,10 @@ function FlightSelectionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-green-50 to-orange-100 dark:from-blue-900/30 dark:via-green-900/30 dark:to-orange-900/30">
-      <div className="min-h-screen bg-background/60 backdrop-blur-2xl">
+    <div className={cn('min-h-screen w-full', 'bg-flights-gradient background-pan-animation')}>
+      <div className="min-h-screen bg-transparent">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <Button asChild variant="outline" className="mb-6 bg-background">
+            <Button asChild variant="outline" className="mb-6 bg-transparent">
                 <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Volver a la Búsqueda

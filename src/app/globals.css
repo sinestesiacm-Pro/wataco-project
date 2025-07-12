@@ -73,28 +73,40 @@
     @apply border-border;
   }
   body {
-    @apply bg-transparent text-foreground;
+    @apply bg-background text-foreground;
+    background-color: #0E1D2A;
   }
 }
 
-@keyframes animate-background {
-  0% {
-    background: #0E1D2A; /* Prussian Blue */
-  }
-  33% {
-    background: #004d40; /* Dark Teal */
-  }
-  66% {
-    background: #4a2511; /* Dark Orange */
-  }
-  100% {
-    background: #0E1D2A; /* Return to Prussian Blue */
-  }
+@keyframes animate-bg-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.background-gradient {
-  background-size: 100% 100%;
-  animation: animate-background 30s ease-in-out infinite;
+@keyframes animate-multicolor {
+  0%, 100% { background-color: #0E1D2A; }
+  33% { background-color: #004d40; }
+  66% { background-color: #4a2511; }
+}
+
+.background-pan-animation {
+  background-size: 200% 200%;
+  animation: animate-bg-pan 20s ease-in-out infinite;
+}
+
+.bg-flights-gradient {
+  background-image: radial-gradient(circle at 20% 20%, hsl(200, 80%, 30%), #0E1D2A 50%);
+}
+.bg-hotels-gradient {
+  background-image: radial-gradient(circle at 80% 20%, hsl(147, 80%, 30%), #0E1D2A 50%);
+}
+.bg-packages-gradient {
+  background-image: radial-gradient(circle at 20% 80%, hsl(35, 80%, 35%), #0E1D2A 50%);
+}
+
+.bg-multicolor-gradient {
+  animation: animate-multicolor 30s ease-in-out infinite;
 }
 
 

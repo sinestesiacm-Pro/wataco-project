@@ -68,9 +68,21 @@ export function HomePageContent() {
       params.set('tab', newTab);
       router.push(`/?${params.toString()}`);
     };
+    
+    const getBackgroundClass = () => {
+        switch(tab) {
+            case 'Flights': return 'bg-flights-gradient';
+            case 'Cruises': return 'bg-flights-gradient';
+            case 'Hotels': return 'bg-hotels-gradient';
+            case 'Packages': return 'bg-packages-gradient';
+            case 'Activities': return 'bg-multicolor-gradient';
+            case 'Social': return 'bg-multicolor-gradient';
+            default: return 'bg-flights-gradient';
+        }
+    }
 
     return (
-        <div className="w-full">
+        <div className={cn('w-full min-h-full', getBackgroundClass(), tab !== 'Activities' && tab !== 'Social' ? 'background-pan-animation' : '')}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
               <div className="hidden md:flex justify-center mb-8">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
