@@ -106,13 +106,13 @@
 
 
 @keyframes animate-multicolor {
-  0%, 100% { background-color: hsl(200, 80%, 15%); }
-  33% { background-color: hsl(160, 100%, 15%); }
-  66% { background-color: hsl(35, 80%, 20%); }
+  0%, 100% { background-color: hsl(210, 80%, 15%); } /* Prussian Blue */
+  50% { background-color: hsl(180, 100%, 25%); } /* Blue Teal */
 }
 
 .bg-multicolor-gradient {
   animation: animate-multicolor 30s ease-in-out infinite;
+  filter: blur(50px);
 }
 
 /* Airplane Window Style - REALISTIC */

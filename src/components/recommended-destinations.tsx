@@ -1,12 +1,11 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Plane } from 'lucide-react';
 import { addMonths, addDays, format } from 'date-fns';
-import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -27,7 +26,7 @@ const DestinationCard = ({ route, isHovered }: { route: typeof flightRoutes[0], 
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <div className={cn("flex-shrink-0 w-[280px] group/card", { 'is-hovered': isHovered })}>
+        <div className={cn("flex-shrink-0 w-[280px] group", { 'is-hovered': isHovered })}>
             <div className="airplane-window">
                 <div className="airplane-window-inner-bevel">
                     <div className="airplane-window-view">
