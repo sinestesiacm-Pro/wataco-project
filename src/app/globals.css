@@ -175,16 +175,6 @@
   transform: scale(1.1);
 }
 
-.airplane-window-shade-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 35% / 40%;
-  overflow: hidden;
-  pointer-events: none;
-}
 .airplane-window-shade {
   position: absolute;
   top: 0;
