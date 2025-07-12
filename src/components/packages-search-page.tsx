@@ -181,7 +181,7 @@ export default function PackagesSearchPage() {
           <InputGroup className='relative' ref={activeInput === 'origin' ? suggestionsRef : null}>
             <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('origin')}>
                 <div className="flex items-center w-full">
-                    <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
+                    <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
                     <div>
                         <p className="text-xs text-white/70">Desde</p>
                         <Input 
@@ -200,7 +200,7 @@ export default function PackagesSearchPage() {
           <InputGroup className='relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
             <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
                 <div className="flex items-center w-full">
-                    <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
+                    <PlaneLanding className="h-6 w-6 mr-4 text-tertiary" />
                     <div>
                         <p className="text-xs text-white/70">Hasta</p>
                         <Input 
@@ -284,7 +284,7 @@ export default function PackagesSearchPage() {
             </Popover>
           </InputGroup>
       </div>
-      <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-12">
+      <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-14">
           <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
       </Button>
     </form>

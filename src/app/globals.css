@@ -95,7 +95,7 @@
    background-image: radial-gradient(circle at center, #005a4d 0%, #004d40 70%);
 }
 .bg-packages-gradient {
-  background-image: radial-gradient(circle at 20% 80%, hsl(35, 80%, 35%), hsl(35, 80%, 15%) 60%);
+  background-color: #D2691E; /* Vibrant Orange matching reference */
 }
 
 @keyframes animate-multicolor {
