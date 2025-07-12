@@ -25,7 +25,17 @@ export function Header() {
   const router = useRouter();
   const { user } = useAuth();
   
-  const tab = searchParams.get('tab') || 'Flights';
+  const getTabFromPath = () => {
+    if (pathname.startsWith('/hotels')) return 'Hotels';
+    if (pathname.startsWith('/packages')) return 'Packages';
+    if (pathname.startsWith('/cruises')) return 'Cruises';
+    if (pathname.startsWith('/activities')) return 'Activities';
+    if (pathname.startsWith('/social')) return 'Social';
+    if (pathname.startsWith('/flights')) return 'Flights';
+    return searchParams.get('tab') || 'Flights';
+  };
+  
+  const tab = getTabFromPath();
 
   const handleTabChange = (newTab: string) => {
     const params = new URLSearchParams(window.location.search);
@@ -34,30 +44,17 @@ export function Header() {
   };
   
   const getTitleFromPath = (path: string): string => {
-    if (path.startsWith('/hotels')) return 'Hoteles';
-    if (path.startsWith('/flights')) return 'Vuelos';
-    if (path.startsWith('/packages')) return 'Paquetes';
-    if (path.startsWith('/cruises')) return 'Cruceros';
-    if (path.startsWith('/activities')) return 'Actividades';
-    if (path.startsWith('/social')) return 'Comunidad';
-    if (path.startsWith('/profile')) return 'Mi Perfil';
+    const currentTab = TABS.find(t => t.id === tab);
+    if (currentTab) return currentTab.label;
 
-    // Fallback for home page based on tab
-    if (typeof window !== 'undefined') {
-        const searchParams = new URLSearchParams(window.location.search);
-        const tabParam = searchParams.get('tab');
-        if (tabParam === 'Hotels') return 'Hoteles';
-        if (tabParam === 'Packages') return 'Paquetes';
-        if (tabParam === 'Cruises') return 'Cruceros';
-        if (tabParam === 'Activities') return 'Actividades';
-        if (tabParam === 'Social') return 'Comunidad';
-    }
+    if (path.startsWith('/profile')) return 'Mi Perfil';
+    if (path.startsWith('/login') || path.startsWith('/signup')) return 'Acceso';
+    if (path.startsWith('/flights/checkout')) return 'Finalizar Compra';
     
-    return 'Vuelos';
+    return 'Be On Trip';
   }
 
   const currentTitle = getTitleFromPath(pathname);
-  const isHomePage = pathname === '/';
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-black/50 backdrop-blur-sm shadow-lg border-b border-white/10">
@@ -72,7 +69,6 @@ export function Header() {
           
           <div className="flex-1 text-center">
              <div className="hidden md:flex justify-center">
-               {isHomePage ? (
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
                   <TabsList className="bg-card/30 backdrop-blur-lg border border-white/10">
                     {TABS.map((item) => (
@@ -83,9 +79,6 @@ export function Header() {
                     ))}
                   </TabsList>
                 </Tabs>
-               ) : (
-                <h1 className="text-2xl font-bold font-headline tracking-wider text-white">{currentTitle}</h1>
-               )}
               </div>
               <h1 className="text-2xl font-bold font-headline tracking-wider text-white md:hidden">{currentTitle}</h1>
           </div>
