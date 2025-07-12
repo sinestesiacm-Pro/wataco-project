@@ -73,8 +73,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    background-color: #0E1D2A;
+    @apply text-foreground;
+    background-color: transparent;
   }
 }
 
@@ -99,10 +99,10 @@
   background-image: radial-gradient(circle at 20% 20%, hsl(200, 80%, 30%), #0E1D2A 50%);
 }
 .bg-hotels-gradient {
-  background-image: radial-gradient(circle at 80% 20%, hsl(147, 80%, 20%), #0E1D2A 50%);
+  background-image: radial-gradient(circle at 80% 20%, hsl(147, 80%, 20%), hsl(147, 80%, 10%) 50%);
 }
 .bg-packages-gradient {
-  background-image: radial-gradient(circle at 20% 80%, hsl(35, 80%, 25%), #0E1D2A 50%);
+  background-image: radial-gradient(circle at 20% 80%, hsl(35, 80%, 25%), hsl(35, 80%, 15%) 50%);
 }
 
 .bg-multicolor-gradient {
