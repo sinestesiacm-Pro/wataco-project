@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -28,7 +27,7 @@ const hotelsByCategory = {
 };
 
 const HotelCard = ({ hotel }: { hotel: typeof hotelsByCategory.Hoteles[0] }) => (
-    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border-0 bg-transparent flex flex-col w-full">
+    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-white/10 backdrop-blur-md border-0 flex flex-col w-full">
         <div className="overflow-hidden relative h-80 rounded-2xl">
           <Image src={hotel.image} data-ai-hint={hotel.hint} alt={hotel.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
@@ -54,12 +53,12 @@ export function RecommendedHotels() {
   return (
     <div className="space-y-8 mt-8">
       <div className="text-center">
-        <h2 className="text-3xl font-headline font-bold text-gray-800">Estancias Populares que te Encantarán</h2>
-        <p className="text-muted-foreground mt-2">Hoteles con excelentes valoraciones para una experiencia única.</p>
+        <h2 className="text-3xl font-headline font-bold text-white">Estancias Populares que te Encantarán</h2>
+        <p className="text-white/80 mt-2">Hoteles con excelentes valoraciones para una experiencia única.</p>
       </div>
 
        <Tabs defaultValue="Hoteles" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 max-w-lg mx-auto bg-card/80 backdrop-blur-sm">
+        <TabsList className="grid w-full grid-cols-3 max-w-lg mx-auto bg-black/20 backdrop-blur-sm border border-white/10">
             {Object.keys(hotelsByCategory).map(category => (
                  <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
             ))}

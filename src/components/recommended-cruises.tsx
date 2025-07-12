@@ -1,10 +1,9 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Ship } from 'lucide-react';
 import Link from 'next/link';
-import { Card, CardContent } from './ui/card';
+import { Card } from './ui/card';
 
 const recommendedCruises = [
   { id: 'caribbean-1', name: 'Caribe Occidental', ship: 'Symphony of the Seas', duration: '7 Noches', image: 'https://images.unsplash.com/photo-1678377402066-f09f89c267d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjcnVpc2UlMjBzaGlwJTIwY2FyaWJiZWFufGVufDB8fHx8MTc1MjA4NDA0OHww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'cruise ship caribbean' },
@@ -15,7 +14,7 @@ const recommendedCruises = [
 ];
 
 const CruiseCard = ({ cruise }: { cruise: typeof recommendedCruises[0] }) => (
-    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border-0 bg-transparent flex flex-col w-full">
+    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-white/10 backdrop-blur-md border-0 flex flex-col w-full">
         <div className="overflow-hidden relative h-80 rounded-2xl">
           <Image src={cruise.image} data-ai-hint={cruise.hint} alt={cruise.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
@@ -41,8 +40,8 @@ export function RecommendedCruises() {
   return (
     <div className="space-y-8 mt-8">
       <div className="text-center">
-        <h2 className="text-3xl font-headline font-bold text-gray-800">Cruceros de Ensueño</h2>
-        <p className="text-muted-foreground mt-2">Explora el mundo desde el mar con estas rutas espectaculares.</p>
+        <h2 className="text-3xl font-headline font-bold text-white">Cruceros de Ensueño</h2>
+        <p className="text-white/80 mt-2">Explora el mundo desde el mar con estas rutas espectaculares.</p>
       </div>
        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {recommendedCruises.map((cruise, index) => (

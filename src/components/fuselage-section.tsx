@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, memo } from 'react';
@@ -11,13 +10,10 @@ interface FuselageSectionProps {
   subtitle: string;
 }
 
-// This component is defined OUTSIDE the parent component.
-// This ensures React treats it as a stable component type and doesn't remount it on every render.
 const BackgroundCarousel = ({ images }: { images: string[] }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    // When the images change, reset the index to 0.
     setCurrentImageIndex(0);
     
     if (images.length > 1) {
@@ -38,7 +34,7 @@ const BackgroundCarousel = ({ images }: { images: string[] }) => {
           alt={`Travel background ${index + 1}`}
           fill
           className={cn(
-            'hero-background-image',
+            'hero-background-image filter blur-[5px]', // Added subtle blur
             index === currentImageIndex ? 'active' : ''
           )}
           style={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -51,7 +47,6 @@ const BackgroundCarousel = ({ images }: { images: string[] }) => {
   );
 };
 
-// React.memo is applied as a best practice to prevent re-renders if the props haven't changed.
 const FuselageSectionComponent = ({ images, title, subtitle }: FuselageSectionProps) => {
   return (
     <section className="relative w-full min-h-[550px] sm:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">

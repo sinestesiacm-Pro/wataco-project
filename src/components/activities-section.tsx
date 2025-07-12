@@ -16,12 +16,12 @@ export function ActivitiesSection() {
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
-        <h2 className="text-3xl font-headline font-bold text-gray-800">Actividades Inolvidables</h2>
-        <p className="text-muted-foreground mt-2">Reserva tours, atracciones y experiencias únicas para tu viaje.</p>
+        <h2 className="text-3xl font-headline font-bold text-white">Actividades Inolvidables</h2>
+        <p className="text-white/80 mt-2">Reserva tours, atracciones y experiencias únicas para tu viaje.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {activities.map((activity, index) => (
-          <Card key={index} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border flex flex-col bg-card">
+          <Card key={index} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-white/10 backdrop-blur-md border-0 flex flex-col">
             <div className="overflow-hidden relative">
               <Image src={activity.image} data-ai-hint={activity.hint} alt={activity.name} width={400} height={300} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-all duration-300 group-hover:backdrop-blur-sm" />
@@ -30,7 +30,7 @@ export function ActivitiesSection() {
               </div>
             </div>
             <CardContent className="p-4 flex flex-col flex-grow">
-              <p className="text-sm text-muted-foreground mb-4 flex-grow">{activity.description}</p>
+              <p className="text-sm text-white/80 mb-4 flex-grow">{activity.description}</p>
               <Button asChild variant="secondary" className="w-full">
                 <Link href={`/activities/${activity.id}`}>
                     <Zap className="mr-2 h-4 w-4" />

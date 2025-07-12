@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Plane, BedDouble, Zap, Luggage, Ship, Users, Home } from 'lucide-react';
+import { Plane, BedDouble, Zap, Luggage, Ship, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -14,7 +14,10 @@ export function BottomNavbar() {
   const activeTab = searchParams.get('tab') || 'Flights';
 
   const handleTabClick = (tab: string) => {
-    router.push(`/?tab=${tab}`);
+    // We create a new URLSearchParams object to preserve other query params if any
+    const params = new URLSearchParams(window.location.search);
+    params.set('tab', tab);
+    router.push(`?${params.toString()}`);
   };
 
   const tabsConfig = [

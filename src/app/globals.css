@@ -5,19 +5,19 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%; /* #F5F7FA */
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 211 100% 50%; /* Azul #007BFF */
+    --background: 220 20% 97%; /* #F5F7FA -> Fallback, no se usará */
+    --foreground: 210 40% 98%; /* Blanco para texto */
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 211 100% 50%; /* Azul #007BFF -> Se usará el nuevo #1C88FF */
     --primary-foreground: 0 0% 100%;
     --secondary: 240 5% 96%;
     --secondary-foreground: 240 6% 10%;
-    --muted: 240 5% 90%;
-    --muted-foreground: 240 4% 46%;
-    --accent: 180 82% 45%; /* Cian #14B8A6 */
+    --muted: 217.2 32.6% 22.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 28 100% 50%; /* Naranja #FF7A00 */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -25,7 +25,7 @@
     --input: 220 13% 88%;
     --ring: 211 100% 50%;
     --radius: 1.25rem;
-    --success: 145 63% 42%; /* Verde #28A745 */
+    --success: 147 67% 43%; /* Verde #19C37D */
     --success-foreground: 0 0% 100%;
     --tertiary: 145 63% 49%;
     --tertiary-foreground: 0 0% 100%;
@@ -44,7 +44,7 @@
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 22.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 180 82% 45%;
+    --accent: 28 100% 50%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -52,7 +52,7 @@
     --input: 217.2 32.6% 27.5%;
     --ring: 211 100% 50%;
     --radius: 1.25rem;
-    --success: 145 63% 42%;
+    --success: 147 67% 43%;
     --success-foreground: 0 0% 100%;
     --tertiary: 145 63% 49%;
     --tertiary-foreground: 0 0% 100%;
@@ -64,9 +64,24 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: #0C2534; /* Fondo oscuro base */
   }
 }
+
+.background-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-color: #0C2534;
+    background-image: radial-gradient(circle at center, #1A3E52 0%, #0C2534 70%, #050D14 100%);
+    filter: blur(30px);
+    transform: scale(1.1); /* Evita bordes duros del blur */
+}
+
 
 /* Hero Section Styling */
 .hero-section {
@@ -97,7 +112,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background: linear-gradient(to top, rgba(12, 37, 52, 0.8) 0%, transparent 50%), linear-gradient(to bottom, rgba(12, 37, 52, 0.8) 0%, transparent 50%);
     z-index: 2;
 }
 
@@ -114,7 +129,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 3.5em;
     color: #FFFFFF;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     margin-bottom: 10px;
     line-height: 1.1;
     font-weight: 700;
@@ -124,7 +139,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 1.2em;
     color: #FFFFFF;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
     margin-bottom: 30px;
     max-width: 700px;
     margin-left: auto;

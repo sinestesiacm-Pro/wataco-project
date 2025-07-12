@@ -82,28 +82,28 @@ export function TestimonialsSection() {
             />
         ))}
         <div 
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10"
+            className="absolute inset-0 bg-[#0C2534]/80 backdrop-blur-sm z-10"
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
             <div className="text-center mb-12">
-                <h2 className="text-3xl font-headline font-bold text-gray-800">Lo que dicen nuestros viajeros</h2>
-                <p className="text-muted-foreground mt-2">Historias reales de aventuras inolvidables.</p>
+                <h2 className="text-3xl font-headline font-bold text-white">Lo que dicen nuestros viajeros</h2>
+                <p className="text-white/80 mt-2">Historias reales de aventuras inolvidables.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
-                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-card/95 backdrop-blur-sm">
-                    <CardContent className="p-6 flex flex-col flex-grow">
+                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white/10 backdrop-blur-md border-white/20">
+                    <CardContent className="p-6 flex flex-col flex-grow text-left">
                     <div className="flex items-center mb-4">
                         <Avatar className="h-14 w-14 mr-4 border-2 border-primary/50">
                         <AvatarImage src={testimonial.avatar} data-ai-hint={testimonial.hint} alt={testimonial.name} />
                         <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
-                        <h3 className="font-bold font-headline text-lg">{testimonial.name}</h3>
-                        <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                        <h3 className="font-bold font-headline text-lg text-white">{testimonial.name}</h3>
+                        <p className="text-sm text-white/70">{testimonial.location}</p>
                         </div>
                     </div>
-                    <blockquote className="text-muted-foreground italic flex-grow mb-4">"{testimonial.text}"</blockquote>
+                    <blockquote className="text-white/80 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
                     {renderStars(testimonial.rating)}
                     </CardContent>
                 </Card>

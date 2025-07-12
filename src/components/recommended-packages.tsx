@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,7 @@ const recommendedPackages = [
 ];
 
 const PackageCard = ({ pkg }: { pkg: typeof recommendedPackages[0] }) => (
-    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border-0 bg-transparent flex flex-col w-full">
+    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-white/10 backdrop-blur-md border-0 flex flex-col w-full">
         <div className="overflow-hidden relative h-80 rounded-2xl">
           <Image src={pkg.image} data-ai-hint={pkg.hint} alt={pkg.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
@@ -38,8 +37,8 @@ export function RecommendedPackages() {
   return (
     <div className="space-y-8 mt-8">
       <div className="text-center">
-        <h2 className="text-3xl font-headline font-bold text-gray-800">Paquetes Destacados</h2>
-        <p className="text-muted-foreground mt-2">Reserva tu Vuelo + Hotel y ahorra en tu próxima gran aventura.</p>
+        <h2 className="text-3xl font-headline font-bold text-white">Paquetes Destacados</h2>
+        <p className="text-white/80 mt-2">Reserva tu Vuelo + Hotel y ahorra en tu próxima gran aventura.</p>
       </div>
        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {recommendedPackages.map((pkg, index) => (

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -33,7 +32,7 @@ export function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex-shrink-0 flex items-center">
@@ -44,7 +43,7 @@ export function Header() {
           
           {/* Desktop Tabs */}
           <div className="flex-1 min-w-0 px-2 sm:px-4 hidden md:block">
-            <nav className="flex items-center justify-center space-x-1 bg-card/50 p-1 rounded-full border w-max mx-auto">
+            <nav className="flex items-center justify-center space-x-1 bg-black/20 p-1 rounded-full border border-white/10 w-max mx-auto">
               {tabsConfig.map(({ id, label, icon: Icon }) => (
                 <TabButton
                   key={id}
@@ -61,9 +60,9 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full hover:bg-primary/10 group transition-all duration-300 hidden sm:inline-flex"
+              className="rounded-full hover:bg-white/10 group transition-all duration-300 hidden sm:inline-flex"
             >
-              <Search className="h-5 w-5 text-foreground/70 group-hover:text-primary group-hover:scale-110 transition-transform" />
+              <Search className="h-5 w-5 text-white/70 group-hover:text-white group-hover:scale-110 transition-transform" />
               <span className="sr-only">Buscar</span>
             </Button>
             {user ? (
@@ -91,8 +90,8 @@ const TabButton = ({ label, icon, isActive, onClick }: { label: string, icon: Re
       className={cn(
         "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap",
         isActive
-          ? "bg-primary text-primary-foreground shadow-lg"
-          : "bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground"
+          ? "bg-blue-500 text-white shadow-lg"
+          : "bg-transparent text-white/80 hover:bg-white/10 hover:text-white"
       )}
     >
       {icon}

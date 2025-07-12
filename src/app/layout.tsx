@@ -25,8 +25,8 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="icon" href="https://i.ibb.co/jK8GBnB/Chat-GPT-Image-9-lug-2025-14-16-37-removebg-preview.png" type="image/png" />
       </head>
-      <body className="font-body antialiased bg-background">
-        <div className="fixed inset-0 z-[-1] bg-gradient-radial from-cyan-100/60 via-sky-200/50 to-blue-300/60 filter blur-[150px]" />
+      <body className="font-body antialiased">
+        <div className="background-gradient" />
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <Header />
