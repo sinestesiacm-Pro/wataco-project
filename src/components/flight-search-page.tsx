@@ -220,7 +220,7 @@ export default function FlightSearchPage() {
         <Popover open={!!activeInput} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
           <div className="space-y-4">
              <PopoverTrigger asChild>
-                <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
                     <div className="flex items-center w-full">
                         <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
                         <div>
@@ -231,7 +231,7 @@ export default function FlightSearchPage() {
                 </Button>
             </PopoverTrigger>
              <PopoverTrigger asChild>
-                <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
                      <div className="flex items-center w-full">
                         <MapPin className="h-6 w-6 mr-4 text-tertiary" />
                         <div>
@@ -251,7 +251,7 @@ export default function FlightSearchPage() {
         
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>
-              <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+              <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
                   <div className="flex items-center w-full">
                       <CalendarIcon className="h-6 w-6 mr-4 text-white" />
                       <div>
@@ -285,14 +285,14 @@ export default function FlightSearchPage() {
                     disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
                 />
                 <div className="p-3 border-t">
-                    <Button onClick={() => setIsCalendarOpen(false)} className="w-full">Listo</Button>
+                    <Button type="button" onClick={() => setIsCalendarOpen(false)} className="w-full">Listo</Button>
                 </div>
             </PopoverContent>
         </Popover>
         
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
                 <div className="flex items-center w-full">
                     <Users className="h-6 w-6 mr-4 text-success" />
                     <div>
@@ -317,11 +317,11 @@ export default function FlightSearchPage() {
                       <p className="text-xs text-muted-foreground">Mayores de 12 años</p>
                   </div>
                   <div className="flex items-center gap-2">
-                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1 || adults <= infants}>
+                      <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1 || adults <= infants}>
                       <Minus className="h-4 w-4" />
                       </Button>
                       <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
+                      <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
                       <Plus className="h-4 w-4" />
                       </Button>
                   </div>
@@ -332,11 +332,11 @@ export default function FlightSearchPage() {
                       <p className="text-xs text-muted-foreground">De 2 a 11 años</p>
                   </div>
                   <div className="flex items-center gap-2">
-                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
+                      <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
                       <Minus className="h-4 w-4" />
                       </Button>
                       <span className="font-bold text-lg w-4 text-center">{children}</span>
-                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
+                      <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8}>
                       <Plus className="h-4 w-4" />
                       </Button>
                   </div>
@@ -347,11 +347,11 @@ export default function FlightSearchPage() {
                       <p className="text-xs text-muted-foreground">Menores de 2 años</p>
                   </div>
                   <div className="flex items-center gap-2">
-                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.max(0, v - 1))} disabled={infants <= 0}>
+                      <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.max(0, v - 1))} disabled={infants <= 0}>
                       <Minus className="h-4 w-4" />
                       </Button>
                       <span className="font-bold text-lg w-4 text-center">{infants}</span>
-                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8 || infants >= adults}>
+                      <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setInfants(v => Math.min(8, v + 1))} disabled={totalTravelers >= 8 || infants >= adults}>
                       <Plus className="h-4 w-4" />
                       </Button>
                   </div>

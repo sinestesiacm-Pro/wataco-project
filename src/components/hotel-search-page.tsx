@@ -180,7 +180,7 @@ export default function HotelSearchPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
 
         <div className="w-full lg:col-span-5 relative" ref={destinationRef}>
-            <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
+            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
                  <div className="flex items-center w-full">
                     <MapPin className="h-6 w-6 mr-4 text-tertiary" />
                     <div>
@@ -204,7 +204,7 @@ export default function HotelSearchPage() {
         <div className="w-full lg:col-span-3">
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
                     <div className="flex items-center w-full">
                         <CalendarIcon className="h-6 w-6 mr-4 text-white" />
                         <div>
@@ -233,7 +233,7 @@ export default function HotelSearchPage() {
         <div className="w-full lg:col-span-2">
             <Popover>
               <PopoverTrigger asChild>
-                 <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+                 <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
                     <div className="flex items-center w-full">
                         <Users className="h-6 w-6 mr-4 text-success" />
                         <div>
@@ -253,11 +253,11 @@ export default function HotelSearchPage() {
                     <div className="flex items-center justify-between">
                       <p className="font-medium">Adultos</p>
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
+                        <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
                           <Minus className="h-4 w-4" />
                         </Button>
                         <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}>
+                        <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}>
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
@@ -268,11 +268,11 @@ export default function HotelSearchPage() {
                         <p className="font-medium">Niños</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
+                        <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}>
                           <Minus className="h-4 w-4" />
                         </Button>
                         <span className="font-bold text-lg w-4 text-center">{children}</span>
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => v + 1)}>
+                        <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => v + 1)}>
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>

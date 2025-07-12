@@ -179,7 +179,7 @@ export default function PackagesSearchPage() {
     <form onSubmit={handleSearch} className="flex flex-col gap-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputGroup className='relative'>
-            <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('origin')}>
+            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('origin')}>
                 <div className="flex items-center w-full">
                     <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
                     <div>
@@ -198,7 +198,7 @@ export default function PackagesSearchPage() {
             {activeInput === 'origin' && <SuggestionsList type="origin" />}
           </InputGroup>
           <InputGroup className='relative'>
-            <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
+            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
                 <div className="flex items-center w-full">
                     <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
                     <div>
@@ -221,7 +221,7 @@ export default function PackagesSearchPage() {
           <InputGroup>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
                     <div className="flex items-center w-full">
                         <CalendarIcon className="h-6 w-6 mr-4 text-white" />
                         <div>
@@ -249,7 +249,7 @@ export default function PackagesSearchPage() {
           <InputGroup>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
                     <div className="flex items-center w-full">
                         <Users className="h-6 w-6 mr-4 text-success" />
                         <div>
@@ -269,11 +269,11 @@ export default function PackagesSearchPage() {
                     <div className="flex items-center justify-between">
                       <p className="font-medium">Adultos</p>
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
+                        <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
                           <Minus className="h-4 w-4" />
                         </Button>
                         <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                        <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)} disabled={adults >= 8}>
+                        <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)} disabled={adults >= 8}>
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
