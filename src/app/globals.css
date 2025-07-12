@@ -73,8 +73,7 @@
     @apply border-border;
   }
   body {
-    background-color: #0E1D2A; /* Fallback dark blue */
-    @apply text-foreground;
+    @apply bg-background text-foreground;
   }
 }
 

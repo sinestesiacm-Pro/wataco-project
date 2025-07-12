@@ -97,30 +97,32 @@ export function HomePageContent() {
     }
 
     return (
-        <div className={cn('w-full min-h-[calc(100vh)] transition-all duration-500 background-pan-animation pt-20 pb-20 md:pb-0', getBackgroundClass())}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-              <div className="hidden md:flex justify-center mb-8">
-                <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
-                  <TabsList className="bg-card/30 backdrop-blur-lg border border-white/10">
-                    {TABS.map((item) => (
-                      <TabsTrigger key={item.id} value={item.id} className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                        <item.icon className="h-4 w-4" />
-                        {item.label}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
-              </div>
-              {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
-            </div>
-      
-            <div className="pt-16 pb-16">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                     <RecommendedContent tab={tab} />
+        <div className={cn('w-full min-h-screen transition-all duration-500 background-pan-animation', getBackgroundClass())}>
+            <div className="pt-20 pb-20 md:pb-0">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+                  <div className="hidden md:flex justify-center mb-8">
+                    <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
+                      <TabsList className="bg-card/30 backdrop-blur-lg border border-white/10">
+                        {TABS.map((item) => (
+                          <TabsTrigger key={item.id} value={item.id} className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                            <item.icon className="h-4 w-4" />
+                            {item.label}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                    </Tabs>
+                  </div>
+                  {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
                 </div>
-            </div>
+          
+                <div className="pt-16 pb-16">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                         <RecommendedContent tab={tab} />
+                    </div>
+                </div>
 
-            <TestimonialsSection />
+                <TestimonialsSection />
+            </div>
         </div>
     )
 }
