@@ -97,7 +97,7 @@ export function HomePageContent() {
     }
 
     return (
-        <div className={cn('w-full min-h-full transition-all duration-500 background-pan-animation', getBackgroundClass())}>
+        <div className={cn('w-full min-h-[calc(100vh)] transition-all duration-500 background-pan-animation pt-20 pb-20 md:pb-0', getBackgroundClass())}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
               <div className="hidden md:flex justify-center mb-8">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">

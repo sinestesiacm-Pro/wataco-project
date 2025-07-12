@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <AuthProvider>
             <Header />
-            <main className="flex-grow pt-20 pb-20 md:pb-0"> 
+            <main className="flex-grow"> 
                 {children}
             </main>
             <Footer />
