@@ -4,7 +4,7 @@ import { Icons } from '@/components/icons';
 
 export function Footer() {
   return (
-    <footer className="bg-transparent backdrop-blur-sm border-t border-white/10 mt-16 shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)]">
+    <footer className="bg-black/50 backdrop-blur-sm border-t border-white/10 mt-16 shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)]">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="flex items-center justify-center md:justify-start">
