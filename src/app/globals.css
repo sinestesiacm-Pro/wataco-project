@@ -131,15 +131,6 @@
   cursor: pointer;
 }
 
-.airplane-window:hover {
-  transform: scale(1.03);
-  box-shadow: 
-    0 15px 35px rgba(0,0,0,0.3),
-    inset 0 0 20px rgba(0,0,0,0.5),
-    inset 0 2px 2px hsl(210, 15%, 100%),
-    inset 0 -2px 2px hsl(210, 10%, 80%);
-}
-
 .airplane-window-inner-bevel {
   position: absolute;
   top: 8%;
@@ -171,7 +162,7 @@
   transition: transform 0.4s ease;
 }
 
-.airplane-window:hover .airplane-window-view img {
+.group.is-hovered .airplane-window-view img {
   transform: scale(1.1);
 }
 
@@ -180,34 +171,19 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 30%; /* Start partially open */
-  background: linear-gradient(to bottom, hsl(200, 15%, 98%) 0%, hsl(200, 15%, 88%) 100%); /* White plastic shade texture */
-  border-bottom: 1px solid hsl(200, 15%, 70%);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  /* The double radius creates a more realistic curve for the top part */
-  border-radius: 35% 35% 20px 20px / 40% 40% 20px 20px;
-  transition: transform 0.4s ease-in-out;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 35% / 40%;
+  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
   pointer-events: auto;
+  opacity: 1;
 }
 
-.airplane-window:hover .airplane-window-shade {
-  transform: translateY(-100%);
-}
-
-/* Handle on the shade */
-.airplane-window-shade::after {
-  content: '';
-  display: block;
-  width: 2.5rem;
-  height: 0.5rem;
-  background: linear-gradient(hsl(200, 10%, 70%), hsl(200, 10%, 60%)); /* 3D handle */
-  border: 1px solid hsl(200, 10%, 55%);
-  border-radius: 4px;
-  opacity: 0.8;
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
+.group.is-hovered .airplane-window-shade {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .airplane-window-content {
@@ -227,6 +203,12 @@
   height: 100%;
   border-radius: 35% / 40%;
   box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.group.is-hovered .airplane-window-content {
+    opacity: 1;
 }
     
 .scrollbar-hide::-webkit-scrollbar {

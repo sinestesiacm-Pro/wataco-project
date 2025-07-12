@@ -8,6 +8,7 @@ import { ArrowRight, Plane } from 'lucide-react';
 import { addMonths, addDays, format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 // Estas rutas se pueden obtener desde Firestore o un CMS en el futuro.
 const flightRoutes = [
@@ -16,7 +17,7 @@ const flightRoutes = [
   { origin: 'PAR', originCity: 'París', destination: 'CTG', destinationCity: 'Cartagena', hint: 'cartagena colombia', image: 'https://images.unsplash.com/photo-1680579178966-8019436998e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYXJ0YWdlbmElMjBjb2xvbWJpYXxlbnwwfHx8fDE3NTIwNjc4MDB8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '820' },
 ];
 
-const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
+const DestinationCard = ({ route, isHovered }: { route: typeof flightRoutes[0], isHovered: boolean }) => {
     const departureDateObj = addMonths(new Date(), 2);
     const returnDateObj = addDays(departureDateObj, 7);
     
@@ -26,7 +27,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <div className="flex-shrink-0 w-[280px]">
+        <div className={cn("flex-shrink-0 w-[280px] group/card", { 'is-hovered': isHovered })}>
             <div className="airplane-window">
                 <div className="airplane-window-inner-bevel">
                     <div className="airplane-window-view">
@@ -37,7 +38,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                             fill 
                             className="object-cover"
                         />
-                        <div className="airplane-window-shade"></div>
+                         <div className="airplane-window-shade"></div>
                         <div className="airplane-window-content">
                             <div>
                                 <h3 className="text-xl font-bold font-headline text-white">{route.originCity} <ArrowRight className="inline-block h-5 w-5 mx-1" /> {route.destinationCity}</h3>
@@ -62,6 +63,8 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
 }
 
 export function RecommendedDestinations() {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
@@ -69,9 +72,13 @@ export function RecommendedDestinations() {
         <p className="text-lg text-muted-foreground mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
       </div>
       
-      <div className="flex justify-center space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4">
+      <div 
+        className="flex justify-center space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {flightRoutes.map((route) => (
-            <DestinationCard key={`${route.origin}-${route.destination}`} route={route} />
+            <DestinationCard key={`${route.origin}-${route.destination}`} route={route} isHovered={isHovered} />
         ))}
       </div>
     </div>
