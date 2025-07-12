@@ -183,7 +183,6 @@
   bottom: 0;
   border-radius: 35% / 40%;
   overflow: hidden;
-  z-index: 2;
   pointer-events: none;
 }
 .airplane-window-shade {
