@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -12,7 +13,7 @@ const activities = [
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
-    <Card className="bg-black/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-black/20">
+    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-white/20">
         <div className="relative w-28 h-28 flex-shrink-0">
             <Image 
                 src={activity.image} 

@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -50,7 +51,7 @@ export function SocialFeedSection() {
         </div>
         <div className="space-y-8">
           {feedItems.map((item, index) => (
-            <Card key={index} className="rounded-3xl bg-black/10 backdrop-blur-xl border border-white/20 text-white shadow-lg">
+            <Card key={index} className="rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3 mb-4">
                   <Avatar>
