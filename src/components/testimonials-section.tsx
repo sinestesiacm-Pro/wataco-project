@@ -49,7 +49,7 @@ const renderStars = (rating: number) => {
 export function TestimonialsSection() {
 
   return (
-    <section className="py-16 text-center bg-card">
+    <section className="py-16 text-center bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-headline font-bold">Lo que dicen nuestros viajeros</h2>
@@ -57,7 +57,7 @@ export function TestimonialsSection() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
-                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-background border-border">
+                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-black/10 backdrop-blur-xl border border-white/20">
                     <CardContent className="p-6 flex flex-col flex-grow text-left">
                     <div className="flex items-center mb-4">
                         <Avatar className="h-14 w-14 mr-4 border-2 border-primary">

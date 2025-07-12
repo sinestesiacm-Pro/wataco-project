@@ -24,7 +24,7 @@ const feedItems = [
   },
   {
     user: { name: 'Ana M.', avatar: 'https://images.unsplash.com/photo-1714415182234-0672970be61a?w=100' },
-    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbb563?fit=crop&w=1920&q=80',
+    image: 'https://placehold.co/1920x1080.png',
     hint: 'luxury hotel',
     caption: 'Encontré el hotel perfecto en los Alpes suizos gracias a Be On Trip. Las vistas son espectaculares.',
     likes: 98,
@@ -32,7 +32,7 @@ const feedItems = [
   },
   {
     user: { name: 'David S.', avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100' },
-    image: 'https://images.unsplash.com/photo-1528543606781-df6e6807b3d0?fit=crop&w=1920&q=80',
+    image: 'https://placehold.co/1920x1080.png',
     hint: 'road trip',
     caption: '¡Aventura en la carretera por la costa de California! Cada curva es una nueva postal. 🚗💨',
     likes: 215,
@@ -46,7 +46,7 @@ export function SocialFeedSection() {
       <div className="max-w-xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-8">
           {feedItems.map((item, index) => (
-            <Card key={index} className="rounded-3xl bg-card text-foreground shadow-lg border-0">
+            <Card key={index} className="rounded-3xl bg-black/10 backdrop-blur-xl border border-white/20 text-foreground shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3 mb-4">
                   <Avatar>

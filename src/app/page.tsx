@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 
 export default function Home() {
   return (
-    <div className="bg-background">
+    <div className="bg-transparent">
       <Suspense>
         <HomePageContent />
       </Suspense>

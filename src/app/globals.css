@@ -81,8 +81,11 @@
   0% {
     background: #0E1D2A; /* Prussian Blue */
   }
-  50% {
-    background: #008080; /* Blue Teal */
+  33% {
+    background: #004d40; /* Dark Teal */
+  }
+  66% {
+    background: #4a2511; /* Dark Orange */
   }
   100% {
     background: #0E1D2A; /* Return to Prussian Blue */
@@ -90,8 +93,8 @@
 }
 
 .background-gradient {
-  background-size: 400% 400%;
-  animation: animate-background 20s ease-in-out infinite;
+  background-size: 100% 100%;
+  animation: animate-background 30s ease-in-out infinite;
 }
 
 
