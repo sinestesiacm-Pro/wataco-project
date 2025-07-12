@@ -77,6 +77,19 @@
   }
 }
 
+@keyframes animate-multicolor {
+  0%, 100% { background-color: hsl(210, 80%, 15%); } /* Prussian Blue */
+  50% { background-color: hsl(180, 100%, 25%); } /* Blue Teal */
+}
+
+.bg-multicolor-gradient {
+  animation: animate-multicolor 30s ease-in-out infinite;
+}
+
+.background-blur-overlay {
+  filter: blur(50px);
+}
+
 @keyframes animate-bg-pan {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -102,20 +115,6 @@
 }
 .bg-activities-gradient {
   background-image: linear-gradient(to top, #00506D 0%, #00A3D4 100%);
-}
-
-
-@keyframes animate-multicolor {
-  0%, 100% { background-color: hsl(210, 80%, 15%); } /* Prussian Blue */
-  50% { background-color: hsl(180, 100%, 25%); } /* Blue Teal */
-}
-
-.bg-multicolor-gradient {
-  animation: animate-multicolor 30s ease-in-out infinite;
-}
-
-.background-blur-overlay {
-  filter: blur(50px);
 }
 
 /* Airplane Window Style - REALISTIC */
@@ -146,7 +145,6 @@
     inset 3px 3px 6px rgba(0,0,0,0.2), /* Inner shadow for depth */
     inset -2px -2px 5px hsla(0, 0%, 100%, 0.1); /* Inner highlight for 3D effect */
   padding: 2%;
-  z-index: -1;
 }
 
 .airplane-window-view {
@@ -163,6 +161,7 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
+  z-index: 1;
 }
 
 .group.is-hovered .airplane-window-view img {
@@ -182,6 +181,7 @@
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
   pointer-events: auto;
   opacity: 1;
+  z-index: 2;
 }
 
 .group.is-hovered .airplane-window-shade {
@@ -202,7 +202,7 @@
   text-align: center;
   color: white;
   background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 40%, transparent 100%);
-  z-index: 1;
+  z-index: 3;
   height: 100%;
   border-radius: 35% / 40%;
   box-sizing: border-box;

@@ -37,7 +37,7 @@ const DestinationCard = ({ route, isHovered }: { route: typeof flightRoutes[0], 
                             fill 
                             className="object-cover"
                         />
-                         <div className="airplane-window-shade"></div>
+                        <div className="airplane-window-shade"></div>
                         <div className="airplane-window-content">
                             <div>
                                 <h3 className="text-xl font-bold font-headline text-white">{route.originCity} <ArrowRight className="inline-block h-5 w-5 mx-1" /> {route.destinationCity}</h3>
