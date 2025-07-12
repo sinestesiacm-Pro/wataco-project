@@ -16,6 +16,7 @@ import { SocialFeedSection } from './social-feed-section';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { Plane, BedDouble, Luggage, Ship, Zap, Users } from 'lucide-react';
+import { Footer } from './footer';
 
 const TABS = [
   { id: 'Flights', label: 'Vuelos', icon: Plane },
@@ -97,7 +98,7 @@ export function HomePageContent() {
     }
 
     return (
-        <div className={cn('w-full flex flex-col min-h-full transition-all duration-500 background-pan-animation', getBackgroundClass())}>
+        <div className={cn('w-full flex flex-col flex-grow', getBackgroundClass())}>
             <div className="pt-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                   <div className="hidden md:flex justify-center mb-8">
@@ -122,6 +123,9 @@ export function HomePageContent() {
                 </div>
 
                 <TestimonialsSection />
+            </div>
+            <div className="mt-auto">
+               <Footer />
             </div>
         </div>
     )

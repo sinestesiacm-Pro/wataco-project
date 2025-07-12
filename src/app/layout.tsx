@@ -1,7 +1,6 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
-import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { AuthProvider } from '@/contexts/auth-context';
 import { ChatWidget } from '@/components/chat-widget';
@@ -31,11 +30,8 @@ export default function RootLayout({
       <body className="font-body antialiased flex flex-col min-h-screen">
         <AuthProvider>
             <Header />
-            <main className="flex flex-col flex-grow">
-              <div className="flex-grow">
+            <main className="flex-grow flex flex-col">
                 {children}
-              </div>
-              <Footer />
             </main>
             <Toaster />
             <ChatWidget />
