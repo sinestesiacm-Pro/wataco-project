@@ -112,6 +112,9 @@
 
 .bg-multicolor-gradient {
   animation: animate-multicolor 30s ease-in-out infinite;
+}
+
+.background-blur-overlay {
   filter: blur(50px);
 }
 
