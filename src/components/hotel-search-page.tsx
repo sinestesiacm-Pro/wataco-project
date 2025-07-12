@@ -272,7 +272,7 @@ export default function HotelSearchPage() {
         </div>
 
         <div className="w-full lg:col-span-2">
-          <Button type="submit" size="lg" className="w-full h-full font-bold bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground rounded-2xl shadow-md hover:shadow-lg transition-all">
+          <Button type="submit" size="lg" className="w-full h-14 font-bold bg-tertiary hover:bg-tertiary/90 text-tertiary-foreground rounded-2xl shadow-md hover:shadow-lg transition-all">
               <BedDouble className="mr-2 h-5 w-5" />
               Buscar Hoteles
           </Button>
