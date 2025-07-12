@@ -181,7 +181,7 @@ export default function PackagesSearchPage() {
           <InputGroup className='relative' ref={activeInput === 'origin' ? suggestionsRef : null}>
             <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('origin')}>
                 <div className="flex items-center w-full">
-                    <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
+                    <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
                     <div>
                         <p className="text-xs text-white/70">Desde</p>
                         <Input 
@@ -200,7 +200,7 @@ export default function PackagesSearchPage() {
           <InputGroup className='relative' ref={activeInput === 'destination' ? suggestionsRef : null}>
             <Button variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
                 <div className="flex items-center w-full">
-                    <PlaneLanding className="h-6 w-6 mr-4 text-tertiary" />
+                    <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
                     <div>
                         <p className="text-xs text-white/70">Hasta</p>
                         <Input 
