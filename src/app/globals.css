@@ -108,7 +108,7 @@
    background-image: linear-gradient(to top, #005A32 0%, #00A651 100%);
 }
 .bg-packages-gradient {
-  background-color: #FF8C00;
+  background-image: linear-gradient(to top, #D84315 0%, #FF7043 100%);
 }
 .bg-cruises-gradient {
   background-image: linear-gradient(to top, #2C004F 0%, #8A2BE2 100%);
@@ -164,7 +164,7 @@
   z-index: 1;
 }
 
-.group.is-hovered .airplane-window-view img {
+.group:hover .airplane-window-view img {
   transform: scale(1.1);
 }
 
@@ -198,7 +198,7 @@
   opacity: 0.3;
 }
 
-.group.is-hovered .airplane-window-shade {
+.group:hover .airplane-window-shade {
   transform: translateY(-100%);
 }
 
@@ -223,7 +223,7 @@
   transition: opacity 0.4s ease-in-out;
 }
 
-.group.is-hovered .airplane-window-content {
+.group:hover .airplane-window-content {
     opacity: 1;
 }
     
