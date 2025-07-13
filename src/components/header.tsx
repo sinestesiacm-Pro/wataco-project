@@ -62,7 +62,7 @@ export function Header() {
         <div className="flex items-center justify-between h-20">
           
           <div className="flex-1 flex justify-start">
-             <Button variant="ghost" size="icon" className="rounded-full bg-secondary">
+             <Button variant="ghost" size="icon" className="rounded-full bg-secondary text-white">
                 <Settings className="h-5 w-5" />
              </Button>
           </div>
@@ -72,7 +72,7 @@ export function Header() {
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
                   <TabsList className="bg-card/30 backdrop-blur-lg border border-white/10">
                     {TABS.map((item) => (
-                      <TabsTrigger key={item.id} value={item.id} className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                      <TabsTrigger key={item.id} value={item.id} className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-white">
                         <item.icon className="h-4 w-4" />
                         {item.label}
                       </TabsTrigger>
@@ -87,14 +87,14 @@ export function Header() {
             {user ? (
               <UserNav />
             ) : (
-              <Button asChild>
+              <Button asChild className="text-white">
                 <Link href="/login">
                   <LogIn className="mr-0 sm:mr-2 h-4 w-4"/>
                   <span className="hidden sm:inline">Iniciar Sesión</span>
                 </Link>
               </Button>
             )}
-            <Button variant="ghost" size="icon" className="rounded-full bg-secondary hidden sm:inline-flex">
+            <Button variant="ghost" size="icon" className="rounded-full bg-secondary text-white hidden sm:inline-flex">
                 <MapPin className="h-5 w-5" />
             </Button>
           </div>
