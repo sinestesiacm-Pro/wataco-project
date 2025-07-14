@@ -1,14 +1,13 @@
-
 'use client';
 
 import type { AmadeusHotelOffer } from '@/lib/types';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Star, MapPin, Wifi, Car, Waves, Utensils, GlassWater, Wind, Dumbbell, Sparkles, Dog, Plane, CheckCircle2, ArrowRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { HotelMapDialog } from './hotel-map-dialog';
+import { Badge } from './ui/badge';
 
 const amenityIcons: { [key: string]: LucideIcon } = {
   SWIMMING_POOL: Waves,
@@ -36,10 +35,9 @@ const renderStars = (rating: string) => {
 
 interface HotelDetailsViewProps {
   hotelOffer: AmadeusHotelOffer;
-  onSeeRooms: () => void;
 }
 
-export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewProps) {
+export function HotelDetailsView({ hotelOffer }: HotelDetailsViewProps) {
   const hotel = hotelOffer.hotel;
 
   return (
@@ -64,15 +62,15 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                         )}
                         {hotel.amenities && hotel.amenities.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-lg mb-3">Servicios del Hotel</h3>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    {hotel.amenities.map(amenity => {
+                                <h3 className="font-semibold text-lg mb-3">Servicios Populares</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {hotel.amenities.slice(0, 6).map(amenity => {
                                         const Icon = amenityIcons[amenity] || CheckCircle2;
                                         return (
-                                            <div key={amenity} className="flex items-center gap-2 text-sm">
-                                                <Icon className="h-5 w-5 text-primary" />
-                                                <span>{formatAmenity(amenity)}</span>
-                                            </div>
+                                            <Badge key={amenity} variant="secondary" className="gap-2 bg-white/20 text-white border-none">
+                                                <Icon className="h-4 w-4" />
+                                                {formatAmenity(amenity)}
+                                            </Badge>
                                         );
                                     })}
                                 </div>
@@ -89,7 +87,7 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                   <CarouselContent>
                     {hotel.media && hotel.media.length > 0 ? (
                       hotel.media.map((photo, index) => (
-                        <CarouselItem key={index} className="relative aspect-video">
+                        <CarouselItem key={index} className="relative aspect-[4/3]">
                           <Image
                               src={photo.uri}
                               alt={`${hotel.name} - ${index + 1}`}
@@ -100,7 +98,7 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                         </CarouselItem>
                       ))
                     ) : (
-                       <CarouselItem className="relative aspect-video">
+                       <CarouselItem className="relative aspect-[4/3]">
                           <Image
                               src="https://placehold.co/800x600.png"
                               alt="Placeholder hotel image"
@@ -116,13 +114,6 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
             </div>
         </div>
       </Card>
-      
-      <div className="flex justify-center mt-8">
-        <Button size="lg" onClick={onSeeRooms} className="font-bold text-lg bg-success hover:bg-success/90">
-          Ver habitaciones
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
-      </div>
     </div>
   );
 }

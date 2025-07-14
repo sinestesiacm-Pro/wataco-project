@@ -14,9 +14,11 @@ interface HotelBookingFlowProps {
   offerId: string;
   adults: number;
   children: number;
+  checkInDate: string;
+  checkOutDate: string;
 }
 
-export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlowProps) {
+export function HotelBookingFlow({ offerId, adults, children, checkInDate, checkOutDate }: HotelBookingFlowProps) {
   const [step, setStep] = useState<BookingStep>('rooms');
   const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
@@ -31,7 +33,16 @@ export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlow
       try {
         const result = await getHotelDetails({ offerId });
         if (result.success && result.data) {
-          setHotelOffer(result.data);
+          // Manually override dates in the fetched offer with the ones from the search
+          const offerWithCorrectDates = {
+            ...result.data,
+            offers: result.data.offers.map(offer => ({
+              ...offer,
+              checkInDate: checkInDate,
+              checkOutDate: checkOutDate,
+            }))
+          };
+          setHotelOffer(offerWithCorrectDates);
         } else {
           setError(result.error || 'No se pudieron cargar los detalles del hotel.');
         }
@@ -42,7 +53,7 @@ export function HotelBookingFlow({ offerId, adults, children }: HotelBookingFlow
       }
     };
     fetchDetails();
-  }, [offerId]);
+  }, [offerId, checkInDate, checkOutDate]);
 
   const handleRoomSelected = (room: Room, numRooms: number) => {
     setSelectedRoom(room);
