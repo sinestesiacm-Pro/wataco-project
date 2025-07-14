@@ -85,32 +85,28 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                 </CardContent>
             </div>
              <div className="relative min-h-[300px] lg:min-h-0">
-                <Carousel className="w-full h-full">
+                <Carousel className="w-full h-full rounded-xl overflow-hidden shadow-lg">
                   <CarouselContent>
                     {hotel.media && hotel.media.length > 0 ? (
                       hotel.media.map((photo, index) => (
-                        <CarouselItem key={index}>
-                           <div className="relative w-full h-full aspect-video lg:aspect-auto lg:h-full rounded-xl overflow-hidden shadow-lg">
-                            <Image
-                                src={photo.uri}
-                                alt={`${hotel.name} - ${index + 1}`}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 1024px) 100vw, 50vw"
-                            />
-                           </div>
+                        <CarouselItem key={index} className="relative aspect-video">
+                          <Image
+                              src={photo.uri}
+                              alt={`${hotel.name} - ${index + 1}`}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 1024px) 100vw, 50vw"
+                          />
                         </CarouselItem>
                       ))
                     ) : (
-                       <CarouselItem>
-                         <div className="relative w-full h-full aspect-video lg:aspect-auto lg:h-full rounded-xl overflow-hidden shadow-lg">
-                            <Image
-                                src="https://placehold.co/800x600.png"
-                                alt="Placeholder hotel image"
-                                fill
-                                className="object-cover"
-                            />
-                         </div>
+                       <CarouselItem className="relative aspect-video">
+                          <Image
+                              src="https://placehold.co/800x600.png"
+                              alt="Placeholder hotel image"
+                              fill
+                              className="object-cover"
+                          />
                         </CarouselItem>
                     )}
                   </CarouselContent>
