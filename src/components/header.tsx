@@ -31,6 +31,7 @@ export function Header() {
     if (pathname.startsWith('/cruises')) return 'Cruises';
     if (pathname.startsWith('/activities')) return 'Activities';
     if (pathname.startsWith('/social')) return 'Social';
+    if (pathname.startsWith('/flights/checkout') && searchParams.has('packageId')) return 'Packages';
     if (pathname.startsWith('/flights')) return 'Flights';
     return searchParams.get('tab') || 'Flights';
   };

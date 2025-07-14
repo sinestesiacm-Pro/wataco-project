@@ -31,7 +31,7 @@ const countryCodes = [
 
 const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card className={cn(isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
+        <Card className={cn(isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><User /> ¿Quién viaja?</CardTitle>
                 <CardDescription className={cn(isPackageBooking ? 'text-white/70':'')}>Ingresa los datos del pasajero principal. Deben coincidir con su documento de identidad.</CardDescription>
@@ -123,7 +123,7 @@ const ContactInfoForm = ({ isPackageBooking }: { isPackageBooking: boolean }) =>
     }
 
     return (
-        <Card className={cn(isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
+        <Card className={cn(isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Mail /> Información de Contacto</CardTitle>
                 <CardDescription className={cn(isPackageBooking ? 'text-white/70':'')}>Te enviaremos la confirmación de tu reserva a este correo.</CardDescription>
@@ -187,7 +187,7 @@ const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceCh
     }
     
     return (
-        <Card className={cn(isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
+        <Card className={cn(isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
             <CardHeader>
                 <CardTitle>Mejora tu Viaje</CardTitle>
                 <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Añade servicios adicionales para una experiencia inolvidable.</CardDescription>
@@ -221,7 +221,7 @@ const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceCh
 
 const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card className={cn(isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
+        <Card className={cn(isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><CreditCard /> Método de Pago</CardTitle>
                 <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Todas las transacciones son seguras y encriptadas.</CardDescription>
@@ -324,7 +324,7 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     const total = baseTotal + addons + extraServicesPrice;
     
     return (
-        <Card className={cn("sticky top-28 shadow-lg", isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
+        <Card className={cn("sticky top-28 shadow-lg", isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
             <CardHeader>
                 <CardTitle>Resumen del Pedido</CardTitle>
                  {pkg && <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Paquete: {pkg.title}</CardDescription>}
