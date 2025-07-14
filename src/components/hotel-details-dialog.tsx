@@ -127,11 +127,11 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
                                 <div className="text-center w-full mt-4">
                                     <div>
                                         <p className="text-xs text-muted-foreground font-body">Precio por noche desde</p>
-                                        <p className="font-bold text-4xl text-tertiary">
+                                        <p className="font-bold text-4xl text-primary">
                                         ${offer.offers?.[0]?.price?.total}
                                         </p>
                                     </div>
-                                    <p className="text-sm font-semibold text-primary animate-pulse-text my-3">¡Ya casi está listo!</p>
+                                    <p className="text-sm font-semibold text-accent animate-pulse-text my-3">¡Ya casi está listo!</p>
                                     <Button asChild size="lg" className="w-full mt-2 bg-success hover:bg-success/90 text-success-foreground font-semibold">
                                         <Link href={bookingLink}>
                                             Ver Habitaciones <ArrowRight className="ml-2 h-4 w-4"/>
