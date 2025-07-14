@@ -37,7 +37,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
     const stops = itinerary.segments.length - 1;
 
     return (
-        <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border border-white/20 bg-black/10 backdrop-blur-xl flex flex-col sm:flex-row text-white">
+        <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border border-white/20 bg-black/20 backdrop-blur-xl flex flex-col sm:flex-row text-white">
             {/* Main boarding pass section */}
             <div className="flex-grow p-4 md:p-6">
                 <div className="flex items-start gap-4">
@@ -127,7 +127,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
             ))}
           </div>
       ) : (
-        <Card className="bg-black/10 backdrop-blur-xl border border-white/20">
+        <Card className="bg-black/20 backdrop-blur-xl border border-white/20">
             <CardContent className="pt-6 text-center text-white/70">
                 <p>No hay vuelos que coincidan con tus filtros.</p>
                 <p>Intenta ajustar o eliminar algunos filtros para ver más resultados.</p>

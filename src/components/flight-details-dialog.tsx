@@ -36,13 +36,13 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
     const departureDate = formatDate(parseISO(firstSegment.departure.at), "d MMM, yyyy", { locale: es });
 
     return (
-        <Card className="bg-card/80 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10">
+        <Card className="bg-white/10 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10 text-white">
             <div className="flex">
                 <div className="flex-grow p-4 sm:p-6">
                     <div className="flex justify-between items-center mb-4">
                         <div>
                             <p className="font-headline font-bold text-xl text-primary">{title}</p>
-                            <p className="text-sm font-semibold text-muted-foreground">{departureDate}</p>
+                            <p className="text-sm font-semibold text-white/80">{departureDate}</p>
                         </div>
                         <Image
                             src={`https://images.kiwi.com/airlines/64/${firstSegment.carrierCode}.png`}
@@ -58,7 +58,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                             <p className="text-2xl sm:text-4xl font-bold font-headline">{firstSegment.departure.iataCode}</p>
                             <p className="text-base sm:text-lg font-semibold">{formatTime(firstSegment.departure.at)}</p>
                         </div>
-                        <div className="flex flex-col items-center text-muted-foreground px-2">
+                        <div className="flex flex-col items-center text-white/70 px-2">
                             <p className="text-sm font-semibold">{formatDuration(itinerary.duration)}</p>
                             <Plane className="w-6 h-6 my-1 text-primary" />
                              <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
@@ -68,12 +68,12 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                              <p className="text-base sm:text-lg font-semibold">{formatTime(lastSegment.arrival.at)}</p>
                         </div>
                     </div>
-                     <div className="text-xs text-muted-foreground text-center">
+                     <div className="text-xs text-white/70 text-center">
                         Operado por {airlineName}
                     </div>
                 </div>
 
-                <div className="bg-muted/40 w-24 sm:w-32 flex-shrink-0 border-l-2 border-dashed border-border flex-col items-center justify-center p-2 sm:p-4 hidden sm:flex">
+                <div className="bg-black/20 w-24 sm:w-32 flex-shrink-0 border-l-2 border-dashed border-border flex-col items-center justify-center p-2 sm:p-4 hidden sm:flex">
                      <p className="font-headline font-bold text-primary text-sm mb-2 text-center animate-pulse-text">Casi Listo</p>
                      <div className="bg-white p-1 rounded-md shadow-inner">
                         <QrCode className="w-12 h-12 sm:w-16 sm:h-16 text-black" />
@@ -115,14 +115,14 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
     const totalPrice = basePrice + addonsPrice;
 
     return (
-        <Card className="bg-card/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10 flex flex-col h-full">
+        <Card className="bg-white/10 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10 flex flex-col h-full text-white">
             <h3 className="font-headline font-bold text-xl text-primary mb-4">Elige tu Tarifa</h3>
             <div className="grid grid-cols-3 gap-2 mb-4">
                 {fareOptions.map(fare => (
-                    <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/10" : "bg-card hover:bg-muted")}>
-                        <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-muted-foreground")} />
+                    <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/20" : "bg-black/20 hover:bg-black/30")}>
+                        <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-white/70")} />
                         <p className="font-semibold text-sm">{fare.name}</p>
-                        <p className="text-xs text-muted-foreground">+${fare.priceModifier}</p>
+                        <p className="text-xs text-white/70">+${fare.priceModifier}</p>
                     </button>
                 ))}
             </div>
@@ -140,9 +140,9 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
             
             <div className="flex-grow"></div>
 
-            <Separator className="my-4"/>
+            <Separator className="my-4 bg-white/20"/>
 
-            <p className="text-sm text-muted-foreground">Precio total</p>
+            <p className="text-sm text-white/70">Precio total</p>
             <p className="text-3xl sm:text-4xl font-bold text-accent my-2">${totalPrice.toFixed(2)}</p>
             
             <DialogClose asChild>
@@ -182,7 +182,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl p-0 border-0 shadow-2xl rounded-3xl">
-          <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0">
+          <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0 text-white">
             <DialogTitle className="font-headline text-2xl sm:text-3xl">Detalles de tu Selección</DialogTitle>
           </DialogHeader>
           

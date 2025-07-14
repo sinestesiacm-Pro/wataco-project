@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';
@@ -34,10 +35,10 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
     const destinationCity = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
 
     return (
-        <Card className="bg-card/80">
+        <Card className="bg-card/80 text-white border-white/20">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
                 <CardTitle className="text-xl font-headline">{title}</CardTitle>
-                <Button variant="link" onClick={onChangeClick}>Cambiar vuelo</Button>
+                <Button variant="link" onClick={onChangeClick} className="text-primary">Cambiar vuelo</Button>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="flex items-center gap-4">
@@ -50,26 +51,26 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
                     />
                     <div>
                         <p className="font-semibold">{formatDate(firstSegment.departure.at)}</p>
-                        <p className="text-sm text-muted-foreground">{airlineName} &middot; {firstSegment.carrierCode} {firstSegment.number}</p>
+                        <p className="text-sm text-white/80">{airlineName} &middot; {firstSegment.carrierCode} {firstSegment.number}</p>
                     </div>
                 </div>
                 <div className="flex items-center justify-between">
                      <div className="text-center">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
-                        <p className="font-semibold text-muted-foreground">{firstSegment.departure.iataCode}</p>
-                        <p className="text-xs text-muted-foreground">{originCity}</p>
+                        <p className="font-semibold text-white/80">{firstSegment.departure.iataCode}</p>
+                        <p className="text-xs text-white/70">{originCity}</p>
                     </div>
-                    <div className="flex-grow flex flex-col items-center text-muted-foreground px-4">
+                    <div className="flex-grow flex flex-col items-center text-white/70 px-4">
                         <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
                         <div className="w-full h-px bg-border relative my-1">
-                           <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-muted-foreground p-0.5 rounded-full"/>
+                           <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-white p-0.5 rounded-full"/>
                         </div>
                          <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
                     </div>
                      <div className="text-center">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
-                        <p className="font-semibold text-muted-foreground">{lastSegment.arrival.iataCode}</p>
-                        <p className="text-xs text-muted-foreground">{destinationCity}</p>
+                        <p className="font-semibold text-white/80">{lastSegment.arrival.iataCode}</p>
+                        <p className="text-xs text-white/70">{destinationCity}</p>
                     </div>
                 </div>
             </CardContent>
@@ -99,18 +100,18 @@ const AdditionalServicesCard = ({ onPriceChange }: { onPriceChange: (price: numb
     }
     
     return (
-        <Card>
+        <Card className="bg-card/80 text-white border-white/20">
             <CardHeader>
                 <CardTitle className="text-xl font-headline">Servicios Adicionales</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
                 {additionalServices.map(service => (
-                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-muted/20">
+                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-black/20 border-white/20">
                         <div className="flex items-center gap-4">
                            <service.icon className="h-8 w-8 text-primary" />
                            <div>
                              <Label htmlFor={service.id} className="font-semibold">{service.name}</Label>
-                             <p className="text-xs text-muted-foreground">{service.description}</p>
+                             <p className="text-xs text-white/80">{service.description}</p>
                            </div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -141,17 +142,17 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, addonsPrice }: {outboun
     const checkoutLink = `/flights/checkout?outboundId=${outboundFlight.id}${returnFlight ? `&returnId=${returnFlight.id}` : ''}&addons=${addonsPrice + additionalServicesPrice}`;
 
     return (
-        <Card className="sticky top-24 shadow-lg">
+        <Card className="sticky top-24 shadow-lg bg-card/80 text-white border-white/20">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold font-headline">Resumen de Precio</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
                 <div className="flex justify-between">
-                    <span className="text-muted-foreground">Vuelos</span>
+                    <span className="text-white/80">Vuelos</span>
                     <span>${basePrice.toFixed(2)}</span>
                 </div>
                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Impuestos y tasas</span>
+                    <span className="text-white/80">Impuestos y tasas</span>
                     <span>${taxes.toFixed(2)}</span>
                 </div>
                  {addonsPrice > 0 && (
@@ -166,7 +167,7 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, addonsPrice }: {outboun
                         <span>${additionalServicesPrice.toFixed(2)}</span>
                     </div>
                  )}
-                <Separator />
+                <Separator className="bg-white/20"/>
                 <div className="flex justify-between font-bold text-xl">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
@@ -188,7 +189,7 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
     return (
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-8 space-y-6">
-                <h2 className="text-3xl font-headline font-bold text-gray-800">Revisa y completa tu reserva</h2>
+                <h2 className="text-3xl font-headline font-bold text-white">Revisa y completa tu reserva</h2>
                 
                 <FlightSummaryCard title="Vuelo de Ida" itinerary={outboundFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onOutboundChange} />
                 
@@ -196,11 +197,11 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
                     <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnFlight.itineraries[1] || returnFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onReturnChange} />
                 )}
 
-                <Separator />
+                <Separator className="bg-white/20"/>
                 
                 <AdditionalServicesCard onPriceChange={(price) => setExtraServicesPrice(prev => prev + price)} />
 
-                 <Card>
+                 <Card className="bg-card/80 text-white border-white/20">
                     <CardHeader>
                         <CardTitle className="text-xl font-headline">Equipaje</CardTitle>
                     </CardHeader>
