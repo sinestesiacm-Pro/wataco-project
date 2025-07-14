@@ -77,19 +77,6 @@
   }
 }
 
-@keyframes animate-multicolor {
-  0%, 100% { background-color: hsl(210, 80%, 15%); } /* Prussian Blue */
-  50% { background-color: hsl(180, 100%, 25%); } /* Blue Teal */
-}
-
-.bg-multicolor-gradient {
-  animation: animate-multicolor 30s ease-in-out infinite;
-}
-
-.background-blur-overlay {
-  filter: blur(50px);
-}
-
 @keyframes animate-bg-pan {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
