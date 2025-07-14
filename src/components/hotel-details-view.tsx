@@ -110,8 +110,8 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                         </CarouselItem>
                     )}
                   </CarouselContent>
-                  <CarouselPrevious className="left-4 bg-black/30 border-white/20 text-white hover:bg-black/50 hover:text-white" />
-                  <CarouselNext className="right-4 bg-black/30 border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                  <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                  <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 border-white/20 text-white hover:bg-black/50 hover:text-white" />
                 </Carousel>
             </div>
         </div>
