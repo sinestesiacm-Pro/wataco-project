@@ -47,38 +47,38 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
     return (
         <div className="flex flex-col md:flex-row flex-grow">
             {/* Options Column */}
-            <div className="w-full md:w-1/2 p-4 flex flex-col">
+            <div className="w-full md:w-1/2 p-6 flex flex-col text-white">
                  <div className="space-y-4">
                     {isRecommended && (
                         <Badge variant="default" className="bg-accent hover:bg-accent/90 mb-2">
                             <Star className="mr-2 h-4 w-4 fill-white" /> Recomendado
                         </Badge>
                     )}
-                     <div className="flex items-center gap-2 text-green-600 font-semibold">
+                     <div className="flex items-center gap-2 text-green-400 font-semibold">
                         <CheckCircle2 className="h-5 w-5" />
                         <span>{isFreeCancellation ? 'Cancelación gratuita (hasta 24h antes)' : 'No reembolsable'}</span>
                     </div>
                     
-                    <Separator />
+                    <Separator className="bg-white/20" />
 
                     <div>
                         <p className="font-semibold text-sm mb-3">Elige tu régimen de comidas:</p>
                         <RadioGroup value={mealPlan} onValueChange={setMealPlan}>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="breakfast" id={`breakfast-${roomOffer.id}`} disabled={!hasBreakfast} />
-                                <Label htmlFor={`breakfast-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground has-[:disabled]:opacity-50">
+                                <RadioGroupItem value="breakfast" id={`breakfast-${roomOffer.id}`} disabled={!hasBreakfast} className="border-white/50 text-primary"/>
+                                <Label htmlFor={`breakfast-${roomOffer.id}`} className="flex items-center gap-2 text-white/80 has-[:disabled]:opacity-50">
                                    <Coffee className="h-4 w-4"/> Desayuno incluido
                                 </Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="none" id={`none-${roomOffer.id}`} />
-                                <Label htmlFor={`none-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground">
+                                <RadioGroupItem value="none" id={`none-${roomOffer.id}`} className="border-white/50 text-primary"/>
+                                <Label htmlFor={`none-${roomOffer.id}`} className="flex items-center gap-2 text-white/80">
                                    <Salad className="h-4 w-4"/> Solo alojamiento
                                 </Label>
                             </div>
                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="all-inclusive" id={`all-${roomOffer.id}`} disabled/>
-                                <Label htmlFor={`all-${roomOffer.id}`} className="flex items-center gap-2 text-muted-foreground has-[:disabled]:opacity-50">
+                                <RadioGroupItem value="all-inclusive" id={`all-${roomOffer.id}`} disabled className="border-white/50 text-primary"/>
+                                <Label htmlFor={`all-${roomOffer.id}`} className="flex items-center gap-2 text-white/80 has-[:disabled]:opacity-50">
                                    <Wine className="h-4 w-4"/> Todo Incluido <span className="text-xs">(+ $150.00)</span>
                                 </Label>
                             </div>
@@ -89,16 +89,16 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
             </div>
             
             {/* Price Column */}
-            <div className="w-full md:w-1/2 p-4 flex flex-col bg-muted/30">
-                <div className="text-right">
-                    <p className="text-xs text-muted-foreground">Precio por noche</p>
-                    <p className="text-3xl font-bold text-primary">${roomOffer.price.total}</p>
-                    <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
+            <div className="w-full md:w-1/2 p-6 flex flex-col bg-black/20">
+                <div className="text-right text-white">
+                    <p className="text-xs text-white/70">Precio por noche</p>
+                    <p className="text-3xl font-bold text-white">${roomOffer.price.total}</p>
+                    <p className="text-xs text-white/70">Impuestos incluidos</p>
                 </div>
                 
                  <div className="flex flex-col gap-4 mt-auto pt-4">
                     <div>
-                        <Label className="text-xs font-semibold">Habitaciones</Label>
+                        <Label className="text-xs font-semibold text-white/80">Habitaciones</Label>
                         <Select 
                             defaultValue="1" 
                             onValueChange={(value) => setNumberOfRooms(parseInt(value, 10))}
@@ -114,12 +114,12 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                           </SelectContent>
                         </Select>
                     </div>
-                    <Button size="lg" className="w-full" onClick={() => onSelect(numberOfRooms)}>
+                    <Button size="lg" className="w-full bg-success hover:bg-success/90 font-bold" onClick={() => onSelect(numberOfRooms)}>
                         Continuar
                     </Button>
-                    <div className="mt-2 text-left space-y-2 text-xs text-muted-foreground">
+                    <div className="mt-2 text-left space-y-2 text-xs text-white/70">
                         <div className="flex items-center gap-2">
-                            {isFreeCancellation ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <XCircle className="h-4 w-4 text-destructive" />}
+                            {isFreeCancellation ? <CheckCircle2 className="h-4 w-4 text-green-400" /> : <XCircle className="h-4 w-4 text-destructive" />}
                             <span>{isFreeCancellation ? 'Cancelación gratuita' : 'No reembolsable'}</span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -148,7 +148,7 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children
              <div className="w-32"></div>
        </div>
 
-        <div className="hidden md:grid grid-cols-12 px-4 text-sm font-semibold text-muted-foreground uppercase">
+        <div className="hidden md:grid grid-cols-12 px-6 text-sm font-semibold text-white/60 uppercase">
             <div className="col-span-5">Tipo de Habitación</div>
             <div className="col-span-7 grid grid-cols-12">
                 <div className="col-span-6">Opciones</div>
@@ -157,11 +157,11 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children
         </div>
 
       {rooms.map((roomOffer, index) => (
-        <Card key={roomOffer.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col">
+        <Card key={roomOffer.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
           <div className="grid grid-cols-1 md:grid-cols-12 flex-grow">
 
             {/* Room Type Column */}
-            <div className="md:col-span-5 p-4">
+            <div className="md:col-span-5 p-6">
                <div className="relative h-48 w-full mb-4 rounded-lg overflow-hidden">
                  <Image
                     src={hotelOffer.hotel.media?.[3]?.uri || hotelOffer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
@@ -171,16 +171,16 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children
                     data-ai-hint="hotel room"
                   />
                </div>
-               <h3 className="text-lg font-bold font-headline mb-3">{roomOffer.room.description.text}</h3>
+               <h3 className="text-xl font-bold font-headline mb-3">{roomOffer.room.description.text}</h3>
                
-               <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground mb-4">
+               <div className="grid grid-cols-2 gap-y-2 text-sm text-white/80 mb-4">
                     <div className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /><span>2 Huéspedes</span></div>
                     <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-primary" /><span>1 Cama Doble</span></div>
                     <div className="flex items-center gap-2"><Square className="h-4 w-4 text-primary" /><span>25 m²</span></div>
                </div>
 
                {roomOffer.room.amenities && (
-                    <div className="space-y-2 mt-4 text-sm text-muted-foreground">
+                    <div className="space-y-2 mt-4 text-sm text-white/80">
                         {roomOffer.room.amenities.map(amenity => {
                             const Icon = roomAmenityIcons[amenity] || CheckCircle2;
                             return (
