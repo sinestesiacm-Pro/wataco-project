@@ -318,9 +318,9 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     const isPkg = !!pkg;
     const addons = parseFloat(searchParams.get('addons') || '0');
     const flightPrice = isPkg ? 0 : 134.00; // Flight price is part of package
-    const taxes = isPkg ? (pkg.price + hotelPrice) * 0.19 : 46.80; // Example tax
+    const taxes = isPkg && pkg ? (pkg.price + hotelPrice) * 0.19 : 46.80; // Example tax
     
-    const baseTotal = isPkg ? pkg.price + hotelPrice : flightPrice + taxes;
+    const baseTotal = isPkg && pkg ? pkg.price + hotelPrice : flightPrice + taxes;
     const total = baseTotal + addons + extraServicesPrice;
     
     return (
@@ -330,7 +330,7 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                  {pkg && <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Paquete: {pkg.title}</CardDescription>}
             </CardHeader>
             <CardContent className="space-y-4">
-                 {isPackage ? (
+                 {isPackageBooking && pkg ? (
                     <>
                         <div className="flex justify-between font-semibold">
                             <span><Plane className="inline-block mr-2 h-4 w-4"/>Vuelo</span>
