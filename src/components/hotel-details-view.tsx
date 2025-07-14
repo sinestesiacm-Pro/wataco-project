@@ -45,8 +45,8 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
   return (
     <div className="space-y-8">
       <Card className="overflow-hidden bg-transparent border-0 shadow-none">
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-            <div className="p-0 lg:p-6 text-white">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="p-0 text-white">
                 <CardHeader className="p-0 mb-4">
                     <CardTitle className="text-3xl font-headline text-white">{hotel.name}</CardTitle>
                     <div className="flex items-center gap-4 mt-2 text-sm text-white/80">
@@ -90,7 +90,7 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                     {hotel.media && hotel.media.length > 0 ? (
                       hotel.media.map((photo, index) => (
                         <CarouselItem key={index}>
-                           <div className="relative w-full h-full aspect-video rounded-xl overflow-hidden shadow-lg">
+                           <div className="relative w-full h-full aspect-video lg:aspect-auto lg:h-full rounded-xl overflow-hidden shadow-lg">
                             <Image
                                 src={photo.uri}
                                 alt={`${hotel.name} - ${index + 1}`}
@@ -103,7 +103,7 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                       ))
                     ) : (
                        <CarouselItem>
-                         <div className="relative w-full h-full aspect-video rounded-xl overflow-hidden shadow-lg">
+                         <div className="relative w-full h-full aspect-video lg:aspect-auto lg:h-full rounded-xl overflow-hidden shadow-lg">
                             <Image
                                 src="https://placehold.co/800x600.png"
                                 alt="Placeholder hotel image"

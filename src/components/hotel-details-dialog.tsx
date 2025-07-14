@@ -34,7 +34,7 @@ export function HotelDetailsDialog({ offer, children, searchParams }: HotelDetai
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-card/80 backdrop-blur-2xl p-6 border-0 shadow-2xl rounded-3xl">
+      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-black/10 backdrop-blur-xl p-6 border-white/20 shadow-2xl rounded-3xl">
         {offer ? (
           <>
             <DialogHeader className="sr-only">
