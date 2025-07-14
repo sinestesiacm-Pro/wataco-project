@@ -84,8 +84,8 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                     </div>
                 </CardContent>
             </div>
-             <div className="relative min-h-[300px] lg:min-h-0">
-                <Carousel className="w-full h-full rounded-xl overflow-hidden shadow-lg">
+             <div className="relative">
+                <Carousel className="w-full rounded-xl overflow-hidden shadow-lg">
                   <CarouselContent>
                     {hotel.media && hotel.media.length > 0 ? (
                       hotel.media.map((photo, index) => (
