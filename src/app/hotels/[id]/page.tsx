@@ -89,14 +89,16 @@ function HotelDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelDetailPage({ params }: { params: { id: string } }) {
+export default function HotelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
+  
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-hotels-gradient">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
-      <HotelDetailPageContent id={params.id} />
+      <HotelDetailPageContent id={id} />
     </Suspense>
   );
 }
