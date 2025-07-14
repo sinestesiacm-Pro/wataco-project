@@ -18,6 +18,7 @@ import Image from 'next/image';
 import { Switch } from '@/components/ui/switch';
 import { recommendedPackages } from '@/lib/mock-packages';
 import type { PackageOffer } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 const countryCodes = [
     { code: 'co', name: 'Colombia', dial: '+57' },
@@ -28,37 +29,37 @@ const countryCodes = [
     { code: 'us', name: 'United States', dial: '+1' },
 ];
 
-const PassengerForm = () => {
+const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card>
+        <Card className={cn(isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><User /> ¿Quién viaja?</CardTitle>
-                <CardDescription>Ingresa los datos del pasajero principal. Deben coincidir con su documento de identidad.</CardDescription>
+                <CardDescription className={cn(isPackageBooking ? 'text-white/70':'')}>Ingresa los datos del pasajero principal. Deben coincidir con su documento de identidad.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <Label htmlFor="firstName">Nombre(s)</Label>
-                        <Input id="firstName" placeholder="John" />
+                        <Input id="firstName" placeholder="John" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                     </div>
                     <div>
                         <Label htmlFor="lastName">Apellido(s)</Label>
-                        <Input id="lastName" placeholder="Doe" />
+                        <Input id="lastName" placeholder="Doe" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                     </div>
                 </div>
                  <div>
                     <Label htmlFor="birthDate">Fecha de Nacimiento</Label>
-                    <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" />
+                    <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                 </div>
                 <div>
                     <Label>Género</Label>
                      <RadioGroup defaultValue="female" className="flex items-center gap-4 pt-2">
                         <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="female" id="female" />
+                            <RadioGroupItem value="female" id="female" className={cn(isPackageBooking ? 'border-white/50 text-primary' : '')}/>
                             <Label htmlFor="female">Femenino</Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="male" id="male" />
+                            <RadioGroupItem value="male" id="male" className={cn(isPackageBooking ? 'border-white/50 text-primary' : '')}/>
                             <Label htmlFor="male">Masculino</Label>
                         </div>
                     </RadioGroup>
@@ -66,7 +67,7 @@ const PassengerForm = () => {
                 <div>
                   <Label htmlFor="residence-country">País de Residencia</Label>
                    <Select>
-                        <SelectTrigger id="residence-country">
+                        <SelectTrigger id="residence-country" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}>
                             <SelectValue placeholder="Selecciona un país" />
                         </SelectTrigger>
                         <SelectContent>
@@ -83,7 +84,7 @@ const PassengerForm = () => {
                     <div>
                         <Label htmlFor="document-type">Tipo de Documento</Label>
                         <Select>
-                            <SelectTrigger id="document-type">
+                            <SelectTrigger id="document-type" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}>
                                 <SelectValue placeholder="Seleccionar" />
                             </SelectTrigger>
                             <SelectContent>
@@ -94,7 +95,7 @@ const PassengerForm = () => {
                     </div>
                      <div>
                         <Label htmlFor="document-number">Número de Documento</Label>
-                        <Input id="document-number" placeholder="AB1234567" />
+                        <Input id="document-number" placeholder="AB1234567" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                     </div>
                 </div>
             </CardContent>
@@ -102,7 +103,7 @@ const PassengerForm = () => {
     );
 };
 
-const ContactInfoForm = () => {
+const ContactInfoForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     const [selectedCountryCode, setSelectedCountryCode] = useState('us');
 
     const SelectedCountryDisplay = ({ code }: { code: string }) => {
@@ -122,21 +123,21 @@ const ContactInfoForm = () => {
     }
 
     return (
-        <Card>
+        <Card className={cn(isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Mail /> Información de Contacto</CardTitle>
-                <CardDescription>Te enviaremos la confirmación de tu reserva a este correo.</CardDescription>
+                <CardDescription className={cn(isPackageBooking ? 'text-white/70':'')}>Te enviaremos la confirmación de tu reserva a este correo.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div>
                     <Label htmlFor="email">Correo Electrónico</Label>
-                    <Input id="email" type="email" placeholder="john.doe@example.com" />
+                    <Input id="email" type="email" placeholder="john.doe@example.com" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                 </div>
                 <div>
                     <Label htmlFor="phone">Número de Teléfono</Label>
                     <div className="flex gap-2 mt-1">
                         <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
-                            <SelectTrigger className="w-[120px]">
+                            <SelectTrigger className={cn("w-[120px]", isPackageBooking ? 'bg-black/20 border-white/20' : '')}>
                                 <SelectValue asChild>
                                     <SelectedCountryDisplay code={selectedCountryCode} />
                                 </SelectValue>
@@ -157,7 +158,7 @@ const ContactInfoForm = () => {
                                 ))}
                             </SelectContent>
                         </Select>
-                        <Input id="phone" type="tel" placeholder="234 567 890" className="flex-grow" />
+                        <Input id="phone" type="tel" placeholder="234 567 890" className={cn("flex-grow", isPackageBooking ? 'bg-black/20 border-white/20' : '')} />
                     </div>
                 </div>
             </CardContent>
@@ -171,7 +172,7 @@ const additionalServices = [
     { id: 'city-tour', name: 'Tour por la Ciudad', description: 'Descubre los secretos de tu destino con un guía local.', price: 55.00, icon: Camera },
 ];
 
-const AdditionalServicesForm = ({ onPriceChange }: { onPriceChange: (price: number) => void }) => {
+const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceChange: (price: number) => void, isPackageBooking: boolean }) => {
     const { toast } = useToast();
 
     const handleServiceToggle = (checked: boolean, price: number) => {
@@ -186,10 +187,10 @@ const AdditionalServicesForm = ({ onPriceChange }: { onPriceChange: (price: numb
     }
     
     return (
-        <Card>
+        <Card className={cn(isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
             <CardHeader>
                 <CardTitle>Mejora tu Viaje</CardTitle>
-                <CardDescription>Añade servicios adicionales para una experiencia inolvidable.</CardDescription>
+                <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Añade servicios adicionales para una experiencia inolvidable.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 {additionalServices.map(service => (
@@ -218,23 +219,23 @@ const AdditionalServicesForm = ({ onPriceChange }: { onPriceChange: (price: numb
 };
 
 
-const PaymentForm = () => {
+const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card>
+        <Card className={cn(isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><CreditCard /> Método de Pago</CardTitle>
-                <CardDescription>Todas las transacciones son seguras y encriptadas.</CardDescription>
+                <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Todas las transacciones son seguras y encriptadas.</CardDescription>
             </CardHeader>
             <CardContent>
                 <RadioGroup defaultValue="credit-card" className="mb-6">
                     <div className="grid grid-cols-2 gap-4">
-                        <Label htmlFor="credit-card" className="flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary">
-                            <RadioGroupItem value="credit-card" id="credit-card" />
+                        <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary", isPackageBooking ? 'border-white/20' : '')}>
+                            <RadioGroupItem value="credit-card" id="credit-card" className={cn(isPackageBooking ? 'border-white/50 text-primary' : '')}/>
                             <CreditCard />
                             <span>Tarjeta de crédito</span>
                         </Label>
-                        <Label htmlFor="paypal" className="flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary">
-                            <RadioGroupItem value="paypal" id="paypal" />
+                        <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary", isPackageBooking ? 'border-white/20' : '')}>
+                            <RadioGroupItem value="paypal" id="paypal" className={cn(isPackageBooking ? 'border-white/50 text-primary' : '')}/>
                             <Landmark />
                             <span>PayPal</span>
                         </Label>
@@ -244,42 +245,42 @@ const PaymentForm = () => {
                 <div className="space-y-4">
                     <div>
                         <Label htmlFor="cardHolder">Nombre en la tarjeta</Label>
-                        <Input id="cardHolder" placeholder="John Doe" />
+                        <Input id="cardHolder" placeholder="John Doe" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                     </div>
                     <div>
                         <Label htmlFor="cardNumber">Número de tarjeta</Label>
-                        <Input id="cardNumber" placeholder="**** **** **** 1234" />
+                        <Input id="cardNumber" placeholder="**** **** **** 1234" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <Label htmlFor="cardExpiry">Vencimiento</Label>
-                            <Input id="cardExpiry" placeholder="MM/AA" />
+                            <Input id="cardExpiry" placeholder="MM/AA" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                         </div>
                         <div>
                             <Label htmlFor="cardCvc">CVC</Label>
-                            <Input id="cardCvc" placeholder="123" />
+                            <Input id="cardCvc" placeholder="123" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                         </div>
                     </div>
                      <Separator className="my-4"/>
                      <CardTitle className="text-lg">Dirección de Facturación</CardTitle>
                      <div>
                         <Label htmlFor="billing-address">Dirección</Label>
-                        <Input id="billing-address" placeholder="123 Main St" />
+                        <Input id="billing-address" placeholder="123 Main St" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                     </div>
                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <Label htmlFor="billing-city">Ciudad</Label>
-                            <Input id="billing-city" placeholder="New York" />
+                            <Input id="billing-city" placeholder="New York" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                         </div>
                         <div>
                             <Label htmlFor="billing-zip">Código Postal</Label>
-                            <Input id="billing-zip" placeholder="10001" />
+                            <Input id="billing-zip" placeholder="10001" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
                         </div>
                     </div>
                      <div>
                         <Label htmlFor="billing-country">País</Label>
                         <Select>
-                            <SelectTrigger id="billing-country">
+                            <SelectTrigger id="billing-country" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}>
                                 <SelectValue placeholder="Selecciona un país" />
                             </SelectTrigger>
                             <SelectContent>
@@ -299,7 +300,7 @@ const PaymentForm = () => {
 };
 
 
-const PriceSummary = () => {
+const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     const searchParams = useSearchParams();
     const packageId = searchParams.get('packageId');
     const hotelPrice = parseFloat(searchParams.get('hotelPrice') || '0');
@@ -314,19 +315,19 @@ const PriceSummary = () => {
         }
     }, [packageId]);
 
-    const isPackage = !!pkg;
+    const isPkg = !!pkg;
     const addons = parseFloat(searchParams.get('addons') || '0');
-    const flightPrice = isPackage ? 0 : 134.00; // Flight price is part of package
-    const taxes = isPackage ? (pkg.price + hotelPrice) * 0.19 : 46.80; // Example tax
+    const flightPrice = isPkg ? 0 : 134.00; // Flight price is part of package
+    const taxes = isPkg ? (pkg.price + hotelPrice) * 0.19 : 46.80; // Example tax
     
-    const baseTotal = isPackage ? pkg.price + hotelPrice : flightPrice + taxes;
+    const baseTotal = isPkg ? pkg.price + hotelPrice : flightPrice + taxes;
     const total = baseTotal + addons + extraServicesPrice;
     
     return (
-        <Card className="sticky top-28 shadow-lg">
+        <Card className={cn("sticky top-28 shadow-lg", isPackageBooking ? 'bg-card/80 backdrop-blur-xl border-none text-white' : '')}>
             <CardHeader>
                 <CardTitle>Resumen del Pedido</CardTitle>
-                 {pkg && <CardDescription>Paquete: {pkg.title}</CardDescription>}
+                 {pkg && <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Paquete: {pkg.title}</CardDescription>}
             </CardHeader>
             <CardContent className="space-y-4">
                  {isPackage ? (
@@ -339,7 +340,7 @@ const PriceSummary = () => {
                             <span><Hotel className="inline-block mr-2 h-4 w-4"/>Hotel</span>
                             <span>+${hotelPrice.toFixed(2)}</span>
                         </div>
-                         <div className="flex justify-between text-muted-foreground">
+                         <div className={cn("flex justify-between", isPackageBooking ? 'text-white/70' : 'text-muted-foreground')}>
                             <span>Precio base paquete</span>
                             <span>${pkg.price.toFixed(2)}</span>
                         </div>
@@ -350,7 +351,7 @@ const PriceSummary = () => {
                         <span>${flightPrice.toFixed(2)}</span>
                     </div>
                  )}
-                 <div className="flex justify-between text-muted-foreground">
+                 <div className={cn("flex justify-between", isPackageBooking ? 'text-white/70' : 'text-muted-foreground')}>
                     <span>Impuestos y tasas</span>
                     <span>${taxes.toFixed(2)}</span>
                 </div>
@@ -366,12 +367,12 @@ const PriceSummary = () => {
                         <span>${extraServicesPrice.toFixed(2)}</span>
                     </div>
                  )}
-                <Separator />
+                <Separator className={cn(isPackageBooking ? 'bg-white/20' : '')} />
                  <div className="flex justify-between font-bold text-xl">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                 </div>
-                 <p className="text-xs text-muted-foreground">
+                 <p className={cn("text-xs", isPackageBooking ? 'text-white/70' : 'text-muted-foreground')}>
                     Al completar esta compra, aceptas nuestros <a href="#" className="underline">Términos de Servicio</a> y <a href="#" className="underline">Política de Privacidad</a>.
                 </p>
             </CardContent>
@@ -397,25 +398,29 @@ function CheckoutPageContent() {
         setTimeout(() => router.push('/'), 2000);
     };
 
+    const backgroundClass = isPackageBooking
+      ? 'bg-packages-gradient background-pan-animation'
+      : 'bg-muted/30';
+
     return (
-      <div className="bg-muted/30 min-h-screen">
+      <div className={cn("min-h-screen", backgroundClass)}>
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center mb-6">
-                <Button asChild variant="outline" className="mr-4">
+                <Button asChild variant="outline" className={cn("mr-4", isPackageBooking ? 'bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white' : '')}>
                     <Link href="/">
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>
                 </Button>
-                <h1 className="text-3xl font-bold font-headline">Finaliza tu Compra</h1>
+                <h1 className={cn("text-3xl font-bold font-headline", isPackageBooking ? 'text-white' : '')}>Finaliza tu Compra</h1>
             </div>
             
             <form onSubmit={handleConfirmBooking}>
                 <div className="grid lg:grid-cols-3 gap-8 items-start">
                     <div className="lg:col-span-2 space-y-6">
-                        <PassengerForm />
-                        <ContactInfoForm />
-                        {isPackageBooking && <AdditionalServicesForm onPriceChange={(price) => setExtraServicesPrice(p => p + price)}/>}
-                        <PaymentForm />
+                        <PassengerForm isPackageBooking={isPackageBooking}/>
+                        <ContactInfoForm isPackageBooking={isPackageBooking}/>
+                        {isPackageBooking && <AdditionalServicesForm onPriceChange={(price) => setExtraServicesPrice(p => p + price)} isPackageBooking={isPackageBooking}/>}
+                        <PaymentForm isPackageBooking={isPackageBooking}/>
                         <div className="flex justify-end pt-4">
                             <Button type="submit" size="lg" className="bg-success hover:bg-success/90 w-full sm:w-auto">
                                 <Lock className="mr-2 h-4 w-4" />
@@ -424,7 +429,7 @@ function CheckoutPageContent() {
                         </div>
                     </div>
                     <div className="lg:col-span-1">
-                        <PriceSummary />
+                        <PriceSummary isPackageBooking={isPackageBooking} />
                     </div>
                 </div>
             </form>
