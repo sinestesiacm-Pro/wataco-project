@@ -68,7 +68,7 @@ export function HomePageContent() {
     }
 
     return (
-        <div className={cn('w-full flex flex-col flex-grow', getBackgroundClass(), 'background-pan-animation')}>
+        <div className={cn('w-full flex flex-col flex-grow min-h-screen', getBackgroundClass(), 'background-pan-animation')}>
             <div className="pt-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                   {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
