@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -29,7 +30,6 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
     stops: [],
     airlines: [],
     bags: [],
-    cabin: null,
   });
 
   const debouncedFilters = useDebounce(filters, 500);
@@ -61,35 +61,30 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
     });
   }, []);
 
-  const handleCabinChange = useCallback((value: FareDetailsBySegment['cabin']) => {
-    setFilters(prev => ({ ...prev, cabin: value }));
-  }, []);
-
-
   return (
-    <Card className="sticky top-24 shadow-lg">
+    <Card className="sticky top-24 shadow-lg bg-black/10 backdrop-blur-xl border border-white/20 text-white">
       <CardHeader>
         <CardTitle className="text-xl font-bold font-headline">Filtrar por</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <FilterSection title="Escalas">
-            <RadioGroup onValueChange={handleStopChange}>
+            <RadioGroup onValueChange={handleStopChange} className="text-white">
                 <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="0" id="stops-0" />
+                    <RadioGroupItem value="0" id="stops-0" className="border-white/50 text-primary" />
                     <Label htmlFor="stops-0">Sin escalas</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="1" id="stops-1" />
+                    <RadioGroupItem value="1" id="stops-1" className="border-white/50 text-primary" />
                     <Label htmlFor="stops-1">1 escala</Label>
                 </div>
                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="2" id="stops-2" />
+                    <RadioGroupItem value="2" id="stops-2" className="border-white/50 text-primary" />
                     <Label htmlFor="stops-2">2 o más escalas</Label>
                 </div>
             </RadioGroup>
         </FilterSection>
 
-        <Separator />
+        <Separator className="bg-white/20" />
 
         <FilterSection title="Aerolíneas">
             {Object.entries(availableAirlines).slice(0, 5).map(([code, name]) => (
@@ -98,13 +93,14 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                       id={`airline-${code}`} 
                       onCheckedChange={(checked) => handleAirlineChange(!!checked, code)} 
                       checked={filters.airlines.includes(code)}
+                      className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                     />
                     <Label htmlFor={`airline-${code}`}>{name}</Label>
                 </div>
             ))}
         </FilterSection>
 
-        <Separator />
+        <Separator className="bg-white/20" />
 
         <FilterSection title="Equipaje">
             <div className="flex items-center space-x-2">
@@ -112,6 +108,7 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                   id="bags-carry-on" 
                   onCheckedChange={(checked) => handleBagsChange(!!checked, 'carry-on')} 
                   checked={filters.bags.includes('carry-on')}
+                  className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
                 <Label htmlFor="bags-carry-on">Equipaje de mano</Label>
             </div>
@@ -120,17 +117,18 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                   id="bags-checked" 
                   onCheckedChange={(checked) => handleBagsChange(!!checked, 'checked')}
                   checked={filters.bags.includes('checked')}
+                  className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
                 <Label htmlFor="bags-checked">Equipaje facturado</Label>
             </div>
         </FilterSection>
 
-        <Separator />
+        <Separator className="bg-white/20" />
         
         <FilterSection title="Flexibilidad">
             <div className="flex items-center space-x-2">
-                <Checkbox id="flex-no-change-fee" disabled />
-                <Label htmlFor="flex-no-change-fee" className="text-muted-foreground">Sin cargos por cambio</Label>
+                <Checkbox id="flex-no-change-fee" disabled className="disabled:opacity-40" />
+                <Label htmlFor="flex-no-change-fee" className="text-white/50">Sin cargos por cambio</Label>
             </div>
         </FilterSection>
 
