@@ -43,16 +43,16 @@ export function HotelMapDialog({ hotelName }: HotelMapDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
           <MapPin className="mr-2 h-4 w-4" />
           Ver en Mapa
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-3xl h-[80vh] flex flex-col p-0">
-        <DialogHeader className="p-4 border-b">
-          <DialogTitle>Ubicación de {hotelName}</DialogTitle>
+      <DialogContent className="max-w-4xl w-[95%] h-[80vh] flex flex-col p-0 bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl">
+        <DialogHeader className="p-4 border-b border-white/20 flex-shrink-0">
+          <DialogTitle className="text-white">Ubicación de {hotelName}</DialogTitle>
         </DialogHeader>
-        <div className="flex-grow">
+        <div className="flex-grow rounded-b-2xl overflow-hidden">
           <APIProvider apiKey={apiKey}>
               <Map
                   defaultCenter={position}
