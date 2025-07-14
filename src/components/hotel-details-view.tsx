@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { AmadeusHotelOffer } from '@/lib/types';
@@ -43,12 +44,12 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
 
   return (
     <div className="space-y-8">
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden bg-transparent border-0 shadow-none">
         <div className="grid grid-cols-1 lg:grid-cols-2">
-            <div className="p-6">
+            <div className="p-0 lg:p-6 text-white">
                 <CardHeader className="p-0 mb-4">
-                    <CardTitle className="text-3xl font-headline">{hotel.name}</CardTitle>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                    <CardTitle className="text-3xl font-headline text-white">{hotel.name}</CardTitle>
+                    <div className="flex items-center gap-4 mt-2 text-sm text-white/80">
                         {hotel.rating && <div className="flex items-center">{renderStars(hotel.rating)}</div>}
                         <div className="flex items-center gap-1"><MapPin className="h-4 w-4" />{hotel.address.cityName}, {hotel.address.countryCode}</div>
                     </div>
@@ -58,7 +59,7 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                         {hotel.description && (
                             <div>
                                 <h3 className="font-semibold text-lg mb-2">Sobre esta propiedad</h3>
-                                <p className="text-muted-foreground">{hotel.description.text}</p>
+                                <p className="text-white/80">{hotel.description.text}</p>
                             </div>
                         )}
                         {hotel.amenities && hotel.amenities.length > 0 && (
@@ -89,35 +90,39 @@ export function HotelDetailsView({ hotelOffer, onSeeRooms }: HotelDetailsViewPro
                     {hotel.media && hotel.media.length > 0 ? (
                       hotel.media.map((photo, index) => (
                         <CarouselItem key={index}>
-                          <Image
-                            src={photo.uri}
-                            alt={`${hotel.name} - ${index + 1}`}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                          />
+                           <div className="relative w-full h-full aspect-video rounded-xl overflow-hidden shadow-lg">
+                            <Image
+                                src={photo.uri}
+                                alt={`${hotel.name} - ${index + 1}`}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                            />
+                           </div>
                         </CarouselItem>
                       ))
                     ) : (
                        <CarouselItem>
-                          <Image
-                            src="https://placehold.co/800x600.png"
-                            alt="Placeholder hotel image"
-                            fill
-                            className="object-cover"
-                          />
+                         <div className="relative w-full h-full aspect-video rounded-xl overflow-hidden shadow-lg">
+                            <Image
+                                src="https://placehold.co/800x600.png"
+                                alt="Placeholder hotel image"
+                                fill
+                                className="object-cover"
+                            />
+                         </div>
                         </CarouselItem>
                     )}
                   </CarouselContent>
-                  <CarouselPrevious className="left-4" />
-                  <CarouselNext className="right-4" />
+                  <CarouselPrevious className="left-4 bg-black/30 border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                  <CarouselNext className="right-4 bg-black/30 border-white/20 text-white hover:bg-black/50 hover:text-white" />
                 </Carousel>
             </div>
         </div>
       </Card>
       
       <div className="flex justify-center mt-8">
-        <Button size="lg" onClick={onSeeRooms} className="font-bold text-lg">
+        <Button size="lg" onClick={onSeeRooms} className="font-bold text-lg bg-success hover:bg-success/90">
           Ver habitaciones
           <ArrowRight className="ml-2 h-5 w-5" />
         </Button>

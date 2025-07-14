@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -82,7 +83,7 @@ export function ChatWidget() {
 
   return (
     <>
-      <div className={cn("fixed bottom-20 md:bottom-6 right-6 z-[60] transition-all duration-300", isOpen ? 'opacity-0 scale-90' : 'opacity-100 scale-100')}>
+      <div className={cn("fixed bottom-20 md:bottom-6 right-6 md:left-6 md:right-auto z-[60] transition-all duration-300", isOpen ? 'opacity-0 scale-90' : 'opacity-100 scale-100')}>
         <Button
           size="icon"
           className="rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-2xl"
@@ -94,7 +95,7 @@ export function ChatWidget() {
 
       <div
         className={cn(
-          "fixed bottom-6 right-6 z-[100] w-[calc(100%-3rem)] max-w-sm transition-all duration-300 ease-in-out",
+          "fixed bottom-6 right-6 md:left-6 md:right-auto z-[100] w-[calc(100%-3rem)] max-w-sm transition-all duration-300 ease-in-out",
           isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'
         )}
       >
