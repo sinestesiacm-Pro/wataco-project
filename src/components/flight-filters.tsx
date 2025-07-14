@@ -18,7 +18,7 @@ interface FlightFiltersProps {
 
 const FilterSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div>
-        <h3 className="text-lg font-semibold mb-3 font-headline">{title}</h3>
+        <h3 className="text-lg font-semibold mb-3 font-headline text-white">{title}</h3>
         <div className="space-y-3 pl-1">
             {children}
         </div>
@@ -62,7 +62,7 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
   }, []);
 
   return (
-    <Card className="sticky top-24 shadow-lg bg-black/10 backdrop-blur-xl border border-white/20 text-white">
+    <Card className="sticky top-24 shadow-lg bg-white/10 backdrop-blur-xl border border-white/20 text-white">
       <CardHeader>
         <CardTitle className="text-xl font-bold font-headline">Filtrar por</CardTitle>
       </CardHeader>

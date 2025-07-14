@@ -29,7 +29,7 @@ export function BookingProgressHeader({ step, isRoundTrip, origin, destination }
   const returnCompleted = step === 'review' && isRoundTrip;
 
   return (
-    <div className="bg-black/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl shadow-md text-white mb-8">
+    <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl shadow-md text-white mb-8">
         <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold font-headline flex items-center gap-3">
                 <Plane className="h-6 w-6 text-primary" />
