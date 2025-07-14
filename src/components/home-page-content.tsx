@@ -59,9 +59,9 @@ export function HomePageContent() {
         switch(tab) {
             case 'Flights': return 'bg-flights-gradient';
             case 'Hotels': return 'bg-hotels-gradient';
-            case 'Packages': return 'bg-cruises-gradient'; // Morado
-            case 'Cruises': return 'bg-activities-gradient'; // Azul claro
-            case 'Activities': return 'bg-packages-gradient'; // Naranja
+            case 'Packages': return 'bg-packages-gradient';
+            case 'Cruises': return 'bg-cruises-gradient';
+            case 'Activities': return 'bg-activities-gradient';
             case 'Social': return 'bg-activities-gradient';
             default: return 'bg-flights-gradient';
         }
