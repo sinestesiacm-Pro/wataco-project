@@ -52,7 +52,7 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
               <div className="p-6 flex-grow">
                 <div className="flex justify-between items-start">
                     <div>
-                        <h3 className="text-2xl font-semibold font-headline text-primary">{offer.hotel.name}</h3>
+                        <h3 className="text-2xl font-semibold font-headline text-white">{offer.hotel.name}</h3>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
                             {renderStars(offer.hotel.rating)}
                             <div className="flex items-center gap-1 text-sm text-white/80">
@@ -83,7 +83,7 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
               <div className="p-4 sm:p-6 bg-black/20 flex flex-col sm:flex-row justify-between items-center gap-4">
                  <div className="text-center sm:text-left">
                     <p className="text-xs text-white/70 font-body">Precio por noche</p>
-                    <p className="font-semibold text-3xl text-tertiary">
+                    <p className="font-semibold text-3xl text-white">
                       ${offer.offers?.[0]?.price?.total}
                     </p>
                 </div>

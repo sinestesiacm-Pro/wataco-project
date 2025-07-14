@@ -29,7 +29,7 @@ export function BottomNavbar() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)] border-t border-white/10 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-sm shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)] border-t border-white/10 md:hidden">
       <div className="flex justify-around items-center h-16">
         {tabsConfig.map(({ id, label, icon: Icon }) => (
           <button
