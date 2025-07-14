@@ -1,14 +1,13 @@
-
 'use client';
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Lock, CreditCard, User, Mail, ArrowLeft, Landmark } from 'lucide-react';
+import { Lock, CreditCard, User, Mail, ArrowLeft, Landmark, Car, ShieldCheck, Camera, Hotel, Plane } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
@@ -16,6 +15,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { Switch } from '@/components/ui/switch';
+import { recommendedPackages } from '@/lib/mock-packages';
+import type { PackageOffer } from '@/lib/types';
 
 const countryCodes = [
     { code: 'co', name: 'Colombia', dial: '+57' },
@@ -163,6 +165,59 @@ const ContactInfoForm = () => {
     )
 }
 
+const additionalServices = [
+    { id: 'transfer', name: 'Traslado Aeropuerto-Hotel', description: 'Traslado privado y cómodo para 2 personas.', price: 80.00, icon: Car },
+    { id: 'insurance', name: 'Seguro de Viaje Completo', description: 'Cobertura médica, de equipaje y cancelación.', price: 45.50, icon: ShieldCheck },
+    { id: 'city-tour', name: 'Tour por la Ciudad', description: 'Descubre los secretos de tu destino con un guía local.', price: 55.00, icon: Camera },
+];
+
+const AdditionalServicesForm = ({ onPriceChange }: { onPriceChange: (price: number) => void }) => {
+    const { toast } = useToast();
+
+    const handleServiceToggle = (checked: boolean, price: number) => {
+        onPriceChange(checked ? price : -price);
+        if (checked) {
+            toast({
+                title: "Servicio añadido",
+                description: `El servicio ha sido añadido a tu reserva.`,
+                variant: 'success'
+            })
+        }
+    }
+    
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Mejora tu Viaje</CardTitle>
+                <CardDescription>Añade servicios adicionales para una experiencia inolvidable.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {additionalServices.map(service => (
+                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-secondary/30">
+                        <div className="flex items-center gap-4">
+                           <service.icon className="h-8 w-8 text-primary" />
+                           <div>
+                             <Label htmlFor={service.id} className="font-semibold">{service.name}</Label>
+                             <p className="text-xs text-muted-foreground">{service.description}</p>
+                           </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <span className="font-semibold text-lg text-primary">
+                                +${service.price.toFixed(2)}
+                            </span>
+                             <Switch 
+                                id={service.id} 
+                                onCheckedChange={(checked) => handleServiceToggle(checked, service.price)}
+                             />
+                        </div>
+                    </div>
+                ))}
+            </CardContent>
+        </Card>
+    );
+};
+
+
 const PaymentForm = () => {
     return (
         <Card>
@@ -245,32 +300,70 @@ const PaymentForm = () => {
 
 
 const PriceSummary = () => {
-    // In a real app, you would fetch flight details based on IDs from searchParams
     const searchParams = useSearchParams();
+    const packageId = searchParams.get('packageId');
+    const hotelPrice = parseFloat(searchParams.get('hotelPrice') || '0');
+    
+    const [extraServicesPrice, setExtraServicesPrice] = useState(0);
+    const [pkg, setPackage] = useState<PackageOffer | null>(null);
+
+    useEffect(() => {
+        if (packageId) {
+            const foundPackage = recommendedPackages.find(p => p.id === packageId);
+            setPackage(foundPackage || null);
+        }
+    }, [packageId]);
+
+    const isPackage = !!pkg;
     const addons = parseFloat(searchParams.get('addons') || '0');
-    // Mock prices for demo
-    const flightPrice = 134.00;
-    const taxes = 46.80;
-    const total = flightPrice + taxes + addons;
+    const flightPrice = isPackage ? 0 : 134.00; // Flight price is part of package
+    const taxes = isPackage ? (pkg.price + hotelPrice) * 0.19 : 46.80; // Example tax
+    
+    const baseTotal = isPackage ? pkg.price + hotelPrice : flightPrice + taxes;
+    const total = baseTotal + addons + extraServicesPrice;
     
     return (
         <Card className="sticky top-28 shadow-lg">
             <CardHeader>
                 <CardTitle>Resumen del Pedido</CardTitle>
+                 {pkg && <CardDescription>Paquete: {pkg.title}</CardDescription>}
             </CardHeader>
             <CardContent className="space-y-4">
-                 <div className="flex justify-between text-muted-foreground">
-                    <span>Vuelos</span>
-                    <span>${flightPrice.toFixed(2)}</span>
-                </div>
+                 {isPackage ? (
+                    <>
+                        <div className="flex justify-between font-semibold">
+                            <span><Plane className="inline-block mr-2 h-4 w-4"/>Vuelo</span>
+                            <span>Incluido</span>
+                        </div>
+                        <div className="flex justify-between font-semibold">
+                            <span><Hotel className="inline-block mr-2 h-4 w-4"/>Hotel</span>
+                            <span>+${hotelPrice.toFixed(2)}</span>
+                        </div>
+                         <div className="flex justify-between text-muted-foreground">
+                            <span>Precio base paquete</span>
+                            <span>${pkg.price.toFixed(2)}</span>
+                        </div>
+                    </>
+                 ) : (
+                    <div className="flex justify-between text-muted-foreground">
+                        <span>Vuelos</span>
+                        <span>${flightPrice.toFixed(2)}</span>
+                    </div>
+                 )}
                  <div className="flex justify-between text-muted-foreground">
                     <span>Impuestos y tasas</span>
                     <span>${taxes.toFixed(2)}</span>
                 </div>
                  {addons > 0 && (
                     <div className="flex justify-between text-primary font-medium">
-                        <span>Servicios Adicionales</span>
+                        <span>Servicios de Tarifa</span>
                         <span>${addons.toFixed(2)}</span>
+                    </div>
+                 )}
+                  {extraServicesPrice > 0 && (
+                    <div className="flex justify-between text-primary font-medium">
+                        <span>Servicios Adicionales</span>
+                        <span>${extraServicesPrice.toFixed(2)}</span>
                     </div>
                  )}
                 <Separator />
@@ -289,6 +382,10 @@ const PriceSummary = () => {
 function CheckoutPageContent() {
     const { toast } = useToast();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const isPackageBooking = !!searchParams.get('packageId');
+
+    const [extraServicesPrice, setExtraServicesPrice] = useState(0);
 
     const handleConfirmBooking = (e: React.FormEvent) => {
         e.preventDefault();
@@ -317,6 +414,7 @@ function CheckoutPageContent() {
                     <div className="lg:col-span-2 space-y-6">
                         <PassengerForm />
                         <ContactInfoForm />
+                        {isPackageBooking && <AdditionalServicesForm onPriceChange={(price) => setExtraServicesPrice(p => p + price)}/>}
                         <PaymentForm />
                         <div className="flex justify-end pt-4">
                             <Button type="submit" size="lg" className="bg-success hover:bg-success/90 w-full sm:w-auto">
@@ -346,5 +444,3 @@ export default function CheckoutPage() {
         </Suspense>
     )
 }
-
-    

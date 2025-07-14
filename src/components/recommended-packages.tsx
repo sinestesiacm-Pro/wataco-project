@@ -1,14 +1,14 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Heart, Star, Tag, Clock, PlaneTakeoff } from 'lucide-react';
+import { Star, Clock, PlaneTakeoff } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { recommendedPackages } from '@/lib/mock-packages';
 import Link from 'next/link';
+import type { PackageOffer } from '@/lib/types';
 
-const PackageCard = ({ pkg }: { pkg: typeof recommendedPackages[0] }) => (
+const PackageCard = ({ pkg }: { pkg: PackageOffer }) => (
     <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-primary/50">
         <div className="relative h-56 w-full">
             <Image 
@@ -74,7 +74,7 @@ export function RecommendedPackages() {
         <h2 className="text-3xl font-bold font-headline text-white">Paquetes Imperdibles</h2>
         <p className="text-white/80 mt-2">Experiencias completas al mejor precio, listas para que las descubras.</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {recommendedPackages.map((pkg) => (
           <PackageCard key={pkg.id} pkg={pkg} />
         ))}

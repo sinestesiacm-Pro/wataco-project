@@ -1,5 +1,3 @@
-
-
 export interface FlightOffer {
   type: string;
   id: string;
@@ -180,16 +178,23 @@ export interface AmadeusHotelSearchResponse {
 
 // Package Types
 export interface PackageOffer {
-    type: 'package-offer';
     id: string;
-    flightOffer: FlightOffer;
-    hotelOffer: AmadeusHotelOffer;
-    price: {
-        currency: string;
-        total: string;
-    };
-    self: string;
+    title: string;
+    destination: string;
+    origin: string;
+    price: number;
+    duration: number;
+    dates: string;
+    description: string;
+    includes: string[];
+    not_included: string[];
+    image: string;
+    hint: string;
+    rating: number;
+    reviews: number;
+    special_offer?: string;
 }
+
 
 export interface PackageData {
     data: PackageOffer[];
