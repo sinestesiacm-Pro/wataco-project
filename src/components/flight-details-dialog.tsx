@@ -119,7 +119,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
             <h3 className="font-headline font-bold text-xl text-primary mb-4">Elige tu Tarifa</h3>
             <div className="grid grid-cols-3 gap-2 mb-4">
                 {fareOptions.map(fare => (
-                    <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/20" : "bg-black/20 hover:bg-black/30")}>
+                    <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/20" : "border-white/20 bg-black/20 hover:bg-black/30")}>
                         <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-white/70")} />
                         <p className="font-semibold text-sm">{fare.name}</p>
                         <p className="text-xs text-white/70">+${fare.priceModifier}</p>
@@ -181,7 +181,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
             Seleccionar
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-background/80 backdrop-blur-xl p-0 border-0 shadow-2xl rounded-3xl">
+      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-white/10 backdrop-blur-xl p-0 border border-white/20 shadow-2xl rounded-3xl">
           <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0 text-white">
             <DialogTitle className="font-headline text-2xl sm:text-3xl">Detalles de tu Selección</DialogTitle>
           </DialogHeader>

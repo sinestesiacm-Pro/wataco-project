@@ -35,7 +35,7 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
     const destinationCity = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
 
     return (
-        <Card className="bg-card/80 text-white border-white/20">
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
                 <CardTitle className="text-xl font-headline">{title}</CardTitle>
                 <Button variant="link" onClick={onChangeClick} className="text-primary">Cambiar vuelo</Button>
@@ -62,7 +62,7 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
                     </div>
                     <div className="flex-grow flex flex-col items-center text-white/70 px-4">
                         <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
-                        <div className="w-full h-px bg-border relative my-1">
+                        <div className="w-full h-px bg-white/20 relative my-1">
                            <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-white p-0.5 rounded-full"/>
                         </div>
                          <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
@@ -100,7 +100,7 @@ const AdditionalServicesCard = ({ onPriceChange }: { onPriceChange: (price: numb
     }
     
     return (
-        <Card className="bg-card/80 text-white border-white/20">
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
             <CardHeader>
                 <CardTitle className="text-xl font-headline">Servicios Adicionales</CardTitle>
             </CardHeader>
@@ -142,7 +142,7 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, addonsPrice }: {outboun
     const checkoutLink = `/flights/checkout?outboundId=${outboundFlight.id}${returnFlight ? `&returnId=${returnFlight.id}` : ''}&addons=${addonsPrice + additionalServicesPrice}`;
 
     return (
-        <Card className="sticky top-24 shadow-lg bg-card/80 text-white border-white/20">
+        <Card className="sticky top-24 shadow-lg bg-white/10 backdrop-blur-xl border border-white/20 text-white">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold font-headline">Resumen de Precio</CardTitle>
             </CardHeader>
@@ -201,7 +201,7 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
                 
                 <AdditionalServicesCard onPriceChange={(price) => setExtraServicesPrice(prev => prev + price)} />
 
-                 <Card className="bg-card/80 text-white border-white/20">
+                 <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
                     <CardHeader>
                         <CardTitle className="text-xl font-headline">Equipaje</CardTitle>
                     </CardHeader>
@@ -210,7 +210,7 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
                             <span className="font-semibold">Tu vuelo incluye:</span>
                             <FlightBaggageInfo flight={outboundFlight} />
                         </div>
-                        <Button variant="outline" disabled>Añadir más equipaje (Próximamente)</Button>
+                        <Button variant="outline" disabled className="bg-transparent border-white/20 hover:bg-white/10 text-white/70">Añadir más equipaje (Próximamente)</Button>
                     </CardContent>
                 </Card>
             </div>

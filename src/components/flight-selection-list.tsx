@@ -37,7 +37,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
     const stops = itinerary.segments.length - 1;
 
     return (
-        <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border border-white/20 bg-black/20 backdrop-blur-xl flex flex-col sm:flex-row text-white">
+        <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl flex flex-col sm:flex-row text-white">
             {/* Main boarding pass section */}
             <div className="flex-grow p-4 md:p-6">
                 <div className="flex items-start gap-4">
@@ -80,7 +80,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
             <div className="flex-shrink-0 w-full sm:w-48 bg-black/20 ticket-tear flex sm:flex-col items-center justify-between sm:justify-center p-4 gap-3">
                 <div className="text-center">
                     <p className="text-xs sm:text-sm text-white/70">Precio total</p>
-                    <p className="text-2xl sm:text-3xl font-bold font-headline text-success">
+                    <p className="text-2xl sm:text-3xl font-bold font-headline text-accent">
                         ${flight.price.total}
                     </p>
                 </div>
@@ -127,7 +127,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
             ))}
           </div>
       ) : (
-        <Card className="bg-black/20 backdrop-blur-xl border border-white/20">
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
             <CardContent className="pt-6 text-center text-white/70">
                 <p>No hay vuelos que coincidan con tus filtros.</p>
                 <p>Intenta ajustar o eliminar algunos filtros para ver más resultados.</p>
