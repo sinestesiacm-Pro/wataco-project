@@ -45,7 +45,7 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
 
     return (
-        <Card className="sticky top-28 shadow-lg bg-white/10 backdrop-blur-xl border border-white/20 text-white">
+        <Card className="sticky top-28 shadow-lg bg-white/20 backdrop-blur-xl border border-white/20 text-white">
             <CardHeader>
                 <div className="relative h-40 w-full mb-4 rounded-lg overflow-hidden">
                     <Image
@@ -140,7 +140,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-2 space-y-6">
-                <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
+                <Card className="bg-white/20 backdrop-blur-xl border border-white/20 text-white">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><CheckCircle className="text-primary"/> ¿Quién se hospeda?</CardTitle>
                         <CardDescription className="text-white/80">Ingresa los datos del huésped principal.</CardDescription>
@@ -197,7 +197,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                     </CardContent>
                 </Card>
                 
-                <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
+                <Card className="bg-white/20 backdrop-blur-xl border border-white/20 text-white">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><CreditCard className="text-primary"/> Método de Pago</CardTitle>
                         <CardDescription className="text-white/80">Esta es una demostración. No se procesarán pagos reales.</CardDescription>
@@ -290,5 +290,3 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
     </>
   );
 }
-
-    
