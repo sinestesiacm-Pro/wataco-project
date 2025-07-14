@@ -2,54 +2,81 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Heart, Star } from 'lucide-react';
-import { Card } from './ui/card';
-
-const recommendedPackages = [
-  { name: 'Aventura en la Riviera Maya', description: 'Vuelo + 5 noches todo incluido', price: '750', image: 'https://images.unsplash.com/photo-1620615748664-9cc920e4150d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyaXZpZXJhJTIwbWF5YSUyMGJlYWNofGVufDB8fHx8MTc1MjA4MzE0M3ww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'riviera maya beach', rating: 5, reviews: 812 },
-  { name: 'Descubrimiento Cultural en Kioto', description: 'Vuelo + 7 noches con tours', price: '1800', image: 'https://images.unsplash.com/photo-1669954791579-15a45890449f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxreW90byUyMHRlbXBsZXxlbnwwfHx8fDE3NTIwODMxNDN8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'kyoto temple', rating: 5, reviews: 456 },
-  { name: 'Patagonia Salvaje', description: 'Vuelo + traslados + 6 noches', price: '2200', image: 'https://images.unsplash.com/photo-1549472599-222886485e01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwYXRhZ29uaWElMjBtb3VudGFpbnN8ZW58MHx8fHwxNzUyMDgzMTQzfDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'patagonia mountains', rating: 4, reviews: 673 },
-  { name: 'Maravillas de Egipto', description: 'Vuelo + crucero por el Nilo', price: '1500', image: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxlZ3lwdCUyMHB5cmFtaWRzfGVufDB8fHx8MTc1MjA4MzE0M3ww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'egypt pyramids', rating: 5, reviews: 1024 },
-];
+import { Heart, Star, Tag, Clock, PlaneTakeoff } from 'lucide-react';
+import { Card, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
+import { recommendedPackages } from '@/lib/mock-packages';
+import Link from 'next/link';
 
 const PackageCard = ({ pkg }: { pkg: typeof recommendedPackages[0] }) => (
-    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-white/20">
-        <div className="relative w-28 h-28 flex-shrink-0">
+    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-primary/50">
+        <div className="relative h-56 w-full">
             <Image 
                 src={pkg.image} 
                 data-ai-hint={pkg.hint} 
-                alt={pkg.name} 
+                alt={pkg.title} 
                 fill 
-                className="object-cover rounded-xl"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
-        </div>
-        <div className="flex flex-col flex-grow">
-            <div className="flex justify-between items-start">
-              <h3 className="font-bold text-lg text-white">{pkg.name}</h3>
-              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white hover:text-white">
-                  <Heart className="h-5 w-5" />
-              </Button>
+            {pkg.special_offer && (
+                 <Badge className="absolute top-3 right-3 text-sm" variant="destructive">{pkg.special_offer}</Badge>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+             <div className="absolute bottom-4 left-4 text-white">
+                <h3 className="font-bold text-2xl font-headline drop-shadow-lg">{pkg.title}</h3>
+                <p className="text-white/90 drop-shadow-md">{pkg.destination}</p>
             </div>
-            <p className="text-sm text-white/70">{pkg.description}</p>
-            <p className="font-semibold text-primary text-xl mt-1">${pkg.price}/persona</p>
-            <div className="flex items-center gap-2 mt-auto text-sm">
-                <div className="flex items-center gap-1 text-amber-400">
-                    {[...Array(pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                    {[...Array(5 - pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-white/30" />)}
+        </div>
+        <CardContent className="p-4 flex flex-col flex-grow text-white">
+            <div className="flex justify-between items-center text-sm text-white/80 mb-3">
+                 <div className="flex items-center gap-2">
+                    <PlaneTakeoff className="h-4 w-4" />
+                    <span>Salida desde {pkg.origin}</span>
                 </div>
-                <p className="text-white/70">({pkg.reviews} reviews)</p>
+                <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    <span>{pkg.duration} Noches</span>
+                </div>
             </div>
-        </div>
+
+            <ul className="text-xs text-white/70 space-y-1 mb-4 list-disc list-inside">
+                {pkg.includes.slice(0, 2).map((item, index) => <li key={index}>{item}</li>)}
+            </ul>
+            
+            <div className="flex-grow"></div>
+
+            <div className="flex justify-between items-end">
+                <div>
+                     <div className="flex items-center gap-2 text-sm">
+                        <div className="flex items-center gap-1 text-amber-400">
+                            {[...Array(pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                        </div>
+                        <p className="text-white/70">({pkg.reviews} reviews)</p>
+                    </div>
+                    <p className="text-xs text-white/80 mt-1">Precio por persona desde</p>
+                    <p className="font-bold text-2xl text-accent">${pkg.price}</p>
+                </div>
+                <Button asChild className="font-semibold" size="sm">
+                   <Link href={`/packages/${pkg.id}`}>
+                     Ver Paquete
+                   </Link>
+                </Button>
+            </div>
+        </CardContent>
     </Card>
 );
 
+
 export function RecommendedPackages() {
   return (
-     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-white">Paquetes Populares</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {recommendedPackages.map((pkg, index) => (
-          <PackageCard key={index} pkg={pkg} />
+     <div className="space-y-8">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold font-headline text-white">Paquetes Imperdibles</h2>
+        <p className="text-white/80 mt-2">Experiencias completas al mejor precio, listas para que las descubras.</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {recommendedPackages.map((pkg) => (
+          <PackageCard key={pkg.id} pkg={pkg} />
         ))}
       </div>
     </div>
