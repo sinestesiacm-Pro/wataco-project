@@ -31,7 +31,7 @@ const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
               </Button>
             </div>
             <p className="text-sm text-white/70">{activity.description}</p>
-            <p className="font-semibold text-primary text-xl mt-1">${activity.price}/persona</p>
+            <p className="font-semibold text-white text-xl mt-1">${activity.price}/persona</p>
             <div className="flex items-center gap-2 mt-auto text-sm">
                 <div className="flex items-center gap-1 text-amber-400">
                     {[...Array(activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
