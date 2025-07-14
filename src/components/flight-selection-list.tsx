@@ -26,7 +26,7 @@ interface FlightSelectionListProps {
   selectedOutboundFlight?: FlightOffer | null;
 }
 
-const FlightCard = ({ flight, dictionaries, onSelectFlight, title }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void, title: string }) => {
+function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void, title: string }) {
     const itinerary = flight.itineraries[0];
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
@@ -91,7 +91,7 @@ const FlightCard = ({ flight, dictionaries, onSelectFlight, title }: { flight: F
                     dialogTitle={title.includes('ida') ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}
                 />
             </div>
-        </div>
+        </Card>
     );
 };
 
