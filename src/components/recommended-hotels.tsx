@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { Separator } from './ui/separator';
 
 const recommendedHotels = [
-  { id: 'HB001', name: 'Oceanview Resort', city: 'Cancún, México', price: '279', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?fit=crop&w=800&q=80', hint: 'luxury resort sunset', rating: 5, reviews: 1327 },
-  { id: 'HB003', name: 'Mountain Escape', city: 'Bariloche, Argentina', price: '315', image: 'https://images.unsplash.com/photo-1575586232388-26154f2c8f8a?fit=crop&w=800&q=80', hint: 'mountain cabin dawn', rating: 5, reviews: 982 },
-  { id: 'HB002', name: 'City Hotel', city: 'Bogotá, Colombia', price: '149', image: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=800&q=80', hint: 'modern hotel room city', rating: 4, reviews: 3481 },
-  { id: 'HB004', name: 'Boutique Hotel', city: 'Cuzco, Perú', price: '180', image: 'https://images.unsplash.com/photo-1596436889106-be35e843f974?fit=crop&w=800&q=80', hint: 'charming boutique hotel', rating: 5, reviews: 754 },
+  { id: 'HB001', name: 'Oceanview Resort', city: 'Cancún, México', price: '279', image: 'https://images.unsplash.com/photo-1607185654436-3bd5d7a897ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxsdXh1cnklMjByZXNvcnQlMjBzdW5zZXR8ZW58MHx8fHwxNzUyNTkyMjM1fDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'luxury resort sunset', rating: 5, reviews: 1327 },
+  { id: 'HB003', name: 'Mountain Escape', city: 'Bariloche, Argentina', price: '315', image: 'https://images.unsplash.com/photo-1743187571446-ab16931a5608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb3VudGFpbiUyMGNhYmluJTIwZGF3bnxlbnwwfHx8fDE3NTI1OTIyMzR8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'mountain cabin dawn', rating: 5, reviews: 982 },
+  { id: 'HB002', name: 'City Hotel', city: 'Bogotá, Colombia', price: '149', image: 'https://images.unsplash.com/photo-1621891334762-e186f94d3a1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBob3RlbCUyMHJvb20lMjBjaXR5fGVufDB8fHx8MTc1MjU5MjIzNHww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'modern hotel room city', rating: 4, reviews: 3481 },
+  { id: 'HB004', name: 'Boutique Hotel', city: 'Cuzco, Perú', price: '180', image: 'https://images.unsplash.com/photo-1617062225480-ee3a56c2c0fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFybWluZyUyMGJvdXRpcXVlJTIwaG90ZWx8ZW58MHx8fHwxNzUyNTkyMjM0fDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'charming boutique hotel', rating: 5, reviews: 754 },
 ];
 
 const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
