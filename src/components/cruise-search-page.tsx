@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { Label } from './ui/label';
+import { recommendedCruises } from '@/lib/mock-cruises';
 
 export default function CruiseSearchPage() {
   const [destinationRegion, setDestinationRegion] = useState('');
@@ -78,9 +79,7 @@ export default function CruiseSearchPage() {
     { value: 'CARIBBEAN', label: 'Caribe' },
     { value: 'ALASKA', label: 'Alaska' },
     { value: 'EUROPE', label: 'Europa' },
-    { value: 'MEXICO', label: 'México' },
-    { value: 'HAWAII', label: 'Hawái' },
-    { value: 'BAHAMAS', label: 'Bahamas' },
+    { value: 'GREECE', label: 'Islas Griegas' },
   ];
 
   return (

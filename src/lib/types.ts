@@ -221,3 +221,26 @@ export interface CruiseOffer {
 export interface CruiseData {
     data: CruiseOffer[];
 }
+
+export interface CruiseItineraryItem {
+  day: number;
+  port: string;
+  arrival: string;
+  departure: string;
+  isAtSea?: boolean;
+  countryCode?: string;
+  image?: string;
+}
+
+export interface CruisePackage {
+  id: string;
+  name: string;
+  ship: string;
+  duration: string;
+  image: string;
+  hint: string;
+  rating: number;
+  reviews: number;
+  price: string;
+  itinerary: CruiseItineraryItem[];
+}
