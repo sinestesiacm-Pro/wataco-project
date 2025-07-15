@@ -125,7 +125,7 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
 
                     {/* Search Button */}
                     <div className="md:col-span-1">
-                        <Button size="lg" className="w-full bg-success hover:bg-success/90" onClick={handleSearchClick}>
+                        <Button size="lg" className="w-full bg-primary hover:bg-primary/90" onClick={handleSearchClick}>
                             <BedDouble className="mr-2 h-5 w-5" />
                             Buscar
                         </Button>

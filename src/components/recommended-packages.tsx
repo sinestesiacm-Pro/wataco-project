@@ -56,7 +56,7 @@ const PackageCard = ({ pkg }: { pkg: PackageOffer }) => (
                     <p className="text-xs text-white/80 mt-1">Precio por persona desde</p>
                     <p className="font-bold text-2xl text-white">${pkg.price}</p>
                 </div>
-                <Button asChild className="font-semibold" size="sm">
+                <Button asChild className="font-semibold bg-success hover:bg-success/90" size="sm">
                    <Link href={`/packages/${pkg.id}`}>
                      Ver Paquete
                    </Link>
