@@ -15,6 +15,12 @@ import { Badge } from '@/components/ui/badge';
 import type { CruisePackage } from '@/lib/types';
 
 function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
+  console.log('--- DEPURACIÓN VIDEO SOURCE (DENTRO DE CRUISEDETAILPAGECONTENT - CRÍTICO) ---');
+  console.log('Valor de `cruise` recibido como prop en el hijo:', cruise);
+  console.log('Valor de `cruise?.videoUrl` recibido en el hijo:', cruise?.videoUrl);
+  console.log('Tipo de `cruise?.videoUrl` en el hijo:', typeof cruise?.videoUrl);
+  console.log('--- FIN DEPURACIÓN VIDEO SOURCE (HIJO) ---');
+
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   
