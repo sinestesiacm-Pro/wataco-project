@@ -1,8 +1,8 @@
 'use client';
 
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useMemo, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2, Ship, Star, Clock, Users, Anchor } from "lucide-react";
+import { ArrowLeft, Loader2, Ship, Star, Clock, Users, Anchor, Play, Pause } from "lucide-react";
 import Link from "next/link";
 import { recommendedCruises } from '@/lib/mock-cruises';
 import { notFound } from 'next/navigation';
@@ -14,10 +14,23 @@ import { Badge } from '@/components/ui/badge';
 
 function CruiseDetailPageContent({ id }: { id: string }) {
   const cruise = useMemo(() => recommendedCruises.find(c => c.id === id), [id]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   if (!cruise) {
     notFound();
   }
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+        if (isPlaying) {
+            videoRef.current.pause();
+        } else {
+            video_ref.current.play();
+        }
+        setIsPlaying(!isPlaying);
+    }
+  };
 
   const renderStars = (rating: number) => {
     return [...Array(rating)].map((_, i) => (
@@ -40,15 +53,29 @@ function CruiseDetailPageContent({ id }: { id: string }) {
         <Card className="overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
           <div className="relative h-64 md:h-96 w-full">
               {cruise.videoUrl ? (
-                <video
-                  src={cruise.videoUrl}
-                  poster={cruise.image}
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
+                <>
+                  <video
+                    ref={videoRef}
+                    src={cruise.videoUrl}
+                    poster={cruise.image}
+                    className="w-full h-full object-cover"
+                    loop
+                    muted
+                    playsInline
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                  />
+                   <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                     <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handlePlayPause}
+                        className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 hover:text-white"
+                     >
+                        {isPlaying ? <Pause className="h-10 w-10"/> : <Play className="h-10 w-10"/>}
+                     </Button>
+                   </div>
+                </>
               ) : (
                 <Image 
                   src={cruise.image} 
@@ -59,8 +86,8 @@ function CruiseDetailPageContent({ id }: { id: string }) {
                   priority
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-6 left-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+              <div className="absolute bottom-6 left-6 pointer-events-none">
                 <Badge variant="secondary" className="mb-2">{cruise.ship}</Badge>
                 <h1 className="text-4xl md:text-5xl font-bold font-headline drop-shadow-lg">{cruise.name}</h1>
               </div>
