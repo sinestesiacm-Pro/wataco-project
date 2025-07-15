@@ -127,24 +127,22 @@ function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
   );
 }
 
-function CruiseDetailPageResolved({ params }: { params: { id: string } }) {
-  const cruise = recommendedCruises.find(c => c.id === params.id);
+
+export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
+  const cruise = recommendedCruises.find(c => c.id === id);
 
   if (!cruise) {
     notFound();
   }
   
-  return <CruiseDetailPageContent cruise={cruise} />;
-}
-
-export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   return (
      <Suspense fallback={
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-cruises-gradient">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
-      <CruiseDetailPageResolved params={React.use(params)} />
+      <CruiseDetailPageContent cruise={cruise} />
     </Suspense>
   );
 }
