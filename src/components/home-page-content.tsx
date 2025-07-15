@@ -56,19 +56,20 @@ export function HomePageContent() {
     const tab = searchParams.get('tab') || 'Flights';
     
     const getBackgroundClass = () => {
+        const baseAnimationClass = 'background-pan-animation';
         switch(tab) {
-            case 'Flights': return 'bg-flights-gradient';
-            case 'Hotels': return 'bg-hotels-gradient';
-            case 'Packages': return 'bg-packages-gradient';
-            case 'Cruises': return 'bg-cruises-gradient';
-            case 'Activities': return 'bg-activities-gradient';
-            case 'Social': return 'bg-activities-gradient';
-            default: return 'bg-flights-gradient';
+            case 'Flights': return cn('bg-flights-gradient', baseAnimationClass);
+            case 'Hotels': return cn('bg-hotels-gradient', baseAnimationClass);
+            case 'Packages': return cn('bg-packages-gradient', baseAnimationClass);
+            case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
+            case 'Activities': return cn('bg-activities-gradient', baseAnimationClass);
+            case 'Social': return cn('bg-activities-gradient', baseAnimationClass);
+            default: return cn('bg-flights-gradient', baseAnimationClass);
         }
     }
 
     return (
-        <div className={cn('w-full flex flex-col flex-grow min-h-screen', getBackgroundClass(), 'background-pan-animation')}>
+        <div className={cn('w-full flex flex-col flex-grow min-h-screen', getBackgroundClass())}>
             <div className="pt-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                   {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
