@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { Suspense, useState, useRef } from 'react';
@@ -7,7 +8,7 @@ import Link from "next/link";
 import { recommendedCruises } from '@/lib/mock-cruises';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { CruiseItinerary } from '@/components/cruise-itinerary';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
