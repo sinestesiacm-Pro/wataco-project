@@ -62,6 +62,7 @@ function CruiseDetailPageContent({ id }: { id: string }) {
                     loop
                     muted
                     playsInline
+                    preload="metadata"
                     onPlay={() => setIsPlaying(true)}
                     onPause={() => setIsPlaying(false)}
                   />
