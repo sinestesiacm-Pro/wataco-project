@@ -123,7 +123,7 @@ function CruiseDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function CruiseDetailPage({ params }: { params: { id: string } }) {
   const { id } = React.use(params);
   
   return (
