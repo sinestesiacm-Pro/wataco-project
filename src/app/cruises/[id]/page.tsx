@@ -1,9 +1,9 @@
 
 'use client';
 
-import React, { Suspense, useState, useRef } from 'react';
+import React, { Suspense } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2, Ship, Star, Clock, Users, Anchor, Play, Pause } from "lucide-react";
+import { ArrowLeft, Loader2, Ship, Star, Clock, Anchor, Play, Pause } from "lucide-react";
 import Link from "next/link";
 import { recommendedCruises } from '@/lib/mock-cruises';
 import { notFound } from 'next/navigation';
@@ -15,14 +15,8 @@ import { Badge } from '@/components/ui/badge';
 import type { CruisePackage } from '@/lib/types';
 
 function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
-  console.log('--- DEPURACIÓN VIDEO SOURCE (DENTRO DE CRUISEDETAILPAGECONTENT - CRÍTICO) ---');
-  console.log('Valor de `cruise` recibido como prop en el hijo:', cruise);
-  console.log('Valor de `cruise?.videoUrl` recibido en el hijo:', cruise?.videoUrl);
-  console.log('Tipo de `cruise?.videoUrl` en el hijo:', typeof cruise?.videoUrl);
-  console.log('--- FIN DEPURACIÓN VIDEO SOURCE (HIJO) ---');
-
-  const [isPlaying, setIsPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
   
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -126,21 +120,25 @@ function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
   );
 }
 
-export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = React.use(params);
-  const cruise = recommendedCruises.find(c => c.id === id);
+function CruiseDetailPageResolved({ params }: { params: { id: string } }) {
+  const cruise = recommendedCruises.find(c => c.id === params.id);
 
   if (!cruise) {
     notFound();
   }
   
+  return <CruiseDetailPageContent cruise={cruise} />;
+}
+
+
+export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   return (
      <Suspense fallback={
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-cruises-gradient">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
-      <CruiseDetailPageContent cruise={cruise} />
+      <CruiseDetailPageResolved params={React.use(params)} />
     </Suspense>
   );
 }
