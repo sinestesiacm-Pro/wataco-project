@@ -12,15 +12,11 @@ import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { CruiseItinerary } from '@/components/cruise-itinerary';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import type { CruisePackage } from '@/lib/types';
 
-function CruiseDetailPageContent({ id }: { id: string }) {
-  const cruise = recommendedCruises.find(c => c.id === id);
+function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  if (!cruise) {
-    notFound();
-  }
   
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -126,6 +122,11 @@ function CruiseDetailPageContent({ id }: { id: string }) {
 
 export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
+  const cruise = recommendedCruises.find(c => c.id === id);
+
+  if (!cruise) {
+    notFound();
+  }
   
   return (
      <Suspense fallback={
@@ -133,7 +134,7 @@ export default function CruiseDetailPage({ params }: { params: Promise<{ id: str
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
-      <CruiseDetailPageContent id={id} />
+      <CruiseDetailPageContent cruise={cruise} />
     </Suspense>
   );
 }
