@@ -1,26 +1,26 @@
 'use client';
 
-import React, { Suspense, useMemo, useState, useRef } from 'react';
+import React, { Suspense, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Ship, Star, Clock, Users, Anchor, Play, Pause } from "lucide-react";
 import Link from "next/link";
 import { recommendedCruises } from '@/lib/mock-cruises';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { CruiseItinerary } from '@/components/cruise-itinerary';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 
 function CruiseDetailPageContent({ id }: { id: string }) {
-  const cruise = useMemo(() => recommendedCruises.find(c => c.id === id), [id]);
+  const cruise = recommendedCruises.find(c => c.id === id);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   if (!cruise) {
     notFound();
   }
-
+  
   const handlePlayPause = () => {
     if (videoRef.current) {
         if (isPlaying) {
@@ -123,7 +123,7 @@ function CruiseDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function CruiseDetailPage({ params }: { params: { id: string } }) {
+export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   
   return (
