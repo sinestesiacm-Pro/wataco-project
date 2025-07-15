@@ -45,9 +45,9 @@ const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
             <div className="flex justify-between items-center">
                 <div>
                     <p className="text-xs text-white/80">desde</p>
-                    <p className="font-semibold text-2xl text-success">${hotel.price}<span className="text-sm font-normal text-white/80">/noche</span></p>
+                    <p className="font-semibold text-2xl text-accent">${hotel.price}<span className="text-sm font-normal text-white/80">/noche</span></p>
                 </div>
-                <Button asChild className="font-semibold bg-success hover:bg-success/90">
+                <Button asChild className="font-semibold">
                     <Link href={`/hotels/${hotel.id}`}>Ver Hotel</Link>
                 </Button>
             </div>
