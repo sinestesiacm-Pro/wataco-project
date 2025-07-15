@@ -39,14 +39,26 @@ function CruiseDetailPageContent({ id }: { id: string }) {
 
         <Card className="overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
           <div className="relative h-64 md:h-96 w-full">
-              <Image 
-                src={cruise.image} 
-                data-ai-hint={cruise.hint} 
-                alt={cruise.name}
-                fill
-                className="object-cover"
-                priority
-              />
+              {cruise.videoUrl ? (
+                <video
+                  src={cruise.videoUrl}
+                  poster={cruise.image}
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                <Image 
+                  src={cruise.image} 
+                  data-ai-hint={cruise.hint} 
+                  alt={cruise.name}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-6 left-6">
                 <Badge variant="secondary" className="mb-2">{cruise.ship}</Badge>

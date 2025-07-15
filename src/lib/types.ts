@@ -238,6 +238,7 @@ export interface CruisePackage {
   ship: string;
   duration: string;
   image: string;
+  videoUrl?: string;
   hint: string;
   rating: number;
   reviews: number;
