@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Ship, Star, Clock, Anchor, Play, Pause } from "lucide-react";
 import Link from "next/link";
@@ -15,8 +15,8 @@ import { Badge } from '@/components/ui/badge';
 import type { CruisePackage } from '@/lib/types';
 
 function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -34,6 +34,13 @@ function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
         <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
     ));
   };
+  
+  // --- DEPURACIÓN VIDEO SOURCE (INTENTO FINAL - EVIDENCIA NECESARIA) ---
+  console.log('--- DEPURACIÓN VIDEO SOURCE (INTENTO FINAL - EVIDENCIA NECESARIA) ---');
+  console.log('Valor de `cruise` en el momento del render:', cruise);
+  console.log('Valor de `cruise.videoUrl` en el momento del render:', cruise?.videoUrl);
+  console.log('Tipo de `cruise.videoUrl`:', typeof cruise?.videoUrl);
+  console.log('--- FIN DEPURACIÓN VIDEO SOURCE (EVIDENCIA NECESARIA) ---');
 
   return (
     <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-cruises-gradient background-pan-animation')}>
@@ -129,7 +136,6 @@ function CruiseDetailPageResolved({ params }: { params: { id: string } }) {
   
   return <CruiseDetailPageContent cruise={cruise} />;
 }
-
 
 export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   return (
