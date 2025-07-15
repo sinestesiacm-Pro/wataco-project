@@ -32,7 +32,7 @@ const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
                   </Button>
                 </div>
                 <p className="text-sm text-white/70">{hotel.city}</p>
-                <p className="font-semibold text-primary text-xl mt-1">${hotel.price}/noche</p>
+                <p className="font-semibold text-white text-xl mt-1">${hotel.price}/noche</p>
                 <div className="flex items-center gap-2 mt-auto text-sm">
                     <div className="flex items-center gap-1 text-amber-400">
                         {[...Array(hotel.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}

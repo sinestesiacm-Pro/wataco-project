@@ -54,7 +54,7 @@ const PackageCard = ({ pkg }: { pkg: PackageOffer }) => (
                         <p className="text-white/70">({pkg.reviews} reviews)</p>
                     </div>
                     <p className="text-xs text-white/80 mt-1">Precio por persona desde</p>
-                    <p className="font-bold text-2xl text-accent">${pkg.price}</p>
+                    <p className="font-bold text-2xl text-white">${pkg.price}</p>
                 </div>
                 <Button asChild className="font-semibold" size="sm">
                    <Link href={`/packages/${pkg.id}`}>
