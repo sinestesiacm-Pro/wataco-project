@@ -14,7 +14,7 @@ const recommendedHotels = [
 
 const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
     <Link href={`/hotels/${hotel.id}`} className="group">
-        <Card className="bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-black/30 h-full">
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-white/20 h-full">
             <div className="relative w-28 h-28 flex-shrink-0">
                 <Image 
                     src={hotel.image} 
