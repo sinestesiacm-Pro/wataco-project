@@ -26,7 +26,7 @@ function CruiseDetailPageContent({ id }: { id: string }) {
         if (isPlaying) {
             videoRef.current.pause();
         } else {
-            video_ref.current.play();
+            videoRef.current.play();
         }
         setIsPlaying(!isPlaying);
     }
