@@ -6,7 +6,7 @@ export const recommendedCruises: CruisePackage[] = [
     name: 'Sueño del Caribe Occidental',
     ship: 'Symphony of the Seas',
     duration: '7 Noches',
-    image: 'https://images.unsplash.com/photo-1678377402066-f09f89c267d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjcnVpc2UlMjBzaGlwJTIwY2FyaWJiZWFufGVufDB8fHx8MTc1MjA4NDA0OHww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/489365022.jpg?k=1219b168a7f964344e138cf6619df1d24e9d8c365313215570258163c95a0547&o=',
     videoUrl: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.mp4',
     hint: 'cruise ship caribbean',
     rating: 5,
