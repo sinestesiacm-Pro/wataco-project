@@ -10,11 +10,13 @@ import { ArrowLeft } from 'lucide-react';
 
 // Componente de Página (Server Component) - Obtiene los datos
 export default async function CruiseDetailPage({ params }: { params: { id: string } }) {
-  const cruise = recommendedCruises.find(c => c.id === params.id); // Busca el crucero
+  // La forma correcta de obtener el crucero. Next.js resuelve los params automáticamente.
+  const cruise = recommendedCruises.find(c => c.id === params.id);
 
-  // Este check de !cruise es crucial aquí en el Server Component
+  // Este check es crucial y ahora funcionará como se espera.
+  // Si no se encuentra el crucero, la página 404 se mostrará y el resto del código no se ejecutará.
   if (!cruise) {
-    notFound(); // Si no se encuentra, muestra 404
+    notFound();
   }
 
   return (
@@ -33,7 +35,7 @@ export default async function CruiseDetailPage({ params }: { params: { id: strin
                        </Link>
                     </Button>
                 </div>
-                {/* Pasa el objeto 'cruise' ya resuelto al componente cliente */}
+                {/* Pasa el objeto 'cruise' ya resuelto y validado al componente cliente */}
                 <CruiseDetailPageContent cruise={cruise} /> 
             </div>
         </div>
