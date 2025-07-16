@@ -51,6 +51,12 @@ const nextConfig: NextConfig = {
         hostname: 'flagcdn.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
