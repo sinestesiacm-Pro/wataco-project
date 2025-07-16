@@ -12,11 +12,6 @@ import type { CruisePackage } from '@/lib/types';
 
 // Componente de Contenido (Client Component) - Recibe datos como props y maneja UI interactiva
 export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
-    console.log('--- DEPURACIÓN VIDEO SOURCE (DESPUÉS DEL FIX DEFINITIVO - EN EL CLIENTE) ---');
-    console.log('Valor de `cruise` recibido como prop:', cruise);
-    console.log('Valor de `cruise.videoUrl` recibido en el hijo:', cruise?.videoUrl);
-    console.log('Tipo de `cruise.videoUrl`:', typeof cruise?.videoUrl);
-    console.log('--- FIN DEPURACIÓN VIDEO SOURCE (DESPUÉS DEL FIX DEFINITIVO) ---');
     
     const [isPlaying, setIsPlaying] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
