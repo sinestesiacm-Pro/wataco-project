@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -25,7 +24,7 @@ const feedItems = [
   },
   {
     user: { name: 'Ana M.', avatar: 'https://images.unsplash.com/photo-1714415182234-0672970be61a?w=100' },
-    image: 'https://placehold.co/1920x1080.png',
+    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbb5eb?fit=crop&w=1920&q=80',
     hint: 'luxury hotel',
     caption: 'Encontré el hotel perfecto en los Alpes suizos gracias a Be On Trip. Las vistas son espectaculares.',
     likes: 98,
@@ -33,7 +32,7 @@ const feedItems = [
   },
   {
     user: { name: 'David S.', avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100' },
-    image: 'https://placehold.co/1920x1080.png',
+    image: 'https://images.unsplash.com/photo-1533106418989-88406e756cae?fit=crop&w=1920&q=80',
     hint: 'road trip',
     caption: '¡Aventura en la carretera por la costa de California! Cada curva es una nueva postal. 🚗💨',
     likes: 215,
