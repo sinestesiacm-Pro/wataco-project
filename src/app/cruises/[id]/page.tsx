@@ -35,13 +35,6 @@ function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
     ));
   };
   
-  // --- DEPURACIÓN VIDEO SOURCE (INTENTO FINAL - EVIDENCIA NECESARIA) ---
-  console.log('--- DEPURACIÓN VIDEO SOURCE (INTENTO FINAL - EVIDENCIA NECESARIA) ---');
-  console.log('Valor de `cruise` en el momento del render:', cruise);
-  console.log('Valor de `cruise.videoUrl` en el momento del render:', cruise?.videoUrl);
-  console.log('Tipo de `cruise.videoUrl`:', typeof cruise?.videoUrl);
-  console.log('--- FIN DEPURACIÓN VIDEO SOURCE (EVIDENCIA NECESARIA) ---');
-
   return (
     <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-cruises-gradient background-pan-animation')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
@@ -127,14 +120,18 @@ function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
   );
 }
 
-
-export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = React.use(params);
+function CruiseDetailPageResolved({ id }: { id: string }) {
   const cruise = recommendedCruises.find(c => c.id === id);
 
   if (!cruise) {
     notFound();
   }
+  
+  return <CruiseDetailPageContent cruise={cruise} />;
+}
+
+export default function CruiseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = React.use(params);
   
   return (
      <Suspense fallback={
@@ -142,7 +139,7 @@ export default function CruiseDetailPage({ params }: { params: Promise<{ id: str
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
-      <CruiseDetailPageContent cruise={cruise} />
+      <CruiseDetailPageResolved id={resolvedParams.id} />
     </Suspense>
   );
 }
