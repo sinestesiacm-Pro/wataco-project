@@ -1,3 +1,4 @@
+
 import type { CruisePackage } from './types';
 
 export const recommendedCruises: CruisePackage[] = [
@@ -6,8 +7,8 @@ export const recommendedCruises: CruisePackage[] = [
     name: 'Sueño del Caribe Occidental',
     ship: 'Symphony of the Seas',
     duration: '7 Noches',
-    image: 'https://images.pexels.com/photos/1586795/pexels-photo-1586795.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    videoUrl: 'https://videos.pexels.com/video-files/2099039/2099039-hd.mp4',
+    image: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.jpeg',
+    videoUrl: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.mp4',
     hint: 'cruise ship caribbean',
     rating: 5,
     reviews: 1150,
