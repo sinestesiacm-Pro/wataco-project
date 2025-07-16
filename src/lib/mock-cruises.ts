@@ -1,4 +1,3 @@
-
 import type { CruisePackage } from './types';
 
 export const recommendedCruises: CruisePackage[] = [
