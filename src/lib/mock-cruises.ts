@@ -13,7 +13,7 @@ export const recommendedCruises: CruisePackage[] = [
       'https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       'https://images.pexels.com/photos/1174732/pexels-photo-1174732.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       'https://images.pexels.com/photos/261101/pexels-photo-261101.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/14585611/pexels-photo-14585611.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+      'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
     ],
     hint: 'cruise ship caribbean',
     rating: 5,
