@@ -15,11 +15,11 @@ import type { CruisePackage } from '@/lib/types';
 // Componente de Contenido (Client Component) - Recibe datos como props y maneja UI interactiva
 export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
     // ¡CRÍTICO! console.log() para verificar el valor de 'cruise' recibido como prop
-    console.log('--- DEPURACIÓN VIDEO SOURCE (NECESIDAD DE EVIDENCIA REAL DEFINITIVA - ULTIMO INTENTO) ---');
-    console.log('Valor de `cruise` en el momento del render (en el hijo):', cruise);
-    console.log('Valor de `cruise.videoUrl` en el momento del render (en el hijo):', cruise?.videoUrl);
-    console.log('Tipo de `cruise.videoUrl` (en el hijo):', typeof cruise?.videoUrl);
-    console.log('--- FIN DEPURACIÓN VIDEO SOURCE (NECESIDAD DE EVIDENCIA REAL DEFINITIVA - ULTIMO INTENTO) ---');
+    console.log('--- DEPURACIÓN VIDEO SOURCE (DESPUÉS DEL FIX DEFINITIVO - EN EL CLIENTE) ---');
+    console.log('Valor de `cruise` recibido como prop:', cruise);
+    console.log('Valor de `cruise.videoUrl` recibido en el hijo:', cruise?.videoUrl);
+    console.log('Tipo de `cruise.videoUrl`:', typeof cruise?.videoUrl);
+    console.log('--- FIN DEPURACIÓN VIDEO SOURCE (DESPUÉS DEL FIX DEFINITIVO) ---');
 
     const [isPlaying, setIsPlaying] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -40,6 +40,15 @@ export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePack
             <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
         ));
     };
+
+    // Renderizado condicional si cruise es undefined o no tiene videoUrl (aunque el padre debería manejarlo)
+    if (!cruise) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px] text-white">
+                <Loader2 className="h-12 w-12 animate-spin text-white" />
+            </div>
+        );
+    }
 
     return (
         <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-cruises-gradient background-pan-animation')}>

@@ -1,14 +1,16 @@
 
+// src/app/cruises/[id]/page.tsx (Este NO debe tener 'use client')
 import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { recommendedCruises } from '@/lib/mock-cruises';
-import CruiseDetailPageContent from '@/components/cruise-detail-page-content';
+import CruiseDetailPageContent from '@/components/cruise-detail-page-content'; // Importa el componente cliente
 
 // Componente de Página (Server Component) - Obtiene los datos
 export default async function CruiseDetailPage({ params }: { params: { id: string } }) {
-  const cruise = recommendedCruises.find(c => c.id === params.id);
+  const cruise = recommendedCruises.find(c => c.id === params.id); // Busca el crucero
 
+  // Este check de !cruise es crucial aquí en el Server Component
   if (!cruise) {
     notFound(); // Si no se encuentra, muestra 404
   }
@@ -20,7 +22,7 @@ export default async function CruiseDetailPage({ params }: { params: { id: strin
       </div>
     }>
       {/* Pasa el objeto 'cruise' ya resuelto al componente cliente */}
-      <CruiseDetailPageContent cruise={cruise} />
+      <CruiseDetailPageContent cruise={cruise} /> 
     </Suspense>
   );
 }
