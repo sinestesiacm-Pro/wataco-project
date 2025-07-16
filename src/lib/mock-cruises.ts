@@ -9,6 +9,12 @@ export const recommendedCruises: CruisePackage[] = [
     duration: '7 Noches',
     image: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.jpeg',
     videoUrl: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.mp4',
+    carouselImages: [
+      'https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/1174732/pexels-photo-1174732.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/261101/pexels-photo-261101.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/14585611/pexels-photo-14585611.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+    ],
     hint: 'cruise ship caribbean',
     rating: 5,
     reviews: 1150,
@@ -30,6 +36,12 @@ export const recommendedCruises: CruisePackage[] = [
     duration: '8 Noches',
     image: 'https://images.pexels.com/photos/3727250/pexels-photo-3727250.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     videoUrl: 'https://videos.pexels.com/video-files/3209828/3209828-hd.mp4',
+    carouselImages: [
+      'https://images.pexels.com/photos/3727250/pexels-photo-3727250.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/176383/pexels-photo-176383.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/159781/cruise-ship-deck-ocean-sea-159781.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/1638283/pexels-photo-1638283.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+    ],
     hint: 'norway fjords',
     rating: 5,
     reviews: 876,
@@ -52,6 +64,12 @@ export const recommendedCruises: CruisePackage[] = [
     duration: '10 Noches',
     image: 'https://images.pexels.com/photos/164041/pexels-photo-164041.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     videoUrl: 'https://videos.pexels.com/video-files/853874/853874-hd.mp4',
+    carouselImages: [
+      'https://images.pexels.com/photos/164041/pexels-photo-164041.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/1831236/pexels-photo-1831236.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/2088295/pexels-photo-2088295.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+    ],
     hint: 'greece santorini',
     rating: 4,
     reviews: 921,
@@ -76,6 +94,12 @@ export const recommendedCruises: CruisePackage[] = [
     duration: '7 Noches',
     image: 'https://images.pexels.com/photos/156314/glacier-ice-climbing-ice-climber-156314.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     videoUrl: 'https://videos.pexels.com/video-files/4059941/4059941-hd.mp4',
+    carouselImages: [
+      'https://images.pexels.com/photos/156314/glacier-ice-climbing-ice-climber-156314.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/3408973/pexels-photo-3408973.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/2088203/pexels-photo-2088203.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/1054218/pexels-photo-1054218.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+    ],
     hint: 'alaska glacier',
     rating: 5,
     reviews: 1043,

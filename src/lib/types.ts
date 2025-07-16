@@ -239,6 +239,7 @@ export interface CruisePackage {
   duration: string;
   image: string;
   videoUrl?: string;
+  carouselImages: string[];
   hint: string;
   rating: number;
   reviews: number;

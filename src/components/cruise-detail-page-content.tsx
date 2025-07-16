@@ -1,32 +1,17 @@
-'use client'; // ¡MUY IMPORTANTE! Esto lo convierte en un Client Component
+'use client';
 
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Ship, Star, Clock, Anchor, Play, Pause } from "lucide-react";
+import { Ship, Star, Clock, Anchor, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from 'next/image';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { CruiseItinerary } from '@/components/cruise-itinerary';
-import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import type { CruisePackage } from '@/lib/types';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
-// Componente de Contenido (Client Component) - Recibe datos como props y maneja UI interactiva
 export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
     
-    const [isPlaying, setIsPlaying] = useState(false);
-    const videoRef = useRef<HTMLVideoElement>(null);
-
-    const handlePlayPause = () => {
-        if (videoRef.current) {
-            if (isPlaying) {
-                videoRef.current.pause();
-            } else {
-                videoRef.current.play();
-            }
-            setIsPlaying(!isPlaying);
-        }
-    };
-
     const renderStars = (rating: number) => {
         return [...Array(rating)].map((_, i) => (
             <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
@@ -44,41 +29,26 @@ export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePack
     return (
         <Card className="overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
             <div className="relative h-64 md:h-96 w-full">
-                {cruise.videoUrl ? (
-                    <>
-                        <video
-                            ref={videoRef}
-                            src={cruise.videoUrl}
-                            poster={cruise.image}
-                            className="w-full h-full object-cover"
-                            loop
-                            muted
-                            playsInline
-                            preload="metadata"
-                            onPlay={() => setIsPlaying(true)}
-                            onPause={() => setIsPlaying(false)}
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={handlePlayPause}
-                                className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 hover:text-white"
-                            >
-                                {isPlaying ? <Pause className="h-10 w-10"/> : <Play className="h-10 w-10"/>}
-                            </Button>
-                        </div>
-                    </>
-                ) : (
-                    <Image
-                        src={cruise.image}
-                        data-ai-hint={cruise.hint}
-                        alt={cruise.name}
-                        fill
-                        className="object-cover"
-                        priority
-                    />
-                )}
+                <Carousel className="w-full h-full">
+                    <CarouselContent>
+                        {(cruise.carouselImages && cruise.carouselImages.length > 0 ? cruise.carouselImages : [cruise.image]).map((imgSrc, index) => (
+                            <CarouselItem key={index}>
+                                <div className="relative h-64 md:h-96 w-full">
+                                    <Image
+                                        src={imgSrc}
+                                        alt={`${cruise.name} - Imagen ${index + 1}`}
+                                        fill
+                                        className="object-cover"
+                                        priority={index === 0}
+                                    />
+                                </div>
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                </Carousel>
+                
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                 <div className="absolute bottom-6 left-6 pointer-events-none">
                     <Badge variant="secondary" className="mb-2">{cruise.ship}</Badge>
