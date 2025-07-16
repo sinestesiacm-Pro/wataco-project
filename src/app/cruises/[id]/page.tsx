@@ -12,7 +12,12 @@ import { ArrowLeft } from 'lucide-react';
 export default async function CruiseDetailPage({ params }: { params: { id: string } }) {
   // La forma correcta de obtener el crucero. Next.js resuelve los params automáticamente.
   const cruise = recommendedCruises.find(c => c.id === params.id);
-
+  console.log('--- DEPURACIÓN VIDEO SOURCE (SERVER COMPONENT - CRÍTICO) ---');
+  console.log('Componente en ejecución:', 'CruiseDetailPage (Server Component)');
+  console.log('Valor de `cruise` en el momento del render:', cruise);
+  console.log('Valor de `cruise.videoUrl` en el momento del render:', cruise?.videoUrl);
+  console.log('Tipo de `cruise.videoUrl`:', typeof cruise?.videoUrl);
+  console.log('--- FIN DEPURACIÓN VIDEO SOURCE (SERVER COMPONENT - CRÍTICO) ---');
   // Este check es crucial y ahora funcionará como se espera.
   // Si no se encuentra el crucero, la página 404 se mostrará y el resto del código no se ejecutará.
   if (!cruise) {
