@@ -31,7 +31,7 @@ const countryCodes = [
 
 const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card>
+        <Card className="bg-white text-gray-800">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><User /> ¿Quién viaja?</CardTitle>
                 <CardDescription>Ingresa los datos del pasajero principal. Deben coincidir con su documento de identidad.</CardDescription>
@@ -123,7 +123,7 @@ const ContactInfoForm = ({ isPackageBooking }: { isPackageBooking: boolean }) =>
     }
 
     return (
-        <Card>
+        <Card className="bg-white text-gray-800">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Mail /> Información de Contacto</CardTitle>
                 <CardDescription>Te enviaremos la confirmación de tu reserva a este correo.</CardDescription>
@@ -187,19 +187,19 @@ const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceCh
     }
     
     return (
-        <Card>
+        <Card className="bg-white text-gray-800">
             <CardHeader>
                 <CardTitle>Mejora tu Viaje</CardTitle>
                 <CardDescription>Añade servicios adicionales para una experiencia inolvidable.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 {additionalServices.map(service => (
-                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-secondary/10">
+                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-gray-100">
                         <div className="flex items-center gap-4">
                            <service.icon className="h-8 w-8 text-primary" />
                            <div>
                              <Label htmlFor={service.id} className="font-semibold">{service.name}</Label>
-                             <p className="text-xs text-muted-foreground">{service.description}</p>
+                             <p className="text-xs text-gray-500">{service.description}</p>
                            </div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -221,7 +221,7 @@ const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceCh
 
 const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card>
+        <Card className="bg-white text-gray-800">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><CreditCard /> Método de Pago</CardTitle>
                 <CardDescription>Todas las transacciones son seguras y encriptadas.</CardDescription>
@@ -229,12 +229,12 @@ const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
             <CardContent>
                 <RadioGroup defaultValue="credit-card" className="mb-6">
                     <div className="grid grid-cols-2 gap-4">
-                        <Label htmlFor="credit-card" className="flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary">
+                        <Label htmlFor="credit-card" className="flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer has-[[data-state=checked]]:bg-blue-50 has-[[data-state=checked]]:border-primary">
                             <RadioGroupItem value="credit-card" id="credit-card" />
                             <CreditCard />
                             <span>Tarjeta de crédito</span>
                         </Label>
-                        <Label htmlFor="paypal" className="flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary">
+                        <Label htmlFor="paypal" className="flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer has-[[data-state=checked]]:bg-blue-50 has-[[data-state=checked]]:border-primary">
                             <RadioGroupItem value="paypal" id="paypal" />
                             <Landmark />
                             <span>PayPal</span>
@@ -324,7 +324,7 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     const total = baseTotal + addons + extraServicesPrice;
     
     return (
-        <Card className="sticky top-28 shadow-lg">
+        <Card className="sticky top-28 shadow-lg bg-white text-gray-800">
             <CardHeader>
                 <CardTitle>Resumen del Pedido</CardTitle>
                  {pkg && <CardDescription>Paquete: {pkg.title}</CardDescription>}
@@ -340,18 +340,18 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                             <span><Hotel className="inline-block mr-2 h-4 w-4"/>Hotel</span>
                             <span>+${hotelPrice.toFixed(2)}</span>
                         </div>
-                         <div className="flex justify-between text-muted-foreground">
+                         <div className="flex justify-between text-gray-500">
                             <span>Precio base paquete</span>
                             <span>${pkg.price.toFixed(2)}</span>
                         </div>
                     </>
                  ) : (
-                    <div className="flex justify-between text-muted-foreground">
+                    <div className="flex justify-between text-gray-500">
                         <span>Vuelos</span>
                         <span>${flightPrice.toFixed(2)}</span>
                     </div>
                  )}
-                 <div className="flex justify-between text-muted-foreground">
+                 <div className="flex justify-between text-gray-500">
                     <span>Impuestos y tasas</span>
                     <span>${taxes.toFixed(2)}</span>
                 </div>
@@ -372,7 +372,7 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                 </div>
-                 <p className="text-xs text-muted-foreground">
+                 <p className="text-xs text-gray-500">
                     Al completar esta compra, aceptas nuestros <a href="#" className="underline">Términos de Servicio</a> y <a href="#" className="underline">Política de Privacidad</a>.
                 </p>
             </CardContent>

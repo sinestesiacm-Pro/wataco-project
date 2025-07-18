@@ -45,7 +45,7 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
 
     return (
-        <Card className="sticky top-28 shadow-lg">
+        <Card className="sticky top-28 shadow-lg bg-white text-gray-800">
             <CardHeader>
                 <div className="relative h-40 w-full mb-4 rounded-lg overflow-hidden">
                     <Image
@@ -69,11 +69,11 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
                 </div>
                 <Separator/>
                 <div className="space-y-2">
-                     <div className="flex justify-between text-muted-foreground">
+                     <div className="flex justify-between text-gray-500">
                         <span>Alojamiento ({numberOfRooms} hab. x {nights} noches)</span>
                         <span>${accommodationPrice.toFixed(2)}</span>
                     </div>
-                     <div className="flex justify-between text-muted-foreground">
+                     <div className="flex justify-between text-gray-500">
                         <span>Impuestos y tasas</span>
                         <span>${taxes.toFixed(2)}</span>
                     </div>
@@ -140,7 +140,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-2 space-y-6">
-                <Card>
+                <Card className="bg-white text-gray-800">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><CheckCircle className="text-primary"/> ¿Quién se hospeda?</CardTitle>
                         <CardDescription>Ingresa los datos del huésped principal.</CardDescription>
@@ -197,7 +197,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                     </CardContent>
                 </Card>
                 
-                <Card>
+                <Card className="bg-white text-gray-800">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><CreditCard className="text-primary"/> Método de Pago</CardTitle>
                         <CardDescription>Esta es una demostración. No se procesarán pagos reales.</CardDescription>
@@ -212,12 +212,12 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                                     defaultValue={field.value} 
                                     className="mb-6 grid grid-cols-2 gap-4"
                                 >
-                                    <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer", paymentMethod === 'credit-card' && 'bg-accent border-primary')}>
+                                    <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer", paymentMethod === 'credit-card' && 'bg-blue-50 border-primary')}>
                                         <RadioGroupItem value="credit-card" id="credit-card"/>
                                         <CreditCard />
                                         <span>Tarjeta de crédito</span>
                                     </Label>
-                                     <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer", paymentMethod === 'paypal' && 'bg-accent border-primary')}>
+                                     <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer", paymentMethod === 'paypal' && 'bg-blue-50 border-primary')}>
                                         <RadioGroupItem value="paypal" id="paypal"/>
                                         <Landmark />
                                         <span>PayPal</span>
@@ -272,7 +272,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                 </Card>
 
                 <div className="flex items-center justify-between pt-4">
-                    <div className="text-xs text-muted-foreground flex items-center gap-2">
+                    <div className="text-xs text-white flex items-center gap-2">
                         <AlertCircle className="h-4 w-4" />
                         <span>Revisa los detalles antes de confirmar.</span>
                     </div>
