@@ -72,11 +72,11 @@
   * {
     @apply border-border;
   }
-  html {
+  html, body {
     @apply h-full;
   }
   body {
-    @apply bg-background text-foreground min-h-screen;
+    @apply bg-background text-foreground;
   }
 }
 
