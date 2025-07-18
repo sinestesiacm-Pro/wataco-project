@@ -58,7 +58,10 @@ export function Header() {
   const currentTitle = getTitleFromPath(pathname);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-white/10 backdrop-blur-sm shadow-lg border-b border-white/10">
+    <header 
+      className="fixed top-0 left-0 right-0 z-40 bg-white/10 backdrop-blur-sm shadow-lg border-b border-white/10"
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
