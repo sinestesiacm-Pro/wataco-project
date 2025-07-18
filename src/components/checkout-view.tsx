@@ -45,7 +45,7 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
 
     return (
-        <Card className="sticky top-28 shadow-lg bg-white/20 backdrop-blur-xl border border-white/20 text-white">
+        <Card className="sticky top-28 shadow-lg">
             <CardHeader>
                 <div className="relative h-40 w-full mb-4 rounded-lg overflow-hidden">
                     <Image
@@ -56,10 +56,10 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
                     />
                 </div>
                 <CardTitle>{hotelOffer.hotel.name}</CardTitle>
-                <CardDescription className="text-white/80">{selectedRoom.room.description.text}</CardDescription>
+                <CardDescription>{selectedRoom.room.description.text}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                <Separator className="bg-white/20" />
+                <Separator/>
                 <div>
                     <p><strong>Check-in:</strong> {format(new Date(checkInDate), 'd MMM, yyyy', { locale: es })}</p>
                     <p><strong>Check-out:</strong> {format(new Date(checkOutDate), 'd MMM, yyyy', { locale: es })}</p>
@@ -67,17 +67,17 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
                     <p><strong>Noches:</strong> {nights}</p>
                     <p><strong>Habitaciones:</strong> {numberOfRooms}</p>
                 </div>
-                <Separator className="bg-white/20" />
+                <Separator/>
                 <div className="space-y-2">
-                     <div className="flex justify-between text-white/80">
+                     <div className="flex justify-between text-muted-foreground">
                         <span>Alojamiento ({numberOfRooms} hab. x {nights} noches)</span>
                         <span>${accommodationPrice.toFixed(2)}</span>
                     </div>
-                     <div className="flex justify-between text-white/80">
+                     <div className="flex justify-between text-muted-foreground">
                         <span>Impuestos y tasas</span>
                         <span>${taxes.toFixed(2)}</span>
                     </div>
-                    <Separator className="bg-white/20" />
+                    <Separator/>
                      <div className="flex justify-between font-bold text-xl">
                         <span>Total</span>
                         <span>${total.toFixed(2)}</span>
@@ -140,10 +140,10 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-2 space-y-6">
-                <Card className="bg-white/20 backdrop-blur-xl border border-white/20 text-white">
+                <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><CheckCircle className="text-primary"/> ¿Quién se hospeda?</CardTitle>
-                        <CardDescription className="text-white/80">Ingresa los datos del huésped principal.</CardDescription>
+                        <CardDescription>Ingresa los datos del huésped principal.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                          <div className="grid sm:grid-cols-2 gap-4">
@@ -152,7 +152,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                                 <Controller
                                     name="firstName"
                                     control={control}
-                                    render={({ field }) => <Input id="firstName" {...field} className="bg-transparent border-white/30" />}
+                                    render={({ field }) => <Input id="firstName" {...field} />}
                                 />
                                 {errors.firstName && <p className="text-destructive text-sm mt-1">{errors.firstName.message}</p>}
                             </div>
@@ -161,7 +161,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                                 <Controller
                                     name="lastName"
                                     control={control}
-                                    render={({ field }) => <Input id="lastName" {...field} className="bg-transparent border-white/30" />}
+                                    render={({ field }) => <Input id="lastName" {...field} />}
                                 />
                                 {errors.lastName && <p className="text-destructive text-sm mt-1">{errors.lastName.message}</p>}
                             </div>
@@ -172,7 +172,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                             <Controller
                                 name="email"
                                 control={control}
-                                render={({ field }) => <Input id="email" type="email" {...field} className="bg-transparent border-white/30" />}
+                                render={({ field }) => <Input id="email" type="email" {...field} />}
                             />
                             {errors.email && <p className="text-destructive text-sm mt-1">{errors.email.message}</p>}
                         </div>
@@ -181,7 +181,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                             <Controller
                                 name="confirmEmail"
                                 control={control}
-                                render={({ field }) => <Input id="confirmEmail" type="email" {...field} className="bg-transparent border-white/30" />}
+                                render={({ field }) => <Input id="confirmEmail" type="email" {...field} />}
                             />
                             {errors.confirmEmail && <p className="text-destructive text-sm mt-1">{errors.confirmEmail.message}</p>}
                         </div>
@@ -190,17 +190,17 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                             <Controller
                                 name="phone"
                                 control={control}
-                                render={({ field }) => <Input id="phone" type="tel" {...field} className="bg-transparent border-white/30" />}
+                                render={({ field }) => <Input id="phone" type="tel" {...field} />}
                             />
                             {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone.message}</p>}
                         </div>
                     </CardContent>
                 </Card>
                 
-                <Card className="bg-white/20 backdrop-blur-xl border border-white/20 text-white">
+                <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><CreditCard className="text-primary"/> Método de Pago</CardTitle>
-                        <CardDescription className="text-white/80">Esta es una demostración. No se procesarán pagos reales.</CardDescription>
+                        <CardDescription>Esta es una demostración. No se procesarán pagos reales.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Controller
@@ -212,13 +212,13 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                                     defaultValue={field.value} 
                                     className="mb-6 grid grid-cols-2 gap-4"
                                 >
-                                    <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-white/20 cursor-pointer border-white/30", paymentMethod === 'credit-card' && 'bg-accent border-accent text-accent-foreground')}>
-                                        <RadioGroupItem value="credit-card" id="credit-card" className="border-white/50 text-white" />
+                                    <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer", paymentMethod === 'credit-card' && 'bg-accent border-primary')}>
+                                        <RadioGroupItem value="credit-card" id="credit-card"/>
                                         <CreditCard />
                                         <span>Tarjeta de crédito</span>
                                     </Label>
-                                     <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-white/20 cursor-pointer border-white/30", paymentMethod === 'paypal' && 'bg-accent border-accent text-accent-foreground')}>
-                                        <RadioGroupItem value="paypal" id="paypal" className="border-white/50 text-white"/>
+                                     <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer", paymentMethod === 'paypal' && 'bg-accent border-primary')}>
+                                        <RadioGroupItem value="paypal" id="paypal"/>
                                         <Landmark />
                                         <span>PayPal</span>
                                      </Label>
@@ -232,7 +232,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                                 <Controller
                                     name="cardHolder"
                                     control={control}
-                                    render={({ field }) => <Input id="cardHolder" {...field} placeholder="J. Doe" className="bg-transparent border-white/30" />}
+                                    render={({ field }) => <Input id="cardHolder" {...field} placeholder="J. Doe" />}
                                 />
                              </div>
                              <div>
@@ -240,7 +240,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                                  <Controller
                                     name="cardNumber"
                                     control={control}
-                                    render={({ field }) => <Input id="cardNumber" {...field} placeholder="**** **** **** 1234" className="bg-transparent border-white/30" />}
+                                    render={({ field }) => <Input id="cardNumber" {...field} placeholder="**** **** **** 1234" />}
                                 />
                              </div>
                              <div className="grid grid-cols-2 gap-4">
@@ -249,7 +249,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                                      <Controller
                                         name="cardExpiry"
                                         control={control}
-                                        render={({ field }) => <Input id="cardExpiry" {...field} placeholder="MM/AA" className="bg-transparent border-white/30" />}
+                                        render={({ field }) => <Input id="cardExpiry" {...field} placeholder="MM/AA" />}
                                     />
                                 </div>
                                  <div>
@@ -257,14 +257,14 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                                      <Controller
                                         name="cardCvc"
                                         control={control}
-                                        render={({ field }) => <Input id="cardCvc" {...field} placeholder="123" className="bg-transparent border-white/30" />}
+                                        render={({ field }) => <Input id="cardCvc" {...field} placeholder="123" />}
                                     />
                                 </div>
                              </div>
                         </div>
                        )}
                        {paymentMethod === 'paypal' && (
-                           <div className="text-center p-8 border border-dashed border-white/30 rounded-lg">
+                           <div className="text-center p-8 border border-dashed rounded-lg">
                                <p>Serás redirigido a PayPal para completar tu pago de forma segura.</p>
                            </div>
                        )}
@@ -272,7 +272,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                 </Card>
 
                 <div className="flex items-center justify-between pt-4">
-                    <div className="text-xs text-white/70 flex items-center gap-2">
+                    <div className="text-xs text-muted-foreground flex items-center gap-2">
                         <AlertCircle className="h-4 w-4" />
                         <span>Revisa los detalles antes de confirmar.</span>
                     </div>

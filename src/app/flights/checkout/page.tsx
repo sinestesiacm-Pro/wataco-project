@@ -31,35 +31,35 @@ const countryCodes = [
 
 const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card className={cn(isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
+        <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><User /> ¿Quién viaja?</CardTitle>
-                <CardDescription className={cn(isPackageBooking ? 'text-white/70':'')}>Ingresa los datos del pasajero principal. Deben coincidir con su documento de identidad.</CardDescription>
+                <CardDescription>Ingresa los datos del pasajero principal. Deben coincidir con su documento de identidad.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <Label htmlFor="firstName">Nombre(s)</Label>
-                        <Input id="firstName" placeholder="John" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                        <Input id="firstName" placeholder="John" />
                     </div>
                     <div>
                         <Label htmlFor="lastName">Apellido(s)</Label>
-                        <Input id="lastName" placeholder="Doe" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                        <Input id="lastName" placeholder="Doe" />
                     </div>
                 </div>
                  <div>
                     <Label htmlFor="birthDate">Fecha de Nacimiento</Label>
-                    <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                    <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" />
                 </div>
                 <div>
                     <Label>Género</Label>
                      <RadioGroup defaultValue="female" className="flex items-center gap-4 pt-2">
                         <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="female" id="female" className={cn(isPackageBooking ? 'border-white/50 text-primary' : '')}/>
+                            <RadioGroupItem value="female" id="female" />
                             <Label htmlFor="female">Femenino</Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="male" id="male" className={cn(isPackageBooking ? 'border-white/50 text-primary' : '')}/>
+                            <RadioGroupItem value="male" id="male" />
                             <Label htmlFor="male">Masculino</Label>
                         </div>
                     </RadioGroup>
@@ -67,7 +67,7 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                 <div>
                   <Label htmlFor="residence-country">País de Residencia</Label>
                    <Select>
-                        <SelectTrigger id="residence-country" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}>
+                        <SelectTrigger id="residence-country">
                             <SelectValue placeholder="Selecciona un país" />
                         </SelectTrigger>
                         <SelectContent>
@@ -84,7 +84,7 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                     <div>
                         <Label htmlFor="document-type">Tipo de Documento</Label>
                         <Select>
-                            <SelectTrigger id="document-type" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}>
+                            <SelectTrigger id="document-type">
                                 <SelectValue placeholder="Seleccionar" />
                             </SelectTrigger>
                             <SelectContent>
@@ -95,7 +95,7 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                     </div>
                      <div>
                         <Label htmlFor="document-number">Número de Documento</Label>
-                        <Input id="document-number" placeholder="AB1234567" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                        <Input id="document-number" placeholder="AB1234567" />
                     </div>
                 </div>
             </CardContent>
@@ -123,21 +123,21 @@ const ContactInfoForm = ({ isPackageBooking }: { isPackageBooking: boolean }) =>
     }
 
     return (
-        <Card className={cn(isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
+        <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Mail /> Información de Contacto</CardTitle>
-                <CardDescription className={cn(isPackageBooking ? 'text-white/70':'')}>Te enviaremos la confirmación de tu reserva a este correo.</CardDescription>
+                <CardDescription>Te enviaremos la confirmación de tu reserva a este correo.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div>
                     <Label htmlFor="email">Correo Electrónico</Label>
-                    <Input id="email" type="email" placeholder="john.doe@example.com" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                    <Input id="email" type="email" placeholder="john.doe@example.com" />
                 </div>
                 <div>
                     <Label htmlFor="phone">Número de Teléfono</Label>
                     <div className="flex gap-2 mt-1">
                         <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
-                            <SelectTrigger className={cn("w-[120px]", isPackageBooking ? 'bg-black/20 border-white/20' : '')}>
+                            <SelectTrigger className="w-[120px]">
                                 <SelectValue asChild>
                                     <SelectedCountryDisplay code={selectedCountryCode} />
                                 </SelectValue>
@@ -158,7 +158,7 @@ const ContactInfoForm = ({ isPackageBooking }: { isPackageBooking: boolean }) =>
                                 ))}
                             </SelectContent>
                         </Select>
-                        <Input id="phone" type="tel" placeholder="234 567 890" className={cn("flex-grow", isPackageBooking ? 'bg-black/20 border-white/20' : '')} />
+                        <Input id="phone" type="tel" placeholder="234 567 890" className="flex-grow" />
                     </div>
                 </div>
             </CardContent>
@@ -187,14 +187,14 @@ const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceCh
     }
     
     return (
-        <Card className={cn(isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
+        <Card>
             <CardHeader>
                 <CardTitle>Mejora tu Viaje</CardTitle>
-                <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Añade servicios adicionales para una experiencia inolvidable.</CardDescription>
+                <CardDescription>Añade servicios adicionales para una experiencia inolvidable.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 {additionalServices.map(service => (
-                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-secondary/30">
+                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-secondary/10">
                         <div className="flex items-center gap-4">
                            <service.icon className="h-8 w-8 text-primary" />
                            <div>
@@ -221,21 +221,21 @@ const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceCh
 
 const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card className={cn(isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
+        <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><CreditCard /> Método de Pago</CardTitle>
-                <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Todas las transacciones son seguras y encriptadas.</CardDescription>
+                <CardDescription>Todas las transacciones son seguras y encriptadas.</CardDescription>
             </CardHeader>
             <CardContent>
                 <RadioGroup defaultValue="credit-card" className="mb-6">
                     <div className="grid grid-cols-2 gap-4">
-                        <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary", isPackageBooking ? 'border-white/20' : '')}>
-                            <RadioGroupItem value="credit-card" id="credit-card" className={cn(isPackageBooking ? 'border-white/50 text-primary' : '')}/>
+                        <Label htmlFor="credit-card" className="flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary">
+                            <RadioGroupItem value="credit-card" id="credit-card" />
                             <CreditCard />
                             <span>Tarjeta de crédito</span>
                         </Label>
-                        <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary", isPackageBooking ? 'border-white/20' : '')}>
-                            <RadioGroupItem value="paypal" id="paypal" className={cn(isPackageBooking ? 'border-white/50 text-primary' : '')}/>
+                        <Label htmlFor="paypal" className="flex items-center gap-2 border rounded-md p-3 hover:bg-accent cursor-pointer has-[[data-state=checked]]:bg-accent has-[[data-state=checked]]:border-primary">
+                            <RadioGroupItem value="paypal" id="paypal" />
                             <Landmark />
                             <span>PayPal</span>
                         </Label>
@@ -245,42 +245,42 @@ const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                 <div className="space-y-4">
                     <div>
                         <Label htmlFor="cardHolder">Nombre en la tarjeta</Label>
-                        <Input id="cardHolder" placeholder="John Doe" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                        <Input id="cardHolder" placeholder="John Doe" />
                     </div>
                     <div>
                         <Label htmlFor="cardNumber">Número de tarjeta</Label>
-                        <Input id="cardNumber" placeholder="**** **** **** 1234" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                        <Input id="cardNumber" placeholder="**** **** **** 1234" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <Label htmlFor="cardExpiry">Vencimiento</Label>
-                            <Input id="cardExpiry" placeholder="MM/AA" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                            <Input id="cardExpiry" placeholder="MM/AA" />
                         </div>
                         <div>
                             <Label htmlFor="cardCvc">CVC</Label>
-                            <Input id="cardCvc" placeholder="123" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                            <Input id="cardCvc" placeholder="123" />
                         </div>
                     </div>
                      <Separator className="my-4"/>
                      <CardTitle className="text-lg">Dirección de Facturación</CardTitle>
                      <div>
                         <Label htmlFor="billing-address">Dirección</Label>
-                        <Input id="billing-address" placeholder="123 Main St" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                        <Input id="billing-address" placeholder="123 Main St" />
                     </div>
                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <Label htmlFor="billing-city">Ciudad</Label>
-                            <Input id="billing-city" placeholder="New York" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                            <Input id="billing-city" placeholder="New York" />
                         </div>
                         <div>
                             <Label htmlFor="billing-zip">Código Postal</Label>
-                            <Input id="billing-zip" placeholder="10001" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}/>
+                            <Input id="billing-zip" placeholder="10001" />
                         </div>
                     </div>
                      <div>
                         <Label htmlFor="billing-country">País</Label>
                         <Select>
-                            <SelectTrigger id="billing-country" className={cn(isPackageBooking ? 'bg-black/20 border-white/20' : '')}>
+                            <SelectTrigger id="billing-country">
                                 <SelectValue placeholder="Selecciona un país" />
                             </SelectTrigger>
                             <SelectContent>
@@ -324,10 +324,10 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     const total = baseTotal + addons + extraServicesPrice;
     
     return (
-        <Card className={cn("sticky top-28 shadow-lg", isPackageBooking ? 'bg-white/10 backdrop-blur-xl border border-white/20 text-white' : '')}>
+        <Card className="sticky top-28 shadow-lg">
             <CardHeader>
                 <CardTitle>Resumen del Pedido</CardTitle>
-                 {pkg && <CardDescription className={cn(isPackageBooking ? 'text-white/70' : '')}>Paquete: {pkg.title}</CardDescription>}
+                 {pkg && <CardDescription>Paquete: {pkg.title}</CardDescription>}
             </CardHeader>
             <CardContent className="space-y-4">
                  {isPackageBooking && pkg ? (
@@ -340,7 +340,7 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                             <span><Hotel className="inline-block mr-2 h-4 w-4"/>Hotel</span>
                             <span>+${hotelPrice.toFixed(2)}</span>
                         </div>
-                         <div className={cn("flex justify-between", isPackageBooking ? 'text-white/70' : 'text-muted-foreground')}>
+                         <div className="flex justify-between text-muted-foreground">
                             <span>Precio base paquete</span>
                             <span>${pkg.price.toFixed(2)}</span>
                         </div>
@@ -351,7 +351,7 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                         <span>${flightPrice.toFixed(2)}</span>
                     </div>
                  )}
-                 <div className={cn("flex justify-between", isPackageBooking ? 'text-white/70' : 'text-muted-foreground')}>
+                 <div className="flex justify-between text-muted-foreground">
                     <span>Impuestos y tasas</span>
                     <span>${taxes.toFixed(2)}</span>
                 </div>
@@ -367,12 +367,12 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                         <span>${extraServicesPrice.toFixed(2)}</span>
                     </div>
                  )}
-                <Separator className={cn(isPackageBooking ? 'bg-white/20' : '')} />
+                <Separator />
                  <div className="flex justify-between font-bold text-xl">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                 </div>
-                 <p className={cn("text-xs", isPackageBooking ? 'text-white/70' : 'text-muted-foreground')}>
+                 <p className="text-xs text-muted-foreground">
                     Al completar esta compra, aceptas nuestros <a href="#" className="underline">Términos de Servicio</a> y <a href="#" className="underline">Política de Privacidad</a>.
                 </p>
             </CardContent>
@@ -400,13 +400,13 @@ function CheckoutPageContent() {
 
     const backgroundClass = isPackageBooking
       ? 'bg-packages-gradient background-pan-animation'
-      : 'bg-muted/30';
+      : 'bg-flights-gradient background-pan-animation';
 
     return (
       <div className={cn("min-h-screen", backgroundClass)}>
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center mb-6">
-                <Button asChild variant="outline" className={cn("mr-4", isPackageBooking ? 'bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white' : '')}>
+                <Button asChild variant="outline" className={cn("mr-4", isPackageBooking ? 'bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white' : 'bg-background/80')}>
                     <Link href="/">
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>
