@@ -5,15 +5,14 @@
 
 @layer base {
   :root {
-    --background: 200 65% 8%; /* #0E1D2A */
-    --background-flights: 220 40% 8%;
-    --foreground: 210 40% 98%;
+    --background: 216 33% 97%; /* #F1F5F9 */
+    --foreground: 222.2 84% 4.9%;
 
-    --card: 200 60% 12%; /* #102635 */
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 200 60% 12%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 208 100% 50%; /* #1C88FF */
     --primary-foreground: 210 40% 98%;
@@ -21,8 +20,8 @@
     --secondary: 200 30% 25%; /* #2D4A59 */
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 200 30% 25%;
-    --muted-foreground: 200 10% 60%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
 
     --accent: 35 100% 60%; /* Orange */
     --accent-foreground: 210 40% 98%;
@@ -30,8 +29,8 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 200 30% 20%; /* #223B47 */
-    --input: 200 30% 20%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
     --ring: 200 90% 55%;
 
     --radius: 1.25rem;
@@ -102,8 +101,7 @@
    background: radial-gradient(circle at top right, #00A651, #005A32 50%), radial-gradient(circle at bottom left, #2ECC40, #005A32 50%);
 }
 .bg-packages-gradient {
-  background: radial-gradient(ellipse at 50% 0%, hsl(270, 50%, 30%, 0.8), transparent 70%),
-              radial-gradient(ellipse at 50% 100%, hsl(270, 50%, 15%), hsl(270, 50%, 5%) 70%);
+  background: radial-gradient(ellipse at 50% 50%, hsl(270, 50%, 20%), hsl(270, 50%, 5%));
 }
 .bg-cruises-gradient {
   background: radial-gradient(circle at 10% 10%, hsla(180, 60%, 50%, 0.7), transparent 40%), radial-gradient(circle at 90% 80%, #00A3D4, #00506D 50%);

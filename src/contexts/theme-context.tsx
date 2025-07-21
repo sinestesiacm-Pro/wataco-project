@@ -51,21 +51,21 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         if (pathname === '/') {
             const baseAnimationClass = 'background-pan-animation';
             switch(theme) {
-                case 'Flights': return 'bg-flights-body'; // Use the new solid color class
+                case 'Flights': return ''; // Use default background from globals.css body
                 case 'Hotels': return cn('bg-hotels-gradient', baseAnimationClass);
                 case 'Packages': return cn('bg-packages-gradient', baseAnimationClass);
                 case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
                 case 'Activities': return cn('bg-activities-gradient', baseAnimationClass);
                 case 'Social': return cn('bg-activities-gradient', baseAnimationClass);
-                default: return 'bg-flights-body'; // Default to the new solid flights background
+                default: return ''; // Default to the base body background
             }
         }
         
         // Fallback for other pages like /profile, /login, flights/select, etc.
         // If it is a flights sub-page, use the flights background. Otherwise, a default.
-        if (pathname.startsWith('/flights')) return 'bg-flights-body';
+        if (pathname.startsWith('/flights')) return '';
         
-        return 'bg-flights-body background-pan-animation';
+        return 'background-pan-animation';
     }
 
     return (
