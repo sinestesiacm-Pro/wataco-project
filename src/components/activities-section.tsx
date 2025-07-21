@@ -13,7 +13,7 @@ const activities = [
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
-    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-white/20">
+    <Card className="bg-card rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:shadow-xl">
         <div className="relative w-28 h-28 flex-shrink-0">
             <Image 
                 src={activity.image} 
@@ -25,19 +25,19 @@ const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
         </div>
         <div className="flex flex-col flex-grow">
             <div className="flex justify-between items-start">
-              <h3 className="font-bold text-lg text-white">{activity.name}</h3>
-              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white hover:text-white">
+              <h3 className="font-bold text-lg text-card-foreground">{activity.name}</h3>
+              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-muted-foreground hover:text-destructive">
                   <Heart className="h-5 w-5" />
               </Button>
             </div>
-            <p className="text-sm text-white/70">{activity.description}</p>
-            <p className="font-semibold text-white text-xl mt-1">${activity.price}/persona</p>
+            <p className="text-sm text-muted-foreground">{activity.description}</p>
+            <p className="font-semibold text-primary text-xl mt-1">${activity.price}/persona</p>
             <div className="flex items-center gap-2 mt-auto text-sm">
                 <div className="flex items-center gap-1 text-amber-400">
                     {[...Array(activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                    {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-white/30" />)}
+                    {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-muted-foreground/30" />)}
                 </div>
-                <p className="text-white/70">({activity.reviews} reviews)</p>
+                <p className="text-muted-foreground">({activity.reviews} reviews)</p>
             </div>
         </div>
     </Card>
