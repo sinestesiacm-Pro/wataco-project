@@ -28,7 +28,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <Card className="group rounded-3xl overflow-hidden bg-white border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <Card className="group rounded-[2.5rem] overflow-hidden bg-white border-none shadow-xl hover:shadow-2xl transition-all duration-300">
             <CardContent className="p-0">
                 <div className="relative h-40">
                     <Image 
