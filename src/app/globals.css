@@ -179,15 +179,16 @@
 
 .cloud {
     position: absolute;
-    background: white;
-    border-radius: 50%;
+    background-image: url('https://i.ibb.co/GvxHs2w/cloud-3.png');
+    background-repeat: no-repeat;
+    background-size: contain;
     opacity: 0.7;
     filter: blur(2px);
     z-index: 0;
 }
 
 .cloud-animation {
-  animation: move-clouds 60s linear infinite;
+  animation: move-clouds linear infinite;
 }
 
 /* Pill-shaped card for flight destinations */
