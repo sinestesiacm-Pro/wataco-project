@@ -65,7 +65,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         // If it is a flights sub-page, use the flights background. Otherwise, a default.
         if (pathname.startsWith('/flights')) return '';
         
-        return 'background-pan-animation';
+        return '';
     }
 
     return (
