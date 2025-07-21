@@ -105,7 +105,7 @@
    background: radial-gradient(circle at top right, #00A651, #005A32 50%), radial-gradient(circle at bottom left, #2ECC40, #005A32 50%);
 }
 .bg-packages-gradient {
-  background: radial-gradient(ellipse at 50% 50%, hsl(270, 50%, 5%), hsl(270, 50%, 20%));
+  background: radial-gradient(ellipse at 50% 50%, hsl(270, 50%, 20%), hsl(270, 50%, 5%));
 }
 .bg-cruises-gradient {
   background: radial-gradient(circle at 10% 10%, hsla(180, 60%, 50%, 0.7), transparent 40%), radial-gradient(circle at 90% 80%, #00A3D4, #00506D 50%);
@@ -184,7 +184,6 @@
     position: absolute;
     opacity: 0.7;
     filter: blur(2px);
-    z-index: 0;
     background: white;
 }
 

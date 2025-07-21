@@ -61,34 +61,42 @@ function RecommendedContent({ tab }: { tab?: string }) {
 
 const AnimatedClouds = () => (
     <div className="absolute top-0 left-0 w-full h-full overflow-x-hidden pointer-events-none z-0">
-        {/* Cloud 1 */}
         <div className="cloud-container cloud-animation" style={{ top: '15%', animationDuration: '75s', animationDelay: '-15s' }}>
             <div className="cloud-part" style={{ width: '120px', height: '120px', top: '0', left: '50px' }}></div>
             <div className="cloud-part" style={{ width: '150px', height: '150px', top: '20px', left: '0' }}></div>
             <div className="cloud-part" style={{ width: '100px', height: '100px', top: '40px', left: '120px' }}></div>
         </div>
-        {/* Cloud 2 */}
         <div className="cloud-container cloud-animation" style={{ top: '25%', animationDuration: '90s', animationDelay: '-5s' }}>
             <div className="cloud-part" style={{ width: '180px', height: '180px', top: '0', left: '80px' }}></div>
             <div className="cloud-part" style={{ width: '220px', height: '220px', top: '30px', left: '0px' }}></div>
             <div className="cloud-part" style={{ width: '150px', height: '150px', top: '50px', left: '180px' }}></div>
         </div>
-        {/* Cloud 3 */}
         <div className="cloud-container cloud-animation" style={{ top: '50%', animationDuration: '60s', animationDelay: '-20s' }}>
              <div className="cloud-part" style={{ width: '100px', height: '100px', top: '0', left: '30px' }}></div>
              <div className="cloud-part" style={{ width: '130px', height: '130px', top: '15px', left: '0px' }}></div>
         </div>
-         {/* Cloud 4 */}
-        <div className="cloud-container cloud-animation" style={{ top: '70%', animationDuration: '80s', animationDelay: '-10s' }}>
+         <div className="cloud-container cloud-animation" style={{ top: '70%', animationDuration: '80s', animationDelay: '-10s' }}>
             <div className="cloud-part" style={{ width: '160px', height: '160px', top: '0', left: '60px' }}></div>
             <div className="cloud-part" style={{ width: '200px', height: '200px', top: '25px', left: '0px' }}></div>
             <div className="cloud-part" style={{ width: '130px', height: '130px', top: '45px', left: '150px' }}></div>
         </div>
-         {/* Cloud 5 */}
-        <div className="cloud-container cloud-animation" style={{ top: '85%', animationDuration: '70s', animationDelay: '-25s' }}>
+         <div className="cloud-container cloud-animation" style={{ top: '85%', animationDuration: '70s', animationDelay: '-25s' }}>
              <div className="cloud-part" style={{ width: '80px', height: '80px', top: '0', left: '40px' }}></div>
              <div className="cloud-part" style={{ width: '110px', height: '110px', top: '10px', left: '0px' }}></div>
              <div className="cloud-part" style={{ width: '70px', height: '70px', top: '20px', left: '90px' }}></div>
+        </div>
+         <div className="cloud-container cloud-animation" style={{ top: '5%', animationDuration: '100s', animationDelay: '-30s' }}>
+             <div className="cloud-part" style={{ width: '90px', height: '90px', top: '0', left: '20px' }}></div>
+             <div className="cloud-part" style={{ width: '120px', height: '120px', top: '10px', left: '0px' }}></div>
+        </div>
+         <div className="cloud-container cloud-animation" style={{ top: '35%', animationDuration: '120s', animationDelay: '-40s' }}>
+            <div className="cloud-part" style={{ width: '140px', height: '140px', top: '0', left: '70px' }}></div>
+            <div className="cloud-part" style={{ width: '180px', height: '180px', top: '20px', left: '0px' }}></div>
+        </div>
+         <div className="cloud-container cloud-animation" style={{ top: '65%', animationDuration: '85s', animationDelay: '-50s' }}>
+            <div className="cloud-part" style={{ width: '110px', height: '110px', top: '0', left: '40px' }}></div>
+            <div className="cloud-part" style={{ width: '140px', height: '140px', top: '15px', left: '0px' }}></div>
+            <div className="cloud-part" style={{ width: '90px', height: '90px', top: '30px', left: '110px' }}></div>
         </div>
     </div>
 );
