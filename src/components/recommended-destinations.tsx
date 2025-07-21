@@ -28,36 +28,30 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <div className="group">
-            <div className="airplane-window">
-                <div className="airplane-window-inner-bevel">
-                    <div className="airplane-window-view">
-                         <Image 
-                            src={route.image} 
-                            data-ai-hint={route.hint} 
-                            alt={`${route.originCity} a ${route.destinationCity}`}
-                            fill 
-                            className="object-cover"
-                        />
-                         <div className="airplane-window-shade"></div>
-                         <div className="airplane-window-content">
-                             <div className="flex-grow"></div>
-                             <div>
-                                <h3 className="font-bold font-headline text-2xl drop-shadow-md">{route.destinationCity}</h3>
-                                <p className="text-sm text-white/80 drop-shadow-sm">Desde {route.originCity}</p>
-                                <p className="font-bold text-3xl text-accent mt-2 drop-shadow-lg">${route.simulatedPrice}</p>
-                                <Button asChild size="sm" className="font-semibold mt-4 bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30">
-                                   <Link href={buttonHref}>
-                                     <Plane className="mr-2 h-4 w-4" />
-                                     Buscar Vuelo
-                                   </Link>
-                                </Button>
-                             </div>
-                         </div>
-                    </div>
+        <Card className="group rounded-3xl overflow-hidden bg-white/90 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <CardContent className="p-0">
+                <div className="relative h-40">
+                    <Image 
+                        src={route.image} 
+                        data-ai-hint={route.hint} 
+                        alt={`${route.originCity} a ${route.destinationCity}`}
+                        fill 
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                 </div>
-            </div>
-        </div>
+                <div className="p-4 text-center">
+                    <h3 className="font-bold font-headline text-xl text-secondary">{route.destinationCity}</h3>
+                    <p className="text-sm text-muted-foreground">Desde {route.originCity}</p>
+                    <p className="font-bold text-3xl text-primary my-2">${route.simulatedPrice}</p>
+                    <Button asChild size="sm" className="font-semibold w-full">
+                       <Link href={buttonHref}>
+                         <Plane className="mr-2 h-4 w-4" />
+                         Buscar Vuelo
+                       </Link>
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
     )
 }
 
@@ -65,12 +59,12 @@ export function RecommendedDestinations() {
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold text-white">Ofertas que no Puedes Dejar Pasar</h2>
-        <p className="text-lg text-white/80 mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
+        <h2 className="text-4xl font-headline font-bold text-secondary">Ofertas que no Puedes Dejar Pasar</h2>
+        <p className="text-lg text-muted-foreground mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
       </div>
       
       <div 
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12 mt-8"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-8"
       >
         {flightRoutes.map((route) => (
             <DestinationCard key={`${route.origin}-${route.destination}`} route={route} />
