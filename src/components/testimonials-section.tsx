@@ -41,7 +41,7 @@ const renderStars = (rating: number) => {
                 <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
             ))}
             {[...Array(5 - rating)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 text-gray-600" />
+                <Star key={i} className="w-4 h-4 text-gray-300" />
             ))}
         </div>
     );
@@ -53,12 +53,12 @@ export function TestimonialsSection() {
     <section className="py-16 text-center flex-grow flex flex-col justify-end pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-                <h2 className="text-3xl font-headline font-bold text-white">Lo que dicen nuestros viajeros</h2>
-                <p className="text-muted-foreground mt-2">Historias reales de aventuras inolvidables.</p>
+                <h2 className="text-3xl font-headline font-bold text-gray-800">Lo que dicen nuestros viajeros</h2>
+                <p className="text-gray-600 mt-2">Historias reales de aventuras inolvidables.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
-                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white/10 backdrop-blur-xl border border-white/10">
+                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white border border-gray-100">
                     <CardContent className="p-6 flex flex-col flex-grow text-left">
                     <div className="flex items-center mb-4">
                         <Avatar className="h-14 w-14 mr-4 border-2 border-primary">
@@ -66,11 +66,11 @@ export function TestimonialsSection() {
                         <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
-                        <h3 className="font-bold font-headline text-lg text-white">{testimonial.name}</h3>
-                        <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                        <h3 className="font-bold font-headline text-lg text-gray-900">{testimonial.name}</h3>
+                        <p className="text-sm text-gray-500">{testimonial.location}</p>
                         </div>
                     </div>
-                    <blockquote className="text-white/80 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
+                    <blockquote className="text-gray-700 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
                     {renderStars(testimonial.rating)}
                     </CardContent>
                 </Card>
