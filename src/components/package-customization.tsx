@@ -161,7 +161,7 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
                 <div className="pt-6 border-t border-white/20 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div>
                         <p className="text-sm text-white/80">Precio final por persona</p>
-                        <p className="text-4xl font-bold text-accent">${finalPrice.toFixed(2)}</p>
+                        <p className="text-4xl font-bold text-white">${finalPrice.toFixed(2)}</p>
                     </div>
                     <Button size="lg" className="w-full sm:w-auto bg-success hover:bg-success/90" onClick={handleBooking}>
                         <CheckCircle className="mr-2 h-5 w-5"/>
