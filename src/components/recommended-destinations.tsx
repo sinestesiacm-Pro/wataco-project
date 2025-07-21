@@ -28,33 +28,36 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <Card className="rounded-3xl bg-white/5 backdrop-blur-sm border border-white/20 shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:border-white/30 hover:scale-105">
-            <div className="relative h-40">
-                <Image 
-                    src={route.image} 
-                    data-ai-hint={route.hint} 
-                    alt={`${route.originCity} a ${route.destinationCity}`}
-                    fill 
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-            </div>
-            <CardContent className="p-4 text-white">
-                <h3 className="font-bold font-headline text-lg truncate">{route.destinationCity}</h3>
-                <p className="text-sm text-white/70">Desde {route.originCity}</p>
-                <div className="flex justify-between items-end mt-4">
-                    <div>
-                        <p className="text-xs text-white/70">Desde</p>
-                        <p className="font-bold text-xl text-accent">${route.simulatedPrice}</p>
+        <div className="group">
+            <div className="airplane-window">
+                <div className="airplane-window-inner-bevel">
+                    <div className="airplane-window-view">
+                         <Image 
+                            src={route.image} 
+                            data-ai-hint={route.hint} 
+                            alt={`${route.originCity} a ${route.destinationCity}`}
+                            fill 
+                            className="object-cover"
+                        />
+                         <div className="airplane-window-shade"></div>
+                         <div className="airplane-window-content">
+                             <div className="flex-grow"></div>
+                             <div>
+                                <h3 className="font-bold font-headline text-2xl drop-shadow-md">{route.destinationCity}</h3>
+                                <p className="text-sm text-white/80 drop-shadow-sm">Desde {route.originCity}</p>
+                                <p className="font-bold text-3xl text-accent mt-2 drop-shadow-lg">${route.simulatedPrice}</p>
+                                <Button asChild size="sm" className="font-semibold mt-4 bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30">
+                                   <Link href={buttonHref}>
+                                     <Plane className="mr-2 h-4 w-4" />
+                                     Buscar Vuelo
+                                   </Link>
+                                </Button>
+                             </div>
+                         </div>
                     </div>
-                    <Button asChild size="sm" className="font-semibold">
-                       <Link href={buttonHref}>
-                         <Plane className="mr-2 h-4 w-4" />
-                         Buscar
-                       </Link>
-                    </Button>
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     )
 }
 
@@ -67,7 +70,7 @@ export function RecommendedDestinations() {
       </div>
       
       <div 
-        className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-8"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12 mt-8"
       >
         {flightRoutes.map((route) => (
             <DestinationCard key={`${route.origin}-${route.destination}`} route={route} />
