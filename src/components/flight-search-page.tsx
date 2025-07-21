@@ -365,7 +365,7 @@ export default function FlightSearchPage() {
           <Button
               type="submit"
               size="lg"
-              className="w-full text-lg font-bold bg-tertiary hover:bg-tertiary/90 h-14 text-tertiary-foreground rounded-2xl shadow-lg hover:shadow-xl transition-all"
+              className="text-lg font-bold bg-success hover:bg-success/90 h-14 text-success-foreground rounded-full shadow-lg hover:shadow-xl transition-all px-10"
           >
              Buscar Vuelos
           </Button>
