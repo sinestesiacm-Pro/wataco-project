@@ -172,11 +172,11 @@
 }
 
 @keyframes move-clouds {
-  0% {
-    transform: translateX(100vw);
+  from {
+    transform: translateX(0);
   }
-  100% {
-    transform: translateX(-400px); /* Move past the left edge */
+  to {
+    transform: translateX(-110vw);
   }
 }
 
