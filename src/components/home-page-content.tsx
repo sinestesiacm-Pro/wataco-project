@@ -1,3 +1,4 @@
+
 'use client';
 
 import FlightSearchPage from '@/components/flight-search-page';
@@ -57,6 +58,16 @@ function RecommendedContent({ tab }: { tab?: string }) {
   }
 }
 
+const AnimatedClouds = () => (
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="cloud cloud-animation" style={{ width: '200px', height: '60px', top: '15%', animationDuration: '75s' }}></div>
+        <div className="cloud cloud-animation" style={{ width: '300px', height: '90px', top: '25%', animationDelay: '-15s', animationDuration: '90s' }}></div>
+        <div className="cloud cloud-animation" style={{ width: '150px', height: '45px', top: '50%', animationDelay: '-5s', animationDuration: '60s' }}></div>
+        <div className="cloud cloud-animation" style={{ width: '250px', height: '75px', top: '70%', animationDelay: '-25s', animationDuration: '80s' }}></div>
+    </div>
+);
+
+
 export function HomePageContent() {
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'Flights';
@@ -67,8 +78,9 @@ export function HomePageContent() {
     }, [tab, setTheme]);
 
     return (
-        <div className="w-full flex flex-col flex-grow">
-            <div className="pt-20">
+        <div className="w-full flex flex-col flex-grow relative">
+            {tab === 'Flights' && <AnimatedClouds />}
+            <div className="pt-20 relative z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                   {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
                 </div>
@@ -81,7 +93,7 @@ export function HomePageContent() {
 
                 <TestimonialsSection />
             </div>
-            <div className="mt-auto">
+            <div className="mt-auto relative z-10">
                <Footer />
             </div>
         </div>

@@ -30,7 +30,7 @@ export function BottomNavbar() {
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 z-50 bg-white/40 backdrop-blur-xl shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)]"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-white/40 backdrop-blur-xl shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)] md:hidden"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="flex justify-around items-center h-16">
