@@ -6,6 +6,7 @@
 @layer base {
   :root {
     --background: 200 65% 8%; /* #0E1D2A */
+    --background-flights: 220 40% 8%;
     --foreground: 210 40% 98%;
 
     --card: 200 60% 12%; /* #102635 */
@@ -42,6 +43,7 @@
 
   .dark {
     --background: 200 65% 8%; /* #0E1D2A */
+    --background-flights: 220 40% 8%;
     --foreground: 210 40% 98%;
     --card: 200 60% 12%; /* #102635 */
     --card-foreground: 210 40% 98%;
@@ -93,10 +95,8 @@
   animation: animate-bg-pan 25s ease-in-out infinite;
 }
 
-.bg-flights-gradient {
-  background: radial-gradient(ellipse 80% 60% at 50% -10%, hsla(210, 100%, 70%, 0.3), transparent),
-              radial-gradient(ellipse 80% 50% at 50% 110%, hsla(300, 100%, 80%, 0.2), transparent),
-              hsl(220, 40%, 8%);
+.bg-flights-body {
+    background-color: hsl(var(--background-flights));
 }
 .bg-hotels-gradient {
    background: radial-gradient(circle at top right, #00A651, #005A32 50%), radial-gradient(circle at bottom left, #2ECC40, #005A32 50%);
