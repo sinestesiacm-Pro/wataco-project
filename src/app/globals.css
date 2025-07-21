@@ -176,7 +176,7 @@
     transform: translateX(100vw);
   }
   100% {
-    transform: translateX(-300px); /* Move past the left edge */
+    transform: translateX(-400px); /* Move past the left edge */
   }
 }
 
