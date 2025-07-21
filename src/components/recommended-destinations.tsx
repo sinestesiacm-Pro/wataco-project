@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -7,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Plane } from 'lucide-react';
 import { addMonths, addDays, format } from 'date-fns';
 import Link from 'next/link';
+import { Card, CardContent } from '@/components/ui/card';
 
 // Estas rutas se pueden obtener desde Firestore o un CMS en el futuro.
 const flightRoutes = [
@@ -40,9 +40,9 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                 <h3 className="font-bold font-headline text-xl text-gray-900">{route.destinationCity}</h3>
                 <p className="text-sm text-gray-700">Desde {route.originCity}</p>
                 <p className="font-bold text-3xl text-primary my-2">${route.simulatedPrice}</p>
-                <Button asChild size="sm" className="font-semibold w-full rounded-xl bg-primary text-white hover:bg-primary/90">
+                <Button asChild size="sm" className="font-semibold w-full rounded-full bg-success text-success-foreground hover:bg-success/90">
                    <Link href={buttonHref}>
-                     <Plane className="mr-2 h-4 w-4 text-white" />
+                     <Plane className="mr-2 h-4 w-4" />
                      Buscar Vuelo
                    </Link>
                 </Button>
