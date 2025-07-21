@@ -8,15 +8,17 @@ import { ArrowRight, Plane } from 'lucide-react';
 import { addMonths, addDays, format } from 'date-fns';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { Card, CardContent } from './ui/card';
 
 // Estas rutas se pueden obtener desde Firestore o un CMS en el futuro.
 const flightRoutes = [
   { origin: 'MAD', originCity: 'Madrid', destination: 'EZE', destinationCity: 'Buenos Aires', hint: 'buenos aires obelisco', image: 'https://images.unsplash.com/photo-1672588371953-2accc9eb0d01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxidWVub3MlMjBhaXJlcyUyMG9iZWxpc2NvfGVufDB8fHx8MTc1MjA2NzgwMHww&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '950' },
   { origin: 'BOG', originCity: 'Bogotá', destination: 'GIG', destinationCity: 'Río de Janeiro', hint: 'rio de janeiro', image: 'https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyaW8lMjBkZSUyMGphbmVpcm98ZW58MHx8fHwxNzUyMDY3ODAwfDA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '480' },
   { origin: 'PAR', originCity: 'París', destination: 'CTG', destinationCity: 'Cartagena', hint: 'cartagena colombia', image: 'https://images.unsplash.com/photo-1680579178966-8019436998e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYXJ0YWdlbmElMjBjb2xvbWJpYXxlbnwwfHx8fDE3NTIwNjc4MDB8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '820' },
+  { origin: 'MIA', originCity: 'Miami', destination: 'SCL', destinationCity: 'Santiago', hint: 'santiago chile', image: 'https://images.unsplash.com/photo-1587527901949-ab0341793a5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzYW50aWFnb3xlbnwwfHx8fDE3NTMwNDY4MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '620' },
 ];
 
-const DestinationCard = ({ route, isHovered }: { route: typeof flightRoutes[0], isHovered: boolean }) => {
+const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const departureDateObj = addMonths(new Date(), 2);
     const returnDateObj = addDays(departureDateObj, 7);
     
@@ -26,58 +28,49 @@ const DestinationCard = ({ route, isHovered }: { route: typeof flightRoutes[0], 
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <div className={cn("flex-shrink-0 w-[280px] group", { 'is-hovered': isHovered })}>
-            <div className="airplane-window">
-                <div className="airplane-window-inner-bevel">
-                    <div className="airplane-window-view">
-                        <Image 
-                            src={route.image} 
-                            data-ai-hint={route.hint} 
-                            alt={`${route.originCity} a ${route.destinationCity}`}
-                            fill 
-                            className="object-cover"
-                        />
-                        <div className="airplane-window-shade"></div>
-                        <div className="airplane-window-content">
-                            <div>
-                                <h3 className="text-xl font-bold font-headline text-white">{route.originCity} <ArrowRight className="inline-block h-5 w-5 mx-1" /> {route.destinationCity}</h3>
-                            </div>
-                            <div className="flex flex-col items-center gap-2 mt-4">
-                                <p className="text-sm text-white/90 font-body">
-                                    Desde <span className="font-bold text-lg text-accent">${route.simulatedPrice}</span>
-                                </p>
-                                <Button asChild size="sm" variant="secondary" className="bg-white/20 hover:bg-white/30 text-white rounded-full">
-                                   <Link href={buttonHref}>
-                                     <Plane className="mr-2 h-4 w-4" />
-                                     Ver Vuelos
-                                   </Link>
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <Card className="rounded-3xl bg-white/5 backdrop-blur-sm border border-white/20 shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:border-white/30 hover:scale-105">
+            <div className="relative h-40">
+                <Image 
+                    src={route.image} 
+                    data-ai-hint={route.hint} 
+                    alt={`${route.originCity} a ${route.destinationCity}`}
+                    fill 
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
             </div>
-        </div>
+            <CardContent className="p-4 text-white">
+                <h3 className="font-bold font-headline text-lg truncate">{route.destinationCity}</h3>
+                <p className="text-sm text-white/70">Desde {route.originCity}</p>
+                <div className="flex justify-between items-end mt-4">
+                    <div>
+                        <p className="text-xs text-white/70">Desde</p>
+                        <p className="font-bold text-xl text-accent">${route.simulatedPrice}</p>
+                    </div>
+                    <Button asChild size="sm" className="font-semibold">
+                       <Link href={buttonHref}>
+                         <Plane className="mr-2 h-4 w-4" />
+                         Buscar
+                       </Link>
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
     )
 }
 
 export function RecommendedDestinations() {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold">Ofertas que no Puedes Dejar Pasar</h2>
-        <p className="text-lg text-muted-foreground mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
+        <h2 className="text-4xl font-headline font-bold text-white">Ofertas que no Puedes Dejar Pasar</h2>
+        <p className="text-lg text-white/80 mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
       </div>
       
       <div 
-        className="flex justify-center space-x-8 pb-12 mt-8 overflow-x-auto scrollbar-hide -mx-4 px-4"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-8"
       >
         {flightRoutes.map((route) => (
-            <DestinationCard key={`${route.origin}-${route.destination}`} route={route} isHovered={isHovered} />
+            <DestinationCard key={`${route.origin}-${route.destination}`} route={route} />
         ))}
       </div>
     </div>
