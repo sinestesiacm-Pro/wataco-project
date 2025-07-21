@@ -177,22 +177,39 @@
 }
 
 
-.cloud {
+.cloud, .cloud-2, .cloud-3 {
     position: absolute;
     background: white;
     border-radius: 50%;
-    box-shadow:
-        /* Large cloud body */
-        0 0 0 0 rgba(255,255,255,1),
-        /* Puffs to the right */
-        30px -30px 0 10px white,
-        60px -15px 0 5px white,
-        /* Puffs to the left */
-        -30px -20px 0 15px white,
-        -60px 0 0 10px white;
     opacity: 0.7;
     filter: blur(5px);
     z-index: 0;
+}
+
+.cloud {
+    box-shadow:
+        0 0 0 0 rgba(255,255,255,1),
+        30px -30px 0 10px white,
+        60px -15px 0 5px white,
+        -30px -20px 0 15px white,
+        -60px 0 0 10px white;
+}
+
+.cloud-2 {
+    box-shadow:
+        0 0 0 0 rgba(255,255,255,1),
+        25px -40px 0 5px white,
+        50px -10px 0 10px white,
+        -20px -15px 0 8px white,
+        -55px 5px 0 5px white;
+}
+
+.cloud-3 {
+    box-shadow:
+        0 0 0 0 rgba(255,255,255,1),
+        40px -25px 0 8px white,
+        70px 0px 0 12px white,
+        -40px -10px 0 10px white;
 }
 
 .cloud-animation {

@@ -60,14 +60,18 @@ function RecommendedContent({ tab }: { tab?: string }) {
 
 const AnimatedClouds = () => (
     <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="cloud cloud-animation" style={{ width: '250px', height: '80px', top: '15%', animationDuration: '75s', animationDelay: '-15s' }}></div>
-        <div className="cloud cloud-animation" style={{ width: '350px', height: '100px', top: '25%', animationDuration: '90s', animationDelay: '-5s' }}></div>
-        <div className="cloud cloud-animation" style={{ width: '200px', height: '60px', top: '50%', animationDuration: '60s', animationDelay: '-20s', left: '10%' }}></div>
-        <div className="cloud cloud-animation" style={{ width: '300px', height: '90px', top: '70%', animationDuration: '80s', animationDelay: '-10s', left: '60%' }}></div>
-        <div className="cloud cloud-animation" style={{ width: '220px', height: '70px', top: '85%', animationDuration: '70s', animationDelay: '-25s' }}></div>
-        <div className="cloud cloud-animation" style={{ width: '280px', height: '85px', top: '5%', animationDuration: '85s', animationDelay: '-30s', left: '30%' }}></div>
-        <div className="cloud cloud-animation" style={{ width: '320px', height: '95px', top: '40%', animationDuration: '95s', animationDelay: '0s' }}></div>
-        <div className="cloud cloud-animation" style={{ width: '150px', height: '50px', top: '60%', animationDuration: '55s', animationDelay: '-40s', left: '80%' }}></div>
+        <div className="cloud-animation cloud" style={{ width: '250px', height: '80px', top: '15%', animationDuration: '75s', animationDelay: '-15s' }}></div>
+        <div className="cloud-animation cloud-2" style={{ width: '350px', height: '100px', top: '25%', animationDuration: '90s', animationDelay: '-5s' }}></div>
+        <div className="cloud-animation cloud-3" style={{ width: '200px', height: '60px', top: '50%', animationDuration: '60s', animationDelay: '-20s' }}></div>
+        <div className="cloud-animation cloud" style={{ width: '300px', height: '90px', top: '70%', animationDuration: '80s', animationDelay: '-10s' }}></div>
+        <div className="cloud-animation cloud-2" style={{ width: '220px', height: '70px', top: '85%', animationDuration: '70s', animationDelay: '-25s' }}></div>
+        <div className="cloud-animation cloud-3" style={{ width: '280px', height: '85px', top: '5%', animationDuration: '85s', animationDelay: '-30s' }}></div>
+        <div className="cloud-animation cloud" style={{ width: '320px', height: '95px', top: '40%', animationDuration: '95s', animationDelay: '0s' }}></div>
+        <div className="cloud-animation cloud-2" style={{ width: '150px', height: '50px', top: '60%', animationDuration: '55s', animationDelay: '-40s' }}></div>
+        <div className="cloud-animation cloud-3" style={{ width: '250px', height: '80px', top: '75%', animationDuration: '100s', animationDelay: '-35s' }}></div>
+        <div className="cloud-animation cloud" style={{ width: '180px', height: '60px', top: '20%', animationDuration: '65s', animationDelay: '-45s' }}></div>
+        <div className="cloud-animation cloud-2" style={{ width: '400px', height: '110px', top: '30%', animationDuration: '120s', animationDelay: '-50s' }}></div>
+        <div className="cloud-animation cloud-3" style={{ width: '210px', height: '70px', top: '90%', animationDuration: '78s', animationDelay: '-55s' }}></div>
     </div>
 );
 
