@@ -28,7 +28,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <Card className="group rounded-3xl overflow-hidden bg-white/90 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <Card className="group rounded-3xl overflow-hidden bg-white border border-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300">
             <CardContent className="p-0">
                 <div className="relative h-40">
                     <Image 
@@ -40,10 +40,10 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                     />
                 </div>
                 <div className="p-4 text-center">
-                    <h3 className="font-bold font-headline text-xl text-secondary">{route.destinationCity}</h3>
-                    <p className="text-sm text-muted-foreground">Desde {route.originCity}</p>
+                    <h3 className="font-bold font-headline text-xl text-gray-800">{route.destinationCity}</h3>
+                    <p className="text-sm text-gray-500">Desde {route.originCity}</p>
                     <p className="font-bold text-3xl text-primary my-2">${route.simulatedPrice}</p>
-                    <Button asChild size="sm" className="font-semibold w-full">
+                    <Button asChild size="sm" className="font-semibold w-full rounded-xl">
                        <Link href={buttonHref}>
                          <Plane className="mr-2 h-4 w-4" />
                          Buscar Vuelo
@@ -59,8 +59,8 @@ export function RecommendedDestinations() {
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold text-secondary">Ofertas que no Puedes Dejar Pasar</h2>
-        <p className="text-lg text-muted-foreground mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
+        <h2 className="text-4xl font-headline font-bold text-gray-800">Ofertas que no Puedes Dejar Pasar</h2>
+        <p className="text-lg text-gray-500 mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
       </div>
       
       <div 
