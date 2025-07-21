@@ -4,11 +4,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Plane } from 'lucide-react';
+import { Plane } from 'lucide-react';
 import { addMonths, addDays, format } from 'date-fns';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { Card, CardContent } from './ui/card';
 
 // Estas rutas se pueden obtener desde Firestore o un CMS en el futuro.
 const flightRoutes = [
@@ -28,30 +26,28 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <Card className="group rounded-3xl overflow-hidden bg-white border-none shadow-xl hover:shadow-2xl transition-all duration-300">
-            <CardContent className="p-0">
-                <div className="relative h-40">
-                    <Image 
-                        src={route.image} 
-                        data-ai-hint={route.hint} 
-                        alt={`${route.originCity} a ${route.destinationCity}`}
-                        fill 
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                </div>
-                <div className="p-4 text-center">
-                    <h3 className="font-bold font-headline text-xl text-gray-800">{route.destinationCity}</h3>
-                    <p className="text-sm text-gray-500">Desde {route.originCity}</p>
-                    <p className="font-bold text-3xl text-primary my-2">${route.simulatedPrice}</p>
-                    <Button asChild size="sm" className="font-semibold w-full rounded-xl">
-                       <Link href={buttonHref}>
-                         <Plane className="mr-2 h-4 w-4" />
-                         Buscar Vuelo
-                       </Link>
-                    </Button>
-                </div>
-            </CardContent>
-        </Card>
+        <div className="destination-card-oval">
+            <div className="image-container">
+                <Image 
+                    src={route.image} 
+                    data-ai-hint={route.hint} 
+                    alt={`${route.originCity} a ${route.destinationCity}`}
+                    fill 
+                    className="object-cover"
+                />
+            </div>
+            <div className="content-container">
+                <h3 className="font-bold font-headline text-xl">{route.destinationCity}</h3>
+                <p className="text-sm text-gray-700">Desde {route.originCity}</p>
+                <p className="font-bold text-3xl text-primary my-2">${route.simulatedPrice}</p>
+                <Button asChild size="sm" className="font-semibold w-full rounded-xl">
+                   <Link href={buttonHref}>
+                     <Plane className="mr-2 h-4 w-4" />
+                     Buscar Vuelo
+                   </Link>
+                </Button>
+            </div>
+        </div>
     )
 }
 

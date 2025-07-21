@@ -195,3 +195,39 @@
     transform: translateX(-250%);
   }
 }
+
+/* Pill-shaped card for flight destinations */
+.destination-card-oval {
+    aspect-ratio: 9 / 16;
+    border-radius: 9999px; /* Pill shape */
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    color: #333; /* Dark text for better contrast */
+}
+
+.destination-card-oval:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.25);
+}
+
+.destination-card-oval .image-container {
+    height: 60%;
+    width: 100%;
+    position: relative;
+}
+
+.destination-card-oval .content-container {
+    height: 40%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
