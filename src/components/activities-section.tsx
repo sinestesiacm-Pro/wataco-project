@@ -13,7 +13,7 @@ const activities = [
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
-    <Card className="bg-white rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:shadow-xl">
+    <Card className="bg-white rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:shadow-xl shadow-lg border-none">
         <div className="relative w-28 h-28 flex-shrink-0">
             <Image 
                 src={activity.image} 
