@@ -7,7 +7,7 @@ export const recommendedCruises: CruisePackage[] = [
     name: 'Sueño del Caribe Occidental',
     ship: 'Symphony of the Seas',
     duration: '7 Noches',
-    image: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.jpeg',
+    image: 'https://images.unsplash.com/photo-1601771281064-e9340d2cb2b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjcnVpc2UlMjBzaGlwJTIwY2FyaWJiZWFufGVufDB8fHx8MTc1MzExMTQyOXww&ixlib=rb-4.1.0&q=80&w=1080',
     videoUrl: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.mp4',
     carouselImages: [
       'https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -34,7 +34,7 @@ export const recommendedCruises: CruisePackage[] = [
     name: 'Fiordos Noruegos',
     ship: 'MSC Euribia',
     duration: '8 Noches',
-    image: 'https://images.pexels.com/photos/3727250/pexels-photo-3727250.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: 'https://images.unsplash.com/photo-1631892504412-609c3b7ab0e0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxub3J3YXklMjBmam9yZHN8ZW58MHx8fHwxNzUzMTExNDI5fDA&ixlib=rb-4.1.0&q=80&w=1080',
     videoUrl: 'https://videos.pexels.com/video-files/3209828/3209828-hd.mp4',
     carouselImages: [
       'https://images.pexels.com/photos/3727250/pexels-photo-3727250.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -62,7 +62,7 @@ export const recommendedCruises: CruisePackage[] = [
     name: 'Islas Griegas',
     ship: 'Celebrity Ascent',
     duration: '10 Noches',
-    image: 'https://images.pexels.com/photos/164041/pexels-photo-164041.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: 'https://images.unsplash.com/photo-1630233110077-25701cf4ae7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxncmVlY2UlMjBzYW50b3Jpbml8ZW58MHx8fHwxNzUzMTExNDI5fDA&ixlib=rb-4.1.0&q=80&w=1080',
     videoUrl: 'https://videos.pexels.com/video-files/853874/853874-hd.mp4',
     carouselImages: [
       'https://images.pexels.com/photos/164041/pexels-photo-164041.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -92,7 +92,7 @@ export const recommendedCruises: CruisePackage[] = [
     name: 'Expedición a Alaska',
     ship: 'Norwegian Bliss',
     duration: '7 Noches',
-    image: 'https://images.pexels.com/photos/156314/glacier-ice-climbing-ice-climber-156314.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: 'https://images.unsplash.com/photo-1690053712268-2e6d0bc394ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YWxhc2thJTIwZ2xhY2llcnxlbnwwfHx8fDE3NTMxMTE0MzB8MA&ixlib=rb-4.1.0&q=80&w=1080',
     videoUrl: 'https://videos.pexels.com/video-files/4059941/4059941-hd.mp4',
     carouselImages: [
       'https://images.pexels.com/photos/156314/glacier-ice-climbing-ice-climber-156314.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
