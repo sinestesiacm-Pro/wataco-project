@@ -56,8 +56,8 @@ export function RecommendedDestinations() {
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold text-white">Ofertas que no Puedes Dejar Pasar</h2>
-        <p className="text-lg text-white/80 mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
+        <h2 className="text-4xl font-headline font-bold text-white drop-shadow-lg">Ofertas que no Puedes Dejar Pasar</h2>
+        <p className="text-lg text-white/80 drop-shadow-lg">Hemos buscado los mejores precios en rutas populares para ti.</p>
       </div>
       
       <div 

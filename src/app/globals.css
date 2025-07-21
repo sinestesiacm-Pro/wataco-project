@@ -94,6 +94,10 @@
   animation: animate-bg-pan 25s ease-in-out infinite;
 }
 
+.background-blur {
+    filter: blur(25px);
+}
+
 .bg-flights-body {
     background-color: hsl(220 40% 8%);
 }
