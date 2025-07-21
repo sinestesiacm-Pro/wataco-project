@@ -59,7 +59,7 @@ export function Header() {
 
   return (
     <header 
-      className="fixed top-0 left-0 right-0 z-40 bg-white/10 backdrop-blur-sm shadow-lg border-b border-white/10"
+      className="fixed top-0 left-0 right-0 z-40 bg-white/40 backdrop-blur-xl shadow-lg"
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,9 +74,9 @@ export function Header() {
           <div className="flex-1 text-center">
              <div className="hidden md:flex justify-center">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
-                  <TabsList className="bg-card/30 backdrop-blur-lg border border-white/10">
+                  <TabsList className="bg-white/40 backdrop-blur-lg">
                     {TABS.map((item) => (
-                      <TabsTrigger key={item.id} value={item.id} className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-white">
+                      <TabsTrigger key={item.id} value={item.id} className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-gray-800">
                         <item.icon className="h-4 w-4" />
                         {item.label}
                       </TabsTrigger>
@@ -84,7 +84,7 @@ export function Header() {
                   </TabsList>
                 </Tabs>
               </div>
-              <h1 className="text-2xl font-bold font-headline tracking-wider text-white md:hidden">{currentTitle}</h1>
+              <h1 className="text-2xl font-bold font-headline tracking-wider text-gray-800 md:hidden">{currentTitle}</h1>
           </div>
           
           <div className="flex-1 flex items-center justify-end gap-2">

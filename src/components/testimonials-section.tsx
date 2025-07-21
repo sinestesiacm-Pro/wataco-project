@@ -58,7 +58,7 @@ export function TestimonialsSection() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
-                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white border border-gray-100">
+                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white/40 backdrop-blur-xl border-none">
                     <CardContent className="p-6 flex flex-col flex-grow text-left">
                     <div className="flex items-center mb-4">
                         <Avatar className="h-14 w-14 mr-4 border-2 border-primary">
@@ -67,10 +67,10 @@ export function TestimonialsSection() {
                         </Avatar>
                         <div>
                         <h3 className="font-bold font-headline text-lg text-gray-900">{testimonial.name}</h3>
-                        <p className="text-sm text-gray-500">{testimonial.location}</p>
+                        <p className="text-sm text-gray-700">{testimonial.location}</p>
                         </div>
                     </div>
-                    <blockquote className="text-gray-700 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
+                    <blockquote className="text-gray-800 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
                     {renderStars(testimonial.rating)}
                     </CardContent>
                 </Card>

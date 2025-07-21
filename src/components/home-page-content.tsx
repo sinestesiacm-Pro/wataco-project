@@ -21,13 +21,20 @@ import { useEffect } from 'react';
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
+  const renderSearch = () => {
+    switch(activeTab) {
+      case 'Flights': return <FlightSearchPage />;
+      case 'Hotels': return <HotelSearchPage />;
+      case 'Packages': return <PackagesSearchPage />;
+      case 'Cruises': return <CruiseSearchPage />;
+      default: return null;
+    }
+  }
+
   return (
-    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl">
-      {activeTab === 'Flights' && <FlightSearchPage />}
-      {activeTab === 'Hotels' && <HotelSearchPage />}
-      {activeTab === 'Packages' && <PackagesSearchPage />}
-      {activeTab === 'Cruises' && <CruiseSearchPage />}
-    </div>
+    <>
+      {renderSearch()}
+    </>
   );
 }
 

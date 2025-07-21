@@ -37,10 +37,10 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                 />
             </div>
             <div className="content-container">
-                <h3 className="font-bold font-headline text-xl text-white">{route.destinationCity}</h3>
-                <p className="text-sm text-white/80">Desde {route.originCity}</p>
-                <p className="font-bold text-3xl text-white my-2">${route.simulatedPrice}</p>
-                <Button asChild size="sm" className="font-semibold w-full rounded-xl bg-white/30 text-white hover:bg-white/50">
+                <h3 className="font-bold font-headline text-xl text-gray-900">{route.destinationCity}</h3>
+                <p className="text-sm text-gray-700">Desde {route.originCity}</p>
+                <p className="font-bold text-3xl text-primary my-2">${route.simulatedPrice}</p>
+                <Button asChild size="sm" className="font-semibold w-full rounded-xl bg-primary text-white hover:bg-primary/90">
                    <Link href={buttonHref}>
                      <Plane className="mr-2 h-4 w-4 text-white" />
                      Buscar Vuelo
