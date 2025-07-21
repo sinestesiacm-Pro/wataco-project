@@ -15,7 +15,7 @@ const recommendedHotels = [
 ];
 
 const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
-    <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-white/20 hover:bg-white/50">
+    <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-white/20 hover:scale-105">
         <div className="relative w-full h-48 flex-shrink-0">
             <Image 
                 src={hotel.image} 
@@ -41,9 +41,7 @@ const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
             
             <div className="flex-grow"></div>
             
-            <Separator className="my-4 bg-gray-500/20" />
-
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mt-4">
                 <div>
                     <p className="text-xs text-gray-600">desde</p>
                     <p className="font-semibold text-2xl text-accent">${hotel.price}<span className="text-sm font-normal text-gray-700">/noche</span></p>
