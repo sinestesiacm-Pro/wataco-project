@@ -179,9 +179,9 @@ export default function PackagesSearchPage() {
     <form onSubmit={handleSearch} className="flex flex-col gap-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputGroup className='relative'>
-            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('origin')}>
+            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl" onClick={() => setActiveInput('origin')}>
                 <div className="flex items-center w-full">
-                    <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
+                    <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
                     <div>
                         <p className="text-xs text-white/70">Desde</p>
                         <Input 
@@ -198,9 +198,9 @@ export default function PackagesSearchPage() {
             {activeInput === 'origin' && <SuggestionsList type="origin" />}
           </InputGroup>
           <InputGroup className='relative'>
-            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
+            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl" onClick={() => setActiveInput('destination')}>
                 <div className="flex items-center w-full">
-                    <PlaneLanding className="h-6 w-6 mr-4 text-tertiary" />
+                    <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
                     <div>
                         <p className="text-xs text-white/70">Hasta</p>
                         <Input 
@@ -221,7 +221,7 @@ export default function PackagesSearchPage() {
           <InputGroup>
             <Popover>
               <PopoverTrigger asChild>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl">
                     <div className="flex items-center w-full">
                         <CalendarIcon className="h-6 w-6 mr-4 text-white" />
                         <div>
@@ -249,7 +249,7 @@ export default function PackagesSearchPage() {
           <InputGroup>
             <Popover>
               <PopoverTrigger asChild>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl">
                     <div className="flex items-center w-full">
                         <Users className="h-6 w-6 mr-4 text-success" />
                         <div>
@@ -284,7 +284,7 @@ export default function PackagesSearchPage() {
             </Popover>
           </InputGroup>
       </div>
-      <Button type="submit" size="lg" className="w-full font-bold bg-success hover:bg-success/90 mt-1 text-success-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-14">
+      <Button type="submit" size="lg" className="w-full font-bold bg-primary hover:bg-primary/90 mt-1 text-primary-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-14">
           <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
       </Button>
     </form>

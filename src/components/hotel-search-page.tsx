@@ -180,7 +180,7 @@ export default function HotelSearchPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
 
         <div className="w-full lg:col-span-5 relative" ref={destinationRef}>
-            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => setActiveInput('destination')}>
+            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl" onClick={() => setActiveInput('destination')}>
                  <div className="flex items-center w-full">
                     <MapPin className="h-6 w-6 mr-4 text-tertiary" />
                     <div>
@@ -204,7 +204,7 @@ export default function HotelSearchPage() {
         <div className="w-full lg:col-span-3">
             <Popover>
               <PopoverTrigger asChild>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl">
                     <div className="flex items-center w-full">
                         <CalendarIcon className="h-6 w-6 mr-4 text-white" />
                         <div>
@@ -233,7 +233,7 @@ export default function HotelSearchPage() {
         <div className="w-full lg:col-span-2">
             <Popover>
               <PopoverTrigger asChild>
-                 <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+                 <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl">
                     <div className="flex items-center w-full">
                         <Users className="h-6 w-6 mr-4 text-success" />
                         <div>

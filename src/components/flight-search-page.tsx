@@ -220,7 +220,7 @@ export default function FlightSearchPage() {
         <Popover open={!!activeInput} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
           <div className="space-y-4">
              <PopoverTrigger asChild>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
                     <div className="flex items-center w-full">
                         <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
                         <div>
@@ -231,7 +231,7 @@ export default function FlightSearchPage() {
                 </Button>
             </PopoverTrigger>
              <PopoverTrigger asChild>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
                      <div className="flex items-center w-full">
                         <MapPin className="h-6 w-6 mr-4 text-tertiary" />
                         <div>
@@ -251,7 +251,7 @@ export default function FlightSearchPage() {
         
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>
-              <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+              <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl">
                   <div className="flex items-center w-full">
                       <CalendarIcon className="h-6 w-6 mr-4 text-white" />
                       <div>
@@ -292,7 +292,7 @@ export default function FlightSearchPage() {
         
         <Popover>
           <PopoverTrigger asChild>
-            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-black/20 hover:bg-black/30 rounded-2xl">
+            <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-transparent hover:bg-white/10 rounded-2xl">
                 <div className="flex items-center w-full">
                     <Users className="h-6 w-6 mr-4 text-success" />
                     <div>
