@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Heart, Star } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import Link from 'next/link';
-import { Separator } from './ui/separator';
 
 const recommendedHotels = [
   { id: 'HB001', name: 'Oceanview Resort', city: 'Cancún, México', price: '279', image: 'https://images.unsplash.com/photo-1607185654436-3bd5d7a897ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxsdXh1cnklMjByZXNvcnQlMjBzdW5zZXR8ZW58MHx8fHwxNzUyNTkyMjM1fDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'luxury resort sunset', rating: 5, reviews: 1327 },
@@ -66,3 +65,5 @@ export function RecommendedHotels() {
     </div>
   );
 }
+
+    
