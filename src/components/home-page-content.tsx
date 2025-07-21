@@ -64,6 +64,10 @@ const AnimatedClouds = () => (
         <div className="cloud cloud-animation" style={{ width: '300px', height: '90px', top: '25%', animationDelay: '-15s', animationDuration: '90s' }}></div>
         <div className="cloud cloud-animation" style={{ width: '150px', height: '45px', top: '50%', animationDelay: '-5s', animationDuration: '60s' }}></div>
         <div className="cloud cloud-animation" style={{ width: '250px', height: '75px', top: '70%', animationDelay: '-25s', animationDuration: '80s' }}></div>
+        <div className="cloud cloud-animation" style={{ width: '180px', height: '50px', top: '85%', animationDelay: '-10s', animationDuration: '70s' }}></div>
+        <div className="cloud cloud-animation" style={{ width: '220px', height: '65px', top: '5%', animationDelay: '-20s', animationDuration: '85s' }}></div>
+        <div className="cloud cloud-animation" style={{ width: '280px', height: '80px', top: '40%', animationDelay: '-30s', animationDuration: '95s' }}></div>
+        <div className="cloud cloud-animation" style={{ width: '120px', height: '35px', top: '60%', animationDelay: '-35s', animationDuration: '55s' }}></div>
     </div>
 );
 
