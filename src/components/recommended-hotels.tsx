@@ -14,7 +14,7 @@ const recommendedHotels = [
 ];
 
 const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
-    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-0 flex flex-col group transition-all duration-300 hover:bg-white/20 hover:shadow-2xl">
+    <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 hover:shadow-2xl bg-white/40 backdrop-blur-xl border-white/20 hover:bg-white/50">
         <div className="relative w-full h-48 flex-shrink-0">
             <Image 
                 src={hotel.image} 
@@ -27,25 +27,25 @@ const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
                 <Heart className="h-5 w-5" />
             </Button>
         </div>
-        <CardContent className="p-4 flex flex-col flex-grow text-white">
+        <CardContent className="p-4 flex flex-col flex-grow text-gray-800">
             <h3 className="font-bold text-lg">{hotel.name}</h3>
-            <p className="text-sm text-white/70">{hotel.city}</p>
+            <p className="text-sm text-gray-600">{hotel.city}</p>
             
             <div className="flex items-center gap-2 mt-2 text-sm">
                 <div className="flex items-center gap-1 text-amber-400">
                     {[...Array(hotel.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                 </div>
-                <p className="text-white/70">({hotel.reviews} reviews)</p>
+                <p className="text-gray-500">({hotel.reviews} reviews)</p>
             </div>
             
             <div className="flex-grow"></div>
             
-            <Separator className="my-4 bg-white/20" />
+            <Separator className="my-4 bg-gray-500/20" />
 
             <div className="flex justify-between items-center">
                 <div>
-                    <p className="text-xs text-white/80">desde</p>
-                    <p className="font-semibold text-2xl text-accent">${hotel.price}<span className="text-sm font-normal text-white/80">/noche</span></p>
+                    <p className="text-xs text-gray-600">desde</p>
+                    <p className="font-semibold text-2xl text-accent">${hotel.price}<span className="text-sm font-normal text-gray-700">/noche</span></p>
                 </div>
                 <Button asChild className="font-semibold">
                     <Link href={`/hotels/${hotel.id}`}>Ver Hotel</Link>
