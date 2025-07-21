@@ -61,7 +61,7 @@ function RecommendedContent({ tab }: { tab?: string }) {
 
 const AnimatedClouds = () => (
     <div className="absolute top-0 left-0 w-full h-full overflow-x-hidden pointer-events-none z-0">
-        {/* Nube 1: Superior Izquierda (lenta) */}
+        {/* Nube 1: Superior Izquierda (lenta, visible al cargar) */}
         <div className="cloud-container cloud-animation" style={{ top: '10%', left: '5%', animationDuration: '120s', animationDelay: '-25s' }}>
             <div className="cloud-part" style={{ width: '220px', height: '80px' }}></div>
             <div className="cloud-part" style={{ width: '150px', height: '60px', top: '20px', left: '-30px' }}></div>
@@ -75,14 +75,14 @@ const AnimatedClouds = () => (
             <div className="cloud-part" style={{ width: '180px', height: '80px', top: '10px', left: '-20px' }}></div>
         </div>
         
-        {/* Nube 3: Central, velocidad media */}
+        {/* Nube 3: Central, velocidad media (visible al cargar) */}
         <div className="cloud-container cloud-animation" style={{ top: '45%', left: '40%', animationDuration: '100s', animationDelay: '-70s' }}>
             <div className="cloud-part" style={{ width: '280px', height: '80px' }}></div>
             <div className="cloud-part" style={{ width: '180px', height: '60px', top: '15px', left: '50px' }}></div>
             <div className="cloud-part" style={{ width: '150px', height: '50px', top: '-15px', left: '70px' }}></div>
         </div>
         
-        {/* Nube 4: Superior Derecha (rápida) - REDISEÑADA */}
+        {/* Nube 4: Superior Derecha (rápida, empieza fuera) */}
         <div className="cloud-container cloud-animation" style={{ top: '5%', left: '80%', animationDuration: '75s', animationDelay: '-10s' }}>
             <div className="cloud-part" style={{ width: '180px', height: '70px' }}></div>
             <div className="cloud-part" style={{ width: '130px', height: '50px', top: '20px', left: '30px' }}></div>
@@ -90,7 +90,7 @@ const AnimatedClouds = () => (
             <div className="cloud-part" style={{ width: '100px', height: '40px', top: '30px', left: '-40px' }}></div>
         </div>
 
-        {/* Nube 5: Central Izquierda, baja */}
+        {/* Nube 5: Central Izquierda, baja (visible al cargar) */}
         <div className="cloud-container cloud-animation" style={{ top: '65%', left: '5%', animationDuration: '110s', animationDelay: '-90s' }}>
             <div className="cloud-part" style={{ width: '250px', height: '80px' }}></div>
             <div className="cloud-part" style={{ width: '150px', height: '60px', top: '-20px', left: '50px' }}></div>
@@ -112,14 +112,14 @@ const AnimatedClouds = () => (
 
         {/* -- NUBES ADICIONALES PARA DENSIDAD Y VELOCIDAD -- */}
         
-        {/* Nube 8: Central superior, velocidad media-rápida */}
+        {/* Nube 8: Central superior, velocidad media-rápida (visible al cargar) */}
         <div className="cloud-container cloud-animation" style={{ top: '20%', left: '30%', animationDuration: '85s', animationDelay: '-50s' }}>
             <div className="cloud-part" style={{ width: '260px', height: '75px' }}></div>
             <div className="cloud-part" style={{ width: '170px', height: '55px', top: '10px', left: '40px' }}></div>
             <div className="cloud-part" style={{ width: '140px', height: '45px', top: '-10px', left: '60px' }}></div>
         </div>
 
-        {/* Nube 9: Inferior izquierda, muy lenta */}
+        {/* Nube 9: Inferior izquierda, muy lenta (visible al cargar) */}
         <div className="cloud-container cloud-animation" style={{ top: '85%', left: '10%', animationDuration: '140s', animationDelay: '-100s' }}>
             <div className="cloud-part" style={{ width: '230px', height: '70px' }}></div>
             <div className="cloud-part" style={{ width: '140px', height: '50px', top: '-15px', left: '40px' }}></div>
@@ -139,20 +139,20 @@ const AnimatedClouds = () => (
             <div className="cloud-part" style={{ width: '170px', height: '65px', top: '-15px', left: '-5px' }}></div>
         </div>
 
-        {/* Nube 12: Central, muy lenta - REDISEÑADA */}
+        {/* Nube 12: Central, muy lenta (visible al cargar) */}
         <div className="cloud-container cloud-animation" style={{ top: '60%', left: '50%', animationDuration: '125s', animationDelay: '-110s' }}>
             <div className="cloud-part" style={{ width: '280px', height: '85px' }}></div>
             <div className="cloud-part" style={{ width: '190px', height: '65px', top: '-20px', left: '40px' }}></div>
             <div className="cloud-part" style={{ width: '150px', height: '60px', top: '25px', left: '-30px' }}></div>
         </div>
-         {/* Nube 13: Media-alta, empieza a la izquierda */}
+         {/* Nube 13: Media-alta, empieza a la izquierda (visible al cargar) */}
         <div className="cloud-container cloud-animation" style={{ top: '30%', left: '15%', animationDuration: '95s', animationDelay: '-30s' }}>
             <div className="cloud-part" style={{ width: '240px', height: '70px' }}></div>
             <div className="cloud-part" style={{ width: '160px', height: '50px', top: '10px', left: '40px' }}></div>
             <div className="cloud-part" style={{ width: '130px', height: '40px', top: '-20px', left: '20px' }}></div>
         </div>
 
-        {/* Nube 14: Inferior, empieza en el centro */}
+        {/* Nube 14: Inferior, empieza en el centro (visible al cargar) */}
         <div className="cloud-container cloud-animation" style={{ top: '90%', left: '50%', animationDuration: '80s', animationDelay: '-60s' }}>
             <div className="cloud-part" style={{ width: '320px', height: '80px' }}></div>
             <div className="cloud-part" style={{ width: '220px', height: '60px', top: '-10px', left: '50px' }}></div>
