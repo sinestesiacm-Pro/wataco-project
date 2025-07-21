@@ -28,7 +28,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <Card className="group rounded-[2.5rem] overflow-hidden bg-white border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+        <Card className="group rounded-3xl overflow-hidden bg-white border-none shadow-xl hover:shadow-2xl transition-all duration-300">
             <CardContent className="p-0">
                 <div className="relative h-40">
                     <Image 
@@ -59,8 +59,8 @@ export function RecommendedDestinations() {
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold text-gray-800">Ofertas que no Puedes Dejar Pasar</h2>
-        <p className="text-lg text-gray-500 mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
+        <h2 className="text-4xl font-headline font-bold text-white">Ofertas que no Puedes Dejar Pasar</h2>
+        <p className="text-lg text-white/80 mt-2">Hemos buscado los mejores precios en rutas populares para ti.</p>
       </div>
       
       <div 
