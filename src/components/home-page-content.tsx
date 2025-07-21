@@ -70,6 +70,7 @@ const AnimatedClouds = () => (
             <div className="cloud-part" style={{ width: '180px', height: '180px', top: '0', left: '80px' }}></div>
             <div className="cloud-part" style={{ width: '220px', height: '220px', top: '30px', left: '0px' }}></div>
             <div className="cloud-part" style={{ width: '150px', height: '150px', top: '50px', left: '180px' }}></div>
+            <div className="cloud-part" style={{ width: '100px', height: '100px', top: '20px', left: '200px' }}></div>
         </div>
         <div className="cloud-container cloud-animation" style={{ top: '50%', animationDuration: '60s', animationDelay: '-20s' }}>
              <div className="cloud-part" style={{ width: '100px', height: '100px', top: '0', left: '30px' }}></div>
