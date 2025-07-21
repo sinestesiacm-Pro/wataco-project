@@ -76,7 +76,7 @@
     @apply h-full;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen;
   }
 }
 
@@ -100,7 +100,7 @@
    background: radial-gradient(circle at top right, #00A651, #005A32 50%), radial-gradient(circle at bottom left, #2ECC40, #005A32 50%);
 }
 .bg-packages-gradient {
-  background: radial-gradient(circle at bottom left, #98A8F8, #282A5A 60%), radial-gradient(circle at top right, #6A7BFF, #282A5A 50%);
+  background: radial-gradient(circle at top right, #98A8F8, #282A5A 60%), radial-gradient(circle at bottom left, #6A7BFF, #282A5A 50%);
 }
 .bg-cruises-gradient {
   background: radial-gradient(circle at 10% 10%, hsla(180, 60%, 50%, 0.7), transparent 40%), radial-gradient(circle at 90% 80%, #00A3D4, #00506D 50%);
