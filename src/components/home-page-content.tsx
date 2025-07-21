@@ -1,4 +1,3 @@
-
 'use client';
 
 import FlightSearchPage from '@/components/flight-search-page';
