@@ -63,9 +63,9 @@ const AnimatedClouds = () => (
     <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         {/* Nube 1: Superior Izquierda (Lenta) */}
         <div className="cloud-container cloud-animation" style={{ animationDuration: '120s', animationDelay: '-10s' }}>
-            <div className="cloud-part" style={{ width: '200px', height: '60px', top: '10%', left: '5%' }}></div>
-            <div className="cloud-part" style={{ width: '140px', height: '50px', top: '12%', left: '0%' }}></div>
-            <div className="cloud-part" style={{ width: '160px', height: '55px', top: '8%', left: '8%' }}></div>
+            <div className="cloud-part" style={{ width: '200px', height: '60px', top: '5%', left: '5%' }}></div>
+            <div className="cloud-part" style={{ width: '140px', height: '50px', top: '7%', left: '0%' }}></div>
+            <div className="cloud-part" style={{ width: '160px', height: '55px', top: '3%', left: '8%' }}></div>
         </div>
 
         {/* Nube 2: Inferior Derecha (Muy Lenta) */}
@@ -121,24 +121,24 @@ export function HomePageContent() {
     return (
         <div className="w-full flex flex-col flex-grow relative">
             {tab === 'Flights' && <AnimatedClouds />}
-            <div className="pt-20 relative z-10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-                  {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
-                </div>
-          
-                <div className="pt-16">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                         <RecommendedContent tab={tab} />
-                    </div>
-                </div>
 
+            <div className="pt-20 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                {tab !== 'Activities' && tab !== 'Social' && <div className="pt-8"><SearchSection tab={tab} /></div>}
+            </div>
+      
+            <div className="pt-16 relative z-10">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                     <RecommendedContent tab={tab} />
+                </div>
+            </div>
+
+            <div className="relative z-10">
                 <TestimonialsSection />
             </div>
+            
             <div className="mt-auto relative z-10">
                <Footer />
             </div>
         </div>
     )
 }
-
-    
