@@ -39,7 +39,8 @@ function HotelOffersPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelOffersPage({ params }: { params: { id: string } }) {
+export default function HotelOffersPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   
   return (
     <Suspense fallback={
@@ -47,7 +48,7 @@ export default function HotelOffersPage({ params }: { params: { id: string } }) 
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
-      <HotelOffersPageContent id={params.id} />
+      <HotelOffersPageContent id={id} />
     </Suspense>
   );
 }
