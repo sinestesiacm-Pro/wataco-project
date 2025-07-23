@@ -14,13 +14,15 @@ let amadeusTokenCache = {
 export async function getAmadeusToken(): Promise<string> {
   const now = Date.now();
 
-  // Return cached token if it's still valid (with a 100-second buffer)
+  // Return cached token if it's still valid
   if (amadeusTokenCache.token && now < amadeusTokenCache.expiresAt) {
+    console.log("diagnose: Amadeus token from cache.");
     return amadeusTokenCache.token;
   }
 
+  console.log("diagnose: Requesting new Amadeus token.");
   if (!AMADEUS_API_KEY || !AMADEUS_API_SECRET) {
-    throw new Error('Las credenciales de la API de Amadeus no están configuradas. Por favor, añádelas a tu archivo .env.');
+    throw new Error('Las credenciales de la API de Amadeus no están configuradas en el archivo .env.');
   }
 
   const tokenUrl = `${AMADEUS_BASE_URL}/v1/security/oauth2/token`;
@@ -38,9 +40,21 @@ export async function getAmadeusToken(): Promise<string> {
 
     if (!response.ok) {
       const errorBody = await response.json().catch(() => response.text());
-      console.error('Failed to get Amadeus token', errorBody);
-      const errorMessage = (errorBody as any)?.error_description || (errorBody as any)?.errors?.[0]?.detail || response.statusText;
-      throw new Error(`Error de token de Amadeus: ${errorMessage}`);
+      console.error('diagnose: Amadeus token API error response:', errorBody);
+      
+      let errorMessage = `Error de API de Amadeus (${response.status})`;
+      if (typeof errorBody === 'object' && errorBody !== null) {
+          const apiError = errorBody as any;
+          if (apiError.error === 'invalid_client') {
+              errorMessage = 'Error de Autenticación: Credenciales de API inválidas.';
+          } else {
+              errorMessage = apiError.error_description || apiError.title || JSON.stringify(apiError);
+          }
+      } else if (typeof errorBody === 'string') {
+          errorMessage = errorBody;
+      }
+      
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
@@ -52,13 +66,16 @@ export async function getAmadeusToken(): Promise<string> {
       token: token,
       expiresAt: now + expiresIn * 1000,
     };
-
+    
+    console.log("diagnose: New Amadeus token received and cached.");
     return token;
-  } catch (err) {
-    console.error(err);
+
+  } catch (err: unknown) {
     if (err instanceof Error) {
-        throw new Error(`No se pudo obtener el token de la API. Razón: ${err.message}`);
+        console.error("diagnose: Failed to get Amadeus token.", err);
+        throw new Error(`Error de autenticación de Amadeus: ${err.message}`);
     }
-    throw new Error('No se pudo obtener el token de la API debido a un error desconocido.');
+    console.error("diagnose: An unknown error occurred while fetching Amadeus token.", err);
+    throw new Error('Error de autenticación de Amadeus debido a un error desconocido.');
   }
 }

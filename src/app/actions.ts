@@ -77,7 +77,7 @@ export async function searchFlights(params: {
 
     return { success: true, data };
   } catch (err: any) {
-    console.error(err);
+    console.error('diagnose: Error in searchFlights action:', err);
     return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
   }
 }
@@ -128,7 +128,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
     return { success: true, data: filteredData };
 
   } catch (err: any) {
-    console.error(err);
+    console.error('diagnose: Error in searchAirports action:', err);
     return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
   }
 }
