@@ -79,6 +79,9 @@
     @apply text-foreground min-h-screen;
     background: radial-gradient(ellipse at center, hsl(var(--primary)) 0%, #005A9C 100%);
   }
+  h2.font-headline.text-white {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
 }
 
 @keyframes animate-bg-pan {
@@ -102,7 +105,7 @@
     background-color: hsl(220 40% 8%);
 }
 .bg-hotels-gradient {
-   background: radial-gradient(circle at top right, #00A651, #005A32 50%), radial-gradient(circle at bottom left, #2ECC40, #005A32 50%);
+   background: radial-gradient(circle at top right, #2ECC71, #1C6C63 50%), radial-gradient(circle at bottom left, #2ECC71, #1C6C63 50%);
 }
 .bg-packages-gradient {
   background: radial-gradient(ellipse at 50% 50%, hsl(270, 50%, 20%), hsl(270, 50%, 5%));
@@ -230,4 +233,47 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+/* Sunflower Animation */
+@keyframes sunflower-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes sunflower-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.sunflower-container {
+  position: absolute;
+  z-index: 1;
+  opacity: 0.6;
+  filter: blur(2px);
+  animation: sunflower-sway 25s ease-in-out infinite, sunflower-float 35s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.sunflower-head {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  background: #53433e; /* Dark brown center */
+  border-radius: 50%;
+  top: 35%;
+  left: 35%;
+  z-index: 2;
+}
+
+.sunflower-petal {
+  position: absolute;
+  width: 40%;
+  height: 50%;
+  background-color: #FFD700;
+  border-radius: 50% 0;
+  top: 25%;
+  left: 30%;
+  transform-origin: bottom right;
+  z-index: 1;
 }

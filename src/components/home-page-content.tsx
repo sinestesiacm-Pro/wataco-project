@@ -24,7 +24,7 @@ function SearchSection({ tab }: { tab?: string }) {
   const renderSearch = () => {
     switch(activeTab) {
       case 'Flights': return <FlightSearchPage />;
-      case 'Hotels': return <HotelSearchPage />;
+      case 'Hotels': return <div className="bg-white/40 backdrop-blur-xl rounded-3xl"><HotelSearchPage /></div>;
       case 'Packages': return <PackagesSearchPage />;
       case 'Cruises': return <CruiseSearchPage />;
       default: return null;
@@ -150,6 +150,28 @@ const AnimatedClouds = () => (
     </div>
 );
 
+const Sunflower = ({ size, style }: { size: number, style: React.CSSProperties }) => (
+  <div className="sunflower-container" style={{ width: size, height: size, ...style }}>
+    <div className="sunflower-head"></div>
+    {[...Array(12)].map((_, i) => (
+      <div key={i} className="sunflower-petal" style={{ transform: `rotate(${i * 30}deg)` }}></div>
+    ))}
+  </div>
+);
+
+const AnimatedSunflowers = () => (
+  <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+    <Sunflower size={100} style={{ top: '15%', left: '5%', animationDelay: '0s', animationDuration: '30s' }} />
+    <Sunflower size={60} style={{ top: '70%', left: '10%', animationDelay: '-5s', animationDuration: '45s' }} />
+    <Sunflower size={80} style={{ top: '50%', left: '30%', animationDelay: '-10s', animationDuration: '38s' }} />
+    <Sunflower size={120} style={{ top: '85%', left: '80%', animationDelay: '-2s', animationDuration: '55s' }} />
+    <Sunflower size={70} style={{ top: '5%', left: '90%', animationDelay: '-15s', animationDuration: '42s' }} />
+    <Sunflower size={90} style={{ top: '30%', left: '60%', animationDelay: '-8s', animationDuration: '33s' }} />
+    <Sunflower size={50} style={{ top: '80%', left: '45%', animationDelay: '-20s', animationDuration: '50s' }} />
+    <Sunflower size={110} style={{ top: '20%', left: '85%', animationDelay: '-3s', animationDuration: '60s' }} />
+  </div>
+);
+
 
 export function HomePageContent() {
     const searchParams = useSearchParams();
@@ -163,6 +185,7 @@ export function HomePageContent() {
     return (
         <div className="w-full flex flex-col flex-grow relative">
             {tab === 'Flights' && <AnimatedClouds />}
+            {tab === 'Hotels' && <AnimatedSunflowers />}
             
             <div className="relative z-10 flex flex-col min-h-dvh">
                 <div className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

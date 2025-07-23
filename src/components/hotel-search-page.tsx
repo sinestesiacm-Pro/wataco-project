@@ -176,7 +176,7 @@ export default function HotelSearchPage() {
   );
 
   return (
-    <div className="bg-emerald-100/70 p-6 rounded-3xl shadow-2xl">
+    <div className="p-6 rounded-3xl">
         <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
             <div className="w-full lg:col-span-5 relative" ref={destinationRef}>

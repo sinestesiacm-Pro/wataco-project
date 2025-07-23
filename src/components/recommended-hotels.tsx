@@ -14,7 +14,7 @@ const recommendedHotels = [
 ];
 
 const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
-    <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-white/20 hover:scale-105">
+    <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-none hover:scale-105">
         <div className="relative w-full h-48 flex-shrink-0">
             <Image 
                 src={hotel.image} 
@@ -65,5 +65,3 @@ export function RecommendedHotels() {
     </div>
   );
 }
-
-    
