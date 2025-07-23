@@ -276,7 +276,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                         <AlertCircle className="h-4 w-4" />
                         <span>Revisa los detalles antes de confirmar.</span>
                     </div>
-                    <Button type="submit" size="lg" className="bg-success hover:bg-success/90">
+                    <Button type="submit" size="lg" className="bg-primary hover:bg-primary/90">
                         <Lock className="mr-2 h-4 w-4" />
                         Confirmar Reserva
                     </Button>

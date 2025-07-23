@@ -104,7 +104,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                             onValueChange={(value) => setNumberOfRooms(parseInt(value, 10))}
                             disabled={adults <= 1 && children === 0}
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="text-card-foreground">
                             <SelectValue placeholder="Seleccionar" />
                           </SelectTrigger>
                           <SelectContent>
