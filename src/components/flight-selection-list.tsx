@@ -37,7 +37,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
     const stops = itinerary.segments.length - 1;
 
     return (
-        <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl flex flex-col sm:flex-row text-white">
+        <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border-none bg-white/40 backdrop-blur-lg flex flex-col sm:flex-row text-gray-800">
             {/* Main boarding pass section */}
             <div className="flex-grow p-4 md:p-6">
                 <div className="flex items-start gap-4">
@@ -52,24 +52,24 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                          <div className="flex items-center justify-between">
                             <div className="font-semibold text-left">
                                 <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
-                                <p className="font-semibold text-white/80">{firstSegment.departure.iataCode}</p>
-                                <p className="text-xs text-white/70">{originCity}</p>
+                                <p className="font-semibold text-gray-600">{firstSegment.departure.iataCode}</p>
+                                <p className="text-xs text-gray-500">{originCity}</p>
                             </div>
-                            <div className="flex-grow flex flex-col items-center text-white/80 px-2">
+                            <div className="flex-grow flex flex-col items-center text-gray-600 px-2">
                                 <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
-                                <div className="w-full h-px bg-white/20 relative my-1">
-                                    <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-background text-white p-0.5 rounded-full"/>
+                                <div className="w-full h-px bg-gray-400/50 relative my-1">
+                                    <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 p-0.5 rounded-full border border-gray-300"/>
                                 </div>
-                                <p className={cn("text-xs font-semibold", stops > 0 ? "text-amber-400" : "text-success")}>{stops === 0 ? 'Directo' : `${stops} escala(s)`}</p>
+                                <p className={cn("text-xs font-semibold", stops > 0 ? "text-amber-600" : "text-green-600")}>{stops === 0 ? 'Directo' : `${stops} escala(s)`}</p>
                             </div>
                             <div className="font-semibold text-right">
                                 <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
-                                 <p className="font-semibold text-white/80">{lastSegment.arrival.iataCode}</p>
-                                 <p className="text-xs text-white/70">{destinationCity}</p>
+                                 <p className="font-semibold text-gray-600">{lastSegment.arrival.iataCode}</p>
+                                 <p className="text-xs text-gray-500">{destinationCity}</p>
                             </div>
                         </div>
-                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-dashed border-white/20">
-                            <p className="text-xs text-white/70">{airlineName} &middot; {firstSegment.carrierCode} {firstSegment.number}</p>
+                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-dashed border-gray-400/50">
+                            <p className="text-xs text-gray-500">{airlineName} &middot; {firstSegment.carrierCode} {firstSegment.number}</p>
                             <FlightBaggageInfo flight={flight} />
                         </div>
                     </div>
@@ -77,9 +77,9 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
             </div>
 
             {/* Tear-off stub */}
-            <div className="flex-shrink-0 w-full sm:w-48 bg-black/20 ticket-tear flex sm:flex-col items-center justify-between sm:justify-center p-4 gap-3">
+            <div className="flex-shrink-0 w-full sm:w-48 bg-black/10 ticket-tear flex sm:flex-col items-center justify-between sm:justify-center p-4 gap-3">
                 <div className="text-center">
-                    <p className="text-xs sm:text-sm text-white/70">Precio total</p>
+                    <p className="text-xs sm:text-sm text-gray-700">Precio total</p>
                     <p className="text-2xl sm:text-3xl font-bold font-headline text-accent">
                         ${flight.price.total}
                     </p>
@@ -101,7 +101,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-3xl font-headline font-bold text-white">
+        <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">
           {title}
         </h2>
       </div>

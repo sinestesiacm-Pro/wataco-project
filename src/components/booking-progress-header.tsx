@@ -16,9 +16,9 @@ const Step = ({ title, isActive, isCompleted }: { title: string; isActive: boole
         {isCompleted ? (
             <CheckCircle className="h-6 w-6 text-success" />
         ) : (
-            <Circle className={cn("h-6 w-6", isActive ? "text-primary fill-primary/20" : "text-white/70")} />
+            <Circle className={cn("h-6 w-6", isActive ? "text-white fill-white/20" : "text-white/70")} />
         )}
-        <span className={cn("font-semibold", isActive ? "text-primary" : isCompleted ? "text-white" : "text-white/70")}>
+        <span className={cn("font-semibold drop-shadow-lg", isActive ? "text-white" : isCompleted ? "text-white" : "text-white/70")}>
             {title}
         </span>
     </div>
@@ -29,13 +29,13 @@ export function BookingProgressHeader({ step, isRoundTrip, origin, destination }
   const returnCompleted = step === 'review' && isRoundTrip;
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl shadow-md text-white mb-8">
+    <div className="bg-black/10 backdrop-blur-lg border border-white/20 p-4 rounded-2xl shadow-md text-white mb-8">
         <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold font-headline flex items-center gap-3">
-                <Plane className="h-6 w-6 text-primary" />
+            <h2 className="text-2xl font-bold font-headline flex items-center gap-3 drop-shadow-lg">
+                <Plane className="h-6 w-6 text-white" />
                 <span>{origin} a {destination}</span>
             </h2>
-             <p className="text-sm text-white/80 font-semibold">
+             <p className="text-sm text-white/80 font-semibold drop-shadow-lg">
                 {isRoundTrip ? 'Ida y Vuelta' : 'Solo Ida'}
             </p>
         </div>
