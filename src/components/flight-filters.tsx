@@ -18,7 +18,7 @@ interface FlightFiltersProps {
 
 const FilterSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div>
-        <h3 className="text-lg font-semibold mb-3 font-headline text-white">{title}</h3>
+        <h3 className="text-lg font-semibold mb-3 font-headline text-gray-800">{title}</h3>
         <div className="space-y-3 pl-1">
             {children}
         </div>
@@ -62,29 +62,29 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
   }, []);
 
   return (
-    <Card className="sticky top-24 shadow-lg bg-white/10 backdrop-blur-xl border border-white/20 text-white">
+    <Card className="sticky top-24 shadow-lg bg-white/60 backdrop-blur-xl border border-white/20 text-gray-800">
       <CardHeader>
-        <CardTitle className="text-xl font-bold font-headline text-white">Filtrar por</CardTitle>
+        <CardTitle className="text-xl font-bold font-headline text-gray-800">Filtrar por</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <FilterSection title="Escalas">
-            <RadioGroup onValueChange={handleStopChange} className="text-white">
+            <RadioGroup onValueChange={handleStopChange} className="text-gray-800">
                 <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="0" id="stops-0" className="border-white/50 text-primary" />
-                    <Label htmlFor="stops-0" className="text-white">Sin escalas</Label>
+                    <RadioGroupItem value="0" id="stops-0" className="border-gray-500/50 text-primary" />
+                    <Label htmlFor="stops-0" className="text-gray-800">Sin escalas</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="1" id="stops-1" className="border-white/50 text-primary" />
-                    <Label htmlFor="stops-1" className="text-white">1 escala</Label>
+                    <RadioGroupItem value="1" id="stops-1" className="border-gray-500/50 text-primary" />
+                    <Label htmlFor="stops-1" className="text-gray-800">1 escala</Label>
                 </div>
                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="2" id="stops-2" className="border-white/50 text-primary" />
-                    <Label htmlFor="stops-2" className="text-white">2 o más escalas</Label>
+                    <RadioGroupItem value="2" id="stops-2" className="border-gray-500/50 text-primary" />
+                    <Label htmlFor="stops-2" className="text-gray-800">2 o más escalas</Label>
                 </div>
             </RadioGroup>
         </FilterSection>
 
-        <Separator className="bg-white/20" />
+        <Separator className="bg-gray-500/20" />
 
         <FilterSection title="Aerolíneas">
             {Object.entries(availableAirlines).slice(0, 5).map(([code, name]) => (
@@ -93,14 +93,14 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                       id={`airline-${code}`} 
                       onCheckedChange={(checked) => handleAirlineChange(!!checked, code)} 
                       checked={filters.airlines.includes(code)}
-                      className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                      className="border-gray-500/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                     />
-                    <Label htmlFor={`airline-${code}`} className="text-white">{name}</Label>
+                    <Label htmlFor={`airline-${code}`} className="text-gray-800">{name}</Label>
                 </div>
             ))}
         </FilterSection>
 
-        <Separator className="bg-white/20" />
+        <Separator className="bg-gray-500/20" />
 
         <FilterSection title="Equipaje">
             <div className="flex items-center space-x-2">
@@ -108,27 +108,27 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                   id="bags-carry-on" 
                   onCheckedChange={(checked) => handleBagsChange(!!checked, 'carry-on')} 
                   checked={filters.bags.includes('carry-on')}
-                  className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                  className="border-gray-500/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
-                <Label htmlFor="bags-carry-on" className="text-white">Equipaje de mano</Label>
+                <Label htmlFor="bags-carry-on" className="text-gray-800">Equipaje de mano</Label>
             </div>
             <div className="flex items-center space-x-2">
                 <Checkbox 
                   id="bags-checked" 
                   onCheckedChange={(checked) => handleBagsChange(!!checked, 'checked')}
                   checked={filters.bags.includes('checked')}
-                  className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                  className="border-gray-500/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
-                <Label htmlFor="bags-checked" className="text-white">Equipaje facturado</Label>
+                <Label htmlFor="bags-checked" className="text-gray-800">Equipaje facturado</Label>
             </div>
         </FilterSection>
 
-        <Separator className="bg-white/20" />
+        <Separator className="bg-gray-500/20" />
         
         <FilterSection title="Flexibilidad">
             <div className="flex items-center space-x-2">
-                <Checkbox id="flex-no-change-fee" disabled className="disabled:opacity-40 border-white/30" />
-                <Label htmlFor="flex-no-change-fee" className="text-white/50">Sin cargos por cambio</Label>
+                <Checkbox id="flex-no-change-fee" disabled className="disabled:opacity-40 border-gray-400/30" />
+                <Label htmlFor="flex-no-change-fee" className="text-gray-500">Sin cargos por cambio</Label>
             </div>
         </FilterSection>
 

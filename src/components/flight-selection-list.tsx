@@ -37,7 +37,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
     const stops = itinerary.segments.length - 1;
 
     return (
-        <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border-none bg-white/40 backdrop-blur-lg flex flex-col sm:flex-row text-gray-800">
+        <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border-none bg-white/60 backdrop-blur-lg flex flex-col sm:flex-row text-gray-800">
             {/* Main boarding pass section */}
             <div className="flex-grow p-4 md:p-6">
                 <div className="flex items-start gap-4">
@@ -77,7 +77,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
             </div>
 
             {/* Tear-off stub */}
-            <div className="flex-shrink-0 w-full sm:w-48 bg-black/10 ticket-tear flex sm:flex-col items-center justify-between sm:justify-center p-4 gap-3">
+            <div className="flex-shrink-0 w-full sm:w-48 bg-white/60 ticket-tear flex sm:flex-col items-center justify-between sm:justify-center p-4 gap-3">
                 <div className="text-center">
                     <p className="text-xs sm:text-sm text-gray-700">Precio total</p>
                     <p className="text-2xl sm:text-3xl font-bold font-headline text-accent">

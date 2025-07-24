@@ -16,9 +16,9 @@ const Step = ({ title, isActive, isCompleted }: { title: string; isActive: boole
         {isCompleted ? (
             <CheckCircle className="h-6 w-6 text-success" />
         ) : (
-            <Circle className={cn("h-6 w-6", isActive ? "text-white fill-white/20" : "text-white/70")} />
+            <Circle className={cn("h-6 w-6", isActive ? "text-primary fill-primary/20" : "text-gray-500")} />
         )}
-        <span className={cn("font-semibold drop-shadow-lg", isActive ? "text-white" : isCompleted ? "text-white" : "text-white/70")}>
+        <span className={cn("font-semibold drop-shadow-lg", isActive ? "text-gray-800" : isCompleted ? "text-gray-800" : "text-gray-500")}>
             {title}
         </span>
     </div>
@@ -29,13 +29,13 @@ export function BookingProgressHeader({ step, isRoundTrip, origin, destination }
   const returnCompleted = step === 'review' && isRoundTrip;
 
   return (
-    <div className="bg-black/10 backdrop-blur-lg border border-white/20 p-4 rounded-2xl shadow-md text-white mb-8">
+    <div className="bg-white/60 backdrop-blur-lg border border-white/20 p-4 rounded-2xl shadow-md text-gray-800 mb-8">
         <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold font-headline flex items-center gap-3 drop-shadow-lg">
-                <Plane className="h-6 w-6 text-white" />
+                <Plane className="h-6 w-6 text-gray-800" />
                 <span>{origin} a {destination}</span>
             </h2>
-             <p className="text-sm text-white/80 font-semibold drop-shadow-lg">
+             <p className="text-sm text-gray-600 font-semibold drop-shadow-lg">
                 {isRoundTrip ? 'Ida y Vuelta' : 'Solo Ida'}
             </p>
         </div>
@@ -47,7 +47,7 @@ export function BookingProgressHeader({ step, isRoundTrip, origin, destination }
         />
         {isRoundTrip && (
             <>
-             <div className="flex-grow h-px bg-white/20 mx-4"></div>
+             <div className="flex-grow h-px bg-gray-400/20 mx-4"></div>
              <Step 
                 title="2. Elige vuelo de vuelta" 
                 isActive={step === 'return'}
@@ -55,7 +55,7 @@ export function BookingProgressHeader({ step, isRoundTrip, origin, destination }
             />
             </>
         )}
-        <div className="flex-grow h-px bg-white/20 mx-4"></div>
+        <div className="flex-grow h-px bg-gray-400/20 mx-4"></div>
         <Step 
             title={isRoundTrip ? "3. Revisa tu viaje" : "2. Revisa tu viaje"}
             isActive={step === 'review'}
