@@ -150,26 +150,29 @@ const AnimatedClouds = () => (
     </div>
 );
 
-const Sunflower = ({ size, style }: { size: number, style: React.CSSProperties }) => (
-  <div className="sunflower-container" style={{ width: size, height: size, ...style }}>
-    <div className="sunflower-head"></div>
-    {[...Array(12)].map((_, i) => (
-      <div key={i} className="sunflower-petal" style={{ transform: `rotate(${i * 30}deg)` }}></div>
-    ))}
-  </div>
+const PalmLeaf = ({ size, style }: { size: number, style: React.CSSProperties }) => (
+  <svg
+    className="leaf-container"
+    style={{ width: size, height: size, ...style }}
+    viewBox="0 0 100 100"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M50 100 C 20 70, 20 30, 50 0 C 80 30, 80 70, 50 100 Z"
+      fill="currentColor"
+    />
+  </svg>
 );
 
-const AnimatedSunflowers = () => (
-  <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-    <Sunflower size={100} style={{ top: '15%', left: '5%', animationDelay: '0s', animationDuration: '30s' }} />
-    <Sunflower size={60} style={{ top: '70%', left: '10%', animationDelay: '-5s', animationDuration: '45s' }} />
-    <Sunflower size={80} style={{ top: '50%', left: '30%', animationDelay: '-10s', animationDuration: '38s' }} />
-    <Sunflower size={120} style={{ top: '85%', left: '80%', animationDelay: '-2s', animationDuration: '55s' }} />
-    <Sunflower size={70} style={{ top: '5%', left: '90%', animationDelay: '-15s', animationDuration: '42s' }} />
-    <Sunflower size={90} style={{ top: '30%', left: '60%', animationDelay: '-8s', animationDuration: '33s' }} />
-    <Sunflower size={50} style={{ top: '80%', left: '45%', animationDelay: '-20s', animationDuration: '50s' }} />
-    <Sunflower size={110} style={{ top: '20%', left: '85%', animationDelay: '-3s', animationDuration: '60s' }} />
-  </div>
+const AnimatedPalmLeaves = () => (
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0 text-white">
+        <PalmLeaf size={150} style={{ top: '-5%', left: '85%', transform: 'rotate(120deg)', animationDelay: '-2s', animationDuration: '25s' }} />
+        <PalmLeaf size={200} style={{ top: '70%', left: '-5%', transform: 'rotate(-40deg)', animationDelay: '0s', animationDuration: '30s' }} />
+        <PalmLeaf size={120} style={{ top: '50%', left: '90%', transform: 'rotate(150deg)', animationDelay: '-5s', animationDuration: '28s' }} />
+        <PalmLeaf size={180} style={{ top: '5%', left: '5%', transform: 'rotate(20deg)', animationDelay: '-8s', animationDuration: '35s' }} />
+        <PalmLeaf size={100} style={{ top: '80%', left: '60%', transform: 'rotate(210deg)', animationDelay: '-12s', animationDuration: '22s' }} />
+        <PalmLeaf size={220} style={{ top: '30%', left: '40%', transform: 'rotate(90deg)', animationDelay: '-15s', animationDuration: '40s', opacity: 0.1 }} />
+    </div>
 );
 
 
@@ -185,7 +188,7 @@ export function HomePageContent() {
     return (
         <div className="w-full flex flex-col flex-grow relative">
             {tab === 'Flights' && <AnimatedClouds />}
-            {tab === 'Hotels' && <AnimatedSunflowers />}
+            {tab === 'Hotels' && <AnimatedPalmLeaves />}
             
             <div className="relative z-10 flex flex-col min-h-dvh">
                 <div className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
