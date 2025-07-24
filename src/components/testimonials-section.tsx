@@ -54,7 +54,7 @@ export function TestimonialsSection() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">Lo que dicen nuestros viajeros</h2>
-                <p className="text-white/80 mt-2 drop-shadow-lg">Historias reales de aventuras inolvidables.</p>
+                <p className="text-white mt-2 drop-shadow-lg">Historias reales de aventuras inolvidables.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (

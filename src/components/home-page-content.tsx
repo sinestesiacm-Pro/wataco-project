@@ -16,6 +16,7 @@ import { Footer } from './footer';
 import { useTheme } from '@/contexts/theme-context';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { Sunflower } from './illustrations/sunflower';
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -150,28 +151,22 @@ const AnimatedClouds = () => (
     </div>
 );
 
-const PalmLeaf = ({ size, style }: { size: number, style: React.CSSProperties }) => (
-  <svg
-    className="leaf-container"
-    style={{ width: size, height: size, ...style }}
-    viewBox="0 0 100 100"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M50 100 C 20 70, 20 30, 50 0 C 80 30, 80 70, 50 100 Z"
-      fill="currentColor"
-    />
-  </svg>
-);
+const sunflowers = Array.from({ length: 15 }, (_, i) => ({
+    id: i,
+    size: Math.random() * (200 - 80) + 80,
+    style: {
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        animationDuration: `${Math.random() * 20 + 20}s, ${Math.random() * 30 + 30}s`,
+        animationDelay: `${Math.random() * -30}s, ${Math.random() * -30}s`,
+    },
+}));
 
-const AnimatedPalmLeaves = () => (
-    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0 text-white">
-        <PalmLeaf size={150} style={{ top: '-5%', left: '85%', transform: 'rotate(120deg)', animationDelay: '-2s', animationDuration: '25s' }} />
-        <PalmLeaf size={200} style={{ top: '70%', left: '-5%', transform: 'rotate(-40deg)', animationDelay: '0s', animationDuration: '30s' }} />
-        <PalmLeaf size={120} style={{ top: '50%', left: '90%', transform: 'rotate(150deg)', animationDelay: '-5s', animationDuration: '28s' }} />
-        <PalmLeaf size={180} style={{ top: '5%', left: '5%', transform: 'rotate(20deg)', animationDelay: '-8s', animationDuration: '35s' }} />
-        <PalmLeaf size={100} style={{ top: '80%', left: '60%', transform: 'rotate(210deg)', animationDelay: '-12s', animationDuration: '22s' }} />
-        <PalmLeaf size={220} style={{ top: '30%', left: '40%', transform: 'rotate(90deg)', animationDelay: '-15s', animationDuration: '40s', opacity: 0.1 }} />
+const AnimatedSunflowers = () => (
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0 text-amber-300">
+        {sunflowers.map(sunflower => (
+            <Sunflower key={sunflower.id} size={sunflower.size} style={sunflower.style} />
+        ))}
     </div>
 );
 
@@ -188,7 +183,7 @@ export function HomePageContent() {
     return (
         <div className="w-full flex flex-col flex-grow relative">
             {tab === 'Flights' && <AnimatedClouds />}
-            {tab === 'Hotels' && <AnimatedPalmLeaves />}
+            {tab === 'Hotels' && <AnimatedSunflowers />}
             
             <div className="relative z-10 flex flex-col min-h-dvh">
                 <div className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

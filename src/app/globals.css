@@ -232,28 +232,20 @@
     text-align: center;
 }
 
-/* Palm Leaf Animation */
-@keyframes leaf-sway {
-  0%, 100% {
-    transform: rotate(-5deg);
-  }
-  50% {
-    transform: rotate(5deg);
-  }
+/* Sunflower Animation */
+@keyframes sunflower-sway {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
 }
-@keyframes leaf-float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+@keyframes sunflower-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-25px); }
 }
-.leaf-container {
+.sunflower-container {
   position: absolute;
   z-index: 0;
   opacity: 0.15;
-  filter: blur(1.5px);
-  animation: leaf-sway 20s ease-in-out infinite, leaf-float 30s ease-in-out infinite;
-  transform-origin: bottom right;
+  filter: blur(2px);
+  animation: sunflower-sway 20s ease-in-out infinite, sunflower-float 30s ease-in-out infinite;
+  transform-origin: bottom center;
 }

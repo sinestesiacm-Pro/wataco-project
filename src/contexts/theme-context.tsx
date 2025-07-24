@@ -41,15 +41,16 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     const pathname = usePathname();
 
     const getBackgroundClass = () => {
+        const baseAnimationClass = 'background-pan-animation';
+
         // For specific detail pages, force a theme regardless of the tab
-        if (pathname.startsWith('/hotels')) return 'bg-hotels-gradient';
-        if (pathname.startsWith('/packages')) return 'bg-packages-gradient';
-        if (pathname.startsWith('/cruises')) return 'bg-cruises-gradient';
-        if (pathname.startsWith('/activities')) return 'bg-activities-gradient';
+        if (pathname.startsWith('/hotels')) return cn('bg-hotels-gradient', baseAnimationClass);
+        if (pathname.startsWith('/packages')) return cn('bg-packages-gradient', baseAnimationClass);
+        if (pathname.startsWith('/cruises')) return cn('bg-cruises-gradient', baseAnimationClass);
+        if (pathname.startsWith('/activities')) return cn('bg-activities-gradient', baseAnimationClass);
         
         // For the home page, use the theme from the context (set by the tab)
         if (pathname === '/') {
-            const baseAnimationClass = 'background-pan-animation';
             switch(theme) {
                 case 'Flights': return ''; // Use default background from globals.css body
                 case 'Hotels': return cn('bg-hotels-gradient', baseAnimationClass);

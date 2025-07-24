@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -71,8 +72,8 @@ export function RecommendedPackages() {
   return (
      <div className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold font-headline text-white">Paquetes Imperdibles</h2>
-        <p className="text-white/80 mt-2">Experiencias completas al mejor precio, listas para que las descubras.</p>
+        <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Paquetes Imperdibles</h2>
+        <p className="text-white mt-2 drop-shadow-lg">Experiencias completas al mejor precio, listas para que las descubras.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {recommendedPackages.map((pkg) => (
