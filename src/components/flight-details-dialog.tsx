@@ -176,7 +176,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
       <DialogTrigger asChild>
         <Button 
             size="sm"
-            className="w-full font-semibold"
+            className="w-full font-semibold bg-success hover:bg-success/90"
         >
             Seleccionar
         </Button>

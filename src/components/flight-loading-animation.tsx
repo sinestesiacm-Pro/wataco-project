@@ -1,35 +1,61 @@
 'use client';
 
-import { Cloud, Plane } from "lucide-react";
+import { Plane } from "lucide-react";
 
 interface FlightLoadingAnimationProps {
     originName: string;
     destinationName: string;
 }
 
+const Cloud = ({ style, className }: { style?: React.CSSProperties, className?: string }) => (
+    <div className={`cloud-container cloud-animation ${className || ''}`} style={style}>
+        <div className="cloud-part" style={{ width: '120px', height: '40px', top: '10px' }}></div>
+        <div className="cloud-part" style={{ width: '80px', height: '30px', left: '-20px', top: '20px' }}></div>
+        <div className="cloud-part" style={{ width: '90px', height: '35px', right: '-15px', top: '15px' }}></div>
+    </div>
+);
+
+
 export function FlightLoadingAnimation({ originName, destinationName }: FlightLoadingAnimationProps) {
     const from = originName.split(',')[0] || "Origen";
     const to = destinationName.split(',')[0] || "Destino";
 
     return (
-        <div className="flex flex-col items-center justify-center text-center py-16 space-y-8 overflow-hidden w-full">
-            <div className="relative w-full max-w-lg h-52">
-                <div className="flight-path">
-                    <Plane className="plane-animation w-12 h-12 text-tertiary" />
+        <div className="flex flex-col items-center justify-center text-center py-16 space-y-8 overflow-hidden w-full h-full">
+            <div className="relative w-full h-52">
+                <div className="absolute inset-0">
+                    <Cloud style={{ top: '10%', left: '-20vw', animationDelay: '-8s', animationDuration: '40s', transform: 'scale(0.8)', opacity: 0.6 }} />
+                    <Cloud style={{ top: '65%', left: '10vw', animationDelay: '-2s', animationDuration: '35s', transform: 'scale(1.2)', opacity: 0.8 }} />
+                    <Cloud style={{ top: '30%', left: '40vw', animationDelay: '-5s', animationDuration: '50s', transform: 'scale(0.7)', opacity: 0.5 }} />
+                    <Cloud style={{ top: '55%', left: '70vw', animationDelay: '-1s', animationDuration: '30s', transform: 'scale(1.1)', opacity: 0.7 }} />
+                    <Cloud style={{ top: '20%', left: '100vw', animationDelay: '-6s', animationDuration: '45s', transform: 'scale(0.9)', opacity: 0.6 }} />
+                    <Cloud style={{ top: '70%', left: '130vw', animationDelay: '-12s', animationDuration: '55s', transform: 'scale(1.3)', opacity: 0.8 }} />
+                    <Cloud style={{ top: '40%', left: '160vw', animationDelay: '-9s', animationDuration: '38s', transform: 'scale(0.8)', opacity: 0.5 }} />
+                    <Cloud style={{ top: '60%', left: '190vw', animationDelay: '-4s', animationDuration: '42s', transform: 'scale(1.0)', opacity: 0.7 }} />
                 </div>
-                {/* Clouds */}
-                <Cloud className="cloud-animation w-16 h-16 text-primary/30 absolute" style={{ top: '10%', left: '-20%', animationDelay: '-8s', animationDuration: '12s' }} />
-                <Cloud className="cloud-animation w-20 h-20 text-primary/40 absolute" style={{ top: '65%', left: '10%', animationDelay: '-2s', animationDuration: '10s' }} />
-                <Cloud className="cloud-animation w-12 h-12 text-primary/20 absolute" style={{ top: '30%', left: '40%', animationDelay: '-5s', animationDuration: '15s' }} />
-                <Cloud className="cloud-animation w-24 h-24 text-primary/50 absolute" style={{ top: '55%', left: '70%', animationDelay: '-1s', animationDuration: '8s' }} />
-                <Cloud className="cloud-animation w-16 h-16 text-primary/30 absolute" style={{ top: '20%', left: '100%', animationDelay: '-6s', animationDuration: '11s' }} />
-                <Cloud className="cloud-animation w-20 h-20 text-primary/40 absolute" style={{ top: '60%', left: '130%', animationDelay: '-3s', animationDuration: '14s' }} />
-                <Cloud className="cloud-animation w-12 h-12 text-primary/20 absolute" style={{ top: '35%', left: '160%', animationDelay: '-9s', animationDuration: '9s' }} />
-                <Cloud className="cloud-animation w-24 h-24 text-primary/50 absolute" style={{ top: '50%', left: '190%', animationDelay: '-4s', animationDuration: '13s' }} />
+                
+                 <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    width: '100%',
+                    height: '2px',
+                    background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent)',
+                }}>
+                    <Plane className="w-12 h-12 text-white animate-fly-up-down" style={{
+                        position: 'absolute',
+                        top: '50%',
+                        animationName: 'fly-path, fly-up-down',
+                        animationDuration: '8s, 4s',
+                        animationIterationCount: 'infinite, infinite',
+                        animationTimingFunction: 'linear, ease-in-out',
+                        transform: 'translateY(-50%) rotate(2deg)',
+                        filter: 'drop-shadow(0 5px 15px rgba(0,0,0,0.3))'
+                    }}/>
+                </div>
             </div>
             <div>
-              <h2 className="text-2xl font-bold font-headline">De {from} a {to}</h2>
-              <p className="text-muted-foreground mt-1">Buscando entre más de 400 aerolíneas...</p>
+              <h2 className="text-2xl font-bold font-headline text-white drop-shadow-lg">De {from} a {to}</h2>
+              <p className="text-white/80 mt-1 drop-shadow-lg">Buscando entre más de 400 aerolíneas...</p>
             </div>
         </div>
     );

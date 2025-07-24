@@ -50,7 +50,7 @@ export function FlightBaggageInfo({ flight, className }: FlightBaggageInfoProps)
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="cursor-default">
-              <PersonalBagIcon className={cn("h-5 w-5", personalItemIncluded ? "text-primary" : "text-muted-foreground/30")} />
+              <PersonalBagIcon className={cn("h-5 w-5", personalItemIncluded ? "text-success" : "text-muted-foreground/30")} />
             </div>
           </TooltipTrigger>
           <TooltipContent><p>{personalItemText}</p></TooltipContent>
@@ -59,7 +59,7 @@ export function FlightBaggageInfo({ flight, className }: FlightBaggageInfoProps)
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="cursor-default">
-               <CarryOnIcon className={cn("h-5 w-5", carryOnIncluded ? "text-primary" : "text-muted-foreground/30")} />
+               <CarryOnIcon className={cn("h-5 w-5", carryOnIncluded ? "text-success" : "text-muted-foreground/30")} />
             </div>
           </TooltipTrigger>
           <TooltipContent><p>{carryOnText}</p></TooltipContent>
@@ -68,7 +68,7 @@ export function FlightBaggageInfo({ flight, className }: FlightBaggageInfoProps)
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="cursor-default">
-               <CheckedBagIcon className={cn("h-6 w-6", checkedBagsIncluded ? "text-primary" : "text-muted-foreground/30")} />
+               <CheckedBagIcon className={cn("h-6 w-6", checkedBagsIncluded ? "text-success" : "text-muted-foreground/30")} />
             </div>
           </TooltipTrigger>
           <TooltipContent><p>{checkedBagsText}</p></TooltipContent>

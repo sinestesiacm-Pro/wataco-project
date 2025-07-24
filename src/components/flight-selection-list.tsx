@@ -60,7 +60,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                                 <div className="w-full h-px bg-white/20 relative my-1">
                                     <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-background text-white p-0.5 rounded-full"/>
                                 </div>
-                                <p className={cn("text-xs font-semibold", stops > 0 ? "text-amber-400" : "text-primary")}>{stops === 0 ? 'Directo' : `${stops} escala(s)`}</p>
+                                <p className={cn("text-xs font-semibold", stops > 0 ? "text-amber-400" : "text-success")}>{stops === 0 ? 'Directo' : `${stops} escala(s)`}</p>
                             </div>
                             <div className="font-semibold text-right">
                                 <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>

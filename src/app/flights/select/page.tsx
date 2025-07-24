@@ -255,7 +255,7 @@ function FlightSelectionPage() {
                           onFilterChange={handleFilterChange}
                       />
                   </aside>
-                  <div className="lg:hidden fixed bottom-20 right-6 z-50">
+                  <div className="lg:hidden fixed bottom-24 right-6 z-50">
                     <Sheet>
                       <SheetTrigger asChild>
                          <Button size="lg" className="rounded-full shadow-lg">

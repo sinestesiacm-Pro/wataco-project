@@ -179,7 +179,7 @@
     transform: translateX(0);
   }
   to {
-    transform: translateX(-110vw);
+    transform: translateX(-250vw);
   }
 }
 
