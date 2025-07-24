@@ -7,6 +7,17 @@ interface FlightLoadingAnimationProps {
     destinationName: string;
 }
 
+const cloudData = [
+  { top: '10%', left: '-20vw', delay: '-8s', duration: '40s', scale: 0.8, opacity: 0.6 },
+  { top: '65%', left: '10vw', delay: '-2s', duration: '35s', scale: 1.2, opacity: 0.8 },
+  { top: '30%', left: '40vw', delay: '-5s', duration: '50s', scale: 0.7, opacity: 0.5 },
+  { top: '55%', left: '70vw', delay: '-1s', duration: '30s', scale: 1.1, opacity: 0.7 },
+  { top: '20%', left: '100vw', delay: '-6s', duration: '45s', scale: 0.9, opacity: 0.6 },
+  { top: '70%', left: '130vw', delay: '-12s', duration: '55s', scale: 1.3, opacity: 0.8 },
+  { top: '40%', left: '160vw', delay: '-9s', duration: '38s', scale: 0.8, opacity: 0.5 },
+  { top: '60%', left: '190vw', delay: '-4s', duration: '42s', scale: 1.0, opacity: 0.7 },
+];
+
 const Cloud = ({ style, className }: { style?: React.CSSProperties, className?: string }) => (
     <div className={`cloud-container cloud-animation ${className || ''}`} style={style}>
         <div className="cloud-part" style={{ width: '120px', height: '40px', top: '10px' }}></div>
@@ -14,7 +25,6 @@ const Cloud = ({ style, className }: { style?: React.CSSProperties, className?: 
         <div className="cloud-part" style={{ width: '90px', height: '35px', right: '-15px', top: '15px' }}></div>
     </div>
 );
-
 
 export function FlightLoadingAnimation({ originName, destinationName }: FlightLoadingAnimationProps) {
     const from = originName.split(',')[0] || "Origen";
@@ -24,14 +34,16 @@ export function FlightLoadingAnimation({ originName, destinationName }: FlightLo
         <div className="flex flex-col items-center justify-center text-center py-16 space-y-8 overflow-hidden w-full h-full">
             <div className="relative w-full h-52">
                 <div className="absolute inset-0">
-                    <Cloud style={{ top: '10%', left: '-20vw', animationDelay: '-8s', animationDuration: '40s', transform: 'scale(0.8)', opacity: 0.6 }} />
-                    <Cloud style={{ top: '65%', left: '10vw', animationDelay: '-2s', animationDuration: '35s', transform: 'scale(1.2)', opacity: 0.8 }} />
-                    <Cloud style={{ top: '30%', left: '40vw', animationDelay: '-5s', animationDuration: '50s', transform: 'scale(0.7)', opacity: 0.5 }} />
-                    <Cloud style={{ top: '55%', left: '70vw', animationDelay: '-1s', animationDuration: '30s', transform: 'scale(1.1)', opacity: 0.7 }} />
-                    <Cloud style={{ top: '20%', left: '100vw', animationDelay: '-6s', animationDuration: '45s', transform: 'scale(0.9)', opacity: 0.6 }} />
-                    <Cloud style={{ top: '70%', left: '130vw', animationDelay: '-12s', animationDuration: '55s', transform: 'scale(1.3)', opacity: 0.8 }} />
-                    <Cloud style={{ top: '40%', left: '160vw', animationDelay: '-9s', animationDuration: '38s', transform: 'scale(0.8)', opacity: 0.5 }} />
-                    <Cloud style={{ top: '60%', left: '190vw', animationDelay: '-4s', animationDuration: '42s', transform: 'scale(1.0)', opacity: 0.7 }} />
+                    {cloudData.map((cloud, index) => (
+                      <Cloud key={index} style={{
+                          top: cloud.top,
+                          left: cloud.left,
+                          animationDelay: cloud.delay,
+                          animationDuration: cloud.duration,
+                          transform: `scale(${cloud.scale})`,
+                          opacity: cloud.opacity
+                      }} />
+                    ))}
                 </div>
                 
                  <div style={{
