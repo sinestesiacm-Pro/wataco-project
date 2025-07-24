@@ -64,22 +64,22 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
   return (
     <Card className="sticky top-24 shadow-lg bg-white/10 backdrop-blur-xl border border-white/20 text-white">
       <CardHeader>
-        <CardTitle className="text-xl font-bold font-headline">Filtrar por</CardTitle>
+        <CardTitle className="text-xl font-bold font-headline text-white">Filtrar por</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <FilterSection title="Escalas">
             <RadioGroup onValueChange={handleStopChange} className="text-white">
                 <div className="flex items-center space-x-2">
                     <RadioGroupItem value="0" id="stops-0" className="border-white/50 text-primary" />
-                    <Label htmlFor="stops-0">Sin escalas</Label>
+                    <Label htmlFor="stops-0" className="text-white">Sin escalas</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                     <RadioGroupItem value="1" id="stops-1" className="border-white/50 text-primary" />
-                    <Label htmlFor="stops-1">1 escala</Label>
+                    <Label htmlFor="stops-1" className="text-white">1 escala</Label>
                 </div>
                  <div className="flex items-center space-x-2">
                     <RadioGroupItem value="2" id="stops-2" className="border-white/50 text-primary" />
-                    <Label htmlFor="stops-2">2 o más escalas</Label>
+                    <Label htmlFor="stops-2" className="text-white">2 o más escalas</Label>
                 </div>
             </RadioGroup>
         </FilterSection>
@@ -95,7 +95,7 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                       checked={filters.airlines.includes(code)}
                       className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                     />
-                    <Label htmlFor={`airline-${code}`}>{name}</Label>
+                    <Label htmlFor={`airline-${code}`} className="text-white">{name}</Label>
                 </div>
             ))}
         </FilterSection>
@@ -110,7 +110,7 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                   checked={filters.bags.includes('carry-on')}
                   className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
-                <Label htmlFor="bags-carry-on">Equipaje de mano</Label>
+                <Label htmlFor="bags-carry-on" className="text-white">Equipaje de mano</Label>
             </div>
             <div className="flex items-center space-x-2">
                 <Checkbox 
@@ -119,7 +119,7 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
                   checked={filters.bags.includes('checked')}
                   className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
-                <Label htmlFor="bags-checked">Equipaje facturado</Label>
+                <Label htmlFor="bags-checked" className="text-white">Equipaje facturado</Label>
             </div>
         </FilterSection>
 
@@ -127,7 +127,7 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
         
         <FilterSection title="Flexibilidad">
             <div className="flex items-center space-x-2">
-                <Checkbox id="flex-no-change-fee" disabled className="disabled:opacity-40" />
+                <Checkbox id="flex-no-change-fee" disabled className="disabled:opacity-40 border-white/30" />
                 <Label htmlFor="flex-no-change-fee" className="text-white/50">Sin cargos por cambio</Label>
             </div>
         </FilterSection>

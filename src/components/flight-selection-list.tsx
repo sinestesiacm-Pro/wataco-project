@@ -55,7 +55,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                                 <p className="font-semibold text-white/80">{firstSegment.departure.iataCode}</p>
                                 <p className="text-xs text-white/70">{originCity}</p>
                             </div>
-                            <div className="flex-grow flex flex-col items-center text-white/70 px-2">
+                            <div className="flex-grow flex flex-col items-center text-white/80 px-2">
                                 <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
                                 <div className="w-full h-px bg-white/20 relative my-1">
                                     <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-background text-white p-0.5 rounded-full"/>

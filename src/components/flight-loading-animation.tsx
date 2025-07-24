@@ -46,13 +46,7 @@ export function FlightLoadingAnimation({ originName, destinationName }: FlightLo
                     ))}
                 </div>
                 
-                 <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    width: '100%',
-                    height: '2px',
-                    background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent)',
-                }}>
+                 <div className="absolute top-1/2 left-0 w-full h-auto">
                     <Plane className="w-12 h-12 text-white animate-fly-up-down" style={{
                         position: 'absolute',
                         top: '50%',
