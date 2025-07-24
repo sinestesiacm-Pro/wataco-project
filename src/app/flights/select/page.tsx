@@ -19,6 +19,7 @@ import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { AnimatedClouds } from '@/components/home-page-content';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
@@ -159,7 +160,8 @@ function FlightSelectionPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-flights-gradient background-pan-animation">
+      <div className="flex items-center justify-center min-h-screen bg-flights-gradient background-pan-animation relative overflow-hidden">
+            <AnimatedClouds />
             <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />
         </div>
     );
@@ -230,8 +232,9 @@ function FlightSelectionPage() {
   }
 
   return (
-    <div className={cn('min-h-screen w-full pt-24 pb-24 md:pb-8', 'bg-flights-gradient background-pan-animation')}>
-      <div className="min-h-full bg-transparent">
+    <div className={cn('min-h-screen w-full pt-24 pb-24 md:pb-8 relative overflow-hidden')}>
+      <AnimatedClouds />
+      <div className="relative z-10 min-h-full bg-transparent">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
                 <Link href="/">

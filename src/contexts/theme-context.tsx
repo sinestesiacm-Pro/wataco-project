@@ -63,8 +63,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         }
         
         // Fallback for other pages like /profile, /login, flights/select, etc.
-        // If it is a flights sub-page, use the flights background. Otherwise, a default.
-        if (pathname.startsWith('/flights')) return '';
+        if (pathname.startsWith('/flights')) return cn('background-pan-animation');
         
         return '';
     }
