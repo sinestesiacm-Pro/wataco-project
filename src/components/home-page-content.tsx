@@ -60,7 +60,7 @@ function RecommendedContent({ tab }: { tab?: string }) {
 }
 
 const AnimatedClouds = () => (
-    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0 filter blur-[25px]">
         {/* Nube 1: Superior Izquierda (Lenta) */}
         <div className="cloud-container cloud-animation" style={{ animationDuration: '120s', top: '5%', left: '5%' }}>
             <div className="cloud-part" style={{ width: '200px', height: '60px' }}></div>
@@ -87,97 +87,37 @@ const AnimatedClouds = () => (
             <div className="cloud-part" style={{ width: '100px', height: '45px', top: '10px', left: '-15px' }}></div>
             <div className="cloud-part" style={{ width: '125px', height: '50px', top: '-10px', left: '20px' }}></div>
         </div>
-
-        {/* Nube 5: Central Izquierda, baja */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '110s', top: '65%', left: '15%' }}>
-            <div className="cloud-part" style={{ width: '225px', height: '70px' }}></div>
-            <div className="cloud-part" style={{ width: '140px', height: '55px', top: '-25px', left: '30px' }}></div>
-        </div>
-
-        {/* Nube 6: Rápida, empieza fuera de pantalla */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '60s', top: '25%', left: '80%' }}>
-            <div className="cloud-part" style={{ width: '200px', height: '80px' }}></div>
-            <div className="cloud-part" style={{ width: '140px', height: '60px', top: '20px', left: '40px' }}></div>
-        </div>
         
-        {/* Nube 7: Pequeña y Baja (Velocidad muy rápida) */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '65s', top: '90%', left: '30%' }}>
-            <div className="cloud-part" style={{ width: '150px', height: '45px' }}></div>
-            <div className="cloud-part" style={{ width: '100px', height: '35px', top: '10px', left: '20px' }}></div>
-        </div>
-
-        {/* --- NUBES ADICIONALES PARA COBERTURA TOTAL --- */}
-
-        {/* Nube 8: Central superior */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '95s', top: '20%', left: '25%' }}>
-            <div className="cloud-part" style={{ width: '180px', height: '50px' }}></div>
-            <div className="cloud-part" style={{ width: '130px', height: '40px', top: '15px', left: '20px' }}></div>
-        </div>
-
-        {/* Nube 9: Inferior izquierda */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '130s', top: '85%', left: '10%' }}>
-            <div className="cloud-part" style={{ width: '210px', height: '65px' }}></div>
-            <div className="cloud-part" style={{ width: '150px', height: '50px', top: '-15px', left: '-25px' }}></div>
-        </div>
-
-        {/* Nube 10: Central derecha */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '88s', top: '50%', left: '75%' }}>
-            <div className="cloud-part" style={{ width: '190px', height: '60px' }}></div>
-            <div className="cloud-part" style={{ width: '120px', height: '45px', top: '20px', left: '-10px' }}></div>
-        </div>
-
-        {/* Nube 11: Muy alta y centrada */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '140s', top: '2%', left: '50%' }}>
-            <div className="cloud-part" style={{ width: '160px', height: '40px' }}></div>
-        </div>
-
-        {/* Nube 12: Muy baja y a la derecha */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '70s', top: '92%', left: '80%' }}>
-            <div className="cloud-part" style={{ width: '220px', height: '55px' }}></div>
-            <div className="cloud-part" style={{ width: '160px', height: '45px', top: '-10px', left: '30px' }}></div>
-        </div>
-
-        {/* Nube 13: Izquierda, media altura */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '105s', top: '60%', left: '0%' }}>
-            <div className="cloud-part" style={{ width: '170px', height: '50px' }}></div>
-            <div className="cloud-part" style={{ width: '130px', height: '40px', top: '10px', left: '25px' }}></div>
-        </div>
-
-        {/* Nube 14: Derecha, media-alta */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '85s', top: '35%', left: '90%' }}>
-            <div className="cloud-part" style={{ width: '200px', height: '60px' }}></div>
-            <div className="cloud-part" style={{ width: '150px', height: '50px', top: '-15px', left: '-30px' }}></div>
-        </div>
+        {[...Array(8)].map((_, i) => (
+             <div key={i} className="cloud-container cloud-animation" style={{ 
+                animationDuration: `${Math.random() * 80 + 70}s`, 
+                top: `${Math.random() * 100}%`, 
+                left: `${Math.random() * 100}%`,
+                animationDelay: `-${Math.random() * 20}s`
+             }}>
+                <div className="cloud-part" style={{ width: `${Math.random() * 100 + 150}px`, height: `${Math.random() * 20 + 50}px` }}></div>
+                <div className="cloud-part" style={{ width: `${Math.random() * 60 + 80}px`, height: `${Math.random() * 20 + 30}px`, top: `${Math.random() * 20 - 10}px`, left: `${Math.random() * 50 - 25}px` }}></div>
+            </div>
+        ))}
     </div>
 );
 
-const flowers = Array.from({ length: 15 }).map((_, i) => {
-  const size = Math.random() * 50 + 50; // size between 50 and 100px
-  return {
-    id: i,
-    style: {
-      width: `${size}px`,
-      height: `${size}px`,
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      '--sway-duration': `${Math.random() * 10 + 15}s`,
-      '--float-duration': `${Math.random() * 15 + 20}s`,
-      '--sway-delay': `${Math.random() * -15}s`,
-      '--float-delay': `${Math.random() * -20}s`,
-    } as React.CSSProperties,
-    petals: Array.from({ length: 12 }),
-  };
-});
+const floatingShapes = Array.from({ length: 12 }).map((_, i) => ({
+  id: i,
+  style: {
+    width: `${Math.random() * 100 + 50}px`, // 50 a 150px
+    height: `${Math.random() * 100 + 50}px`, // 50 a 150px
+    top: `${Math.random() * 100}%`,
+    left: `${Math.random() * 100}%`,
+    '--float-duration': `${Math.random() * 30 + 30}s`, // 30s a 60s
+    '--float-delay': `${Math.random() * -30}s`,
+  } as React.CSSProperties,
+}));
 
-const AnimatedFlowers = () => (
+const AnimatedWindows = () => (
     <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        {flowers.map(flower => (
-            <div key={flower.id} className="flower-container" style={flower.style}>
-                <div className="flower-center"></div>
-                {flower.petals.map((_, i) => (
-                    <div key={i} className="flower-petal" style={{ transform: `translateX(-50%) rotate(${i * 30}deg)` }}></div>
-                ))}
-            </div>
+        {floatingShapes.map(shape => (
+            <div key={shape.id} className="floating-shape" style={shape.style} />
         ))}
     </div>
 );
@@ -195,7 +135,7 @@ export function HomePageContent() {
     return (
         <div className="w-full flex flex-col flex-grow relative">
             {tab === 'Flights' && <AnimatedClouds />}
-            {tab === 'Hotels' && <AnimatedFlowers />}
+            {tab === 'Hotels' && <AnimatedWindows />}
             
             <div className="relative z-10 flex flex-col min-h-dvh">
                 <div className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
