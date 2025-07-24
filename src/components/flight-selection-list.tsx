@@ -50,19 +50,19 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                     />
                     <div className="flex-grow">
                          <div className="flex items-center justify-between">
-                            <div className="font-semibold text-left">
+                            <div className="font-semibold text-left text-gray-800">
                                 <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                                 <p className="font-semibold text-gray-600">{firstSegment.departure.iataCode}</p>
                                 <p className="text-xs text-gray-500">{originCity}</p>
                             </div>
                             <div className="flex-grow flex flex-col items-center text-gray-600 px-2">
-                                <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
+                                <p className="text-xs font-semibold text-gray-800">{formatDuration(itinerary.duration)}</p>
                                 <div className="w-full h-px bg-gray-400/50 relative my-1">
                                     <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 p-0.5 rounded-full border border-gray-300"/>
                                 </div>
                                 <p className={cn("text-xs font-semibold", stops > 0 ? "text-amber-600" : "text-green-600")}>{stops === 0 ? 'Directo' : `${stops} escala(s)`}</p>
                             </div>
-                            <div className="font-semibold text-right">
+                            <div className="font-semibold text-right text-gray-800">
                                 <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                                  <p className="font-semibold text-gray-600">{lastSegment.arrival.iataCode}</p>
                                  <p className="text-xs text-gray-500">{destinationCity}</p>
@@ -80,7 +80,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
             <div className="flex-shrink-0 w-full sm:w-48 bg-white/60 ticket-tear flex sm:flex-col items-center justify-between sm:justify-center p-4 gap-3">
                 <div className="text-center">
                     <p className="text-xs sm:text-sm text-gray-700">Precio total</p>
-                    <p className="text-2xl sm:text-3xl font-bold font-headline text-accent">
+                    <p className="text-2xl sm:text-3xl font-bold font-headline text-gray-800">
                         ${flight.price.total}
                     </p>
                 </div>
