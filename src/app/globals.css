@@ -232,20 +232,42 @@
     text-align: center;
 }
 
-/* Sunflower Animation */
-@keyframes sunflower-sway {
+/* Flower Animation */
+@keyframes flower-sway {
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(8deg); }
 }
-@keyframes sunflower-float {
+@keyframes flower-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-25px); }
 }
-.sunflower-container {
+.flower-container {
   position: absolute;
   z-index: 0;
-  opacity: 0.15;
+  opacity: 0.2;
   filter: blur(2px);
-  animation: sunflower-sway 20s ease-in-out infinite, sunflower-float 30s ease-in-out infinite;
   transform-origin: bottom center;
+  animation: flower-sway var(--sway-duration) ease-in-out var(--sway-delay) infinite, flower-float var(--float-duration) ease-in-out var(--float-delay) infinite;
+}
+.flower-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(#654321, #4a2c0f);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.flower-petal {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 30%;
+    height: 60%;
+    background-image: url('https://i.ibb.co/L8GzzC2/petal.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform-origin: bottom center;
+    transform: translateX(-50%);
 }

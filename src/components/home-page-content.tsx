@@ -16,7 +16,7 @@ import { Footer } from './footer';
 import { useTheme } from '@/contexts/theme-context';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Sunflower } from './illustrations/sunflower';
+import Image from 'next/image';
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -151,21 +151,33 @@ const AnimatedClouds = () => (
     </div>
 );
 
-const sunflowers = Array.from({ length: 15 }, (_, i) => ({
+const flowers = Array.from({ length: 15 }).map((_, i) => {
+  const size = Math.random() * 50 + 50; // size between 50 and 100px
+  return {
     id: i,
-    size: Math.random() * (200 - 80) + 80,
     style: {
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        animationDuration: `${Math.random() * 20 + 20}s, ${Math.random() * 30 + 30}s`,
-        animationDelay: `${Math.random() * -30}s, ${Math.random() * -30}s`,
-    },
-}));
+      width: `${size}px`,
+      height: `${size}px`,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      '--sway-duration': `${Math.random() * 10 + 15}s`,
+      '--float-duration': `${Math.random() * 15 + 20}s`,
+      '--sway-delay': `${Math.random() * -15}s`,
+      '--float-delay': `${Math.random() * -20}s`,
+    } as React.CSSProperties,
+    petals: Array.from({ length: 12 }),
+  };
+});
 
-const AnimatedSunflowers = () => (
-    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0 text-amber-300">
-        {sunflowers.map(sunflower => (
-            <Sunflower key={sunflower.id} size={sunflower.size} style={sunflower.style} />
+const AnimatedFlowers = () => (
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        {flowers.map(flower => (
+            <div key={flower.id} className="flower-container" style={flower.style}>
+                <div className="flower-center"></div>
+                {flower.petals.map((_, i) => (
+                    <div key={i} className="flower-petal" style={{ transform: `translateX(-50%) rotate(${i * 30}deg)` }}></div>
+                ))}
+            </div>
         ))}
     </div>
 );
@@ -183,7 +195,7 @@ export function HomePageContent() {
     return (
         <div className="w-full flex flex-col flex-grow relative">
             {tab === 'Flights' && <AnimatedClouds />}
-            {tab === 'Hotels' && <AnimatedSunflowers />}
+            {tab === 'Hotels' && <AnimatedFlowers />}
             
             <div className="relative z-10 flex flex-col min-h-dvh">
                 <div className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
