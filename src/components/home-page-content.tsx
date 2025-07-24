@@ -134,7 +134,7 @@ export function HomePageContent() {
 
     return (
         <div className="w-full flex flex-col flex-grow relative">
-            {tab === 'Flights' && <AnimatedClouds />}
+            {(tab === 'Flights' || tab === 'Social') && <AnimatedClouds />}
             {tab === 'Hotels' && <AnimatedWindows />}
             
             <div className="relative z-10 flex flex-col min-h-dvh">
