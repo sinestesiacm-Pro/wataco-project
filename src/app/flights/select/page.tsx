@@ -19,7 +19,7 @@ import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { AnimatedClouds } from '@/components/home-page-content';
+import { AnimatedClouds } from '@/components/animated-clouds';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
@@ -161,7 +161,6 @@ function FlightSelectionPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-flights-gradient background-pan-animation relative overflow-hidden">
-            <AnimatedClouds />
             <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />
         </div>
     );

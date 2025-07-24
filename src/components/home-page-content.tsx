@@ -17,6 +17,7 @@ import { useTheme } from '@/contexts/theme-context';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { AnimatedClouds } from '@/components/animated-clouds';
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -58,49 +59,6 @@ function RecommendedContent({ tab }: { tab?: string }) {
       return <RecommendedDestinations />;
   }
 }
-
-const AnimatedClouds = () => (
-    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0 filter blur-[25px]">
-        {/* Nube 1: Superior Izquierda (Lenta) */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '120s', top: '5%', left: '5%' }}>
-            <div className="cloud-part" style={{ width: '200px', height: '60px' }}></div>
-            <div className="cloud-part" style={{ width: '140px', height: '50px', top: '15px', left: '-30px' }}></div>
-            <div className="cloud-part" style={{ width: '160px', height: '55px', top: '-10px', left: '25px' }}></div>
-        </div>
-
-        {/* Nube 2: Inferior Derecha (Muy Lenta) */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '150s', top: '80%', left: '60%' }}>
-            <div className="cloud-part" style={{ width: '250px', height: '75px' }}></div>
-            <div className="cloud-part" style={{ width: '175px', height: '60px', top: '-20px', left: '40px' }}></div>
-        </div>
-        
-        {/* Nube 3: Central (Velocidad Media) */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '100s', top: '45%', left: '40%' }}>
-            <div className="cloud-part" style={{ width: '175px', height: '55px' }}></div>
-            <div className="cloud-part" style={{ width: '125px', height: '45px', top: '10px', left: '15px' }}></div>
-            <div className="cloud-part" style={{ width: '140px', height: '50px', top: '-5px', left: '-20px' }}></div>
-        </div>
-        
-        {/* Nube 4: Superior Derecha (Rápida) */}
-        <div className="cloud-container cloud-animation" style={{ animationDuration: '75s', top: '15%', left: '70%' }}>
-            <div className="cloud-part" style={{ width: '160px', height: '55px' }}></div>
-            <div className="cloud-part" style={{ width: '100px', height: '45px', top: '10px', left: '-15px' }}></div>
-            <div className="cloud-part" style={{ width: '125px', height: '50px', top: '-10px', left: '20px' }}></div>
-        </div>
-        
-        {[...Array(8)].map((_, i) => (
-             <div key={i} className="cloud-container cloud-animation" style={{ 
-                animationDuration: `${Math.random() * 80 + 70}s`, 
-                top: `${Math.random() * 100}%`, 
-                left: `${Math.random() * 100}%`,
-                animationDelay: `-${Math.random() * 20}s`
-             }}>
-                <div className="cloud-part" style={{ width: `${Math.random() * 100 + 150}px`, height: `${Math.random() * 20 + 50}px` }}></div>
-                <div className="cloud-part" style={{ width: `${Math.random() * 60 + 80}px`, height: `${Math.random() * 20 + 30}px`, top: `${Math.random() * 20 - 10}px`, left: `${Math.random() * 50 - 25}px` }}></div>
-            </div>
-        ))}
-    </div>
-);
 
 const floatingShapes = Array.from({ length: 12 }).map((_, i) => ({
   id: i,
