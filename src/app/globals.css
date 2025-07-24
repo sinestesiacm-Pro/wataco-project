@@ -79,9 +79,6 @@
     @apply text-foreground min-h-screen;
     background: radial-gradient(ellipse at center, hsl(var(--primary)) 0%, #005A9C 100%);
   }
-  h2.font-headline.text-white {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  }
 }
 
 @keyframes animate-bg-pan {
