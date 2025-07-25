@@ -65,7 +65,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                                 <div className="w-full h-px bg-gray-400/50 relative my-1">
                                     <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 p-0.5 rounded-full border border-gray-300"/>
                                 </div>
-                                <p className={cn("text-xs font-semibold", stops > 0 ? "text-amber-600" : "text-green-600")}>{stopInfo}</p>
+                                <p className={cn("text-xs font-semibold", stops > 0 ? "text-accent" : "text-green-600")}>{stopInfo}</p>
                             </div>
                             <div className="font-semibold text-right text-gray-800">
                                 <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
@@ -85,7 +85,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
             <div className="flex-shrink-0 w-full sm:w-48 bg-white/60 ticket-tear flex sm:flex-col items-center justify-between sm:justify-center p-4 gap-3">
                 <div className="text-center">
                     <p className="text-xs sm:text-sm text-gray-700">Precio total</p>
-                    <p className="text-2xl sm:text-3xl font-bold font-headline text-gray-800">
+                    <p className="text-2xl sm:text-3xl font-bold text-gray-800">
                         ${flight.price.total}
                     </p>
                 </div>
