@@ -404,7 +404,7 @@ function CheckoutPageContent() {
       : '';
 
     return (
-      <div className={cn("min-h-screen relative", backgroundClass)}>
+      <div className={cn("min-h-screen relative pt-24", backgroundClass)}>
         <AnimatedClouds />
         <div className="relative z-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center mb-6">

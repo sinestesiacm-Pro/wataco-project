@@ -146,10 +146,10 @@
 
 @keyframes move-clouds {
   from {
-    transform: translateX(0vw);
+    transform: translateX(-150%) translateY(var(--translate-y-start, 0));
   }
   to {
-    transform: translateX(150vw);
+    transform: translateX(150vw) translateY(var(--translate-y-end, 0));
   }
 }
 
