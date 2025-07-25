@@ -19,19 +19,26 @@ const cloudData = [
   { top: '85%', left: '25%', scale: 1.1, duration: '110s', delay: '-90s' },
   { top: '95%', left: '80%', scale: 0.9, duration: '95s', delay: '-40s' },
   { top: '50%', left: '30%', scale: 1.0, duration: '125s', delay: '-80s' },
+
+  // --- Nubes Adicionales (x2) ---
+  { top: '10%', left: '80%', scale: 1.3, duration: '170s', delay: '-15s' },
+  { top: '35%', left: '15%', scale: 1.7, duration: '190s', delay: '-45s' },
+  { top: '70%', left: '90%', scale: 1.1, duration: '115s', delay: '-65s' },
+  { top: '90%', left: '10%', scale: 1.9, duration: '200s', delay: '-100s' },
+  { top: '20%', left: '50%', scale: 0.9, duration: '85s', delay: '-25s' },
+  { top: '55%', left: '60%', scale: 1.4, duration: '145s', delay: '-55s' },
+  { top: '88%', left: '40%', scale: 1.2, duration: '135s', delay: '-85s' },
+  { top: '2%', left: '20%', scale: 1.0, duration: '105s', delay: '-5s' },
+  { top: '45%', left: '5%', scale: 1.6, duration: '175s', delay: '-35s' },
+  { top: '80%', left: '75%', scale: 1.0, duration: '125s', delay: '-95s' },
 ];
 
 const Cloud = ({ style }: { style?: React.CSSProperties }) => (
     <div className="cloud-container cloud-animation relative w-[200px] h-[120px]" style={style}>
-        {/* Central grande */}
         <div className="cloud-part" style={{ top: '0%', left: '25%', width: '100px', height: '100px' }}></div>
-        
-        {/* Lado izquierdo */}
         <div className="cloud-part" style={{ top: '30%', left: '5%', width: '70px', height: '70px' }}></div>
         <div className="cloud-part" style={{ top: '55%', left: '20%', width: '60px', height: '60px' }}></div>
         <div className="cloud-part" style={{ top: '50%', left: '0%', width: '50px', height: '50px' }}></div>
-
-        {/* Lado derecho */}
         <div className="cloud-part" style={{ top: '30%', right: '5%', width: '70px', height: '70px' }}></div>
         <div className="cloud-part" style={{ top: '55%', right: '20%', width: '60px', height: '60px' }}></div>
         <div className="cloud-part" style={{ top: '50%', right: '0%', width: '50px', height: '50px' }}></div>
@@ -42,7 +49,7 @@ const Cloud = ({ style }: { style?: React.CSSProperties }) => (
 export const AnimatedClouds = () => (
     <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         {cloudData.map((cloud, index) => {
-          const startX = `${-20 - (index % 5) * 20}vw`; // escalonar el inicio
+          const startX = `${-20 - (index % 5) * 20}vw`;
           const endX = '120vw';
           return (
             <Cloud key={index} style={{
