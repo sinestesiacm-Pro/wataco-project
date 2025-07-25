@@ -34,11 +34,9 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
     const destinationCity = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
 
     const stops = itinerary.segments.length - 1;
-    const stopInfo = stops === 1 
-        ? `1 escala en ${itinerary.segments[0].arrival.iataCode}`
-        : stops > 1 
-            ? `${stops} escalas`
-            : 'Directo';
+    const stopInfo = stops >= 1
+        ? `${stops} escala${stops > 1 ? 's' : ''} en ${itinerary.segments[0].arrival.iataCode}`
+        : 'Directo';
 
 
     return (
@@ -65,7 +63,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                                 <div className="w-full h-px bg-gray-400/50 relative my-1">
                                     <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 p-0.5 rounded-full border border-gray-300"/>
                                 </div>
-                                <p className={cn("text-xs font-semibold", stops > 0 ? "text-accent" : "text-green-600")}>{stopInfo}</p>
+                                <p className={cn("text-xs font-semibold drop-shadow-sm", stops > 0 ? "text-accent" : "text-green-600")}>{stopInfo}</p>
                             </div>
                             <div className="font-semibold text-right text-gray-800">
                                 <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
