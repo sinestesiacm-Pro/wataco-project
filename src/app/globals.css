@@ -156,7 +156,7 @@
 
 .cloud-container {
     position: absolute;
-    filter: blur(20px);
+    filter: blur(25px);
     opacity: 0.8;
 }
 
