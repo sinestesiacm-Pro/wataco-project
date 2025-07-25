@@ -15,13 +15,13 @@ const WelcomeAboardCloud = () => {
 
         // Tier 1 (Largest & Most Prominent)
         { text: "Bienvenido a bordo", size: "text-3xl", position: "top-[45%] left-[20%]", opacity: "opacity-80", duration: "12s", delay: "-2s" },
-        { text: "Bienvenue à bord", size: "text-3xl", position: "top-[40%] right-[15%]", opacity: "opacity-90", duration: "11s", delay: "-1s" },
+        { text: "Bienvenue à bord", size: "text-2xl", position: "top-[35%] right-[15%]", opacity: "opacity-90", duration: "11s", delay: "-1.5s" },
         { text: "Willkommen an Bord", size: "text-2xl", position: "top-[25%] left-[45%]", opacity: "opacity-70", duration: "13s", delay: "-3s" },
         { text: "欢迎登机", size: "text-3xl", position: "bottom-[25%] right-[45%]", opacity: "opacity-90", duration: "10s", delay: "-5s" },
         { text: "Benvenuto a bordo", size: "text-xl", position: "top-[58%] right-[22%]", opacity: "opacity-60", duration: "15s", delay: "-4s" },
 
         // Tier 2 (Medium Size, Filling Gaps)
-        { text: "Bem-vindo a bordo", size: "text-lg", position: "top-[60%] left-[25%]", opacity: "opacity-70", duration: "14s", delay: "-6s" },
+        { text: "Bem-vindo a bordo", size: "text-lg", position: "top-[65%] left-[25%]", opacity: "opacity-70", duration: "14s", delay: "-6.5s" },
         { text: "어서 오세요", size: "text-xl", position: "top-[30%] left-[30%]", opacity: "opacity-75", duration: "12s", delay: "-7s" },
         { text: "ご搭乗ありがとうございます", size: "text-lg", position: "top-[30%] right-[25%]", opacity: "opacity-70", duration: "16s", delay: "-8s" },
         { text: "Добро пожаловать на борт", size: "text-lg", position: "top-[20%] left-[55%]", opacity: "opacity-60", duration: "11s", delay: "-9s" },
@@ -108,3 +108,5 @@ export function FlightLoadingAnimation({ originName, destinationName }: FlightLo
         </div>
     );
 }
+
+    

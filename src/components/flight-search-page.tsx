@@ -19,6 +19,7 @@ import React from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Separator } from './ui/separator';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const InputGroup = ({ children, className }: { children: React.ReactNode; className?: string }) => (
   <div className={cn("relative flex flex-col w-full", className)}>{children}</div>
@@ -31,6 +32,7 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 export default function FlightSearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const isMobile = useIsMobile();
   
   const [origin, setOrigin] = useState('MAD');
   const [destination, setDestination] = useState('');
@@ -223,7 +225,7 @@ export default function FlightSearchPage() {
                <PopoverTrigger asChild>
                   <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
                       <div className="flex items-center w-full">
-                          <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
+                          <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
                           <div>
                               <p className="text-xs text-gray-700">From</p>
                               <p className="text-lg font-semibold">{originQuery}</p>
@@ -234,7 +236,7 @@ export default function FlightSearchPage() {
                <PopoverTrigger asChild>
                   <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
                        <div className="flex items-center w-full">
-                          <MapPin className="h-6 w-6 mr-4 text-primary" />
+                          <MapPin className="h-6 w-6 mr-4 text-tertiary" />
                           <div>
                               <p className="text-xs text-gray-700">To</p>
                                <Input 
@@ -256,30 +258,35 @@ export default function FlightSearchPage() {
           </Popover>
 
           <div className="grid grid-cols-2 gap-4">
-              <Popover>
+              <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
                       <div className="flex items-center w-full">
-                          <CalendarIcon className="h-6 w-6 mr-4" />
+                          <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
                           <div>
                               <p className="text-xs text-gray-700">Dates</p>
-                              <p className="text-base md:text-lg font-semibold">
+                              <p className="text-base md:text-lg font-semibold text-gray-800">
                                 {date?.from && date.to ? `${format(date.from, "dd LLL")} - ${format(date.to, "dd LLL")}` : "Elige tus fechas"}
                               </p>
                           </div>
                       </div>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="w-auto p-0 max-h-[80vh] overflow-y-auto" align="start">
                     <Calendar
                         initialFocus
                         mode="range"
                         defaultMonth={date?.from}
                         selected={date}
                         onSelect={setDate}
-                        numberOfMonths={2}
+                        numberOfMonths={isMobile ? 1 : 2}
                         disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
                     />
+                    {isMobile && (
+                        <div className="p-2 border-t">
+                            <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
+                        </div>
+                    )}
                 </PopoverContent>
               </Popover>
 
@@ -287,10 +294,10 @@ export default function FlightSearchPage() {
                 <PopoverTrigger asChild>
                   <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
                       <div className="flex items-center w-full">
-                          <Users className="h-6 w-6 mr-4" />
+                          <Users className="h-6 w-6 mr-4 text-gray-800" />
                           <div>
                               <p className="text-xs text-gray-700">Travelers</p>
-                              <p className="text-base md:text-lg font-semibold">{travelerText}</p>
+                              <p className="text-base md:text-lg font-semibold text-gray-800">{travelerText}</p>
                           </div>
                       </div>
                   </Button>
@@ -367,3 +374,5 @@ export default function FlightSearchPage() {
       </div>
   );
 }
+
+    

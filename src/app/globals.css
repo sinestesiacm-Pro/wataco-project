@@ -155,7 +155,7 @@
 
 .cloud-container {
     position: absolute;
-    filter: blur(25px);
+    filter: blur(20px);
     opacity: 0.8;
 }
 
@@ -243,3 +243,5 @@
 .animate-zoom-fade {
   animation: zoom-and-fade linear infinite;
 }
+
+    
