@@ -144,36 +144,6 @@
 }
 
 
-/* Loading Animation Keyframes */
-@keyframes fly-path {
-  0% {
-    left: -10%;
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    left: 110%;
-    opacity: 0;
-  }
-}
-
-@keyframes fly-up-down {
-  0% {
-    transform: translateY(-50%) translateY(-5px) rotate(2deg);
-  }
-  50% {
-    transform: translateY(-50%) translateY(5px) rotate(2deg);
-  }
-  100% {
-    transform: translateY(-50%) translateY(-5px) rotate(2deg);
-  }
-}
-
 @keyframes move-clouds {
   from {
     transform: translateX(0);
