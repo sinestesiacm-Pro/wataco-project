@@ -48,6 +48,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         if (pathname.startsWith('/packages')) return cn('bg-packages-gradient', baseAnimationClass);
         if (pathname.startsWith('/cruises')) return cn('bg-cruises-gradient', baseAnimationClass);
         if (pathname.startsWith('/activities')) return cn('bg-activities-gradient', baseAnimationClass);
+        if (pathname.startsWith('/flights')) return ''; // Use default from body
         
         // For the home page, use the theme from the context (set by the tab)
         if (pathname === '/') {
@@ -62,9 +63,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
             }
         }
         
-        // Fallback for other pages like /profile, /login, flights/select, etc.
-        if (pathname.startsWith('/flights')) return cn('background-pan-animation');
-        
+        // Fallback for other pages like /profile, /login, etc.
         return '';
     }
 

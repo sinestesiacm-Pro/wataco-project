@@ -19,6 +19,7 @@ import { Switch } from '@/components/ui/switch';
 import { recommendedPackages } from '@/lib/mock-packages';
 import type { PackageOffer } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { AnimatedClouds } from '@/components/animated-clouds';
 
 const countryCodes = [
     { code: 'co', name: 'Colombia', dial: '+57' },
@@ -400,18 +401,19 @@ function CheckoutPageContent() {
 
     const backgroundClass = isPackageBooking
       ? 'bg-packages-gradient background-pan-animation'
-      : 'bg-flights-gradient background-pan-animation';
+      : '';
 
     return (
-      <div className={cn("min-h-screen", backgroundClass)}>
-        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div className={cn("min-h-screen relative", backgroundClass)}>
+        <AnimatedClouds />
+        <div className="relative z-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center mb-6">
                 <Button asChild variant="outline" className={cn("mr-4", isPackageBooking ? 'bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white' : 'bg-background/80')}>
                     <Link href="/">
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>
                 </Button>
-                <h1 className={cn("text-3xl font-bold font-headline", isPackageBooking ? 'text-white' : '')}>Finaliza tu Compra</h1>
+                <h1 className={cn("text-3xl font-bold font-headline", isPackageBooking ? 'text-white' : 'text-white')}>Finaliza tu Compra</h1>
             </div>
             
             <form onSubmit={handleConfirmBooking}>
