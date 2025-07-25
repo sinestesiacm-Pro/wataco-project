@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -36,7 +35,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
 
     const stops = itinerary.segments.length - 1;
     const stopInfo = stops === 1 
-        ? `${stops} escala en ${itinerary.segments[0].arrival.iataCode}`
+        ? `1 escala en ${itinerary.segments[0].arrival.iataCode}`
         : stops > 1 
             ? `${stops} escalas`
             : 'Directo';
@@ -113,15 +112,15 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
       </div>
 
        {selectedOutboundFlight && (
-         <Card className="bg-primary/10 border-primary/20">
+         <Card className="bg-primary/80 border-primary/20">
             <CardContent className="p-4 flex items-center justify-between gap-4 text-white">
                 <div className="flex items-center gap-3">
-                    <Plane className="h-5 w-5 text-primary"/>
+                    <Plane className="h-5 w-5 text-white"/>
                     <p className="font-semibold">
                         Vuelo de ida seleccionado: {selectedOutboundFlight.itineraries[0].segments[0].departure.iataCode} - {selectedOutboundFlight.itineraries[0].segments.slice(-1)[0].arrival.iataCode}
                     </p>
                 </div>
-                <p className="font-bold text-lg text-primary">${selectedOutboundFlight.price.total}</p>
+                <p className="font-bold text-lg text-white">${selectedOutboundFlight.price.total}</p>
             </CardContent>
          </Card>
       )}

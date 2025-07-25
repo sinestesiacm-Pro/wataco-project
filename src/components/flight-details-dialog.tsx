@@ -43,7 +43,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
 
 
     return (
-        <Card className="bg-black/20 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10">
+        <Card className="bg-white/60 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10">
             <div className="flex">
                 <div className="flex-grow p-4 sm:p-6">
                     <div className="flex justify-between items-center mb-4">
@@ -83,7 +83,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                 <div className="bg-black/20 w-24 sm:w-32 flex-shrink-0 border-l-2 border-dashed border-border flex-col items-center justify-center p-2 sm:p-4 hidden sm:flex">
                      <p className="font-headline font-bold text-primary text-sm mb-2 text-center animate-pulse-text">Casi Listo</p>
                      <div className="bg-white p-1 rounded-md shadow-inner">
-                        <QrCode className="w-12 h-12 sm:w-16 sm:h-16 text-black" />
+                        <QrCode className="w-12 h-12 sm:w-16 h-12 sm:h-16 text-black" />
                      </div>
                      <p className="text-xs font-mono mt-2 text-center text-gray-800">{firstSegment.carrierCode} {firstSegment.number}</p>
                 </div>
@@ -122,14 +122,14 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
     const totalPrice = basePrice + addonsPrice;
 
     return (
-        <Card className="bg-black/20 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10 flex flex-col h-full text-white">
+        <Card className="bg-white/60 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10 flex flex-col h-full text-gray-800">
             <h3 className="font-headline font-bold text-xl text-primary mb-4">Elige tu Tarifa</h3>
             <div className="grid grid-cols-3 gap-2 mb-4">
                 {fareOptions.map(fare => (
-                    <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/20" : "border-white/20 bg-black/20 hover:bg-black/30")}>
-                        <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-white/70")} />
+                    <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/20" : "border-gray-500/20 bg-black/10 hover:bg-black/20")}>
+                        <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-gray-800/70")} />
                         <p className="font-semibold text-sm text-gray-800">{fare.name}</p>
-                        <p className="text-xs text-white/70">+${fare.priceModifier}</p>
+                        <p className="text-xs text-gray-700/70">+${fare.priceModifier}</p>
                     </button>
                 ))}
             </div>
@@ -147,7 +147,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
             
             <div className="flex-grow"></div>
 
-            <Separator className="my-4 bg-white/20"/>
+            <Separator className="my-4 bg-gray-500/20"/>
 
             <p className="text-sm text-gray-700">Precio total</p>
             <p className="text-3xl sm:text-4xl font-bold text-gray-800 my-2">${totalPrice.toFixed(2)}</p>
