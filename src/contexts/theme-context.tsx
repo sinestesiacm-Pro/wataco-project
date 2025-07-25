@@ -48,7 +48,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         if (pathname.startsWith('/packages')) return cn('bg-packages-gradient', baseAnimationClass);
         if (pathname.startsWith('/cruises')) return cn('bg-cruises-gradient', baseAnimationClass);
         if (pathname.startsWith('/activities')) return cn('bg-activities-gradient', baseAnimationClass);
-        if (pathname.startsWith('/flights')) return ''; // Use default from body
+        if (pathname.startsWith('/flights')) return ''; // Use default from body (now the blue gradient)
         
         // For the home page, use the theme from the context (set by the tab)
         if (pathname === '/') {
@@ -58,7 +58,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
                 case 'Packages': return cn('bg-packages-gradient', baseAnimationClass);
                 case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
                 case 'Activities': return cn('bg-activities-gradient', baseAnimationClass);
-                case 'Social': return cn('bg-activities-gradient', baseAnimationClass);
+                case 'Social': return ''; // Use default blue background for social
                 default: return ''; // Default to the base body background
             }
         }
