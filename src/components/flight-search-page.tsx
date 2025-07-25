@@ -263,7 +263,7 @@ export default function FlightSearchPage() {
                           <CalendarIcon className="h-6 w-6 mr-4" />
                           <div>
                               <p className="text-xs text-gray-700">Dates</p>
-                              <p className="text-lg font-semibold">
+                              <p className="text-base md:text-lg font-semibold">
                                 {date?.from && date.to ? `${format(date.from, "dd LLL")} - ${format(date.to, "dd LLL")}` : "Elige tus fechas"}
                               </p>
                           </div>
@@ -290,7 +290,7 @@ export default function FlightSearchPage() {
                           <Users className="h-6 w-6 mr-4" />
                           <div>
                               <p className="text-xs text-gray-700">Travelers</p>
-                              <p className="text-lg font-semibold">{travelerText}</p>
+                              <p className="text-base md:text-lg font-semibold">{travelerText}</p>
                           </div>
                       </div>
                   </Button>
