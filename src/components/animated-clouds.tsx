@@ -22,14 +22,22 @@ const cloudData = [
 ];
 
 const Cloud = ({ style }: { style?: React.CSSProperties }) => (
-    <div className="cloud-container cloud-animation" style={style}>
-        {/* Base de la nube */}
-        <div className="cloud-part" style={{ top: '20px', left: '10px', width: '80px', height: '40px' }}></div>
-        {/* Lóbulos superiores */}
-        <div className="cloud-part" style={{ top: '0', left: '25px', width: '50px', height: '50px' }}></div>
-        <div className="cloud-part" style={{ top: '5px', left: '50px', width: '40px', height: '40px' }}></div>
+    <div className="cloud-container cloud-animation relative w-[200px] h-[100px]" style={style}>
+        {/* Central grande */}
+        <div className="cloud-part" style={{ top: '20%', left: '25%', width: '100px', height: '100px' }}></div>
+        
+        {/* Lado izquierdo */}
+        <div className="cloud-part" style={{ top: '35%', left: '5%', width: '70px', height: '70px' }}></div>
+        <div className="cloud-part" style={{ top: '10%', left: '15%', width: '80px', height: '80px' }}></div>
+        <div className="cloud-part" style={{ top: '50%', left: '20%', width: '60px', height: '60px' }}></div>
+
+        {/* Lado derecho */}
+        <div className="cloud-part" style={{ top: '35%', right: '5%', width: '70px', height: '70px' }}></div>
+        <div className="cloud-part" style={{ top: '10%', right: '15%', width: '80px', height: '80px' }}></div>
+        <div className="cloud-part" style={{ top: '50%', right: '20%', width: '60px', height: '60px' }}></div>
     </div>
 );
+
 
 export const AnimatedClouds = () => (
     <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
