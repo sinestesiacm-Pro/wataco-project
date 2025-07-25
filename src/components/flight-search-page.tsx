@@ -374,5 +374,3 @@ export default function FlightSearchPage() {
       </div>
   );
 }
-
-    
