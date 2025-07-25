@@ -26,11 +26,10 @@ export const AnimatedClouds = () => {
     useEffect(() => {
         const generateCloudData = () => {
             return Array.from({ length: 20 }).map((_, i) => {
-                const duration = Math.random() * 120 + 60; // 60s to 180s
+                const duration = Math.random() * 90 + 90; // 90s to 180s
                 const delay = Math.random() * -180; // Start at various points in the animation
                 const top = `${Math.random() * 100}%`;
                 const scale = Math.random() * 0.8 + 0.5; // 0.5 to 1.3
-                const initialX = Math.random() * 100; // Start at a random horizontal position
 
                 return {
                     id: i,
@@ -42,8 +41,6 @@ export const AnimatedClouds = () => {
                         animationDelay: `${delay}s`,
                         animationTimingFunction: 'linear',
                         animationIterationCount: 'infinite',
-                        '--cloud-start-x': `${initialX}vw`,
-                        '--cloud-end-x': `${initialX + 150}vw`, // Ensure it moves well off-screen
                     } as React.CSSProperties,
                 };
             });
@@ -52,7 +49,7 @@ export const AnimatedClouds = () => {
     }, []);
 
     return (
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-0 left-[-50%] w-[200%] h-full overflow-hidden pointer-events-none z-0">
             {cloudData.map(cloud => (
                 <Cloud key={cloud.id} style={cloud.style} />
             ))}

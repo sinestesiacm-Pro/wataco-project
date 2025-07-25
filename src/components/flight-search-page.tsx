@@ -263,9 +263,9 @@ export default function FlightSearchPage() {
                   <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
                       <div className="flex items-center w-full">
                           <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
-                          <div>
+                          <div className="truncate">
                               <p className="text-xs text-gray-700">Dates</p>
-                              <p className="text-base md:text-lg font-semibold text-gray-800 p-1">
+                              <p className="text-base md:text-lg font-semibold text-gray-800 truncate">
                                 {date?.from && date.to ? `${format(date.from, "dd LLL")} - ${format(date.to, "dd LLL")}` : "Elige tus fechas"}
                               </p>
                           </div>
