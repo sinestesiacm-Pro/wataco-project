@@ -79,7 +79,7 @@ const WelcomeAboardCloud = () => {
     ];
 
     return (
-        <div className="relative w-full h-96 text-white font-headline">
+        <div className="relative w-full h-96 text-white font-body">
             {words.map((word, index) => (
                 <span
                     key={index}
@@ -101,8 +101,8 @@ export function FlightLoadingAnimation({ originName, destinationName }: FlightLo
     return (
         <div className="flex flex-col items-center justify-center text-center py-16 space-y-8 overflow-hidden w-full h-full">
             <WelcomeAboardCloud />
-            <div className="relative z-10 bg-black/20 backdrop-blur-sm p-4 rounded-xl">
-              <h2 className="text-2xl font-bold font-headline text-white drop-shadow-lg">De {from} a {to}</h2>
+            <div className="relative z-10 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body">
+              <h2 className="text-2xl font-bold text-white drop-shadow-lg">De {from} a {to}</h2>
               <p className="text-white/80 mt-1 drop-shadow-lg">Buscando entre más de 400 aerolíneas...</p>
             </div>
         </div>
