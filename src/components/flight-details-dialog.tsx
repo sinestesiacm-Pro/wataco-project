@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -181,8 +180,8 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
             Seleccionar
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-white/10 backdrop-blur-xl p-0 border border-white/20 shadow-2xl rounded-3xl">
-          <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0 text-white">
+      <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-white/60 backdrop-blur-xl p-0 border border-white/20 shadow-2xl rounded-3xl">
+          <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0 text-gray-800">
             <DialogTitle className="font-headline text-2xl sm:text-3xl">Detalles de tu Selección</DialogTitle>
           </DialogHeader>
           
