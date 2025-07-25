@@ -4,16 +4,15 @@ import React, { useEffect, useState } from 'react';
 
 const Cloud = ({ style }: { style?: React.CSSProperties }) => (
     <div className="cloud-container cloud-animation relative w-[200px] h-[120px]" style={style}>
-        {/* Cuerpo principal de la nube - 7 Círculos */}
+        {/* Estructura de 5 círculos basada en la imagen de referencia */}
         <div className="cloud-part" style={{ top: '20%', left: '25%', width: '100px', height: '100px' }}></div>
-        <div className="cloud-part" style={{ top: '35%', left: '10%', width: '70px', height: '70px' }}></div>
-        <div className="cloud-part" style={{ top: '35%', right: '10%', width: '70px', height: '70px' }}></div>
-        <div className="cloud-part" style={{ top: '55%', left: '20%', width: '60px', height: '60px' }}></div>
-        <div className="cloud-part" style={{ top: '55%', right: '20%', width: '60px', height: '60px' }}></div>
-        <div className="cloud-part" style={{ top: '50%', left: '0%', width: '50px', height: '50px' }}></div>
-        <div className="cloud-part" style={{ top: '50%', right: '0%', width: '50px', height: '50px' }}></div>
+        <div className="cloud-part" style={{ top: '45%', left: '10%', width: '70px', height: '70px' }}></div>
+        <div className="cloud-part" style={{ top: '45%', right: '10%', width: '70px', height: '70px' }}></div>
+        <div className="cloud-part" style={{ bottom: '15%', left: '30%', width: '50px', height: '50px' }}></div>
+        <div className="cloud-part" style={{ bottom: '15%', right: '30%', width: '50px', height: '50px' }}></div>
     </div>
 );
+
 
 type CloudData = {
     id: number;

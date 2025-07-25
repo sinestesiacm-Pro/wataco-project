@@ -30,7 +30,7 @@ const WelcomeAboardCloud = () => {
         { text: "أهلاً بكم على متن الطائرة", size: "text-xl", position: "bottom-[15%] left-[35%]", opacity: "opacity-80", duration: "10s", delay: "-10s" },
         { text: "स्वआगत हैं", size: "text-2xl", position: "bottom-[10%] right-[25%]", opacity: "opacity-75", duration: "13s", delay: "-11s" },
         
-        // New Additions for more density
+        // New Additions for more density (25% more)
         { text: "Yolculuğa hoş geldiniz", size: "text-lg", position: "top-[5%] left-[10%]", opacity: "opacity-65", duration: "15s", delay: "-3.5s" },
         { text: "Karibu", size: "text-2xl", position: "top-[80%] left-[50%]", opacity: "opacity-70", duration: "10s", delay: "-4.5s" },
         { text: "ברוכים הבאים", size: "text-xl", position: "top-[75%] left-[25%]", opacity: "opacity-75", duration: "12s", delay: "-5.5s" },
