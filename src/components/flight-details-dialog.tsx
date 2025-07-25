@@ -36,7 +36,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
 
     const stops = itinerary.segments.length - 1;
     const stopInfo = stops === 1 
-        ? `${stops} escala en ${itinerary.segments[0].arrival.iataCode}`
+        ? `1 escala en ${itinerary.segments[0].arrival.iataCode}`
         : stops > 1 
             ? `${stops} escalas`
             : 'Directo';
@@ -49,7 +49,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                     <div className="flex justify-between items-center mb-4">
                         <div>
                             <p className="font-headline font-bold text-xl text-primary">{title}</p>
-                            <p className="text-sm font-semibold text-white/80">{departureDate}</p>
+                            <p className="text-sm font-semibold text-gray-800">{departureDate}</p>
                         </div>
                         <Image
                             src={`https://images.kiwi.com/airlines/64/${firstSegment.carrierCode}.png`}
@@ -65,7 +65,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                             <p className="text-2xl sm:text-4xl font-bold font-headline text-gray-800">{firstSegment.departure.iataCode}</p>
                             <p className="text-base sm:text-lg font-semibold text-gray-800">{formatTime(firstSegment.departure.at)}</p>
                         </div>
-                        <div className="flex flex-col items-center text-white/70 px-2">
+                        <div className="flex flex-col items-center px-2">
                             <p className="text-sm font-semibold text-gray-800">{formatDuration(itinerary.duration)}</p>
                             <Plane className="w-6 h-6 my-1 text-primary" />
                              <p className="text-xs text-gray-800">{stopInfo}</p>
@@ -195,13 +195,9 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
           
           <div className="flex-grow overflow-y-auto">
             <ScrollArea className="h-full">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 p-4 sm:p-6 pt-0">
-                  <div className="md:col-span-7 space-y-6">
-                      <BoardingPassCard itinerary={itineraryToShow} dictionaries={dictionaries} title={dialogTitle}/>
-                  </div>
-                  <div className="md:col-span-5 space-y-6">
-                      <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
-                  </div>
+              <div className="space-y-6 p-4 sm:p-6 pt-0">
+                  <BoardingPassCard itinerary={itineraryToShow} dictionaries={dictionaries} title={dialogTitle}/>
+                  <PriceCard flight={flight} onSelectFlight={onSelectFlight} />
               </div>
             </ScrollArea>
           </div>
