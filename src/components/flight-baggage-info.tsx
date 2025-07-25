@@ -19,10 +19,9 @@ const CarryOnIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => 
 
 const CheckedBagIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={className} {...props} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M19,4.5H17V3a2,2,0,0,0-2-2H9A2,2,0,0,0,7,3V4.5H5a2,2,0,0,0-2,2V20a2,2,0,0,0,2,2H6.5a1.5,1.5,0,0,0,0,3h1.5a1.5,1.5,0,0,0,0-3H16a1.5,1.5,0,0,0,0,3h1.5a1.5,1.5,0,0,0,0-3H19a2,2,0,0,0,2-2V6.5A2,2,0,0,0,19,4.5ZM8.5,3A.5.5,0,0,1,9,2.5h6A.5.5,0,0,1,15.5,3V4.5h-7ZM19.5,20a.5.5,0,0,1-.5.5H17.5a1.5,1.5,0,0,0,0-3H19a.5.5,0,0,1,.5.5V20Zm0-2.5a.5.5,0,0,1-.5.5H5a.5.5,0,0,1-.5-.5V6.5a.5.5,0,0,1,.5-.5H7v1A.5.5,0,0,0,7.5,7h9a.5.5,0,0,0,.5-.5v-1h2a.5.5,0,0,1,.5.5Z"/>
+       <path d="M7,6V3a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1V6h3a1,1,0,0,1,1,1V20a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V7A1,1,0,0,1,5,6ZM9,4v2h6V4Zm10,4H5v1h14Z" />
     </svg>
 );
-
 
 interface FlightBaggageInfoProps {
   flight: FlightOffer;
@@ -59,7 +58,7 @@ export function FlightBaggageInfo({ flight, className }: FlightBaggageInfoProps)
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="cursor-default">
-               <CarryOnIcon className={cn("h-5 w-5 fill-primary stroke-none", !carryOnIncluded && "fill-muted-foreground/30")} />
+               <CarryOnIcon className={cn("h-5 w-5 fill-primary", !carryOnIncluded && "fill-muted-foreground/30")} />
             </div>
           </TooltipTrigger>
           <TooltipContent><p>{carryOnText}</p></TooltipContent>
