@@ -34,8 +34,16 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
     const departureDate = formatDate(parseISO(firstSegment.departure.at), "d MMM, yyyy", { locale: es });
 
+    const stops = itinerary.segments.length - 1;
+    const stopInfo = stops === 1 
+        ? `${stops} escala en ${itinerary.segments[0].arrival.iataCode}`
+        : stops > 1 
+            ? `${stops} escalas`
+            : 'Directo';
+
+
     return (
-        <Card className="bg-white/10 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10 text-white">
+        <Card className="bg-black/20 backdrop-blur-sm p-0 rounded-2xl shadow-lg overflow-hidden border-2 border-primary/10">
             <div className="flex">
                 <div className="flex-grow p-4 sm:p-6">
                     <div className="flex justify-between items-center mb-4">
@@ -54,20 +62,20 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                     
                     <div className="flex items-center justify-between my-6">
                         <div className="text-center">
-                            <p className="text-2xl sm:text-4xl font-bold font-headline">{firstSegment.departure.iataCode}</p>
-                            <p className="text-base sm:text-lg font-semibold">{formatTime(firstSegment.departure.at)}</p>
+                            <p className="text-2xl sm:text-4xl font-bold font-headline text-gray-800">{firstSegment.departure.iataCode}</p>
+                            <p className="text-base sm:text-lg font-semibold text-gray-800">{formatTime(firstSegment.departure.at)}</p>
                         </div>
                         <div className="flex flex-col items-center text-white/70 px-2">
-                            <p className="text-sm font-semibold">{formatDuration(itinerary.duration)}</p>
+                            <p className="text-sm font-semibold text-gray-800">{formatDuration(itinerary.duration)}</p>
                             <Plane className="w-6 h-6 my-1 text-primary" />
-                             <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
+                             <p className="text-xs text-gray-800">{stopInfo}</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-2xl sm:text-4xl font-bold font-headline">{lastSegment.arrival.iataCode}</p>
-                             <p className="text-base sm:text-lg font-semibold">{formatTime(lastSegment.arrival.at)}</p>
+                            <p className="text-2xl sm:text-4xl font-bold font-headline text-gray-800">{lastSegment.arrival.iataCode}</p>
+                             <p className="text-base sm:text-lg font-semibold text-gray-800">{formatTime(lastSegment.arrival.at)}</p>
                         </div>
                     </div>
-                     <div className="text-xs text-white/70 text-center">
+                     <div className="text-xs text-gray-700 text-center">
                         Operado por {airlineName}
                     </div>
                 </div>
@@ -77,7 +85,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                      <div className="bg-white p-1 rounded-md shadow-inner">
                         <QrCode className="w-12 h-12 sm:w-16 sm:h-16 text-black" />
                      </div>
-                     <p className="text-xs font-mono mt-2 text-center">{firstSegment.carrierCode} {firstSegment.number}</p>
+                     <p className="text-xs font-mono mt-2 text-center text-gray-800">{firstSegment.carrierCode} {firstSegment.number}</p>
                 </div>
             </div>
         </Card>
@@ -114,13 +122,13 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
     const totalPrice = basePrice + addonsPrice;
 
     return (
-        <Card className="bg-white/10 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10 flex flex-col h-full text-white">
+        <Card className="bg-black/20 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border-2 border-primary/10 flex flex-col h-full text-white">
             <h3 className="font-headline font-bold text-xl text-primary mb-4">Elige tu Tarifa</h3>
             <div className="grid grid-cols-3 gap-2 mb-4">
                 {fareOptions.map(fare => (
                     <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/20" : "border-white/20 bg-black/20 hover:bg-black/30")}>
                         <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-white/70")} />
-                        <p className="font-semibold text-sm">{fare.name}</p>
+                        <p className="font-semibold text-sm text-gray-800">{fare.name}</p>
                         <p className="text-xs text-white/70">+${fare.priceModifier}</p>
                     </button>
                 ))}
@@ -129,7 +137,7 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
             <div className="flex-grow pr-3 -mr-3 mb-4 min-h-[80px]">
               <ul className="text-sm space-y-2">
                   {selectedFareOption?.features.map(feature => (
-                      <li key={feature} className="flex items-center gap-2">
+                      <li key={feature} className="flex items-center gap-2 text-gray-800">
                           <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                           <span>{feature}</span>
                       </li>
@@ -141,8 +149,8 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
 
             <Separator className="my-4 bg-white/20"/>
 
-            <p className="text-sm text-white/70">Precio total</p>
-            <p className="text-3xl sm:text-4xl font-bold text-accent my-2">${totalPrice.toFixed(2)}</p>
+            <p className="text-sm text-gray-700">Precio total</p>
+            <p className="text-3xl sm:text-4xl font-bold text-gray-800 my-2">${totalPrice.toFixed(2)}</p>
             
             <DialogClose asChild>
                 <Button
