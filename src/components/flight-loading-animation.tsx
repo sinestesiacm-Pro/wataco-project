@@ -13,14 +13,12 @@ const WelcomeAboardCloud = () => {
         // Centerpiece
         { text: "Welcome Aboard", size: "text-4xl", position: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2", opacity: "opacity-100", duration: "8s", delay: "0s" },
 
-        // Tier 1 (Largest & Most Prominent)
+        // Tier 1 (Most Prominent)
         { text: "Bienvenido a bordo", size: "text-3xl", position: "top-[40%] left-[15%]", opacity: "opacity-80", duration: "10s", delay: "-1s" },
         { text: "Bienvenue à bord", size: "text-2xl", position: "top-[25%] right-[10%]", opacity: "opacity-90", duration: "9s", delay: "-0.5s" },
         { text: "Willkommen an Bord", size: "text-2xl", position: "top-[20%] left-[40%]", opacity: "opacity-70", duration: "11s", delay: "-2s" },
         { text: "欢迎登机", size: "text-3xl", position: "bottom-[20%] right-[40%]", opacity: "opacity-90", duration: "8s", delay: "-3s" },
         { text: "Benvenuto a bordo", size: "text-xl", position: "top-[65%] right-[20%]", opacity: "opacity-60", duration: "13s", delay: "-2.5s" },
-
-        // Tier 2 (Medium Size, Filling Gaps)
         { text: "Bem-vindo a bordo", size: "text-lg", position: "bottom-[30%] left-[10%]", opacity: "opacity-70", duration: "12s", delay: "-4s" },
         { text: "어서 오세요", size: "text-xl", position: "top-[28%] left-[25%]", opacity: "opacity-75", duration: "10s", delay: "-5s" },
         { text: "ご搭乗ありがとうございます", size: "text-lg", position: "top-[35%] right-[25%]", opacity: "opacity-70", duration: "14s", delay: "-6s" },
@@ -28,14 +26,21 @@ const WelcomeAboardCloud = () => {
         { text: "Welkom aan boord", size: "text-md", position: "top-[40%] left-[55%]", opacity: "opacity-65", duration: "11s", delay: "-8s" },
         { text: "Välkommen ombord", size: "text-lg", position: "bottom-[40%] right-[55%]", opacity: "opacity-70", duration: "12s", delay: "-9s" },
         { text: "أهلاً بكم على متن الطائرة", size: "text-xl", position: "bottom-[15%] left-[35%]", opacity: "opacity-80", duration: "10s", delay: "-10s" },
-        { text: "स्वआगत हैं", size: "text-2xl", position: "bottom-[10%] right-[25%]", opacity: "opacity-75", duration: "13s", delay: "-11s" },
         
-        // New Additions for more density (25% more)
+        // Doubled Languages
+        { text: "स्वआगत हैं", size: "text-2xl", position: "bottom-[10%] right-[15%]", opacity: "opacity-75", duration: "13s", delay: "-11s" },
         { text: "Yolculuğa hoş geldiniz", size: "text-lg", position: "top-[5%] left-[10%]", opacity: "opacity-65", duration: "15s", delay: "-3.5s" },
         { text: "Karibu", size: "text-2xl", position: "top-[80%] left-[50%]", opacity: "opacity-70", duration: "10s", delay: "-4.5s" },
         { text: "ברוכים הבאים", size: "text-xl", position: "top-[75%] left-[25%]", opacity: "opacity-75", duration: "12s", delay: "-5.5s" },
         { text: "ยินดีต้อนรับ", size: "text-2xl", position: "top-[60%] right-[45%]", opacity: "opacity-80", duration: "9s", delay: "-6.5s" },
         { text: "Velkommen", size: "text-xl", position: "bottom-[5%] left-[5%]", opacity: "opacity-70", duration: "11s", delay: "-7.5s" },
+        { text: "Καλώς ήρθατε", size: "text-lg", position: "top-[10%] right-[30%]", opacity: "opacity-60", duration: "14s", delay: "-12s" },
+        { text: "Fáilte romhat", size: "text-xl", position: "bottom-[45%] left-[40%]", opacity: "opacity-70", duration: "10s", delay: "-13s" },
+        { text: "Selamat datang", size: "text-2xl", position: "top-[70%] left-[70%]", opacity: "opacity-80", duration: "11s", delay: "-14s" },
+        { text: "Tervetuloa", size: "text-lg", position: "bottom-[25%] right-[5%]", opacity: "opacity-75", duration: "12s", delay: "-15s" },
+        { text: "Vítejte na palubě", size: "text-xl", position: "top-[5%] right-[5%]", opacity: "opacity-65", duration: "10s", delay: "-16s" },
+        { text: "Bine ați venit la bord", size: "text-lg", position: "bottom-[50%] left-[5%]", opacity: "opacity-70", duration: "13s", delay: "-17s" },
+        { text: "Maligayang pagdating", size: "text-xl", position: "top-[90%] left-[45%]", opacity: "opacity-80", duration: "9s", delay: "-18s" },
     ];
 
     return (
