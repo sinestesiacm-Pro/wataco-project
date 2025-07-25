@@ -228,7 +228,7 @@ export default function FlightSearchPage() {
                           <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
                           <div>
                               <p className="text-xs text-gray-700">From</p>
-                              <p className="text-lg font-semibold">{originQuery}</p>
+                              <p className="text-lg font-semibold text-gray-800">{originQuery}</p>
                           </div>
                       </div>
                   </Button>
@@ -265,7 +265,7 @@ export default function FlightSearchPage() {
                           <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
                           <div>
                               <p className="text-xs text-gray-700">Dates</p>
-                              <p className="text-base md:text-lg font-semibold text-gray-800">
+                              <p className="text-base md:text-lg font-semibold text-gray-800 p-1">
                                 {date?.from && date.to ? `${format(date.from, "dd LLL")} - ${format(date.to, "dd LLL")}` : "Elige tus fechas"}
                               </p>
                           </div>
@@ -282,11 +282,9 @@ export default function FlightSearchPage() {
                         numberOfMonths={isMobile ? 1 : 2}
                         disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
                     />
-                    {isMobile && (
-                        <div className="p-2 border-t">
-                            <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
-                        </div>
-                    )}
+                    <div className="p-2 border-t md:hidden">
+                        <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
+                    </div>
                 </PopoverContent>
               </Popover>
 

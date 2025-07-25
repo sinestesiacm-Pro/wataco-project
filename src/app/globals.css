@@ -146,12 +146,13 @@
 
 @keyframes move-clouds {
   from {
-    transform: translateX(var(--cloud-start-x));
+    transform: translateX(var(--cloud-start-x, -100%));
   }
   to {
-    transform: translateX(var(--cloud-end-x));
+    transform: translateX(var(--cloud-end-x, 100vw));
   }
 }
+
 
 .cloud-container {
     position: absolute;
@@ -166,8 +167,11 @@
 }
 
 .cloud-animation {
-  animation: move-clouds linear infinite;
+  animation-name: move-clouds;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
+
 
 /* Pill-shaped card for flight destinations */
 .destination-card-oval {
