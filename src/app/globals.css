@@ -161,6 +161,7 @@
     position: absolute;
     background-color: white;
     border-radius: 100%;
+    filter: blur(25px);
 }
 
 .cloud-animation {
@@ -222,4 +223,22 @@
   filter: blur(20px);
   opacity: 0.7;
   animation: float-rect var(--float-duration) ease-in-out var(--float-delay) infinite alternate;
+}
+
+@keyframes zoom-and-fade {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.animate-zoom-fade {
+  animation: zoom-and-fade linear infinite;
 }
