@@ -215,7 +215,7 @@ export default function FlightSearchPage() {
   );
 
   return (
-      <div className="bg-blue-200/70 p-6 rounded-3xl shadow-2xl">
+      <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleManualSearch} className="flex flex-col gap-4 text-gray-800">
           
           <Popover open={!!activeInput} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
@@ -247,58 +247,15 @@ export default function FlightSearchPage() {
                 {activeInput && renderSuggestions(activeInput)}
             </PopoverContent>
           </Popover>
-
-          <Separator className="bg-gray-500/20" />
-          
-          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
-                    <div className="flex items-center w-full">
-                        <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
-                        <div>
-                            <p className="text-xs text-gray-700">Dates</p>
-                            <p className="text-lg font-semibold text-gray-800">
-                              {date?.from ? (
-                                  date.to && isRoundTrip ? (
-                                      <>
-                                          {format(date.from, "dd LLL")} -{" "}
-                                          {format(date.to, "dd LLL")}
-                                      </>
-                                  ) : (
-                                      format(date.from, "dd LLL, y")
-                                  )
-                              ) : (
-                                  <span>Elige tus fechas</span>
-                              )}
-                            </p>
-                        </div>
-                    </div>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                      initialFocus
-                      mode="range"
-                      defaultMonth={date?.from}
-                      selected={date}
-                      onSelect={setDate}
-                      numberOfMonths={2}
-                      disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
-                  />
-                  <div className="p-3 border-t">
-                      <Button type="button" onClick={() => setIsCalendarOpen(false)} className="w-full">Listo</Button>
-                  </div>
-              </PopoverContent>
-          </Popover>
           
           <Popover>
             <PopoverTrigger asChild>
               <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
                   <div className="flex items-center w-full">
-                      <Users className="h-6 w-6 mr-4 text-success" />
+                      <Users className="h-6 w-6 mr-4" />
                       <div>
                           <p className="text-xs text-gray-700">Travelers</p>
-                          <p className="text-lg font-semibold text-gray-800">{travelerText}</p>
+                          <p className="text-lg font-semibold">{travelerText}</p>
                       </div>
                   </div>
               </Button>
@@ -365,7 +322,7 @@ export default function FlightSearchPage() {
           <Button
               type="submit"
               size="lg"
-              className="text-lg font-bold bg-success hover:bg-success/90 h-14 text-success-foreground rounded-full shadow-lg hover:shadow-xl transition-all px-10"
+              className="text-lg font-bold bg-gradient-to-r from-blue-400 to-blue-600 h-14 text-white rounded-full shadow-lg hover:shadow-xl transition-all px-10"
           >
              Buscar Vuelos
           </Button>
