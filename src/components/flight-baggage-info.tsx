@@ -19,7 +19,7 @@ const CarryOnIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => 
 
 const CheckedBagIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={className} {...props} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-       <path d="M7,6V3a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1V6h3a1,1,0,0,1,1,1V20a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V7A1,1,0,0,1,5,6ZM9,4v2h6V4Zm10,4H5v1h14Z" />
+        <path d="M8.5,4h7a1.5,1.5,0,0,1,1.5,1.5v1.5h-10V5.5A1.5,1.5,0,0,1,8.5,4ZM7,7H17a2,2,0,0,1,2,2V18a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V9A2,2,0,0,1,7,7Zm2.5,12a1,1,0,1,0-1-1,1,1,0,0,0,1,1Zm6,0a1,1,0,1,0-1-1,1,1,0,0,0,1,1Z" />
     </svg>
 );
 
@@ -49,7 +49,7 @@ export function FlightBaggageInfo({ flight, className }: FlightBaggageInfoProps)
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="cursor-default">
-              <PersonalBagIcon className={cn("h-5 w-5 stroke-primary fill-none", !personalItemIncluded && "stroke-muted-foreground/30")} />
+              <PersonalBagIcon className={cn("h-5 w-5", personalItemIncluded ? "stroke-primary fill-none" : "stroke-muted-foreground/30 fill-none")} />
             </div>
           </TooltipTrigger>
           <TooltipContent><p>{personalItemText}</p></TooltipContent>
@@ -58,7 +58,7 @@ export function FlightBaggageInfo({ flight, className }: FlightBaggageInfoProps)
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="cursor-default">
-               <CarryOnIcon className={cn("h-5 w-5 fill-primary", !carryOnIncluded && "fill-muted-foreground/30")} />
+               <CarryOnIcon className={cn("h-5 w-5", carryOnIncluded ? "fill-primary" : "fill-muted-foreground/30")} />
             </div>
           </TooltipTrigger>
           <TooltipContent><p>{carryOnText}</p></TooltipContent>
@@ -67,7 +67,7 @@ export function FlightBaggageInfo({ flight, className }: FlightBaggageInfoProps)
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="cursor-default">
-               <CheckedBagIcon className={cn("h-6 w-6 stroke-primary fill-none", !checkedBagsIncluded && "stroke-muted-foreground/30")} />
+               <CheckedBagIcon className={cn("h-6 w-6", checkedBagsIncluded ? "stroke-primary fill-none" : "stroke-muted-foreground/30 fill-none")} />
             </div>
           </TooltipTrigger>
           <TooltipContent><p>{checkedBagsText}</p></TooltipContent>
