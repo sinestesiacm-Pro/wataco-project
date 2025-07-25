@@ -156,15 +156,13 @@
 .cloud-container {
     position: absolute;
     filter: blur(25px);
+    opacity: 0.8;
 }
 
 .cloud-part {
     position: absolute;
     background-color: white;
     border-radius: 9999px;
-    opacity: 0.8;
-    width: 200px;
-    height: 60px;
 }
 
 .cloud-animation {
