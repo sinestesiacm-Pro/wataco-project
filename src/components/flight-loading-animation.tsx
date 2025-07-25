@@ -9,15 +9,29 @@ interface FlightLoadingAnimationProps {
 
 const WelcomeAboardCloud = () => {
     const words = [
+        // Center
         { text: "Welcome Aboard", size: "text-4xl", position: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2", opacity: "opacity-100" },
-        { text: "Bienvenido a bordo", size: "text-2xl", position: "top-1/3 left-1/4", opacity: "opacity-80" },
-        { text: "Willkommen an Bord", size: "text-xl", position: "top-2/3 left-1/2 -translate-x-3/4", opacity: "opacity-70" },
-        { text: "Bienvenue à bord", size: "text-3xl", position: "top-1/4 right-1/4", opacity: "opacity-90" },
-        { text: "Benvenuto a bordo", size: "text-lg", position: "top-1/2 right-1/4 translate-x-1/4", opacity: "opacity-60" },
-        { text: "Bem-vindo a bordo", size: "text-2xl", position: "bottom-1/4 left-1/4", opacity: "opacity-80" },
-        { text: "ご搭乗ありがとうございます", size: "text-xl", position: "bottom-1/3 right-1/4", opacity: "opacity-70" },
-        { text: "Добро пожаловать на борт", size: "text-lg", position: "top-1/4 left-1/2 -translate-x-1/2", opacity: "opacity-60" },
-        { text: "欢迎登机", size: "text-3xl", position: "bottom-1/4 right-1/2", opacity: "opacity-90" },
+        
+        // Left side
+        { text: "Bienvenido a bordo", size: "text-2xl", position: "top-[45%] left-[20%]", opacity: "opacity-80" },
+        { text: "Bem-vindo a bordo", size: "text-lg", position: "top-[60%] left-[25%]", opacity: "opacity-70" },
+        { text: "어서 오세요", size: "text-xl", position: "top-[30%] left-[30%]", opacity: "opacity-75" },
+
+        // Right side
+        { text: "Bienvenue à bord", size: "text-3xl", position: "top-[40%] right-[15%]", opacity: "opacity-90" },
+        { text: "Benvenuto a bordo", size: "text-md", position: "top-[58%] right-[22%]", opacity: "opacity-60" },
+        { text: "ご搭乗ありがとうございます", size: "text-lg", position: "top-[30%] right-[25%]", opacity: "opacity-70" },
+
+        // Top side
+        { text: "Willkommen an Bord", size: "text-xl", position: "top-[25%] left-[45%]", opacity: "opacity-70" },
+        { text: "Добро пожаловать на борт", size: "text-lg", position: "top-[20%] left-[55%]", opacity: "opacity-60" },
+        { text: "Welkom aan boord", size: "text-md", position: "top-[35%] left-[50%]", opacity: "opacity-65" },
+        
+        // Bottom side
+        { text: "欢迎登机", size: "text-3xl", position: "bottom-[25%] right-[45%]", opacity: "opacity-90" },
+        { text: "Välkommen ombord", size: "text-lg", position: "bottom-[35%] right-[55%]", opacity: "opacity-70" },
+        { text: "أهلاً بكم على متن الطائرة", size: "text-xl", position: "bottom-[20%] left-[40%]", opacity: "opacity-80" },
+        { text: "स्वआगत हैं", size: "text-2xl", position: "bottom-[15%] right-[30%]", opacity: "opacity-75" },
     ];
 
     return (
@@ -25,7 +39,7 @@ const WelcomeAboardCloud = () => {
             {words.map((word, index) => (
                 <span
                     key={index}
-                    className={`absolute whitespace-nowrap ${word.size} ${word.position} ${word.opacity}`}
+                    className={`absolute whitespace-nowrap ${word.size} ${word.position} ${word.opacity} drop-shadow-lg`}
                 >
                     {word.text}
                 </span>
