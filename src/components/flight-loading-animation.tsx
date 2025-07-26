@@ -55,14 +55,14 @@ const generateWords = (count: number) => {
             top: `${Math.random() * 140 - 20}%`, // -20% to 120%
             left: leftPosition,
             fontWeight: base.weight.toString(),
-            duration: `${Math.random() * 40 + 20}s`, // 20s to 60s
+            duration: `${Math.random() * 35 + 15}s`, // 15s to 50s
             delay: `-${Math.random() * 40}s`
         });
     }
     return generated;
 };
 
-const words = generateWords(326);
+const words = generateWords(261);
 
 const WelcomeAboardCloud = () => {
     return (
