@@ -244,3 +244,78 @@
     transform: scale(1.1);
   }
 }
+
+
+/* Underwater Scene for Cruises */
+@keyframes rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-100vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes swim {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  50% {
+     transform: translateX(-25px) rotate(5deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+.underwater-scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.coral-stalk {
+  position: absolute;
+  bottom: -50px;
+  filter: blur(15px);
+  border-top-left-radius: 999px;
+  border-top-right-radius: 999px;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -50px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  animation: rise linear infinite;
+  filter: blur(2px);
+}
+
+.fish {
+    position: absolute;
+    filter: blur(10px);
+    animation: swim 4s ease-in-out infinite, rise 20s linear infinite;
+}
+.fish-body {
+    width: 60px;
+    height: 30px;
+    background-color: rgba(255, 152, 0, 0.4);
+    border-radius: 50%;
+}
+.fish-tail {
+    position: absolute;
+    top: 5px;
+    right: -15px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 20px solid rgba(255, 152, 0, 0.4);
+}

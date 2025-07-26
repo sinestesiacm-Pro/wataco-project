@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
+import { UnderwaterScene } from './underwater-scene';
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -94,6 +95,7 @@ export function HomePageContent() {
         <div className="w-full flex flex-col flex-grow relative">
             {(tab === 'Flights' || tab === 'Social') && <AnimatedClouds />}
             {tab === 'Hotels' && <AnimatedWindows />}
+            {tab === 'Cruises' && <UnderwaterScene />}
             
             <div className="relative z-10 flex flex-col min-h-dvh">
                 <div className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
