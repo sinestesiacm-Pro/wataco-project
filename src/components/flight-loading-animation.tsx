@@ -41,11 +41,11 @@ const generateWords = (count: number) => {
         const sizeClass = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
         
         let leftPosition;
-        // Ensure more elements on the left, less on the right
-        if (i % 4 === 0) { // 25% of elements on the right
-             leftPosition = `${Math.random() * 70 + 50}%`;
-        } else { // 75% of elements on the left
-             leftPosition = `${Math.random() * 70 - 20}%`;
+        // Distribute elements: 70% on the left, 30% on the right for balance
+        if (i % 10 < 3) { // 30% of elements on the right
+             leftPosition = `${Math.random() * 50 + 50}%`; // 50% to 100%
+        } else { // 70% of elements on the left
+             leftPosition = `${Math.random() * 50}%`; // 0% to 50%
         }
 
         generated.push({
@@ -74,8 +74,8 @@ const Word = React.memo(function Word({ word }: { word: any }) {
                 top: word.top,
                 left: word.left,
                 fontWeight: word.fontWeight,
-                '--translate-y-start': word.translateYStart,
-                '--translate-y-end': word.translateYEnd,
+                '--translate-y-start': word['--translate-y-start'],
+                '--translate-y-end': word['--translate-y-end'],
                 animation: `float-and-fade ${word.animationDuration} linear ${word.animationDelay} infinite`,
             } as React.CSSProperties}
         >
