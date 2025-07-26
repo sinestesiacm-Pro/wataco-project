@@ -120,7 +120,7 @@ const AdditionalServicesCard = ({ onPriceChange }: { onPriceChange: (price: numb
                              <Switch 
                                 id={service.id} 
                                 onCheckedChange={(checked) => handleServiceToggle(checked, service.price)}
-                                className="data-[state=unchecked]:bg-background"
+                                className="data-[state=unchecked]:bg-input"
                              />
                         </div>
                     </div>
