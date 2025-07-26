@@ -110,15 +110,15 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
       </div>
 
        {selectedOutboundFlight && (
-         <Card className="bg-primary/80 border-primary/20">
-            <CardContent className="p-4 flex items-center justify-between gap-4 text-white">
+         <Card className="bg-gradient-to-r from-yellow-400 to-orange-500 border-none shadow-lg">
+            <CardContent className="p-4 flex items-center justify-between gap-4 text-gray-800">
                 <div className="flex items-center gap-3">
-                    <Plane className="h-5 w-5 text-white"/>
+                    <Plane className="h-5 w-5"/>
                     <p className="font-semibold">
                         Vuelo de ida seleccionado: {selectedOutboundFlight.itineraries[0].segments[0].departure.iataCode} - {selectedOutboundFlight.itineraries[0].segments.slice(-1)[0].arrival.iataCode}
                     </p>
                 </div>
-                <p className="font-bold text-lg text-white">${selectedOutboundFlight.price.total}</p>
+                <p className="font-bold text-lg">${selectedOutboundFlight.price.total}</p>
             </CardContent>
          </Card>
       )}
