@@ -41,18 +41,16 @@ const generateWords = (count: number) => {
         const sizeClass = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
         
         let leftPosition;
-        // Condition to generate more words on the left side of the screen
-        if (i % 3 !== 0) { // roughly 2/3 of words on the left
-             leftPosition = `${Math.random() * 70 - 20}%`; // -20% to 50%
-        } else { // 1/3 of words on the right
-             leftPosition = `${Math.random() * 70 + 50}%`; // 50% to 120%
+        if (i % 3 !== 0) {
+             leftPosition = `${Math.random() * 70 - 20}%`;
+        } else {
+             leftPosition = `${Math.random() * 70 + 50}%`;
         }
 
         generated.push({
             text: base.text,
             size: sizeClass[Math.floor(Math.random() * sizeClass.length)],
-            opacity: `opacity-${Math.floor(Math.random() * 8 + 2) * 10}`, // 20-90
-            top: `${Math.random() * 140 - 20}%`, // -20% to 120%
+            top: `${Math.random() * 140 - 20}%`,
             left: leftPosition,
             fontWeight: base.weight.toString(),
             duration: `${Math.random() * 35 + 15}s`, // 15s to 50s
@@ -72,8 +70,7 @@ const WelcomeAboardCloud = () => {
                     key={index}
                     className={cn(
                         "animate-zoom-fade whitespace-nowrap absolute text-white",
-                        word.size,
-                        word.opacity
+                        word.size
                     )}
                     style={{
                         top: word.top,
