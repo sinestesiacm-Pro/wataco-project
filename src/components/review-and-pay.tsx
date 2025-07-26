@@ -105,7 +105,7 @@ const AdditionalServicesCard = ({ onPriceChange }: { onPriceChange: (price: numb
             </CardHeader>
             <CardContent className="space-y-4">
                 {additionalServices.map(service => (
-                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-background">
+                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-muted">
                         <div className="flex items-center gap-4">
                            <service.icon className="h-8 w-8 text-primary" />
                            <div>
