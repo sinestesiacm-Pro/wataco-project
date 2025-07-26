@@ -258,15 +258,12 @@
   }
 }
 
-@keyframes swim {
-  0% {
-    transform: translateX(0) rotate(0deg);
+@keyframes swim-across {
+  from {
+    transform: translateX(-100px);
   }
-  50% {
-     transform: translateX(-25px) rotate(5deg);
-  }
-  100% {
-    transform: translateX(0) rotate(0deg);
+  to {
+    transform: translateX(100vw);
   }
 }
 
@@ -281,27 +278,20 @@
   z-index: 0;
 }
 
-.coral-stalk {
-  position: absolute;
-  bottom: -50px;
-  filter: blur(15px);
-  border-top-left-radius: 999px;
-  border-top-right-radius: 999px;
-}
-
 .bubble {
   position: absolute;
   bottom: -50px;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   animation: rise linear infinite;
-  filter: blur(2px);
+  filter: blur(1px);
 }
 
 .fish {
     position: absolute;
     filter: blur(10px);
-    animation: swim 4s ease-in-out infinite, rise 20s linear infinite;
+    animation: swim-across linear infinite;
 }
 .fish-body {
     width: 60px;
@@ -312,10 +302,10 @@
 .fish-tail {
     position: absolute;
     top: 5px;
-    right: -15px;
+    left: -15px; /* Adjusted to be on the left for rightward movement */
     width: 0;
     height: 0;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-left: 20px solid rgba(255, 152, 0, 0.4);
+    border-right: 20px solid rgba(255, 152, 0, 0.4); /* Pointing right */
 }
