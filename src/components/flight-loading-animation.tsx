@@ -4,32 +4,32 @@ import React, { useMemo } from 'react';
 import { cn } from "@/lib/utils";
 
 const baseWords = [
-    { text: "Welcome Aboard", weight: 700 },
-    { text: "Bienvenido a bordo", weight: 700 },
-    { text: "Willkommen an Bord", weight: 600 },
-    { text: "Bienvenue à bord", weight: 600 },
-    { text: "Benvenuto a bordo", weight: 500 },
-    { text: "Bem-vindo a bordo", weight: 500 },
-    { text: "ようこそ", weight: 600 },
-    { text: "歡迎光臨", weight: 600 },
-    { text: "어서 오세요", weight: 500 },
-    { text: "Välkommen ombord", weight: 400 },
-    { text: "Witamy na pokładzie", weight: 400 },
-    { text: "Welkom aan boord", weight: 400 },
-    { text: "Dobrodošli na brodu", weight: 400 },
-    { text: "Fáilte ar bord", weight: 500 },
-    { text: "Vítejte na palubě", weight: 400 },
-    { text: "ยินดีต้อนรับ", weight: 500 },
-    { text: "Chào mừng", weight: 400 },
-    { text: "Καλώς ήρθατε", weight: 500 },
-    { text: "Tervetuloa kyytiin", weight: 400 },
-    { text: "Hoş geldiniz", weight: 500 },
-    { text: "Velkommen", weight: 400 },
-    { text: "Bun venit", weight: 400 },
-    { text: "Siyakwamukela", weight: 400},
-    { text: "Maligayang pagdating", weight: 500},
-    { text: "Sugeng rawuh", weight: 500},
-    { text: "Tervetuloa", weight: 400},
+    { text: "Welcome Aboard", weight: 500 },
+    { text: "Bienvenido a bordo", weight: 500 },
+    { text: "Willkommen an Bord", weight: 400 },
+    { text: "Bienvenue à bord", weight: 400 },
+    { text: "Benvenuto a bordo", weight: 300 },
+    { text: "Bem-vindo a bordo", weight: 300 },
+    { text: "ようこそ", weight: 400 },
+    { text: "歡迎光臨", weight: 400 },
+    { text: "어서 오세요", weight: 300 },
+    { text: "Välkommen ombord", weight: 300 },
+    { text: "Witamy na pokładzie", weight: 300 },
+    { text: "Welkom aan boord", weight: 300 },
+    { text: "Dobrodošli na brodu", weight: 300 },
+    { text: "Fáilte ar bord", weight: 400 },
+    { text: "Vítejte na palubě", weight: 300 },
+    { text: "ยินดีต้อนรับ", weight: 400 },
+    { text: "Chào mừng", weight: 300 },
+    { text: "Καλώς ήρθατε", weight: 400 },
+    { text: "Tervetuloa kyytiin", weight: 300 },
+    { text: "Hoş geldiniz", weight: 400 },
+    { text: "Velkommen", weight: 300 },
+    { text: "Bun venit", weight: 300 },
+    { text: "Siyakwamukela", weight: 300},
+    { text: "Maligayang pagdating", weight: 400},
+    { text: "Sugeng rawuh", weight: 400},
+    { text: "Tervetuloa", weight: 300},
     { text: "aboard", weight: 300 },
     { text: "welcome", weight: 300 },
 ];
@@ -53,9 +53,8 @@ const generateWords = (count: number) => {
             top: `${Math.random() * 100}%`,
             left: leftPosition,
             fontWeight: base.weight.toString(),
-            fadeDuration: `${Math.random() * 10 + 10}s`, // 10s to 20s
-            moveDuration: `${Math.random() * 20 + 20}s`, // 20s to 40s
-            delay: `-${Math.random() * 30}s`,
+            fadeDuration: `${Math.random() * 20 + 20}s`, // 20s to 40s
+            delay: `-${Math.random() * 40}s`,
             translateYStart: `${Math.random() * 40 - 20}vh`, // from -20vh to 20vh
             translateYEnd: `${Math.random() * 40 - 20}vh`, // to -20vh to 20vh
         });
@@ -76,10 +75,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
                 fontWeight: word.fontWeight,
                 '--translate-y-start': word.translateYStart,
                 '--translate-y-end': word.translateYEnd,
-                animation: `
-                    float-and-fade ${word.fadeDuration} linear ${word.delay} infinite,
-                    move-and-scale ${word.moveDuration} linear ${word.delay} infinite
-                `,
+                animation: `float-and-fade ${word.fadeDuration} linear ${word.delay} infinite`,
             } as React.CSSProperties}
         >
             {word.text}
