@@ -3,6 +3,7 @@
 import React from 'react';
 import { cn } from "@/lib/utils";
 
+// Definitive list with full phrases, varied styles, and extended positioning
 const words = [
     // Complete phrases, varied sizes and weights
     { text: "Welcome Aboard", size: "text-4xl", opacity: "opacity-100", top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontWeight: '700', duration: '45s', delay: '0s' },
@@ -34,22 +35,22 @@ const words = [
     { text: "Bun venit", size: "text-xl", opacity: "opacity-75", top: '20%', left: '95%', fontWeight: '400', duration: '61s', delay: '-16s' },
 
     // Filler words with negative and >100% positions for extended canvas
-    ...Array.from({ length: 40 }).map((_, i) => ({
+    ...Array.from({ length: 120 }).map((_, i) => ({
         text: "welcome",
-        size: `text-${['sm', 'md', 'lg', 'xl'][Math.floor(Math.random() * 4)]}`,
+        size: `text-${['sm', 'md', 'lg', 'xl', '2xl'][Math.floor(Math.random() * 5)]}`,
         opacity: `opacity-${Math.floor(Math.random() * 6 + 3) * 10}`, // 30-80
-        top: `${Math.random() * 140 - 20}%`,
-        left: `${Math.random() * 140 - 20}%`,
-        fontWeight: `${[300, 400, 500][Math.floor(Math.random() * 3)]}`,
+        top: `${Math.random() * 140 - 20}%`, // -20% to 120%
+        left: `${Math.random() * 140 - 20}%`, // -20% to 120%
+        fontWeight: `${[300, 400, 500, 600, 700][Math.floor(Math.random() * 5)]}`,
         duration: `${Math.random() * 40 + 20}s`, // 20-60s
         delay: `-${Math.random() * 20}s`
     })),
-    ...Array.from({ length: 40 }).map((_, i) => ({
+    ...Array.from({ length: 120 }).map((_, i) => ({
         text: "aboard",
-        size: `text-${['xs', 'sm', 'md'][Math.floor(Math.random() * 3)]}`,
+        size: `text-${['xs', 'sm', 'md', 'lg'][Math.floor(Math.random() * 4)]}`,
         opacity: `opacity-${Math.floor(Math.random() * 5 + 2) * 10}`, // 20-60
-        top: `${Math.random() * 140 - 20}%`,
-        left: `${Math.random() * 140 - 20}%`,
+        top: `${Math.random() * 140 - 20}%`, // -20% to 120%
+        left: `${Math.random() * 140 - 20}%`, // -20% to 120%
         fontWeight: '300',
         duration: `${Math.random() * 40 + 30}s`, // 30-70s
         delay: `-${Math.random() * 30}s`
@@ -71,8 +72,6 @@ const WelcomeAboardCloud = () => {
                     style={{
                         top: word.top,
                         left: word.left,
-                        right: word.right,
-                        bottom: word.bottom,
                         transform: word.transform,
                         fontWeight: word.fontWeight,
                         direction: word.direction as any,
