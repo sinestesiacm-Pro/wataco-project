@@ -405,7 +405,6 @@ function CheckoutPageContent() {
 
     return (
       <div className={cn("min-h-screen relative pt-24", backgroundClass)}>
-        <AnimatedClouds />
         <div className="relative z-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center mb-6">
                 <Button asChild variant="outline" className={cn("mr-4", isPackageBooking ? 'bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white' : 'bg-background/80')}>
