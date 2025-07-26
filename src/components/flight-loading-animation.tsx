@@ -54,7 +54,7 @@ const generateWords = (count: number) => {
     return generated;
 };
 
-const words = generateWords(600); // Generate 600 elements
+const words = generateWords(510); // Generate 510 elements (15% reduction from 600)
 
 const WelcomeAboardCloud = () => {
     return (
