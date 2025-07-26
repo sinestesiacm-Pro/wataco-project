@@ -114,12 +114,13 @@ const AdditionalServicesCard = ({ onPriceChange }: { onPriceChange: (price: numb
                            </div>
                         </div>
                         <div className="flex items-center gap-4">
-                            <span className="font-semibold text-lg text-tertiary">
+                            <span className="font-semibold text-lg text-primary">
                                 {service.price > 0 ? `$${service.price.toFixed(2)}` : 'Gratis'}
                             </span>
                              <Switch 
                                 id={service.id} 
                                 onCheckedChange={(checked) => handleServiceToggle(checked, service.price)}
+                                className="data-[state=unchecked]:bg-background"
                              />
                         </div>
                     </div>
