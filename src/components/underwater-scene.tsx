@@ -64,7 +64,7 @@ export function UnderwaterScene() {
     }
 
     return (
-        <div className="underwater-scene">
+        <div className="underwater-scene h-full w-full">
             {config.corals.map((coral, index) => (
                 <coral.Component key={`coral-${index}`} style={coral.style} />
             ))}
