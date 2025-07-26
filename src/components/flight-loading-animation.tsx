@@ -40,19 +40,11 @@ const generateWords = (count: number) => {
         const base = baseWords[i % baseWords.length];
         const sizeClass = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
         
-        let leftPosition;
-        // Distribute elements: 70% on the left, 30% on the right for balance
-        if (i % 10 < 3) { // 30% of elements on the right
-             leftPosition = `${Math.random() * 50 + 50}%`; // 50% to 100%
-        } else { // 70% of elements on the left
-             leftPosition = `${Math.random() * 50}%`; // 0% to 50%
-        }
-
         generated.push({
             text: base.text,
             size: sizeClass[Math.floor(Math.random() * sizeClass.length)],
             top: `${Math.random() * 100}%`,
-            left: leftPosition,
+            left: `${Math.random() * 100}%`, // Distribute across the full width
             fontWeight: base.weight.toString(),
             '--translate-y-start': `${Math.random() * 40 - 20}vh`,
             '--translate-y-end': `${Math.random() * 40 - 20}vh`,
@@ -85,6 +77,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 });
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
+    // useMemo ensures the word list is generated only once
     const words = useMemo(() => generateWords(209), []);
     
     return (
