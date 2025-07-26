@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { cn } from "@/lib/utils";
 
 const baseWords = [
@@ -41,7 +41,7 @@ const generateWords = (count: number) => {
         const sizeClass = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
         
         let leftPosition;
-        if (i % 3 !== 0) {
+        if (i % 3 === 0) {
              leftPosition = `${Math.random() * 70 - 20}%`;
         } else {
              leftPosition = `${Math.random() * 70 + 50}%`;
@@ -53,15 +53,13 @@ const generateWords = (count: number) => {
             top: `${Math.random() * 140 - 20}%`,
             left: leftPosition,
             fontWeight: base.weight.toString(),
-            duration: `${Math.random() * 35 + 15}s`, // 15s to 50s
+            duration: `${Math.random() * 35 + 15}s`,
             delay: `-${Math.random() * 40}s`
         });
     }
     return generated;
 };
 
-// Memoize the Word component to prevent re-renders when the parent re-renders.
-// This is the key to fixing the "stuck" words issue.
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
@@ -84,11 +82,10 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
-    // We use useMemo to ensure the word list is only generated once.
-    const words = React.useMemo(() => generateWords(261), []);
+    const words = useMemo(() => generateWords(261), []);
     
     return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
             {words.map((word, index) => (
                 <Word key={index} word={word} />
             ))}
@@ -103,8 +100,9 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
 
     return (
         <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden">
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10" />
             <WelcomeAboardCloud />
-            <div className="relative z-10 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
+            <div className="relative z-30 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
               <h2 className="text-2xl font-bold text-white">De {from} a {to}</h2>
               <p className="text-white/80 mt-1">Buscando entre más de 400 aerolíneas...</p>
             </div>
