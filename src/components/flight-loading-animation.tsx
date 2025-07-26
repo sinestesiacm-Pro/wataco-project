@@ -41,10 +41,11 @@ const generateWords = (count: number) => {
         const sizeClass = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
         
         let leftPosition;
-        if (i % 3 === 0) {
-             leftPosition = `${Math.random() * 70 - 20}%`;
-        } else {
+        // Ensure more elements on the left, less on the right
+        if (i % 4 === 0) { // 25% of elements on the right
              leftPosition = `${Math.random() * 70 + 50}%`;
+        } else { // 75% of elements on the left
+             leftPosition = `${Math.random() * 70 - 20}%`;
         }
 
         generated.push({
@@ -53,10 +54,10 @@ const generateWords = (count: number) => {
             top: `${Math.random() * 100}%`,
             left: leftPosition,
             fontWeight: base.weight.toString(),
-            fadeDuration: `${Math.random() * 20 + 20}s`, // 20s to 40s
-            delay: `-${Math.random() * 40}s`,
-            translateYStart: `${Math.random() * 40 - 20}vh`, // from -20vh to 20vh
-            translateYEnd: `${Math.random() * 40 - 20}vh`, // to -20vh to 20vh
+            '--translate-y-start': `${Math.random() * 40 - 20}vh`,
+            '--translate-y-end': `${Math.random() * 40 - 20}vh`,
+            animationDuration: `${Math.random() * 35 + 15}s`,
+            animationDelay: `-${Math.random() * 50}s`,
         });
     }
     return generated;
@@ -75,7 +76,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
                 fontWeight: word.fontWeight,
                 '--translate-y-start': word.translateYStart,
                 '--translate-y-end': word.translateYEnd,
-                animation: `float-and-fade ${word.fadeDuration} linear ${word.delay} infinite`,
+                animation: `float-and-fade ${word.animationDuration} linear ${word.animationDelay} infinite`,
             } as React.CSSProperties}
         >
             {word.text}
@@ -84,7 +85,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 });
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
-    const words = useMemo(() => generateWords(261), []);
+    const words = useMemo(() => generateWords(209), []);
     
     return (
         <>
