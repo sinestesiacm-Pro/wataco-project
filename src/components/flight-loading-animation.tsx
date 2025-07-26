@@ -11,7 +11,7 @@ const WelcomeAboardCloud = () => {
         { text: "Bienvenido a bordo", size: "text-3xl", opacity: "opacity-95", top: '35%', left: '30%', fontWeight: '600' },
         { text: "Bienvenue à bord", size: "text-3xl", opacity: "opacity-90", top: '55%', left: '70%', fontWeight: '600' },
         
-        // Increased density phrases (original set)
+        // Increased density phrases (original set + more)
         { text: "Willkommen an Bord", size: "text-2xl", opacity: "opacity-85", top: '20%', left: '10%', fontWeight: '500' },
         { text: "Benvenuto a bordo", size: "text-2xl", opacity: "opacity-80", top: '70%', left: '25%', fontWeight: '500' },
         { text: "Bem-vindo a bordo", size: "text-xl", opacity: "opacity-75", top: '15%', left: '80%', fontWeight: '400' },
@@ -146,38 +146,34 @@ const WelcomeAboardCloud = () => {
         { text: "Mirë se vjen", size: "text-xl", opacity: "opacity-80", top: '7%', left: '40%', fontWeight: '500' }
     ];
 
-
     return (
-        <div className="absolute inset-0 flex items-center justify-center">
-             <div className="relative w-full h-full">
-                {words.map((word, index) => (
-                    <span
-                        key={index}
-                        className={cn(
-                            "animate-zoom-fade whitespace-nowrap drop-shadow-lg absolute text-white",
-                            word.size,
-                            word.opacity
-                        )}
-                        style={{
-                            top: word.top,
-                            left: word.left,
-                            right: word.right,
-                            bottom: word.bottom,
-                            transform: word.transform,
-                            fontWeight: word.fontWeight,
-                            direction: word.direction as any,
-                            animationDuration: `${Math.random() * 40 + 20}s`,
-                            animationDelay: `${Math.random() * -40}s`,
-                        } as React.CSSProperties}
-                    >
-                        {word.text}
-                    </span>
-                ))}
-            </div>
+        <div className="relative w-full h-full">
+            {words.map((word, index) => (
+                <span
+                    key={index}
+                    className={cn(
+                        "animate-zoom-fade whitespace-nowrap drop-shadow-lg absolute text-white",
+                        word.size,
+                        word.opacity
+                    )}
+                    style={{
+                        top: word.top,
+                        left: word.left,
+                        right: word.right,
+                        bottom: word.bottom,
+                        transform: word.transform,
+                        fontWeight: word.fontWeight,
+                        direction: word.direction as any,
+                        animationDuration: `${Math.random() * 40 + 20}s`,
+                        animationDelay: `${Math.random() * -40}s`,
+                    } as React.CSSProperties}
+                >
+                    {word.text}
+                </span>
+            ))}
         </div>
     );
 };
-
 
 export function FlightLoadingAnimation({ originName, destinationName }: { originName: string; destinationName: string }) {
     const from = originName.split(',')[0] || "Origen";
@@ -185,7 +181,7 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
 
     return (
         <div className="flex flex-col items-center justify-center text-center w-full h-full overflow-hidden relative">
-            <div className="relative w-full flex-grow flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center">
                 <WelcomeAboardCloud />
             </div>
             <div className="relative z-10 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
