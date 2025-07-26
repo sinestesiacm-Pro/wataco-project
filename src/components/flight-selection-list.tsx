@@ -110,7 +110,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
       </div>
 
        {selectedOutboundFlight && (
-         <Card className="bg-gradient-to-r from-yellow-400 to-orange-500 border-none shadow-lg">
+         <Card className="bg-gradient-to-r from-yellow-400 to-amber-500 border-none shadow-lg">
             <CardContent className="p-4 flex items-center justify-between gap-4 text-gray-800">
                 <div className="flex items-center gap-3">
                     <Plane className="h-5 w-5"/>

@@ -32,7 +32,7 @@ const countryCodes = [
 
 const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card className="bg-white/90 backdrop-blur-sm text-gray-800 border-2 border-blue-200/50">
+        <Card className="bg-white text-gray-800 border-2 border-blue-200/50">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><User /> ¿Quién viaja?</CardTitle>
                 <CardDescription>Ingresa los datos del pasajero principal. Deben coincidir con su documento de identidad.</CardDescription>
@@ -124,7 +124,7 @@ const ContactInfoForm = ({ isPackageBooking }: { isPackageBooking: boolean }) =>
     }
 
     return (
-        <Card className="bg-white/90 backdrop-blur-sm text-gray-800 border-2 border-blue-200/50">
+        <Card className="bg-white text-gray-800 border-2 border-blue-200/50">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Mail /> Información de Contacto</CardTitle>
                 <CardDescription>Te enviaremos la confirmación de tu reserva a este correo.</CardDescription>
@@ -188,7 +188,7 @@ const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceCh
     }
     
     return (
-        <Card className="bg-white/90 backdrop-blur-sm text-gray-800 border-2 border-blue-200/50">
+        <Card className="bg-white text-gray-800 border-2 border-blue-200/50">
             <CardHeader>
                 <CardTitle>Mejora tu Viaje</CardTitle>
                 <CardDescription>Añade servicios adicionales para una experiencia inolvidable.</CardDescription>
@@ -222,7 +222,7 @@ const AdditionalServicesForm = ({ onPriceChange, isPackageBooking }: { onPriceCh
 
 const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     return (
-        <Card className="bg-white/90 backdrop-blur-sm text-gray-800 border-2 border-blue-200/50">
+        <Card className="bg-white text-gray-800 border-2 border-blue-200/50">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><CreditCard /> Método de Pago</CardTitle>
                 <CardDescription>Todas las transacciones son seguras y encriptadas.</CardDescription>
@@ -325,7 +325,7 @@ const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
     const total = baseTotal + addons + extraServicesPrice;
     
     return (
-        <Card className="sticky top-28 shadow-lg bg-white/90 backdrop-blur-sm text-gray-800 border-2 border-blue-200/50">
+        <Card className="sticky top-28 shadow-lg bg-white text-gray-800 border-2 border-blue-200/50">
             <CardHeader>
                 <CardTitle>Resumen del Pedido</CardTitle>
                  {pkg && <CardDescription>Paquete: {pkg.title}</CardDescription>}
