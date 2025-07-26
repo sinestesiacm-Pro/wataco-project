@@ -34,9 +34,9 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
     const destinationCity = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
 
     return (
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
+        <Card className="bg-card text-card-foreground">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
-                <CardTitle className="text-xl font-headline text-white">{title}</CardTitle>
+                <CardTitle className="text-xl font-headline text-card-foreground">{title}</CardTitle>
                 <Button variant="link" onClick={onChangeClick} className="text-primary">Cambiar vuelo</Button>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -50,26 +50,26 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
                     />
                     <div>
                         <p className="font-semibold">{formatDate(firstSegment.departure.at)}</p>
-                        <p className="text-sm text-white/80">{airlineName} &middot; {firstSegment.carrierCode} {firstSegment.number}</p>
+                        <p className="text-sm text-muted-foreground">{airlineName} &middot; {firstSegment.carrierCode} {firstSegment.number}</p>
                     </div>
                 </div>
                 <div className="flex items-center justify-between">
                      <div className="text-center">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
-                        <p className="font-semibold text-white/80">{firstSegment.departure.iataCode}</p>
-                        <p className="text-xs text-white/70">{originCity}</p>
+                        <p className="font-semibold text-card-foreground">{firstSegment.departure.iataCode}</p>
+                        <p className="text-xs text-muted-foreground">{originCity}</p>
                     </div>
-                    <div className="flex-grow flex flex-col items-center text-white/70 px-4">
+                    <div className="flex-grow flex flex-col items-center text-muted-foreground px-4">
                         <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
-                        <div className="w-full h-px bg-white/20 relative my-1">
-                           <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-white p-0.5 rounded-full"/>
+                        <div className="w-full h-px bg-border relative my-1">
+                           <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-card-foreground p-0.5 rounded-full"/>
                         </div>
                          <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
                     </div>
                      <div className="text-center">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
-                        <p className="font-semibold text-white/80">{lastSegment.arrival.iataCode}</p>
-                        <p className="text-xs text-white/70">{destinationCity}</p>
+                        <p className="font-semibold text-card-foreground">{lastSegment.arrival.iataCode}</p>
+                        <p className="text-xs text-muted-foreground">{destinationCity}</p>
                     </div>
                 </div>
             </CardContent>
@@ -99,18 +99,18 @@ const AdditionalServicesCard = ({ onPriceChange }: { onPriceChange: (price: numb
     }
     
     return (
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
+        <Card className="bg-card text-card-foreground">
             <CardHeader>
-                <CardTitle className="text-xl font-headline text-white">Servicios Adicionales</CardTitle>
+                <CardTitle className="text-xl font-headline text-card-foreground">Servicios Adicionales</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
                 {additionalServices.map(service => (
-                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-black/20 border-white/20">
+                    <div key={service.id} className="flex items-center justify-between p-3 rounded-lg border bg-background">
                         <div className="flex items-center gap-4">
                            <service.icon className="h-8 w-8 text-primary" />
                            <div>
-                             <Label htmlFor={service.id} className="font-semibold text-white">{service.name}</Label>
-                             <p className="text-xs text-white/80">{service.description}</p>
+                             <Label htmlFor={service.id} className="font-semibold text-card-foreground">{service.name}</Label>
+                             <p className="text-xs text-muted-foreground">{service.description}</p>
                            </div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -141,17 +141,17 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, addonsPrice }: {outboun
     const checkoutLink = `/flights/checkout?outboundId=${outboundFlight.id}${returnFlight ? `&returnId=${returnFlight.id}` : ''}&addons=${addonsPrice + additionalServicesPrice}`;
 
     return (
-        <Card className="sticky top-24 shadow-lg bg-white/10 backdrop-blur-xl border border-white/20 text-white">
+        <Card className="sticky top-24 shadow-lg bg-card text-card-foreground">
             <CardHeader>
-                <CardTitle className="text-2xl font-bold font-headline text-white">Resumen de Precio</CardTitle>
+                <CardTitle className="text-2xl font-bold font-headline text-card-foreground">Resumen de Precio</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
                 <div className="flex justify-between">
-                    <span className="text-white/80">Vuelos</span>
+                    <span className="text-muted-foreground">Vuelos</span>
                     <span>${basePrice.toFixed(2)}</span>
                 </div>
                  <div className="flex justify-between">
-                    <span className="text-white/80">Impuestos y tasas</span>
+                    <span className="text-muted-foreground">Impuestos y tasas</span>
                     <span>${taxes.toFixed(2)}</span>
                 </div>
                  {addonsPrice > 0 && (
@@ -166,7 +166,7 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, addonsPrice }: {outboun
                         <span>${additionalServicesPrice.toFixed(2)}</span>
                     </div>
                  )}
-                <Separator className="bg-white/20"/>
+                <Separator className="bg-border"/>
                 <div className="flex justify-between font-bold text-xl">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
@@ -200,16 +200,16 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
                 
                 <AdditionalServicesCard onPriceChange={(price) => setExtraServicesPrice(prev => prev + price)} />
 
-                 <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
+                 <Card className="bg-card text-card-foreground">
                     <CardHeader>
-                        <CardTitle className="text-xl font-headline text-white">Equipaje</CardTitle>
+                        <CardTitle className="text-xl font-headline text-card-foreground">Equipaje</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="flex items-center gap-4">
-                            <span className="font-semibold text-white">Tu vuelo incluye:</span>
+                            <span className="font-semibold text-card-foreground">Tu vuelo incluye:</span>
                             <FlightBaggageInfo flight={outboundFlight} />
                         </div>
-                        <Button variant="outline" disabled className="bg-transparent border-white/20 hover:bg-white/10 text-white/70">Añadir más equipaje (Próximamente)</Button>
+                        <Button variant="outline" disabled className="bg-transparent border-border hover:bg-accent text-muted-foreground">Añadir más equipaje (Próximamente)</Button>
                     </CardContent>
                 </Card>
             </div>
