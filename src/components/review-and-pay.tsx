@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';

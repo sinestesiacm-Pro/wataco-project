@@ -300,12 +300,11 @@ const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
 };
 
 
-const PriceSummary = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
+const PriceSummary = ({ isPackageBooking, extraServicesPrice }: { isPackageBooking: boolean, extraServicesPrice: number }) => {
     const searchParams = useSearchParams();
     const packageId = searchParams.get('packageId');
     const hotelPrice = parseFloat(searchParams.get('hotelPrice') || '0');
     
-    const [extraServicesPrice, setExtraServicesPrice] = useState(0);
     const [pkg, setPackage] = useState<PackageOffer | null>(null);
 
     useEffect(() => {
@@ -429,7 +428,7 @@ function CheckoutPageContent() {
                         </div>
                     </div>
                     <div className="lg:col-span-1">
-                        <PriceSummary isPackageBooking={isPackageBooking} />
+                        <PriceSummary isPackageBooking={isPackageBooking} extraServicesPrice={extraServicesPrice} />
                     </div>
                 </div>
             </form>
