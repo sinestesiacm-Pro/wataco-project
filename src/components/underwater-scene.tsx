@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 // More detailed SVG-based coral shapes
 const Coral1 = ({ style }: { style: React.CSSProperties }) => (
@@ -22,10 +23,16 @@ const Bubble = ({ style }: { style: React.CSSProperties }) => (
     <div className="bubble" style={style} />
 );
 
-const Fish = ({ style }: { style: React.CSSProperties }) => (
+const fishColors = [
+  'rgba(255, 152, 0, 0.4)', // Orange
+  'rgba(0, 191, 255, 0.4)', // Deep Sky Blue
+  'rgba(255, 215, 0, 0.4)', // Gold
+];
+
+const Fish = ({ style, color }: { style: React.CSSProperties, color: string }) => (
     <div className="fish" style={style}>
-        <div className="fish-body" />
-        <div className="fish-tail" />
+        <div className="fish-body" style={{ backgroundColor: color }} />
+        <div className="fish-tail" style={{ borderRight: `20px solid ${color}` }}/>
     </div>
 );
 
@@ -46,12 +53,13 @@ export function UnderwaterScene() {
           animationDelay: `${Math.random() * 8}s`,
         }
       })),
-      fish: Array.from({ length: 7 }).map(() => ({
+      fish: Array.from({ length: 7 }).map((_, i) => ({
         style: {
           top: `${Math.random() * 80 + 10}%`,
           animationDuration: `${Math.random() * 15 + 10}s`,
           animationDelay: `${Math.random() * 15}s`,
-        }
+        },
+        color: fishColors[i % fishColors.length],
       })),
     }
 
@@ -64,7 +72,7 @@ export function UnderwaterScene() {
                 <Bubble key={`bubble-${index}`} style={bubble.style} />
             ))}
             {config.fish.map((fish, index) => (
-                <Fish key={`fish-${index}`} style={fish.style} />
+                <Fish key={`fish-${index}`} style={fish.style} color={fish.color} />
             ))}
         </div>
     );
