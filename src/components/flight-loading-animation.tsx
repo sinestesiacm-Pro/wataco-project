@@ -93,7 +93,9 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
 
     return (
         <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden">
-             <WelcomeAboardCloud />
+            <div className="absolute inset-0">
+                <WelcomeAboardCloud />
+            </div>
             <div className="relative z-10 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
               <h2 className="text-2xl font-bold text-white">De {from} a {to}</h2>
               <p className="text-white/80 mt-1">Buscando entre más de 400 aerolíneas...</p>
