@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const baseWords = [
-    { text: "Welcome Aboard", weight: 500 },
-    { text: "Bienvenido a bordo", weight: 500 },
-    { text: "Willkommen an Bord", weight: 400 },
-    { text: "Bienvenue à bord", weight: 400 },
+    { text: "Welcome Aboard", weight: 400 },
+    { text: "Bienvenido a bordo", weight: 400 },
+    { text: "Willkommen an Bord", weight: 300 },
+    { text: "Bienvenue à bord", weight: 300 },
     { text: "Benvenuto a bordo", weight: 300 },
     { text: "Bem-vindo a bordo", weight: 300 },
     { text: "ようこそ", weight: 400 },
@@ -53,16 +53,19 @@ const generateWords = (count: number, isMobile: boolean) => {
             text: base.text,
             size: sizeClassOptions[Math.floor(Math.random() * sizeClassOptions.length)],
             top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`, // Distribute evenly
             fontWeight: base.weight.toString(),
             '--translate-y-start': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
             '--translate-y-end': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
-            animation: `float-and-fade ${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s linear -${Math.random() * 50}s infinite`,
+            animationName: 'float-and-fade, move-clouds',
+            animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s, ${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
+            animationDelay: `-${Math.random() * 50}s, -${Math.random() * 50}s`,
+            animationTimingFunction: 'linear, linear',
+            animationIterationCount: 'infinite, infinite',
         });
     }
     return generated;
 };
-
 
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
@@ -77,7 +80,11 @@ const Word = React.memo(function Word({ word }: { word: any }) {
                 fontWeight: word.fontWeight,
                 '--translate-y-start': word['--translate-y-start'],
                 '--translate-y-end': word['--translate-y-end'],
-                animation: word.animation,
+                animationName: word.animationName,
+                animationDuration: word.animationDuration,
+                animationDelay: word.animationDelay,
+                animationTimingFunction: word.animationTimingFunction,
+                animationIterationCount: word.animationIterationCount,
             } as React.CSSProperties}
         >
             {word.text}
@@ -87,7 +94,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 60 : 209;
+    const wordCount = isMobile ? 80 : 261;
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
     

@@ -233,14 +233,14 @@
 @keyframes float-and-fade {
   0% {
     opacity: 0;
-    transform: translateY(var(--translate-y-start)) scale(0.5);
+    transform: scale(0.5);
   }
   20%, 80% {
     opacity: 1;
-    transform: translateY(calc(var(--translate-y-start) + (var(--translate-y-end) - var(--translate-y-start)) * (0.5))) scale(1);
+    transform: scale(1);
   }
   100% {
     opacity: 0;
-    transform: translateY(var(--translate-y-end)) scale(1.1);
+    transform: scale(1.1);
   }
 }
