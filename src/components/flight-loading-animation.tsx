@@ -50,11 +50,14 @@ const generateWords = (count: number) => {
         generated.push({
             text: base.text,
             size: sizeClass[Math.floor(Math.random() * sizeClass.length)],
-            top: `${Math.random() * 140 - 20}%`,
+            top: `${Math.random() * 100}%`,
             left: leftPosition,
             fontWeight: base.weight.toString(),
-            duration: `${Math.random() * 35 + 15}s`,
-            delay: `-${Math.random() * 40}s`
+            fadeDuration: `${Math.random() * 10 + 10}s`, // 10s to 20s
+            moveDuration: `${Math.random() * 20 + 20}s`, // 20s to 40s
+            delay: `-${Math.random() * 30}s`,
+            translateYStart: `${Math.random() * 40 - 20}vh`, // from -20vh to 20vh
+            translateYEnd: `${Math.random() * 40 - 20}vh`, // to -20vh to 20vh
         });
     }
     return generated;
@@ -71,7 +74,12 @@ const Word = React.memo(function Word({ word }: { word: any }) {
                 top: word.top,
                 left: word.left,
                 fontWeight: word.fontWeight,
-                animation: `zoom-and-fade ${word.duration} linear ${word.delay} infinite`,
+                '--translate-y-start': word.translateYStart,
+                '--translate-y-end': word.translateYEnd,
+                animation: `
+                    float-and-fade ${word.fadeDuration} linear ${word.delay} infinite,
+                    move-and-scale ${word.moveDuration} linear ${word.delay} infinite
+                `,
             } as React.CSSProperties}
         >
             {word.text}
@@ -79,16 +87,18 @@ const Word = React.memo(function Word({ word }: { word: any }) {
     );
 });
 
-
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const words = useMemo(() => generateWords(261), []);
     
     return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
-            {words.map((word, index) => (
-                <Word key={index} word={word} />
-            ))}
-        </div>
+        <>
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10" />
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
+                {words.map((word, index) => (
+                    <Word key={index} word={word} />
+                ))}
+            </div>
+        </>
     )
 })
 
@@ -99,7 +109,6 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
 
     return (
         <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden">
-            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10" />
             <WelcomeAboardCloud />
             <div className="relative z-30 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
               <h2 className="text-2xl font-bold text-white">De {from} a {to}</h2>
