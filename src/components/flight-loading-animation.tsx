@@ -10,71 +10,70 @@ interface FlightLoadingAnimationProps {
 }
 
 const WelcomeAboardCloud = () => {
-    // A much larger and more diverse array to create density.
-    // The layout is now controlled by Flexbox, so the exact position is less important than the order and size.
+    // A large, deliberately positioned array to create a dense, full-screen word cloud.
+    // Positions are in percentages to be responsive.
     const words = [
-        { text: "Bienvenue", size: "text-2xl" },
-        { text: "Welcome", size: "text-4xl", opacity: "opacity-100" },
-        { text: "Willkommen", size: "text-xl" },
-        { text: "Bienvenido", size: "text-3xl", opacity: "opacity-95" },
-        { text: "Benvenuto", size: "text-2xl" },
-        { text: "Bem-vindo", size: "text-xl" },
-        { text: "Välkommen", size: "text-lg" },
-        { text: "Karibu", size: "text-2xl" },
-        { text: "어서 오세요", size: "text-3xl" },
-        { text: "ようこそ", size: "text-xl" },
-        { text: "歡迎", size: "text-3xl" },
-        { text: "Selamat datang", size: "text-lg" },
-        { text: "Fáilte", size: "text-2xl" },
-        { text: "Witamy", size: "text-xl" },
-        { text: "Hoş geldiniz", size: "text-2xl" },
-        { text: "Καλώς ήρθατε", size: "text-lg" },
-        { text: "Ласкаво просимо", size: "text-xl" },
-        { text: "Добро пожаловать", size: "text-2xl" },
-        { text: "أهلاً بك", size: "text-4xl" },
-        { text: "Siyakwamukela", size: "text-lg" },
-        { text: "Vítejte", size: "text-xl" },
-        { text: "Tervetuloa", size: "text-2xl" },
-        { text: "स्वआगत है", size: "text-3xl" },
-        { text: "Maligayang pagdating", size: "text-lg" },
-        { text: "Failte", size: "text-xl" },
-        { text: "Croeso", size: "text-2xl" },
-        { text: "Üdvözöljük", size: "text-lg" },
-        { text: "Barka da zuwa", size: "text-xl" },
-        { text: "Bine aţi venit", size: "text-lg" },
-        { text: "Velkomin", size: "text-xl" },
-        { text: "Sugeng rawuh", size: "text-lg" },
-        { text: "ברוכים הבאים", size: "text-3xl" },
-        { text: "வரவேற்பு", size: "text-2xl" },
-        { text: "Dobrodošli", size: "text-xl" },
-        { text: "Sveiki atvykę", size: "text-lg" },
-        { text: "Tere tulemast", size: "text-xl" },
-        { text: "Welkom", size: "text-2xl" },
-        { text: "Chào mừng", size: "text-lg" },
-        { text: "Benvinguts", size: "text-xl" },
-        { text: "Vitajte", size: "text-lg" },
-        { text: "Gaidīti", size: "text-xl" },
-        { text: "Sveiki", size: "text-2xl" },
-        { text: "Mire se vini", size: "text-lg" },
-        { text: "Mirë se erdhët", size: "text-xl" },
-        { text: "Wëllkomm", size: "text-2xl" },
+        { text: "Welcome", size: "text-4xl", opacity: "opacity-100", top: '45%', left: '50%', transform: 'translate(-50%, -50%)' },
+        { text: "Bienvenido", size: "text-3xl", opacity: "opacity-95", top: '35%', left: '30%' },
+        { text: "Bienvenue", size: "text-3xl", opacity: "opacity-90", top: '55%', left: '70%' },
+        { text: "Willkommen", size: "text-2xl", opacity: "opacity-85", top: '20%', left: '10%' },
+        { text: "Benvenuto", size: "text-2xl", opacity: "opacity-80", top: '70%', left: '25%' },
+        { text: "Bem-vindo", size: "text-xl", opacity: "opacity-75", top: '15%', left: '80%' },
+        { text: "Välkommen", size: "text-lg", opacity: "opacity-70", top: '85%', left: '5%' },
+        { text: "Karibu", size: "text-2xl", opacity: "opacity-85", top: '5%', left: '30%' },
+        { text: "어서 오세요", size: "text-3xl", opacity: "opacity-90", top: '60%', left: '5%' },
+        { text: "ようこそ", size: "text-xl", opacity: "opacity-80", top: '90%', left: '85%' },
+        { text: "歡迎", size: "text-3xl", opacity: "opacity-85", top: '10%', left: '55%' },
+        { text: "Selamat datang", size: "text-lg", opacity: "opacity-75", top: '80%', left: '60%' },
+        { text: "Fáilte", size: "text-2xl", opacity: "opacity-90", top: '25%', left: '45%' },
+        { text: "Witamy", size: "text-xl", opacity: "opacity-80", top: '75%', left: '90%' },
+        { text: "Hoş geldiniz", size: "text-2xl", opacity: "opacity-85", top: '40%', left: '90%' },
+        { text: "Καλώς ήρθατε", size: "text-lg", opacity: "opacity-70", top: '5%', left: '5%' },
+        { text: "Ласкаво просимо", size: "text-xl", opacity: "opacity-85", top: '95%', left: '50%', transform: 'translateX(-50%)' },
+        { text: "Добро пожаловать", size: "text-2xl", opacity: "opacity-90", top: '50%', left: '15%' },
+        { text: "أهلاً بك", size: "text-4xl", opacity: "opacity-95", top: '30%', left: '75%' },
+        { text: "Siyakwamukela", size: "text-lg", opacity: "opacity-70", top: '88%', left: '30%' },
+        { text: "Vítejte", size: "text-xl", opacity: "opacity-80", top: '65%', left: '40%' },
+        { text: "Tervetuloa", size: "text-2xl", opacity: "opacity-85", top: '15%', left: '35%' },
+        { text: "स्वआगत है", size: "text-3xl", opacity: "opacity-90", top: '80%', left: '75%' },
+        { text: "Maligayang pagdating", size: "text-lg", opacity: "opacity-75", top: '68%', left: '65%' },
+        { text: "Failte", size: "text-xl", opacity: "opacity-80", top: '5%', left: '85%' },
+        { text: "Croeso", size: "text-2xl", opacity: "opacity-85", top: '92%', left: '15%' },
+        { text: "Üdvözöljük", size: "text-lg", opacity: "opacity-70", top: '38%', left: '5%' },
+        { text: "Barka da zuwa", size: "text-xl", opacity: "opacity-75", top: '58%', left: '85%' },
+        { text: "Bine aţi venit", size: "text-lg", opacity: "opacity-70", top: '28%', left: '95%' },
+        { text: "Velkomin", size: "text-xl", opacity: "opacity-80", top: '78%', left: '15%' },
+        { text: "Sugeng rawuh", size: "text-lg", opacity: "opacity-75", top: '10%', left: '20%' },
+        { text: "ברוכים הבאים", size: "text-3xl", opacity: "opacity-95", top: '85%', left: '45%' },
+        { text: "வரவேற்பு", size: "text-2xl", opacity: "opacity-85", top: '35%', left: '55%' },
+        { text: "Dobrodošli", size: "text-xl", opacity: "opacity-80", top: '60%', left: '50%' },
+        { text: "Sveiki atvykę", size: "text-lg", opacity: "opacity-70", top: '95%', left: '75%' },
+        { text: "Tere tulemast", size: "text-xl", opacity: "opacity-80", top: '2%', left: '70%' },
+        { text: "Welkom", size: "text-2xl", opacity: "opacity-85", top: '70%', left: '5%' },
+        { text: "Chào mừng", size: "text-lg", opacity: "opacity-75", top: '5%', left: '45%' },
+        { text: "Benvinguts", size: "text-xl", opacity: "opacity-80", top: '90%', left: '30%' },
+        { text: "Vitajte", size: "text-lg", opacity: "opacity-70", top: '25%', left: '25%' },
     ];
 
-
     return (
-        <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 px-4 text-white font-body leading-tight">
+        <div className="relative w-full h-full">
             {words.map((word, index) => (
                 <span
                     key={index}
                     className={cn(
-                        "animate-zoom-fade whitespace-nowrap drop-shadow-lg",
+                        "animate-zoom-fade whitespace-nowrap drop-shadow-lg absolute",
                         word.size,
-                        word.opacity || "opacity-70"
+                        word.opacity
                     )}
                     style={{
-                        animationDuration: `${Math.random() * 5 + 8}s`, // 8s to 13s
-                        animationDelay: `${Math.random() * -5}s`,     // -5s to 0s
-                    }}
+                        top: word.top,
+                        left: word.left,
+                        right: word.right,
+                        bottom: word.bottom,
+                        transform: word.transform,
+                        animationDuration: `${Math.random() * 5 + 8}s`,
+                        animationDelay: `${Math.random() * -5}s`,
+                    } as React.CSSProperties}
                 >
                     {word.text}
                 </span>
@@ -90,11 +89,9 @@ export function FlightLoadingAnimation({ originName, destinationName }: FlightLo
 
     return (
         <div className="flex flex-col items-center justify-center text-center w-full h-full overflow-hidden">
-            {/* Main container for the word cloud, ensuring it's centered and has space */}
-            <div className="relative w-full flex-grow flex items-center justify-center py-8">
+            <div className="relative w-full flex-grow flex items-center justify-center">
                 <WelcomeAboardCloud />
             </div>
-            {/* Bottom info section */}
             <div className="relative z-10 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
               <h2 className="text-2xl font-bold text-white drop-shadow-lg">De {from} a {to}</h2>
               <p className="text-white/80 mt-1 drop-shadow-lg">Buscando entre más de 400 aerolíneas...</p>

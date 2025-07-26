@@ -160,7 +160,7 @@ function FlightSelectionPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-flights-gradient background-pan-animation relative overflow-hidden">
+      <div className="w-full h-screen bg-flights-gradient background-pan-animation relative overflow-hidden">
             <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />
         </div>
     );
