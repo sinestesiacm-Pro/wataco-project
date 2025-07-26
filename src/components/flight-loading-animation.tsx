@@ -64,15 +64,14 @@ const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
             className={cn(
-                "animate-zoom-fade whitespace-nowrap absolute text-white",
+                "whitespace-nowrap absolute text-white",
                 word.size
             )}
             style={{
                 top: word.top,
                 left: word.left,
                 fontWeight: word.fontWeight,
-                animationDuration: word.duration,
-                animationDelay: word.delay,
+                animation: `zoom-and-fade ${word.duration} linear ${word.delay} infinite`,
             } as React.CSSProperties}
         >
             {word.text}

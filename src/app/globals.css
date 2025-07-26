@@ -244,7 +244,3 @@
     opacity: 0;
   }
 }
-
-.animate-zoom-fade {
-  animation: zoom-and-fade linear infinite;
-}
