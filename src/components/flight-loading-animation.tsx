@@ -60,32 +60,42 @@ const generateWords = (count: number) => {
     return generated;
 };
 
-const words = generateWords(261);
+// Memoize the Word component to prevent re-renders when the parent re-renders.
+// This is the key to fixing the "stuck" words issue.
+const Word = React.memo(function Word({ word }: { word: any }) {
+    return (
+        <span
+            className={cn(
+                "animate-zoom-fade whitespace-nowrap absolute text-white",
+                word.size
+            )}
+            style={{
+                top: word.top,
+                left: word.left,
+                fontWeight: word.fontWeight,
+                animationDuration: word.duration,
+                animationDelay: word.delay,
+            } as React.CSSProperties}
+        >
+            {word.text}
+        </span>
+    );
+});
 
-const WelcomeAboardCloud = () => {
+
+const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
+    // We use useMemo to ensure the word list is only generated once.
+    const words = React.useMemo(() => generateWords(261), []);
+    
     return (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {words.map((word, index) => (
-                <span
-                    key={index}
-                    className={cn(
-                        "animate-zoom-fade whitespace-nowrap absolute text-white",
-                        word.size
-                    )}
-                    style={{
-                        top: word.top,
-                        left: word.left,
-                        fontWeight: word.fontWeight,
-                        animationDuration: word.duration,
-                        animationDelay: word.delay,
-                    } as React.CSSProperties}
-                >
-                    {word.text}
-                </span>
+                <Word key={index} word={word} />
             ))}
         </div>
     )
-}
+})
+
 
 export function FlightLoadingAnimation({ originName, destinationName }: { originName: string; destinationName: string }) {
     const from = originName.split(',')[0] || "Origen";
@@ -93,9 +103,7 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
 
     return (
         <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden">
-            <div className="absolute inset-0">
-                <WelcomeAboardCloud />
-            </div>
+            <WelcomeAboardCloud />
             <div className="relative z-10 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
               <h2 className="text-2xl font-bold text-white">De {from} a {to}</h2>
               <p className="text-white/80 mt-1">Buscando entre más de 400 aerolíneas...</p>
