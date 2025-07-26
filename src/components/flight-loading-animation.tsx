@@ -61,7 +61,7 @@ const WelcomeAboardCloud = () => {
                 <span
                     key={index}
                     className={cn(
-                        "animate-zoom-fade whitespace-nowrap drop-shadow-lg absolute",
+                        "animate-zoom-fade whitespace-nowrap drop-shadow-lg absolute text-white",
                         word.size,
                         word.opacity
                     )}
