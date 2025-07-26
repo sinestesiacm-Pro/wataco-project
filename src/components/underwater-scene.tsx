@@ -37,7 +37,7 @@ export function UnderwaterScene() {
         { Component: Coral1, style: { width: '120px', height: '120px', left: '80%', bottom: '-10px', transform: 'scaleX(-1)'} },
         { Component: Coral2, style: { width: '180px', height: '100px', left: '60%', bottom: '-30px' } },
       ],
-      bubbles: Array.from({ length: 25 }).map(() => ({
+      bubbles: Array.from({ length: 50 }).map(() => ({
         style: {
           left: `${Math.random() * 100}%`,
           width: `${Math.random() * 20 + 5}px`,
