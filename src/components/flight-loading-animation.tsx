@@ -110,36 +110,38 @@ const WelcomeAboardCloud = () => {
 
 
     return (
-        <div className="relative w-full h-full">
-            {words.map((word, index) => (
-                <span
-                    key={index}
-                    className={cn(
-                        "animate-zoom-fade whitespace-nowrap drop-shadow-lg absolute text-white",
-                        word.size,
-                        word.opacity
-                    )}
-                    style={{
-                        top: word.top,
-                        left: word.left,
-                        right: word.right,
-                        bottom: word.bottom,
-                        transform: word.transform,
-                        fontWeight: word.fontWeight,
-                        direction: word.direction as any,
-                        animationDuration: `${Math.random() * 40 + 20}s`,
-                        animationDelay: `${Math.random() * -40}s`,
-                    } as React.CSSProperties}
-                >
-                    {word.text}
-                </span>
-            ))}
+        <div className="absolute inset-0 flex items-center justify-center">
+             <div className="relative w-full h-full">
+                {words.map((word, index) => (
+                    <span
+                        key={index}
+                        className={cn(
+                            "animate-zoom-fade whitespace-nowrap drop-shadow-lg absolute text-white",
+                            word.size,
+                            word.opacity
+                        )}
+                        style={{
+                            top: word.top,
+                            left: word.left,
+                            right: word.right,
+                            bottom: word.bottom,
+                            transform: word.transform,
+                            fontWeight: word.fontWeight,
+                            direction: word.direction as any,
+                            animationDuration: `${Math.random() * 40 + 20}s`,
+                            animationDelay: `${Math.random() * -40}s`,
+                        } as React.CSSProperties}
+                    >
+                        {word.text}
+                    </span>
+                ))}
+            </div>
         </div>
     );
 };
 
 
-export function FlightLoadingAnimation({ originName, destinationName }: FlightLoadingAnimationProps) {
+export function FlightLoadingAnimation({ originName, destinationName }: { originName: string; destinationName: string }) {
     const from = originName.split(',')[0] || "Origen";
     const to = destinationName.split(',')[0] || "Destino";
 
