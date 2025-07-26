@@ -19,7 +19,6 @@ import { Switch } from '@/components/ui/switch';
 import { recommendedPackages } from '@/lib/mock-packages';
 import type { PackageOffer } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { AnimatedClouds } from '@/components/animated-clouds';
 
 const countryCodes = [
     { code: 'co', name: 'Colombia', dial: '+57' },
@@ -41,16 +40,16 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <Label htmlFor="firstName">Nombre(s)</Label>
-                        <Input id="firstName" placeholder="John" className="bg-white/80 border-gray-300" />
+                        <Input id="firstName" placeholder="John" className="bg-white border-gray-300" />
                     </div>
                     <div>
                         <Label htmlFor="lastName">Apellido(s)</Label>
-                        <Input id="lastName" placeholder="Doe" className="bg-white/80 border-gray-300" />
+                        <Input id="lastName" placeholder="Doe" className="bg-white border-gray-300" />
                     </div>
                 </div>
                  <div>
                     <Label htmlFor="birthDate">Fecha de Nacimiento</Label>
-                    <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" className="bg-white/80 border-gray-300" />
+                    <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" className="bg-white border-gray-300" />
                 </div>
                 <div>
                     <Label>Género</Label>
@@ -68,7 +67,7 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                 <div>
                   <Label htmlFor="residence-country">País de Residencia</Label>
                    <Select>
-                        <SelectTrigger id="residence-country" className="bg-white/80 border-gray-300">
+                        <SelectTrigger id="residence-country" className="bg-white border-gray-300">
                             <SelectValue placeholder="Selecciona un país" />
                         </SelectTrigger>
                         <SelectContent>
@@ -85,7 +84,7 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                     <div>
                         <Label htmlFor="document-type">Tipo de Documento</Label>
                         <Select>
-                            <SelectTrigger id="document-type" className="bg-white/80 border-gray-300">
+                            <SelectTrigger id="document-type" className="bg-white border-gray-300">
                                 <SelectValue placeholder="Seleccionar" />
                             </SelectTrigger>
                             <SelectContent>
@@ -96,7 +95,7 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                     </div>
                      <div>
                         <Label htmlFor="document-number">Número de Documento</Label>
-                        <Input id="document-number" placeholder="AB1234567" className="bg-white/80 border-gray-300" />
+                        <Input id="document-number" placeholder="AB1234567" className="bg-white border-gray-300" />
                     </div>
                 </div>
             </CardContent>
@@ -132,13 +131,13 @@ const ContactInfoForm = ({ isPackageBooking }: { isPackageBooking: boolean }) =>
             <CardContent className="space-y-4">
                 <div>
                     <Label htmlFor="email">Correo Electrónico</Label>
-                    <Input id="email" type="email" placeholder="john.doe@example.com" className="bg-white/80 border-gray-300" />
+                    <Input id="email" type="email" placeholder="john.doe@example.com" className="bg-white border-gray-300" />
                 </div>
                 <div>
                     <Label htmlFor="phone">Número de Teléfono</Label>
                     <div className="flex gap-2 mt-1">
                         <Select value={selectedCountryCode} onValueChange={setSelectedCountryCode}>
-                            <SelectTrigger className="w-[120px] bg-white/80 border-gray-300">
+                            <SelectTrigger className="w-[120px] bg-white border-gray-300">
                                 <SelectValue asChild>
                                     <SelectedCountryDisplay code={selectedCountryCode} />
                                 </SelectValue>
@@ -159,7 +158,7 @@ const ContactInfoForm = ({ isPackageBooking }: { isPackageBooking: boolean }) =>
                                 ))}
                             </SelectContent>
                         </Select>
-                        <Input id="phone" type="tel" placeholder="234 567 890" className="flex-grow bg-white/80 border-gray-300" />
+                        <Input id="phone" type="tel" placeholder="234 567 890" className="flex-grow bg-white border-gray-300" />
                     </div>
                 </div>
             </CardContent>
@@ -246,42 +245,42 @@ const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                 <div className="space-y-4">
                     <div>
                         <Label htmlFor="cardHolder">Nombre en la tarjeta</Label>
-                        <Input id="cardHolder" placeholder="John Doe" className="bg-white/80 border-gray-300" />
+                        <Input id="cardHolder" placeholder="John Doe" className="bg-white border-gray-300" />
                     </div>
                     <div>
                         <Label htmlFor="cardNumber">Número de tarjeta</Label>
-                        <Input id="cardNumber" placeholder="**** **** **** 1234" className="bg-white/80 border-gray-300" />
+                        <Input id="cardNumber" placeholder="**** **** **** 1234" className="bg-white border-gray-300" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <Label htmlFor="cardExpiry">Vencimiento</Label>
-                            <Input id="cardExpiry" placeholder="MM/AA" className="bg-white/80 border-gray-300" />
+                            <Input id="cardExpiry" placeholder="MM/AA" className="bg-white border-gray-300" />
                         </div>
                         <div>
                             <Label htmlFor="cardCvc">CVC</Label>
-                            <Input id="cardCvc" placeholder="123" className="bg-white/80 border-gray-300" />
+                            <Input id="cardCvc" placeholder="123" className="bg-white border-gray-300" />
                         </div>
                     </div>
                      <Separator className="my-4"/>
                      <CardTitle className="text-lg">Dirección de Facturación</CardTitle>
                      <div>
                         <Label htmlFor="billing-address">Dirección</Label>
-                        <Input id="billing-address" placeholder="123 Main St" className="bg-white/80 border-gray-300" />
+                        <Input id="billing-address" placeholder="123 Main St" className="bg-white border-gray-300" />
                     </div>
                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <Label htmlFor="billing-city">Ciudad</Label>
-                            <Input id="billing-city" placeholder="New York" className="bg-white/80 border-gray-300" />
+                            <Input id="billing-city" placeholder="New York" className="bg-white border-gray-300" />
                         </div>
                         <div>
                             <Label htmlFor="billing-zip">Código Postal</Label>
-                            <Input id="billing-zip" placeholder="10001" className="bg-white/80 border-gray-300" />
+                            <Input id="billing-zip" placeholder="10001" className="bg-white border-gray-300" />
                         </div>
                     </div>
                      <div>
                         <Label htmlFor="billing-country">País</Label>
                         <Select>
-                            <SelectTrigger id="billing-country" className="bg-white/80 border-gray-300">
+                            <SelectTrigger id="billing-country" className="bg-white border-gray-300">
                                 <SelectValue placeholder="Selecciona un país" />
                             </SelectTrigger>
                             <SelectContent>
@@ -401,7 +400,7 @@ function CheckoutPageContent() {
 
     const backgroundClass = isPackageBooking
       ? 'bg-packages-gradient background-pan-animation'
-      : '';
+      : 'bg-flights-gradient';
 
     return (
       <div className={cn("min-h-screen relative pt-24", backgroundClass)}>
@@ -412,7 +411,7 @@ function CheckoutPageContent() {
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>
                 </Button>
-                <h1 className={cn("text-3xl font-bold font-headline", isPackageBooking ? 'text-white' : 'text-white')}>Finaliza tu Compra</h1>
+                <h1 className={cn("text-3xl font-bold font-headline", isPackageBooking ? 'text-white' : 'text-gray-800')}>Finaliza tu Compra</h1>
             </div>
             
             <form onSubmit={handleConfirmBooking}>
@@ -450,3 +449,5 @@ export default function CheckoutPage() {
         </Suspense>
     )
 }
+
+    
