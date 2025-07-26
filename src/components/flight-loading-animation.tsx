@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { cn } from "@/lib/utils";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const baseWords = [
     { text: "Welcome Aboard", weight: 500 },
@@ -34,26 +35,34 @@ const baseWords = [
     { text: "welcome", weight: 300 },
 ];
 
-const generateWords = (count: number) => {
+const generateWords = (count: number, isMobile: boolean) => {
     const generated = [];
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
-        const sizeClass = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
+        const sizeClassOptions = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
+        
+        const mobileDurationRange = { min: 15, max: 35 };
+        const desktopDurationRange = { min: 15, max: 50 };
+        const durationRange = isMobile ? mobileDurationRange : desktopDurationRange;
+
+        const mobileTranslateYRange = { min: -10, max: 10 };
+        const desktopTranslateYRange = { min: -20, max: 20 };
+        const translateYRange = isMobile ? mobileTranslateYRange : desktopTranslateYRange;
         
         generated.push({
             text: base.text,
-            size: sizeClass[Math.floor(Math.random() * sizeClass.length)],
+            size: sizeClassOptions[Math.floor(Math.random() * sizeClassOptions.length)],
             top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`, // Distribute across the full width
+            left: `${Math.random() * 100}%`,
             fontWeight: base.weight.toString(),
-            '--translate-y-start': `${Math.random() * 40 - 20}vh`,
-            '--translate-y-end': `${Math.random() * 40 - 20}vh`,
-            animationDuration: `${Math.random() * 35 + 15}s`,
-            animationDelay: `-${Math.random() * 50}s`,
+            '--translate-y-start': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
+            '--translate-y-end': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
+            animation: `float-and-fade ${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s linear -${Math.random() * 50}s infinite`,
         });
     }
     return generated;
 };
+
 
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
@@ -68,7 +77,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
                 fontWeight: word.fontWeight,
                 '--translate-y-start': word['--translate-y-start'],
                 '--translate-y-end': word['--translate-y-end'],
-                animation: `float-and-fade ${word.animationDuration} linear ${word.animationDelay} infinite`,
+                animation: word.animation,
             } as React.CSSProperties}
         >
             {word.text}
@@ -77,8 +86,10 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 });
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
-    // useMemo ensures the word list is generated only once
-    const words = useMemo(() => generateWords(209), []);
+    const isMobile = useIsMobile();
+    const wordCount = isMobile ? 60 : 209;
+    
+    const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
     
     return (
         <>
