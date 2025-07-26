@@ -4,9 +4,9 @@ import React from 'react';
 import { cn } from "@/lib/utils";
 
 const words = [
-    // Frases completas y destacadas
-    { text: "Bienvenido a bordo", size: "text-3xl", opacity: "opacity-95", top: '30%', left: '25%', fontWeight: '600', duration: '50s', delay: '-5s' },
+    // Complete phrases, varied sizes and weights
     { text: "Welcome Aboard", size: "text-4xl", opacity: "opacity-100", top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontWeight: '700', duration: '45s', delay: '0s' },
+    { text: "Bienvenido a bordo", size: "text-3xl", opacity: "opacity-95", top: '30%', left: '25%', fontWeight: '600', duration: '50s', delay: '-5s' },
     { text: "Willkommen an Bord", size: "text-2xl", opacity: "opacity-85", top: '15%', left: '15%', fontWeight: '500', duration: '55s', delay: '-10s' },
     { text: "Bienvenue à bord", size: "text-3xl", opacity: "opacity-90", top: '70%', left: '75%', fontWeight: '600', duration: '48s', delay: '-2s' },
     { text: "Benvenuto a bordo", size: "text-2xl", opacity: "opacity-80", top: '80%', left: '30%', fontWeight: '500', duration: '52s', delay: '-8s' },
@@ -17,8 +17,6 @@ const words = [
     { text: "Dobrodošli na brodu", size: "text-lg", opacity: "opacity-70", top: '20%', left: '45%', fontWeight: '400', duration: '62s', delay: '-18s' },
     { text: "Fáilte ar bord", size: "text-xl", opacity: "opacity-80", top: '45%', left: '5%', fontWeight: '500', duration: '58s', delay: '-14s' },
     { text: "Vítejte na palubě", size: "text-lg", opacity: "opacity-75", top: '95%', left: '20%', fontWeight: '400', duration: '63s', delay: '-22s' },
-    
-    // Idiomas asiáticos y otros
     { text: "ようこそ", size: "text-3xl", opacity: "opacity-90", top: '10%', left: '85%', fontWeight: '600', duration: '49s', delay: '-7s' },
     { text: "歡迎光臨", size: "text-2xl", opacity: "opacity-85", top: '40%', left: '90%', fontWeight: '600', duration: '53s', delay: '-3s' },
     { text: "어서 오세요", size: "text-xl", opacity: "opacity-80", top: '65%', left: '10%', fontWeight: '500', duration: '58s', delay: '-12s' },
@@ -35,28 +33,29 @@ const words = [
     { text: "Tervetuloa", size: "text-xl", opacity: "opacity-80", top: '65%', left: '40%', fontWeight: '500', duration: '59s', delay: '-14s' },
     { text: "Bun venit", size: "text-xl", opacity: "opacity-75", top: '20%', left: '95%', fontWeight: '400', duration: '61s', delay: '-16s' },
 
-    // Palabras sueltas de relleno para densidad
+    // Filler words with negative and >100% positions for extended canvas
     ...Array.from({ length: 40 }).map((_, i) => ({
         text: "welcome",
         size: `text-${['sm', 'md', 'lg', 'xl'][Math.floor(Math.random() * 4)]}`,
         opacity: `opacity-${Math.floor(Math.random() * 6 + 3) * 10}`, // 30-80
-        top: `${Math.random() * 120 - 10}%`,
-        left: `${Math.random() * 120 - 10}%`,
+        top: `${Math.random() * 140 - 20}%`,
+        left: `${Math.random() * 140 - 20}%`,
         fontWeight: `${[300, 400, 500][Math.floor(Math.random() * 3)]}`,
-        duration: `${Math.random() * 40 + 30}s`, // 30-70s
-        delay: `-${Math.random() * 30}s`
+        duration: `${Math.random() * 40 + 20}s`, // 20-60s
+        delay: `-${Math.random() * 20}s`
     })),
     ...Array.from({ length: 40 }).map((_, i) => ({
         text: "aboard",
         size: `text-${['xs', 'sm', 'md'][Math.floor(Math.random() * 3)]}`,
         opacity: `opacity-${Math.floor(Math.random() * 5 + 2) * 10}`, // 20-60
-        top: `${Math.random() * 120 - 10}%`,
-        left: `${Math.random() * 120 - 10}%`,
+        top: `${Math.random() * 140 - 20}%`,
+        left: `${Math.random() * 140 - 20}%`,
         fontWeight: '300',
-        duration: `${Math.random() * 50 + 40}s`, // 40-90s
-        delay: `-${Math.random() * 40}s`
+        duration: `${Math.random() * 40 + 30}s`, // 30-70s
+        delay: `-${Math.random() * 30}s`
     })),
 ];
+
 
 const WelcomeAboardCloud = () => {
     return (
