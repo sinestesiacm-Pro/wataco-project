@@ -106,6 +106,44 @@ const WelcomeAboardCloud = () => {
         { text: "வரவேற்பு", size: "text-lg", opacity: "opacity-70", top: '70%', left: '90%', fontWeight: '400' },
         { text: "Witamy na pokładzie", size: "text-xl", opacity: "opacity-80", top: '80%', left: '5%', fontWeight: '500' },
         { text: "Üdv a fedélzeten", size: "text-2xl", opacity: "opacity-85", top: '90%', left: '40%', fontWeight: '600' },
+        // Filling more gaps
+        { text: "Bem-vinda a bordo", size: "text-xl", opacity: "opacity-75", top: '50%', left: '30%', fontWeight: '400' },
+        { text: "Dobrodošla", size: "text-lg", opacity: "opacity-70", top: '35%', left: '80%', fontWeight: '500' },
+        { text: "Velkomin um borð", size: "text-2xl", opacity: "opacity-85", top: '65%', left: '15%', fontWeight: '600' },
+        { text: "Sveicināti uz klāja", size: "text-xl", opacity: "opacity-80", top: '15%', left: '65%', fontWeight: '500' },
+        { text: "Laipni lūdzam", size: "text-2xl", opacity: "opacity-90", top: '80%', left: '95%', fontWeight: '600' },
+        { text: "Benvenuto", size: "text-3xl", opacity: "opacity-95", top: '5%', left: '25%', fontWeight: '700' },
+        { text: "Bienvenida", size: "text-3xl", opacity: "opacity-90", top: '95%', left: '5%', fontWeight: '700' },
+        { text: "Willkommen", size: "text-2xl", opacity: "opacity-85", top: '45%', left: '75%', fontWeight: '600' },
+        { text: "Bem-vindo", size: "text-xl", opacity: "opacity-80", top: '25%', left: '5%', fontWeight: '500' },
+        { text: "Hoş geldin", size: "text-lg", opacity: "opacity-75", top: '75%', left: '35%', fontWeight: '400' },
+        { text: "Καλώς ορίσατε", size: "text-2xl", opacity: "opacity-85", top: '55%', left: '95%', fontWeight: '600' },
+        { text: "أهلاً وسهلاً", size: "text-4xl", opacity: "opacity-95", top: '20%', left: '85%', fontWeight: '700', direction: 'rtl' },
+        { text: "Powitanie", size: "text-xl", opacity: "opacity-80", top: '85%', left: '65%', fontWeight: '500' },
+        { text: "Tervetuloa kyytiin", size: "text-lg", opacity: "opacity-75", top: '40%', left: '20%', fontWeight: '400' },
+        { text: "Vítejte", size: "text-2xl", opacity: "opacity-85", top: '90%', left: '80%', fontWeight: '600' },
+        { text: "Benvinguda", size: "text-xl", opacity: "opacity-80", top: '10%', left: '75%', fontWeight: '500' },
+        { text: "Fáilte", size: "text-lg", opacity: "opacity-75", top: '60%', left: '60%', fontWeight: '400' },
+        { text: "Croeso", size: "text-2xl", opacity: "opacity-85", top: '5%', left: '95%', fontWeight: '600' },
+        { text: "Üdvözlet", size: "text-xl", opacity: "opacity-80", top: '95%', left: '95%', fontWeight: '500' },
+        { text: "Chào đón", size: "text-lg", opacity: "opacity-75", top: '30%', left: '40%', fontWeight: '400' },
+        { text: "Velkommen ombord", size: "text-2xl", opacity: "opacity-85", top: '70%', left: '55%', fontWeight: '600' },
+        { text: "Mire se erdhe", size: "text-xl", opacity: "opacity-80", top: '50%', left: '5%', fontWeight: '500' },
+        { text: "Добре дошла", size: "text-lg", opacity: "opacity-75", top: '88%', left: '50%', fontWeight: '400' },
+        { text: "Benvida a bordo", size: "text-2xl", opacity: "opacity-85", top: '12%', left: '45%', fontWeight: '600' },
+        { text: "Välkommen", size: "text-xl", opacity: "opacity-80", top: '33%', left: '90%', fontWeight: '500' },
+        { text: "Tere tulemast laevale", size: "text-lg", opacity: "opacity-75", top: '66%', left: '30%', fontWeight: '400' },
+        { text: "Maligayang pagdating sakay", size: "text-2xl", opacity: "opacity-85", top: '92%', left: '40%', fontWeight: '600' },
+        { text: "Tervetuloa laivaan", size: "text-xl", opacity: "opacity-80", top: '3%', left: '55%', fontWeight: '500' },
+        { text: "Soo dhaweyn", size: "text-lg", opacity: "opacity-75", top: '22%', left: '15%', fontWeight: '400' },
+        { text: "Selamat datang di kapal", size: "text-2xl", opacity: "opacity-85", top: '44%', left: '35%', fontWeight: '600' },
+        { text: "ברוכים הבאים על הסיפון", size: "text-xl", opacity: "opacity-80", top: '77%', left: '70%', fontWeight: '500', direction: 'rtl' },
+        { text: "Siyakwamukela emkhunjini", size: "text-lg", opacity: "opacity-75", top: '58%', left: '45%', fontWeight: '400' },
+        { text: "Dobrodošli na brodu", size: "text-2xl", opacity: "opacity-85", top: '18%', left: '30%', fontWeight: '600' },
+        { text: "Üdv a fedélzeten", size: "text-xl", opacity: "opacity-80", top: '82%', left: '10%', fontWeight: '500' },
+        { text: "Vitajte na palube", size: "text-lg", opacity: "opacity-75", top: '38%', left: '60%', fontWeight: '400' },
+        { text: "Mire se erdhët në bord", size: "text-2xl", opacity: "opacity-85", top: '62%', left: '80%', fontWeight: '600' },
+        { text: "Mirë se vjen", size: "text-xl", opacity: "opacity-80", top: '7%', left: '40%', fontWeight: '500' }
     ];
 
 
@@ -146,7 +184,7 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
     const to = destinationName.split(',')[0] || "Destino";
 
     return (
-        <div className="flex flex-col items-center justify-center text-center w-full h-full overflow-hidden">
+        <div className="flex flex-col items-center justify-center text-center w-full h-full overflow-hidden relative">
             <div className="relative w-full flex-grow flex items-center justify-center">
                 <WelcomeAboardCloud />
             </div>
