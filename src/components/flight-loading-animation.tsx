@@ -40,12 +40,20 @@ const generateWords = (count: number) => {
         const base = baseWords[i % baseWords.length];
         const sizeClass = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
         
+        let leftPosition;
+        // Condition to generate more words on the left side of the screen
+        if (i % 3 !== 0) { // roughly 2/3 of words on the left
+             leftPosition = `${Math.random() * 70 - 20}%`; // -20% to 50%
+        } else { // 1/3 of words on the right
+             leftPosition = `${Math.random() * 70 + 50}%`; // 50% to 120%
+        }
+
         generated.push({
             text: base.text,
             size: sizeClass[Math.floor(Math.random() * sizeClass.length)],
             opacity: `opacity-${Math.floor(Math.random() * 8 + 2) * 10}`, // 20-90
             top: `${Math.random() * 140 - 20}%`, // -20% to 120%
-            left: `${Math.random() * 140 - 20}%`, // -20% to 120%
+            left: leftPosition,
             fontWeight: base.weight.toString(),
             duration: `${Math.random() * 40 + 20}s`, // 20s to 60s
             delay: `-${Math.random() * 40}s`
@@ -54,7 +62,7 @@ const generateWords = (count: number) => {
     return generated;
 };
 
-const words = generateWords(408); // Generate 408 elements (20% reduction from 510)
+const words = generateWords(326);
 
 const WelcomeAboardCloud = () => {
     return (
