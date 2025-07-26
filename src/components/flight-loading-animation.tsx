@@ -3,78 +3,74 @@
 import React from 'react';
 import { cn } from "@/lib/utils";
 
-// Definitive list with full phrases, varied styles, and extended positioning
-const words = [
-    // Complete phrases, varied sizes and weights
-    { text: "Welcome Aboard", size: "text-4xl", opacity: "opacity-100", top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontWeight: '700', duration: '45s', delay: '0s' },
-    { text: "Bienvenido a bordo", size: "text-3xl", opacity: "opacity-95", top: '30%', left: '25%', fontWeight: '600', duration: '30s', delay: '-5s' },
-    { text: "Willkommen an Bord", size: "text-2xl", opacity: "opacity-85", top: '15%', left: '15%', fontWeight: '500', duration: '55s', delay: '-10s' },
-    { text: "Bienvenue à bord", size: "text-3xl", opacity: "opacity-90", top: '70%', left: '75%', fontWeight: '600', duration: '28s', delay: '-2s' },
-    { text: "Benvenuto a bordo", size: "text-2xl", opacity: "opacity-80", top: '80%', left: '30%', fontWeight: '500', duration: '52s', delay: '-8s' },
-    { text: "Bem-vindo a bordo", size: "text-xl", opacity: "opacity-75", top: '10%', left: '60%', fontWeight: '400', duration: '37s', delay: '-11s' },
-    { text: "Välkommen ombord", size: "text-lg", opacity: "opacity-70", top: '90%', left: '5%', fontWeight: '300', duration: '65s', delay: '-20s' },
-    { text: "Witamy na pokładzie", size: "text-xl", opacity: "opacity-80", top: '75%', left: '95%', fontWeight: '400', duration: '46s', delay: '-9s' },
-    { text: "Welkom aan boord", size: "text-xl", opacity: "opacity-80", top: '85%', left: '80%', fontWeight: '500', duration: '59s', delay: '-4s' },
-    { text: "Dobrodošli na brodu", size: "text-lg", opacity: "opacity-70", top: '20%', left: '45%', fontWeight: '400', duration: '62s', delay: '-18s' },
-    { text: "Fáilte ar bord", size: "text-xl", opacity: "opacity-80", top: '45%', left: '5%', fontWeight: '500', duration: '38s', delay: '-14s' },
-    { text: "Vítejte na palubě", size: "text-lg", opacity: "opacity-75", top: '95%', left: '20%', fontWeight: '400', duration: '63s', delay: '-22s' },
-    { text: "ようこそ", size: "text-3xl", opacity: "opacity-90", top: '10%', left: '85%', fontWeight: '600', duration: '29s', delay: '-7s' },
-    { text: "歡迎光臨", size: "text-2xl", opacity: "opacity-85", top: '40%', left: '90%', fontWeight: '600', duration: '53s', delay: '-3s' },
-    { text: "어서 오세요", size: "text-xl", opacity: "opacity-80", top: '65%', left: '10%', fontWeight: '500', duration: '38s', delay: '-12s' },
-    { text: "ยินดีต้อนรับ", size: "text-2xl", opacity: "opacity-85", top: '90%', left: '60%', fontWeight: '500', duration: '51s', delay: '-6s' },
-    { text: "Chào mừng", size: "text-lg", opacity: "opacity-75", top: '5%', left: '40%', fontWeight: '400', duration: '40s', delay: '-15s' },
-    { text: "Καλώς ήρθατε", size: "text-2xl", opacity: "opacity-85", top: '5%', left: '10%', fontWeight: '500', duration: '54s', delay: '-13s' },
-    { text: "Tervetuloa kyytiin", size: "text-xl", opacity: "opacity-80", top: '60%', left: '60%', fontWeight: '500', duration: '31s', delay: '-6s' },
-    { text: "ברוכים הבאים", size: "text-2xl", opacity: "opacity-90", top: '55%', left: '35%', fontWeight: '600', direction: 'rtl', duration: '48s', delay: '-1s' },
-    { text: "Sugeng rawuh", size: "text-xl", opacity: "opacity-75", top: '25%', left: '70%', fontWeight: '400', duration: '64s', delay: '-17s' },
-    { text: "Maligayang pagdating", size: "text-xl", opacity: "opacity-80", top: '75%', left: '50%', fontWeight: '500', duration: '37s', delay: '-8s' },
-    { text: "Siyakwamukela", size: "text-md", opacity: "opacity-60", top: '50%', left: '90%', fontWeight: '400', duration: '69s', delay: '-28s' },
-    { text: "Hoş geldiniz", size: "text-2xl", opacity: "opacity-85", top: '5%', left: '25%', fontWeight: '500', duration: '35s', delay: '-5s' },
-    { text: "Velkommen", size: "text-2xl", opacity: "opacity-85", top: '35%', left: '85%', fontWeight: '500', duration: '53s', delay: '-11s' },
-    { text: "Tervetuloa", size: "text-xl", opacity: "opacity-80", top: '65%', left: '40%', fontWeight: '500', duration: '29s', delay: '-14s' },
-    { text: "Bun venit", size: "text-xl", opacity: "opacity-75", top: '20%', left: '95%', fontWeight: '400', duration: '61s', delay: '-16s' },
-
-    // Filler words with negative and >100% positions for extended canvas
-    ...Array.from({ length: 120 }).map((_, i) => ({
-        text: "welcome",
-        size: `text-${['sm', 'md', 'lg', 'xl', '2xl'][Math.floor(Math.random() * 5)]}`,
-        opacity: `opacity-${Math.floor(Math.random() * 6 + 3) * 10}`, // 30-80
-        top: `${Math.random() * 140 - 20}%`, // -20% to 120%
-        left: `${Math.random() * 140 - 20}%`, // -20% to 120%
-        fontWeight: `${[300, 400, 500, 600, 700][Math.floor(Math.random() * 5)]}`,
-        duration: `${Math.random() * 30 + 20}s`, // 20-50s
-        delay: `-${Math.random() * 20}s`
-    })),
-    ...Array.from({ length: 120 }).map((_, i) => ({
-        text: "aboard",
-        size: `text-${['xs', 'sm', 'md', 'lg'][Math.floor(Math.random() * 4)]}`,
-        opacity: `opacity-${Math.floor(Math.random() * 5 + 2) * 10}`, // 20-60
-        top: `${Math.random() * 140 - 20}%`, // -20% to 120%
-        left: `${Math.random() * 140 - 20}%`, // -20% to 120%
-        fontWeight: '300',
-        duration: `${Math.random() * 40 + 30}s`, // 30-70s
-        delay: `-${Math.random() * 30}s`
-    })),
+const baseWords = [
+    { text: "Welcome Aboard", weight: 700 },
+    { text: "Bienvenido a bordo", weight: 700 },
+    { text: "Willkommen an Bord", weight: 600 },
+    { text: "Bienvenue à bord", weight: 600 },
+    { text: "Benvenuto a bordo", weight: 500 },
+    { text: "Bem-vindo a bordo", weight: 500 },
+    { text: "ようこそ", weight: 600 },
+    { text: "歡迎光臨", weight: 600 },
+    { text: "어서 오세요", weight: 500 },
+    { text: "Välkommen ombord", weight: 400 },
+    { text: "Witamy na pokładzie", weight: 400 },
+    { text: "Welkom aan boord", weight: 400 },
+    { text: "Dobrodošli na brodu", weight: 400 },
+    { text: "Fáilte ar bord", weight: 500 },
+    { text: "Vítejte na palubě", weight: 400 },
+    { text: "ยินดีต้อนรับ", weight: 500 },
+    { text: "Chào mừng", weight: 400 },
+    { text: "Καλώς ήρθατε", weight: 500 },
+    { text: "Tervetuloa kyytiin", weight: 400 },
+    { text: "Hoş geldiniz", weight: 500 },
+    { text: "Velkommen", weight: 400 },
+    { text: "Bun venit", weight: 400 },
+    { text: "Siyakwamukela", weight: 400},
+    { text: "Maligayang pagdating", weight: 500},
+    { text: "Sugeng rawuh", weight: 500},
+    { text: "Tervetuloa", weight: 400},
+    { text: "aboard", weight: 300 },
+    { text: "welcome", weight: 300 },
 ];
 
+const generateWords = (count: number) => {
+    const generated = [];
+    for (let i = 0; i < count; i++) {
+        const base = baseWords[i % baseWords.length];
+        const sizeClass = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
+        
+        generated.push({
+            text: base.text,
+            size: sizeClass[Math.floor(Math.random() * sizeClass.length)],
+            opacity: `opacity-${Math.floor(Math.random() * 8 + 2) * 10}`, // 20-90
+            top: `${Math.random() * 140 - 20}%`, // -20% to 120%
+            left: `${Math.random() * 140 - 20}%`, // -20% to 120%
+            fontWeight: base.weight.toString(),
+            duration: `${Math.random() * 40 + 20}s`, // 20s to 60s
+            delay: `-${Math.random() * 40}s`
+        });
+    }
+    return generated;
+};
+
+const words = generateWords(600); // Generate 600 elements
 
 const WelcomeAboardCloud = () => {
     return (
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {words.map((word, index) => (
                 <span
                     key={index}
                     className={cn(
-                        "animate-zoom-fade whitespace-nowrap absolute text-white drop-shadow-lg",
+                        "animate-zoom-fade whitespace-nowrap absolute text-white",
                         word.size,
                         word.opacity
                     )}
                     style={{
                         top: word.top,
                         left: word.left,
-                        transform: word.transform,
                         fontWeight: word.fontWeight,
-                        direction: word.direction as any,
                         animationDuration: word.duration,
                         animationDelay: word.delay,
                     } as React.CSSProperties}
@@ -94,8 +90,8 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
         <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden">
              <WelcomeAboardCloud />
             <div className="relative z-10 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
-              <h2 className="text-2xl font-bold text-white drop-shadow-lg">De {from} a {to}</h2>
-              <p className="text-white/80 mt-1 drop-shadow-lg">Buscando entre más de 400 aerolíneas...</p>
+              <h2 className="text-2xl font-bold text-white">De {from} a {to}</h2>
+              <p className="text-white/80 mt-1">Buscando entre más de 400 aerolíneas...</p>
             </div>
         </div>
     );
