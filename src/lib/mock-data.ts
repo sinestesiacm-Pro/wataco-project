@@ -116,7 +116,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Urban Oasis Lofts',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1604514749294-f2757279c178?fit=crop&w=800&q=80', category: 'LIVING_AREA' },
+          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LIVING_AREA' },
           { uri: 'https://images.unsplash.com/photo-1588855426540-5d18916a0d20?fit=crop&w=800&q=80', category: 'BEDROOM' },
         ],
         address: { lines: ['Calle 10 #43A-30'], postalCode: '050021', cityName: 'Medellín', countryCode: 'CO' },
@@ -164,7 +164,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Londoner',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1549294413-26f195200c16?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1723465308831-29da05e011f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?fit=crop&w=800&q=80', category: 'POOL' },
         ],
         address: { lines: ['38 Leicester Square'], postalCode: 'WC2H 7DX', cityName: 'Londres', countryCode: 'GB' },
@@ -489,7 +489,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Hotel Costes',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1618220252344-88b9a181878b?fit=crop&w=800&q=80', category: 'INTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1607320895054-c5c543e9a069?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'INTERIOR' },
         ],
         address: { lines: ['239-241 Rue Saint-Honoré'], postalCode: '75001', cityName: 'París', countryCode: 'FR' },
         description: { lang: 'es', text: 'Lujo, opulencia y un ambiente chic. Famoso por su patio, spa y su clientela de celebridades.' },
@@ -512,7 +512,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Armani Hotel Dubai',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1598305334237-7ac5351e6b98?fit=crop&w=800&q=80', category: 'VIEW' },
+          { uri: 'https://images.unsplash.com/photo-1723465308831-29da05e011f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'VIEW' },
         ],
         address: { lines: ['Burj Khalifa'], postalCode: '888333', cityName: 'Dubai', countryCode: 'AE' },
         description: { lang: 'es', text: 'Ocupando 11 pisos del icónico Burj Khalifa, este hotel ofrece la quintaesencia del estilo y la hospitalidad de Armani.' },
