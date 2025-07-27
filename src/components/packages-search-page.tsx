@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import type { DateRange } from 'react-day-picker';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const InputGroup = ({ children, className }: { children: React.ReactNode; className?: string }) => (
   <div className={cn("relative flex flex-col w-full", className)}>{children}</div>
@@ -36,7 +37,9 @@ export default function PackagesSearchPage() {
     from: addDays(new Date(), 7),
     to: addDays(new Date(), 14),
   });
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [adults, setAdults] = useState(1);
+  const isMobile = useIsMobile();
   
   const [packagesData, setPackagesData] = useState<PackageData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -220,7 +223,7 @@ export default function PackagesSearchPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputGroup>
-                <Popover>
+                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                     <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
                         <div className="flex items-center w-full">
@@ -236,14 +239,17 @@ export default function PackagesSearchPage() {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                    initialFocus
-                    mode="range"
-                    defaultMonth={date?.from}
-                    selected={date}
-                    onSelect={setDate}
-                    numberOfMonths={2}
-                    disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+                        initialFocus
+                        mode="range"
+                        defaultMonth={date?.from}
+                        selected={date}
+                        onSelect={setDate}
+                        numberOfMonths={isMobile ? 1 : 2}
+                        disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
                     />
+                    <div className="p-2 border-t md:hidden">
+                        <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
+                    </div>
                 </PopoverContent>
                 </Popover>
             </InputGroup>

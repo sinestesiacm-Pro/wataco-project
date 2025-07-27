@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -9,6 +10,7 @@ import { CalendarIcon, Users, Minus, Plus, BedDouble, Baby } from 'lucide-react'
 import { format, addDays } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { es } from 'date-fns/locale';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AvailabilitySearchProps {
     onSearch: (data: { checkInDate: Date, checkOutDate: Date, adults: number, children: number }) => void;
@@ -27,6 +29,8 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
     });
     const [adults, setAdults] = useState(initialData.adults);
     const [children, setChildren] = useState(initialData.children);
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const isMobile = useIsMobile();
 
     const handleSearchClick = () => {
         if (date?.from && date?.to) {
@@ -52,7 +56,7 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
                     {/* Date Picker */}
                     <div className="md:col-span-1">
                         <label className="text-white/80 text-sm font-semibold mb-2 block">Fechas</label>
-                        <Popover>
+                        <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                             <PopoverTrigger asChild>
                                 <Button variant="outline" className="w-full justify-start text-left font-normal bg-black/20 text-white border-white/30 hover:bg-black/30 hover:text-white">
                                     <CalendarIcon className="mr-2 h-4 w-4" />
@@ -76,10 +80,13 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
                                     defaultMonth={date?.from}
                                     selected={date}
                                     onSelect={setDate}
-                                    numberOfMonths={2}
+                                    numberOfMonths={isMobile ? 1 : 2}
                                     disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
                                     locale={es}
                                 />
+                                <div className="p-2 border-t md:hidden">
+                                    <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
+                                </div>
                             </PopoverContent>
                         </Popover>
                     </div>

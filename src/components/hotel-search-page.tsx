@@ -21,6 +21,7 @@ import React from 'react';
 import { Card, CardContent } from './ui/card';
 import type { DateRange } from 'react-day-picker';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const InputGroup = ({ children }: { children: React.ReactNode }) => (
   <div className="relative flex flex-col w-full">{children}</div>
@@ -37,6 +38,7 @@ type HotelFiltersState = {
 
 export default function HotelSearchPage() {
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   const [destination, setDestination] = useState<Airport | null>(null);
   const [destinationQuery, setDestinationQuery] = useState('');
@@ -45,6 +47,7 @@ export default function HotelSearchPage() {
     from: addDays(new Date(), 7),
     to: addDays(new Date(), 14),
   });
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   
@@ -142,7 +145,7 @@ export default function HotelSearchPage() {
   }
   
   const totalGuests = adults + children;
-  const travelerText = `${totalGuests} huésped${totalGuests > 1 ? 'es' : ''}`;
+  const travelerText = `${totalGuests} huésped${totalGuests > 1 ? 's' : ''}`;
 
 
   const SuggestionsList = () => (
@@ -202,7 +205,7 @@ export default function HotelSearchPage() {
             </div>
             
             <div className="w-full lg:col-span-3">
-                <Popover>
+                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                     <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
                         <div className="flex items-center w-full">
@@ -218,14 +221,17 @@ export default function HotelSearchPage() {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                    initialFocus
-                    mode="range"
-                    defaultMonth={date?.from}
-                    selected={date}
-                    onSelect={setDate}
-                    numberOfMonths={2}
-                    disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+                        initialFocus
+                        mode="range"
+                        defaultMonth={date?.from}
+                        selected={date}
+                        onSelect={setDate}
+                        numberOfMonths={isMobile ? 1 : 2}
+                        disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
                     />
+                     <div className="p-2 border-t md:hidden">
+                        <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
+                    </div>
                 </PopoverContent>
                 </Popover>
             </div>

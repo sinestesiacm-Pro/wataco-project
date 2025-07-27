@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useRef } from 'react';
 import { format } from 'date-fns';
@@ -13,6 +14,7 @@ import { cn } from '@/lib/utils';
 import React from 'react';
 import { Label } from './ui/label';
 import { recommendedCruises } from '@/lib/mock-cruises';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function CruiseSearchPage() {
   const [destinationRegion, setDestinationRegion] = useState('');
@@ -22,6 +24,8 @@ export default function CruiseSearchPage() {
     return nextMonth;
   });
   const [adults, setAdults] = useState(2);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const isMobile = useIsMobile();
   
   const [cruiseData, setCruiseData] = useState<CruiseData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -103,7 +107,7 @@ export default function CruiseSearchPage() {
             
             <div className="w-full lg:col-span-3">
                 <Label htmlFor="departureDate" className="text-sm font-semibold ml-2 text-gray-700">Navegando Después de</Label>
-                <Popover>
+                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                     <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal mt-1 bg-white/50 text-gray-800 border-gray-400", !departureDate && "text-gray-500")}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
@@ -112,6 +116,9 @@ export default function CruiseSearchPage() {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                     <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} initialFocus />
+                    <div className="p-2 border-t md:hidden">
+                        <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
+                    </div>
                 </PopoverContent>
                 </Popover>
             </div>

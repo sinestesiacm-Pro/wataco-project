@@ -10,7 +10,7 @@ const recommendedHotels = [
   { id: 'HB001', name: 'Oceanview Resort', city: 'Cancún, México', price: '279', image: 'https://images.unsplash.com/photo-1607185654436-3bd5d7a897ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxsdXh1cnklMjByZXNvcnQlMjBzdW5zZXR8ZW58MHx8fHwxNzUyNTkyMjM1fDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'luxury resort sunset', rating: 5, reviews: 1327 },
   { id: 'HB003', name: 'Mountain Escape', city: 'Bariloche, Argentina', price: '315', image: 'https://images.unsplash.com/photo-1743187571446-ab16931a5608?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb3VudGFpbiUyMGNhYmluJTIwZGF3bnxlbnwwfHx8fDE3NTI1OTIyMzR8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'mountain cabin dawn', rating: 5, reviews: 982 },
   { id: 'HB002', name: 'City Hotel', city: 'Bogotá, Colombia', price: '149', image: 'https://images.unsplash.com/photo-1621891334762-e186f94d3a1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBob3RlbCUyMHJvb20lMjBjaXR5fGVufDB8fHx8MTc1MjU5MjIzNHww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'modern hotel room city', rating: 4, reviews: 3481 },
-  { id: 'HB004', name: 'Boutique Hotel', city: 'Cuzco, Perú', price: '180', image: 'https://images.unsplash.com/photo-1617062225480-ee3a56c2c0fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFybWluZyUyMGJvdXRpcXVlJTIwaG90ZWx8ZW58MHx8fHwxNzUyNTkyMjM0fDA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'charming boutique hotel', rating: 5, reviews: 754 },
+  { id: 'HB004', name: 'Boutique Hotel', city: 'Cuzco, Perú', price: '180', image: 'https://images.unsplash.com/photo-1617062225480-ee3a56c2c0fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYXJjZWxvbmElMjBzYWdyYWRhJTIwZmFtaWxpYXxlbnwwfHx8fDE3NTI1MTk1OTF8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'charming boutique hotel', rating: 5, reviews: 754 },
 ];
 
 const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
@@ -43,7 +43,7 @@ const HotelCard = ({ hotel }: { hotel: typeof recommendedHotels[0] }) => (
             <div className="flex justify-between items-center mt-4">
                 <div>
                     <p className="text-xs text-gray-600">desde</p>
-                    <p className="font-semibold text-2xl text-accent">${hotel.price}<span className="text-sm font-normal text-gray-700">/noche</span></p>
+                    <p className="font-semibold text-2xl text-white">${hotel.price}<span className="text-sm font-normal text-gray-700">/noche</span></p>
                 </div>
                 <Button asChild className="font-semibold">
                     <Link href={`/hotels/${hotel.id}`}>Ver Hotel</Link>
