@@ -46,6 +46,7 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                         alt={offer.hotel.name || 'Hotel image'} 
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
                     />
                 </div>
                 
@@ -70,7 +71,7 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                         <div className="mt-4">
                             <div className="flex flex-wrap gap-2">
                                 {offer.hotel.amenities.slice(0, 5).map((amenity, index) => (
-                                <Badge key={index} variant="secondary">
+                                <Badge key={index} variant="secondary" className="bg-white/20 text-white border-none">
                                     {formatAmenity(amenity)}
                                 </Badge>
                                 ))}
