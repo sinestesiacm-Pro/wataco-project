@@ -40,7 +40,7 @@ export function BottomNavbar() {
             onClick={() => handleTabClick(id)}
             className={cn(
               "flex flex-col items-center justify-center gap-1 w-full h-full text-muted-foreground transition-colors",
-              isOnHomePage && activeTab === id ? "text-primary scale-110" : "text-gray-800/60"
+              isOnHomePage && activeTab === id ? "text-primary scale-110" : "text-white/80"
             )}
           >
             <Icon className="h-5 w-5" />
