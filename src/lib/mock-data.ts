@@ -140,7 +140,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Palermo Art Hotel',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LOBBY' },
           { uri: 'https://images.unsplash.com/photo-1590490359838-8427515b1368?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['Thames 2313'], postalCode: 'C1425FIG', cityName: 'Buenos Aires', countryCode: 'AR' },
@@ -466,7 +466,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Hotel Puerta de América',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1594904351111-a8535055979f?fit=crop&w=800&q=80', category: 'ARCHITECTURE' },
+          { uri: 'https://images.unsplash.com/photo-1564566088416-baa476f858eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxIb3RlbCUyMFB1ZXJ0YSUyMGRlJTIwQW0lQzMlQTlyaWNhJTIwTWFkcmlkfGVufDB8fHx8MTc1MzcyMDk1NHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'ARCHITECTURE' },
         ],
         address: { lines: ['Av. de América, 41'], postalCode: '28028', cityName: 'Madrid', countryCode: 'ES' },
         description: { lang: 'es', text: 'Un museo de arquitectura y diseño. Cada planta fue diseñada por un arquitecto de fama mundial.' },
@@ -574,3 +574,4 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
