@@ -7,7 +7,7 @@ export const recommendedCruises: CruisePackage[] = [
     ship: 'Symphony of the Seas',
     duration: '7 Noches',
     image: 'https://images.unsplash.com/photo-1678377281995-ca41018f4937?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjcnVpc2UlMjBzaGlwJTIwY2FyaWJiZWFufGVufDB8fHx8MTc1MzcxNTkzNXww&ixlib=rb-4.1.0&q=80&w=1080',
-    videoUrl: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.mp4',
+    videoUrl: 'https://videos.pexels.com/video-files/3089163/3089163-hd.mp4',
     carouselImages: [
       'https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg',
       'https://images.pexels.com/photos/1174732/pexels-photo-1174732.jpeg',
@@ -114,3 +114,5 @@ export const recommendedCruises: CruisePackage[] = [
     ]
   },
 ];
+
+    
