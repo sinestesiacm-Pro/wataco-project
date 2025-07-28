@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 const feedItems = [
   {
     user: { name: 'Elena G.', avatar: 'https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=100' },
-    image: 'https://images.unsplash.com/photo-1623556710453-d76c4ea26d1e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0cmF2ZWwlMjBjb3VwbGV8ZW58MHx8fHwxNzUzNTYzNTE3fDA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0cmF2ZWwlMjBjb3VwbGV8ZW58MHx8fHwxNzUzNTYzNTE3fDA&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'travel couple',
     caption: '¡Explorando las maravillas de Bali! No puedo creer la belleza de este lugar. 🌴 #ViajeSoñado',
     likes: 124,
@@ -16,7 +16,7 @@ const feedItems = [
   },
   {
     user: { name: 'Carlos R.', avatar: 'https://images.unsplash.com/photo-1636377985931-898218afd306?w=100' },
-    image: 'https://images.unsplash.com/photo-1675589291893-eeefa8f2b7a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlZ3lwdCUyMHB5cmFtaWRzfGVufDB8fHx8MTc1MzQ4MzI1M3ww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlZ3lwdCUyMHB5cmFtaWRzfGVufDB8fHx8MTc1MzQ4MzI1M3ww&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'egypt pyramids',
     caption: 'Finalmente cumpliendo mi sueño de ver las pirámides de Giza. Una experiencia que te cambia la vida. ✨',
     likes: 302,
@@ -24,7 +24,7 @@ const feedItems = [
   },
   {
     user: { name: 'Ana M.', avatar: 'https://images.unsplash.com/photo-1714415182234-0672970be61a?w=100' },
-    image: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbHxlbnwwfHx8fDE3NTM1NjM1MTd8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbb5eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjBob3RlbHxlbnwwfHx8fDE3NTM1NjM1MTd8MA&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'luxury hotel',
     caption: 'Encontré el hotel perfecto en los Alpes suizos gracias a Be On Trip. Las vistas son espectaculares.',
     likes: 98,
@@ -32,7 +32,7 @@ const feedItems = [
   },
   {
     user: { name: 'David S.', avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100' },
-    image: 'https://images.unsplash.com/flagged/photo-1552470470-959579335ea9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxyb2FkJTIwdHJpcHxlbnwwfHx8fDE3NTM1NjM1MTZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1532581291347-9c39cf10a73c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb2FkJTIwdHJpcHxlbnwwfHx8fDE3NTM1NjM1MTZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'road trip',
     caption: '¡Aventura en la carretera por la costa de California! Cada curva es una nueva postal. 🚗💨',
     likes: 215,
