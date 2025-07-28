@@ -69,7 +69,7 @@ export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePack
                     <Card className="bg-black/20 p-4">
                         <CardTitle className="text-xl mb-2">Precio</CardTitle>
                         <p className="text-sm text-white/80">Desde</p>
-                        <p className="text-4xl font-bold text-accent">${cruise.price}</p>
+                        <p className="text-4xl font-bold text-white">${cruise.price}</p>
                         <p className="text-sm text-white/80">por persona</p>
                         <Button size="lg" className="w-full mt-4 bg-success hover:bg-success/90">Reservar Ahora</Button>
                     </Card>

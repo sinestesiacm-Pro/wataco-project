@@ -36,6 +36,7 @@ export function CruiseItinerary({ itinerary }: { itinerary: CruiseItineraryItem[
                                     src={item.image}
                                     alt={item.port}
                                     fill
+                                    sizes="(max-width: 640px) 100vw, 128px"
                                     className="object-cover rounded-md"
                                 />
                             </div>
