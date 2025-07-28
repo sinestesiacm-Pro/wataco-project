@@ -1,4 +1,3 @@
-
 import type { CruisePackage } from './types';
 
 export const recommendedCruises: CruisePackage[] = [
@@ -10,10 +9,10 @@ export const recommendedCruises: CruisePackage[] = [
     image: 'https://images.unsplash.com/photo-1678377281995-ca41018f4937?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjcnVpc2UlMjBzaGlwJTIwY2FyaWJiZWFufGVufDB8fHx8MTc1MzcxNTkzNXww&ixlib=rb-4.1.0&q=80&w=1080',
     videoUrl: 'https://cf.bstatic.com/static/px/assets/projects/b-us-travel-trends-report-2024/videos/desktop/resort.mp4',
     carouselImages: [
-      'https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/1174732/pexels-photo-1174732.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/261101/pexels-photo-261101.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+      'https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg',
+      'https://images.pexels.com/photos/1174732/pexels-photo-1174732.jpeg',
+      'https://images.pexels.com/photos/261101/pexels-photo-261101.jpeg',
+      'https://images.unsplash.com/photo-1540541338287-41700207dee6'
     ],
     hint: 'cruise ship caribbean',
     rating: 5,
@@ -22,7 +21,7 @@ export const recommendedCruises: CruisePackage[] = [
     itinerary: [
       { day: 1, port: 'Miami, Florida', arrival: 'Embarque', departure: '16:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1518831032849-37435f336187' },
       { day: 2, port: 'Navegación', arrival: 'Alta Mar', departure: '', isAtSea: true },
-      { day: 3, port: 'Roatán, Honduras', arrival: '08:00', departure: '17:00', countryCode: 'hn', image: 'https://images.unsplash.com/photo-1616192758174-84518f73c38a1' },
+      { day: 3, port: 'Roatán, Honduras', arrival: '08:00', departure: '17:00', countryCode: 'hn', image: 'https://images.unsplash.com/photo-1616192758174-84518f73c38a' },
       { day: 4, port: 'Costa Maya, México', arrival: '08:00', departure: '17:00', countryCode: 'mx', image: 'https://images.unsplash.com/photo-1629814393963-490332857500' },
       { day: 5, port: 'Cozumel, México', arrival: '07:00', departure: '16:00', countryCode: 'mx', image: 'https://images.unsplash.com/photo-1601002244297-c8a75a7c2c96' },
       { day: 6, port: 'Navegación', arrival: 'Alta Mar', departure: '', isAtSea: true },
@@ -37,10 +36,10 @@ export const recommendedCruises: CruisePackage[] = [
     image: 'https://images.unsplash.com/photo-1656490246727-a58085b306d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxub3J3YXklMjBmam9yZHN8ZW58MHx8fHwxNzUzNzE1OTM1fDA&ixlib=rb-4.1.0&q=80&w=1080',
     videoUrl: 'https://videos.pexels.com/video-files/3209828/3209828-hd.mp4',
     carouselImages: [
-      'https://images.pexels.com/photos/3727250/pexels-photo-3727250.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/176383/pexels-photo-176383.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/159781/cruise-ship-deck-ocean-sea-159781.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/1638283/pexels-photo-1638283.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+      'https://images.pexels.com/photos/3727250/pexels-photo-3727250.jpeg',
+      'https://images.pexels.com/photos/176383/pexels-photo-176383.jpeg',
+      'https://images.pexels.com/photos/159781/cruise-ship-deck-ocean-sea-159781.jpeg',
+      'https://images.pexels.com/photos/1638283/pexels-photo-1638283.jpeg'
     ],
     hint: 'norway fjords',
     rating: 5,
@@ -65,10 +64,10 @@ export const recommendedCruises: CruisePackage[] = [
     image: 'https://images.unsplash.com/photo-1446822679794-fbd084d10491?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z3JlZWNlJTIwc2FudG9yaW5pfGVufDB8fHx8MTc1MzcxNTkzNXww&ixlib=rb-4.1.0&q=80&w=1080',
     videoUrl: 'https://videos.pexels.com/video-files/853874/853874-hd.mp4',
     carouselImages: [
-      'https://images.pexels.com/photos/164041/pexels-photo-164041.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/1831236/pexels-photo-1831236.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/2088295/pexels-photo-2088295.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+      'https://images.pexels.com/photos/164041/pexels-photo-164041.jpeg',
+      'https://images.pexels.com/photos/1831236/pexels-photo-1831236.jpeg',
+      'https://images.pexels.com/photos/2088295/pexels-photo-2088295.jpeg',
+      'https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg'
     ],
     hint: 'greece santorini',
     rating: 4,
@@ -95,10 +94,10 @@ export const recommendedCruises: CruisePackage[] = [
     image: 'https://images.unsplash.com/photo-1690053712746-de87328066d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YWxhc2thJTIwZ2xhY2llcnxlbnwwfHx8fDE3NTM3MTU5MzZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
     videoUrl: 'https://videos.pexels.com/video-files/4059941/4059941-hd.mp4',
     carouselImages: [
-      'https://images.pexels.com/photos/156314/glacier-ice-climbing-ice-climber-156314.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/3408973/pexels-photo-3408973.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/2088203/pexels-photo-2088203.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/1054218/pexels-photo-1054218.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+      'https://images.pexels.com/photos/156314/glacier-ice-climbing-ice-climber-156314.jpeg',
+      'https://images.pexels.com/photos/3408973/pexels-photo-3408973.jpeg',
+      'https://images.pexels.com/photos/2088203/pexels-photo-2088203.jpeg',
+      'https://images.pexels.com/photos/1054218/pexels-photo-1054218.jpeg'
     ],
     hint: 'alaska glacier',
     rating: 5,
@@ -115,7 +114,3 @@ export const recommendedCruises: CruisePackage[] = [
     ]
   },
 ];
-
-    
-
-    
