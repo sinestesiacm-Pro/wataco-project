@@ -41,7 +41,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'City Center Boutique Hotel',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1568495248636-6432b97bd949?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1607320874448-d33f052651e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?fit=crop&w=800&q=80', category: 'LOBBY' },
           { uri: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
@@ -140,7 +140,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Palermo Art Hotel',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1555855422-a1b9134a66d1?fit=crop&w=800&q=80', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LOBBY' },
           { uri: 'https://images.unsplash.com/photo-1590490359838-8427515b1368?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['Thames 2313'], postalCode: 'C1425FIG', cityName: 'Buenos Aires', countryCode: 'AR' },
@@ -164,7 +164,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Londoner',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1723465308831-29da05e011f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?fit=crop&w=800&q=80', category: 'POOL' },
         ],
         address: { lines: ['38 Leicester Square'], postalCode: 'WC2H 7DX', cityName: 'Londres', countryCode: 'GB' },
@@ -512,7 +512,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Armani Hotel Dubai',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1723465308831-29da05e011f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'VIEW' },
+          { uri: 'https://images.unsplash.com/photo-1536269404660-0a8d4e88bf1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'VIEW' },
         ],
         address: { lines: ['Burj Khalifa'], postalCode: '888333', cityName: 'Dubai', countryCode: 'AE' },
         description: { lang: 'es', text: 'Ocupando 11 pisos del icónico Burj Khalifa, este hotel ofrece la quintaesencia del estilo y la hospitalidad de Armani.' },
