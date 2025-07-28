@@ -211,7 +211,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Sakura Garden Hotel',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1559624989-7b9303bd9992?fit=crop&w=800&q=80', category: 'GARDEN' },
+          { uri: 'https://images.unsplash.com/photo-1607320895054-c5c543e9a069?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'GARDEN' },
           { uri: 'https://images.unsplash.com/photo-1542314831-068cd1dbb5eb?fit=crop&w=800&q=80', category: 'EXTERIOR' },
         ],
         address: { lines: ['2-2-1 Nishi-Shinjuku'], postalCode: '163-8221', cityName: 'Tokio', countryCode: 'JP' },
@@ -328,7 +328,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The New Yorker Inn',
         rating: '3',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1549638441-b787d2e11f14?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1607320874448-d33f052651e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['481 8th Ave'], postalCode: '10001', cityName: 'Nueva York', countryCode: 'US' },
         description: { lang: 'es', text: 'Una opción económica y funcional cerca de Penn Station. Perfecto para explorar Manhattan sin gastar una fortuna.' },
@@ -374,7 +374,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Tango de Mayo Hotel',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1578680952233-f5b2447b952f?fit=crop&w=800&q=80', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LOBBY' },
         ],
         address: { lines: ['Av. de Mayo 1396'], postalCode: 'C1085ABQ', cityName: 'Buenos Aires', countryCode: 'AR' },
         description: { lang: 'es', text: 'Edificio histórico en la Avenida de Mayo, restaurado con elegancia. Disfrute de su terraza con vistas al Congreso.' },
@@ -443,7 +443,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Capsule Hotel Shinjuku',
         rating: '3',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1587985064135-03665f6e9ab8?fit=crop&w=800&q=80', category: 'CAPSULE' },
+          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'CAPSULE' },
         ],
         address: { lines: ['1-16-9 Kabukicho'], postalCode: '160-0021', cityName: 'Tokio', countryCode: 'JP' },
         description: { lang: 'es', text: 'Una experiencia japonesa única. Duerme en una cápsula moderna y funcional en el corazón de Shinjuku.' },
