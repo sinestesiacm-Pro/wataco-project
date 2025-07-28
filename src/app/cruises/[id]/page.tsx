@@ -7,17 +7,13 @@ import CruiseDetailPageContent from '@/components/cruise-detail-page-content';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { UnderwaterScene } from '@/components/underwater-scene';
 
 // Componente de Página (Server Component) - Obtiene los datos
 export default async function CruiseDetailPage({ params }: { params: { id: string } }) {
   // La forma correcta de obtener el crucero. Next.js resuelve los params automáticamente.
   const cruise = recommendedCruises.find(c => c.id === params.id);
-  console.log('--- DEPURACIÓN VIDEO SOURCE (SERVER COMPONENT - CRÍTICO) ---');
-  console.log('Componente en ejecución:', 'CruiseDetailPage (Server Component)');
-  console.log('Valor de `cruise` en el momento del render:', cruise);
-  console.log('Valor de `cruise.videoUrl` en el momento del render:', cruise?.videoUrl);
-  console.log('Tipo de `cruise.videoUrl`:', typeof cruise?.videoUrl);
-  console.log('--- FIN DEPURACIÓN VIDEO SOURCE (SERVER COMPONENT - CRÍTICO) ---');
+
   // Este check es crucial y ahora funcionará como se espera.
   // Si no se encuentra el crucero, la página 404 se mostrará y el resto del código no se ejecutará.
   if (!cruise) {
@@ -30,8 +26,9 @@ export default async function CruiseDetailPage({ params }: { params: { id: strin
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
-        <div className="w-full min-h-screen pt-24 pb-24 bg-cruises-gradient background-pan-animation">
-             <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="w-full min-h-screen pt-24 pb-24 bg-cruises-gradient background-pan-animation relative overflow-hidden">
+             <UnderwaterScene />
+             <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
                 <div className="flex justify-between items-center">
                     <Button asChild variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
                        <Link href="/?tab=Cruises">
