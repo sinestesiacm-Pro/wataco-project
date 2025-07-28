@@ -91,7 +91,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Playa Paraiso All-Inclusive',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?fit=crop&w=800&q=80', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'POOL' },
           { uri: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=800&q=80', category: 'BEACH' },
           { uri: 'https://images.unsplash.com/photo-1559539343-a8c63ce577b8?fit=crop&w=800&q=80', category: 'RESTAURANT' },
         ],
@@ -137,7 +137,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       id: 'HB006',
       hotel: {
         hotelId: 'HB6',
-        name: 'Palermo Art Hotel',
+        name: 'Tango de Mayo Hotel',
         rating: '4',
         media: [
           { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LOBBY' },
@@ -152,7 +152,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         id: 'offer-6',
         checkInDate: '2024-11-05',
         checkOutDate: '2024-11-10',
-        price: { currency: 'USD', total: '190.00', base: '170.00' },
+        price: { currency: 'USD', total: '175.00', base: '155.00' },
         room: { type: 'ART_ROOM', description: { text: 'Habitación decorada por artistas locales.' }, amenities: ['WIFI'] }
       }]
     },
@@ -235,7 +235,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Gran Vía Capital',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1607320883386-99e7b333392c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8aG90ZWwlMjBleHRlcmlvcnxlbnwwfHx8fDE3NTM2NTQ4Njh8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['Gran Vía, 42'], postalCode: '28013', cityName: 'Madrid', countryCode: 'ES' },
         description: { lang: 'es', text: 'En el corazón de la Gran Vía, este hotel ofrece vistas espectaculares y acceso directo a los teatros y tiendas más importantes de Madrid.' },
@@ -375,10 +375,11 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         rating: '4',
         media: [
           { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1590490359838-8427515b1368?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
-        address: { lines: ['Av. de Mayo 1396'], postalCode: 'C1085ABQ', cityName: 'Buenos Aires', countryCode: 'AR' },
-        description: { lang: 'es', text: 'Edificio histórico en la Avenida de Mayo, restaurado con elegancia. Disfrute de su terraza con vistas al Congreso.' },
-        amenities: ['WIFI', 'RESTAURANT', 'BAR', 'FITNESS_CENTER']
+        address: { lines: ['Thames 2313'], postalCode: 'C1425FIG', cityName: 'Buenos Aires', countryCode: 'AR' },
+        description: { lang: 'es', text: 'Un hotel boutique inspirado en el arte y la cultura de Palermo. Cada habitación es una obra de arte única.' },
+        amenities: ['WIFI', 'RESTAURANT', 'BAR', 'PETS_ALLOWED']
       },
       available: true,
       offers: [{
@@ -443,7 +444,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Capsule Hotel Shinjuku',
         rating: '3',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'CAPSULE' },
+          { uri: 'https://images.unsplash.com/photo-1723465308831-29da05e011f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'CAPSULE' },
         ],
         address: { lines: ['1-16-9 Kabukicho'], postalCode: '160-0021', cityName: 'Tokio', countryCode: 'JP' },
         description: { lang: 'es', text: 'Una experiencia japonesa única. Duerme en una cápsula moderna y funcional en el corazón de Shinjuku.' },
@@ -489,7 +490,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Hotel Costes',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1607320895054-c5c543e9a069?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'INTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'INTERIOR' },
         ],
         address: { lines: ['239-241 Rue Saint-Honoré'], postalCode: '75001', cityName: 'París', countryCode: 'FR' },
         description: { lang: 'es', text: 'Lujo, opulencia y un ambiente chic. Famoso por su patio, spa y su clientela de celebridades.' },
@@ -574,4 +575,5 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
