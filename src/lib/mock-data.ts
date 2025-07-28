@@ -164,7 +164,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Londoner',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?fit=crop&w=800&q=80', category: 'POOL' },
         ],
         address: { lines: ['38 Leicester Square'], postalCode: 'WC2H 7DX', cityName: 'Londres', countryCode: 'GB' },
@@ -305,7 +305,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Cancún Palms All-Inclusive',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?fit=crop&w=800&q=80', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1607320874448-d33f052651e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'POOL' },
         ],
         address: { lines: ['Blvd. Kukulcan Km 14.5'], postalCode: '77500', cityName: 'Cancún', countryCode: 'MX' },
         description: { lang: 'es', text: 'Diversión para toda la familia en nuestro resort todo incluido. Múltiples piscinas, actividades diarias y club infantil.' },
@@ -328,7 +328,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The New Yorker Inn',
         rating: '3',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1607320874448-d33f052651e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['481 8th Ave'], postalCode: '10001', cityName: 'Nueva York', countryCode: 'US' },
         description: { lang: 'es', text: 'Una opción económica y funcional cerca de Penn Station. Perfecto para explorar Manhattan sin gastar una fortuna.' },
@@ -559,7 +559,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Standard, High Line',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1520186994231-7ea7220c3a2f?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['848 Washington St'], postalCode: '10014', cityName: 'Nueva York', countryCode: 'US' },
         description: { lang: 'es', text: 'Flotando sobre el High Line en el Meatpacking District, este hotel es famoso por sus vistas panorámicas, su azotea y su ambiente vibrante.' },
@@ -575,5 +575,6 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
 
