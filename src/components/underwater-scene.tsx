@@ -44,15 +44,18 @@ export function UnderwaterScene() {
         { Component: Coral1, style: { width: '120px', height: '120px', left: '80%', bottom: '-10px', transform: 'scaleX(-1)'} },
         { Component: Coral2, style: { width: '180px', height: '100px', left: '60%', bottom: '-30px' } },
       ],
-      bubbles: Array.from({ length: 50 }).map(() => ({
-        style: {
-          left: `${Math.random() * 100}%`,
-          width: `${Math.random() * 20 + 5}px`,
-          height: `${Math.random() * 20 + 5}px`,
-          animationDuration: `${Math.random() * 10 + 8}s`,
-          animationDelay: `${Math.random() * 8}s`,
+      bubbles: Array.from({ length: 50 }).map(() => {
+        const size = Math.random() * 20 + 5;
+        return {
+          style: {
+            left: `${Math.random() * 100}%`,
+            width: `${size}px`,
+            height: `${size}px`,
+            animationDuration: `${Math.random() * 10 + 8}s`,
+            animationDelay: `${Math.random() * 8}s`,
+          }
         }
-      })),
+      }),
       fish: Array.from({ length: 7 }).map((_, i) => ({
         style: {
           left: '-150px', // Start fish off-screen
