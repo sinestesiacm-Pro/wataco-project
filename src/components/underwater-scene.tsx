@@ -55,6 +55,7 @@ export function UnderwaterScene() {
       })),
       fish: Array.from({ length: 7 }).map((_, i) => ({
         style: {
+          left: '-150px', // Start fish off-screen
           top: `${Math.random() * 80 + 10}%`,
           animationDuration: `${Math.random() * 15 + 10}s`,
           animationDelay: `${Math.random() * 15}s`,
@@ -66,13 +67,13 @@ export function UnderwaterScene() {
     return (
         <div className="underwater-scene h-full w-full">
             {config.corals.map((coral, index) => (
-                <coral.Component key={`coral-${index}`} style={coral.style} />
+                <coral.Component key={`coral-${index}`} style={coral.style as React.CSSProperties} />
             ))}
             {config.bubbles.map((bubble, index) => (
-                <Bubble key={`bubble-${index}`} style={bubble.style} />
+                <Bubble key={`bubble-${index}`} style={bubble.style as React.CSSProperties} />
             ))}
             {config.fish.map((fish, index) => (
-                <Fish key={`fish-${index}`} style={fish.style} color={fish.color} />
+                <Fish key={`fish-${index}`} style={fish.style as React.CSSProperties} color={fish.color} />
             ))}
         </div>
     );
