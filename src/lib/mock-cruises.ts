@@ -22,7 +22,7 @@ export const recommendedCruises: CruisePackage[] = [
     itinerary: [
       { day: 1, port: 'Miami, Florida', arrival: 'Embarque', departure: '16:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1518831032849-37435f336187' },
       { day: 2, port: 'Navegación', arrival: 'Alta Mar', departure: '', isAtSea: true },
-      { day: 3, port: 'Roatán, Honduras', arrival: '08:00', departure: '17:00', countryCode: 'hn', image: 'https://images.unsplash.com/photo-1616192758174-8451873c38a1' },
+      { day: 3, port: 'Roatán, Honduras', arrival: '08:00', departure: '17:00', countryCode: 'hn', image: 'https://images.unsplash.com/photo-1616192758174-84518f73c38a1' },
       { day: 4, port: 'Costa Maya, México', arrival: '08:00', departure: '17:00', countryCode: 'mx', image: 'https://images.unsplash.com/photo-1629814393963-490332857500' },
       { day: 5, port: 'Cozumel, México', arrival: '07:00', departure: '16:00', countryCode: 'mx', image: 'https://images.unsplash.com/photo-1601002244297-c8a75a7c2c96' },
       { day: 6, port: 'Navegación', arrival: 'Alta Mar', departure: '', isAtSea: true },
@@ -115,5 +115,7 @@ export const recommendedCruises: CruisePackage[] = [
     ]
   },
 ];
+
+    
 
     
