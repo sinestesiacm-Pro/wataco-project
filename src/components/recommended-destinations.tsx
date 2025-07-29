@@ -11,10 +11,10 @@ import { Card, CardContent } from '@/components/ui/card';
 
 // Estas rutas se pueden obtener desde Firestore o un CMS en el futuro.
 const flightRoutes = [
-  { origin: 'MAD', originCity: 'Madrid', destination: 'EZE', destinationCity: 'Buenos Aires', hint: 'buenos aires obelisco', image: 'https://images.unsplash.com/photo-1579296885368-2c23c0f4f7b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxidWVub3MlMjBhaXJlcyUyMG9iZWxpc2NvfGVufDB8fHx8MTc1Mzg3OTg1Mnww&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '950' },
-  { origin: 'BOG', originCity: 'Bogotá', destination: 'GIG', destinationCity: 'Río de Janeiro', hint: 'rio de janeiro', image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyaW8lMjBkZSUyMGphbmVpcm8lMjBjcmlzdG8lMjByZWRlbnRvcnxlbnwwfHx8fDE3NTM4Nzk4Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '480' },
-  { origin: 'PAR', originCity: 'París', destination: 'CTG', destinationCity: 'Cartagena', hint: 'cartagena colombia', image: 'https://images.unsplash.com/photo-1569947113257-03b4183d735d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYXJ0YWdlbmElMjBjb2xvbWJpYSUyMG9sZCUyMHRvd258ZW58MHx8fHwxNzUzODc5OTAxfDA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '820' },
-  { origin: 'MIA', originCity: 'Miami', destination: 'SCL', destinationCity: 'Santiago', hint: 'santiago chile', image: 'https://images.unsplash.com/photo-1528217504386-b48c41865c37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW50aWFnbyUyMGNoaWxlJTIwYW5kZXN8ZW58MHx8fHwxNzUzODc5OTIzfDA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '620' },
+  { origin: 'MAD', originCity: 'Madrid', destination: 'EZE', destinationCity: 'Buenos Aires', hint: 'buenos aires obelisco', image: 'https://images.unsplash.com/photo-1579296885368-2c23c0f4f7b2?fit=crop&w=1080&q=80', simulatedPrice: '950' },
+  { origin: 'BOG', originCity: 'Bogotá', destination: 'GIG', destinationCity: 'Río de Janeiro', hint: 'rio de janeiro cristo redentor', image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?fit=crop&w=1080&q=80', simulatedPrice: '480' },
+  { origin: 'PAR', originCity: 'París', destination: 'CTG', destinationCity: 'Cartagena', hint: 'cartagena colombia old town', image: 'https://images.unsplash.com/photo-1569947113257-03b4183d735d?fit=crop&w=1080&q=80', simulatedPrice: '820' },
+  { origin: 'MIA', originCity: 'Miami', destination: 'SCL', destinationCity: 'Santiago', hint: 'santiago chile andes', image: 'https://images.unsplash.com/photo-1528217504386-b48c41865c37?fit=crop&w=1080&q=80', simulatedPrice: '620' },
 ];
 
 const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
