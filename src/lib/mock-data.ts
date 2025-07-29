@@ -328,7 +328,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The New Yorker Inn',
         rating: '3',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1645382738209-110622cb069f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0aGUlMjBuZXclMjB5b3JrZXIlMjBpbm4lMjB8ZW58MHx8fHwxNzUzODAxNjY5fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['481 8th Ave'], postalCode: '10001', cityName: 'Nueva York', countryCode: 'US' },
         description: { lang: 'es', text: 'Una opción económica y funcional cerca de Penn Station. Perfecto para explorar Manhattan sin gastar una fortuna.' },
@@ -444,7 +444,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Capsule Hotel Shinjuku',
         rating: '3',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'CAPSULE' },
+          { uri: 'https://images.unsplash.com/photo-1723465308831-29da05e011f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'CAPSULE' },
         ],
         address: { lines: ['1-16-9 Kabukicho'], postalCode: '160-0021', cityName: 'Tokio', countryCode: 'JP' },
         description: { lang: 'es', text: 'Una experiencia japonesa única. Duerme en una cápsula moderna y funcional en el corazón de Shinjuku.' },
@@ -575,6 +575,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
 
 
