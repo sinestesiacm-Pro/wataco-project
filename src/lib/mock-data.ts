@@ -66,7 +66,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Mountain View Lodge',
         rating: '3',
         media: [
-            { uri: 'https://images.unsplash.com/photo-1575586232388-26154f2c8f8a?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+            { uri: 'https://images.unsplash.com/photo-1597709955882-d2edac2e1f4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxNb3VudGFpbiUyMFZpZXclMjBMb2RnZSUyMERlbnZlciUyQyUyMFVTfGVufDB8fHx8MTc1Mzc5NTI2MXww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
             { uri: 'https://images.unsplash.com/photo-1616594039964-ae9124a35e23?fit=crop&w=800&q=80', category: 'VIEW' },
             { uri: 'https://images.unsplash.com/photo-1598928922559-052a3539818d?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
@@ -575,6 +575,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
 
 
