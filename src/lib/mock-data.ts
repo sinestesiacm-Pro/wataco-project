@@ -41,7 +41,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'City Center Boutique Hotel',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1607320874448-d33f052651e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1568495048035-31a9f39502ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxib3V0aXF1ZSUyMGhvdGVsJTIwbmV3JTIweW9ya3xlbnwwfHx8fDE3NTM4Nzk0ODF8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?fit=crop&w=800&q=80', category: 'LOBBY' },
           { uri: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
@@ -91,7 +91,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Playa Paraiso All-Inclusive',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwbGF5YSUyMGRlbCUyMGNhcm1lbiUyMHJlc29ydHxlbnwwfHx8fDE3NTM4Nzk1MDF8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'POOL' },
           { uri: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=800&q=80', category: 'BEACH' },
           { uri: 'https://images.unsplash.com/photo-1559539343-a8c63ce577b8?fit=crop&w=800&q=80', category: 'RESTAURANT' },
         ],
@@ -116,7 +116,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Urban Oasis Lofts',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1472510771109-39b92752a6b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LIVING_AREA' },
+          { uri: 'https://images.unsplash.com/photo-1565329921943-7e537b7a2ea9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtZWRlbGxpbiUyMGVsJTIwcG9ibGFkbyUyMGFwYXJ0bWVudHxlbnwwfHx8fDE3NTM4Nzk1MzN8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'LIVING_AREA' },
           { uri: 'https://images.unsplash.com/photo-1588855426540-5d18916a0d20?fit=crop&w=800&q=80', category: 'BEDROOM' },
         ],
         address: { lines: ['Calle 10 #43A-30'], postalCode: '050021', cityName: 'Medellín', countryCode: 'CO' },
@@ -140,7 +140,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Tango de Mayo Hotel',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1589922533633-3a853b018318?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxidWVub3MlMjBhaXJlcyUyMGhvdGVsJTIwYm91dGlxdWV8ZW58MHx8fHwxNzUzODc5NTY0fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'LOBBY' },
           { uri: 'https://images.unsplash.com/photo-1590490359838-8427515b1368?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['Thames 2313'], postalCode: 'C1425FIG', cityName: 'Buenos Aires', countryCode: 'AR' },
@@ -164,7 +164,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Londoner',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1542314831-068cd1dbb5eb?fit=crop&w=800&q=80', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?fit=crop&w=800&q=80', category: 'POOL' },
         ],
         address: { lines: ['38 Leicester Square'], postalCode: 'WC2H 7DX', cityName: 'Londres', countryCode: 'GB' },
@@ -188,7 +188,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Roma Antica Suites',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1552562203-d8c2a8f8d975?fit=crop&w=800&q=80', category: 'ROOM' },
+          { uri: 'https://images.unsplash.com/photo-1572033841097-440a79b8c067?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyb21lJTIwaG90ZWwlMjB2aWV3fGVufDB8fHx8MTc1Mzg3OTU5Nnww&ixlib=rb-4.1.0&q=80&w=1080', category: 'ROOM' },
         ],
         address: { lines: ['Via dei Fori Imperiali, 1'], postalCode: '00186', cityName: 'Roma', countryCode: 'IT' },
         description: { lang: 'es', text: 'Duerme entre la historia. Suites elegantes con vistas a ruinas antiguas, a pasos del Foro Romano.' },
@@ -211,7 +211,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Sakura Garden Hotel',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1607320895054-c5c543e9a069?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'GARDEN' },
+          { uri: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0b2t5byUyMGhvdGVsJTIwZ2FyZGVufGVufDB8fHx8MTc1Mzg3OTYyNnww&ixlib=rb-4.1.0&q=80&w=1080', category: 'GARDEN' },
           { uri: 'https://images.unsplash.com/photo-1542314831-068cd1dbb5eb?fit=crop&w=800&q=80', category: 'EXTERIOR' },
         ],
         address: { lines: ['2-2-1 Nishi-Shinjuku'], postalCode: '163-8221', cityName: 'Tokio', countryCode: 'JP' },
@@ -235,7 +235,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Gran Vía Capital',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1607320883386-99e7b333392c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8aG90ZWwlMjBleHRlcmlvcnxlbnwwfHx8fDE3NTM2NTQ4Njh8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1581206417531-8c377323620b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtYWRyaWQlMjBncmFuJTIwdmlhJTIwaG90ZWx8ZW58MHx8fHwxNzUzODc5NjUxfDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['Gran Vía, 42'], postalCode: '28013', cityName: 'Madrid', countryCode: 'ES' },
         description: { lang: 'es', text: 'En el corazón de la Gran Vía, este hotel ofrece vistas espectaculares y acceso directo a los teatros y tiendas más importantes de Madrid.' },
@@ -258,7 +258,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Le Marais Charm',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1540555363138-1e6836979672?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1549294413-535d35a58a7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwYXJpcyUyMGxlJTIwbWFyYWlzJTIwaG90ZWx8ZW58MHx8fHwxNzUzODc5Njc4fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['24 Rue de Sévigné'], postalCode: '75004', cityName: 'París', countryCode: 'FR' },
         description: { lang: 'es', text: 'Encanto parisino en el vibrante barrio de Le Marais. Un hotel boutique con patio interior y un ambiente acogedor.' },
@@ -305,7 +305,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Cancún Palms All-Inclusive',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1607320874448-d33f052651e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjYW5jdW4lMjByZXNvcnQlMjBwb29sfGVufDB8fHx8MTc1Mzg3OTcwM3ww&ixlib=rb-4.1.0&q=80&w=1080', category: 'POOL' },
         ],
         address: { lines: ['Blvd. Kukulcan Km 14.5'], postalCode: '77500', cityName: 'Cancún', countryCode: 'MX' },
         description: { lang: 'es', text: 'Diversión para toda la familia en nuestro resort todo incluido. Múltiples piscinas, actividades diarias y club infantil.' },
@@ -328,7 +328,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The New Yorker Inn',
         rating: '3',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzbWFsbCUyMG5ldyUyMHlvcmslMjBob3RlbHxlbnwwfHx8fDE3NTM4Nzk3MjV8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['481 8th Ave'], postalCode: '10001', cityName: 'Nueva York', countryCode: 'US' },
         description: { lang: 'es', text: 'Una opción económica y funcional cerca de Penn Station. Perfecto para explorar Manhattan sin gastar una fortuna.' },
@@ -444,7 +444,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Capsule Hotel Shinjuku',
         rating: '3',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1723465308831-29da05e011f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'CAPSULE' },
+          { uri: 'https://images.unsplash.com/photo-1587985064135-03665f6e9ab8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx0b2t5byUyMGNhcHN1bGUlMjBob3RlbHxlbnwwfHx8fDE3NTM4Nzk3Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'CAPSULE' },
         ],
         address: { lines: ['1-16-9 Kabukicho'], postalCode: '160-0021', cityName: 'Tokio', countryCode: 'JP' },
         description: { lang: 'es', text: 'Una experiencia japonesa única. Duerme en una cápsula moderna y funcional en el corazón de Shinjuku.' },
@@ -490,7 +490,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Hotel Costes',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'INTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1621293954908-36a194503738?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxob3RlbCUyMGNvc3RlcyUyMHBhcmlzJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzUzODc5ODA2fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'INTERIOR' },
         ],
         address: { lines: ['239-241 Rue Saint-Honoré'], postalCode: '75001', cityName: 'París', countryCode: 'FR' },
         description: { lang: 'es', text: 'Lujo, opulencia y un ambiente chic. Famoso por su patio, spa y su clientela de celebridades.' },
@@ -575,6 +575,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
 
 
