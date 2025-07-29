@@ -513,7 +513,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Armani Hotel Dubai',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1536269404660-0a8d4e88bf1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'VIEW' },
+          { uri: 'https://images.unsplash.com/photo-1677129667171-92abd8740fa3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxhcm1hbmklMjBob3RlbCUyMGR1YmFpfGVufDB8fHx8MTc1Mzc5NDkxMXww&ixlib=rb-4.1.0&q=80&w=1080', category: 'VIEW' },
         ],
         address: { lines: ['Burj Khalifa'], postalCode: '888333', cityName: 'Dubai', countryCode: 'AE' },
         description: { lang: 'es', text: 'Ocupando 11 pisos del icónico Burj Khalifa, este hotel ofrece la quintaesencia del estilo y la hospitalidad de Armani.' },
@@ -575,6 +575,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
 
 
