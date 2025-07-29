@@ -559,7 +559,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Standard, High Line',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1665411615010-623db963a4f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8VGhlJTIwU3RhbmRhcmQlMkMlMjBIaWdoJTIwTGluZSUyME51ZXZhJTIwWW9yayUyQyUyMFVTfGVufDB8fHx8MTc1Mzc5NTA4N3ww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['848 Washington St'], postalCode: '10014', cityName: 'Nueva York', countryCode: 'US' },
         description: { lang: 'es', text: 'Flotando sobre el High Line en el Meatpacking District, este hotel es famoso por sus vistas panorámicas, su azotea y su ambiente vibrante.' },
@@ -575,6 +575,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
 
 
