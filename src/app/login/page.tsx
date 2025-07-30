@@ -9,16 +9,16 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Terminal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { signInWithEmail, signInWithGoogle } = useAuth();
   const router = useRouter();
@@ -27,6 +27,7 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     try {
       await signInWithEmail(email, password);
       toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido de vuelta!", variant: "success" });
@@ -37,11 +38,7 @@ export default function LoginPage() {
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
         description = "Credenciales incorrectas. Por favor, verifica tu correo y contraseña.";
       }
-      toast({
-        title: "Error de inicio de sesión",
-        description: description,
-        variant: "destructive"
-      });
+      setError(description);
     } finally {
       setLoading(false);
     }
@@ -49,11 +46,13 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
+    setError(null);
     try {
       await signInWithGoogle();
       toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido!", variant: "success" });
       router.push('/');
-    } catch (error: any) {
+    } catch (error: any)
+      {
       console.error("Google Sign-In Error:", error);
       let description = "No se pudo iniciar sesión con Google. Por favor, inténtalo de nuevo.";
       if (error.code === 'auth/popup-closed-by-user') {
@@ -63,11 +62,7 @@ export default function LoginPage() {
       } else if (error.code === 'auth/configuration-not-found') {
         description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication', haz clic en 'Get started' y habilita Google como proveedor de inicio de sesión.";
       }
-       toast({
-        title: "Error de inicio de sesión con Google",
-        description: description,
-        variant: "destructive"
-      });
+      setError(description);
     } finally {
         setGoogleLoading(false);
     }
@@ -81,6 +76,15 @@ export default function LoginPage() {
           <CardDescription className="text-white/80">Inicia sesión en tu cuenta para continuar</CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4 bg-red-500/20 border-red-500/50 text-white">
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Error de Autenticación</AlertTitle>
+              <AlertDescription>
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Correo Electrónico</Label>

@@ -9,10 +9,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Terminal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -20,6 +19,7 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { signUpWithEmail, signInWithGoogle } = useAuth();
   const router = useRouter();
@@ -27,13 +27,10 @@ export default function SignupPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
     if (password !== confirmPassword) {
-      toast({
-          title: 'Error de registro',
-          description: "Las contraseñas no coinciden. Por favor, asegúrate de que tus contraseñas coinciden.",
-          variant: 'destructive',
-      });
+      setError("Las contraseñas no coinciden. Por favor, asegúrate de que tus contraseñas coinciden.");
       return;
     }
     setLoading(true);
@@ -51,11 +48,7 @@ export default function SignupPage() {
       } else if (error.code === 'auth/configuration-not-found') {
         description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication' y haz clic en 'Get started' para habilitar el servicio.";
       }
-      toast({
-        title: "Error de registro",
-        description: description,
-        variant: "destructive"
-      });
+      setError(description);
     } finally {
       setLoading(false);
     }
@@ -63,6 +56,7 @@ export default function SignupPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
+    setError(null);
     try {
       await signInWithGoogle();
       toast({ title: "¡Cuenta creada!", description: "¡Bienvenido!", variant: "success" });
@@ -77,11 +71,7 @@ export default function SignupPage() {
       } else if (error.code === 'auth/configuration-not-found') {
         description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication', haz clic en 'Get started' y habilita Google como proveedor de inicio de sesión.";
       }
-      toast({
-        title: "Error de registro con Google",
-        description: description,
-        variant: "destructive"
-      });
+      setError(description);
     } finally {
       setGoogleLoading(false);
     }
@@ -95,6 +85,15 @@ export default function SignupPage() {
           <CardDescription className="text-white/80">Únete a nosotros y empieza a planificar tu próxima aventura</CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4 bg-red-500/20 border-red-500/50 text-white">
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Error de Registro</AlertTitle>
+              <AlertDescription>
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
           <form onSubmit={handleSignup} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Correo Electrónico</Label>
