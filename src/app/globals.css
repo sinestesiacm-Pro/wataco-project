@@ -116,6 +116,9 @@
 .bg-activities-gradient {
   background: radial-gradient(circle at 90% 10%, #ff9800, #e65100 50%), radial-gradient(circle at 10% 90%, #FFDC00, #e65100 60%);
 }
+.bg-auth-gradient {
+  background: linear-gradient(270deg, hsl(205, 70%, 40%), hsl(220, 70%, 60%), #2ECC71, hsl(270, 50%, 45%), #00A3D4, #ff9800);
+}
     
 .scrollbar-hide::-webkit-scrollbar {
     display: none;

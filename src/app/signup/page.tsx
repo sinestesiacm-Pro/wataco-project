@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
 import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -63,7 +64,9 @@ export default function SignupPage() {
     } catch (error: any) {
       console.error(error);
       let description = 'No se pudo registrar con Google. Por favor, inténtalo de nuevo.';
-      if (error.code === 'auth/unauthorized-domain') {
+      if (error.code === 'auth/popup-closed-by-user') {
+        description = "Has cerrado la ventana de inicio de sesión de Google. Por favor, inténtalo de nuevo.";
+      } else if (error.code === 'auth/unauthorized-domain') {
           description = "El dominio de esta aplicación no está autorizado. Encuentra el dominio correcto en la barra de URL de la ventana de vista previa y agrégalo a la consola de Firebase en Authentication > Settings > Authorized domains.";
       } else if (error.code?.includes('api-key')) {
         description = "La clave de API de Firebase no es válida. Revisa tu archivo .env.local y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
@@ -79,11 +82,11 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12 px-4">
-      <Card className="w-full max-w-md shadow-2xl">
+    <div className={cn("flex items-center justify-center min-h-screen py-12 px-4", "bg-auth-gradient background-pan-animation")}>
+      <Card className="w-full max-w-md bg-black/20 backdrop-blur-xl border-none text-white">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-semibold font-headline">Crea una Cuenta</CardTitle>
-          <CardDescription>Únete a nosotros y empieza a planificar tu próxima aventura</CardDescription>
+          <CardTitle className="text-3xl font-bold font-headline">Crea una Cuenta</CardTitle>
+          <CardDescription className="text-white/80">Únete a nosotros y empieza a planificar tu próxima aventura</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignup} className="space-y-4">
@@ -96,6 +99,7 @@ export default function SignupPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="bg-black/20 border-white/30 placeholder:text-white/60"
               />
             </div>
             <div className="space-y-2">
@@ -106,6 +110,7 @@ export default function SignupPage() {
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="bg-black/20 border-white/30 placeholder:text-white/60"
               />
             </div>
              <div className="space-y-2">
@@ -116,6 +121,7 @@ export default function SignupPage() {
                 required 
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                className="bg-black/20 border-white/30 placeholder:text-white/60"
               />
             </div>
             <Button type="submit" className="w-full font-semibold" disabled={loading}>
@@ -125,19 +131,19 @@ export default function SignupPage() {
           </form>
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-white/30" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">O continúa con</span>
+              <span className="bg-black/20 px-2 text-white/80 backdrop-blur-sm">O continúa con</span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
+          <Button variant="outline" className="w-full bg-white/90 text-gray-800 hover:bg-white" onClick={handleGoogleSignIn} disabled={googleLoading}>
              {googleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Icons.logo width={20} height={20} className="mr-2" />}
             Google
           </Button>
           <div className="mt-4 text-center text-sm">
-            ¿Ya tienes una cuenta?{' '}
-            <Link href="/login" className="underline text-primary">
+            <span className="text-white/80">¿Ya tienes una cuenta?{' '}</span>
+            <Link href="/login" className="underline text-success font-semibold">
               Inicia sesión
             </Link>
           </div>
