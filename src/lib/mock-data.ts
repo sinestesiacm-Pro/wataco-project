@@ -188,7 +188,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Roma Antica Suites',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1572033841097-440a79b8c067?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyb21lJTIwaG90ZWwlMjB2aWV3fGVufDB8fHx8MTc1Mzg3OTU5Nnww&ixlib=rb-4.1.0&q=80&w=1080', category: 'ROOM' },
+          { uri: 'https://images.unsplash.com/photo-1637889408383-87f02910011a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxSb21hJTIwQW50aWNhJTIwU3VpdGVzJTIwUm9tYSUyQyUyMElUfGVufDB8fHx8MTc1Mzg3MjIzOHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'ROOM' },
         ],
         address: { lines: ['Via dei Fori Imperiali, 1'], postalCode: '00186', cityName: 'Roma', countryCode: 'IT' },
         description: { lang: 'es', text: 'Duerme entre la historia. Suites elegantes con vistas a ruinas antiguas, a pasos del Foro Romano.' },
@@ -575,6 +575,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
 
 
