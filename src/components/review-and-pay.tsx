@@ -185,6 +185,7 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, addonsPrice }: {outboun
 
 export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addonsPrice, onOutboundChange, onReturnChange }: ReviewAndPayProps) {
     const [extraServicesPrice, setExtraServicesPrice] = useState(0);
+    const returnItinerary = returnFlight ? (returnFlight.itineraries.length > 1 ? returnFlight.itineraries[1] : returnFlight.itineraries[0]) : null;
 
     return (
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
@@ -193,8 +194,8 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
                 
                 <FlightSummaryCard title="Vuelo de Ida" itinerary={outboundFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onOutboundChange} />
                 
-                {returnFlight && onReturnChange && (
-                    <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnFlight.itineraries[1] || returnFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onReturnChange} />
+                {returnFlight && onReturnChange && returnItinerary && (
+                    <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnItinerary} dictionaries={dictionaries} onChangeClick={onReturnChange} />
                 )}
 
                 <Separator className="bg-white/20"/>

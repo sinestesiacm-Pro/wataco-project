@@ -26,7 +26,8 @@ interface FlightSelectionListProps {
 }
 
 function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void, title: string }) {
-    const itinerary = flight.itineraries[0];
+    const isReturnFlight = title.toLowerCase().includes('vuelta');
+    const itinerary = (isReturnFlight && flight.itineraries.length > 1) ? flight.itineraries[1] : flight.itineraries[0];
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
