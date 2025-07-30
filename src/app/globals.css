@@ -97,6 +97,19 @@
   animation: animate-bg-pan 25s ease-in-out infinite;
 }
 
+@keyframes animate-color-change {
+  0%   { background-color: hsl(45, 100%, 50%); } /* Activities Yellow/Orange */
+  20%  { background-color: hsl(205, 70%, 60%); } /* Flights Blue */
+  40%  { background-color: #1C6C63; }            /* Hotels Green */
+  60%  { background-color: hsl(270, 50%, 45%); } /* Packages Purple */
+  80%  { background-color: #00506D; }            /* Cruises Cyan */
+  100% { background-color: hsl(45, 100%, 50%); } /* Back to Activities */
+}
+
+.color-change-animation {
+  animation: animate-color-change 25s ease-in-out infinite;
+}
+
 .background-blur {
     filter: blur(25px);
 }
@@ -117,7 +130,9 @@
   background: radial-gradient(circle at 90% 10%, #ff9800, #e65100 50%), radial-gradient(circle at 10% 90%, #FFDC00, #e65100 60%);
 }
 .bg-auth-gradient {
-  background: linear-gradient(270deg, hsl(205, 70%, 40%), hsl(220, 70%, 60%), #2ECC71, hsl(270, 50%, 45%), #00A3D4, #ff9800);
+  background-size: 400% 400%;
+  animation: animate-bg-pan 25s ease-in-out infinite;
+  background-image: linear-gradient(270deg, hsl(205, 70%, 40%), hsl(220, 70%, 60%), #2ECC71, hsl(270, 50%, 45%), #00A3D4, #ff9800);
 }
     
 .scrollbar-hide::-webkit-scrollbar {

@@ -82,7 +82,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className={cn("flex items-center justify-center min-h-screen py-12 px-4", "bg-auth-gradient background-pan-animation")}>
+    <div className={cn("flex items-center justify-center min-h-screen py-12 px-4", "color-change-animation")}>
       <Card className="w-full max-w-md bg-black/20 backdrop-blur-xl border-none text-white">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold font-headline">Crea una Cuenta</CardTitle>
