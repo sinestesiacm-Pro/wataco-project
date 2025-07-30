@@ -44,6 +44,10 @@ export default function SignupPage() {
       let description = "No se pudo crear la cuenta. Por favor, inténtalo de nuevo.";
        if (error.code?.includes('api-key')) {
         description = "La clave de API de Firebase no es válida. Revisa tu archivo .env y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
+      } else if (error.code === 'auth/email-already-in-use') {
+        description = "Este correo electrónico ya está en uso. Por favor, intenta iniciar sesión.";
+      } else if (error.code === 'auth/weak-password') {
+        description = "La contraseña es demasiado débil. Debe tener al menos 6 caracteres.";
       }
       toast({
         title: 'Falló el registro',

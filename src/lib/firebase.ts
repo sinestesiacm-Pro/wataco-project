@@ -14,7 +14,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize auth only if the config is valid
+// Initialize auth. If firebaseConfig.apiKey is not valid, this will throw an error.
+// The AuthProvider will catch this and display a helpful message.
 const auth: Auth = getAuth(app);
 
-export { app, auth };
+export { app, auth, firebaseConfig };

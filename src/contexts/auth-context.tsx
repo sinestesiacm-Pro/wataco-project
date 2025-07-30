@@ -2,9 +2,8 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/lib/firebase'; // Import the centralized auth instance
+import { auth, firebaseConfig } from '@/lib/firebase'; // Import the centralized auth instance
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
 
@@ -19,18 +18,15 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Configuration check is implicitly handled by the firebase.ts module
-const firebaseConfigValid = process.env.NEXT_PUBLIC_FIREBASE_API_KEY && process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
-
+// Configuration check is now more explicit.
+const isFirebaseConfigValid = !!firebaseConfig.apiKey;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
-    // If config is not valid, auth will be null.
-    if (!auth) {
+    if (!isFirebaseConfigValid) {
         setLoading(false);
         return;
     }
@@ -43,8 +39,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   
   const getFirebaseAuth = () => {
-    if (!auth) {
-      throw new Error("Firebase is not configured correctly.");
+    if (!isFirebaseConfigValid) {
+      throw new Error("Firebase is not configured correctly. Please check your .env file.");
     }
     return auth;
   }
@@ -67,12 +63,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logOut = () => {
     const authInstance = getFirebaseAuth();
-    return signOut(authInstance).then(() => {
-        router.push('/');
-    });
+    // No need to use router here, just sign out. Navigation can be handled in the component if needed.
+    return signOut(authInstance);
   };
 
-  if (!firebaseConfigValid) {
+  if (!isFirebaseConfigValid) {
     return (
       <div className="flex items-center justify-center h-screen bg-background p-4">
         <Alert variant="destructive" className="max-w-2xl">
@@ -81,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           <AlertDescription>
             Las variables de entorno de Firebase no están configuradas correctamente. 
             Por favor, asegúrate de que tu archivo <strong>.env</strong> 
-            contiene todas las variables <code>NEXT_PUBLIC_FIREBASE_*</code> requeridas.
+            contiene todas las variables <code>NEXT_PUBLIC_FIREBASE_*</code> requeridas y que el servidor de desarrollo se ha reiniciado.
           </AlertDescription>
         </Alert>
       </div>

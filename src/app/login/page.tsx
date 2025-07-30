@@ -34,6 +34,8 @@ export default function LoginPage() {
       let description = "Por favor, revisa tus credenciales e inténtalo de nuevo.";
       if (error.code?.includes('api-key')) {
         description = "La clave de API de Firebase no es válida. Revisa tu archivo .env y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
+      } else if (error.code === 'auth/invalid-credential') {
+        description = "Credenciales incorrectas. Por favor, verifica tu correo y contraseña.";
       }
       toast({
         title: 'Falló el inicio de sesión',
