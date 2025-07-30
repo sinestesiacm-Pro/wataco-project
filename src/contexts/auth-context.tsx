@@ -30,10 +30,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   
   const signInWithGoogle = () => {
+    // Pass the auth instance explicitly to the provider
     const provider = new GoogleAuthProvider();
-    // Explicitly pass the auth instance to the provider
-    provider.addScope('profile');
-    provider.addScope('email');
     return signInWithPopup(auth, provider);
   };
 
