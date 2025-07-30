@@ -33,7 +33,7 @@ export default function LoginPage() {
       console.error(error);
       let description = "Por favor, revisa tus credenciales e inténtalo de nuevo.";
       if (error.code?.includes('api-key')) {
-        description = "La clave de API de Firebase no es válida. Revisa tu archivo .env.local y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
+        description = "La clave de API de Firebase no es válida. Revisa tu archivo .env y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
       }
       toast({
         title: 'Falló el inicio de sesión',
@@ -59,7 +59,7 @@ export default function LoginPage() {
       } else if (error.code === 'auth/unauthorized-domain') {
           description = "El dominio de esta aplicación no está autorizado. Encuentra el dominio correcto en la barra de URL de la ventana de vista previa y agrégalo a la consola de Firebase en Authentication > Settings > Authorized domains.";
       } else if (error.code?.includes('api-key')) {
-        description = "La clave de API de Firebase no es válida. Revisa tu archivo .env.local y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
+        description = "La clave de API de Firebase no es válida. Revisa tu archivo .env y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
       }
       toast({
         title: 'Falló el inicio de sesión con Google',
