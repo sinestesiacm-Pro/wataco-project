@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { auth, firebaseConfigValid } from '@/lib/firebase';
+import { auth } from '@/lib/firebase';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
@@ -23,10 +23,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!firebaseConfigValid) {
-        setLoading(false);
-        return;
-    }
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
@@ -35,34 +31,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
   
-  const getFirebaseAuth = () => {
-    if (!firebaseConfigValid) {
-      const error = new Error("Firebase is not configured correctly.");
-      error.name = "FirebaseConfigError";
-      throw error;
-    }
-    return auth;
-  }
-
   const signInWithGoogle = () => {
-    const authInstance = getFirebaseAuth();
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(authInstance, provider);
+    return signInWithPopup(auth, provider);
   };
 
   const signUpWithEmail = (email: string, password: string) => {
-      const authInstance = getFirebaseAuth();
-      return createUserWithEmailAndPassword(authInstance, email, password);
+      return createUserWithEmailAndPassword(auth, email, password);
   }
 
   const signInWithEmail = (email: string, password: string) => {
-      const authInstance = getFirebaseAuth();
-      return signInWithEmailAndPassword(authInstance, email, password);
+      return signInWithEmailAndPassword(auth, email, password);
   }
 
   const logOut = () => {
-    const authInstance = getFirebaseAuth();
-    return signOut(authInstance);
+    return signOut(auth);
   };
 
   if (loading) {
@@ -71,20 +54,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
     );
-  }
-  
-  if (!firebaseConfigValid) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-background p-4">
-        <Alert variant="destructive" className="max-w-2xl">
-          <Terminal className="h-4 w-4" />
-          <AlertTitle>Error de Configuración de Firebase</AlertTitle>
-          <AlertDescription>
-            Las credenciales de Firebase no están configuradas correctamente en el código fuente.
-          </AlertDescription>
-        </Alert>
-      </div>
-    )
   }
 
   const value = { user, loading, signInWithGoogle, logOut, signUpWithEmail, signInWithEmail };

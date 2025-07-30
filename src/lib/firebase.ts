@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
-import { getAuth, Auth, browserLocalPersistence, initializeAuth } from "firebase/auth";
+import { getAuth, Auth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDNbwoek_BuA76NtTdaS-emwDj92jhbLdo",
@@ -11,16 +11,10 @@ const firebaseConfig = {
   measurementId: ""
 };
 
-// Check if the configuration is valid
-export const firebaseConfigValid = !!firebaseConfig.apiKey;
-
 // Initialize Firebase
 const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Explicitly initialize Auth with persistence to avoid environment issues.
-const auth: Auth = initializeAuth(app, {
-  persistence: browserLocalPersistence
-});
-
+// Get the Auth instance using the standard getAuth method
+const auth: Auth = getAuth(app);
 
 export { app, auth };
