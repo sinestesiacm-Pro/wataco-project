@@ -11,6 +11,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Terminal } from 'lucide-react';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -18,6 +20,7 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { signUpWithEmail, signInWithGoogle } = useAuth();
   const router = useRouter();
@@ -25,13 +28,10 @@ export default function SignupPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
     if (password !== confirmPassword) {
-      toast({
-        title: "Las contraseñas no coinciden",
-        description: "Por favor, asegúrate de que tus contraseñas coinciden.",
-        variant: 'destructive',
-      });
+      setError("Las contraseñas no coinciden. Por favor, asegúrate de que tus contraseñas coinciden.");
       return;
     }
     setLoading(true);
@@ -49,11 +49,7 @@ export default function SignupPage() {
       } else if (error.code === 'auth/configuration-not-found') {
         description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication' y haz clic en 'Get started' para habilitar el servicio.";
       }
-      toast({
-        title: 'Falló el registro',
-        description: description,
-        variant: 'destructive',
-      });
+      setError(description);
     } finally {
       setLoading(false);
     }
@@ -61,6 +57,7 @@ export default function SignupPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
+    setError(null);
     try {
       await signInWithGoogle();
       toast({ title: "¡Cuenta creada!", description: "¡Bienvenido!", variant: "success" });
@@ -75,11 +72,7 @@ export default function SignupPage() {
       } else if (error.code === 'auth/configuration-not-found') {
         description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication', haz clic en 'Get started' y habilita Google como proveedor de inicio de sesión.";
       }
-      toast({
-        title: 'Falló el registro con Google',
-        description: description,
-        variant: 'destructive',
-      });
+      setError(description);
     } finally {
       setGoogleLoading(false);
     }
@@ -128,6 +121,13 @@ export default function SignupPage() {
                 className="bg-black/20 border-white/30 placeholder:text-white/60"
               />
             </div>
+             {error && (
+                <Alert variant="destructive" className="bg-destructive/20 border-destructive/50 text-destructive">
+                    <Terminal className="h-4 w-4" />
+                    <AlertTitle>Error de registro</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                </Alert>
+            )}
             <Button type="submit" className="w-full font-semibold" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Registrarse
@@ -142,7 +142,7 @@ export default function SignupPage() {
             </div>
           </div>
           <Button variant="outline" className="w-full bg-white/90 text-gray-800 hover:bg-white" onClick={handleGoogleSignIn} disabled={googleLoading}>
-             {googleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Icons.logo width={20} height={20} className="mr-2" />}
+             {googleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Icons.google className="mr-2 h-4 w-4" />}
             Google
           </Button>
           <div className="mt-4 text-center text-sm">
