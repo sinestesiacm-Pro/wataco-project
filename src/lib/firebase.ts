@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
-import { getAuth, Auth } from "firebase/auth";
+import { getAuth, Auth, browserLocalPersistence, initializeAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDNbwoek_BuA76NtTdaS-emwDj92jhbLdo",
@@ -16,6 +16,16 @@ export const firebaseConfigValid = !!firebaseConfig.apiKey;
 
 // Initialize Firebase
 const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth: Auth = getAuth(app);
+
+// Explicitly initialize Auth with persistence to avoid environment issues.
+// This also helps in scenarios where third-party cookies might be blocked.
+const auth: Auth = initializeAuth(app, {
+  persistence: browserLocalPersistence,
+  // This is a fallback for development environments where the domain might be dynamic.
+  // In a production environment, you would rely solely on the authorized domains in the Firebase console.
+  // @ts-ignore
+  authorizedDomains: ["localhost"] 
+});
+
 
 export { app, auth };

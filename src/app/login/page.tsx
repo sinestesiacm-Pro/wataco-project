@@ -19,7 +19,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const { signInWithEmail, signInWithGoogle } = useAuth();
   const router = useRouter();
@@ -28,7 +27,6 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     try {
       await signInWithEmail(email, password);
       toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido de vuelta!", variant: "success" });
@@ -41,7 +39,11 @@ export default function LoginPage() {
       } else if (error.code === 'auth/configuration-not-found') {
         description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication' y haz clic en 'Get started' para habilitar el servicio.";
       }
-      setError(description);
+      toast({
+        title: "Error de inicio de sesión",
+        description: description,
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }
@@ -49,7 +51,6 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    setError(null);
     try {
       await signInWithGoogle();
       toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido!", variant: "success" });
@@ -64,7 +65,11 @@ export default function LoginPage() {
       } else if (error.code === 'auth/configuration-not-found') {
         description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication', haz clic en 'Get started' y habilita Google como proveedor de inicio de sesión.";
       }
-      setError(description);
+       toast({
+        title: "Error de inicio de sesión con Google",
+        description: description,
+        variant: "destructive"
+      });
     } finally {
         setGoogleLoading(false);
     }
@@ -102,13 +107,6 @@ export default function LoginPage() {
                 className="bg-black/20 border-white/30 placeholder:text-white/60"
               />
             </div>
-            {error && (
-                <Alert variant="destructive" className="bg-destructive/20 border-destructive/50 text-destructive">
-                    <Terminal className="h-4 w-4" />
-                    <AlertTitle>Error de inicio de sesión</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                </Alert>
-            )}
             <Button type="submit" className="w-full font-semibold" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Iniciar Sesión
