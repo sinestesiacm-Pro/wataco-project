@@ -40,12 +40,14 @@ export default function SignupPage() {
       toast({ title: "¡Cuenta creada!", description: "¡Bienvenido! Te has registrado con éxito.", variant: "success" });
       router.push('/');
     } catch (error: any) {
-      console.error(error);
+      console.error("Signup Error:", error);
       let description = "No se pudo crear la cuenta. Por favor, inténtalo de nuevo.";
        if (error.code === 'auth/email-already-in-use') {
         description = "Este correo electrónico ya está en uso. Por favor, intenta iniciar sesión.";
       } else if (error.code === 'auth/weak-password') {
         description = "La contraseña es demasiado débil. Debe tener al menos 6 caracteres.";
+      } else if (error.code === 'auth/configuration-not-found') {
+        description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication' y haz clic en 'Get started' para habilitar el servicio.";
       }
       toast({
         title: 'Falló el registro',
@@ -64,12 +66,14 @@ export default function SignupPage() {
       toast({ title: "¡Cuenta creada!", description: "¡Bienvenido!", variant: "success" });
       router.push('/');
     } catch (error: any) {
-      console.error(error);
+      console.error("Google Sign-In Error:", error);
       let description = 'No se pudo registrar con Google. Por favor, inténtalo de nuevo.';
       if (error.code === 'auth/popup-closed-by-user') {
         description = "Has cerrado la ventana de inicio de sesión de Google. Por favor, inténtalo de nuevo.";
       } else if (error.code === 'auth/unauthorized-domain') {
           description = "El dominio de esta aplicación no está autorizado. Encuentra el dominio correcto en la barra de URL de la ventana de vista previa y agrégalo a la consola de Firebase en Authentication > Settings > Authorized domains.";
+      } else if (error.code === 'auth/configuration-not-found') {
+        description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication', haz clic en 'Get started' y habilita Google como proveedor de inicio de sesión.";
       }
       toast({
         title: 'Falló el registro con Google',
