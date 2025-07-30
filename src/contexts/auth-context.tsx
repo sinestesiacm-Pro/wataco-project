@@ -1,13 +1,13 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { User, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, type FirebaseOptions } from 'firebase/auth';
+import { getAuth, initializeAuth, indexedDBLocalPersistence } from 'firebase/auth';
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
-
 
 interface AuthContextType {
   user: User | null;
@@ -20,40 +20,36 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const firebaseConfigValid = 
-    process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
-    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
-    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+};
+
+const firebaseConfigValid = firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId;
+
+let app: FirebaseApp;
+if (firebaseConfigValid) {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+}
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
-  };
-
-  const signUpWithEmail = (email: string, password: string) => {
-      return createUserWithEmailAndPassword(auth, email, password);
-  }
-
-  const signInWithEmail = (email: string, password: string) => {
-      return signInWithEmailAndPassword(auth, email, password);
-  }
-
-  const logOut = () => {
-    return signOut(auth).then(() => {
-        router.push('/');
-    });
-  };
-
   useEffect(() => {
     if (!firebaseConfigValid) {
         setLoading(false);
         return;
     }
+    const auth = initializeAuth(app, {
+      persistence: indexedDBLocalPersistence
+    });
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
@@ -61,6 +57,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return () => unsubscribe();
   }, []);
+  
+  const getFirebaseAuth = () => {
+    if (!firebaseConfigValid) {
+      throw new Error("Firebase configuration is invalid.");
+    }
+    return getAuth(app);
+  }
+
+  const signInWithGoogle = () => {
+    const auth = getFirebaseAuth();
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider);
+  };
+
+  const signUpWithEmail = (email: string, password: string) => {
+      const auth = getFirebaseAuth();
+      return createUserWithEmailAndPassword(auth, email, password);
+  }
+
+  const signInWithEmail = (email: string, password: string) => {
+      const auth = getFirebaseAuth();
+      return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  const logOut = () => {
+    const auth = getFirebaseAuth();
+    return signOut(auth).then(() => {
+        router.push('/');
+    });
+  };
 
   if (!firebaseConfigValid) {
     return (
