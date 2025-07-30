@@ -9,14 +9,16 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Icons } from '@/components/icons';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Terminal } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { signInWithEmail, signInWithGoogle } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
@@ -24,13 +26,20 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     try {
       await signInWithEmail(email, password);
       toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido de vuelta!", variant: "success" });
       router.push('/');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast({ title: "Error de inicio de sesión", description: "Credenciales incorrectas. Por favor, revisa tus datos.", variant: "destructive" });
+      let description = "Credenciales incorrectas. Por favor, revisa tus datos.";
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        description = "Correo electrónico o contraseña incorrectos.";
+      } else if (error.code === 'auth/configuration-not-found') {
+        description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication' y haz clic en 'Get started' para habilitar el servicio.";
+      }
+      setError(description);
     } finally {
       setLoading(false);
     }
@@ -38,13 +47,22 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
+    setError(null);
     try {
       await signInWithGoogle();
       toast({ title: "¡Inicio de sesión exitoso!", description: "¡Bienvenido!", variant: "success" });
       router.push('/');
-    } catch (error) {
+    } catch (error: any) {
       console.error("Google Sign-In Error:", error);
-      toast({ title: "Error de inicio de sesión con Google", description: "No se pudo iniciar sesión con Google. Por favor, inténtalo de nuevo.", variant: "destructive" });
+      let description = "No se pudo iniciar sesión con Google. Por favor, inténtalo de nuevo.";
+      if (error.code === 'auth/popup-closed-by-user') {
+        description = "Has cerrado la ventana de inicio de sesión de Google. Por favor, inténtalo de nuevo.";
+      } else if (error.code === 'auth/unauthorized-domain') {
+          description = "El dominio de esta aplicación no está autorizado. Encuentra el dominio correcto en la barra de URL de la ventana de vista previa y agrégalo a la consola de Firebase en Authentication > Settings > Authorized domains.";
+      } else if (error.code === 'auth/configuration-not-found') {
+        description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication', haz clic en 'Get started' y habilita Google como proveedor de inicio de sesión.";
+      }
+      setError(description);
     } finally {
       setGoogleLoading(false);
     }
@@ -58,6 +76,15 @@ export default function LoginPage() {
           <CardDescription className="text-white/80">Inicia sesión en tu cuenta para continuar</CardDescription>
         </CardHeader>
         <CardContent>
+           {error && (
+            <Alert variant="destructive" className="mb-4 bg-red-500/20 border-red-500/50 text-white">
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Error de Inicio de Sesión</AlertTitle>
+              <AlertDescription>
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Correo Electrónico</Label>
