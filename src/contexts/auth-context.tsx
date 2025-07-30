@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { auth, firebaseConfig } from '@/lib/firebase'; // Import the centralized auth instance
+import { auth, firebaseConfigValid } from '@/lib/firebase';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
@@ -18,15 +18,12 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Configuration check is now more explicit.
-const isFirebaseConfigValid = !!firebaseConfig.apiKey;
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isFirebaseConfigValid) {
+    if (!firebaseConfigValid) {
         setLoading(false);
         return;
     }
@@ -39,8 +36,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   
   const getFirebaseAuth = () => {
-    if (!isFirebaseConfigValid) {
-      throw new Error("Firebase is not configured correctly. Please check your .env file.");
+    if (!firebaseConfigValid) {
+      const error = new Error("Firebase is not configured correctly. Please check your .env file.");
+      error.name = "FirebaseConfigError";
+      throw error;
     }
     return auth;
   }
@@ -63,11 +62,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logOut = () => {
     const authInstance = getFirebaseAuth();
-    // No need to use router here, just sign out. Navigation can be handled in the component if needed.
     return signOut(authInstance);
   };
 
-  if (!isFirebaseConfigValid) {
+  if (loading) {
+    return (
+        <div className="flex items-center justify-center h-screen bg-background">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        </div>
+    );
+  }
+  
+  if (!firebaseConfigValid) {
     return (
       <div className="flex items-center justify-center h-screen bg-background p-4">
         <Alert variant="destructive" className="max-w-2xl">
@@ -83,14 +89,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     )
   }
 
-  if (loading) {
-    return (
-        <div className="flex items-center justify-center h-screen bg-background">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </div>
-    );
-  }
-  
   const value = { user, loading, signInWithGoogle, logOut, signUpWithEmail, signInWithEmail };
 
   return (

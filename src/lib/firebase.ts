@@ -11,11 +11,11 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
+// Check if the configuration is valid
+export const firebaseConfigValid = !!firebaseConfig.apiKey;
+
 // Initialize Firebase
 const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-// Initialize auth. If firebaseConfig.apiKey is not valid, this will throw an error.
-// The AuthProvider will catch this and display a helpful message.
 const auth: Auth = getAuth(app);
 
-export { app, auth, firebaseConfig };
+export { app, auth };
