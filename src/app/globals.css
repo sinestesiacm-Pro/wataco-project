@@ -98,12 +98,12 @@
 }
 
 @keyframes animate-color-change {
-  0%   { background-color: hsl(45, 100%, 50%); } /* Activities Yellow/Orange */
+  0%   { background-color: hsl(45, 90%, 65%); } /* Activities Softer Yellow */
   20%  { background-color: hsl(205, 70%, 60%); } /* Flights Blue */
   40%  { background-color: #1C6C63; }            /* Hotels Green */
   60%  { background-color: hsl(270, 50%, 45%); } /* Packages Purple */
   80%  { background-color: #00506D; }            /* Cruises Cyan */
-  100% { background-color: hsl(45, 100%, 50%); } /* Back to Activities */
+  100% { background-color: hsl(45, 90%, 65%); } /* Back to Activities */
 }
 
 .color-change-animation {
