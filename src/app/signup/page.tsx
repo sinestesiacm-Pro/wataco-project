@@ -42,9 +42,7 @@ export default function SignupPage() {
     } catch (error: any) {
       console.error(error);
       let description = "No se pudo crear la cuenta. Por favor, inténtalo de nuevo.";
-       if (error.code?.includes('api-key')) {
-        description = "La clave de API de Firebase no es válida. Revisa tu archivo .env y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
-      } else if (error.code === 'auth/email-already-in-use') {
+       if (error.code === 'auth/email-already-in-use') {
         description = "Este correo electrónico ya está en uso. Por favor, intenta iniciar sesión.";
       } else if (error.code === 'auth/weak-password') {
         description = "La contraseña es demasiado débil. Debe tener al menos 6 caracteres.";
@@ -72,8 +70,6 @@ export default function SignupPage() {
         description = "Has cerrado la ventana de inicio de sesión de Google. Por favor, inténtalo de nuevo.";
       } else if (error.code === 'auth/unauthorized-domain') {
           description = "El dominio de esta aplicación no está autorizado. Encuentra el dominio correcto en la barra de URL de la ventana de vista previa y agrégalo a la consola de Firebase en Authentication > Settings > Authorized domains.";
-      } else if (error.code?.includes('api-key')) {
-        description = "La clave de API de Firebase no es válida. Revisa tu archivo .env y asegúrate de que las variables NEXT_PUBLIC_FIREBASE_* estén configuradas correctamente.";
       }
       toast({
         title: 'Falló el registro con Google',

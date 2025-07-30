@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   
   const getFirebaseAuth = () => {
     if (!firebaseConfigValid) {
-      const error = new Error("Firebase is not configured correctly. Please check your .env file.");
+      const error = new Error("Firebase is not configured correctly.");
       error.name = "FirebaseConfigError";
       throw error;
     }
@@ -80,9 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           <Terminal className="h-4 w-4" />
           <AlertTitle>Error de Configuración de Firebase</AlertTitle>
           <AlertDescription>
-            Las variables de entorno de Firebase no están configuradas correctamente. 
-            Por favor, asegúrate de que tu archivo <strong>.env</strong> 
-            contiene todas las variables <code>NEXT_PUBLIC_FIREBASE_*</code> requeridas y que el servidor de desarrollo se ha reiniciado.
+            Las credenciales de Firebase no están configuradas correctamente en el código fuente.
           </AlertDescription>
         </Alert>
       </div>
