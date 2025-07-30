@@ -26,6 +26,15 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+      toast({
+        title: 'Error de Configuración',
+        description: "La clave de API de Firebase no está configurada. Revisa tu archivo .env.",
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (password !== confirmPassword) {
       toast({
         title: "Las contraseñas no coinciden",
@@ -56,6 +65,14 @@ export default function SignupPage() {
   };
 
   const handleGoogleSignIn = async () => {
+     if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+      toast({
+        title: 'Error de Configuración',
+        description: "La clave de API de Firebase no está configurada. Revisa tu archivo .env.",
+        variant: 'destructive',
+      });
+      return;
+    }
     setGoogleLoading(true);
     try {
       await signInWithGoogle();

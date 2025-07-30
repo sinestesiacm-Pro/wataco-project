@@ -24,6 +24,14 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+      toast({
+        title: 'Error de Configuración',
+        description: "La clave de API de Firebase no está configurada. Revisa tu archivo .env.",
+        variant: 'destructive',
+      });
+      return;
+    }
     setLoading(true);
     try {
       await signInWithEmail(email, password);
@@ -46,6 +54,14 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+      toast({
+        title: 'Error de Configuración',
+        description: "La clave de API de Firebase no está configurada. Revisa tu archivo .env.",
+        variant: 'destructive',
+      });
+      return;
+    }
     setGoogleLoading(true);
     try {
       await signInWithGoogle();
