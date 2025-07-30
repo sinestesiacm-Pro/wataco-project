@@ -13,8 +13,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-// Get the Auth instance using the standard getAuth method
 const auth: Auth = getAuth(app);
 
 export { app, auth };

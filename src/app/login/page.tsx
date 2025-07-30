@@ -36,8 +36,6 @@ export default function LoginPage() {
       let description = "Por favor, revisa tus credenciales e inténtalo de nuevo.";
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
         description = "Credenciales incorrectas. Por favor, verifica tu correo y contraseña.";
-      } else if (error.code === 'auth/configuration-not-found') {
-        description = "La configuración de autenticación no se encuentra. Por favor, ve a tu consola de Firebase, selecciona 'Authentication' y haz clic en 'Get started' para habilitar el servicio.";
       }
       toast({
         title: "Error de inicio de sesión",
