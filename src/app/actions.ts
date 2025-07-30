@@ -182,17 +182,38 @@ export async function searchHotels(params: {
     return { success: false, error: 'Parámetros de búsqueda de hotel inválidos.' };
   }
   
-  if (!HOTELBEDS_API_KEY) {
-      return { success: false, error: 'La clave API de Hotelbeds no está configurada.' };
-  }
+  const { cityCode } = validation.data;
 
   // NOTE: This is a mocked response to demonstrate the UI with Hotelbeds-like data.
   // A real integration would involve calls to Hotelbeds API endpoints.
-  
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // Fisher-Yates shuffle algorithm
-  const shuffledHotels = [...MOCK_HOTELS_DATA];
+  // Filter the hotels by the provided cityCode
+  const hotelsInCity = MOCK_HOTELS_DATA.filter(hotel => {
+    // We need a mapping from city IATA code to the city name used in our mock data
+    const cityCodeToName: Record<string, string> = {
+        'NYC': 'New York',
+        'LON': 'Londres',
+        'PAR': 'París',
+        'TYO': 'Tokio',
+        'DXB': 'Dubai',
+        'ROM': 'Roma',
+        'CUN': 'Cancún',
+        'MAD': 'Madrid',
+        'BUE': 'Buenos Aires',
+        'MDE': 'Medellín',
+        // Add other mappings as needed
+    };
+    const cityName = cityCodeToName[cityCode.toUpperCase()];
+    return hotel.hotel.address.cityName === cityName;
+  });
+
+  if (hotelsInCity.length === 0) {
+      return { success: false, error: 'No se encontraron hoteles en la ciudad especificada.' };
+  }
+
+  // Fisher-Yates shuffle algorithm to randomize results within the city
+  const shuffledHotels = [...hotelsInCity];
   for (let i = shuffledHotels.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffledHotels[i], shuffledHotels[j]] = [shuffledHotels[j], shuffledHotels[i]];
