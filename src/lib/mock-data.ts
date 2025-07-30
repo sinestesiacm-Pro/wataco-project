@@ -41,7 +41,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'City Center Boutique Hotel',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1568495048035-31a9f39502ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxib3V0aXF1ZSUyMGhvdGVsJTIwbmV3JTIweW9ya3xlbnwwfHx8fDE3NTM4Nzk0ODF8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1719917227086-851efb1eb6b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxDaXR5JTIwQ2VudGVyJTIwQm91dGlxdWUlMjBIb3RlbCUyME5ldyUyMFlvcmt8ZW58MHx8fHwxNzUzODg3NDU0fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?fit=crop&w=800&q=80', category: 'LOBBY' },
           { uri: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
@@ -575,6 +575,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     }
   ];
+
 
 
 
