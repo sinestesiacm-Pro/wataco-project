@@ -11,14 +11,14 @@ import Link from "next/link";
 const userPosts = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1573790387438-4da905039392?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxiYWxpJTIwdHJhdmVsfGVufDB8fHx8MTc1Mzg3ODU5Mnww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1573790387438-4da905039392?w=500',
     caption: '¡Explorando las maravillas de Bali!',
     likes: 124,
     comments: 12,
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1533106418989-88406e768237?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYWxpZm9ybmlhJTIwY29hc3QlMjByb2FkJTIwdHJpcHxlbnwwfHx8fDE3NTM4Nzg3MjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1533106418989-88406e768237?w=500',
     caption: 'Aventura en la carretera por la costa de California.',
     likes: 215,
     comments: 22,
