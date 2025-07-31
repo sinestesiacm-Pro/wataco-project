@@ -51,7 +51,7 @@ export default function ProfileSidebar() {
   return (
     <aside className="space-y-6 sticky top-24">
       {user && (
-        <Card className="shadow-lg">
+        <Card className="bg-black/20 backdrop-blur-xl border-none text-white">
             <div className="flex flex-col items-center text-center p-4">
             <Avatar className="h-20 w-20 mb-4 border-2 border-primary">
                 <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
@@ -59,12 +59,12 @@ export default function ProfileSidebar() {
             </Avatar>
             <div>
                 <h2 className="text-xl font-semibold font-headline">{user.displayName}</h2>
-                <p className="text-sm text-muted-foreground">{user.email}</p>
+                <p className="text-sm text-white/80">{user.email}</p>
             </div>
             </div>
         </Card>
       )}
-      <Card className="shadow-lg p-2">
+      <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white">
         <nav className="space-y-1">
             {navItems.map((item) => (
             <Link
@@ -74,7 +74,7 @@ export default function ProfileSidebar() {
                 'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors duration-200',
                 item.href === activeSection
                     ? 'bg-primary text-primary-foreground shadow-md'
-                    : 'text-foreground hover:bg-muted'
+                    : 'text-white/90 hover:bg-white/10'
                 )}
             >
                 <item.icon
@@ -82,7 +82,7 @@ export default function ProfileSidebar() {
                     'mr-3 h-5 w-5 flex-shrink-0',
                     item.href === activeSection
                     ? 'text-primary-foreground'
-                    : 'text-muted-foreground group-hover:text-primary'
+                    : 'text-white/70 group-hover:text-white'
                 )}
                 />
                 {item.name}
@@ -90,14 +90,14 @@ export default function ProfileSidebar() {
             ))}
         </nav>
       </Card>
-       <Card className="shadow-lg p-4">
+       <Card className="p-4 bg-black/20 backdrop-blur-xl border-none text-white">
         <div className="space-y-4">
             <div>
-                <Label htmlFor="language-select" className="flex items-center gap-2 mb-2 text-sm font-medium">
-                    <Globe className="h-4 w-4 text-muted-foreground" /> Idioma
+                <Label htmlFor="language-select" className="flex items-center gap-2 mb-2 text-sm font-medium text-white/80">
+                    <Globe className="h-4 w-4" /> Idioma
                 </Label>
                 <Select value={language} onValueChange={handleLanguageChange}>
-                    <SelectTrigger id="language-select">
+                    <SelectTrigger id="language-select" className="bg-black/20 border-white/30 text-white">
                         <SelectValue placeholder="Seleccionar idioma" />
                     </SelectTrigger>
                     <SelectContent>
@@ -108,11 +108,11 @@ export default function ProfileSidebar() {
                 </Select>
             </div>
             <div>
-                <Label htmlFor="currency-select" className="flex items-center gap-2 mb-2 text-sm font-medium">
-                    <CircleDollarSign className="h-4 w-4 text-muted-foreground" /> Moneda
+                <Label htmlFor="currency-select" className="flex items-center gap-2 mb-2 text-sm font-medium text-white/80">
+                    <CircleDollarSign className="h-4 w-4" /> Moneda
                 </Label>
                 <Select value={currency} onValueChange={handleCurrencyChange}>
-                    <SelectTrigger id="currency-select">
+                    <SelectTrigger id="currency-select" className="bg-black/20 border-white/30 text-white">
                         <SelectValue placeholder="Seleccionar moneda" />
                     </SelectTrigger>
                     <SelectContent>

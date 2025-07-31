@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import ProfileSidebar from '@/components/profile-sidebar';
 import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -24,13 +25,15 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-3 xl:col-span-3">
-          <ProfileSidebar />
-        </div>
-        <div className="lg:col-span-9 xl:col-span-9 mt-6 lg:mt-0">
-          {children}
+    <div className={cn("min-h-screen w-full pt-24 pb-8", "bg-auth-gradient")}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-3 xl:col-span-3">
+            <ProfileSidebar />
+          </div>
+          <div className="lg:col-span-9 xl:col-span-9 mt-6 lg:mt-0">
+            {children}
+          </div>
         </div>
       </div>
     </div>
