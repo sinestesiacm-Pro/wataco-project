@@ -1,7 +1,7 @@
 // To execute this script, run the following command in your terminal:
 // npx tsx src/lib/seed-vip-codes.ts
 
-import { collection, writeBatch, getDocs } from 'firebase/firestore';
+import { collection, writeBatch, getDocs, doc } from 'firebase/firestore';
 import { db } from './firebase';
 
 // Function to generate a random alphanumeric string of a given length
