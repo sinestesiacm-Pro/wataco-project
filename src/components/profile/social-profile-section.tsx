@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { useAuth } from "@/contexts/auth-context";
 import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
 
 const userPosts = [
   {
@@ -18,7 +19,7 @@ const userPosts = [
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1533106418989-88406e768237?w=500',
+    image: 'https://images.unsplash.com/photo-1501908753894-275a33a392d4?w=500',
     caption: 'Aventura en la carretera por la costa de California.',
     likes: 215,
     comments: 22,
@@ -98,5 +99,3 @@ export function SocialProfileSection() {
         </div>
     );
 }
-
-const Separator = ({ className }: { className?: string }) => <div className={`h-px w-full ${className}`} />;
