@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root, .light {
     --background: 216 33% 90%; /* #E4EEF6 */
     --foreground: 222.2 84% 4.9%;
 
@@ -41,25 +41,34 @@
   }
 
   .dark {
-    --background: 216 33% 90%; /* #E4EEF6 */
+    --background: 224 71% 4%;
     --foreground: 210 40% 98%;
-    --card: 200 60% 12%; /* #102635 */
+
+    --card: 216 34% 17%;
     --card-foreground: 210 40% 98%;
-    --popover: 200 60% 12%;
+
+    --popover: 224 71% 4%;
     --popover-foreground: 210 40% 98%;
-    --primary: 208 100% 50%; /* #1C88FF */
-    --primary-foreground: 210 40% 98%;
-    --secondary: 200 30% 25%; /* #2D4A59 */
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 200 30% 25%;
-    --muted-foreground: 200 10% 60%;
-    --accent: 35 100% 60%; /* Orange */
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 200 30% 20%; /* #223B47 */
-    --input: 200 30% 20%;
-    --ring: 200 90% 55%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    
     --radius: 1.25rem;
     --success: 147 67% 43%;
     --success-foreground: 0 0% 100%;
@@ -76,8 +85,7 @@
     height: 100%;
   }
   body {
-    @apply text-foreground min-h-screen;
-    background: #3A8AC2;
+    @apply bg-background text-foreground min-h-screen;
   }
   h2.font-headline, h3.font-headline, p.font-headline {
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);

@@ -5,19 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Settings, User, Bell, Palette, Languages, Lock, Shield, HelpCircle, Info } from "lucide-react";
+import { Settings, User, Bell, Palette, Shield, Save } from "lucide-react";
 import { Switch } from "../ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { useTheme } from "@/contexts/theme-context";
+import { useAuth } from "@/contexts/auth-context";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 
-const SectionCard = ({ title, description, icon: Icon, children }: { title: string, description: string, icon: React.ElementType, children: React.ReactNode }) => (
-    <Card className="bg-black/20 backdrop-blur-xl border-none text-white">
+const SectionCard = ({ title, description, icon: Icon, children, footer }: { title: string, description: string, icon: React.ElementType, children: React.ReactNode, footer?: React.ReactNode }) => (
+    <Card className="bg-black/20 backdrop-blur-xl border-none text-white flex flex-col">
         <CardHeader>
             <div className="flex items-start gap-4">
                 <Icon className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
@@ -27,13 +24,31 @@ const SectionCard = ({ title, description, icon: Icon, children }: { title: stri
                 </div>
             </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-grow">
             {children}
         </CardContent>
+        {footer && <div className="p-6 pt-0 mt-4">{footer}</div>}
     </Card>
 )
 
 export function SettingsSection() {
+  const { colorTheme, setColorTheme } = useTheme();
+  const { user } = useAuth();
+  const { toast } = useToast();
+
+  const [displayName, setDisplayName] = useState(user?.displayName || '');
+  const [email, setEmail] = useState(user?.email || '');
+
+  const handleSaveChanges = () => {
+    // Here you would typically call an update profile function from your auth context
+    console.log("Saving changes:", { displayName, email });
+    toast({
+        title: "Cambios Guardados",
+        description: "Tu información de perfil ha sido actualizada.",
+        variant: "success",
+    });
+  };
+
   return (
     <div className="space-y-8">
         <div className="flex items-center gap-3">
@@ -41,61 +56,67 @@ export function SettingsSection() {
              <h1 className="text-3xl font-headline text-white">Configuración</h1>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Column 1 */}
-            <div className="space-y-8">
-                <SectionCard
-                    title="Información de la Cuenta"
-                    description="Actualiza tus datos personales y gestiona tu cuenta."
-                    icon={User}
-                >
-                   <div className="space-y-4">
-                        <div>
-                            <Label htmlFor="displayName" className="text-white/80">Nombre</Label>
-                            <Input id="displayName" defaultValue="Dev User" className="bg-black/20 border-white/30" />
-                        </div>
-                        <div>
-                            <Label htmlFor="email" className="text-white/80">Correo Electrónico</Label>
-                            <Input id="email" type="email" defaultValue="dev@example.com" className="bg-black/20 border-white/30" />
-                        </div>
-                        <Button variant="outline" className="bg-transparent border-white/30 hover:bg-white/10">Cambiar Contraseña</Button>
-                   </div>
-                   <Separator className="my-6 bg-white/20" />
-                   <div className="space-y-2">
-                     <Button variant="link" className="p-0 h-auto text-white/70 hover:text-white">Gestionar Dispositivos Conectados</Button>
-                     <br />
-                     <Button variant="link" className="p-0 h-auto text-destructive/80 hover:text-destructive">Eliminar Cuenta</Button>
-                   </div>
-                </SectionCard>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            
+            <SectionCard
+                title="Información de la Cuenta"
+                description="Actualiza tus datos personales y gestiona tu cuenta."
+                icon={User}
+                footer={
+                    <Button onClick={handleSaveChanges} className="w-full">
+                        <Save className="mr-2 h-4 w-4" />
+                        Guardar Cambios
+                    </Button>
+                }
+            >
+               <div className="space-y-4">
+                    <div>
+                        <Label htmlFor="displayName" className="text-white/80">Nombre</Label>
+                        <Input 
+                            id="displayName" 
+                            value={displayName}
+                            onChange={(e) => setDisplayName(e.target.value)}
+                            className="bg-black/20 border-white/30" 
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="email" className="text-white/80">Correo Electrónico</Label>
+                        <Input 
+                            id="email" 
+                            type="email" 
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="bg-black/20 border-white/30" 
+                        />
+                    </div>
+                    <Button variant="outline" className="bg-transparent border-white/30 hover:bg-white/10">Cambiar Contraseña</Button>
+               </div>
+               <Separator className="my-6 bg-white/20" />
+               <div className="space-y-2">
+                 <Button variant="link" className="p-0 h-auto text-white/70 hover:text-white">Gestionar Dispositivos Conectados</Button>
+                 <br />
+                 <Button variant="link" className="p-0 h-auto text-destructive/80 hover:text-destructive">Eliminar Cuenta</Button>
+               </div>
+            </SectionCard>
 
-                <SectionCard
-                    title="Preferencias de la Aplicación"
-                    description="Personaliza tu experiencia en la aplicación."
+            <div className="space-y-8">
+                 <SectionCard
+                    title="Preferencias"
+                    description="Personaliza la apariencia y el comportamiento de la aplicación."
                     icon={Palette}
                 >
                    <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <Label htmlFor="dark-mode" className="text-white">Modo Oscuro</Label>
-                            <Switch id="dark-mode" disabled />
-                        </div>
-                         <div className="space-y-2">
-                           <Label htmlFor="language" className="text-white/80">Idioma</Label>
-                             <Select defaultValue="es">
-                              <SelectTrigger id="language" className="w-full bg-black/20 border-white/30">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="es">Español</SelectItem>
-                                <SelectItem value="en">English</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <Switch 
+                                id="dark-mode" 
+                                checked={colorTheme === 'dark'}
+                                onCheckedChange={(checked) => setColorTheme(checked ? 'dark' : 'light')}
+                            />
                         </div>
                    </div>
                 </SectionCard>
-            </div>
-
-            {/* Column 2 */}
-            <div className="space-y-8">
+                
                  <SectionCard
                     title="Notificaciones"
                     description="Elige cómo quieres que te contactemos."
@@ -110,12 +131,9 @@ export function SettingsSection() {
                             <Label htmlFor="email-offers" className="text-white">Ofertas por correo</Label>
                             <Switch id="email-offers" defaultChecked />
                         </div>
-                         <div className="flex items-center justify-between">
-                            <Label htmlFor="email-updates" className="text-white">Actualizaciones de Reserva</Label>
-                            <Switch id="email-updates" defaultChecked />
-                        </div>
                    </div>
                 </SectionCard>
+                
                 <SectionCard
                     title="Privacidad y Soporte"
                     description="Consulta nuestras políticas y obtén ayuda."

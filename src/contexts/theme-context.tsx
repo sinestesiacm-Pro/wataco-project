@@ -1,27 +1,46 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
-type Theme = 'Flights' | 'Hotels' | 'Packages' | 'Cruises' | 'Activities' | 'Social' | 'Default';
+type TabTheme = 'Flights' | 'Hotels' | 'Packages' | 'Cruises' | 'Activities' | 'Social' | 'Default';
+type ColorTheme = 'light' | 'dark';
 
 interface ThemeContextType {
-  theme: Theme;
-  setTheme: (theme: Theme | string) => void;
+  tabTheme: TabTheme;
+  setTabTheme: (theme: TabTheme | string) => void;
+  colorTheme: ColorTheme;
+  setColorTheme: (theme: ColorTheme) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setThemeState] = useState<Theme>('Default');
+  const [tabTheme, setTabThemeState] = useState<TabTheme>('Default');
+  const [colorTheme, setColorThemeState] = useState<ColorTheme>('light');
 
-  const setTheme = (newTheme: Theme | string) => {
-    setThemeState(newTheme as Theme);
+  const setTabTheme = (newTheme: TabTheme | string) => {
+    setTabThemeState(newTheme as TabTheme);
   };
+  
+  const setColorTheme = (newTheme: ColorTheme) => {
+      setColorThemeState(newTheme);
+      if (typeof window !== 'undefined') {
+        const root = window.document.documentElement;
+        root.classList.remove('light', 'dark');
+        root.classList.add(newTheme);
+      }
+  };
+  
+   useEffect(() => {
+    // Set the light theme as default on initial load
+    const root = window.document.documentElement;
+    root.classList.add('light');
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ tabTheme, setTabTheme, colorTheme, setColorTheme }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -37,34 +56,39 @@ export const useTheme = () => {
 
 
 export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
-    const { theme } = useTheme();
+    const { tabTheme } = useTheme();
     const pathname = usePathname();
 
     const getBackgroundClass = () => {
+        
+        if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
+            return "color-change-animation";
+        }
+        if (pathname.startsWith('/profile')) {
+            return "color-change-animation";
+        }
+
         const baseAnimationClass = 'background-pan-animation';
 
-        // For specific detail pages, force a theme regardless of the tab
         if (pathname.startsWith('/hotels')) return cn('bg-hotels-gradient', baseAnimationClass);
         if (pathname.startsWith('/packages')) return cn('bg-packages-gradient', baseAnimationClass);
         if (pathname.startsWith('/cruises')) return cn('bg-cruises-gradient', baseAnimationClass);
         if (pathname.startsWith('/activities')) return cn('bg-activities-gradient', baseAnimationClass);
-        if (pathname.startsWith('/flights')) return ''; // Use default from body (now the blue gradient)
+        if (pathname.startsWith('/flights')) return 'bg-flights-gradient';
         
-        // For the home page, use the theme from the context (set by the tab)
         if (pathname === '/') {
-            switch(theme) {
-                case 'Flights': return ''; // Use default background from globals.css body
+            switch(tabTheme) {
+                case 'Flights': return 'bg-flights-gradient'; 
                 case 'Hotels': return cn('bg-hotels-gradient', baseAnimationClass);
                 case 'Packages': return cn('bg-packages-gradient', baseAnimationClass);
                 case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
                 case 'Activities': return cn('bg-activities-gradient', baseAnimationClass);
-                case 'Social': return ''; // Use default blue background for social
-                default: return ''; // Default to the base body background
+                case 'Social': return 'bg-flights-gradient';
+                default: return 'bg-flights-gradient';
             }
         }
         
-        // Fallback for other pages like /profile, /login, etc.
-        return '';
+        return 'bg-flights-gradient';
     }
 
     return (

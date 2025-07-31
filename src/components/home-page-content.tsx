@@ -85,11 +85,11 @@ const AnimatedWindows = () => (
 export function HomePageContent() {
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'Flights';
-    const { setTheme } = useTheme();
+    const { setTabTheme } = useTheme();
 
     useEffect(() => {
-        setTheme(tab);
-    }, [tab, setTheme]);
+        setTabTheme(tab);
+    }, [tab, setTabTheme]);
 
     return (
         <div className="w-full flex flex-col flex-grow relative">
