@@ -7,14 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 const SectionPlaceholder = ({ title, icon: Icon, children }: { title: string; icon: React.ElementType; children: React.ReactNode }) => (
-    <Card className="shadow-lg">
+    <Card className="bg-black/20 backdrop-blur-xl border-none text-white">
         <CardHeader>
-            <CardTitle className="flex items-center gap-3 text-2xl font-headline">
-                <Icon className="h-6 w-6 text-primary" />
+            <CardTitle className="flex items-center gap-3 text-2xl font-headline text-white">
+                <Icon className="h-6 w-6 text-white" />
                 <span>{title}</span>
             </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="text-white/80">
             {children}
         </CardContent>
     </Card>
@@ -22,33 +22,33 @@ const SectionPlaceholder = ({ title, icon: Icon, children }: { title: string; ic
 
 const NextTripSection = () => (
     <SectionPlaceholder title="Próximo Viaje" icon={Plane}>
-        <p className="text-muted-foreground">Aquí verás los detalles de tu próximo viaje. ¡Aún no has planeado nada!</p>
+        <p>Aquí verás los detalles de tu próximo viaje. ¡Aún no has planeado nada!</p>
     </SectionPlaceholder>
 );
 
 const BookingsSection = () => (
     <SectionPlaceholder title="Mis Reservas" icon={Book}>
-        <p className="text-muted-foreground">Aquí aparecerán todas tus reservas de vuelos, hoteles y actividades.</p>
+        <p>Aquí aparecerán todas tus reservas de vuelos, hoteles y actividades.</p>
     </SectionPlaceholder>
 );
 
 const AlbumsSection = () => (
     <SectionPlaceholder title="Mis Álbumes" icon={Images}>
-        <p className="text-muted-foreground">Crea y comparte álbumes de fotos de tus aventuras.</p>
+        <p>Crea y comparte álbumes de fotos de tus aventuras.</p>
     </SectionPlaceholder>
 );
 
 const SocialSection = () => (
     <SectionPlaceholder title="Social" icon={Users}>
-        <p className="text-muted-foreground">Conecta con otros viajeros y comparte tus experiencias.</p>
+        <p>Conecta con otros viajeros y comparte tus experiencias.</p>
     </SectionPlaceholder>
 );
 
 const BonusSection = () => (
     <SectionPlaceholder title="Activar Bono" icon={Gift}>
-        <p className="text-muted-foreground">Ingresa tu código de bono aquí para reclamar tu recompensa.</p>
+        <p>Ingresa tu código de bono aquí para reclamar tu recompensa.</p>
         <div className="mt-4 flex flex-col sm:flex-row gap-2">
-            <Input placeholder="Tu código de bono" className="flex-grow" />
+            <Input placeholder="Tu código de bono" className="flex-grow bg-black/20 border-white/30 placeholder:text-white/60" />
             <Button className="w-full sm:w-auto">Activar</Button>
         </div>
     </SectionPlaceholder>
@@ -57,7 +57,7 @@ const BonusSection = () => (
 
 const SettingsSection = () => (
     <SectionPlaceholder title="Configuración" icon={Settings}>
-        <p className="text-muted-foreground">Gestiona tu cuenta, notificaciones y preferencias.</p>
+        <p>Gestiona tu cuenta, notificaciones y preferencias.</p>
     </SectionPlaceholder>
 );
 
