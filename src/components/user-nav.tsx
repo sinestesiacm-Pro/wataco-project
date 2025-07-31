@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogOut, User as UserIcon, LayoutGrid } from 'lucide-react';
+import { LogOut, User as UserIcon, LayoutGrid, Settings } from 'lucide-react';
 import Link from 'next/link';
 
 export function UserNav() {
@@ -49,6 +49,12 @@ export function UserNav() {
             <Link href="/profile">
               <LayoutGrid className="mr-2 h-4 w-4" />
               <span>Mi Perfil</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/profile?section=settings">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Configuración</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
