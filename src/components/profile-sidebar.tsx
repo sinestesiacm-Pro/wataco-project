@@ -18,7 +18,7 @@ const navItems = [
   { name: 'Reservas', href: 'bookings', icon: Book },
   { name: 'Álbumes', href: 'albums', icon: Images },
   { name: 'Social', href: 'social', icon: Users },
-  { name: 'Activar Bono', href: 'bonus', icon: Gift },
+  { name: 'Membresía VIP', href: 'bonus', icon: Gift },
 ];
 
 export default function ProfileSidebar() {

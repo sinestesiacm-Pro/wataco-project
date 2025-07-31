@@ -4,6 +4,8 @@ import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageD
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
+import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 const HOTELBEDS_API_KEY = "7b693caa6d94519ce17374929121537f";
@@ -294,4 +296,54 @@ export async function searchCruises(params: {
   // The Amadeus Cruise API is not available in the standard test environment.
   // This is a placeholder response.
   return { success: false, error: "La búsqueda de cruceros no está disponible en esta demostración." };
+}
+
+const vipActivationSchema = z.object({
+    userId: z.string().min(1, "User ID is required."),
+    membershipCode: z.string().min(6, "Membership code must be at least 6 characters."),
+});
+
+export async function activateVipMembership(params: { userId: string, membershipCode: string }): Promise<{ success: boolean; error?: string; message?: string }> {
+    const validation = vipActivationSchema.safeParse(params);
+    if (!validation.success) {
+        return { success: false, error: 'Parámetros de activación inválidos.' };
+    }
+
+    const { userId, membershipCode } = validation.data;
+
+    try {
+        const vipMembershipsRef = collection(db, 'vip_memberships');
+        const q = query(vipMembershipsRef, where("code", "==", membershipCode));
+        
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            return { success: false, error: "Código de membresía inválido." };
+        }
+
+        const vipDoc = querySnapshot.docs[0];
+        const vipData = vipDoc.data();
+
+        if (vipData.isUsed) {
+            return { success: false, error: "Este código de membresía ya ha sido utilizado." };
+        }
+
+        const batch = writeBatch(db);
+
+        // Mark the VIP code as used and assign it to the user
+        const vipDocRef = doc(db, "vip_memberships", vipDoc.id);
+        batch.update(vipDocRef, { isUsed: true, usedBy: userId });
+
+        // Update the user's profile to mark them as a VIP
+        const userDocRef = doc(db, "users", userId);
+        batch.set(userDocRef, { isVIP: true }, { merge: true });
+
+        await batch.commit();
+
+        return { success: true, message: "¡Felicitaciones! Tu membresía VIP ha sido activada." };
+
+    } catch (err: any) {
+        console.error("Error activating VIP membership:", err);
+        return { success: false, error: err.message || "Ocurrió un error inesperado al activar la membresía." };
+    }
 }

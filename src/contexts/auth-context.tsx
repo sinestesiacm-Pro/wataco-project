@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { Loader2 } from 'lucide-react';
 
 // Check if we're in a development environment (like the preview window)
@@ -10,6 +12,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 interface AuthContextType {
   user: User | null;
+  isVIP: boolean;
   loading: boolean;
   signInWithGoogle: () => Promise<any>;
   logOut: () => Promise<any>;
@@ -30,21 +33,37 @@ const mockUser = {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isVIP, setIsVIP] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // If in development, use the mock user and skip Firebase auth
-    if (isDevelopment) {
-      setUser(mockUser);
-      setLoading(false);
-      return;
-    }
+    const checkUserStatus = async (firebaseUser: User | null) => {
+        if (isDevelopment) {
+            setUser(mockUser);
+            // Simulate checking VIP status for mock user
+            setIsVIP(false); 
+            setLoading(false);
+            return;
+        }
 
-    // Otherwise, use real Firebase auth
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
+        if (firebaseUser) {
+            setUser(firebaseUser);
+            // Check for VIP status in Firestore
+            const userDocRef = doc(db, 'users', firebaseUser.uid);
+            const userDoc = await getDoc(userDocRef);
+            if (userDoc.exists() && userDoc.data().isVIP) {
+                setIsVIP(true);
+            } else {
+                setIsVIP(false);
+            }
+        } else {
+            setUser(null);
+            setIsVIP(false);
+        }
+        setLoading(false);
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, checkUserStatus);
 
     return () => unsubscribe();
   }, []);
@@ -77,6 +96,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logOut = () => {
     if (isDevelopment) {
       setUser(null);
+      setIsVIP(false);
       return Promise.resolve();
     }
     return signOut(auth);
@@ -90,7 +110,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
   }
 
-  const value = { user, loading, signInWithGoogle, logOut, signUpWithEmail, signInWithEmail };
+  const value = { user, isVIP, loading, signInWithGoogle, logOut, signUpWithEmail, signInWithEmail };
 
   return (
     <AuthContext.Provider value={value}>
