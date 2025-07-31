@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogDescription,
   DialogFooter
 } from '@/components/ui/dialog';
@@ -32,10 +31,10 @@ const SectionCard = ({ title, description, icon: Icon, children, footer }: { tit
                 </div>
             </div>
         </CardHeader>
-        <CardContent className="flex-grow">
+        <CardContent className="flex-grow flex flex-col">
             {children}
         </CardContent>
-        {footer && <div className="p-6 pt-0 mt-4">{footer}</div>}
+        {footer && <div className="p-6 pt-0">{footer}</div>}
     </Card>
 )
 
@@ -74,8 +73,14 @@ export function SettingsDialog({ children }: { children: React.ReactNode }) {
                     title="Información de la Cuenta"
                     description="Actualiza tus datos personales y gestiona tu cuenta."
                     icon={User}
+                    footer={
+                         <Button onClick={handleSaveChanges} className="w-full">
+                            <Save className="mr-2 h-4 w-4" />
+                            Guardar Cambios
+                        </Button>
+                    }
                 >
-                   <div className="space-y-4">
+                   <div className="space-y-4 flex-grow">
                         <div>
                             <Label htmlFor="displayName">Nombre</Label>
                             <Input 
@@ -96,9 +101,8 @@ export function SettingsDialog({ children }: { children: React.ReactNode }) {
                         <Button variant="outline">Cambiar Contraseña</Button>
                    </div>
                    <Separator className="my-6" />
-                   <div className="space-y-2">
+                   <div className="space-y-2 flex flex-col items-start">
                      <Button variant="link" className="p-0 h-auto">Gestionar Dispositivos Conectados</Button>
-                     <br />
                      <Button variant="link" className="p-0 h-auto text-destructive/80 hover:text-destructive">Eliminar Cuenta</Button>
                    </div>
                 </SectionCard>
