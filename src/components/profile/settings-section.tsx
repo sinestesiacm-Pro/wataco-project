@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 
 
 const SectionCard = ({ title, description, icon: Icon, children, footer }: { title: string, description: string, icon: React.ElementType, children: React.ReactNode, footer?: React.ReactNode }) => (
-    <Card className="bg-black/20 backdrop-blur-xl border-none text-white flex flex-col">
+    <Card className="bg-black/20 backdrop-blur-xl border-none text-white flex flex-col shadow-lg">
         <CardHeader>
             <div className="flex items-start gap-4">
                 <Icon className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
@@ -58,48 +58,48 @@ export function SettingsSection() {
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             
-            <SectionCard
-                title="Información de la Cuenta"
-                description="Actualiza tus datos personales y gestiona tu cuenta."
-                icon={User}
-                footer={
-                    <Button onClick={handleSaveChanges} className="w-full">
-                        <Save className="mr-2 h-4 w-4" />
-                        Guardar Cambios
-                    </Button>
-                }
-            >
-               <div className="space-y-4">
-                    <div>
-                        <Label htmlFor="displayName" className="text-white/80">Nombre</Label>
-                        <Input 
-                            id="displayName" 
-                            value={displayName}
-                            onChange={(e) => setDisplayName(e.target.value)}
-                            className="bg-black/20 border-white/30" 
-                        />
-                    </div>
-                    <div>
-                        <Label htmlFor="email" className="text-white/80">Correo Electrónico</Label>
-                        <Input 
-                            id="email" 
-                            type="email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="bg-black/20 border-white/30" 
-                        />
-                    </div>
-                    <Button variant="outline" className="bg-transparent border-white/30 hover:bg-white/10">Cambiar Contraseña</Button>
-               </div>
-               <Separator className="my-6 bg-white/20" />
-               <div className="space-y-2">
-                 <Button variant="link" className="p-0 h-auto text-white/70 hover:text-white">Gestionar Dispositivos Conectados</Button>
-                 <br />
-                 <Button variant="link" className="p-0 h-auto text-destructive/80 hover:text-destructive">Eliminar Cuenta</Button>
-               </div>
-            </SectionCard>
+             <div className="space-y-8">
+                 <SectionCard
+                    title="Información de la Cuenta"
+                    description="Actualiza tus datos personales y gestiona tu cuenta."
+                    icon={User}
+                    footer={
+                        <Button onClick={handleSaveChanges} className="w-full">
+                            <Save className="mr-2 h-4 w-4" />
+                            Guardar Cambios
+                        </Button>
+                    }
+                >
+                   <div className="space-y-4">
+                        <div>
+                            <Label htmlFor="displayName" className="text-white/80">Nombre</Label>
+                            <Input 
+                                id="displayName" 
+                                value={displayName}
+                                onChange={(e) => setDisplayName(e.target.value)}
+                                className="bg-black/20 border-white/30" 
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="email" className="text-white/80">Correo Electrónico</Label>
+                            <Input 
+                                id="email" 
+                                type="email" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="bg-black/20 border-white/30" 
+                            />
+                        </div>
+                        <Button variant="outline" className="bg-transparent border-white/30 hover:bg-white/10">Cambiar Contraseña</Button>
+                   </div>
+                   <Separator className="my-6 bg-white/20" />
+                   <div className="space-y-2">
+                     <Button variant="link" className="p-0 h-auto text-white/70 hover:text-white">Gestionar Dispositivos Conectados</Button>
+                     <br />
+                     <Button variant="link" className="p-0 h-auto text-destructive/80 hover:text-destructive">Eliminar Cuenta</Button>
+                   </div>
+                </SectionCard>
 
-            <div className="space-y-8">
                  <SectionCard
                     title="Preferencias"
                     description="Personaliza la apariencia y el comportamiento de la aplicación."
@@ -116,7 +116,9 @@ export function SettingsSection() {
                         </div>
                    </div>
                 </SectionCard>
-                
+            </div>
+
+            <div className="space-y-8">
                  <SectionCard
                     title="Notificaciones"
                     description="Elige cómo quieres que te contactemos."

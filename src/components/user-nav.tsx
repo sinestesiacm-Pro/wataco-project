@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogOut, User as UserIcon, LayoutGrid, Settings } from 'lucide-react';
 import Link from 'next/link';
+import { SettingsDialog } from './settings-dialog';
 
 export function UserNav() {
   const { user, logOut } = useAuth();
@@ -51,12 +52,12 @@ export function UserNav() {
               <span>Mi Perfil</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/profile?section=settings">
+          <SettingsDialog>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="cursor-pointer">
               <Settings className="mr-2 h-4 w-4" />
               <span>Configuración</span>
-            </Link>
-          </DropdownMenuItem>
+            </DropdownMenuItem>
+          </SettingsDialog>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logOut} className="cursor-pointer">

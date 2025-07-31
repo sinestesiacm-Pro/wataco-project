@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Book, Plane, Images, Users, Settings, Gift, Globe, CircleDollarSign, Camera } from 'lucide-react';
+import { Book, Plane, Images, Users, Gift, Globe, CircleDollarSign, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -19,7 +19,6 @@ const navItems = [
   { name: 'Álbumes', href: 'albums', icon: Images },
   { name: 'Social', href: 'social', icon: Users },
   { name: 'Activar Bono', href: 'bonus', icon: Gift },
-  { name: 'Configuración', href: 'settings', icon: Settings },
 ];
 
 export default function ProfileSidebar() {
