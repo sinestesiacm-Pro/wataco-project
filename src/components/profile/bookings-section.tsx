@@ -9,14 +9,14 @@ import { Button } from "@/components/ui/button";
 
 const mockBookings = {
   upcoming: [
-    { id: 'up1', type: 'Vuelo + Hotel', destination: 'París, Francia', date: '24 Sep - 30 Sep', status: 'Confirmado', price: '2500', image: 'https://images.unsplash.com/photo-1502602898657-3e91760c0341?w=500', icon: Plane },
+    { id: 'up1', type: 'Vuelo + Hotel', destination: 'París, Francia', date: '24 Sep - 30 Sep', status: 'Confirmado', price: '2500', image: 'https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=500', icon: Plane },
   ],
   past: [
-    { id: 'pa1', type: 'Hotel', destination: 'The Grand Resort, Miami', date: '15 Jul - 20 Jul', status: 'Completado', price: '2375', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500', icon: BedDouble },
-    { id: 'pa2', type: 'Crucero', destination: 'Sueño del Caribe', date: '01 Feb - 08 Feb', status: 'Completado', price: '1960', image: 'https://images.unsplash.com/photo-1548554992-8935a7a781a3?w=500', icon: Ship },
+    { id: 'pa1', type: 'Hotel', destination: 'The Grand Resort, Miami', date: '15 Jul - 20 Jul', status: 'Completado', price: '2375', image: 'https://images.unsplash.com/photo-1549294413-26f195200c16?w=500', icon: BedDouble },
+    { id: 'pa2', type: 'Crucero', destination: 'Sueño del Caribe', date: '01 Feb - 08 Feb', status: 'Completado', price: '1960', image: 'https://images.unsplash.com/photo-1620789439137-23451b68e0e6?w=500', icon: Ship },
   ],
   cancelled: [
-     { id: 'ca1', type: 'Actividad', destination: 'Tour por la Ciudad Histórica', date: '10 May', status: 'Cancelado', price: '50', image: 'https://images.unsplash.com/photo-1549893060-5407a1443469?w=500', icon: Zap },
+     { id: 'ca1', type: 'Actividad', destination: 'Tour por la Ciudad Histórica', date: '10 May', status: 'Cancelado', price: '50', image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=500', icon: Zap },
   ],
 };
 
