@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const mockNextTrip = {
   destination: "París, Francia",
-  image: "https://images.unsplash.com/photo-1502602898657-3e91760c0341?w=800",
+  image: "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwYXJpcyUyMGVpZmZlbCUyMHRvd2VyfGVufDB8fHx8MTc1Mzg3MzI5M3ww&ixlib=rb-4.1.0&q=80&w=1080",
   startDate: "2024-09-24T00:00:00.000Z",
   endDate: "2024-09-30T00:00:00.000Z",
   type: "Vuelo + Hotel",
@@ -59,7 +59,7 @@ export function NextTripSection() {
         {/* Main Card */}
         <Card className="lg:col-span-2 bg-black/20 backdrop-blur-xl border-none text-white relative overflow-hidden">
              <div className="absolute inset-0">
-                <Image src={mockNextTrip.image} alt={mockNextTrip.destination} fill className="object-cover opacity-30" />
+                <Image src={mockNextTrip.image} data-ai-hint="paris eiffel tower" alt={mockNextTrip.destination} fill className="object-cover opacity-30" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
             </div>
             <div className="relative flex flex-col h-full">
