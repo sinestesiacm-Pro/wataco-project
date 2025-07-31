@@ -11,14 +11,14 @@ import Link from "next/link";
 const userPosts = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1573790387438-4da905039392?w=500',
+    image: 'https://images.unsplash.com/photo-1573790387438-4da905039392?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxiYWxpJTIwdHJhdmVsfGVufDB8fHx8MTc1Mzg3ODU5Mnww&ixlib=rb-4.1.0&q=80&w=1080',
     caption: '¡Explorando las maravillas de Bali!',
     likes: 124,
     comments: 12,
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1533106418989-88406e768237?w=500',
+    image: 'https://images.unsplash.com/photo-1533106418989-88406e768237?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYWxpZm9ybmlhJTIwY29hc3QlMjByb2FkJTIwdHJpcHxlbnwwfHx8fDE3NTM4Nzg3MjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
     caption: 'Aventura en la carretera por la costa de California.',
     likes: 215,
     comments: 22,
@@ -42,7 +42,7 @@ export function SocialProfileSection() {
     return (
         <div className="space-y-6">
             {/* Profile Header */}
-            <Card className="bg-black/20 backdrop-blur-xl border-none text-white">
+            <Card className="bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
                 <CardContent className="p-6">
                     <div className="flex flex-col sm:flex-row items-center gap-6">
                         <Avatar className="h-24 w-24 text-4xl border-4 border-primary">
@@ -77,7 +77,7 @@ export function SocialProfileSection() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {userPosts.map(post => (
-                    <div key={post.id} className="relative group rounded-2xl overflow-hidden aspect-square">
+                    <div key={post.id} className="relative group rounded-2xl overflow-hidden aspect-square shadow-lg hover:shadow-xl transition-all">
                         <Image src={post.image} alt={post.caption} fill className="object-cover" />
                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white">
                             <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ export function SocialProfileSection() {
                         </div>
                     </div>
                 ))}
-                <div className="relative group rounded-2xl overflow-hidden aspect-square flex items-center justify-center bg-black/20 border-2 border-dashed border-white/30 cursor-pointer hover:bg-black/30 transition-colors">
+                <div className="relative group rounded-2xl overflow-hidden aspect-square flex items-center justify-center bg-black/20 border-2 border-dashed border-white/30 cursor-pointer hover:bg-black/30 transition-colors shadow-lg hover:shadow-xl">
                     <Plus className="h-10 w-10 text-white/50" />
                 </div>
             </div>
@@ -100,4 +100,3 @@ export function SocialProfileSection() {
 }
 
 const Separator = ({ className }: { className?: string }) => <div className={`h-px w-full ${className}`} />;
-
