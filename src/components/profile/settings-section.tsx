@@ -17,7 +17,7 @@ import {
 
 
 const SectionCard = ({ title, description, icon: Icon, children }: { title: string, description: string, icon: React.ElementType, children: React.ReactNode }) => (
-    <Card className="bg-black/30 border-white/20">
+    <Card className="bg-black/20 backdrop-blur-xl border-none text-white">
         <CardHeader>
             <div className="flex items-start gap-4">
                 <Icon className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
