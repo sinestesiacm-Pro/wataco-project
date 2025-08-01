@@ -1,3 +1,4 @@
+
 'use server';
 
 import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData } from '@/lib/types';
@@ -303,7 +304,7 @@ const vipActivationSchema = z.object({
     membershipCode: z.string().min(6, "Membership code must be at least 6 characters."),
 });
 
-export async function activateVipMembership(params: { userId: string, membershipCode: string }): Promise<{ success: boolean; error?: string; message?: string }> {
+export async function activateVipMembership(params: { userId: string, membershipCode: string }): Promise<{ success: boolean; error?: string; message?: string; tier?: string }> {
     const validation = vipActivationSchema.safeParse(params);
     if (!validation.success) {
         return { success: false, error: 'Parámetros de activación inválidos.' };
@@ -327,6 +328,8 @@ export async function activateVipMembership(params: { userId: string, membership
         if (vipData.isUsed) {
             return { success: false, error: "Este código de membresía ya ha sido utilizado." };
         }
+        
+        const vipTier = vipData.tier || 'gold'; // Default to gold if tier is not specified
 
         const batch = writeBatch(db);
 
@@ -336,11 +339,11 @@ export async function activateVipMembership(params: { userId: string, membership
 
         // Update the user's profile to mark them as a VIP
         const userDocRef = doc(db, "users", userId);
-        batch.set(userDocRef, { isVIP: true }, { merge: true });
+        batch.set(userDocRef, { vipTier: vipTier }, { merge: true });
 
         await batch.commit();
 
-        return { success: true, message: "¡Felicitaciones! Tu membresía VIP ha sido activada." };
+        return { success: true, message: "¡Felicitaciones! Tu membresía VIP ha sido activada.", tier: vipTier };
 
     } catch (err: any) {
         console.error("Error activating VIP membership:", err);

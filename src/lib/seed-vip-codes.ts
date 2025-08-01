@@ -1,3 +1,4 @@
+
 // To execute this script, run the following command in your terminal:
 // npx tsx src/lib/seed-vip-codes.ts
 
@@ -23,12 +24,16 @@ async function seedVipCodes() {
   // Optional: Check if the collection is already populated
   const existingDocs = await getDocs(vipMembershipsRef);
   if (!existingDocs.empty) {
-    console.log('The "vip_memberships" collection already contains data. Aborting seeding.');
-    return;
+    console.log('The "vip_memberships" collection already contains data. Deleting old data before seeding.');
+    const deleteBatch = writeBatch(db);
+    existingDocs.forEach(doc => deleteBatch.delete(doc.ref));
+    await deleteBatch.commit();
+    console.log('Old data deleted.');
   }
 
   const batch = writeBatch(db);
   const codesToGenerate = 20;
+  const tiers = ['gold', 'platinum', 'black'];
   const generatedCodes = new Set<string>();
 
   while (generatedCodes.size < codesToGenerate) {
@@ -38,13 +43,15 @@ async function seedVipCodes() {
 
   console.log(`Generated ${codesToGenerate} unique codes.`);
 
-  generatedCodes.forEach(code => {
+  Array.from(generatedCodes).forEach((code, index) => {
     // Let Firestore generate a unique document ID automatically
     const docRef = doc(vipMembershipsRef); 
+    const tier = tiers[index % tiers.length]; // Distribute tiers among codes
     batch.set(docRef, {
       code: code,
       isUsed: false,
       usedBy: null,
+      tier: tier
     });
   });
 
