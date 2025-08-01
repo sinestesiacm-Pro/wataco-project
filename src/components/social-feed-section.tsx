@@ -16,7 +16,7 @@ const feedItems = [
   },
   {
     user: { name: 'Carlos R.', avatar: 'https://images.unsplash.com/photo-1636377985931-898218afd306?w=100' },
-    image: 'https://images.unsplash.com/photo-1572009343275-39e163b2da41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxlZ3lwdCUyMHB5cmFtaWRzJTIwdHJhdmVsfGVufDB8fHx8MTc1Mzg3ODY1N3ww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1569531955317-390fbbc73f17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlZ2lwdG98ZW58MHx8fHwxNzU0MDg1MTE2fDA&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'egypt travel',
     caption: 'Finalmente cumpliendo mi sueño de ver las pirámides de Giza. Una experiencia que te cambia la vida. ✨',
     likes: 302,
