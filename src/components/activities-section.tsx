@@ -7,7 +7,7 @@ import { Heart, Star } from 'lucide-react';
 
 const activities = [
   { id: 'atv-guatape-1', name: 'Paseo en Cuatrimoto', description: 'Aventura todoterreno de 45-50 min en Guatapé.', image: 'https://images.unsplash.com/photo-1620027653298-545b44fab76b?w=500', hint: 'atv adventure', rating: 5, reviews: 489, price: '70' },
-  { id: 'jetski-guatape-1', name: 'Jetski en el Embalse', description: '30 min (2p) por $55 o 1 hora por $99.', image: 'https://images.unsplash.com/photo-1599409634947-3866b7294b69?w=500', hint: 'jetski water', rating: 5, reviews: 612, price: '55' },
+  { id: 'jetski-guatape-1', name: 'Jetski en el Embalse', description: '30 min (2p) por $55 o 1 hora por $99.', image: 'https://images.unsplash.com/photo-1598028060898-c117093edfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxndWF0YXBlfGVufDB8fHx8MTc1NDA4NDQ5MXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'guatape lake', rating: 5, reviews: 612, price: '55' },
   { id: 'paraglide-guatape-1', name: 'Vuelo en Parapente', description: '10 minutos de vuelo sobre Guatapé.', image: 'https://images.unsplash.com/photo-1565563445845-7c5fe4441e42?w=500', hint: 'paragliding flight', rating: 4, reviews: 315, price: '89' },
   { id: 'cooking-class-1', name: 'Clase de Cocina Local', description: 'Aprende platos típicos de la región antioqueña.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?w=500', hint: 'cooking class', rating: 5, reviews: 211, price: '85' },
 ];
