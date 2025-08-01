@@ -32,7 +32,7 @@ const feedItems = [
   },
   {
     user: { name: 'David S.', avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100' },
-    image: 'https://images.unsplash.com/photo-1533106418989-88406e768237?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYWxpZm9ybmlhJTIwY29hc3QlMjByb2FkJTIwdHJpcHxlbnwwfHx8fDE3NTM4Nzg3MjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1594365458706-6fab3472f681?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjYWxpZm9ybmlhfGVufDB8fHx8MTc1NDA4NTA2Mnww&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'california roadtrip',
     caption: '¡Aventura en la carretera por la costa de California! Cada curva es una nueva postal. 🚗💨',
     likes: 215,
