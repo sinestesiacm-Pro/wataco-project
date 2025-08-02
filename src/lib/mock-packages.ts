@@ -30,7 +30,7 @@ export const recommendedPackages: PackageOffer[] = [
     description: "Descubre el corazón del café colombiano. Alójate en una hacienda tradicional, aprende del proceso del café y maravíllate con los paisajes del Valle de Cocora.",
     includes: ["Vuelo a Armenia", "Alojamiento en finca cafetera con desayuno", "Tour de café", "Excursión al Valle de Cocora y Salento"],
     not_included: ["Transporte terrestre entre ciudades", "Almuerzos y cenas", "Propinas"],
-    image: "https://images.unsplash.com/photo-1737914692026-678dfb176171?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjb2NvcmElMjB2YWxsZXklMjBjb2xvbWJpYXxlbnwwfHx8fDE3NTQxMzU3Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    image: "https://images.unsplash.com/photo-1532185922611-3410b1898a1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2YWxsZSUyMGRlbCUyMGNvY29yYXxlbnwwfHx8fDE3NTQxMzYzNjl8MA&ixlib=rb-4.1.0&q=80&w=1080",
     hint: "cocora valley colombia",
     rating: 5,
     reviews: 987,
