@@ -15,7 +15,7 @@ const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
             <Image 
                 src={hotel.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'} 
                 data-ai-hint="hotel exterior" 
-                alt={hotel.hotel.name} 
+                alt={hotel.hotel.name || 'Hotel'} 
                 fill 
                 className="object-cover rounded-t-2xl transition-transform duration-300 group-hover:scale-105"
             />
