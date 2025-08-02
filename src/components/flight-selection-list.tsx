@@ -4,13 +4,12 @@ import Image from 'next/image';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plane, Clock, ArrowDown } from 'lucide-react';
+import { Plane, Clock, ArrowRight } from 'lucide-react';
 import { FlightBaggageInfo } from './flight-baggage-info';
 import { FlightDetailsDialog } from './flight-details-dialog';
 import { cn } from '@/lib/utils';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { differenceInMinutes, formatDistanceStrict } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { differenceInMinutes } from 'date-fns';
 import React from 'react';
 
 const formatDuration = (duration: string) => {
@@ -44,7 +43,7 @@ const getLayoverInfo = (currentSegment: Segment, nextSegment: Segment, dictionar
 
 
 const FlightItineraryDetail = ({ itinerary, dictionaries }: { itinerary: Itinerary, dictionaries: Dictionaries }) => (
-    <div className="bg-black/10 backdrop-blur-sm p-4 rounded-b-2xl">
+    <div className="bg-black/20 backdrop-blur-sm p-4 rounded-b-2xl">
         <div className="relative pl-6">
             {/* Timeline line */}
             <div className="absolute left-10 top-5 bottom-5 w-0.5 bg-primary/30" />
@@ -62,16 +61,17 @@ const FlightItineraryDetail = ({ itinerary, dictionaries }: { itinerary: Itinera
                                 <div className="h-4 w-4 bg-primary rounded-full mt-1 border-2 border-background ring-2 ring-primary/50" />
                             </div>
                             <div className="flex-grow pl-6 pb-8">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <p className="font-bold text-white">{formatTime(segment.departure.at)} - {segment.departure.iataCode}</p>
-                                        <p className="text-sm text-white/70">{formatDate(segment.departure.at)}</p>
-                                    </div>
-                                    <div className="text-right">
-                                         <p className="font-bold text-white">{formatTime(segment.arrival.at)} - {segment.arrival.iataCode}</p>
-                                        <p className="text-sm text-white/70">{formatDate(segment.arrival.at)}</p>
-                                    </div>
+                                <div className="flex items-center gap-2 font-bold text-white">
+                                    <span>{formatTime(segment.departure.at)}</span>
+                                    <ArrowRight className="h-4 w-4" />
+                                    <span>{formatTime(segment.arrival.at)}</span>
                                 </div>
+                                <div className="flex items-center gap-2 text-sm text-white/80">
+                                    <span>{segment.departure.iataCode}</span>
+                                    <span>-</span>
+                                    <span>{segment.arrival.iataCode}</span>
+                                </div>
+                                <p className="text-xs text-white/70 mt-1">{formatDate(segment.departure.at)}</p>
                                 <p className="text-xs text-white/70 mt-1">{airlineName} · Duración: {formatDuration(segment.duration)}</p>
                             </div>
                         </div>
