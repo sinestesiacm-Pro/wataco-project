@@ -34,7 +34,6 @@ export const recommendedPackages: PackageOffer[] = [
     hint: "cocora valley colombia",
     rating: 5,
     reviews: 987,
-    not_included: []
   },
   {
     id: "COL-AMA-01",
@@ -83,8 +82,7 @@ export const recommendedPackages: PackageOffer[] = [
     image: "https://images.unsplash.com/photo-1708716174800-978f0f2762ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0YXlyb25hfGVufDB8fHx8MTc1NDEzNTg3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
     hint: "tayrona park colombia beach",
     rating: 5,
-    reviews: 2143,
-    not_included: []
+    reviews: 2143
   },
   {
     id: "COL-SAP-01",
