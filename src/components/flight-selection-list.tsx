@@ -43,10 +43,10 @@ const getLayoverInfo = (currentSegment: Segment, nextSegment: Segment, dictionar
 
 
 const FlightItineraryDetail = ({ itinerary, dictionaries }: { itinerary: Itinerary, dictionaries: Dictionaries }) => (
-    <div className="bg-black/20 backdrop-blur-sm p-4 rounded-b-2xl">
+    <div className="p-4">
         <div className="relative pl-5">
             {/* Timeline line */}
-            <div className="absolute left-10 top-5 bottom-5 w-0.5 bg-primary/30" />
+            <div className="absolute left-[22px] top-5 bottom-5 w-0.5 bg-primary/30" />
 
             {itinerary.segments.map((segment, index) => {
                 const isLastSegment = index === itinerary.segments.length - 1;
@@ -57,8 +57,8 @@ const FlightItineraryDetail = ({ itinerary, dictionaries }: { itinerary: Itinera
                     <React.Fragment key={segment.id}>
                         {/* Segment Point */}
                         <div className="flex items-start gap-4 relative">
-                            <div className="absolute left-0 top-0 h-full flex justify-center w-10">
-                                <div className="h-4 w-4 bg-primary rounded-full mt-1 border-2 border-background ring-2 ring-primary/50" />
+                            <div className="absolute left-0 top-0 h-full flex justify-center w-12">
+                                <div className="h-4 w-4 bg-primary rounded-full mt-1 border-2 border-white/50 ring-2 ring-primary/50" />
                             </div>
                             <div className="flex-grow pl-8 pb-8">
                                 <div className="flex items-center gap-2 font-bold text-white">
@@ -79,10 +79,10 @@ const FlightItineraryDetail = ({ itinerary, dictionaries }: { itinerary: Itinera
                         {/* Layover Point */}
                         {layover && (
                              <div className="flex items-start gap-4 relative mb-8">
-                                <div className="absolute left-0 top-0 h-full flex justify-center w-10">
-                                    <Clock className="h-4 w-4 text-accent mt-1" />
+                                <div className="absolute left-0 top-0 h-full flex justify-center w-12">
+                                    <Clock className="h-4 w-4 text-primary mt-1" />
                                 </div>
-                                <div className="pl-8 text-accent font-semibold">
+                                <div className="pl-8 text-primary font-semibold">
                                     <p>Escala en {layover.location} · {layover.duration}</p>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
 
     return (
         <Collapsible asChild>
-            <Card className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border-none bg-white/60 backdrop-blur-lg flex flex-col text-gray-800">
+            <div className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border-none bg-white/60 backdrop-blur-lg flex flex-col text-gray-800">
                 <div className="flex flex-col sm:flex-row">
                     {/* Main boarding pass section */}
                     <div className="flex-grow p-4 md:p-6">
@@ -179,7 +179,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                  <CollapsibleContent>
                     <FlightItineraryDetail itinerary={itinerary} dictionaries={dictionaries} />
                 </CollapsibleContent>
-            </Card>
+            </div>
         </Collapsible>
     );
 };
