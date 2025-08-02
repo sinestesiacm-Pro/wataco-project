@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Heart, Star } from 'lucide-react';
 
 const activities = [
-  { id: 'coffee-tour-1', name: 'Tour de Café en el Eje', description: 'Descubre el proceso del café, desde la semilla hasta la taza.', image: 'https://images.unsplash.com/photo-1599933310642-8a071d1e434e?w=500', hint: 'colombia coffee farm', rating: 5, reviews: 489, price: '45' },
+  { id: 'guatape-tour-1', name: 'Excursión a Guatapé y El Peñol', description: 'Un día completo para explorar la piedra y el colorido pueblo.', image: 'https://images.unsplash.com/photo-1588334493335-512c1d23b37b?w=500', hint: 'guatape colombia', rating: 5, reviews: 1532, price: '65' },
   { id: 'paraglide-chicamocha-1', name: 'Parapente en Chicamocha', description: 'Vuela sobre el segundo cañón más grande del mundo.', image: 'https://images.unsplash.com/photo-1689074521618-6c2b3dc31470?w=500', hint: 'paragliding canyon', rating: 5, reviews: 612, price: '89' },
-  { id: 'diving-san-andres-1', name: 'Buceo en San Andrés', description: 'Explora el mar de los siete colores y su barrera de coral.', image: 'https://images.unsplash.com/photo-1574542544973-59c3d8b59d32?w=500', hint: 'scuba diving caribbean', rating: 4, reviews: 315, price: '70' },
-  { id: 'cooking-class-1', name: 'Clase de Cocina Local', description: 'Aprende a preparar platos típicos de la región antioqueña.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?w=500', hint: 'cooking class', rating: 5, reviews: 211, price: '85' },
+  { id: 'coffee-tour-1', name: 'Tour de Café en el Eje', description: 'Descubre el proceso del café, desde la semilla hasta la taza.', image: 'https://images.unsplash.com/photo-1599933310642-8a071d1e434e?w=500', hint: 'colombia coffee farm', rating: 5, reviews: 489, price: '45' },
+  { id: 'guatape-boat-1', name: 'Paseo en Barco por la Represa', description: 'Navega por las tranquilas aguas y descubre islas ocultas.', image: 'https://images.unsplash.com/photo-1636831154859-90cb8a7e584f?w=500', hint: 'guatape lake', rating: 4, reviews: 721, price: '30' },
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
