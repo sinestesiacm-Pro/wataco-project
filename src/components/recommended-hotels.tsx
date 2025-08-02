@@ -51,24 +51,21 @@ const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
 );
 
 export function RecommendedHotels() {
-  const [shuffledHotels, setShuffledHotels] = useState<AmadeusHotelOffer[]>([]);
+  const [colombianHotels, setColombianHotels] = useState<AmadeusHotelOffer[]>([]);
 
   useEffect(() => {
-    // Fisher-Yates shuffle algorithm
-    const array = [...MOCK_HOTELS_DATA];
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    setShuffledHotels(array.slice(0, 4));
+    // Filter for Colombian hotels and then shuffle them
+    const filtered = MOCK_HOTELS_DATA.filter(hotel => hotel.hotel.address.countryCode === 'CO');
+    const shuffled = [...filtered].sort(() => 0.5 - Math.random());
+    setColombianHotels(shuffled.slice(0, 4));
   }, []);
 
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Hoteles Recomendados</h2>
+      <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Hoteles Recomendados en Colombia</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {shuffledHotels.map((hotel, index) => (
+        {colombianHotels.map((hotel, index) => (
           <HotelCard key={hotel.id || index} hotel={hotel} />
         ))}
       </div>

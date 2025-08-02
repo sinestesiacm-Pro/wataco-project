@@ -101,4 +101,21 @@ export const recommendedPackages: PackageOffer[] = [
     reviews: 1765,
     special_offer: "🌊 Paraíso Caribeño"
   },
+  {
+    id: "COL-BAQ-01",
+    title: "Carnaval de Barranquilla",
+    destination: "Barranquilla, Colombia",
+    origin: "Miami",
+    price: 550,
+    duration: 4,
+    dates: "Febrero 2025",
+    description: "¡Quien lo vive es quien lo goza! Experimenta uno de los carnavales más famosos del mundo. Color, música y alegría te esperan en la Puerta de Oro de Colombia.",
+    includes: ["Vuelo redondo a Barranquilla", "Hotel 4 estrellas", "Palco para la Batalla de Flores", "Desayunos"],
+    not_included: ["Otras comidas", "Entradas a otros eventos", "Gastos personales"],
+    image: "https://images.unsplash.com/photo-1652087399285-a74523116a13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYXJuYXZhbCUyMGJhcnJhbnF1aWxsYXxlbnwwfHx8fDE3NTQyNDM4NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    hint: "barranquilla carnival",
+    rating: 5,
+    reviews: 2500,
+    special_offer: "🎉 ¡Vive el Carnaval!"
+  }
 ];
