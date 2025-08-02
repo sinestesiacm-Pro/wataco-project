@@ -54,9 +54,13 @@ export function RecommendedHotels() {
   const [colombianHotels, setColombianHotels] = useState<AmadeusHotelOffer[]>([]);
 
   useEffect(() => {
-    // Filter for Colombian hotels and then shuffle them
+    // Filter for Colombian hotels
     const filtered = MOCK_HOTELS_DATA.filter(hotel => hotel.hotel.address.countryCode === 'CO');
+    
+    // Shuffle the filtered array
     const shuffled = [...filtered].sort(() => 0.5 - Math.random());
+
+    // Get the first 4 elements
     setColombianHotels(shuffled.slice(0, 4));
   }, []);
 
