@@ -57,10 +57,10 @@ export function RecommendedHotels() {
     // Filter for Colombian hotels
     const filtered = MOCK_HOTELS_DATA.filter(hotel => hotel.hotel.address.countryCode === 'CO');
     
-    // Shuffle the filtered array
+    // Shuffle the filtered array to get different hotels on each load
     const shuffled = [...filtered].sort(() => 0.5 - Math.random());
 
-    // Get the first 4 elements
+    // Get the first 4 elements, ensuring we don't try to slice more than available.
     setColombianHotels(shuffled.slice(0, 4));
   }, []);
 
