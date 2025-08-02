@@ -74,7 +74,7 @@ export function Header() {
           
           <div className="flex-1 flex justify-start">
              <Link href="/">
-                <Icons.logo width={120} height={40} className="text-white" />
+                <Icons.logo width={120} height={40} />
              </Link>
           </div>
           
