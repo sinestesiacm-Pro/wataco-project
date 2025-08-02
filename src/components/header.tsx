@@ -65,7 +65,7 @@ export function Header() {
     <header 
       className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
-        isTransparentHeader ? "bg-transparent" : "bg-card/10 backdrop-blur-xl"
+        isTransparentHeader ? "bg-transparent" : "bg-black/10 backdrop-blur-xl"
       )}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
