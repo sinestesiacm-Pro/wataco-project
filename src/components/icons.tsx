@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const TravelCOPLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
   <Image
-    src="https://i.ibb.co/7bQ4h8w/travelcop-logo.png"
+    src="https://i.ibb.co/F4kT2fFG/Chat-GPT-Image-2-ago-2025-12-23-04.png"
     alt="TravelCOP Logo"
     width={width}
     height={height}

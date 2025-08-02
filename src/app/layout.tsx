@@ -25,7 +25,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="icon" href="https://i.ibb.co/6y4n3xR/travelcop-logo-favicon.png" type="image/png" />
+        <link rel="icon" href="https://i.ibb.co/F4kT2fFG/Chat-GPT-Image-2-ago-2025-12-23-04.png" type="image/png" />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
