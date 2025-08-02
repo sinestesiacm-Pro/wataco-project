@@ -35,9 +35,9 @@ export default function FlightSearchPage() {
   const isMobile = useIsMobile();
   
   const [origin, setOrigin] = useState('MAD');
-  const [destination, setDestination] = useState('');
-  const [originQuery, setOriginQuery] = useState('Madrid');
-  const [destinationQuery, setDestinationQuery] = useState('');
+  const [destination, setDestination] = useState('BOG');
+  const [originQuery, setOriginQuery] = useState('Madrid, España');
+  const [destinationQuery, setDestinationQuery] = useState('Bogotá, Colombia');
   
   const [date, setDate] = useState<DateRange | undefined>({
       from: addDays(new Date(), 7),

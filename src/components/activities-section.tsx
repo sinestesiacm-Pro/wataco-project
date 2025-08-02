@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -5,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Heart, Star } from 'lucide-react';
 
 const activities = [
-  { id: 'atv-guatape-1', name: 'Paseo en Cuatrimoto', description: 'Aventura todoterreno de 45-50 min en Guatapé.', image: 'https://images.unsplash.com/photo-1575677155757-b5eb75df3a4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxxdWFkJTIwYmlrZXxlbnwwfHx8fDE3NTQwODQ3NzN8MA&ixlib=rb-4.1.0&q=80&w=1080', hint: 'atv adventure', rating: 5, reviews: 489, price: '70' },
-  { id: 'jetski-guatape-1', name: 'Jetski en el Embalse', description: '30 min (2p) por $55 o 1 hora por $99.', image: 'https://images.unsplash.com/photo-1598028060898-c117093edfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxndWF0YXBlfGVufDB8fHx8MTc1NDA4NDQ5MXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'guatape lake', rating: 5, reviews: 612, price: '55' },
-  { id: 'paraglide-guatape-1', name: 'Vuelo en Parapente', description: '10 minutos de vuelo sobre Guatapé.', image: 'https://images.unsplash.com/photo-1689074521618-6c2b3dc31470?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8cGFyYXBlbnRlfGVufDB8fHx8MTc1NDA4NDU3Mnww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'paragliding flight', rating: 4, reviews: 315, price: '89' },
-  { id: 'cooking-class-1', name: 'Clase de Cocina Local', description: 'Aprende platos típicos de la región antioqueña.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?w=500', hint: 'cooking class', rating: 5, reviews: 211, price: '85' },
+  { id: 'coffee-tour-1', name: 'Tour de Café en el Eje', description: 'Descubre el proceso del café, desde la semilla hasta la taza.', image: 'https://images.unsplash.com/photo-1599933310642-8a071d1e434e?w=500', hint: 'colombia coffee farm', rating: 5, reviews: 489, price: '45' },
+  { id: 'paraglide-chicamocha-1', name: 'Parapente en Chicamocha', description: 'Vuela sobre el segundo cañón más grande del mundo.', image: 'https://images.unsplash.com/photo-1689074521618-6c2b3dc31470?w=500', hint: 'paragliding canyon', rating: 5, reviews: 612, price: '89' },
+  { id: 'diving-san-andres-1', name: 'Buceo en San Andrés', description: 'Explora el mar de los siete colores y su barrera de coral.', image: 'https://images.unsplash.com/photo-1574542544973-59c3d8b59d32?w=500', hint: 'scuba diving caribbean', rating: 4, reviews: 315, price: '70' },
+  { id: 'cooking-class-1', name: 'Clase de Cocina Local', description: 'Aprende a preparar platos típicos de la región antioqueña.', image: 'https://images.unsplash.com/photo-1634151739970-bba3910d0d36?w=500', hint: 'cooking class', rating: 5, reviews: 211, price: '85' },
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
@@ -47,7 +48,7 @@ export function ActivitiesSection() {
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-3xl font-bold font-headline text-white">Actividades y Experiencias</h2>
-        <p className="text-white/80 mt-2">Descubre aventuras inolvidables en tu próximo destino.</p>
+        <p className="text-white/80 mt-2">Descubre aventuras inolvidables en tu próximo destino en Colombia.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {activities.map((activity, index) => (

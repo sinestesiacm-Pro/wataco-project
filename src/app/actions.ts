@@ -138,16 +138,16 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
 }
 
 const hotelDestinations: Airport[] = [
-    { name: 'Nueva York', iataCode: 'NYC', subType: 'CITY', address: { cityName: 'Nueva York', countryName: 'Estados Unidos' } },
-    { name: 'Londres', iataCode: 'LON', subType: 'CITY', address: { cityName: 'Londres', countryName: 'Reino Unido' } },
-    { name: 'París', iataCode: 'PAR', subType: 'CITY', address: { cityName: 'París', countryName: 'Francia' } },
-    { name: 'Tokio', iataCode: 'TYO', subType: 'CITY', address: { cityName: 'Tokio', countryName: 'Japón' } },
-    { name: 'Dubai', iataCode: 'DXB', subType: 'CITY', address: { cityName: 'Dubai', countryName: 'Emiratos Árabes Unidos' } },
-    { name: 'Roma', iataCode: 'ROM', subType: 'CITY', address: { cityName: 'Roma', countryName: 'Italia' } },
-    { name: 'Cancún', iataCode: 'CUN', subType: 'CITY', address: { cityName: 'Cancún', countryName: 'México' } },
-    { name: 'Madrid', iataCode: 'MAD', subType: 'CITY', address: { cityName: 'Madrid', countryName: 'España' } },
-    { name: 'Buenos Aires', iataCode: 'BUE', subType: 'CITY', address: { cityName: 'Buenos Aires', countryName: 'Argentina' } },
+    { name: 'Bogotá', iataCode: 'BOG', subType: 'CITY', address: { cityName: 'Bogotá', countryName: 'Colombia' } },
     { name: 'Medellín', iataCode: 'MDE', subType: 'CITY', address: { cityName: 'Medellín', countryName: 'Colombia' } },
+    { name: 'Cartagena', iataCode: 'CTG', subType: 'CITY', address: { cityName: 'Cartagena', countryName: 'Colombia' } },
+    { name: 'Cali', iataCode: 'CLO', subType: 'CITY', address: { cityName: 'Cali', countryName: 'Colombia' } },
+    { name: 'Bucaramanga', iataCode: 'BGA', subType: 'CITY', address: { cityName: 'Bucaramanga', countryName: 'Colombia' } },
+    { name: 'Pasto', iataCode: 'PSO', subType: 'CITY', address: { cityName: 'Pasto', countryName: 'Colombia' } },
+    { name: 'Armenia (Eje Cafetero)', iataCode: 'AXM', subType: 'CITY', address: { cityName: 'Armenia', countryName: 'Colombia' } },
+    { name: 'Santa Marta', iataCode: 'SMR', subType: 'CITY', address: { cityName: 'Santa Marta', countryName: 'Colombia' } },
+    { name: 'Leticia (Amazonas)', iataCode: 'LET', subType: 'CITY', address: { cityName: 'Leticia', countryName: 'Colombia' } },
+    { name: 'Riohacha (La Guajira)', iataCode: 'RCH', subType: 'CITY', address: { cityName: 'Riohacha', countryName: 'Colombia' } },
 ];
 
 export async function searchHotelDestinations(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
@@ -195,17 +195,16 @@ export async function searchHotels(params: {
   const hotelsInCity = MOCK_HOTELS_DATA.filter(hotel => {
     // We need a mapping from city IATA code to the city name used in our mock data
     const cityCodeToName: Record<string, string> = {
-        'NYC': 'New York',
-        'LON': 'Londres',
-        'PAR': 'París',
-        'TYO': 'Tokio',
-        'DXB': 'Dubai',
-        'ROM': 'Roma',
-        'CUN': 'Cancún',
-        'MAD': 'Madrid',
-        'BUE': 'Buenos Aires',
+        'BOG': 'Bogotá',
         'MDE': 'Medellín',
-        // Add other mappings as needed
+        'CTG': 'Cartagena',
+        'CLO': 'Cali',
+        'BGA': 'Bucaramanga',
+        'PSO': 'Pasto',
+        'AXM': 'Armenia',
+        'SMR': 'Santa Marta',
+        'LET': 'Leticia',
+        'RCH': 'Riohacha',
     };
     const cityName = cityCodeToName[cityCode.toUpperCase()];
     return hotel.hotel.address.cityName === cityName;

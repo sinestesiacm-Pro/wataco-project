@@ -11,10 +11,10 @@ import { Card, CardContent } from '@/components/ui/card';
 
 // Estas rutas se pueden obtener desde Firestore o un CMS en el futuro.
 const flightRoutes = [
-  { origin: 'MAD', originCity: 'Madrid', destination: 'EZE', destinationCity: 'Buenos Aires', hint: 'buenos aires obelisco', image: 'https://images.unsplash.com/photo-1679417302631-7a8998864de6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxidWVub3MlMjBhaXJlcyUyMG9iZWxpc2NvfGVufDB8fHx8MTc1MzgyNDk0Nnww&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '950' },
-  { origin: 'BOG', originCity: 'Bogotá', destination: 'GIG', destinationCity: 'Río de Janeiro', hint: 'rio de janeiro cristo redentor', image: 'https://images.unsplash.com/photo-1606141923451-000827e3c16e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxyaW8lMjBkZSUyMGphbmVpcm8lMjBjcmlzdG8lMjByZWRlbnRvcnxlbnwwfHx8fDE3NTM4MjQ5NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '480' },
-  { origin: 'PAR', originCity: 'París', destination: 'CTG', destinationCity: 'Cartagena', hint: 'cartagena colombia old town', image: 'https://images.unsplash.com/photo-1534943441045-1009d7cb0bb9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYXJ0YWdlbmF8ZW58MHx8fHwxNzUzODI1MDU4fDA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '820' },
-  { origin: 'MIA', originCity: 'Miami', destination: 'SCL', destinationCity: 'Santiago', hint: 'santiago chile andes', image: 'https://images.unsplash.com/photo-1662051852327-a309197c7b61?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzYW50aWFnbyUyMGNoaWxlJTIwYW5kZXN8ZW58MHx8fHwxNzUzODI0OTQ2fDA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '620' },
+  { origin: 'MAD', originCity: 'Madrid', destination: 'BOG', destinationCity: 'Bogotá', hint: 'bogota monserrate', image: 'https://images.unsplash.com/photo-1599333333981-804b73b5c464?w=500', simulatedPrice: '950' },
+  { origin: 'MIA', originCity: 'Miami', destination: 'MDE', destinationCity: 'Medellín', hint: 'medellin comuna 13', image: 'https://images.unsplash.com/photo-1628178614649-14a51d2e185f?w=500', simulatedPrice: '480' },
+  { origin: 'JFK', originCity: 'Nueva York', destination: 'CTG', destinationCity: 'Cartagena', hint: 'cartagena colombia old town', image: 'https://images.unsplash.com/photo-1534943441045-1009d7cb0bb9?w=500', simulatedPrice: '820' },
+  { origin: 'MEX', originCity: 'Ciudad de México', destination: 'CLO', destinationCity: 'Cali', hint: 'cali colombia church', image: 'https://images.unsplash.com/photo-1627906339414-2453e7a02c89?w=500', simulatedPrice: '620' },
 ];
 
 const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
@@ -56,8 +56,8 @@ export function RecommendedDestinations() {
   return (
     <div className="space-y-8 mt-16">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold text-white drop-shadow-lg">Ofertas que no Puedes Dejar Pasar</h2>
-        <p className="text-lg text-white mt-2 drop-shadow-lg">Hemos buscado los mejores precios en rutas populares para ti.</p>
+        <h2 className="text-4xl font-headline font-bold text-white drop-shadow-lg">El Riesgo es que te Quieras Quedar</h2>
+        <p className="text-lg text-white mt-2 drop-shadow-lg">Descubre las mejores rutas para empezar tu aventura en Colombia.</p>
       </div>
       
       <div 

@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -45,7 +46,7 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
 export function RecommendedCruises() {
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-white">Cruceros Populares</h2>
+      <h2 className="text-3xl font-bold font-headline text-white">Cruceros por Colombia</h2>
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {recommendedCruises.map((cruise, index) => (
           <CruiseCard key={index} cruise={cruise} />
