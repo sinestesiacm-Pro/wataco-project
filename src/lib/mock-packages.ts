@@ -63,7 +63,7 @@ export const recommendedPackages: PackageOffer[] = [
     description: "Un viaje a un paisaje surrealista donde el desierto se encuentra con el mar. Duerme en una ranchería Wayuu y descubre la cultura local en el Cabo de la Vela.",
     includes: ["Vuelo a Riohacha", "Transporte 4x4", "Alojamiento en hamaca en ranchería", "Comidas típicas", "Visita a Cabo de la Vela y Punta Gallinas"],
     not_included: ["Bebidas", "Propinas", "Seguro personal"],
-    image: "https://images.unsplash.com/photo-1598701426654-d27921bade3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsYSUyMGd1YWppcmElMjBkZXNlcnQlMjBjb2xvbWJpYXxlbnwwfHx8fDE3NTQxMzU3Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    image: "https://images.unsplash.com/photo-1536612055491-249569d2a99f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsYSUyMGd1YWppcmF8ZW58MHx8fHwxNzU0MTM2MDY0fDA&ixlib=rb-4.1.0&q=80&w=1080",
     hint: "la guajira desert colombia",
     rating: 5,
     reviews: 1890,
