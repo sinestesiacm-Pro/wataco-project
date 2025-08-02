@@ -97,7 +97,7 @@ export const recommendedPackages: PackageOffer[] = [
     description: "Descubre el mar de los siete colores. Disfruta de las playas de San Andrés y luego escapa a la tranquilidad y belleza virgen de Providencia.",
     includes: ["Vuelo a San Andrés", "Vuelo San Andrés-Providencia", "Hotel 3 estrellas en ambas islas", "Tour en lancha por Johnny Cay"],
     not_included: ["Tarjeta de turismo", "Comidas", "Alquiler de mulita en Providencia"],
-    image: "https://images.unsplash.com/photo-1723502436281-36488c772f1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzYW4lMjBhbmRyZXMlMjBpc2xhbmQlMjBjb2xvbWJpYXxlbnwwfHx8fDE3NTQxMzU3Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    image: "https://images.unsplash.com/photo-1592782985575-a96c6e647155?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW4lMjBhbmRyZXMlMjBpc2xhc3xlbnwwfHx8fDE3NTQxMzU4NDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
     hint: "san andres island colombia",
     rating: 4,
     reviews: 1765,
