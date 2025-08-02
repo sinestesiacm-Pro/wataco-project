@@ -305,7 +305,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Decameron Panaca',
         rating: '4',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1607320874448-d33f052651e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1712732690962-72391b0f7b8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYWZlJTIwY29sb21iaWF8ZW58MHx8fHwxNzU0MTUxMzY5fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'POOL' },
         ],
         address: { lines: ['Km 7 Vereda Kerman'], postalCode: '634027', cityName: 'Quimbaya', countryCode: 'CO' },
         description: { lang: 'es', text: 'Un resort todo incluido inmerso en la cultura cafetera y agropecuaria. Ideal para familias, con acceso directo al Parque PANACA.' },
