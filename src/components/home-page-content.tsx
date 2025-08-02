@@ -92,23 +92,27 @@ export function HomePageContent() {
     }, [tab, setTabTheme]);
 
     return (
-        <div className="w-full flex flex-col flex-grow relative">
-            {(tab === 'Flights' || tab === 'Social') && <AnimatedClouds />}
-            {tab === 'Hotels' && <AnimatedWindows />}
-            {tab === 'Cruises' && <UnderwaterScene />}
+        <div className="w-full flex-grow flex flex-col relative">
+            <div className="absolute inset-0 z-0">
+                {(tab === 'Flights' || tab === 'Social') && <AnimatedClouds />}
+                {tab === 'Hotels' && <AnimatedWindows />}
+                {tab === 'Cruises' && <UnderwaterScene />}
+            </div>
             
-            <div className="relative z-10 flex flex-col min-h-dvh">
-                <div className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    {tab !== 'Activities' && tab !== 'Social' && <div className="pt-8"><SearchSection tab={tab} /></div>}
+            <div className="relative z-10 flex flex-col flex-grow">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div className="pt-28">
+                         {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
+                    </div>
                 </div>
           
-                <div className="pt-16">
+                <div className="py-16">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                          <RecommendedContent tab={tab} />
                     </div>
                 </div>
 
-                <div className="mt-auto pt-16">
+                <div className="mt-auto">
                     <TestimonialsSection />
                     <Footer />
                 </div>
