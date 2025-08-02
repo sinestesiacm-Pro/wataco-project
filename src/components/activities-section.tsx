@@ -10,6 +10,10 @@ const activities = [
   { id: 'paraglide-chicamocha-1', name: 'Parapente en Chicamocha', description: 'Vuela sobre el segundo cañón más grande del mundo.', image: 'https://images.unsplash.com/photo-1689074521618-6c2b3dc31470?w=500', hint: 'paragliding canyon', rating: 5, reviews: 612, price: '89' },
   { id: 'coffee-tour-1', name: 'Tour de Café en el Eje', description: 'Descubre el proceso del café, desde la semilla hasta la taza.', image: 'https://images.unsplash.com/photo-1599933310642-8a071d1e434e?w=500', hint: 'colombia coffee farm', rating: 5, reviews: 489, price: '45' },
   { id: 'guatape-boat-1', name: 'Paseo en Barco por la Represa', description: 'Navega por las tranquilas aguas y descubre islas ocultas.', image: 'https://images.unsplash.com/photo-1636831154859-90cb8a7e584f?w=500', hint: 'guatape lake', rating: 4, reviews: 721, price: '30' },
+  { id: 'guatape-paraglide-1', name: 'Parapente sobre Guatapé', description: 'Disfruta de una vista de pájaro de la represa y la Piedra.', image: 'https://images.unsplash.com/photo-1519995163531-e186bb5f74e6?w=500', hint: 'paragliding lake', rating: 5, reviews: 345, price: '85' },
+  { id: 'guatape-atv-1', name: 'Aventura en Cuatrimoto', description: 'Recorre senderos y caminos rurales con vistas espectaculares.', image: 'https://images.unsplash.com/photo-1627443834922-0b7e204c35c3?w=500', hint: 'atv trail mountain', rating: 4, reviews: 218, price: '50' },
+  { id: 'guatape-flyboard-1', name: 'Flyboard en la Represa', description: 'Siente la emoción de volar sobre el agua. ¡Pura adrenalina!', image: 'https://i.ibb.co/6y40gNB/Flyboard-Guatape.jpg', hint: 'flyboard water sport', rating: 5, reviews: 150, price: '50' },
+  { id: 'guatape-helicopter-1', name: 'Vuelo en Helicóptero', description: 'Una vista inolvidable de la Piedra del Peñol desde el aire.', image: 'https://images.unsplash.com/photo-1631101968843-c91485c29013?w=500', hint: 'helicopter lake view', rating: 5, reviews: 95, price: '120' },
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
