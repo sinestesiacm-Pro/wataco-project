@@ -91,49 +91,62 @@ const airportSearchSchema = z.object({
   keyword: z.string().min(1),
 });
 
+const colombianAirports: Airport[] = [
+    { name: 'El Dorado International Airport', iataCode: 'BOG', subType: 'AIRPORT', address: { cityName: 'Bogotá', countryName: 'Colombia' } },
+    { name: 'José María Córdova International Airport', iataCode: 'MDE', subType: 'AIRPORT', address: { cityName: 'Medellín', countryName: 'Colombia' } },
+    { name: 'Rafael Núñez International Airport', iataCode: 'CTG', subType: 'AIRPORT', address: { cityName: 'Cartagena', countryName: 'Colombia' } },
+    { name: 'Alfonso Bonilla Aragón International Airport', iataCode: 'CLO', subType: 'AIRPORT', address: { cityName: 'Cali', countryName: 'Colombia' } },
+    { name: 'Ernesto Cortissoz International Airport', iataCode: 'BAQ', subType: 'AIRPORT', address: { cityName: 'Barranquilla', countryName: 'Colombia' } },
+    { name: 'Palonegro International Airport', iataCode: 'BGA', subType: 'AIRPORT', address: { cityName: 'Bucaramanga', countryName: 'Colombia' } },
+    { name: 'Antonio Nariño Airport', iataCode: 'PSO', subType: 'AIRPORT', address: { cityName: 'Pasto', countryName: 'Colombia' } },
+    { name: 'El Edén International Airport', iataCode: 'AXM', subType: 'AIRPORT', address: { cityName: 'Armenia', countryName: 'Colombia' } },
+];
+
 export async function searchAirports(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
   const validation = airportSearchSchema.safeParse({ keyword });
   if (!validation.success) {
     return { success: false, error: 'Palabra clave de búsqueda inválida.' };
   }
+  const validatedKeyword = validation.data.keyword.toLowerCase();
+
+  // First, filter our local list of Colombian airports
+  const localResults = colombianAirports.filter(airport =>
+      airport.name.toLowerCase().includes(validatedKeyword) ||
+      airport.address?.cityName?.toLowerCase().includes(validatedKeyword) ||
+      airport.iataCode.toLowerCase().includes(validatedKeyword)
+  );
 
   try {
     const token = await getAmadeusToken();
-    const validatedKeyword = validation.data.keyword;
-
     const searchParams = new URLSearchParams({
       subType: 'CITY,AIRPORT',
-      'page[limit]': '50',
+      'page[limit]': '10',
+      keyword: validatedKeyword,
     });
-    
-    // If the keyword is likely an IATA code, prioritize a location search by that code.
-    if (validatedKeyword.length === 3 && validatedKeyword.toUpperCase() === validatedKeyword) {
-      searchParams.append('locationType', 'CITY');
-      searchParams.append('keyword', validatedKeyword);
-    } else {
-      searchParams.append('keyword', validatedKeyword);
-    }
 
     const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations?${searchParams.toString()}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!response.ok) {
-      const errorBody = await response.json();
-      console.error('Amadeus API Error (Airports):', errorBody);
-      const errorMessage = errorBody.errors?.[0]?.detail || 'Error en la búsqueda de aeropuertos.';
-      return { success: false, error: errorMessage };
+        // If the API fails, we can still return our local results
+        console.warn('Amadeus API call failed, returning local results.');
+        return { success: true, data: localResults };
     }
 
-    const data: AirportSearchResponse = await response.json();
+    const apiData: AirportSearchResponse = await response.json();
+    const apiResults = apiData.data.filter(location => location.iataCode && location.name);
     
-    const filteredData = data.data.filter(location => location.iataCode && location.name);
-    
-    return { success: true, data: filteredData };
+    // Combine and deduplicate results, giving priority to local (Colombian) results
+    const combined = [...localResults, ...apiResults];
+    const uniqueResults = Array.from(new Map(combined.map(item => [item.iataCode, item])).values());
+
+    return { success: true, data: uniqueResults };
 
   } catch (err: any) {
     console.error('diagnose: Error in searchAirports action:', err);
-    return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
+    // Return local results if API call fails
+    return { success: true, data: localResults };
   }
 }
 
