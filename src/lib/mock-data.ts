@@ -212,7 +212,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         rating: '5',
         media: [
           { uri: 'https://images.unsplash.com/photo-1607320895054-c5c543e9a069?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1MzY1NDg2OHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'GARDEN' },
-          { uri: 'https://images.unsplash.com/photo-1542314831-068cd1dbb5eb?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1557733686-54d18473d49e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtZWRlbGxpbnxlbnwwfHx8fDE3NTQxMzcyODh8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
         ],
         address: { lines: ['Calle 47 #28-43'], postalCode: '680003', cityName: 'Bucaramanga', countryCode: 'CO' },
         description: { lang: 'es', text: 'Lujo y exclusividad en la "Ciudad Bonita". Disfruta de su rooftop con piscina, spa y vistas panorámicas de la ciudad.' },
@@ -390,3 +390,5 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     },
   ];
+
+    

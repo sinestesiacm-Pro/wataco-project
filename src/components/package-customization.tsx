@@ -45,7 +45,7 @@ const mockHotels = [
         description: "Un ícono de la hospitalidad parisina. Este palacio histórico ofrece suites opulentas, un servicio impecable y una piscina interior espectacular.",
         amenities: [ { icon: Wifi, text: "Wi-Fi Gratuito" }, { icon: Sparkles, text: "Piscina y Spa" }, { icon: Utensils, text: "Alta Cocina" } ],
         images: [
-            "https://images.unsplash.com/photo-1542314831-068cd1dbb5eb?fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1557733686-54d18473d49e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtZWRlbGxpbnxlbnwwfHx8fDE3NTQxMzcyODh8MA&ixlib=rb-4.1.0&q=80&w=1080",
             "https://images.unsplash.com/photo-1611892440504-42a792e24d32?fit=crop&w=800&q=80",
         ]
     },
@@ -173,3 +173,5 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
         </Card>
     );
 }
+
+    
