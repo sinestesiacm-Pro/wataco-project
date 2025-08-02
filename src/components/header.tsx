@@ -55,7 +55,7 @@ export function Header() {
     if (path.startsWith('/login') || path.startsWith('/signup')) return 'Acceso';
     if (path.startsWith('/flights/checkout')) return 'Finalizar Compra';
     
-    return 'Be On Trip';
+    return 'TravelCOP';
   }
 
   const currentTitle = getTitleFromPath(pathname);
