@@ -117,5 +117,39 @@ export const recommendedPackages: PackageOffer[] = [
     rating: 5,
     reviews: 2500,
     special_offer: "🎉 ¡Vive el Carnaval!"
+  },
+  {
+    id: "COL-CHICAMOCHA-01",
+    title: "Cañón del Chicamocha",
+    destination: "Santander, Colombia",
+    origin: "Toronto",
+    price: 580,
+    duration: 4,
+    dates: "Septiembre - Noviembre 2024",
+    description: "Siente la inmensidad del segundo cañón más grande del mundo. Disfruta de actividades de aventura como parapente y teleférico en un paisaje que te dejará sin aliento.",
+    includes: ["Vuelo a Bucaramanga", "Hotel 4 estrellas", "Entrada al Parque Nacional del Chicamocha", "Tour en teleférico"],
+    not_included: ["Actividades de aventura (parapente)", "Comidas", "Transporte local"],
+    image: "https://images.unsplash.com/photo-1689074521618-6c2b3dc31470?w=500",
+    hint: "chicamocha canyon colombia",
+    rating: 5,
+    reviews: 1640,
+    special_offer: "🌄 Vista Impresionante"
+  },
+  {
+    id: "COL-LLANOS-01",
+    title: "Safari en Los Llanos",
+    destination: "Los Llanos Orientales, Colombia",
+    origin: "Berlín",
+    price: 720,
+    duration: 5,
+    dates: "Diciembre 2024 - Febrero 2025",
+    description: "Explora la inmensa sabana colombiana en un auténtico safari llanero. Observa capibaras, venados y aves exóticas, y vive la cultura del vaquero colombiano.",
+    includes: ["Vuelo a Yopal", "Alojamiento en hato llanero", "Todas las comidas", "Safaris en 4x4 y a caballo"],
+    not_included: ["Bebidas alcohólicas", "Propinas"],
+    image: "https://images.unsplash.com/photo-1687352210874-9f826a79f872?w=500",
+    hint: "colombia los llanos sunrise",
+    rating: 5,
+    reviews: 950,
+    special_offer: "🤠 Aventura Llanera"
   }
 ];
