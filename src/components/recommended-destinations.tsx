@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 // Estas rutas se pueden obtener desde Firestore o un CMS en el futuro.
 const flightRoutes = [
-  { origin: 'MAD', originCity: 'Madrid', destination: 'BOG', destinationCity: 'Bogotá', hint: 'bogota monserrate', image: 'https://images.unsplash.com/photo-1599333333981-804b73b5c464?w=500', simulatedPrice: '950' },
+  { origin: 'MAD', originCity: 'Madrid', destination: 'BOG', destinationCity: 'Bogotá', hint: 'bogota monserrate', image: 'https://images.unsplash.com/photo-1568632234165-47bb34c35708?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxib2dvdGF8ZW58MHx8fHwxNzU0MTM3MzcxfDA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '950' },
   { origin: 'MIA', originCity: 'Miami', destination: 'MDE', destinationCity: 'Medellín', hint: 'medellin comuna 13', image: 'https://images.unsplash.com/photo-1715503234327-b57d32e5da0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtZWRlbGxpbnxlbnwwfHx8fDE3NTQxMzcyODh8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '480' },
   { origin: 'JFK', originCity: 'Nueva York', destination: 'CTG', destinationCity: 'Cartagena', hint: 'cartagena colombia old town', image: 'https://images.unsplash.com/photo-1534943441045-1009d7cb0bb9?w=500', simulatedPrice: '820' },
   { origin: 'MEX', originCity: 'Ciudad de México', destination: 'CLO', destinationCity: 'Cali', hint: 'cali colombia church', image: 'https://images.unsplash.com/flagged/photo-1576364255488-17bdd8cba58c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxN3x8Y2FsaXxlbnwwfHx8fDE3NTQxMzY2MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '620' },
@@ -70,4 +70,3 @@ export function RecommendedDestinations() {
     </div>
   );
 }
-
