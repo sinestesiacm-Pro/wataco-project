@@ -58,13 +58,13 @@ export function Header() {
   }
 
   const currentTitle = getTitleFromPath(pathname);
-  const isTransparentHeader = pathname === '/';
+  const isHomePage = pathname === '/';
 
   return (
     <header 
       className={cn(
-        "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
-        isTransparentHeader ? "bg-transparent" : "bg-black/20 backdrop-blur-xl shadow-lg"
+        "fixed top-0 left-0 right-0 z-40 transition-colors duration-300",
+        isHomePage ? "bg-transparent" : "bg-black/20 backdrop-blur-xl shadow-lg"
       )}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
