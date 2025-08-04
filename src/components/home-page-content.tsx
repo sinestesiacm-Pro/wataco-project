@@ -1,3 +1,4 @@
+
 'use client';
 
 import FlightSearchPage from '@/components/flight-search-page';
@@ -95,19 +96,6 @@ export function HomePageContent() {
         <div className="w-full flex-grow flex flex-col relative">
             <div className="absolute inset-0 z-0">
                 {(tab === 'Flights' || tab === 'Social') && <AnimatedClouds />}
-                {tab === 'Hotels' && 
-                    <div className="absolute inset-0 overflow-hidden">
-                        <Image 
-                           src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070" 
-                           data-ai-hint="green mountains"
-                           alt="Green mountains background"
-                           fill
-                           className="object-cover filter blur-md"
-                           quality={80}
-                        />
-                        <div className="absolute inset-0 bg-black/30"></div>
-                    </div>
-                }
                 {tab === 'Cruises' && <UnderwaterScene />}
             </div>
             
