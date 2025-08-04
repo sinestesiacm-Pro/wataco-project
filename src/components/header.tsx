@@ -64,7 +64,7 @@ export function Header() {
     <header 
       className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-colors duration-300",
-        "bg-black/20 backdrop-blur-xl shadow-lg"
+        "bg-white/20 backdrop-blur-xl shadow-lg"
       )}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
