@@ -362,10 +362,25 @@
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-image: linear-gradient(to bottom, rgba(40,10,60,0.4), rgba(10,0,20,0.8)), url('https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?q=80&w=2070');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   filter: blur(8px);
   transform: scale(1.1);
+  animation: rotating-backgrounds 30s linear infinite;
+}
+
+@keyframes rotating-backgrounds {
+  0%, 30% {
+    background-image: linear-gradient(to bottom, rgba(40,10,60,0.4), rgba(10,0,20,0.8)), url('https://images.unsplash.com/photo-1505832018823-50331d703234?q=80&w=2070');
+  }
+  33.33%, 63.33% {
+    background-image: linear-gradient(to bottom, rgba(10,40,60,0.4), rgba(0,10,20,0.8)), url('https://images.unsplash.com/photo-1507525428034-b723a996f329?q=80&w=2070');
+  }
+  66.66%, 96.66% {
+    background-image: linear-gradient(to bottom, rgba(10,20,40,0.4), rgba(0,5,10,0.8)), url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=2070');
+  }
+  100% {
+    background-image: linear-gradient(to bottom, rgba(40,10,60,0.4), rgba(10,0,20,0.8)), url('https://images.unsplash.com/photo-1505832018823-50331d703234?q=80&w=2070');
+  }
 }
