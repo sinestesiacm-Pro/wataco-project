@@ -385,14 +385,14 @@
 }
 
 @keyframes ken-burns-animation {
-  0% { transform: scale(1.1) translate(0, 0); }
+  0%, 100% { transform: scale(1.1) translate(0, 0); }
+  
   15% { transform: scale(1.15) translate(2%, -2%); }
-  30% { transform: scale(1.1) translate(0, 0); } /* End of first image */
-  33.33% { transform: scale(1.1) translate(0, 0); } /* Start of second image */
+  33.33% { transform: scale(1.1) translate(0, 0); }
+  
   48.33% { transform: scale(1.15) translate(-2%, 2%); }
-  63.33% { transform: scale(1.1) translate(0, 0); } /* End of second image */
-  66.66% { transform: scale(1.1) translate(0, 0); } /* Start of third image */
+  66.66% { transform: scale(1.1) translate(0, 0); }
+  
   81.66% { transform: scale(1.15) translate(2%, 2%); }
-  96.66% { transform: scale(1.1) translate(0, 0); } /* End of third image */
-  100% { transform: scale(1.1) translate(0, 0); }
+  94.66% { transform: scale(1.1) translate(0, 0); }
 }
