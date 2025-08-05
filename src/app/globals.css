@@ -364,8 +364,6 @@
   z-index: -1;
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
-  filter: blur(8px);
   animation: rotating-backgrounds 30s linear infinite, ken-burns-animation 40s ease-out infinite;
 }
 
@@ -397,6 +395,8 @@
     transform: scale(1.1) translate(0, 0);
   }
 }
+
+    
 
     
 
