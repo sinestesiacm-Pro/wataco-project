@@ -73,7 +73,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         const baseAnimationClass = 'background-pan-animation';
 
         if (pathname.startsWith('/hotels')) return 'bg-hotels-background';
-        if (pathname.startsWith('/packages')) return cn('bg-packages-gradient', baseAnimationClass);
+        if (pathname.startsWith('/packages')) return 'bg-packages-background';
         if (pathname.startsWith('/cruises')) return cn('bg-cruises-gradient', baseAnimationClass);
         if (pathname.startsWith('/activities')) return cn('bg-activities-gradient', baseAnimationClass);
         if (pathname.startsWith('/flights')) return 'bg-flights-gradient';
@@ -82,7 +82,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
             switch(tabTheme) {
                 case 'Flights': return 'bg-flights-gradient'; 
                 case 'Hotels': return 'bg-hotels-background';
-                case 'Packages': return cn('bg-packages-gradient', baseAnimationClass);
+                case 'Packages': return 'bg-packages-background';
                 case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
                 case 'Activities': return cn('bg-activities-gradient', baseAnimationClass);
                 case 'Social': return 'bg-flights-gradient';

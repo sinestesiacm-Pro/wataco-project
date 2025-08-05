@@ -125,12 +125,6 @@
 .bg-flights-gradient {
    background: linear-gradient(135deg, hsl(205, 70%, 40%), hsl(220, 70%, 60%));
 }
-.bg-hotels-gradient {
-   background: radial-gradient(circle at top right, #2ECC71, #1C6C63 50%), radial-gradient(circle at bottom left, #2ECC71, #1C6C63 50%);
-}
-.bg-packages-gradient {
-  background: radial-gradient(ellipse at 50% 50%, hsl(270, 50%, 45%), hsl(270, 50%, 25%));
-}
 .bg-cruises-gradient {
   background: radial-gradient(circle at 10% 10%, hsla(180, 60%, 50%, 0.7), transparent 40%), radial-gradient(circle at 90% 80%, #00A3D4, #00506D 50%);
 }
@@ -353,4 +347,25 @@
   background-attachment: fixed;
   filter: blur(8px);
   transform: scale(1.1); /* To avoid hard edges from the blur */
+}
+
+.bg-packages-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-packages-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background-image: linear-gradient(to bottom, rgba(40,10,60,0.4), rgba(10,0,20,0.8)), url('https://images.unsplash.com/photo-1519677100203-a0e668c92439?q=80&w=2070');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  filter: blur(8px);
+  transform: scale(1.1);
 }
