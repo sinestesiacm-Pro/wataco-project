@@ -179,7 +179,7 @@ export default function PackagesSearchPage() {
   );
 
   return (
-    <div className="bg-violet-200/70 p-6 rounded-3xl shadow-2xl">
+    <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputGroup className='relative'>
