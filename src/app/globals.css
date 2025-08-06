@@ -280,10 +280,19 @@
 
 @keyframes swim-across {
   from {
-    transform: translateX(-100px);
+    transform: translateX(-150px);
   }
   to {
     transform: translateX(100vw);
+  }
+}
+
+@keyframes swim-across-reverse {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-150px);
   }
 }
 
@@ -310,7 +319,12 @@
 .fish {
     position: absolute;
     filter: blur(10px);
+}
+.fish.animate-swim-across {
     animation: swim-across linear infinite;
+}
+.fish.animate-swim-across-reverse {
+    animation: swim-across-reverse linear infinite;
 }
 .fish-body {
     width: 60px;

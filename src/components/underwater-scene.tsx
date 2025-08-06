@@ -29,12 +29,22 @@ const fishColors = [
   'rgba(255, 215, 0, 0.4)', // Gold
 ];
 
-const Fish = ({ style, color }: { style: React.CSSProperties, color: string }) => (
-    <div className="fish" style={style}>
+const reverseFishColors = [
+    'rgba(218, 112, 214, 0.4)', // Orchid (Purple/Pink)
+    'rgba(255, 105, 180, 0.4)', // Hot Pink
+];
+
+
+const Fish = ({ style, color, direction = 'right' }: { style: React.CSSProperties, color: string, direction?: 'left' | 'right' }) => (
+    <div 
+        className={cn("fish", direction === 'right' ? 'animate-swim-across' : 'animate-swim-across-reverse')} 
+        style={{...style, transform: direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)'}}
+    >
         <div className="fish-body" style={{ backgroundColor: color }} />
         <div className="fish-tail" style={{ borderRight: `20px solid ${color}` }}/>
     </div>
 );
+
 
 export function UnderwaterScene() {
     const config = {
@@ -64,6 +74,17 @@ export function UnderwaterScene() {
           animationDelay: `${Math.random() * 15}s`,
         },
         color: fishColors[i % fishColors.length],
+        direction: 'right' as 'right' | 'left',
+      })),
+       reverseFish: Array.from({ length: 5 }).map((_, i) => ({
+        style: {
+          right: '-150px', // Start fish off-screen on the right
+          top: `${Math.random() * 70 + 15}%`, // Different vertical range
+          animationDuration: `${Math.random() * 12 + 12}s`, // Slightly different speed
+          animationDelay: `${Math.random() * 12}s`,
+        },
+        color: reverseFishColors[i % reverseFishColors.length],
+        direction: 'left' as 'right' | 'left',
       })),
     }
 
@@ -76,7 +97,10 @@ export function UnderwaterScene() {
                 <Bubble key={`bubble-${index}`} style={bubble.style as React.CSSProperties} />
             ))}
             {config.fish.map((fish, index) => (
-                <Fish key={`fish-${index}`} style={fish.style as React.CSSProperties} color={fish.color} />
+                <Fish key={`fish-${index}`} style={fish.style as React.CSSProperties} color={fish.color} direction={fish.direction} />
+            ))}
+             {config.reverseFish.map((fish, index) => (
+                <Fish key={`reverse-fish-${index}`} style={fish.style as React.CSSProperties} color={fish.color} direction={fish.direction} />
             ))}
         </div>
     );
