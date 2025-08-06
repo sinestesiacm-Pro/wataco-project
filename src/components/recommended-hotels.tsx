@@ -31,19 +31,17 @@ const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
                 <div className="flex items-center gap-1 text-amber-400">
                     {[...Array(parseInt(hotel.hotel.rating || '0'))].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                 </div>
-                {/* Reviews are not in this data structure, so we can mock them or hide them */}
-                {/* <p className="text-gray-500">({hotel.reviews} reviews)</p> */}
             </div>
             
             <div className="flex-grow"></div>
             
             <div className="flex justify-between items-center mt-4">
                 <div>
-                    <p className="text-xs text-gray-600">desde</p>
-                    <p className="font-semibold text-2xl text-white">${hotel.offers[0].price.total}<span className="text-sm font-normal text-gray-700">/noche</span></p>
+                    <p className="text-xs text-gray-600">from</p>
+                    <p className="font-semibold text-2xl text-white">${hotel.offers[0].price.total}<span className="text-sm font-normal text-gray-700">/night</span></p>
                 </div>
                 <Button asChild className="font-semibold">
-                    <Link href={`/hotels/${hotel.id}`}>Ver Hotel</Link>
+                    <Link href={`/hotels/${hotel.id}`}>View Hotel</Link>
                 </Button>
             </div>
         </CardContent>
@@ -51,28 +49,25 @@ const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
 );
 
 export function RecommendedHotels() {
-  const [colombianHotels, setColombianHotels] = useState<AmadeusHotelOffer[]>([]);
+  const [hotels, setHotels] = useState<AmadeusHotelOffer[]>([]);
 
   useEffect(() => {
-    // Filter for Colombian hotels
-    const filtered = MOCK_HOTELS_DATA.filter(hotel => hotel.hotel.address.countryCode === 'CO');
-    
-    // Shuffle the filtered array to get different hotels on each load
-    const shuffled = [...filtered].sort(() => 0.5 - Math.random());
-
-    // Get the first 4 elements, ensuring we don't try to slice more than available.
-    setColombianHotels(shuffled.slice(0, 4));
+    // Shuffle the mock data to show a random selection
+    const shuffled = [...MOCK_HOTELS_DATA].sort(() => 0.5 - Math.random());
+    setHotels(shuffled.slice(0, 4));
   }, []);
 
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Hoteles Recomendados en Colombia</h2>
+      <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Recommended Hotels Around the World</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {colombianHotels.map((hotel, index) => (
+        {hotels.map((hotel, index) => (
           <HotelCard key={hotel.id || index} hotel={hotel} />
         ))}
       </div>
     </div>
   );
 }
+
+    

@@ -27,7 +27,7 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
               </Button>
             </div>
             <p className="text-sm text-white/70">{cruise.ship} - {cruise.duration}</p>
-            <p className="font-semibold text-primary text-xl mt-1">${cruise.price}/persona</p>
+            <p className="font-semibold text-primary text-xl mt-1">${cruise.price}/person</p>
             <div className="flex items-center gap-2 mt-auto text-sm">
                 <div className="flex items-center gap-1 text-amber-400">
                     {[...Array(cruise.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
@@ -36,7 +36,7 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
                 <p className="text-white/70">({cruise.reviews} reviews)</p>
             </div>
              <Button asChild size="sm" className="mt-2 w-full sm:w-auto sm:ml-auto font-semibold">
-                <Link href={`/cruises/${cruise.id}`}>Ver Crucero</Link>
+                <Link href={`/cruises/${cruise.id}`}>View Cruise</Link>
              </Button>
         </div>
     </Card>
@@ -46,7 +46,7 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
 export function RecommendedCruises() {
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-white">Cruceros por Colombia</h2>
+      <h2 className="text-3xl font-bold font-headline text-white">Recommended Cruises</h2>
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {recommendedCruises.map((cruise, index) => (
           <CruiseCard key={index} cruise={cruise} />
@@ -55,3 +55,5 @@ export function RecommendedCruises() {
     </div>
   );
 }
+
+    

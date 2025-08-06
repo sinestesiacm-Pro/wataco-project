@@ -32,11 +32,11 @@ const PackageCard = ({ pkg }: { pkg: PackageOffer }) => (
             <div className="flex justify-between items-center text-sm text-white/80 mb-3">
                  <div className="flex items-center gap-2">
                     <PlaneTakeoff className="h-4 w-4" />
-                    <span>Salida desde {pkg.origin}</span>
+                    <span>Departs from {pkg.origin}</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    <span>{pkg.duration} Noches</span>
+                    <span>{pkg.duration} Nights</span>
                 </div>
             </div>
 
@@ -54,12 +54,12 @@ const PackageCard = ({ pkg }: { pkg: PackageOffer }) => (
                         </div>
                         <p className="text-white/70">({pkg.reviews} reviews)</p>
                     </div>
-                    <p className="text-xs text-white/80 mt-1">Precio por persona desde</p>
+                    <p className="text-xs text-white/80 mt-1">Price per person from</p>
                     <p className="font-bold text-2xl text-white">${pkg.price}</p>
                 </div>
                 <Button asChild className="font-semibold bg-success hover:bg-success/90" size="sm">
                    <Link href={`/packages/${pkg.id}`}>
-                     Ver Paquete
+                     View Package
                    </Link>
                 </Button>
             </div>
@@ -72,8 +72,8 @@ export function RecommendedPackages() {
   return (
      <div className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Paquetes Imperdibles</h2>
-        <p className="text-white mt-2 drop-shadow-lg">Experiencias completas al mejor precio, listas para que las descubras.</p>
+        <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Unforgettable Packages</h2>
+        <p className="text-white mt-2 drop-shadow-lg">Complete experiences at the best price, ready for you to discover.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {recommendedPackages.map((pkg) => (
@@ -83,3 +83,5 @@ export function RecommendedPackages() {
     </div>
   );
 }
+
+    

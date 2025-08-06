@@ -11,11 +11,11 @@ import { cn } from '@/lib/utils';
 import { Icons } from './icons';
 
 const TABS = [
-  { id: 'Flights', label: 'Vuelos', icon: Plane },
-  { id: 'Hotels', label: 'Hoteles', icon: BedDouble },
-  { id: 'Packages', label: 'Paquetes', icon: Luggage },
-  { id: 'Cruises', label: 'Cruceros', icon: Ship },
-  { id: 'Activities', label: 'Actividades', icon: Zap },
+  { id: 'Flights', label: 'Flights', icon: Plane },
+  { id: 'Hotels', label: 'Hotels', icon: BedDouble },
+  { id: 'Packages', label: 'Packages', icon: Luggage },
+  { id: 'Cruises', label: 'Cruises', icon: Ship },
+  { id: 'Activities', label: 'Activities', icon: Zap },
   { id: 'Social', label: 'Social', icon: Users },
 ];
 
@@ -50,11 +50,11 @@ export function Header() {
         return currentTab.label;
     }
 
-    if (path.startsWith('/profile')) return 'Mi Perfil';
-    if (path.startsWith('/login') || path.startsWith('/signup')) return 'Acceso';
-    if (path.startsWith('/flights/checkout')) return 'Finalizar Compra';
+    if (path.startsWith('/profile')) return 'My Profile';
+    if (path.startsWith('/login') || path.startsWith('/signup')) return 'Access';
+    if (path.startsWith('/flights/checkout')) return 'Finalize Purchase';
     
-    return 'TravelCOP';
+    return 'BE ON TRIP';
   }
 
   const currentTitle = getTitleFromPath(pathname);
@@ -100,7 +100,7 @@ export function Header() {
               <Button asChild className="text-white bg-white/20 hover:bg-white/30">
                 <Link href="/login">
                   <LogIn className="mr-0 sm:mr-2 h-4 w-4"/>
-                  <span className="hidden sm:inline">Iniciar Sesión</span>
+                  <span className="hidden sm:inline">Sign In</span>
                 </Link>
               </Button>
             )}
@@ -110,3 +110,5 @@ export function Header() {
     </header>
   );
 }
+
+    

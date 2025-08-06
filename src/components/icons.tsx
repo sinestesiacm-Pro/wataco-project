@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
-const TravelCOPLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
+const BeOnTripLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
   <Image
-    src="https://i.ibb.co/rGjpwpwT/krea-edit-removebg-preview.png"
-    alt="TravelCOP Logo"
+    src="https://i.ibb.co/68qCMbL/logo-be-on-trip.png"
+    alt="BE ON TRIP Logo"
     width={width}
     height={height}
     className={className}
@@ -22,7 +22,9 @@ const GoogleLogo = (props: React.ComponentProps<'svg'>) => (
 
 
 export const Icons = {
-  logo: TravelCOPLogo,
-  icon: TravelCOPLogo,
+  logo: BeOnTripLogo,
+  icon: BeOnTripLogo,
   google: GoogleLogo,
 };
+
+    

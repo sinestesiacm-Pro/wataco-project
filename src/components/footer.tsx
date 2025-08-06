@@ -8,10 +8,10 @@ export function Footer() {
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="flex items-center justify-center md:justify-start">
-            <Icons.logo width={100} height={27} />
+            <Icons.logo width={100} height={40} />
           </div>
           <div className="text-center text-sm text-white">
-            © {new Date().getFullYear()} TravelCOP. Todos los derechos reservados.
+            © {new Date().getFullYear()} BE ON TRIP. All rights reserved.
           </div>
           <div className="flex items-center justify-center md:justify-end space-x-6">
             <Link href="#" className="text-white hover:text-primary transition-colors">
@@ -29,3 +29,5 @@ export function Footer() {
     </footer>
   );
 }
+
+    

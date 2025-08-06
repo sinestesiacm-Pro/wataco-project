@@ -33,7 +33,7 @@ export async function searchFlights(params: {
   
   const validation = searchSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Parámetros de búsqueda inválidos.' };
+    return { success: false, error: 'Invalid search parameters.' };
   }
 
   const { origin, destination, departureDate, returnDate, adults, children, infants } = validation.data;
@@ -69,20 +69,20 @@ export async function searchFlights(params: {
     if (!response.ok) {
       const errorBody = await response.json();
       console.error('Amadeus API Error:', errorBody);
-      const errorMessage = errorBody.errors?.[0]?.detail || 'Error en la búsqueda de vuelos.';
+      const errorMessage = errorBody.errors?.[0]?.detail || 'Error searching for flights.';
       return { success: false, error: errorMessage };
     }
 
     const data: FlightData = await response.json();
 
     if (!data.data || data.data.length === 0) {
-      return { success: false, error: 'No se encontraron vuelos para esta ruta.' };
+      return { success: false, error: 'No flights found for this route.' };
     }
 
     return { success: true, data };
   } catch (err: any) {
     console.error('diagnose: Error in searchFlights action:', err);
-    return { success: false, error: err.message || 'Ocurrió un error inesperado.' };
+    return { success: false, error: err.message || 'An unexpected error occurred.' };
   }
 }
 
@@ -91,30 +91,12 @@ const airportSearchSchema = z.object({
   keyword: z.string().min(1),
 });
 
-const colombianAirports: Airport[] = [
-    { name: 'El Dorado International Airport', iataCode: 'BOG', subType: 'AIRPORT', address: { cityName: 'Bogotá', countryName: 'Colombia' } },
-    { name: 'José María Córdova International Airport', iataCode: 'MDE', subType: 'AIRPORT', address: { cityName: 'Medellín', countryName: 'Colombia' } },
-    { name: 'Rafael Núñez International Airport', iataCode: 'CTG', subType: 'AIRPORT', address: { cityName: 'Cartagena', countryName: 'Colombia' } },
-    { name: 'Alfonso Bonilla Aragón International Airport', iataCode: 'CLO', subType: 'AIRPORT', address: { cityName: 'Cali', countryName: 'Colombia' } },
-    { name: 'Ernesto Cortissoz International Airport', iataCode: 'BAQ', subType: 'AIRPORT', address: { cityName: 'Barranquilla', countryName: 'Colombia' } },
-    { name: 'Palonegro International Airport', iataCode: 'BGA', subType: 'AIRPORT', address: { cityName: 'Bucaramanga', countryName: 'Colombia' } },
-    { name: 'Antonio Nariño Airport', iataCode: 'PSO', subType: 'AIRPORT', address: { cityName: 'Pasto', countryName: 'Colombia' } },
-    { name: 'El Edén International Airport', iataCode: 'AXM', subType: 'AIRPORT', address: { cityName: 'Armenia', countryName: 'Colombia' } },
-];
-
 export async function searchAirports(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
   const validation = airportSearchSchema.safeParse({ keyword });
   if (!validation.success) {
-    return { success: false, error: 'Palabra clave de búsqueda inválida.' };
+    return { success: false, error: 'Invalid search keyword.' };
   }
   const validatedKeyword = validation.data.keyword.toLowerCase();
-
-  // First, filter our local list of Colombian airports
-  const localResults = colombianAirports.filter(airport =>
-      airport.name.toLowerCase().includes(validatedKeyword) ||
-      airport.address?.cityName?.toLowerCase().includes(validatedKeyword) ||
-      airport.iataCode.toLowerCase().includes(validatedKeyword)
-  );
 
   try {
     const token = await getAmadeusToken();
@@ -129,51 +111,61 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
     });
 
     if (!response.ok) {
-        // If the API fails, we can still return our local results
-        console.warn('Amadeus API call failed, returning local results.');
-        return { success: true, data: localResults };
+        console.warn('Amadeus API call failed in searchAirports.');
+        const errorBody = await response.json().catch(() => ({}));
+        return { success: false, error: errorBody.errors?.[0]?.detail || 'Failed to fetch airport data.' };
     }
 
     const apiData: AirportSearchResponse = await response.json();
     const apiResults = apiData.data.filter(location => location.iataCode && location.name);
     
-    // Combine and deduplicate results, giving priority to local (Colombian) results
-    const combined = [...localResults, ...apiResults];
-    const uniqueResults = Array.from(new Map(combined.map(item => [item.iataCode, item])).values());
+    // Deduplicate results, as API can return city and airport for the same place
+    const uniqueResults = Array.from(new Map(apiResults.map(item => [item.iataCode, item])).values());
 
     return { success: true, data: uniqueResults };
 
   } catch (err: any) {
     console.error('diagnose: Error in searchAirports action:', err);
-    // Return local results if API call fails
-    return { success: true, data: localResults };
+    return { success: false, error: 'An unexpected error occurred while searching for airports.' };
   }
 }
 
-const hotelDestinations: Airport[] = [
-    { name: 'Bogotá', iataCode: 'BOG', subType: 'CITY', address: { cityName: 'Bogotá', countryName: 'Colombia' } },
-    { name: 'Medellín', iataCode: 'MDE', subType: 'CITY', address: { cityName: 'Medellín', countryName: 'Colombia' } },
-    { name: 'Cartagena', iataCode: 'CTG', subType: 'CITY', address: { cityName: 'Cartagena', countryName: 'Colombia' } },
-    { name: 'Cali', iataCode: 'CLO', subType: 'CITY', address: { cityName: 'Cali', countryName: 'Colombia' } },
-    { name: 'Bucaramanga', iataCode: 'BGA', subType: 'CITY', address: { cityName: 'Bucaramanga', countryName: 'Colombia' } },
-    { name: 'Pasto', iataCode: 'PSO', subType: 'CITY', address: { cityName: 'Pasto', countryName: 'Colombia' } },
-    { name: 'Armenia (Eje Cafetero)', iataCode: 'AXM', subType: 'CITY', address: { cityName: 'Armenia', countryName: 'Colombia' } },
-    { name: 'Santa Marta', iataCode: 'SMR', subType: 'CITY', address: { cityName: 'Santa Marta', countryName: 'Colombia' } },
-    { name: 'Leticia (Amazonas)', iataCode: 'LET', subType: 'CITY', address: { cityName: 'Leticia', countryName: 'Colombia' } },
-    { name: 'Riohacha (La Guajira)', iataCode: 'RCH', subType: 'CITY', address: { cityName: 'Riohacha', countryName: 'Colombia' } },
-];
-
 export async function searchHotelDestinations(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
+    const validation = airportSearchSchema.safeParse({ keyword });
+    if (!validation.success) {
+        return { success: false, error: 'Invalid search keyword.' };
+    }
     if (!keyword) {
         return { success: true, data: [] };
     }
-    const lowercasedKeyword = keyword.toLowerCase();
-    const filteredData = hotelDestinations.filter(
-        dest => dest.name.toLowerCase().includes(lowercasedKeyword) || dest.address?.countryName?.toLowerCase().includes(lowercasedKeyword)
-    );
-    // Simulate network delay for better UX
-    await new Promise(resolve => setTimeout(resolve, 200)); 
-    return { success: true, data: filteredData };
+    const validatedKeyword = validation.data.keyword.toLowerCase();
+
+    try {
+        const token = await getAmadeusToken();
+        const searchParams = new URLSearchParams({
+            subType: 'CITY',
+            'page[limit]': '10',
+            keyword: validatedKeyword,
+        });
+
+        const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations?${searchParams.toString()}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+            console.warn('Amadeus API call failed for hotel destinations.');
+            return { success: false, error: 'Failed to fetch destination data.' };
+        }
+
+        const apiData: AirportSearchResponse = await response.json();
+        // Ensure we only return locations that have an IATA code and a name.
+        const apiResults = apiData.data.filter(location => location.iataCode && location.name);
+        
+        return { success: true, data: apiResults };
+    } catch (err: any) {
+        console.error('diagnose: Error in searchHotelDestinations action:', err);
+        return { success: false, error: 'An unexpected error occurred while searching for destinations.' };
+    }
 }
 
 const hotelSearchSchema = z.object({
@@ -195,7 +187,7 @@ export async function searchHotels(params: {
 }): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
   const validation = hotelSearchSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Parámetros de búsqueda de hotel inválidos.' };
+    return { success: false, error: 'Invalid hotel search parameters.' };
   }
   
   const { cityCode } = validation.data;
@@ -204,37 +196,23 @@ export async function searchHotels(params: {
   // A real integration would involve calls to Hotelbeds API endpoints.
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // Filter the hotels by the provided cityCode
-  const hotelsInCity = MOCK_HOTELS_DATA.filter(hotel => {
-    // We need a mapping from city IATA code to the city name used in our mock data
-    const cityCodeToName: Record<string, string> = {
-        'BOG': 'Bogotá',
-        'MDE': 'Medellín',
-        'CTG': 'Cartagena',
-        'CLO': 'Cali',
-        'BGA': 'Bucaramanga',
-        'PSO': 'Pasto',
-        'AXM': 'Armenia',
-        'SMR': 'Santa Marta',
-        'LET': 'Leticia',
-        'RCH': 'Riohacha',
-    };
-    const cityName = cityCodeToName[cityCode.toUpperCase()];
-    return hotel.hotel.address.cityName === cityName;
-  });
-
-  if (hotelsInCity.length === 0) {
-      return { success: false, error: 'No se encontraron hoteles en la ciudad especificada.' };
+  // Since this is a global app, we can't reliably filter by a small mock list.
+  // So, we'll return a randomized selection from the entire mock data set.
+  if (MOCK_HOTELS_DATA.length === 0) {
+      return { success: false, error: 'No hotels found.' };
   }
 
-  // Fisher-Yates shuffle algorithm to randomize results within the city
-  const shuffledHotels = [...hotelsInCity];
+  // Fisher-Yates shuffle algorithm to randomize results
+  const shuffledHotels = [...MOCK_HOTELS_DATA];
   for (let i = shuffledHotels.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffledHotels[i], shuffledHotels[j]] = [shuffledHotels[j], shuffledHotels[i]];
   }
+  
+  // Return a slice of the shuffled array to simulate pagination/limited results
+  const randomSelection = shuffledHotels.slice(0, 10);
 
-  return { success: true, data: shuffledHotels };
+  return { success: true, data: randomSelection };
 }
 
 
@@ -245,7 +223,7 @@ const hotelDetailsSchema = z.object({
 export async function getHotelDetails(params: { offerId: string }): Promise<{ success: boolean; data?: AmadeusHotelOffer; error?: string }> {
   const validation = hotelDetailsSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Parámetros de detalles de hotel inválidos.' };
+    return { success: false, error: 'Invalid hotel detail parameters.' };
   }
 
   const { offerId } = validation.data;
@@ -255,7 +233,7 @@ export async function getHotelDetails(params: { offerId: string }): Promise<{ su
   const hotelOffer = MOCK_HOTELS_DATA.find(offer => offer.id === offerId);
 
   if (!hotelOffer) {
-    return { success: false, error: 'No se pudieron obtener los detalles del hotel.' };
+    return { success: false, error: 'Could not fetch hotel details.' };
   }
   
   // Simulate network delay
@@ -282,12 +260,12 @@ export async function searchPackages(params: {
   
   const validation = packageSearchSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Parámetros de búsqueda de paquete inválidos.' };
+    return { success: false, error: 'Invalid package search parameters.' };
   }
 
   // The actual Amadeus Flight+Hotel Search API is complex and may not be available in the standard test environment.
   // This is a placeholder response that informs the user.
-  return { success: false, error: "La búsqueda de paquetes no está disponible en esta demostración. Por favor, busca vuelos y hoteles por separado." };
+  return { success: false, error: "Package search is not available in this demo. Please search for flights and hotels separately." };
 }
 
 const cruiseSearchSchema = z.object({
@@ -303,12 +281,12 @@ export async function searchCruises(params: {
 }): Promise<{ success: boolean; data?: CruiseData; error?: string }> {
   const validation = cruiseSearchSchema.safeParse(params);
   if (!validation.success) {
-    return { success: false, error: 'Parámetros de búsqueda de crucero inválidos.' };
+    return { success: false, error: 'Invalid cruise search parameters.' };
   }
 
   // The Amadeus Cruise API is not available in the standard test environment.
   // This is a placeholder response.
-  return { success: false, error: "La búsqueda de cruceros no está disponible en esta demostración." };
+  return { success: false, error: "Cruise search is not available in this demo." };
 }
 
 const vipActivationSchema = z.object({
@@ -319,7 +297,7 @@ const vipActivationSchema = z.object({
 export async function activateVipMembership(params: { userId: string, membershipCode: string }): Promise<{ success: boolean; error?: string; message?: string; tier?: string }> {
     const validation = vipActivationSchema.safeParse(params);
     if (!validation.success) {
-        return { success: false, error: 'Parámetros de activación inválidos.' };
+        return { success: false, error: 'Invalid activation parameters.' };
     }
 
     const { userId, membershipCode } = validation.data;
@@ -331,14 +309,14 @@ export async function activateVipMembership(params: { userId: string, membership
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-            return { success: false, error: "Código de membresía inválido." };
+            return { success: false, error: "Invalid membership code." };
         }
 
         const vipDoc = querySnapshot.docs[0];
         const vipData = vipDoc.data();
 
         if (vipData.isUsed) {
-            return { success: false, error: "Este código de membresía ya ha sido utilizado." };
+            return { success: false, error: "This membership code has already been used." };
         }
         
         const vipTier = vipData.tier || 'gold'; // Default to gold if tier is not specified
@@ -355,10 +333,12 @@ export async function activateVipMembership(params: { userId: string, membership
 
         await batch.commit();
 
-        return { success: true, message: "¡Felicitaciones! Tu membresía VIP ha sido activada.", tier: vipTier };
+        return { success: true, message: "Congratulations! Your VIP membership has been activated.", tier: vipTier };
 
     } catch (err: any) {
         console.error("Error activating VIP membership:", err);
-        return { success: false, error: err.message || "Ocurrió un error inesperado al activar la membresía." };
+        return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
+
+    
