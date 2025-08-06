@@ -289,10 +289,10 @@
 
 @keyframes swim-across-reverse {
   from {
-    transform: translateX(100vw);
+    transform: translateX(0);
   }
   to {
-    transform: translateX(-150px);
+    transform: translateX(-110vw);
   }
 }
 
@@ -334,7 +334,7 @@
 .fish-tail {
     position: absolute;
     top: 5px;
-    left: -15px; /* Adjusted to be on the left for rightward movement */
+    right: 50px;
     width: 0;
     height: 0;
     border-top: 10px solid transparent;
@@ -439,3 +439,4 @@
 
 
     
+

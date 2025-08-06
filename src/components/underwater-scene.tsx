@@ -41,7 +41,7 @@ const Fish = ({ style, color, direction = 'right' }: { style: React.CSSPropertie
         style={{...style, transform: direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)'}}
     >
         <div className="fish-body" style={{ backgroundColor: color }} />
-        <div className="fish-tail" style={{ borderRight: `20px solid ${color}` }}/>
+        <div className="fish-tail" style={{ borderLeft: `20px solid ${color}` }}/>
     </div>
 );
 
@@ -78,7 +78,7 @@ export function UnderwaterScene() {
       })),
        reverseFish: Array.from({ length: 5 }).map((_, i) => ({
         style: {
-          right: '-150px', // Start fish off-screen on the right
+          left: '100vw', // Start fish off-screen on the right
           top: `${Math.random() * 70 + 15}%`, // Different vertical range
           animationDuration: `${Math.random() * 12 + 12}s`, // Slightly different speed
           animationDelay: `${Math.random() * 12}s`,
