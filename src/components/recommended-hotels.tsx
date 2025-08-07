@@ -24,6 +24,7 @@ const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
                                     alt={`${hotel.hotel.name} image ${index + 1}`}
                                     fill 
                                     className="object-cover"
+                                    draggable={false}
                                 />
                              </div>
                         </CarouselItem>
