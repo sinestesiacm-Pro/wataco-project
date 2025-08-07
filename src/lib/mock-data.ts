@@ -185,7 +185,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Beverly Hills Hotel',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1524229648276-e66561fe45a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0aGUlMjBiZXZlcmx5JTIwaGlsbHMlMjBob3RlbHxlbnwwfHx8fDE3NTQ1NTYzMjd8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1627237648384-76580c2c7a17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8VGhlJTIwQmV2ZXJseSUyMEhpbGxzJTIwSG90ZWx8ZW58MHx8fHwxNzU0NTU2NDM5fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?fit=crop&w=800&q=80', category: 'POOL' },
         ],
         address: { lines: ['9641 Sunset Blvd'], postalCode: '90210', cityName: 'Beverly Hills', countryCode: 'US' },
