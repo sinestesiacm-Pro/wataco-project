@@ -2,24 +2,37 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Heart, Star } from 'lucide-react';
+import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import Link from 'next/link';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { useState, useEffect } from 'react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
     <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-none hover:scale-105">
         <div className="relative w-full h-48 flex-shrink-0">
-            <Image 
-                src={hotel.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'} 
-                data-ai-hint="hotel exterior" 
-                alt={hotel.hotel.name || 'Hotel'} 
-                fill 
-                className="object-cover rounded-t-2xl transition-transform duration-300 group-hover:scale-105"
-            />
-            <Button variant="ghost" size="icon" className="absolute top-3 right-3 w-8 h-8 flex-shrink-0 text-white bg-black/30 hover:bg-black/50 hover:text-white rounded-full">
+             <Carousel className="w-full h-full rounded-t-2xl overflow-hidden">
+                <CarouselContent>
+                    {hotel.hotel.media?.map((photo, index) => (
+                        <CarouselItem key={index}>
+                             <div className="relative h-48 w-full">
+                                <Image 
+                                    src={photo.uri}
+                                    data-ai-hint="hotel photo" 
+                                    alt={`${hotel.hotel.name} image ${index + 1}`}
+                                    fill 
+                                    className="object-cover"
+                                />
+                             </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                 <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                 <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Carousel>
+            <Button variant="ghost" size="icon" className="absolute top-3 right-3 w-8 h-8 flex-shrink-0 text-white bg-black/30 hover:bg-black/50 hover:text-white rounded-full z-20">
                 <Heart className="h-5 w-5" />
             </Button>
         </div>
@@ -52,7 +65,6 @@ export function RecommendedHotels() {
   const [hotels, setHotels] = useState<AmadeusHotelOffer[]>([]);
 
   useEffect(() => {
-    // Shuffle the mock data to show a random selection
     const shuffled = [...MOCK_HOTELS_DATA].sort(() => 0.5 - Math.random());
     setHotels(shuffled.slice(0, 4));
   }, []);
@@ -69,5 +81,3 @@ export function RecommendedHotels() {
     </div>
   );
 }
-
-    

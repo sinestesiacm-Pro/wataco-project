@@ -87,7 +87,7 @@ export function HotelDetailsView({ hotelOffer }: HotelDetailsViewProps) {
                   <CarouselContent>
                     {hotel.media && hotel.media.length > 0 ? (
                       hotel.media.map((photo, index) => (
-                        <CarouselItem key={index} className="relative aspect-[4/3]">
+                        <CarouselItem key={index} className="relative aspect-video">
                           <Image
                               src={photo.uri}
                               alt={`${hotel.name} - ${index + 1}`}
@@ -98,7 +98,7 @@ export function HotelDetailsView({ hotelOffer }: HotelDetailsViewProps) {
                         </CarouselItem>
                       ))
                     ) : (
-                       <CarouselItem className="relative aspect-[4/3]">
+                       <CarouselItem className="relative aspect-video">
                           <Image
                               src="https://placehold.co/800x600.png"
                               alt="Placeholder hotel image"

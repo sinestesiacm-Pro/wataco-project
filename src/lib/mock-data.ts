@@ -91,9 +91,10 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Click Clack Hotel',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?fit=crop&w=800&q=80', category: 'POOL' },
-          { uri: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=800&q=80', category: 'BEACH' },
+          { uri: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?fit=crop&w=800&q=80', category: 'ROOM' },
+          { uri: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?fit=crop&w=800&q=80', category: 'POOL' },
           { uri: 'https://images.unsplash.com/photo-1559539343-a8c63ce577b8?fit=crop&w=800&q=80', category: 'RESTAURANT' },
+          { uri: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?fit=crop&w=800&q=80', category: 'EXTERIOR' },
         ],
         address: { lines: ['Cra. 11 #93-77'], postalCode: '110221', cityName: 'Bogotá', countryCode: 'CO' },
         description: { lang: 'es', text: 'Sumérgete en el diseño y la creatividad en este hotel único en el corazón de Bogotá. Disfruta de su rooftop bar, eventos culturales y habitaciones llenas de detalles sorprendentes.' },
@@ -117,6 +118,8 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         rating: '4',
         media: [
           { uri: 'https://images.unsplash.com/photo-1553199221-0602b15bde9a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxMZSUyME1hcmFpcyUyMENoYXJtJTIwUGFyJUMzJUFEcyUyQyUyMEZSfGVufDB8fHx8MTc1MzgwMTIyOXww&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1502602898657-3e91760c0337?fit=crop&w=800&q=80', category: 'VIEW' },
+          { uri: 'https://images.unsplash.com/photo-1622791295932-61f6723a35f5?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['97 Rue des Archives'], postalCode: '75003', cityName: 'Paris', countryCode: 'FR' },
         description: { lang: 'es', text: 'Encantador hotel en el corazón de Le Marais, cerca de la Place des Vosges y el Museo Picasso.' },
@@ -140,6 +143,8 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         rating: '4',
         media: [
           { uri: 'https://images.unsplash.com/photo-1645382738209-110622cb069f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0aGUlMjBuZXclMjB5b3JrZXIlMjBpbm4lMjB8ZW58MHx8fHwxNzUzODAxNjY5fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1544321945-e6b78c8574a7?fit=crop&w=800&q=80', category: 'LOBBY' },
+          { uri: 'https://images.unsplash.com/photo-1595526114035-0d45ab143c20?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['481 8th Ave'], postalCode: '10001', cityName: 'New York', countryCode: 'US' },
         description: { lang: 'es', text: 'Hotel icónico con arquitectura Art Deco, a pasos de Times Square y el Madison Square Garden.' },
@@ -163,6 +168,8 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         rating: '5',
         media: [
           { uri: 'https://images.unsplash.com/photo-1637889408383-87f02910011a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxSb21hJTIwQW50aWNhJTIwU3VpdGVzJTIwUm9tYSUyQyUyMElUfGVufDB8fHx8MTc1MzgyMjIzOHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'ROOM' },
+          { uri: 'https://images.unsplash.com/photo-1572911762121-8864b2b0a1f0?fit=crop&w=800&q=80', category: 'EXTERIOR' },
+          { uri: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?fit=crop&w=800&q=80', category: 'VIEW' },
         ],
         address: { lines: ['Via del Corso 113'], postalCode: '00186', cityName: 'Rome', countryCode: 'IT' },
         description: { lang: 'es', text: 'Suites de lujo con vistas al Panteón. Vive la historia de Roma con el confort moderno.' },
@@ -187,6 +194,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         media: [
           { uri: 'https://images.unsplash.com/photo-1627237648384-76580c2c7a17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8VGhlJTIwQmV2ZXJseSUyMEhpbGxzJTIwSG90ZWx8ZW58MHx8fHwxNzU0NTU2NDM5fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'EXTERIOR' },
           { uri: 'https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?fit=crop&w=800&q=80', category: 'POOL' },
+          { uri: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?fit=crop&w=800&q=80', category: 'ROOM' },
         ],
         address: { lines: ['9641 Sunset Blvd'], postalCode: '90210', cityName: 'Beverly Hills', countryCode: 'US' },
         description: { lang: 'es', text: 'El legendario "Palacio Rosa" ofrece glamour atemporal y un servicio de primera clase en el corazón de Beverly Hills.' },
