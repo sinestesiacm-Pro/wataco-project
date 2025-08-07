@@ -15,7 +15,7 @@ const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
         <div className="relative w-full h-48 flex-shrink-0">
              <Carousel className="w-full h-full rounded-t-2xl overflow-hidden">
                 <CarouselContent>
-                    {hotel.hotel.media?.map((photo, index) => (
+                    {(hotel.hotel.media || []).map((photo, index) => (
                         <CarouselItem key={index}>
                              <div className="relative h-48 w-full">
                                 <Image 
