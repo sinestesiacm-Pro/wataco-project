@@ -221,3 +221,5 @@ async function seedHotels() {
 
 // Execute the seeding function
 seedHotels();
+
+    
