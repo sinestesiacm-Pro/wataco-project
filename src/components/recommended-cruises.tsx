@@ -27,7 +27,7 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
               </Button>
             </div>
             <p className="text-sm text-white/70">{cruise.ship} - {cruise.duration}</p>
-            <p className="font-semibold text-primary text-xl mt-1">${cruise.price}/person</p>
+            <p className="font-semibold text-white text-xl mt-1">${cruise.price}/person</p>
             <div className="flex items-center gap-2 mt-auto text-sm">
                 <div className="flex items-center gap-1 text-amber-400">
                     {[...Array(cruise.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
