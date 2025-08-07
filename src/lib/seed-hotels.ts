@@ -1,4 +1,3 @@
-
 // To execute this script, run the following command in your terminal:
 // npx tsx src/lib/seed-hotels.ts
 
