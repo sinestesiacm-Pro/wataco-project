@@ -26,11 +26,11 @@ const hotelsData = [
       descripcion: 'Lujo y historia en la ciudad amurallada.',
       media: [
         "https://live.staticflickr.com/590/33257495121_2cb15ce3a0_b.jpg",
-        "https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/161758/pexels-photo-161758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/594077/pexels-photo-594077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/3144580/pexels-photo-3144580.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/277574/pexels-photo-277574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+        "https://image-tc.galaxy.tf/wiwebp-efi4bkfvzvb3h5hzbu4ld4lop/hotel-charleston-santa-teresa-cartagena-aerial-view.webp?width=1920",
+        "https://image-tc.galaxy.tf/wiwebp-4qzziexjtttbeiuklh0b7wyf2/piscina-en-la-azotea-hotel-charleston-santa-teresa-cartagena.webp?width=1920",
+        "https://image-tc.galaxy.tf/wijpeg-3zwht0g3k68140bt7dot77uoy/spa-jacuzzi-hotel-charleston-santa-teresa-cartagena_standard.jpg?width=2000&crop=110%2C0%2C1780%2C1335",
+        "https://image-tc.galaxy.tf/wijpeg-3bv4d6k0npormxm79rk2u1x5e/grand-suite-city-view-charleston-santa-teresa-cartagena-01_standard.jpg?width=800&crop=121%2C0%2C1759%2C1319",
+        "https://image-tc.galaxy.tf/wijpeg-xkzv7vouldhq3fpeaay07iax/pasillo-restaurante-harry-sasson-cartagena-santa-teresa_standard.jpg?width=1140&crop=106%2C0%2C1709%2C1282"
       ],
       rating: 5,
       price: 320

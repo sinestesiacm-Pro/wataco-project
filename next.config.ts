@@ -70,6 +70,12 @@ const nextConfig: NextConfig = {
         hostname: 'www.clickclackhotel.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'image-tc.galaxy.tf',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
