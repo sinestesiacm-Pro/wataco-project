@@ -10,12 +10,12 @@ const hotelsData = [
       ubicacion: 'Bogotá, Colombia',
       descripcion: 'Hotel de diseño moderno y único en el corazón de la ciudad.',
       media: [
-        "https://www.clickclackhotel.com/media/uploads/galeriahoteles/hotel-medellin_XIQAvd7.jpg?q=pr:sharp/rs:fill/w:960/h:1000/g:ce/f:jpg",
-        "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/70441/pexels-photo-70441.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+        "https://www.clickclackhotel.com/media/uploads/galeriahoteles/hoteles_bogota.jpg?q=pr:sharp/rs:fill/w:960/h:1000/g:ce/f:jpg",
+        "https://www.clickclackhotel.com/media/uploads/info_landing/PRODUCTOS_CUIDADO_-74.jpg?q=pr:sharp/rs:fill/w:1200/h:800/f:jpg",
+        "https://www.clickclackhotel.com/media/uploads/galeriahabitaciones/Portada.jpg?q=pr:sharp/rs:fill/w:1920/h:1000/g:ce/f:jpg",
+        "https://www.clickclackhotel.com/media/uploads/galeriahabitaciones/l5.jpg?q=pr:sharp/rs:fill/w:1920/h:1000/f:jpg",
+        "https://www.clickclackhotel.com/media/uploads/galeriahabitaciones/portadal.jpg?q=pr:sharp/rs:fill/w:1920/h:1000/f:jpg",
+        "https://cf.bstatic.com/xdata/images/hotel/max1024x768/268205097.jpg?k=adda31e2de3d98f1a16d2bf686e6db20d1c3bb24b751201d425296527c428c18&o=&hp=1"
       ],
       rating: 5,
       price: 280
