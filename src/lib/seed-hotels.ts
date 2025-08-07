@@ -10,7 +10,7 @@ const hotelsData = [
       ubicacion: 'Bogotá, Colombia',
       descripcion: 'Hotel de diseño moderno y único en el corazón de la ciudad.',
       media: [
-        "https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "https://www.clickclackhotel.com/media/uploads/galeriahoteles/hotel-medellin_XIQAvd7.jpg?q=pr:sharp/rs:fill/w:960/h:1000/g:ce/f:jpg",
         "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
         "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
         "https://images.pexels.com/photos/70441/pexels-photo-70441.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -25,7 +25,7 @@ const hotelsData = [
       ubicacion: 'Cartagena, Colombia',
       descripcion: 'Lujo y historia en la ciudad amurallada.',
       media: [
-        "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "https://live.staticflickr.com/590/33257495121_2cb15ce3a0_b.jpg",
         "https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
         "https://images.pexels.com/photos/161758/pexels-photo-161758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
         "https://images.pexels.com/photos/594077/pexels-photo-594077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
