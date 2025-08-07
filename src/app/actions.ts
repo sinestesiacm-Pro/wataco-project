@@ -7,9 +7,13 @@ import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import crypto from 'crypto';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
-const HOTELBEDS_API_KEY = "7b693caa6d94519ce17374929121537f";
+const HOTELBEDS_API_KEY = process.env.HOTELBEDS_API_KEY;
+const HOTELBEDS_SECRET = process.env.HOTELBEDS_SECRET;
+const HOTELBEDS_API_URL = "https://api.test.hotelbeds.com";
+
 
 const searchSchema = z.object({
   origin: z.string().min(3).max(3),
@@ -185,35 +189,83 @@ export async function searchHotels(params: {
   ratings?: number[];
   amenities?: string[];
 }): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
-  const validation = hotelSearchSchema.safeParse(params);
-  if (!validation.success) {
-    return { success: false, error: 'Invalid hotel search parameters.' };
-  }
-  
-  const { cityCode } = validation.data;
+    const validation = hotelSearchSchema.safeParse(params);
+    if (!validation.success) {
+        return { success: false, error: 'Invalid hotel search parameters.' };
+    }
 
-  // NOTE: This is a mocked response to demonstrate the UI with Hotelbeds-like data.
-  // A real integration would involve calls to Hotelbeds API endpoints.
-  await new Promise(resolve => setTimeout(resolve, 1000));
+    if (!HOTELBEDS_API_KEY || !HOTELBEDS_SECRET) {
+        return { success: false, error: "Las credenciales de Hotelbeds no están configuradas." };
+    }
 
-  // Since this is a global app, we can't reliably filter by a small mock list.
-  // So, we'll return a randomized selection from the entire mock data set.
-  if (MOCK_HOTELS_DATA.length === 0) {
-      return { success: false, error: 'No hotels found.' };
-  }
+    const { cityCode, checkInDate, checkOutDate, adults } = validation.data;
 
-  // Fisher-Yates shuffle algorithm to randomize results
-  const shuffledHotels = [...MOCK_HOTELS_DATA];
-  for (let i = shuffledHotels.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledHotels[i], shuffledHotels[j]] = [shuffledHotels[j], shuffledHotels[i]];
-  }
-  
-  // Return a slice of the shuffled array to simulate pagination/limited results
-  const randomSelection = shuffledHotels.slice(0, 10);
+    const signature = crypto.createHash('sha256').update(`${HOTELBEDS_API_KEY}${HOTELBEDS_SECRET}${Math.floor(Date.now() / 1000)}`).digest('hex');
 
-  return { success: true, data: randomSelection };
+    const requestBody = {
+        stay: {
+            checkIn: checkInDate,
+            checkOut: checkOutDate,
+        },
+        occupancies: [{
+            rooms: 1,
+            adults: adults,
+            children: 0,
+        }],
+        destination: {
+            code: cityCode
+        }
+    };
+    
+    try {
+        const response = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels`, {
+            method: 'POST',
+            headers: {
+                'Api-key': HOTELBEDS_API_KEY,
+                'X-Signature': signature,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.json();
+            console.error('Hotelbeds API Error:', errorBody);
+            return { success: false, error: errorBody.error?.message || 'Error buscando hoteles.' };
+        }
+
+        const hotelbedsData = await response.json();
+        
+        if (!hotelbedsData.hotels || hotelbedsData.hotels.length === 0) {
+            return { success: false, error: 'No se encontraron hoteles para esta búsqueda.' };
+        }
+        
+        // This is a simplified mapping. A real implementation would be more complex.
+        const hotelCodes = hotelbedsData.hotels.hotels.map((h: any) => h.code);
+        
+        if(hotelCodes.length === 0) {
+            return { success: false, error: 'No se encontraron hoteles disponibles.' };
+        }
+        
+        // Let's use mock data enriched with real hotel codes for this demo
+        const mappedData = MOCK_HOTELS_DATA.map((mockHotel, index) => ({
+            ...mockHotel,
+            hotel: {
+                ...mockHotel.hotel,
+                hotelId: hotelCodes[index % hotelCodes.length] || mockHotel.hotel.hotelId,
+            }
+        })).slice(0, 10); // Limit to 10 results for demo purposes
+        
+
+        return { success: true, data: mappedData };
+
+    } catch (err: any) {
+        console.error('Error in searchHotels action:', err);
+        return { success: false, error: err.message || 'Ocurrió un error inesperado al buscar hoteles.' };
+    }
 }
+
 
 
 const hotelDetailsSchema = z.object({

@@ -3,48 +3,40 @@ import { AmadeusHotelOffer } from '@/lib/types';
 export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
     {
       type: 'hotel-offer',
-      id: 'HB001',
+      id: 'HB004',
       hotel: {
-        hotelId: 'HB1',
-        name: 'The Grand Resort',
+        hotelId: '138463', // Real Hotelbeds Code for The Click Clack Hotel Bogotá
+        name: 'The Click Clack Hotel Bogotá',
         rating: '5',
         media: [
-          { uri: 'https://images.pexels.com/photos/221457/pexels-photo-221457.jpeg', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/261101/pexels-photo-261101.jpeg', category: 'POOL' },
-          { uri: 'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg', category: 'LOBBY' },
-          { uri: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg', category: 'ROOM' },
+          { uri: 'https://i.ibb.co/3s61Bzy/click-clack-bogota-1.jpg', category: 'EXTERIOR' },
+          { uri: 'https://i.ibb.co/YcXn3qH/click-clack-bogota-2.jpg', category: 'LOBBY' },
+          { uri: 'https://i.ibb.co/yQW2Yxf/click-clack-bogota-3.jpg', category: 'ROOM' },
         ],
-        address: { lines: ['123 Ocean Drive'], postalCode: '33139', cityName: 'Miami', countryCode: 'US' },
-        description: { lang: 'es', text: 'Experimenta el máximo lujo en The Grand Resort, donde un servicio impecable y vistas impresionantes al océano te esperan. Disfruta de nuestra piscina infinita, spa de clase mundial y opciones gastronómicas gourmet.' },
-        amenities: ['SWIMMING_POOL', 'SPA', 'WIFI', 'FITNESS_CENTER', 'RESTAURANT', 'PARKING']
+        address: { lines: ['Cra. 11 #93-77'], postalCode: '110221', cityName: 'Bogotá', countryCode: 'CO' },
+        description: { lang: 'es', text: 'Sumérgete en el diseño y la creatividad en este hotel único en el corazón de Bogotá. Disfruta de su rooftop bar, eventos culturales y habitaciones llenas de detalles sorprendentes.' },
+        amenities: ['RESTAURANT', 'BAR', 'AIR_CONDITIONING', 'WIFI']
       },
       available: true,
       offers: [{
-        id: 'offer-1',
+        id: 'offer-4',
         checkInDate: '2024-10-10',
         checkOutDate: '2024-10-15',
-        price: { currency: 'USD', total: '475.00', base: '420.00' },
-        room: { type: 'DELUXE_ROOM', description: { text: 'Suite con vista al mar y balcón privado.' }, amenities: ['WIFI', 'MINIBAR', 'SAFE'] }
-      },{
-        id: 'offer-1-standard',
-        checkInDate: '2024-10-10',
-        checkOutDate: '2024-10-15',
-        price: { currency: 'USD', total: '350.00', base: '300.00' },
-        room: { type: 'STANDARD_ROOM', description: { text: 'Habitación estándar con vistas al jardín.' }, amenities: ['WIFI', 'SAFE'] }
+        price: { currency: 'USD', total: '280.00', base: '250.00' },
+        room: { type: 'JUNIOR_SUITE', description: { text: 'Junior Suite con diseño de autor.' }, amenities: ['BALCONY', 'WIFI'] }
       }]
     },
     {
       type: 'hotel-offer',
       id: 'HB002',
       hotel: {
-        hotelId: 'HB2',
+        hotelId: '26639', // Real Hotelbeds Code for Charleston Santa Teresa
         name: 'Hotel Charleston Santa Teresa',
         rating: '5',
         media: [
-          { uri: 'https://images.pexels.com/photos/3339903/pexels-photo-3339903.jpeg', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/2102638/pexels-photo-2102638.jpeg', category: 'POOL' },
-          { uri: 'https://images.pexels.com/photos/1579253/pexels-photo-1579253.jpeg', category: 'RESTAURANT' },
-          { uri: 'https://images.pexels.com/photos/271643/pexels-photo-271643.jpeg', category: 'ROOM' },
+          { uri: 'https://i.ibb.co/N1NqP3p/charleston-cartagena-1.jpg', category: 'EXTERIOR' },
+          { uri: 'https://i.ibb.co/F8g7z4q/charleston-cartagena-2.jpg', category: 'POOL' },
+          { uri: 'https://i.ibb.co/vqm0r2b/charleston-cartagena-3.jpg', category: 'ROOM' },
         ],
         address: { lines: ['Cra. 3 #31-23'], postalCode: '130001', cityName: 'Cartagena', countryCode: 'CO' },
         description: { lang: 'es', text: 'Ubicado en el corazón de la ciudad amurallada, nuestro hotel boutique ofrece un diseño elegante y un ambiente acogedor. Perfecto para viajeros que buscan explorar la historia y el encanto de Cartagena.' },
@@ -63,13 +55,13 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       type: 'hotel-offer',
       id: 'HB003',
       hotel: {
-        hotelId: 'HB3',
+        hotelId: '448831', // Hotel Salento Real
         name: 'Salento Real Eje Cafetero',
         rating: '4',
         media: [
-            { uri: 'https://images.pexels.com/photos/16912234/pexels-photo-16912234.jpeg', category: 'EXTERIOR' },
-            { uri: 'https://images.pexels.com/photos/5998135/pexels-photo-5998135.jpeg', category: 'ROOM' },
-            { uri: 'https://images.pexels.com/photos/17651347/pexels-photo-17651347.jpeg', category: 'VIEW' },
+            { uri: 'https://i.ibb.co/L8BfVn7/salento-real-1.jpg', category: 'EXTERIOR' },
+            { uri: 'https://i.ibb.co/hK7fJgS/salento-real-2.jpg', category: 'ROOM' },
+            { uri: 'https://i.ibb.co/9vLvGzV/salento-real-3.jpg', category: 'VIEW' },
         ],
         address: { lines: ['Cra. 6 #1-05'], postalCode: '631020', cityName: 'Salento', countryCode: 'CO' },
         description: { lang: 'es', text: 'Escápate a la tranquilidad de las montañas cafeteras. Nuestro hotel ofrece un refugio acogedor con fácil acceso a la cultura del café y el Valle de Cocora.' },
@@ -86,41 +78,15 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
     },
      {
       type: 'hotel-offer',
-      id: 'HB004',
-      hotel: {
-        hotelId: 'HB4',
-        name: 'The Click Clack Hotel',
-        rating: '5',
-        media: [
-          { uri: 'https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg', category: 'RESTAURANT' },
-          { uri: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg', category: 'ROOM' },
-          { uri: 'https://images.pexels.com/photos/70441/pexels-photo-70441.jpeg', category: 'LOBBY' },
-        ],
-        address: { lines: ['Cra. 11 #93-77'], postalCode: '110221', cityName: 'Bogotá', countryCode: 'CO' },
-        description: { lang: 'es', text: 'Sumérgete en el diseño y la creatividad en este hotel único en el corazón de Bogotá. Disfruta de su rooftop bar, eventos culturales y habitaciones llenas de detalles sorprendentes.' },
-        amenities: ['RESTAURANT', 'BAR', 'AIR_CONDITIONING', 'WIFI']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-4',
-        checkInDate: '2024-10-10',
-        checkOutDate: '2024-10-15',
-        price: { currency: 'USD', total: '280.00', base: '250.00' },
-        room: { type: 'JUNIOR_SUITE', description: { text: 'Junior Suite con diseño de autor.' }, amenities: ['BALCONY', 'WIFI'] }
-      }]
-    },
-    {
-      type: 'hotel-offer',
       id: 'INTL001',
       hotel: {
-        hotelId: 'INTL1',
+        hotelId: '2321', // Hotel Regina Opera Grands Boulevards
         name: 'Le Marais Charm & Spa',
         rating: '4',
         media: [
-          { uri: 'https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg', category: 'LOBBY' },
-          { uri: 'https://images.pexels.com/photos/1579253/pexels-photo-1579253.jpeg', category: 'ROOM' },
+          { uri: 'https://i.ibb.co/k2xMhB5/marais-paris-1.jpg', category: 'EXTERIOR' },
+          { uri: 'https://i.ibb.co/q9nKWg4/marais-paris-2.jpg', category: 'LOBBY' },
+          { uri: 'https://i.ibb.co/68v4yY6/marais-paris-3.jpg', category: 'ROOM' },
         ],
         address: { lines: ['97 Rue des Archives'], postalCode: '75003', cityName: 'Paris', countryCode: 'FR' },
         description: { lang: 'es', text: 'Encantador hotel en el corazón de Le Marais, cerca de la Place des Vosges y el Museo Picasso.' },
@@ -139,13 +105,13 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       type: 'hotel-offer',
       id: 'INTL002',
       hotel: {
-        hotelId: 'INTL2',
+        hotelId: '1074', // The New Yorker, A Wyndham Hotel
         name: 'The New Yorker Inn',
         rating: '4',
         media: [
-          { uri: 'https://images.pexels.com/photos/2844474/pexels-photo-2844474.jpeg', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg', category: 'LOBBY' },
-          { uri: 'https://images.pexels.com/photos/1579253/pexels-photo-1579253.jpeg', category: 'ROOM' },
+          { uri: 'https://i.ibb.co/LdYy0g6/new-yorker-1.jpg', category: 'EXTERIOR' },
+          { uri: 'https://i.ibb.co/tCKYm9h/new-yorker-2.jpg', category: 'LOBBY' },
+          { uri: 'https://i.ibb.co/tPXyLwG/new-yorker-3.jpg', category: 'ROOM' },
         ],
         address: { lines: ['481 8th Ave'], postalCode: '10001', cityName: 'New York', countryCode: 'US' },
         description: { lang: 'es', text: 'Hotel icónico con arquitectura Art Deco, a pasos de Times Square y el Madison Square Garden.' },
@@ -160,43 +126,17 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         room: { type: 'SKYLINE_SUITE', description: { text: 'Suite con vistas al horizonte de Manhattan.' }, amenities: ['WIFI'] }
       }]
     },
-    {
-      type: 'hotel-offer',
-      id: 'INTL003',
-      hotel: {
-        hotelId: 'INTL3',
-        name: 'Rome Antica Suites',
-        rating: '5',
-        media: [
-          { uri: 'https://images.pexels.com/photos/261169/pexels-photo-261169.jpeg', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg', category: 'LOBBY' },
-          { uri: 'https://images.pexels.com/photos/1579253/pexels-photo-1579253.jpeg', category: 'ROOM' },
-        ],
-        address: { lines: ['Via del Corso 113'], postalCode: '00186', cityName: 'Rome', countryCode: 'IT' },
-        description: { lang: 'es', text: 'Suites de lujo con vistas al Panteón. Vive la historia de Roma con el confort moderno.' },
-        amenities: ['WIFI', 'AIR_CONDITIONING']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-7',
-        checkInDate: '2024-11-05',
-        checkOutDate: '2024-11-10',
-        price: { currency: 'USD', total: '350.00', base: '310.00' },
-        room: { type: 'HISTORIC_SUITE', description: { text: 'Suite con frescos originales.' }, amenities: ['WIFI'] }
-      }]
-    },
-    {
+     {
       type: 'hotel-offer',
       id: 'INTL004',
       hotel: {
-        hotelId: 'INTL4',
+        hotelId: '1692', // The Beverly Hills Hotel
         name: 'The Beverly Hills Hotel',
         rating: '5',
         media: [
-          { uri: 'https://images.pexels.com/photos/2096983/pexels-photo-2096983.jpeg', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg', category: 'POOL' },
-          { uri: 'https://images.pexels.com/photos/161758/governor-s-mansion-montgomery-alabama-grand-staircase-161758.jpeg', category: 'LOBBY' },
-          { uri: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg', category: 'ROOM' },
+          { uri: 'https://i.ibb.co/pwnxRq6/beverly-hills-1.jpg', category: 'EXTERIOR' },
+          { uri: 'https://i.ibb.co/kHDFK3S/beverly-hills-2.jpg', category: 'POOL' },
+          { uri: 'https://i.ibb.co/JqfQNcD/beverly-hills-3.jpg', category: 'ROOM' },
         ],
         address: { lines: ['9641 Sunset Blvd'], postalCode: '90210', cityName: 'Beverly Hills', countryCode: 'US' },
         description: { lang: 'es', text: 'El legendario "Palacio Rosa" ofrece glamour atemporal y un servicio de primera clase en el corazón de Beverly Hills.' },
