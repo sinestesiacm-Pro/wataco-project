@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed:firestore": "tsx src/lib/seed-vip-codes.ts"
+    "seed:firestore:vip": "tsx src/lib/seed-vip-codes.ts",
+    "seed:firestore:hotels": "tsx src/lib/seed-hotels.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.13.0",

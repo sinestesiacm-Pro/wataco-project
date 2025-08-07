@@ -5,23 +5,37 @@ import { Button } from '@/components/ui/button';
 import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import Link from 'next/link';
-import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { useState, useEffect } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Skeleton } from './ui/skeleton';
 
-const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
+// Simplified hotel type for Firestore data
+interface Hotel {
+    id: string;
+    nombre: string;
+    ubicacion: string;
+    descripcion: string;
+    media: string[];
+    rating: number; // Added rating for consistency
+    price: number; // Added price for consistency
+}
+
+
+const HotelCard = ({ hotel }: { hotel: Hotel }) => (
     <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-none hover:scale-105">
         <div className="relative w-full h-48 flex-shrink-0">
              <Carousel className="w-full h-full rounded-t-2xl overflow-hidden">
                 <CarouselContent>
-                    {(hotel.hotel.media || []).map((photo, index) => (
+                    {(hotel.media || []).map((photo, index) => (
                         <CarouselItem key={index}>
                              <div className="relative h-48 w-full">
                                 <Image 
-                                    src={photo.uri}
+                                    src={photo}
                                     data-ai-hint="hotel photo" 
-                                    alt={`${hotel.hotel.name} image ${index + 1}`}
+                                    alt={`${hotel.nombre} image ${index + 1}`}
                                     fill 
                                     className="object-cover"
                                     draggable={false}
@@ -38,12 +52,12 @@ const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
             </Button>
         </div>
         <CardContent className="p-4 flex flex-col flex-grow text-gray-800">
-            <h3 className="font-bold text-lg">{hotel.hotel.name}</h3>
-            <p className="text-sm text-gray-600">{hotel.hotel.address.cityName}, {hotel.hotel.address.countryCode}</p>
+            <h3 className="font-bold text-lg">{hotel.nombre}</h3>
+            <p className="text-sm text-gray-600">{hotel.ubicacion}</p>
             
             <div className="flex items-center gap-2 mt-2 text-sm">
                 <div className="flex items-center gap-1 text-amber-400">
-                    {[...Array(parseInt(hotel.hotel.rating || '0'))].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                    {[...Array(hotel.rating || 0)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                 </div>
             </div>
             
@@ -52,33 +66,85 @@ const HotelCard = ({ hotel }: { hotel: AmadeusHotelOffer }) => (
             <div className="flex justify-between items-center mt-4">
                 <div>
                     <p className="text-xs text-gray-600">from</p>
-                    <p className="font-semibold text-2xl text-white">${hotel.offers[0].price.total}<span className="text-sm font-normal text-gray-700">/night</span></p>
+                    <p className="font-semibold text-2xl text-white">${hotel.price}<span className="text-sm font-normal text-gray-700">/night</span></p>
                 </div>
+                {/* The link should eventually lead to a proper details page that also fetches from firestore */}
                 <Button asChild className="font-semibold">
-                    <Link href={`/hotels/${hotel.id}`}>View Hotel</Link>
+                    <Link href={`#`}>View Hotel</Link>
                 </Button>
             </div>
         </CardContent>
     </Card>
 );
 
+const HotelSkeleton = () => (
+    <div className="rounded-2xl p-0 flex flex-col bg-white/40 backdrop-blur-xl border-none">
+        <Skeleton className="w-full h-48 rounded-t-2xl" />
+        <div className="p-4">
+            <Skeleton className="h-6 w-3/4 mb-2" />
+            <Skeleton className="h-4 w-1/2 mb-4" />
+            <Skeleton className="h-4 w-1/4" />
+            <div className="flex justify-between items-end mt-4">
+                <div className="space-y-1">
+                    <Skeleton className="h-3 w-12" />
+                    <Skeleton className="h-8 w-24" />
+                </div>
+                <Skeleton className="h-10 w-28" />
+            </div>
+        </div>
+    </div>
+)
+
 export function RecommendedHotels() {
-  const [hotels, setHotels] = useState<AmadeusHotelOffer[]>([]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const shuffled = [...MOCK_HOTELS_DATA].sort(() => 0.5 - Math.random());
-    setHotels(shuffled.slice(0, 4));
-  }, []);
+    const fetchHotels = async () => {
+      try {
+        setLoading(true);
+        const hotelsCollection = collection(db, 'hoteles');
+        const hotelSnapshot = await getDocs(hotelsCollection);
+        if (hotelSnapshot.empty) {
+            setError("No se encontraron hoteles. Asegúrate de que la colección 'hoteles' exista en Firestore y no esté vacía.");
+        } else {
+            const hotelsList = hotelSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Hotel));
+            setHotels(hotelsList);
+        }
+      } catch (err) {
+        console.error("Error fetching hotels from Firestore:", err);
+        setError("Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchHotels();
+  }, []);
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Recommended Hotels Around the World</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {hotels.map((hotel, index) => (
-          <HotelCard key={hotel.id || index} hotel={hotel} />
-        ))}
-      </div>
+      <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
+      
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => <HotelSkeleton key={i} />)}
+        </div>
+      ) : error ? (
+        <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
+            <CardContent className="pt-6 text-center">
+                <h3 className="font-bold">Error al Cargar Hoteles</h3>
+                <p className="text-sm mt-2">{error}</p>
+            </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {hotels.map((hotel) => (
+            <HotelCard key={hotel.id} hotel={hotel} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
