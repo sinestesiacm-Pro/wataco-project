@@ -6,7 +6,7 @@ import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import Link from 'next/link';
 import type { AmadeusHotelOffer } from '@/lib/types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -95,8 +95,22 @@ const HotelSkeleton = () => (
     </div>
 )
 
+// Function to shuffle an array
+const shuffleArray = <T,>(array: T[]): T[] => {
+    let currentIndex = array.length, randomIndex;
+
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
+
 export function RecommendedHotels() {
-  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [allHotels, setAllHotels] = useState<Hotel[]>([]);
+  const [displayedHotels, setDisplayedHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -107,10 +121,11 @@ export function RecommendedHotels() {
         const hotelsCollection = collection(db, 'hoteles');
         const hotelSnapshot = await getDocs(hotelsCollection);
         if (hotelSnapshot.empty) {
-            setError("No se encontraron hoteles. Asegúrate de que la colección 'hoteles' exista en Firestore y no esté vacía.");
+            setError("No se encontraron hoteles. Asegúrate de ejecutar el script de siembra: npx tsx src/lib/seed-hotels.ts");
         } else {
             const hotelsList = hotelSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Hotel));
-            setHotels(hotelsList);
+            setAllHotels(hotelsList);
+            setDisplayedHotels(shuffleArray([...hotelsList]).slice(0, 4));
         }
       } catch (err) {
         console.error("Error fetching hotels from Firestore:", err);
@@ -122,6 +137,16 @@ export function RecommendedHotels() {
 
     fetchHotels();
   }, []);
+
+  useEffect(() => {
+    if(allHotels.length === 0) return;
+
+    const intervalId = setInterval(() => {
+      setDisplayedHotels(shuffleArray([...allHotels]).slice(0, 4));
+    }, 40000); // Rotate hotels every 40 seconds
+
+    return () => clearInterval(intervalId);
+  }, [allHotels]);
 
   return (
     <div className="space-y-6">
@@ -140,7 +165,7 @@ export function RecommendedHotels() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {hotels.map((hotel) => (
+          {displayedHotels.map((hotel) => (
             <HotelCard key={hotel.id} hotel={hotel} />
           ))}
         </div>
