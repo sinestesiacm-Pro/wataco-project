@@ -402,7 +402,7 @@
 
 /* Activities Background Specifics */
 .bg-activities-background::before {
-  background-image: linear-gradient(to bottom, rgba(100, 50, 0, 0.4), rgba(50, 20, 0, 0.8)), url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=2070');
+  background-image: linear-gradient(to bottom, rgba(100, 50, 0, 0.4), rgba(50, 20, 0, 0.8)), url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=2070');
   opacity: 1;
 }
 
@@ -431,7 +431,7 @@
 
 @keyframes fade-and-rotate-activities {
   0%, 33.32%, 100% {
-    background-image: linear-gradient(to bottom, rgba(100, 50, 0, 0.4), rgba(50, 20, 0, 0.8)), url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=2070');
+    background-image: linear-gradient(to bottom, rgba(100, 50, 0, 0.4), rgba(50, 20, 0, 0.8)), url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=2070');
   }
   33.33%, 66.65% {
     background-image: linear-gradient(to bottom, rgba(80, 60, 0, 0.4), rgba(30, 20, 0, 0.8)), url('https://images.unsplash.com/photo-1572695995254-20a8c2f5d371?w=2070');
@@ -468,3 +468,4 @@
 
 
     
+
