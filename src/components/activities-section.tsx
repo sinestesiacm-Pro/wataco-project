@@ -17,7 +17,7 @@ const activities = [
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
-    <Card className="bg-white rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:shadow-xl shadow-lg border-none">
+    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-white/20 shadow-lg">
         <div className="relative w-28 h-28 flex-shrink-0">
             <Image 
                 src={activity.image} 
@@ -27,21 +27,21 @@ const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
                 className="object-cover rounded-xl"
             />
         </div>
-        <div className="flex flex-col flex-grow">
+        <div className="flex flex-col flex-grow text-white">
             <div className="flex justify-between items-start">
-              <h3 className="font-bold text-lg text-gray-900">{activity.name}</h3>
-              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-gray-400 hover:text-destructive">
+              <h3 className="font-bold text-lg">{activity.name}</h3>
+              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white/70 hover:text-white">
                   <Heart className="h-5 w-5" />
               </Button>
             </div>
-            <p className="text-sm text-gray-600">{activity.description}</p>
-            <p className="font-semibold text-primary text-xl mt-1">${activity.price}/person</p>
+            <p className="text-sm text-white/80">{activity.description}</p>
+            <p className="font-semibold text-accent text-xl mt-1">${activity.price}/person</p>
             <div className="flex items-center gap-2 mt-auto text-sm">
                 <div className="flex items-center gap-1 text-amber-400">
                     {[...Array(activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                    {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-gray-300" />)}
+                    {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-white/30" />)}
                 </div>
-                <p className="text-gray-500">({activity.reviews} reviews)</p>
+                <p className="text-white/70">({activity.reviews} reviews)</p>
             </div>
         </div>
     </Card>
@@ -62,5 +62,4 @@ export function ActivitiesSection() {
     </div>
   );
 }
-
     
