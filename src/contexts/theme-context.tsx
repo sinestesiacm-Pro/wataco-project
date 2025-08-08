@@ -75,7 +75,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         if (pathname.startsWith('/hotels')) return 'bg-hotels-background';
         if (pathname.startsWith('/packages')) return 'bg-packages-background';
         if (pathname.startsWith('/cruises')) return cn('bg-cruises-gradient', baseAnimationClass);
-        if (pathname.startsWith('/activities')) return cn('bg-activities-gradient', baseAnimationClass);
+        if (pathname.startsWith('/activities')) return 'bg-activities-background';
         if (pathname.startsWith('/flights')) return 'bg-flights-gradient';
         
         if (pathname === '/') {
@@ -84,7 +84,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
                 case 'Hotels': return 'bg-hotels-background';
                 case 'Packages': return 'bg-packages-background';
                 case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
-                case 'Activities': return cn('bg-activities-gradient', baseAnimationClass);
+                case 'Activities': return 'bg-activities-background';
                 case 'Social': return 'bg-flights-gradient';
                 default: return 'bg-flights-gradient';
             }
@@ -99,3 +99,5 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         </div>
     )
 }
+
+    
