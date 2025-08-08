@@ -391,7 +391,10 @@
 }
 
 .bg-packages-background::after {
-  animation: fade-in-out 30s linear infinite, rotating-backgrounds-packages 30s linear infinite, ken-burns-animation 40s ease-out infinite;
+  animation-name: fade-in-out, rotating-backgrounds-packages, ken-burns-animation;
+  animation-duration: 30s, 30s, 40s;
+  animation-timing-function: linear, linear, ease-out;
+  animation-iteration-count: infinite, infinite, infinite;
 }
 
 /* Activities Background Specifics */
@@ -400,7 +403,10 @@
 }
 
 .bg-activities-background::after {
-  animation: fade-in-out 45s linear infinite, rotating-backgrounds-activities 45s linear infinite, ken-burns-animation 40s ease-out infinite;
+  animation-name: fade-in-out, rotating-backgrounds-activities, ken-burns-animation;
+  animation-duration: 45s, 45s, 40s;
+  animation-timing-function: linear, linear, ease-out;
+  animation-iteration-count: infinite, infinite, infinite;
 }
 
 
