@@ -90,7 +90,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
             }
         }
         
-        return 'bg-flights-background';
+        return 'bg-flights-gradient';
     }
 
     return (
