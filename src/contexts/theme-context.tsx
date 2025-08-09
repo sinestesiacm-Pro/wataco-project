@@ -76,21 +76,21 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
         if (pathname.startsWith('/packages')) return 'bg-packages-background';
         if (pathname.startsWith('/cruises')) return cn('bg-cruises-gradient', baseAnimationClass);
         if (pathname.startsWith('/activities')) return 'bg-activities-background';
-        if (pathname.startsWith('/flights')) return 'bg-flights-gradient';
+        if (pathname.startsWith('/flights')) return 'bg-flights-background';
         
         if (pathname === '/') {
             switch(tabTheme) {
-                case 'Flights': return 'bg-flights-gradient'; 
+                case 'Flights': return 'bg-flights-background'; 
                 case 'Hotels': return 'bg-hotels-background';
                 case 'Packages': return 'bg-packages-background';
                 case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
                 case 'Activities': return 'bg-activities-background';
-                case 'Social': return 'bg-flights-gradient';
-                default: return 'bg-flights-gradient';
+                case 'Social': return 'bg-flights-background';
+                default: return 'bg-flights-background';
             }
         }
         
-        return 'bg-flights-gradient';
+        return 'bg-flights-background';
     }
 
     return (
