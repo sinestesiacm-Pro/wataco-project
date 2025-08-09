@@ -376,7 +376,7 @@
   z-index: -1;
   background-image: url('https://images.pexels.com/photos/9420645/pexels-photo-9420645.jpeg');
   background-size: cover;
-  background-position: center 60%;
+  background-position: center 40%;
   filter: blur(8px);
   animation-name: ken-burns-animation;
   animation-duration: 40s;
@@ -513,6 +513,7 @@
 
 
     
+
 
 
 
