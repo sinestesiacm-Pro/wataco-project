@@ -87,7 +87,7 @@ export function FlightFilters({ availableAirlines, onFilterChange }: FlightFilte
         <Separator className="bg-gray-500/20" />
 
         <FilterSection title="Aerolíneas">
-            {Object.entries(availableAirlines).slice(0, 5).map(([code, name]) => (
+            {availableAirlines && Object.entries(availableAirlines).slice(0, 5).map(([code, name]) => (
                  <div key={code} className="flex items-center space-x-2">
                     <Checkbox 
                       id={`airline-${code}`} 
