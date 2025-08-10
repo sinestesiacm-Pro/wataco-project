@@ -57,7 +57,7 @@ export function NextTripSection() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Card */}
-        <Card className="lg:col-span-2 bg-black/20 backdrop-blur-xl border-none text-white relative overflow-hidden">
+        <Card className="lg:col-span-2 bg-black/20 backdrop-blur-xl border-none text-white relative overflow-hidden shadow-lg">
              <div className="absolute inset-0">
                 <Image src={mockNextTrip.image} data-ai-hint="paris eiffel tower" alt={mockNextTrip.destination} fill className="object-cover opacity-30" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
@@ -97,7 +97,7 @@ export function NextTripSection() {
 
         {/* Side Cards */}
         <div className="space-y-6">
-            <Card className="bg-black/20 backdrop-blur-xl border-none text-white">
+            <Card className="bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg font-headline">
                         <Calendar className="h-5 w-5 text-primary"/>
@@ -119,7 +119,7 @@ export function NextTripSection() {
                     </div>
                 </CardContent>
             </Card>
-            <Card className="bg-black/20 backdrop-blur-xl border-none text-white">
+            <Card className="bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg font-headline">
                         <FileText className="h-5 w-5 text-primary"/>
@@ -127,10 +127,10 @@ export function NextTripSection() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                   <Button variant="outline" className="w-full justify-start bg-transparent border-white/30 hover:bg-white/10">
+                   <Button variant="outline" className="w-full justify-start bg-transparent border-white/30 hover:bg-white/10 text-white">
                         <Download className="mr-2 h-4 w-4"/> Ver E-tickets
                    </Button>
-                    <Button variant="outline" className="w-full justify-start bg-transparent border-white/30 hover:bg-white/10">
+                    <Button variant="outline" className="w-full justify-start bg-transparent border-white/30 hover:bg-white/10 text-white">
                         <Download className="mr-2 h-4 w-4"/> Ver Confirmación de Hotel
                    </Button>
                 </CardContent>

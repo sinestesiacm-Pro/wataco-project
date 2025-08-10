@@ -18,7 +18,7 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
 
   if (loading || !user) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
+      <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
@@ -28,12 +28,12 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
     <div className={cn("min-h-screen w-full pt-24 pb-8", "color-change-animation")}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-3 xl:col-span-3">
+          <div className="lg:col-span-4 xl:col-span-3">
             <ProfileSidebar />
           </div>
-          <div className="lg:col-span-9 xl:col-span-9 mt-6 lg:mt-0">
+          <main className="lg:col-span-8 xl:col-span-9 mt-6 lg:mt-0">
             {children}
-          </div>
+          </main>
         </div>
       </div>
     </div>
