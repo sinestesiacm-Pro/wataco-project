@@ -424,12 +424,15 @@
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-image: linear-gradient(to bottom, rgba(100, 50, 0, 0.4), rgba(50, 20, 0, 0.8)), url('https://images.unsplash.com/photo-1570899324009-399a16a4b18c?w=2070');
+  background-image: linear-gradient(to bottom, rgba(100, 50, 0, 0.4), rgba(50, 20, 0, 0.8)), url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=2070');
   background-size: cover;
   background-position: center;
   filter: blur(8px);
   opacity: 1;
   animation-name: ken-burns-animation;
+  animation-duration: 40s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
 }
 
 .bg-activities-background::after {
@@ -513,6 +516,7 @@
 
 
     
+
 
 
 
