@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getHotelDetails } from '@/app/actions';
+import { getFirestoreHotelDetails } from '@/app/actions';
 import { AmadeusHotelOffer, Room } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { RoomSelectionView } from './room-selection-view';
 import { CheckoutView } from './checkout-view';
 import { Button } from './ui/button';
+import { Card, CardContent } from './ui/card';
 
 type BookingStep = 'rooms' | 'checkout';
 
@@ -31,7 +32,8 @@ export function HotelBookingFlow({ offerId, adults, children, checkInDate, check
       setLoading(true);
       setError(null);
       try {
-        const result = await getHotelDetails({ offerId });
+        // Use getFirestoreHotelDetails to ensure we fetch from the correct source
+        const result = await getFirestoreHotelDetails(offerId); 
         if (result.success && result.data) {
           // Manually override dates in the fetched offer with the ones from the search
           const offerWithCorrectDates = {
@@ -76,7 +78,14 @@ export function HotelBookingFlow({ offerId, adults, children, checkInDate, check
   }
 
   if (error || !hotelOffer) {
-    return <p className="text-destructive text-center">{error || 'Hotel no encontrado.'}</p>;
+    return (
+        <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
+            <CardContent className="pt-6 text-center">
+                <h3 className="font-bold">Error al Cargar Ofertas</h3>
+                <p className="text-sm mt-2">{error || 'Hotel no encontrado.'}</p>
+            </CardContent>
+        </Card>
+    )
   }
 
   const renderStep = () => {
