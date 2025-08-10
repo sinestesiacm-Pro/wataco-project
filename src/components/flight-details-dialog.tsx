@@ -117,7 +117,6 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
     const [selectedFare, setSelectedFare] = useState("Light");
     
     const basePrice = parseFloat(flight.price.total);
-    const selectedFareOption = fareOptions.find(f => f.name === selectedFare);
     const addonsPrice = selectedFareOption?.priceModifier || 0;
     const totalPrice = basePrice + addonsPrice;
 
@@ -181,14 +180,11 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex justify-center">
-            <Button 
-                size="sm"
-                className="font-semibold bg-success hover:bg-success/90"
-            >
-                Seleccionar
-            </Button>
-        </div>
+         <Button 
+            className="w-4/5 mx-auto font-bold text-lg py-6 rounded-full bg-gradient-to-br from-blue-700 to-blue-900 text-white shadow-lg border-b-4 border-blue-900 hover:from-blue-600 hover:to-blue-800 active:translate-y-px active:shadow-md"
+         >
+            Seleccionar
+         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-white/60 backdrop-blur-xl p-0 border border-white/20 shadow-2xl rounded-3xl">
           <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0 text-gray-800">
