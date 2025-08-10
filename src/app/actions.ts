@@ -1,7 +1,7 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData, AmadeusHotel } from '@/lib/types';
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
@@ -294,6 +294,66 @@ export async function getHotelDetails(params: { offerId: string }): Promise<{ su
   return { success: true, data: hotelOffer };
 }
 
+export async function getFirestoreHotelDetails(id: string): Promise<{ success: boolean; data?: AmadeusHotelOffer; error?: string }> {
+    try {
+        const hotelDocRef = doc(db, 'hoteles', id);
+        const hotelDoc = await getDoc(hotelDocRef);
+
+        if (!hotelDoc.exists()) {
+            return { success: false, error: 'Hotel no encontrado en la base de datos.' };
+        }
+
+        const data = hotelDoc.data();
+        
+        // Map Firestore data to AmadeusHotelOffer structure
+        const hotelOffer: AmadeusHotelOffer = {
+            id: hotelDoc.id,
+            type: 'hotel-offer',
+            available: true,
+            hotel: {
+                hotelId: hotelDoc.id,
+                name: data.nombre,
+                rating: data.rating?.toString(),
+                media: (data.media || []).map((url: string) => ({ uri: url, category: 'GENERAL' })),
+                address: {
+                    cityName: data.ubicacion.split(',')[0],
+                    countryCode: data.ubicacion.split(',')[1]?.trim() || '',
+                    lines: [data.ubicacion],
+                    postalCode: '',
+                },
+                description: {
+                    lang: 'es',
+                    text: data.descripcion,
+                },
+                amenities: data.amenities || [],
+            },
+            offers: [
+                {
+                    id: `offer-${hotelDoc.id}`,
+                    checkInDate: '2024-10-10', // Placeholder date
+                    checkOutDate: '2024-10-15', // Placeholder date
+                    price: {
+                        currency: 'USD',
+                        total: data.price?.toFixed(2) || '0.00',
+                        base: (data.price * 0.9).toFixed(2) || '0.00' // Placeholder
+                    },
+                    room: {
+                        type: 'STANDARD_ROOM',
+                        description: { text: 'Habitación Estándar' },
+                        amenities: [],
+                    }
+                }
+            ],
+        };
+
+        return { success: true, data: hotelOffer };
+    } catch (err: any) {
+        console.error('Error fetching hotel from Firestore:', err);
+        return { success: false, error: err.message || 'Ocurrió un error inesperado al buscar el hotel.' };
+    }
+}
+
+
 const packageSearchSchema = z.object({
   originLocationCode: z.string().min(3).max(3),
   destinationLocationCode: z.string().min(3).max(3),
@@ -392,5 +452,3 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
-
-    

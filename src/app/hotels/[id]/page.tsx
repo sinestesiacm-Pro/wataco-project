@@ -6,11 +6,12 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { getHotelDetails } from '@/app/actions';
+import { getFirestoreHotelDetails } from '@/app/actions';
 import { AmadeusHotelOffer } from '@/lib/types';
 import { HotelDetailsView } from '@/components/hotel-details-view';
 import { AvailabilitySearch } from '@/components/availability-search';
 import { addDays, format } from 'date-fns';
+import { Card, CardContent } from '@/components/ui/card';
 
 function HotelDetailPageContent({ id }: { id: string }) {
     const router = useRouter();
@@ -22,7 +23,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
     useEffect(() => {
         const fetchDetails = async () => {
             setLoading(true);
-            const result = await getHotelDetails({ offerId: id });
+            const result = await getFirestoreHotelDetails(id);
             if (result.success && result.data) {
                 setHotelOffer(result.data);
             } else {
@@ -52,7 +53,19 @@ function HotelDetailPageContent({ id }: { id: string }) {
     }
 
     if (error || !hotelOffer) {
-        return <p className="text-destructive text-center py-10">{error}</p>;
+        return (
+             <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
+                    <CardContent className="pt-6 text-center">
+                        <h3 className="font-bold">Error al Cargar Hotel</h3>
+                        <p className="text-sm mt-2">{error}</p>
+                        <Button asChild variant="outline" className="mt-4 bg-transparent hover:bg-white/10">
+                            <Link href="/?tab=Hotels">Volver a Hoteles</Link>
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        );
     }
     
     // Get initial dates from URL or set defaults
