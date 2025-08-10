@@ -31,13 +31,13 @@ export function CruiseItinerary({ itinerary }: { itinerary: CruiseItineraryItem[
                <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30 w-full">
                     <div className="flex flex-col sm:flex-row gap-4">
                         {item.image && (
-                            <div className="relative w-full sm:w-32 h-24 flex-shrink-0">
+                            <div className="relative w-full sm:w-32 h-24 flex-shrink-0 rounded-md overflow-hidden">
                                 <Image
                                     src={item.image}
                                     alt={item.port}
                                     fill
                                     sizes="(max-width: 640px) 100vw, 128px"
-                                    className="object-cover rounded-md"
+                                    className="object-cover"
                                 />
                             </div>
                         )}
