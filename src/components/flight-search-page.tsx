@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, X, Plane } from 'lucide-react';
+import { CalendarIcon, Users, Loader2, PlaneTakeoff, PlaneLanding, Minus, Plus, MapPin, X, Plane, ArrowRightLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Switch } from './ui/switch';
@@ -216,12 +216,19 @@ export default function FlightSearchPage() {
       </div>
   );
 
+  const handleSwapDestinations = () => {
+    setOrigin(destination);
+    setDestination(origin);
+    setOriginQuery(destinationQuery);
+    setDestinationQuery(originQuery);
+  };
+
   return (
       <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleManualSearch} className="flex flex-col gap-4 text-gray-800">
           
           <Popover open={!!activeInput} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
-            <div className="space-y-4">
+            <div className="space-y-1 relative">
                <PopoverTrigger asChild>
                   <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
                       <div className="flex items-center w-full">
@@ -233,6 +240,11 @@ export default function FlightSearchPage() {
                       </div>
                   </Button>
               </PopoverTrigger>
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
+                <Button type="button" variant="ghost" size="icon" onClick={handleSwapDestinations} className="bg-white/50 hover:bg-white/80 rounded-full h-9 w-9">
+                    <ArrowRightLeft className="h-4 w-4 text-gray-700" />
+                </Button>
+              </div>
                <PopoverTrigger asChild>
                   <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
                        <div className="flex items-center w-full">
