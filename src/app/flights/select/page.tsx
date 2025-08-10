@@ -160,7 +160,7 @@ function FlightSelectionPage() {
 
   if (loading) {
     return (
-      <div className="w-full h-screen bg-flights-gradient background-pan-animation relative overflow-hidden">
+      <div className="w-full h-screen relative overflow-hidden">
             <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />
         </div>
     );
@@ -231,7 +231,7 @@ function FlightSelectionPage() {
   }
 
   return (
-    <div className={cn('min-h-screen w-full pt-24 pb-24 md:pb-8 relative overflow-hidden bg-flights-gradient background-pan-animation')}>
+    <div className={cn('min-h-screen w-full pt-24 pb-24 md:pb-8 relative overflow-hidden')}>
       <div className="relative z-10 min-h-full bg-transparent">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
@@ -289,7 +289,7 @@ function FlightSelectionPage() {
 export default function FlightSelectPageWrapper() {
   return (
     <Suspense fallback={
-        <div className="flex items-center justify-center min-h-screen bg-flights-gradient background-pan-animation">
+        <div className="flex items-center justify-center min-h-screen">
             <Loader2 className="h-12 w-12 animate-spin text-white" />
         </div>
     }>

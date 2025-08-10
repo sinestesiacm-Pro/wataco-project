@@ -399,7 +399,7 @@ function CheckoutPageContent() {
 
     const backgroundClass = isPackageBooking
       ? 'bg-packages-gradient background-pan-animation'
-      : 'bg-flights-gradient';
+      : '';
 
     return (
       <div className={cn("min-h-screen relative pt-24", backgroundClass)}>

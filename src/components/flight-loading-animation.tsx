@@ -53,7 +53,7 @@ const generateWords = (count: number, isMobile: boolean) => {
             text: base.text,
             size: sizeClassOptions[Math.floor(Math.random() * sizeClassOptions.length)],
             top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`, // Distribute evenly
+            left: `${Math.random() * 100}%`,
             fontWeight: base.weight.toString(),
             '--translate-y-start': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
             '--translate-y-end': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
@@ -94,7 +94,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 80 : 261;
+    const wordCount = isMobile ? 120 : 350; // Increased word count
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
     
