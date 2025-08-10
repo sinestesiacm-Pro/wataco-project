@@ -26,7 +26,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${departureDate}&to_date=${returnDate}&adults=1&autosearch=true`;
 
     return (
-        <div className="destination-card-oval">
+        <div className="destination-card-oval flex-shrink-0 w-48">
             <div className="image-container">
                 <Image 
                     src={route.image} 
@@ -37,10 +37,10 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                 />
             </div>
             <div className="content-container">
-                <h3 className="font-bold font-headline text-xl text-gray-900">{route.destinationCity}</h3>
-                <p className="text-sm text-gray-700">From {route.originCity}</p>
-                <p className="font-bold text-3xl text-white my-2 drop-shadow-lg">${route.simulatedPrice}</p>
-                <Button asChild size="sm" className="font-semibold rounded-full bg-accent text-accent-foreground hover:bg-accent/90">
+                <h3 className="font-bold font-headline text-lg text-gray-900">{route.destinationCity}</h3>
+                <p className="text-xs text-gray-700">From {route.originCity}</p>
+                <p className="font-bold text-2xl text-white my-1 drop-shadow-lg">${route.simulatedPrice}</p>
+                <Button asChild size="sm" className="font-semibold rounded-full bg-accent text-accent-foreground hover:bg-accent/90 mt-1">
                    <Link href={buttonHref}>
                      <Plane className="mr-2 h-4 w-4" />
                      Find Flight
@@ -59,9 +59,7 @@ export function RecommendedDestinations() {
         <p className="text-lg text-white mt-2 drop-shadow-lg">Discover the best routes to start your next adventure.</p>
       </div>
       
-      <div 
-        className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mt-8"
-      >
+      <div className="flex overflow-x-auto space-x-4 py-4 px-4 -mx-4 scrollbar-hide">
         {flightRoutes.map((route) => (
             <DestinationCard key={`${route.origin}-${route.destination}`} route={route} />
         ))}
