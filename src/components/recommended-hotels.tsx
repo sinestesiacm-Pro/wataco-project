@@ -70,7 +70,7 @@ const HotelCard = ({ hotel }: { hotel: Hotel }) => (
                 </div>
                 {/* The link should eventually lead to a proper details page that also fetches from firestore */}
                 <Button asChild className="font-semibold">
-                    <Link href={`#`}>View Hotel</Link>
+                    <Link href={`/hotels/${hotel.id}`}>View Hotel</Link>
                 </Button>
             </div>
         </CardContent>
