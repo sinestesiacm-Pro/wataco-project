@@ -82,7 +82,7 @@ export function ChatWidget() {
 
   return (
     <>
-      <div className={cn("fixed bottom-24 md:bottom-6 right-6 md:left-6 md:right-auto z-[60] transition-all duration-300", isOpen ? 'opacity-0 scale-90' : 'opacity-100 scale-100')}>
+      <div className={cn("fixed bottom-24 md:bottom-6 left-6 z-[60] transition-all duration-300", isOpen ? 'opacity-0 scale-90' : 'opacity-100 scale-100')}>
         <Button
           size="icon"
           className="rounded-full w-16 h-16 bg-primary/50 hover:bg-primary/70 backdrop-blur-sm border border-white/20 shadow-2xl"
