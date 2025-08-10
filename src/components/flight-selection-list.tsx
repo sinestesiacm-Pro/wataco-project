@@ -34,8 +34,6 @@ interface FlightSelectionListProps {
   onSelectFlight: (flight: FlightOffer, addons: number) => void;
   title: string;
   selectedOutboundFlight?: FlightOffer | null;
-  availableAirlines: Dictionaries['carriers'];
-  onFilterChange: (filters: any) => void;
 }
 
 function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void, title: string }) {
@@ -110,7 +108,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
 };
 
 
-export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight, availableAirlines, onFilterChange }: FlightSelectionListProps) {
+export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight }: FlightSelectionListProps) {
   
   return (
     <div className="space-y-6">

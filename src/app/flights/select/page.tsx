@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { AnimatedClouds } from '@/components/animated-clouds';
 
@@ -198,8 +198,6 @@ function FlightSelectionPage() {
             dictionaries={flightData.dictionaries}
             onSelectFlight={handleOutboundSelect}
             title={`Vuelos de ida a ${destinationQuery}`}
-            availableAirlines={availableAirlines}
-            onFilterChange={handleFilterChange}
           />
         );
       case 'return':
@@ -210,8 +208,6 @@ function FlightSelectionPage() {
             onSelectFlight={handleReturnSelect}
             title={`Vuelos de vuelta a ${originQuery}`}
             selectedOutboundFlight={selectedOutbound}
-            availableAirlines={availableAirlines}
-            onFilterChange={handleFilterChange}
           />
         );
       case 'review':
@@ -263,12 +259,16 @@ function FlightSelectionPage() {
                   <div className="lg:hidden fixed bottom-28 right-6 z-50">
                     <Sheet>
                       <SheetTrigger asChild>
-                         <Button size="lg" className="rounded-full shadow-lg">
+                         <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4 bg-white/40 backdrop-blur-xl border border-white/20 text-white hover:bg-white/60">
                            <Filter className="mr-2 h-5 w-5"/>
                            Filtros
                          </Button>
                       </SheetTrigger>
                       <SheetContent side="bottom" className="h-[80vh]">
+                        <SheetHeader className="sr-only">
+                           <SheetTitle>Filtros de Vuelo</SheetTitle>
+                           <SheetDescription>Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</SheetDescription>
+                        </SheetHeader>
                         <FlightFilters 
                             availableAirlines={availableAirlines}
                             onFilterChange={handleFilterChange}
