@@ -27,7 +27,7 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
   return (
     <div className={cn("min-h-screen w-full pt-24 pb-8", "color-change-animation")}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
-        <aside className="lg:w-1/4 xl:w-1/3">
+        <aside className="lg:w-1/4 xl:w-1/3 lg:sticky lg:top-24 self-start">
             <ProfileSidebar />
         </aside>
         <main className="lg:w-3/4 xl:w-2/3">
