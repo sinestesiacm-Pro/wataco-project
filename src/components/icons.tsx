@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const BeOnTripLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
   <Image
-    src="https://i.ibb.co/68qCMbL/logo-be-on-trip.png"
+    src="https://i.ibb.co/HS47tyK/Logo-moderno-ORVIAN-su-fondo-blu.png"
     alt="BE ON TRIP Logo"
     width={width}
     height={height}
