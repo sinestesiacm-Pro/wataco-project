@@ -221,37 +221,38 @@ export default function FlightSearchPage() {
         <form onSubmit={handleManualSearch} className="flex flex-col gap-4 text-gray-800">
           
           <Popover open={!!activeInput} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
-            <div className="space-y-4 relative">
-              <PopoverTrigger asChild>
-                  <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
-                      <div className="flex items-center w-full">
-                          <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
-                          <div>
-                              <p className="text-xs text-gray-700">From</p>
-                              <p className="text-lg font-semibold text-gray-800">{originQuery}</p>
+            <div className="relative">
+                <div className="space-y-4">
+                  <PopoverTrigger asChild>
+                      <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
+                          <div className="flex items-center w-full">
+                              <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
+                              <div>
+                                  <p className="text-xs text-gray-700">From</p>
+                                  <p className="text-lg font-semibold text-gray-800">{originQuery}</p>
+                              </div>
                           </div>
-                      </div>
-                  </Button>
-              </PopoverTrigger>
-              
-               <PopoverTrigger asChild>
-                  <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
-                       <div className="flex items-center w-full">
-                          <MapPin className="h-6 w-6 mr-4 text-tertiary" />
-                          <div>
-                              <p className="text-xs text-gray-700">To</p>
-                              <p className="text-lg font-semibold text-gray-800">{destinationQuery}</p>
+                      </Button>
+                  </PopoverTrigger>
+                  
+                   <PopoverTrigger asChild>
+                      <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
+                           <div className="flex items-center w-full">
+                              <MapPin className="h-6 w-6 mr-4 text-tertiary" />
+                              <div>
+                                  <p className="text-xs text-gray-700">To</p>
+                                  <p className="text-lg font-semibold text-gray-800">{destinationQuery}</p>
+                              </div>
                           </div>
-                      </div>
+                      </Button>
+                  </PopoverTrigger>
+                </div>
+
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
+                  <Button type="button" variant="ghost" size="icon" onClick={handleSwapDestinations} className="bg-white/50 hover:bg-white/80 rounded-full h-9 w-9">
+                      <ArrowRightLeft className="h-4 w-4 text-gray-700" />
                   </Button>
-              </PopoverTrigger>
-
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
-                <Button type="button" variant="ghost" size="icon" onClick={handleSwapDestinations} className="bg-white/50 hover:bg-white/80 rounded-full h-9 w-9">
-                    <ArrowRightLeft className="h-4 w-4 text-gray-700" />
-                </Button>
-              </div>
-
+                </div>
             </div>
             <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
                 {activeInput && renderSuggestions(activeInput)}
