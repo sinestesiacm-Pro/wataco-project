@@ -49,7 +49,7 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
         <Card className="bg-white/60 backdrop-blur-lg border border-white/20 text-gray-800 rounded-2xl shadow-lg">
             <CardContent className="p-4 space-y-4">
                 {/* Airline Info */}
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center px-2">
                     <div className="flex items-center gap-2">
                         <Image
                             src={`https://images.kiwi.com/airlines/32/${firstSegment.carrierCode}.png`}
@@ -65,41 +65,39 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
 
                 {/* Flight Details */}
                 <div className="flex items-center justify-between">
-                    <div className="text-center">
+                    <div className="text-left">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-gray-600">{firstSegment.departure.iataCode}</p>
                     </div>
                     <div className="flex-grow flex flex-col items-center text-gray-600 px-2">
-                        <div className="w-full h-px bg-gray-400/50 relative my-1">
+                         <div className="w-full h-px bg-gray-400/50 relative my-1">
                             <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 p-0.5 rounded-full border border-gray-300"/>
                         </div>
                     </div>
-                    <div className="text-center">
+                    <div className="text-right">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-gray-600">{lastSegment.arrival.iataCode}</p>
                     </div>
                 </div>
                 
-                <Separator className="bg-gray-400/30" />
-
-                {/* Duration, Stops, Price */}
-                <div className="flex justify-between items-center">
-                    <div className="text-sm flex items-center gap-4">
-                        <div className="flex items-center gap-1.5 text-gray-700">
-                           <Clock className="w-4 h-4"/>
-                           <span className="font-medium">{formatDuration(itinerary.duration)}</span>
-                        </div>
-                        <span className="text-gray-600 font-medium">{stopInfo}</span>
+                {/* Duration and Price */}
+                <div className="flex justify-between items-center px-2">
+                    <div className="text-sm flex items-center gap-1.5 text-gray-700">
+                       <Clock className="w-4 h-4"/>
+                       <span className="font-medium">{formatDuration(itinerary.duration)}</span>
+                       <span className="text-gray-600 font-medium">{stopInfo}</span>
                     </div>
-                     <p className="text-2xl font-bold text-green-600">${flight.price.total}</p>
+                     <p className="text-2xl font-bold text-gray-800">${flight.price.total}</p>
                 </div>
                 
-                <FlightDetailsDialog
-                    flight={flight}
-                    dictionaries={dictionaries}
-                    onSelectFlight={onSelectFlight}
-                    dialogTitle={title.includes('ida') ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}
-                />
+                <div className="pt-2">
+                  <FlightDetailsDialog
+                      flight={flight}
+                      dictionaries={dictionaries}
+                      onSelectFlight={onSelectFlight}
+                      dialogTitle={title.includes('ida') ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}
+                  />
+                </div>
 
             </CardContent>
         </Card>

@@ -114,7 +114,7 @@ const fareOptions = [
 ];
 
 const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFlight: (flight: FlightOffer, addons: number) => void }) => {
-    const [selectedFare, setSelectedFare] = useState("Light");
+    const selectedFareOption = fareOptions.find(f => f.name === "Light");
     
     const basePrice = parseFloat(flight.price.total);
     const addonsPrice = selectedFareOption?.priceModifier || 0;
@@ -125,8 +125,8 @@ const PriceCard = ({ flight, onSelectFlight }: { flight: FlightOffer, onSelectFl
             <h3 className="font-headline font-bold text-xl text-primary mb-4">Elige tu Tarifa</h3>
             <div className="grid grid-cols-3 gap-2 mb-4">
                 {fareOptions.map(fare => (
-                    <button key={fare.name} onClick={() => setSelectedFare(fare.name)} className={cn("p-3 rounded-lg border-2 text-center transition-all", selectedFare === fare.name ? "border-primary bg-primary/20" : "border-gray-500/20 bg-black/10 hover:bg-black/20")}>
-                        <fare.icon className={cn("h-6 w-6 mx-auto mb-1", selectedFare === fare.name ? "text-primary" : "text-gray-800/70")} />
+                    <button key={fare.name} onClick={() => {}} className={cn("p-3 rounded-lg border-2 text-center transition-all", fare.name === "Light" ? "border-primary bg-primary/20" : "border-gray-500/20 bg-black/10 hover:bg-black/20")}>
+                        <fare.icon className={cn("h-6 w-6 mx-auto mb-1", fare.name === "Light" ? "text-primary" : "text-gray-800/70")} />
                         <p className="font-semibold text-sm text-gray-800">{fare.name}</p>
                         <p className="text-xs text-gray-700/70">+${fare.priceModifier}</p>
                     </button>
