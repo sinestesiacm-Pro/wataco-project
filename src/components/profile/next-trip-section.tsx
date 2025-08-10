@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plane, Hotel, Calendar, FileText, Download } from "lucide-react";
+import { Plane, Hotel, Calendar, FileText, Download, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -56,18 +56,17 @@ export function NextTripSection() {
 
   return (
     <div className="space-y-6">
-        {/* Main Card */}
-        <Card className="bg-black/20 backdrop-blur-xl border-none text-white relative overflow-hidden shadow-lg h-full flex flex-col">
+        <Card className="bg-black/20 backdrop-blur-xl border-none text-white relative overflow-hidden shadow-lg flex flex-col">
              <div className="absolute inset-0">
                 <Image src={mockNextTrip.image} data-ai-hint="paris eiffel tower" alt={mockNextTrip.destination} fill className="object-cover opacity-30" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
             </div>
-            <div className="relative flex flex-col h-full">
-                <CardHeader>
+            <div className="relative flex flex-col h-full p-6">
+                <CardHeader className="p-0">
                     <CardTitle className="text-3xl font-headline text-white drop-shadow-lg">{mockNextTrip.destination}</CardTitle>
                     <p className="text-white/80 drop-shadow-md">{formatDateRange(mockNextTrip.startDate, mockNextTrip.endDate)}</p>
                 </CardHeader>
-                <CardContent className="flex-grow">
+                <CardContent className="p-0 mt-4 flex-grow">
                    <div className="bg-black/40 backdrop-blur-sm p-4 rounded-lg">
                      <p className="text-sm text-white/70 mb-2">Información Clave:</p>
                      <div className="space-y-3">
@@ -88,22 +87,21 @@ export function NextTripSection() {
                      </div>
                    </div>
                 </CardContent>
-                <CardFooter className="flex justify-between items-center mt-auto">
+                <CardFooter className="p-0 mt-4 flex justify-between items-center">
                     <p className="text-sm font-semibold bg-primary/20 text-primary px-3 py-1 rounded-full">{mockNextTrip.type}</p>
                     <Button>Ver Detalles</Button>
                 </CardFooter>
             </div>
         </Card>
 
-        {/* Countdown Card */}
         <Card className="bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="flex items-center gap-2 text-lg font-headline">
                     <Calendar className="h-5 w-5 text-primary"/>
                     Cuenta Regresiva
                 </CardTitle>
             </CardHeader>
-            <CardContent className="flex justify-around items-baseline text-center">
+            <CardContent className="flex justify-around items-baseline text-center py-4">
                 <div>
                     <p className="text-4xl font-bold">{timeLeft.days}</p>
                     <p className="text-xs text-white/70">días</p>
@@ -119,15 +117,17 @@ export function NextTripSection() {
             </CardContent>
         </Card>
 
-        {/* Documents Card */}
         <Card className="bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="flex items-center gap-2 text-lg font-headline">
                     <FileText className="h-5 w-5 text-primary"/>
                     Documentos
                 </CardTitle>
+                 <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-primary/50 text-white hover:bg-primary">
+                    <MessageSquare className="h-5 w-5" />
+                </Button>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="space-y-2 pt-4">
                <Button variant="outline" className="w-full justify-start bg-transparent border-white/30 hover:bg-white/10 text-white">
                     <Download className="mr-2 h-4 w-4"/> Ver E-tickets
                </Button>
