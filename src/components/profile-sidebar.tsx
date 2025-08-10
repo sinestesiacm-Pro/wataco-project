@@ -70,7 +70,7 @@ export default function ProfileSidebar() {
   }
 
   return (
-    <aside className="space-y-6">
+    <div className="space-y-6">
       {user && (
         <Card className="bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
             <CardContent className="p-4">
@@ -98,6 +98,32 @@ export default function ProfileSidebar() {
             </CardContent>
         </Card>
       )}
+      <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
+        <nav className="space-y-1">
+            {navItems.map((item) => (
+            <Link
+                key={item.name}
+                href={`/profile?section=${item.href}`}
+                className={cn(
+                'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors duration-200',
+                item.href === activeSection
+                    ? 'bg-primary text-primary-foreground shadow-md'
+                    : 'text-white/90 hover:bg-white/10'
+                )}
+            >
+                <item.icon
+                className={cn(
+                    'mr-3 h-5 w-5 flex-shrink-0',
+                    item.href === activeSection
+                    ? 'text-primary-foreground'
+                    : 'text-white/70 group-hover:text-white'
+                )}
+                />
+                {item.name}
+            </Link>
+            ))}
+        </nav>
+      </Card>
       
       <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
         <nav className="space-y-1">
@@ -162,6 +188,6 @@ export default function ProfileSidebar() {
           </div>
         </CardContent>
       </Card>
-    </aside>
+    </div>
   );
 }
