@@ -6,7 +6,7 @@ import { Book, Plane, Images, Users, Gift, Globe, CircleDollarSign, Camera, Sett
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Card, CardHeader, CardContent } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Label } from './ui/label';
 import { useState, useRef } from 'react';
@@ -70,124 +70,128 @@ export default function ProfileSidebar() {
   }
 
   return (
-    <div className="space-y-6">
-      {user && (
-        <Card className="bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
-            <CardContent className="p-4">
-              <div className="flex flex-col items-center text-center">
-              <div className="relative group">
-                  <Avatar className="h-24 w-24 mb-4 border-4 border-primary">
-                      <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
-                      <AvatarFallback className="text-4xl">{userInitial}</AvatarFallback>
-                  </Avatar>
-                  <Button 
-                      variant="outline" 
-                      size="icon" 
-                      className="absolute bottom-2 right-2 h-8 w-8 rounded-full bg-black/50 hover:bg-black/70 border-white/30 group-hover:opacity-100 md:opacity-0 transition-opacity"
-                      onClick={handleAvatarClick}
-                  >
-                      <Camera className="h-4 w-4" />
-                  </Button>
-                  <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
-              </div>
-              <div>
-                  <h2 className="text-xl font-semibold font-headline">{user.displayName}</h2>
-                  <p className="text-sm text-white/80">{user.email}</p>
-              </div>
-              </div>
-            </CardContent>
-        </Card>
-      )}
-      <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
-        <nav className="space-y-1">
-            {navItems.map((item) => (
-            <Link
-                key={item.name}
-                href={`/profile?section=${item.href}`}
-                className={cn(
-                'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors duration-200',
-                item.href === activeSection
-                    ? 'bg-primary text-primary-foreground shadow-md'
-                    : 'text-white/90 hover:bg-white/10'
-                )}
-            >
-                <item.icon
-                className={cn(
-                    'mr-3 h-5 w-5 flex-shrink-0',
-                    item.href === activeSection
-                    ? 'text-primary-foreground'
-                    : 'text-white/70 group-hover:text-white'
-                )}
-                />
-                {item.name}
-            </Link>
-            ))}
-        </nav>
-      </Card>
-      
-       <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
-        <nav className="space-y-1">
-            {bottomNavItems.map((item) => (
-            <Link
-                key={item.name}
-                href={`/profile?section=${item.href}`}
-                className={cn(
-                'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors duration-200',
-                item.href === activeSection
-                    ? 'bg-primary text-primary-foreground shadow-md'
-                    : 'text-white/90 hover:bg-white/10'
-                )}
-            >
-                <item.icon
-                className={cn(
-                    'mr-3 h-5 w-5 flex-shrink-0',
-                    item.href === activeSection
-                    ? 'text-primary-foreground'
-                    : 'text-white/70 group-hover:text-white'
-                )}
-                />
-                {item.name}
-            </Link>
-            ))}
-        </nav>
-      </Card>
+    <div className="flex flex-col h-full">
+        <div className="flex-grow space-y-6">
+            {user && (
+                <Card className="bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
+                    <CardContent className="p-4">
+                    <div className="flex flex-col items-center text-center">
+                    <div className="relative group">
+                        <Avatar className="h-24 w-24 mb-4 border-4 border-primary">
+                            <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
+                            <AvatarFallback className="text-4xl">{userInitial}</AvatarFallback>
+                        </Avatar>
+                        <Button 
+                            variant="outline" 
+                            size="icon" 
+                            className="absolute bottom-2 right-2 h-8 w-8 rounded-full bg-black/50 hover:bg-black/70 border-white/30 group-hover:opacity-100 md:opacity-0 transition-opacity"
+                            onClick={handleAvatarClick}
+                        >
+                            <Camera className="h-4 w-4" />
+                        </Button>
+                        <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-semibold font-headline">{user.displayName}</h2>
+                        <p className="text-sm text-white/80">{user.email}</p>
+                    </div>
+                    </div>
+                    </CardContent>
+                </Card>
+            )}
+            <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
+                <nav className="space-y-1">
+                    {navItems.map((item) => (
+                    <Link
+                        key={item.name}
+                        href={`/profile?section=${item.href}`}
+                        className={cn(
+                        'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors duration-200',
+                        item.href === activeSection
+                            ? 'bg-primary text-primary-foreground shadow-md'
+                            : 'text-white/90 hover:bg-white/10'
+                        )}
+                    >
+                        <item.icon
+                        className={cn(
+                            'mr-3 h-5 w-5 flex-shrink-0',
+                            item.href === activeSection
+                            ? 'text-primary-foreground'
+                            : 'text-white/70 group-hover:text-white'
+                        )}
+                        />
+                        {item.name}
+                    </Link>
+                    ))}
+                </nav>
+            </Card>
+        </div>
+        
+        <div className="mt-6 space-y-6">
+            <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
+                <nav className="space-y-1">
+                    {bottomNavItems.map((item) => (
+                    <Link
+                        key={item.name}
+                        href={`/profile?section=${item.href}`}
+                        className={cn(
+                        'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors duration-200',
+                        item.href === activeSection
+                            ? 'bg-primary text-primary-foreground shadow-md'
+                            : 'text-white/90 hover:bg-white/10'
+                        )}
+                    >
+                        <item.icon
+                        className={cn(
+                            'mr-3 h-5 w-5 flex-shrink-0',
+                            item.href === activeSection
+                            ? 'text-primary-foreground'
+                            : 'text-white/70 group-hover:text-white'
+                        )}
+                        />
+                        {item.name}
+                    </Link>
+                    ))}
+                </nav>
+            </Card>
 
-      <Card className="p-4 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
-        <CardContent className="p-0">
-          <div className="space-y-4">
-              <div>
-                  <Label htmlFor="language-select" className="flex items-center gap-2 mb-2 text-sm font-medium text-white/80">
-                      <Globe className="h-4 w-4" /> Idioma
-                  </Label>
-                  <Select value={language} onValueChange={handleLanguageChange}>
-                      <SelectTrigger id="language-select" className="bg-black/20 border-white/30 text-white">
-                          <SelectValue placeholder="Seleccionar idioma" />
-                      </SelectTrigger>
-                      <SelectContent>
-                          <SelectItem value="es">Español</SelectItem>
-                          <SelectItem value="en">English</SelectItem>
-                          <SelectItem value="it">Italiano</SelectItem>
-                      </SelectContent>
-                  </Select>
-              </div>
-              <div>
-                  <Label htmlFor="currency-select" className="flex items-center gap-2 mb-2 text-sm font-medium text-white/80">
-                      <CircleDollarSign className="h-4 w-4" /> Moneda
-                  </Label>
-                  <Select value={currency} onValueChange={handleCurrencyChange}>
-                      <SelectTrigger id="currency-select" className="bg-black/20 border-white/30 text-white">
-                          <SelectValue placeholder="Seleccionar moneda" />
-                      </SelectTrigger>
-                      <SelectContent>
-                          <SelectItem value="usd">USD - Dólar estadounidense</SelectItem>
-                          <SelectItem value="eur">EUR - Euro</SelectItem>
-                          <SelectItem value="cop">COP - Peso colombiano</SelectItem>
-                      </SelectContent>
-                  </Select>
-              </div>
-          </div>
-        </CardContent>
-      </Card>
+            <Card className="p-4 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
+                <CardContent className="p-0">
+                <div className="space-y-4">
+                    <div>
+                        <Label htmlFor="language-select" className="flex items-center gap-2 mb-2 text-sm font-medium text-white/80">
+                            <Globe className="h-4 w-4" /> Idioma
+                        </Label>
+                        <Select value={language} onValueChange={handleLanguageChange}>
+                            <SelectTrigger id="language-select" className="bg-black/20 border-white/30 text-white">
+                                <SelectValue placeholder="Seleccionar idioma" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="es">Español</SelectItem>
+                                <SelectItem value="en">English</SelectItem>
+                                <SelectItem value="it">Italiano</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label htmlFor="currency-select" className="flex items-center gap-2 mb-2 text-sm font-medium text-white/80">
+                            <CircleDollarSign className="h-4 w-4" /> Moneda
+                        </Label>
+                        <Select value={currency} onValueChange={handleCurrencyChange}>
+                            <SelectTrigger id="currency-select" className="bg-black/20 border-white/30 text-white">
+                                <SelectValue placeholder="Seleccionar moneda" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="usd">USD - Dólar estadounidense</SelectItem>
+                                <SelectItem value="eur">EUR - Euro</SelectItem>
+                                <SelectItem value="cop">COP - Peso colombiano</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                </CardContent>
+            </Card>
+        </div>
     </div>
   );
 }
