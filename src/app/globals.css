@@ -34,8 +34,8 @@
     --ring: 200 90% 55%;
 
     --radius: 1.25rem;
-    --success: 147 67% 43%; /* Verde #19C37D */
-    --success-foreground: 0 0% 100%;
+    --success: 48 95% 58%; /* #9BFA47 */
+    --success-foreground: 0 0% 0%;
     --tertiary: 35 100% 60%; /* Naranja #FF9800 */
     --tertiary-foreground: 0 0% 100%;
   }
@@ -513,6 +513,7 @@
 
 
     
+
 
 
 

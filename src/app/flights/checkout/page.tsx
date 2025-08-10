@@ -402,7 +402,7 @@ function CheckoutPageContent() {
       : '';
 
     return (
-      <div className={cn("min-h-screen relative pt-24", backgroundClass)}>
+      <div className={cn("min-h-screen relative pt-24 pb-24", backgroundClass)}>
         <div className="relative z-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center mb-6">
                 <Button asChild variant="outline" className={cn("mr-4", isPackageBooking ? 'bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white' : 'bg-background/80')}>
@@ -420,18 +420,18 @@ function CheckoutPageContent() {
                         <ContactInfoForm isPackageBooking={isPackageBooking}/>
                         {isPackageBooking && <AdditionalServicesForm onPriceChange={(price) => setExtraServicesPrice(p => p + price)} isPackageBooking={isPackageBooking}/>}
                         <PaymentForm isPackageBooking={isPackageBooking}/>
-                        <div className="flex justify-end pt-4">
-                            <Button type="submit" size="lg" className="bg-success hover:bg-success/90 w-full sm:w-auto">
-                                <Lock className="mr-2 h-4 w-4" />
-                                Confirmar y Pagar
-                            </Button>
-                        </div>
                     </div>
                     <div className="lg:col-span-1">
                         <PriceSummary isPackageBooking={isPackageBooking} extraServicesPrice={extraServicesPrice} />
                     </div>
                 </div>
             </form>
+        </div>
+         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/10 backdrop-blur-xl border-t border-white/20 md:hidden">
+            <Button size="lg" className="w-full bg-success hover:bg-success/90 text-success-foreground" onClick={handleConfirmBooking}>
+                <Lock className="mr-2 h-5 w-5" />
+                Confirmar y Pagar
+            </Button>
         </div>
       </div>
     );
