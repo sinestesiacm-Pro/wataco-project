@@ -35,7 +35,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                 <p className="font-bold text-2xl text-white my-1 drop-shadow-lg">${route.simulatedPrice}</p>
             </div>
             <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button asChild size="default" className="central-flight-button rounded-full font-semibold text-sm py-5 px-6 bg-accent/60 backdrop-blur-md text-white hover:bg-accent/80 shadow-2xl border border-white/20">
+                <Button asChild size="default" className="central-flight-button rounded-full font-semibold text-sm py-5 px-6 bg-accent/40 backdrop-blur-md text-white hover:bg-accent/80 shadow-2xl border border-white/20">
                     <Link href={buttonHref}>
                     <Plane className="mr-2 h-4 w-4" />
                     Find Flight
