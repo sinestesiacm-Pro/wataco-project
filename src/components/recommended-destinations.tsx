@@ -13,7 +13,6 @@ const flightRoutes = [
   { origin: 'JFK', originCity: 'New York', destination: 'CDG', destinationCity: 'Paris', hint: 'paris eiffel tower', image: 'https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=500', simulatedPrice: '750' },
   { origin: 'LHR', originCity: 'London', destination: 'NRT', destinationCity: 'Tokyo', hint: 'tokyo japan temple', image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=500', simulatedPrice: '1100' },
   { origin: 'LAX', originCity: 'Los Angeles', destination: 'BKK', destinationCity: 'Bangkok', hint: 'bangkok thailand temple', image: 'https://images.unsplash.com/photo-1573790387438-4da905039392?w=500', simulatedPrice: '980' },
-  { origin: 'SYD', originCity: 'Sydney', destination: 'FCO', destinationCity: 'Rome', hint: 'rome colosseum', image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyMHx8cm9tYXxlbnwwfHx8fDE3NTQ4NDMyNDV8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '1350' },
 ];
 
 const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
@@ -36,7 +35,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                 <p className="text-xs text-gray-700">From {route.originCity}</p>
                 <p className="font-bold text-2xl text-white my-1 drop-shadow-lg">${route.simulatedPrice}</p>
                  
-                <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 flex items-end justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pb-28">
                     <Button asChild size="lg" className="central-flight-button rounded-full font-semibold text-base py-6 px-8 bg-accent/80 backdrop-blur-md text-accent-foreground hover:bg-accent/90 shadow-2xl border border-white/30">
                         <Link href={buttonHref}>
                         <Plane className="mr-2 h-5 w-5" />
@@ -61,12 +60,19 @@ export function RecommendedDestinations() {
       
       <div className="relative flex justify-center items-center h-[400px]">
         <div className="flex overflow-x-auto space-x-8 py-4 px-4 -mx-4 scrollbar-hide absolute inset-0 items-center justify-start md:justify-center">
-            {flightRoutes.map((route) => (
-                <DestinationCard 
-                    key={`${route.origin}-${route.destination}`} 
-                    route={route}
-                />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="col-span-1 md:col-span-2 lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div className="col-span-1">
+                        <DestinationCard route={flightRoutes[0]} />
+                    </div>
+                    <div className="col-span-1">
+                        <DestinationCard route={flightRoutes[1]} />
+                    </div>
+                </div>
+                <div className="col-span-1 md:col-span-2 lg:col-span-3">
+                     <DestinationCard route={flightRoutes[2]} />
+                </div>
+            </div>
         </div>
       </div>
     </div>
