@@ -38,11 +38,6 @@ function HotelOffersPageContent({ id }: { id: string }) {
                   checkOutDate={checkOutDate || ''}
                 />
             </div>
-
-            <div>
-                <h2 className="text-3xl font-bold font-headline text-white mb-6">Quizás también te interese</h2>
-                <RecommendedHotels />
-            </div>
         </div>
       </div>
     </div>

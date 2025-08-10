@@ -6,7 +6,7 @@ import { AmadeusHotelOffer, Room } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { AlertCircle, Lock, CreditCard, Landmark, CheckCircle, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
@@ -269,18 +269,17 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                            </div>
                        )}
                     </CardContent>
+                    <CardFooter className="flex-col items-start gap-4">
+                        <div className="text-xs text-white flex items-center gap-2">
+                           <AlertCircle className="h-4 w-4 text-gray-500" />
+                           <span className="text-gray-500">Revisa los detalles antes de confirmar.</span>
+                       </div>
+                       <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90">
+                           <Lock className="mr-2 h-4 w-4" />
+                           Confirmar Reserva
+                       </Button>
+                    </CardFooter>
                 </Card>
-
-                <div className="flex items-center justify-between pt-4">
-                    <div className="text-xs text-white flex items-center gap-2">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>Revisa los detalles antes de confirmar.</span>
-                    </div>
-                    <Button type="submit" size="lg" className="bg-primary hover:bg-primary/90">
-                        <Lock className="mr-2 h-4 w-4" />
-                        Confirmar Reserva
-                    </Button>
-                </div>
             </div>
             <div className="lg:col-span-1">
                 <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} />
