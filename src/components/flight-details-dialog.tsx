@@ -182,7 +182,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
       <DialogTrigger asChild>
         <div className="flex justify-center">
          <Button 
-            className="w-4/5 font-bold text-lg py-6 rounded-full bg-gradient-to-br from-blue-700 to-blue-900 text-white shadow-lg border-b-4 border-blue-900 hover:from-blue-600 hover:to-blue-800 active:translate-y-px active:shadow-md"
+            className="w-4/5 font-bold text-lg py-6 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
          >
             Seleccionar
          </Button>

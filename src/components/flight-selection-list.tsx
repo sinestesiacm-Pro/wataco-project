@@ -4,13 +4,15 @@ import Image from 'next/image';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plane, Clock } from 'lucide-react';
+import { Plane, Clock, Filter } from 'lucide-react';
 import { FlightBaggageInfo } from './flight-baggage-info';
 import { FlightDetailsDialog } from './flight-details-dialog';
 import { cn } from '@/lib/utils';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import React from 'react';
 import { Separator } from './ui/separator';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { FlightFilters } from './flight-filters';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -31,6 +33,8 @@ interface FlightSelectionListProps {
   onSelectFlight: (flight: FlightOffer, addons: number) => void;
   title: string;
   selectedOutboundFlight?: FlightOffer | null;
+  availableAirlines: Dictionaries['carriers'];
+  onFilterChange: (filters: any) => void;
 }
 
 function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void, title: string }) {
@@ -105,45 +109,70 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
 };
 
 
-export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight }: FlightSelectionListProps) {
+export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight, availableAirlines, onFilterChange }: FlightSelectionListProps) {
   
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">
-          {title}
-        </h2>
-      </div>
-
-       {selectedOutboundFlight && (
-         <Card className="bg-gradient-to-r from-yellow-400 to-amber-500 border-none shadow-lg">
-            <CardContent className="p-4 flex items-center justify-between gap-4 text-gray-800">
-                <div className="flex items-center gap-3">
-                    <Plane className="h-5 w-5"/>
-                    <p className="font-semibold">
-                        Vuelo de ida seleccionado: {selectedOutboundFlight.itineraries[0].segments[0].departure.iataCode} - {selectedOutboundFlight.itineraries[0].segments.slice(-1)[0].arrival.iataCode}
-                    </p>
+        <div className="lg:grid lg:grid-cols-12 lg:gap-8 mt-8">
+            <aside className="hidden lg:block lg:col-span-3">
+                <FlightFilters 
+                    availableAirlines={availableAirlines}
+                    onFilterChange={onFilterChange}
+                />
+            </aside>
+            <main className='lg:col-span-9'>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">
+                        {title}
+                    </h2>
                 </div>
-                <p className="font-bold text-lg">${selectedOutboundFlight.price.total}</p>
-            </CardContent>
-         </Card>
-      )}
 
-      {flights.length > 0 ? (
-          <div className="space-y-4">
-            {flights.map((flight) => (
-              <FlightCard key={flight.id} flight={flight} dictionaries={dictionaries} onSelectFlight={onSelectFlight} title={title} />
-            ))}
-          </div>
-      ) : (
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
-            <CardContent className="pt-6 text-center text-white/70">
-                <p>No hay vuelos que coincidan con tus filtros.</p>
-                <p>Intenta ajustar o eliminar algunos filtros para ver más resultados.</p>
-            </CardContent>
-        </Card>
-      )}
+                {selectedOutboundFlight && (
+                    <Card className="bg-gradient-to-r from-yellow-400 to-amber-500 border-none shadow-lg mb-4">
+                        <CardContent className="p-4 flex items-center justify-between gap-4 text-gray-800">
+                            <div className="flex items-center gap-3">
+                                <Plane className="h-5 w-5"/>
+                                <p className="font-semibold">
+                                    Vuelo de ida seleccionado: {selectedOutboundFlight.itineraries[0].segments[0].departure.iataCode} - {selectedOutboundFlight.itineraries[0].segments.slice(-1)[0].arrival.iataCode}
+                                </p>
+                            </div>
+                            <p className="font-bold text-lg">${selectedOutboundFlight.price.total}</p>
+                        </CardContent>
+                    </Card>
+                )}
 
+                {flights.length > 0 ? (
+                    <div className="space-y-4">
+                        {flights.map((flight) => (
+                        <FlightCard key={flight.id} flight={flight} dictionaries={dictionaries} onSelectFlight={onSelectFlight} title={title} />
+                        ))}
+                    </div>
+                ) : (
+                    <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+                        <CardContent className="pt-6 text-center text-white/70">
+                            <p>No hay vuelos que coincidan con tus filtros.</p>
+                            <p>Intenta ajustar o eliminar algunos filtros para ver más resultados.</p>
+                        </CardContent>
+                    </Card>
+                )}
+            </main>
+             <div className="lg:hidden fixed bottom-28 right-6 z-50">
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button size="lg" className="rounded-full shadow-2xl bg-primary/50 hover:bg-primary/70 backdrop-blur-sm border border-white/20">
+                        <Filter className="mr-2 h-5 w-5"/>
+                        Filtros
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className="h-[80vh]">
+                    <FlightFilters 
+                        availableAirlines={availableAirlines}
+                        onFilterChange={onFilterChange}
+                    />
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </div>
     </div>
   );
 }
