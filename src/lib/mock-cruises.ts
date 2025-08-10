@@ -22,10 +22,10 @@ export const recommendedCruises: CruisePackage[] = [
     itinerary: [
       { day: 1, port: 'Miami, USA', arrival: 'Embark', departure: '18:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1599542222383-0c4a4e12395b' },
       { day: 2, port: 'Nassau, Bahamas', arrival: '08:00', departure: '17:00', countryCode: 'bs', image: 'https://images.unsplash.com/photo-1574542544973-59c3d8b59d32' },
-      { day: 3, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1499946252333-28913915bab8' },
+      { day: 3, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true },
       { day: 4, port: 'Charlotte Amalie, St. Thomas', arrival: '08:00', departure: '18:00', countryCode: 'vi', image: 'https://images.unsplash.com/photo-1574401569788-f1f13a453697' },
       { day: 5, port: 'Philipsburg, St. Maarten', arrival: '07:00', departure: '17:00', countryCode: 'sx', image: 'https://images.unsplash.com/photo-1606233767215-181172157d6b' },
-      { day: 6, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1499946252333-28913915bab8' },
+      { day: 6, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true },
       { day: 7, port: 'Miami, USA', arrival: '06:00', departure: 'Disembark', countryCode: 'us', image: 'https://images.unsplash.com/photo-1599542222383-0c4a4e12395b' },
     ],
   },
@@ -48,13 +48,13 @@ export const recommendedCruises: CruisePackage[] = [
     price: '1850',
     itinerary: [
       { day: 1, port: 'Seattle, USA', arrival: 'Embark', departure: '18:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1502104034324-a3250214152c' },
-      { day: 2, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1499946252333-28913915bab8' },
+      { day: 2, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true },
       { day: 3, port: 'Ketchikan, Alaska', arrival: '08:00', departure: '18:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1628042533390-3693241b1285' },
-      { day: 4, port: 'Juneau, Alaska', arrival: '07:00', departure: '16:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1606233767215-181172157d6b' },
-      { day: 5, port: 'Skagway, Alaska', arrival: '09:00', departure: '19:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1593539193635-f726a578a1f8' },
+      { day: 4, port: 'Juneau, Alaska', arrival: '07:00', departure: '16:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1593539193635-f726a578a1f8' },
+      { day: 5, port: 'Skagway, Alaska', arrival: '09:00', departure: '19:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1569429594182-159f0861503e' },
       { day: 6, port: 'Glacier Bay National Park', arrival: 'Scenic Cruising', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1527022206739-2c7edca55829' },
-      { day: 7, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1499946252333-28913915bab8' },
-      { day: 8, port: 'Seward, Alaska', arrival: '08:00', departure: 'Disembark', countryCode: 'us', image: 'https://images.unsplash.com/photo-1569429594182-159f0861503e' },
+      { day: 7, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true },
+      { day: 8, port: 'Seward, Alaska', arrival: '08:00', departure: 'Disembark', countryCode: 'us', image: 'https://images.unsplash.com/photo-1548849839-55448b11c3e1' },
     ]
   },
 ];
