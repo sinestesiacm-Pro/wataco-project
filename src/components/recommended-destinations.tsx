@@ -33,22 +33,20 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                 <h3 className="font-bold font-headline text-lg text-gray-900">{route.destinationCity}</h3>
                 <p className="text-xs text-gray-700">From {route.originCity}</p>
                 <p className="font-bold text-2xl text-white my-1 drop-shadow-lg">${route.simulatedPrice}</p>
-                 
-                <div className="absolute inset-0 flex items-end justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pb-28">
-                    <Button asChild size="lg" className="central-flight-button rounded-full font-semibold text-base py-6 px-8 bg-accent/80 backdrop-blur-md text-accent-foreground hover:bg-accent/90 shadow-2xl border border-white/30">
-                        <Link href={buttonHref}>
-                        <Plane className="mr-2 h-5 w-5" />
-                        Find Flight
-                        </Link>
-                    </Button>
-                </div>
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Button asChild size="default" className="central-flight-button rounded-full font-semibold text-sm py-5 px-6 bg-accent/60 backdrop-blur-md text-white hover:bg-accent/80 shadow-2xl border border-white/20">
+                    <Link href={buttonHref}>
+                    <Plane className="mr-2 h-4 w-4" />
+                    Find Flight
+                    </Link>
+                </Button>
             </div>
         </div>
     )
 }
 
 export function RecommendedDestinations() {
-  const [selectedRoute, setSelectedRoute] = useState<typeof flightRoutes[0] | null>(null);
 
   return (
     <div className="space-y-4 mt-16">

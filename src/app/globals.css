@@ -195,7 +195,6 @@
 .destination-card-oval {
     height: 300px; /* Taller card */
     width: 200px; /* Fixed width */
-    aspect-ratio: 9 / 16;
     border-radius: 9999px; /* Pill shape */
     background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(20px);
@@ -215,10 +214,6 @@
     transform: scale(1.2); /* Epic growth effect */
     box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.3);
     z-index: 10;
-}
-
-.destination-card-oval:not(:hover) {
-    filter: blur(1px) opacity(0.7);
 }
 
 
