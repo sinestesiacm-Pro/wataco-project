@@ -198,6 +198,8 @@ function FlightSelectionPage() {
             dictionaries={flightData.dictionaries}
             onSelectFlight={handleOutboundSelect}
             title={`Vuelos de ida a ${destinationQuery}`}
+            availableAirlines={availableAirlines}
+            onFilterChange={handleFilterChange}
           />
         );
       case 'return':
@@ -208,6 +210,8 @@ function FlightSelectionPage() {
             onSelectFlight={handleReturnSelect}
             title={`Vuelos de vuelta a ${originQuery}`}
             selectedOutboundFlight={selectedOutbound}
+            availableAirlines={availableAirlines}
+            onFilterChange={handleFilterChange}
           />
         );
       case 'review':
@@ -256,7 +260,7 @@ function FlightSelectionPage() {
                           onFilterChange={handleFilterChange}
                       />
                   </aside>
-                  <div className="lg:hidden fixed bottom-28 right-6 z-50">
+                  <div className="lg:hidden fixed bottom-24 right-6 z-50">
                     <Sheet>
                       <SheetTrigger asChild>
                          <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4 bg-white/40 backdrop-blur-xl border border-white/20 text-white hover:bg-white/60">
