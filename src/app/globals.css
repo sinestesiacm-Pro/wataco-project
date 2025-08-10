@@ -193,7 +193,7 @@
 
 /* Pill-shaped card for flight destinations */
 .destination-card-oval {
-    aspect-ratio: 9 / 16;
+    aspect-ratio: 9 / 12;
     border-radius: 9999px; /* Pill shape */
     background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(20px);
@@ -516,6 +516,7 @@
 
 
     
+
 
 
 
