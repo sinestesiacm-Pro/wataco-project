@@ -16,17 +16,12 @@ const flightRoutes = [
   { origin: 'SYD', originCity: 'Sydney', destination: 'FCO', destinationCity: 'Rome', hint: 'rome colosseum', image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyMHx8cm9tYXxlbnwwfHx8fDE3NTQ4NDMyNDV8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '1350' },
 ];
 
-const DestinationCard = ({ route, onSelect, onDeselect, isActive }: { route: typeof flightRoutes[0], onSelect: () => void, onDeselect: () => void, isActive: boolean }) => {
+const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
     
-    const buttonHref = isActive ? `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${format(addMonths(new Date(), 2), 'yyyy-MM-dd')}&to_date=${format(addDays(addMonths(new Date(), 2), 7), 'yyyy-MM-dd')}&adults=1&autosearch=true` : '#';
+    const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${format(addMonths(new Date(), 2), 'yyyy-MM-dd')}&to_date=${format(addDays(addMonths(new Date(), 2), 7), 'yyyy-MM-dd')}&adults=1&autosearch=true`;
     
     return (
-        <div 
-            className={cn("destination-card-oval flex-shrink-0", { 'active': isActive })}
-            onMouseEnter={onSelect}
-            onMouseLeave={onDeselect}
-            onClick={onSelect}
-        >
+        <div className="destination-card-oval flex-shrink-0 group">
             <div className="image-container">
                 <Image 
                     src={route.image} 
@@ -40,16 +35,15 @@ const DestinationCard = ({ route, onSelect, onDeselect, isActive }: { route: typ
                 <h3 className="font-bold font-headline text-lg text-gray-900">{route.destinationCity}</h3>
                 <p className="text-xs text-gray-700">From {route.originCity}</p>
                 <p className="font-bold text-2xl text-white my-1 drop-shadow-lg">${route.simulatedPrice}</p>
-                 {isActive && (
-                    <div className="absolute -bottom-5 z-20">
-                      <Button asChild size="lg" className="central-flight-button rounded-full font-semibold text-base py-6 px-8 bg-accent text-accent-foreground hover:bg-accent/90 shadow-2xl">
-                         <Link href={buttonHref}>
-                           <Plane className="mr-2 h-5 w-5" />
-                           Find Flight
-                         </Link>
-                      </Button>
-                    </div>
-                )}
+                 
+                <div className="absolute -bottom-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <Button asChild size="lg" className="central-flight-button rounded-full font-semibold text-base py-6 px-8 bg-accent text-accent-foreground hover:bg-accent/90 shadow-2xl">
+                        <Link href={buttonHref}>
+                        <Plane className="mr-2 h-5 w-5" />
+                        Find Flight
+                        </Link>
+                    </Button>
+                </div>
             </div>
         </div>
     )
@@ -71,9 +65,6 @@ export function RecommendedDestinations() {
                 <DestinationCard 
                     key={`${route.origin}-${route.destination}`} 
                     route={route}
-                    onSelect={() => setSelectedRoute(route)}
-                    onDeselect={() => setSelectedRoute(null)}
-                    isActive={selectedRoute?.destination === route.destination}
                 />
             ))}
         </div>
