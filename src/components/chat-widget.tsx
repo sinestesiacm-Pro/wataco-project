@@ -83,10 +83,10 @@ export function ChatWidget() {
 
   return (
     <>
-      <div className={cn("fixed bottom-20 md:bottom-6 right-6 md:left-6 md:right-auto z-[60] transition-all duration-300", isOpen ? 'opacity-0 scale-90' : 'opacity-100 scale-100')}>
+      <div className={cn("fixed bottom-40 md:bottom-6 right-6 md:left-6 md:right-auto z-[60] transition-all duration-300", isOpen ? 'opacity-0 scale-90' : 'opacity-100 scale-100')}>
         <Button
           size="icon"
-          className="rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-2xl"
+          className="rounded-full w-16 h-16 bg-primary/50 hover:bg-primary/70 backdrop-blur-sm border border-white/20 shadow-2xl"
           onClick={() => setIsOpen(true)}
         >
           <MessageSquare className="h-8 w-8" />
