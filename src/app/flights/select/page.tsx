@@ -198,6 +198,8 @@ function FlightSelectionPage() {
             dictionaries={flightData.dictionaries}
             onSelectFlight={handleOutboundSelect}
             title={`Vuelos de ida a ${destinationQuery}`}
+            availableAirlines={availableAirlines}
+            onFilterChange={handleFilterChange}
           />
         );
       case 'return':
@@ -208,6 +210,8 @@ function FlightSelectionPage() {
             onSelectFlight={handleReturnSelect}
             title={`Vuelos de vuelta a ${originQuery}`}
             selectedOutboundFlight={selectedOutbound}
+            availableAirlines={availableAirlines}
+            onFilterChange={handleFilterChange}
           />
         );
       case 'review':
