@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -60,19 +59,9 @@ export function RecommendedDestinations() {
       
       <div className="relative flex justify-center items-center h-[400px]">
         <div className="flex overflow-x-auto space-x-8 py-4 px-4 -mx-4 scrollbar-hide absolute inset-0 items-center justify-start md:justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div className="col-span-1 md:col-span-2 lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <div className="col-span-1">
-                        <DestinationCard route={flightRoutes[0]} />
-                    </div>
-                    <div className="col-span-1">
-                        <DestinationCard route={flightRoutes[1]} />
-                    </div>
-                </div>
-                <div className="col-span-1 md:col-span-2 lg:col-span-3">
-                     <DestinationCard route={flightRoutes[2]} />
-                </div>
-            </div>
+            {flightRoutes.map((route, index) => (
+                <DestinationCard key={index} route={route} />
+            ))}
         </div>
       </div>
     </div>
