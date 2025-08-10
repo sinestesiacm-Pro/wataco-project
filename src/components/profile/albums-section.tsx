@@ -8,7 +8,7 @@ import Image from "next/image";
 const albums = [
   { id: 1, name: "Verano en Grecia", cover: "https://images.unsplash.com/photo-1563823434121-b85de130e0a4?w=500", photoCount: 45 },
   { id: 2, name: "Aventura en los Andes", cover: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=500", photoCount: 78 },
-  { id: 3, name: "Escapada a Roma", cover: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=500", photoCount: 32 },
+  { id: 3, name: "Escapada a Roma", cover: "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyMHx8cm9tYXxlbnwwfHx8fDE3NTQ4NDMyNDV8MA&ixlib=rb-4.1.0&q=80&w=1080", photoCount: 32 },
   { id: 4, name: "Neones de Tokio", cover: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=500", photoCount: 112 },
 ];
 
