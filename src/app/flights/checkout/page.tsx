@@ -2,7 +2,7 @@
 
 import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -300,7 +300,7 @@ const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
 };
 
 
-const PriceSummary = ({ isPackageBooking, extraServicesPrice }: { isPackageBooking: boolean, extraServicesPrice: number }) => {
+const PriceSummary = ({ isPackageBooking, extraServicesPrice, onConfirm }: { isPackageBooking: boolean, extraServicesPrice: number, onConfirm: (e: React.FormEvent) => void }) => {
     const searchParams = useSearchParams();
     const packageId = searchParams.get('packageId');
     const hotelPrice = parseFloat(searchParams.get('hotelPrice') || '0');
@@ -375,6 +375,12 @@ const PriceSummary = ({ isPackageBooking, extraServicesPrice }: { isPackageBooki
                     Al completar esta compra, aceptas nuestros <a href="#" className="underline">Términos de Servicio</a> y <a href="#" className="underline">Política de Privacidad</a>.
                 </p>
             </CardContent>
+             <CardFooter>
+                 <Button size="lg" className="w-full bg-success hover:bg-success/90 text-success-foreground" onClick={onConfirm}>
+                    <Lock className="mr-2 h-5 w-5" />
+                    Confirmar y Pagar
+                </Button>
+            </CardFooter>
         </Card>
     );
 }
@@ -422,16 +428,10 @@ function CheckoutPageContent() {
                         <PaymentForm isPackageBooking={isPackageBooking}/>
                     </div>
                     <div className="lg:col-span-1">
-                        <PriceSummary isPackageBooking={isPackageBooking} extraServicesPrice={extraServicesPrice} />
+                        <PriceSummary isPackageBooking={isPackageBooking} extraServicesPrice={extraServicesPrice} onConfirm={handleConfirmBooking}/>
                     </div>
                 </div>
             </form>
-        </div>
-         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/10 backdrop-blur-xl border-t border-white/20 md:hidden">
-            <Button size="lg" className="w-full bg-success hover:bg-success/90 text-success-foreground" onClick={handleConfirmBooking}>
-                <Lock className="mr-2 h-5 w-5" />
-                Confirmar y Pagar
-            </Button>
         </div>
       </div>
     );
