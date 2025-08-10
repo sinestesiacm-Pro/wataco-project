@@ -45,7 +45,7 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
 
     return (
-        <Card className="sticky top-28 shadow-lg bg-white text-gray-800">
+        <Card className="shadow-lg bg-white text-gray-800">
             <CardHeader>
                 <div className="relative h-40 w-full mb-4 rounded-lg overflow-hidden">
                     <Image
@@ -137,154 +137,152 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
             <div className="w-32"></div>
         </div>
 
-     <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid lg:grid-cols-3 gap-8 items-start">
-            <div className="lg:col-span-2 space-y-6">
-                <Card className="bg-white text-gray-800">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><CheckCircle className="text-primary"/> ¿Quién se hospeda?</CardTitle>
-                        <CardDescription>Ingresa los datos del huésped principal.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                         <div className="grid sm:grid-cols-2 gap-4">
-                            <div>
-                                <Label htmlFor="firstName">Nombre</Label>
-                                <Controller
-                                    name="firstName"
-                                    control={control}
-                                    render={({ field }) => <Input id="firstName" {...field} />}
-                                />
-                                {errors.firstName && <p className="text-destructive text-sm mt-1">{errors.firstName.message}</p>}
-                            </div>
-                            <div>
-                                <Label htmlFor="lastName">Apellido</Label>
-                                <Controller
-                                    name="lastName"
-                                    control={control}
-                                    render={({ field }) => <Input id="lastName" {...field} />}
-                                />
-                                {errors.lastName && <p className="text-destructive text-sm mt-1">{errors.lastName.message}</p>}
-                            </div>
-                        </div>
-                        
-                         <div>
-                            <Label htmlFor="email">Correo Electrónico</Label>
-                            <Controller
-                                name="email"
-                                control={control}
-                                render={({ field }) => <Input id="email" type="email" {...field} />}
-                            />
-                            {errors.email && <p className="text-destructive text-sm mt-1">{errors.email.message}</p>}
-                        </div>
-                         <div>
-                            <Label htmlFor="confirmEmail">Confirmar Correo Electrónico</Label>
-                            <Controller
-                                name="confirmEmail"
-                                control={control}
-                                render={({ field }) => <Input id="confirmEmail" type="email" {...field} />}
-                            />
-                            {errors.confirmEmail && <p className="text-destructive text-sm mt-1">{errors.confirmEmail.message}</p>}
-                        </div>
-                         <div>
-                            <Label htmlFor="phone">Teléfono de Contacto</Label>
-                            <Controller
-                                name="phone"
-                                control={control}
-                                render={({ field }) => <Input id="phone" type="tel" {...field} />}
-                            />
-                            {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone.message}</p>}
-                        </div>
-                    </CardContent>
-                </Card>
-                
-                <Card className="bg-white text-gray-800">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><CreditCard className="text-primary"/> Método de Pago</CardTitle>
-                        <CardDescription>Esta es una demostración. No se procesarán pagos reales.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
+     <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto space-y-8">
+        {/* BookingSummary is now at the top */}
+        <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} />
+
+        {/* Guest Details */}
+        <Card className="bg-white text-gray-800">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><CheckCircle className="text-primary"/> ¿Quién se hospeda?</CardTitle>
+                <CardDescription>Ingresa los datos del huésped principal.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                 <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <Label htmlFor="firstName">Nombre</Label>
                         <Controller
-                            name="paymentMethod"
+                            name="firstName"
                             control={control}
-                            render={({ field }) => (
-                                <RadioGroup 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value} 
-                                    className="mb-6 grid grid-cols-2 gap-4"
-                                >
-                                    <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer", paymentMethod === 'credit-card' && 'bg-blue-50 border-primary')}>
-                                        <RadioGroupItem value="credit-card" id="credit-card"/>
-                                        <CreditCard />
-                                        <span>Tarjeta de crédito</span>
-                                    </Label>
-                                     <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer", paymentMethod === 'paypal' && 'bg-blue-50 border-primary')}>
-                                        <RadioGroupItem value="paypal" id="paypal"/>
-                                        <Landmark />
-                                        <span>PayPal</span>
-                                     </Label>
-                                </RadioGroup>
-                            )}
+                            render={({ field }) => <Input id="firstName" {...field} />}
                         />
-                       {paymentMethod === 'credit-card' && (
-                        <div className="space-y-4">
-                             <div>
-                                <Label htmlFor="cardHolder">Nombre en la tarjeta</Label>
-                                <Controller
-                                    name="cardHolder"
-                                    control={control}
-                                    render={({ field }) => <Input id="cardHolder" {...field} placeholder="J. Doe" />}
-                                />
-                             </div>
-                             <div>
-                                <Label htmlFor="cardNumber">Número de tarjeta</Label>
-                                 <Controller
-                                    name="cardNumber"
-                                    control={control}
-                                    render={({ field }) => <Input id="cardNumber" {...field} placeholder="**** **** **** 1234" />}
-                                />
-                             </div>
-                             <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <Label htmlFor="cardExpiry">Vencimiento</Label>
-                                     <Controller
-                                        name="cardExpiry"
-                                        control={control}
-                                        render={({ field }) => <Input id="cardExpiry" {...field} placeholder="MM/AA" />}
-                                    />
-                                </div>
-                                 <div>
-                                    <Label htmlFor="cardCvc">CVC</Label>
-                                     <Controller
-                                        name="cardCvc"
-                                        control={control}
-                                        render={({ field }) => <Input id="cardCvc" {...field} placeholder="123" />}
-                                    />
-                                </div>
-                             </div>
+                        {errors.firstName && <p className="text-destructive text-sm mt-1">{errors.firstName.message}</p>}
+                    </div>
+                    <div>
+                        <Label htmlFor="lastName">Apellido</Label>
+                        <Controller
+                            name="lastName"
+                            control={control}
+                            render={({ field }) => <Input id="lastName" {...field} />}
+                        />
+                        {errors.lastName && <p className="text-destructive text-sm mt-1">{errors.lastName.message}</p>}
+                    </div>
+                </div>
+                
+                 <div>
+                    <Label htmlFor="email">Correo Electrónico</Label>
+                    <Controller
+                        name="email"
+                        control={control}
+                        render={({ field }) => <Input id="email" type="email" {...field} />}
+                    />
+                    {errors.email && <p className="text-destructive text-sm mt-1">{errors.email.message}</p>}
+                </div>
+                 <div>
+                    <Label htmlFor="confirmEmail">Confirmar Correo Electrónico</Label>
+                    <Controller
+                        name="confirmEmail"
+                        control={control}
+                        render={({ field }) => <Input id="confirmEmail" type="email" {...field} />}
+                    />
+                    {errors.confirmEmail && <p className="text-destructive text-sm mt-1">{errors.confirmEmail.message}</p>}
+                </div>
+                 <div>
+                    <Label htmlFor="phone">Teléfono de Contacto</Label>
+                    <Controller
+                        name="phone"
+                        control={control}
+                        render={({ field }) => <Input id="phone" type="tel" {...field} />}
+                    />
+                    {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone.message}</p>}
+                </div>
+            </CardContent>
+        </Card>
+        
+        {/* Payment Method */}
+        <Card className="bg-white text-gray-800">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><CreditCard className="text-primary"/> Método de Pago</CardTitle>
+                <CardDescription>Esta es una demostración. No se procesarán pagos reales.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Controller
+                    name="paymentMethod"
+                    control={control}
+                    render={({ field }) => (
+                        <RadioGroup 
+                            onValueChange={field.onChange} 
+                            defaultValue={field.value} 
+                            className="mb-6 grid grid-cols-2 gap-4"
+                        >
+                            <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer", paymentMethod === 'credit-card' && 'bg-blue-50 border-primary')}>
+                                <RadioGroupItem value="credit-card" id="credit-card"/>
+                                <CreditCard />
+                                <span>Tarjeta de crédito</span>
+                            </Label>
+                             <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer", paymentMethod === 'paypal' && 'bg-blue-50 border-primary')}>
+                                <RadioGroupItem value="paypal" id="paypal"/>
+                                <Landmark />
+                                <span>PayPal</span>
+                             </Label>
+                        </RadioGroup>
+                    )}
+                />
+               {paymentMethod === 'credit-card' && (
+                <div className="space-y-4">
+                     <div>
+                        <Label htmlFor="cardHolder">Nombre en la tarjeta</Label>
+                        <Controller
+                            name="cardHolder"
+                            control={control}
+                            render={({ field }) => <Input id="cardHolder" {...field} placeholder="J. Doe" />}
+                        />
+                     </div>
+                     <div>
+                        <Label htmlFor="cardNumber">Número de tarjeta</Label>
+                         <Controller
+                            name="cardNumber"
+                            control={control}
+                            render={({ field }) => <Input id="cardNumber" {...field} placeholder="**** **** **** 1234" />}
+                        />
+                     </div>
+                     <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <Label htmlFor="cardExpiry">Vencimiento</Label>
+                             <Controller
+                                name="cardExpiry"
+                                control={control}
+                                render={({ field }) => <Input id="cardExpiry" {...field} placeholder="MM/AA" />}
+                            />
                         </div>
-                       )}
-                       {paymentMethod === 'paypal' && (
-                           <div className="text-center p-8 border border-dashed rounded-lg">
-                               <p>Serás redirigido a PayPal para completar tu pago de forma segura.</p>
-                           </div>
-                       )}
-                    </CardContent>
-                    <CardFooter className="flex-col items-start gap-4">
-                        <div className="text-xs text-white flex items-center gap-2">
-                           <AlertCircle className="h-4 w-4 text-gray-500" />
-                           <span className="text-gray-500">Revisa los detalles antes de confirmar.</span>
-                       </div>
-                       <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90">
-                           <Lock className="mr-2 h-4 w-4" />
-                           Confirmar Reserva
-                       </Button>
-                    </CardFooter>
-                </Card>
-            </div>
-            <div className="lg:col-span-1">
-                <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} />
-            </div>
-        </div>
+                         <div>
+                            <Label htmlFor="cardCvc">CVC</Label>
+                             <Controller
+                                name="cardCvc"
+                                control={control}
+                                render={({ field }) => <Input id="cardCvc" {...field} placeholder="123" />}
+                            />
+                        </div>
+                     </div>
+                </div>
+               )}
+               {paymentMethod === 'paypal' && (
+                   <div className="text-center p-8 border border-dashed rounded-lg">
+                       <p>Serás redirigido a PayPal para completar tu pago de forma segura.</p>
+                   </div>
+               )}
+            </CardContent>
+             <CardFooter className="flex-col items-start gap-4">
+                <div className="text-xs text-white flex items-center gap-2">
+                   <AlertCircle className="h-4 w-4 text-gray-500" />
+                   <span className="text-gray-500">Revisa los detalles antes de confirmar.</span>
+               </div>
+               <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90">
+                   <Lock className="mr-2 h-4 w-4" />
+                   Confirmar Reserva
+               </Button>
+            </CardFooter>
+        </Card>
     </form>
     </>
   );
