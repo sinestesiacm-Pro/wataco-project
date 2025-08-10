@@ -47,14 +47,14 @@ export const recommendedCruises: CruisePackage[] = [
     reviews: 876,
     price: '1850',
     itinerary: [
-      { day: 1, port: 'Seattle, USA', arrival: 'Embark', departure: '18:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1605333146449-b5cd15f75c2d' },
+      { day: 1, port: 'Seattle, USA', arrival: 'Embark', departure: '18:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1502104034324-a3250214152c' },
       { day: 2, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1499946252333-28913915bab8' },
       { day: 3, port: 'Ketchikan, Alaska', arrival: '08:00', departure: '18:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1628042533390-3693241b1285' },
       { day: 4, port: 'Juneau, Alaska', arrival: '07:00', departure: '16:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1606233767215-181172157d6b' },
       { day: 5, port: 'Skagway, Alaska', arrival: '09:00', departure: '19:00', countryCode: 'us', image: 'https://images.unsplash.com/photo-1593539193635-f726a578a1f8' },
-      { day: 6, port: 'Glacier Bay National Park', arrival: 'Scenic Cruising', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1605333146449-b5cd15f75c2d' },
+      { day: 6, port: 'Glacier Bay National Park', arrival: 'Scenic Cruising', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1527022206739-2c7edca55829' },
       { day: 7, port: 'At Sea', arrival: 'High Seas', departure: '', isAtSea: true, image: 'https://images.unsplash.com/photo-1499946252333-28913915bab8' },
-      { day: 8, port: 'Seward, Alaska', arrival: '08:00', departure: 'Disembark', countryCode: 'us', image: 'https://images.unsplash.com/photo-1605333146449-b5cd15f75c2d' },
+      { day: 8, port: 'Seward, Alaska', arrival: '08:00', departure: 'Disembark', countryCode: 'us', image: 'https://images.unsplash.com/photo-1569429594182-159f0861503e' },
     ]
   },
 ];
