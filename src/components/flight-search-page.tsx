@@ -180,13 +180,6 @@ export default function FlightSearchPage() {
 
   const renderSuggestions = (type: 'origin' | 'destination') => (
       <div ref={popoverContentRef} className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-        <Input 
-          autoFocus
-          className="m-2 w-[calc(100%-1rem)]"
-          placeholder={`Buscar ${type === 'origin' ? 'origen' : 'destino'}`}
-          value={type === 'origin' ? originQuery : destinationQuery}
-          onChange={(e) => type === 'origin' ? setOriginQuery(e.target.value) : setDestinationQuery(e.target.value)}
-        />
         {suggestionsLoading ? (
           <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
             <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
@@ -247,14 +240,7 @@ export default function FlightSearchPage() {
                           <MapPin className="h-6 w-6 mr-4 text-tertiary" />
                           <div>
                               <p className="text-xs text-gray-700">To</p>
-                               <Input 
-                                id="destination" type="text" value={destinationQuery} 
-                                onChange={e => setDestinationQuery(e.target.value)} 
-                                onFocus={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}
-                                placeholder="Destino" 
-                                className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
-                                autoComplete="off"
-                            />
+                              <p className="text-lg font-semibold text-gray-800">{destinationQuery}</p>
                           </div>
                       </div>
                   </Button>
@@ -386,3 +372,5 @@ export default function FlightSearchPage() {
       </div>
   );
 }
+
+    
