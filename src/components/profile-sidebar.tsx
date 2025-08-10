@@ -125,7 +125,7 @@ export default function ProfileSidebar() {
         </nav>
       </Card>
       
-      <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
+       <Card className="p-2 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
         <nav className="space-y-1">
             {bottomNavItems.map((item) => (
             <Link
@@ -152,7 +152,7 @@ export default function ProfileSidebar() {
         </nav>
       </Card>
 
-       <Card className="p-4 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
+      <Card className="p-4 bg-black/20 backdrop-blur-xl border-none text-white shadow-lg">
         <CardContent className="p-0">
           <div className="space-y-4">
               <div>

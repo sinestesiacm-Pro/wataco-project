@@ -123,9 +123,6 @@ export function NextTripSection() {
                     <FileText className="h-5 w-5 text-primary"/>
                     Documentos
                 </CardTitle>
-                 <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-primary/50 text-white hover:bg-primary">
-                    <MessageSquare className="h-5 w-5" />
-                </Button>
             </CardHeader>
             <CardContent className="space-y-2 pt-4">
                <Button variant="outline" className="w-full justify-start bg-transparent border-white/30 hover:bg-white/10 text-white">
