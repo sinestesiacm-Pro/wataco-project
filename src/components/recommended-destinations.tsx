@@ -17,12 +17,15 @@ const flightRoutes = [
 ];
 
 const DestinationCard = ({ route, onSelect, onDeselect, isActive }: { route: typeof flightRoutes[0], onSelect: () => void, onDeselect: () => void, isActive: boolean }) => {
+    
+    const buttonHref = isActive ? `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${format(addMonths(new Date(), 2), 'yyyy-MM-dd')}&to_date=${format(addDays(addMonths(new Date(), 2), 7), 'yyyy-MM-dd')}&adults=1&autosearch=true` : '#';
+    
     return (
         <div 
             className={cn("destination-card-oval flex-shrink-0", { 'active': isActive })}
             onMouseEnter={onSelect}
             onMouseLeave={onDeselect}
-            onTouchStart={onSelect}
+            onClick={onSelect}
         >
             <div className="image-container">
                 <Image 
@@ -37,6 +40,16 @@ const DestinationCard = ({ route, onSelect, onDeselect, isActive }: { route: typ
                 <h3 className="font-bold font-headline text-lg text-gray-900">{route.destinationCity}</h3>
                 <p className="text-xs text-gray-700">From {route.originCity}</p>
                 <p className="font-bold text-2xl text-white my-1 drop-shadow-lg">${route.simulatedPrice}</p>
+                 {isActive && (
+                    <div className="absolute -bottom-5 z-20">
+                      <Button asChild size="lg" className="central-flight-button rounded-full font-semibold text-base py-6 px-8 bg-accent text-accent-foreground hover:bg-accent/90 shadow-2xl">
+                         <Link href={buttonHref}>
+                           <Plane className="mr-2 h-5 w-5" />
+                           Find Flight
+                         </Link>
+                      </Button>
+                    </div>
+                )}
             </div>
         </div>
     )
@@ -44,8 +57,6 @@ const DestinationCard = ({ route, onSelect, onDeselect, isActive }: { route: typ
 
 export function RecommendedDestinations() {
   const [selectedRoute, setSelectedRoute] = useState<typeof flightRoutes[0] | null>(null);
-
-  const buttonHref = selectedRoute ? `/?origin=${selectedRoute.origin}&destination=${selectedRoute.destination}&origin_query=${encodeURIComponent(selectedRoute.originCity)}&destination_query=${encodeURIComponent(selectedRoute.destinationCity)}&from_date=${format(addMonths(new Date(), 2), 'yyyy-MM-dd')}&to_date=${format(addDays(addMonths(new Date(), 2), 7), 'yyyy-MM-dd')}&adults=1&autosearch=true` : '#';
 
   return (
     <div className="space-y-4 mt-16">
@@ -61,25 +72,12 @@ export function RecommendedDestinations() {
                     key={`${route.origin}-${route.destination}`} 
                     route={route}
                     onSelect={() => setSelectedRoute(route)}
-                    onDeselect={() => {}}
+                    onDeselect={() => setSelectedRoute(null)}
                     isActive={selectedRoute?.destination === route.destination}
                 />
             ))}
         </div>
-        
-        {selectedRoute && (
-          <div className="absolute bottom-10 z-20">
-            <Button asChild size="lg" className="central-flight-button rounded-full font-semibold text-lg py-7 px-8 bg-accent text-accent-foreground hover:bg-accent/90 shadow-2xl">
-               <Link href={buttonHref}>
-                 <Plane className="mr-2 h-5 w-5" />
-                 Find Flight
-               </Link>
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
 }
-
-    
