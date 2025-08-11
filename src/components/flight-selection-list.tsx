@@ -5,15 +5,13 @@ import Image from 'next/image';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plane, Clock, Filter } from 'lucide-react';
+import { Plane, Clock, ChevronDown } from 'lucide-react';
 import { FlightBaggageInfo } from './flight-baggage-info';
 import { FlightDetailsDialog } from './flight-details-dialog';
 import { cn } from '@/lib/utils';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import React from 'react';
 import { Separator } from './ui/separator';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { FlightFilters } from './flight-filters';
 
 const formatDuration = (duration: string) => {
   return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm');
@@ -27,16 +25,41 @@ const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
+interface StopInfoProps {
+    itinerary: Itinerary;
+    dictionaries: Dictionaries;
+}
 
-interface FlightSelectionListProps {
-  flights: FlightOffer[];
+const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
+    if (itinerary.segments.length <= 1) return null;
+
+    return (
+        <div className="space-y-4 px-2">
+            {itinerary.segments.slice(0, -1).map((segment, index) => {
+                const nextSegment = itinerary.segments[index + 1];
+                const layoverDuration = new Date(nextSegment.departure.at).getTime() - new Date(segment.arrival.at).getTime();
+                const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
+                const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
+                
+                return (
+                     <div key={`stop-${index}`} className="text-xs text-center text-gray-600">
+                        <p>Escala en {segment.arrival.iataCode} ({dictionaries.locations[segment.arrival.iataCode]?.cityCode})</p>
+                        <p>Duración: {hours}h {minutes}m</p>
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
+
+interface FlightCardProps {
+  flight: FlightOffer;
   dictionaries: Dictionaries;
   onSelectFlight: (flight: FlightOffer, addons: number) => void;
   title: string;
-  selectedOutboundFlight?: FlightOffer | null;
 }
 
-function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: FlightOffer, dictionaries: Dictionaries, onSelectFlight: (flight: FlightOffer, addons: number) => void, title: string }) {
+const FlightCard: React.FC<FlightCardProps> = ({ flight, dictionaries, onSelectFlight, title }) => {
     const isReturnFlight = title.toLowerCase().includes('vuelta');
     const itinerary = (isReturnFlight && flight.itineraries.length > 1) ? flight.itineraries[1] : flight.itineraries[0];
     const firstSegment = itinerary.segments[0];
@@ -44,14 +67,12 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
 
     const stops = itinerary.segments.length - 1;
-    const stopInfo = stops >= 1
-        ? `${stops} escala${stops > 1 ? 's' : ''}`
-        : 'Directo';
+    const stopInfoText = stops > 1 ? `${stops} escalas` : stops === 1 ? '1 escala' : 'Directo';
 
     return (
-        <Card className="bg-white/60 backdrop-blur-lg border border-white/20 text-gray-800 rounded-2xl shadow-lg">
+        <Collapsible asChild>
+          <Card className="bg-white/60 backdrop-blur-lg border border-white/20 text-gray-800 rounded-2xl shadow-lg">
             <CardContent className="p-4 space-y-4">
-                {/* Airline Info */}
                 <div className="flex justify-between items-center px-2">
                     <div className="flex items-center gap-2">
                         <Image
@@ -63,34 +84,44 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                         />
                         <span className="font-semibold text-sm">{airlineName}</span>
                     </div>
-                    <span className="text-xs text-gray-600">{firstSegment.carrierCode} {firstSegment.number}</span>
+                    <FlightBaggageInfo flight={flight} />
                 </div>
-
-                {/* Flight Details */}
-                <div className="flex items-center justify-between">
+                
+                <div className="grid grid-cols-3 items-center text-center">
                     <div className="text-left">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-gray-600">{firstSegment.departure.iataCode}</p>
                     </div>
-                    <div className="flex-grow flex flex-col items-center text-gray-600 px-2">
-                         <div className="w-full h-px bg-gray-400/50 relative my-1">
-                            <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 p-0.5 rounded-full border border-gray-300"/>
-                        </div>
-                    </div>
+
+                    <CollapsibleTrigger asChild>
+                         <button className={cn("flex flex-col items-center cursor-pointer", stops === 0 && "pointer-events-none")}>
+                            <span className="text-xs font-semibold">{formatDuration(itinerary.duration)}</span>
+                            <div className="w-full h-px bg-gray-400/50 relative my-1">
+                                <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 p-0.5 rounded-full border border-gray-300"/>
+                            </div>
+                            <div className="flex items-center gap-1 text-xs text-gray-600">
+                                <span>{stopInfoText}</span>
+                                {stops > 0 && <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />}
+                            </div>
+                        </button>
+                    </CollapsibleTrigger>
+                    
                     <div className="text-right">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-gray-600">{lastSegment.arrival.iataCode}</p>
                     </div>
                 </div>
-                
-                {/* Duration and Price */}
-                <div className="flex justify-between items-center px-2">
-                    <div className="text-sm flex items-center gap-1.5 text-gray-700">
-                       <Clock className="w-4 h-4"/>
-                       <span className="font-medium">{formatDuration(itinerary.duration)}</span>
-                       <span className="text-gray-600 font-medium">{stopInfo}</span>
-                    </div>
-                     <p className="text-2xl font-bold text-gray-800">${flight.price.total}</p>
+
+                <CollapsibleContent>
+                    <Separator className="my-3 bg-gray-400/30" />
+                    <StopInfo itinerary={itinerary} dictionaries={dictionaries} />
+                </CollapsibleContent>
+
+                <Separator className="my-3 bg-gray-400/30" />
+
+                <div className="text-center">
+                    <p className="text-xs text-gray-600">Precio</p>
+                    <p className="text-2xl font-bold text-gray-800">${flight.price.total}</p>
                 </div>
                 
                 <div className="pt-2">
@@ -101,14 +132,20 @@ function FlightCard({ flight, dictionaries, onSelectFlight, title }: { flight: F
                       dialogTitle={title.includes('ida') ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}
                   />
                 </div>
-
             </CardContent>
-        </Card>
+          </Card>
+        </Collapsible>
     );
 };
 
 
-export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight }: FlightSelectionListProps) {
+export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight }: {
+    flights: FlightOffer[];
+    dictionaries: Dictionaries;
+    onSelectFlight: (flight: FlightOffer, addons: number) => void;
+    title: string;
+    selectedOutboundFlight?: FlightOffer | null;
+}) {
   
   return (
     <div className="space-y-6">
