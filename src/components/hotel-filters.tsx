@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
+import { useDebounce } from '@/hooks/use-debounce';
 
 interface HotelFiltersProps {
   onFilterChange: (filters: any) => void;
@@ -40,14 +41,12 @@ const accommodationTypes: { id: string; label: string; }[] = [
 ];
 
 const FilterSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
-    <Card className="bg-transparent shadow-none border-0 text-white">
-        <CardHeader className="p-4">
-            <CardTitle className="text-lg font-headline">{title}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-4 pt-0">
+    <div>
+        <h3 className="text-lg font-semibold mb-3 font-headline text-white">{title}</h3>
+        <div className="space-y-3 pl-1">
             {children}
-        </CardContent>
-    </Card>
+        </div>
+    </div>
 );
 
 export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
@@ -60,18 +59,14 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
     distance: null,
   });
 
+  const debouncedFilters = useDebounce(filters, 500);
+
   useEffect(() => {
-    // This effect now correctly debounces the filter changes.
-    const handler = setTimeout(() => {
-      onFilterChange(filters);
-    }, 500); // Debounce time of 500ms
+    onFilterChange(debouncedFilters);
+  }, [debouncedFilters, onFilterChange]);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [filters, onFilterChange]);
 
-  const handleCheckboxChange = (
+  const handleCheckboxChange = useCallback((
     value: string | number, 
     type: 'stars' | 'amenities' | 'accommodationTypes'
   ) => {
@@ -82,16 +77,15 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
             : [...list, value];
         return { ...prev, [type]: newList };
     });
-  };
+  }, []);
 
   return (
-    <div className="sticky top-24 space-y-4 bg-black/10 backdrop-blur-xl border border-white/20 rounded-2xl p-2">
-      <Card className="bg-transparent shadow-none border-0 text-white">
-        <CardHeader>
-            <CardTitle className="text-xl font-bold">Filtrar Resultados</CardTitle>
-        </CardHeader>
-      </Card>
-
+    <Card className="sticky top-24 shadow-none bg-transparent border-none text-white">
+      <CardHeader className="p-0 mb-4">
+        <CardTitle className="text-xl font-bold font-headline text-white">Filtrar por</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6 p-0">
+      
       <FilterSection title="Tu presupuesto">
           <Slider
               defaultValue={filters.priceRange}
@@ -193,6 +187,7 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
          </RadioGroup>
       </FilterSection>
 
-    </div>
+    </CardContent>
+    </Card>
   );
 }

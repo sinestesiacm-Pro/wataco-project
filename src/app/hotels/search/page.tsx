@@ -152,18 +152,24 @@ function HotelResultsPageContent() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              <aside className="hidden lg:block lg:col-span-3">
-                <HotelFilters onFilterChange={handleFilterChange} />
+              <aside className="hidden lg:block lg:col-span-3 sticky top-24 self-start">
+                  <div className="bg-black/20 backdrop-blur-2xl border border-white/20 rounded-2xl p-4">
+                    <HotelFilters onFilterChange={handleFilterChange} />
+                  </div>
               </aside>
               <div className="lg:hidden fixed bottom-24 right-6 z-50">
                     <Sheet>
                       <SheetTrigger asChild>
-                         <Button size="lg" className="rounded-full shadow-lg">
+                         <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4 bg-white/40 backdrop-blur-xl border border-white/20 text-white hover:bg-white/60">
                            <Filter className="mr-2 h-5 w-5"/>
                            Filtros
                          </Button>
                       </SheetTrigger>
-                      <SheetContent side="bottom" className="h-[80vh] bg-card/80 backdrop-blur-xl border-none">
+                      <SheetContent side="bottom" className="h-[80vh] bg-background/50 backdrop-blur-2xl border-t border-white/20">
+                        <SheetHeader className="sr-only">
+                           <SheetTitle>Filtros de Hotel</SheetTitle>
+                           <SheetDescription>Aplica filtros para refinar los resultados de tu búsqueda de hoteles.</SheetDescription>
+                        </SheetHeader>
                          <ScrollArea className="h-full pr-4">
                             <HotelFilters onFilterChange={handleFilterChange} />
                          </ScrollArea>

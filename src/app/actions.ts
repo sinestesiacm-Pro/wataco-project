@@ -193,83 +193,68 @@ export async function searchHotels(params: {
     if (!validation.success) {
         return { success: false, error: 'Invalid hotel search parameters.' };
     }
-
-    if (!HOTELBEDS_API_KEY || !HOTELBEDS_SECRET) {
-        console.log("Hotelbeds credentials not found, returning mock data.");
-        return { success: true, data: MOCK_HOTELS_DATA };
-    }
-
-    const { cityCode, checkInDate, checkOutDate, adults } = validation.data;
-
-    const signature = crypto.createHash('sha256').update(`${HOTELBEDS_API_KEY}${HOTELBEDS_SECRET}${Math.floor(Date.now() / 1000)}`).digest('hex');
-
-    const requestBody = {
-        stay: {
-            checkIn: checkInDate,
-            checkOut: checkOutDate,
-        },
-        occupancies: [{
-            rooms: 1,
-            adults: adults,
-            children: 0,
-        }],
-        destination: {
-            code: cityCode
-        }
-    };
     
+    // For this demo, we will always return a shuffled list from our Firestore mock data.
+    // This simplifies the flow and avoids external API failures.
     try {
-        const response = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels`, {
-            method: 'POST',
-            headers: {
-                'Api-key': HOTELBEDS_API_KEY,
-                'X-Signature': signature,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody)
+        const hotelsCollection = collection(db, 'hoteles');
+        const hotelSnapshot = await getDocs(hotelsCollection);
+        
+        if (hotelSnapshot.empty) {
+            return { success: false, error: "No hay hoteles en la base de datos. Ejecuta el script de siembra." };
+        }
+
+        const allHotels: AmadeusHotelOffer[] = hotelSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                type: 'hotel-offer',
+                available: true,
+                hotel: {
+                    hotelId: doc.id,
+                    name: data.nombre,
+                    rating: data.rating?.toString(),
+                    media: (data.media || []).map((url: string) => ({ uri: url, category: 'GENERAL' })),
+                    address: {
+                        cityName: data.ubicacion.split(',')[0],
+                        countryCode: data.ubicacion.split(',')[1]?.trim() || '',
+                        lines: [data.ubicacion],
+                        postalCode: '',
+                    },
+                    description: {
+                        lang: 'es',
+                        text: data.descripcion,
+                    },
+                    amenities: data.amenities || [],
+                },
+                offers: [
+                    {
+                        id: `offer-${doc.id}`,
+                        checkInDate: params.checkInDate,
+                        checkOutDate: params.checkOutDate,
+                        price: {
+                            currency: 'USD',
+                            total: data.price?.toFixed(2) || '0.00',
+                            base: (data.price * 0.9).toFixed(2) || '0.00'
+                        },
+                        room: {
+                            type: 'STANDARD_ROOM',
+                            description: { text: 'Habitación Estándar' },
+                            amenities: [],
+                        }
+                    }
+                ],
+            };
         });
-
-        if (!response.ok) {
-            const errorBody = await response.json();
-            console.error('Hotelbeds API Error:', errorBody);
-            // Fallback to mock data on API error
-            console.log("Hotelbeds API failed, returning mock data.");
-            return { success: true, data: MOCK_HOTELS_DATA };
-        }
-
-        const hotelbedsData = await response.json();
         
-        if (!hotelbedsData.hotels || hotelbedsData.hotels.hotels.length === 0) {
-            // Fallback to mock data if no hotels are found
-            console.log("No hotels found from Hotelbeds, returning mock data.");
-            return { success: true, data: MOCK_HOTELS_DATA };
-        }
+        // Shuffle the array to simulate different search results
+        const shuffledHotels = allHotels.sort(() => 0.5 - Math.random());
         
-        const hotelCodes = hotelbedsData.hotels.hotels.map((h: any) => h.code.toString());
-        
-        if(hotelCodes.length === 0) {
-             console.log("No available hotel codes from Hotelbeds, returning mock data.");
-            return { success: true, data: MOCK_HOTELS_DATA };
-        }
-        
-        const mappedData = MOCK_HOTELS_DATA.map((mockHotel, index) => ({
-            ...mockHotel,
-            hotel: {
-                ...mockHotel.hotel,
-                hotelId: hotelCodes[index % hotelCodes.length] || mockHotel.hotel.hotelId,
-            },
-            id: `search-result-${hotelCodes[index % hotelCodes.length]}-${index}`
-        })).slice(0, 15);
-        
-
-        return { success: true, data: mappedData };
+        return { success: true, data: shuffledHotels.slice(0, 15) };
 
     } catch (err: any) {
-        console.error('Error in searchHotels action:', err);
-        // Fallback to mock data on any unexpected error
-        console.log("An unexpected error occurred, returning mock data.");
-        return { success: true, data: MOCK_HOTELS_DATA };
+        console.error('Error fetching hotels from Firestore in searchHotels:', err);
+        return { success: false, error: err.message || 'An unexpected error occurred while searching for hotels.' };
     }
 }
 
