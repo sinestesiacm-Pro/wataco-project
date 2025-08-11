@@ -250,11 +250,13 @@ function FlightSelectionPage() {
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 mt-8">
               {step !== 'review' && (
                 <>
-                  <aside className="hidden lg:block lg:col-span-3">
-                      <FlightFilters 
-                          availableAirlines={availableAirlines}
-                          onFilterChange={handleFilterChange}
-                      />
+                  <aside className="hidden lg:block lg:col-span-3 sticky top-24 self-start">
+                      <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-4">
+                        <FlightFilters 
+                            availableAirlines={availableAirlines}
+                            onFilterChange={handleFilterChange}
+                        />
+                      </div>
                   </aside>
                   <div className="lg:hidden fixed bottom-24 right-6 z-50">
                     <Sheet>
@@ -264,7 +266,7 @@ function FlightSelectionPage() {
                            Filtros
                          </Button>
                       </SheetTrigger>
-                      <SheetContent side="bottom" className="h-[80vh]">
+                      <SheetContent side="bottom" className="h-[80vh] bg-background/80 backdrop-blur-xl border-t border-white/20">
                         <SheetHeader className="sr-only">
                            <SheetTitle>Filtros de Vuelo</SheetTitle>
                            <SheetDescription>Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</SheetDescription>
