@@ -26,12 +26,12 @@ const baseWords = [
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
-            className={cn("whitespace-nowrap absolute text-white opacity-70", word.size)}
+            className={cn("whitespace-nowrap absolute text-white", word.size)}
             style={{
                 top: word.top,
                 left: word.left,
                 fontWeight: word.weight,
-                animationName: 'move-across-rtl',
+                animationName: 'float-and-fade-ltr',
                 animationDuration: word.animationDuration,
                 animationDelay: word.animationDelay,
                 animationTimingFunction: 'linear',
@@ -49,7 +49,7 @@ const generateWords = (count: number, isMobile: boolean) => {
     const sizeOptions = isMobile 
         ? ['text-2xl', 'text-3xl', 'text-4xl'] 
         : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
-    const durationRange = { min: 25, max: 55 }; // Wider range for more speed variation
+    const durationRange = { min: 25, max: 55 };
 
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
@@ -58,9 +58,9 @@ const generateWords = (count: number, isMobile: boolean) => {
             ...base,
             size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
             top: `${Math.random() * 100}%`,
-            left: `${-50 + Math.random() * 200}%`, // Start anywhere from -50% to 150%
+            left: `${-100 + Math.random() * 200}%`, // Start anywhere from -100% to 100% to fill screen
             animationDuration: `${duration}s`,
-            animationDelay: `-${Math.random() * duration}s`, // CRUCIAL: Negative delay starts animation mid-cycle
+            animationDelay: `-${Math.random() * duration}s`, // Negative delay starts animation mid-cycle
         });
     }
     return generated;
