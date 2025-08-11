@@ -41,31 +41,34 @@ const generateWords = (count: number, isMobile: boolean) => {
         const base = baseWords[i % baseWords.length];
         const sizeClassOptions = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
         
-        const mobileDurationRange = { min: 15, max: 35 };
-        const desktopDurationRange = { min: 15, max: 50 };
+        const mobileDurationRange = { min: 25, max: 45 };
+        const desktopDurationRange = { min: 30, max: 60 };
         const durationRange = isMobile ? mobileDurationRange : desktopDurationRange;
 
         const mobileTranslateYRange = { min: -10, max: 10 };
         const desktopTranslateYRange = { min: -20, max: 20 };
         const translateYRange = isMobile ? mobileTranslateYRange : desktopTranslateYRange;
-        
+
         generated.push({
             text: base.text,
             size: sizeClassOptions[Math.floor(Math.random() * sizeClassOptions.length)],
             top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
+            left: `${Math.random() * 200 - 50}%`, // Distribute from -50% to 150% to cover the whole screen evenly
             fontWeight: base.weight.toString(),
+            '--translate-x-start': `${Math.random() * 20 - 10}vw`,
+            '--translate-x-end': `${Math.random() * 20 - 10}vw`,
             '--translate-y-start': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
             '--translate-y-end': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
-            animationName: 'float-and-fade, move-clouds',
-            animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s, ${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
-            animationDelay: `-${Math.random() * 50}s, -${Math.random() * 50}s`,
-            animationTimingFunction: 'linear, linear',
-            animationIterationCount: 'infinite, infinite',
+            animationName: 'float-and-move',
+            animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
+            animationDelay: `-${Math.random() * (durationRange.max - durationRange.min)}s`,
+            animationTimingFunction: 'linear',
+            animationIterationCount: 'infinite',
         });
     }
     return generated;
 };
+
 
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
@@ -78,6 +81,8 @@ const Word = React.memo(function Word({ word }: { word: any }) {
                 top: word.top,
                 left: word.left,
                 fontWeight: word.fontWeight,
+                '--translate-x-start': word['--translate-x-start'],
+                '--translate-x-end': word['--translate-x-end'],
                 '--translate-y-start': word['--translate-y-start'],
                 '--translate-y-end': word['--translate-y-end'],
                 animationName: word.animationName,
