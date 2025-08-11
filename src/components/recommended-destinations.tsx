@@ -12,9 +12,8 @@ const flightRoutes = [
   { origin: 'JFK', originCity: 'New York', destination: 'CDG', destinationCity: 'Paris', hint: 'paris eiffel tower', image: 'https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=500', simulatedPrice: '750' },
   { origin: 'LHR', originCity: 'London', destination: 'NRT', destinationCity: 'Tokyo', hint: 'tokyo japan temple', image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=500', simulatedPrice: '1100' },
   { origin: 'LAX', originCity: 'Los Angeles', destination: 'BKK', destinationCity: 'Bangkok', hint: 'bangkok thailand temple', image: 'https://images.unsplash.com/photo-1573790387438-4da905039392?w=500', simulatedPrice: '980' },
-  { origin: 'SYD', originCity: 'Sydney', destination: 'LAX', destinationCity: 'Los Angeles', hint: 'los angeles california', image: 'https://images.unsplash.com/photo-1542383237-67a0609062b8?w=500', simulatedPrice: '1300' },
   { origin: 'BOG', originCity: 'Bogotá', destination: 'MIA', destinationCity: 'Miami', hint: 'miami beach', image: 'https://images.unsplash.com/photo-1533106478322-195b3994a873?w=500', simulatedPrice: '350' },
-  { origin: 'DXB', originCity: 'Dubai', destination: 'LHR', destinationCity: 'London', hint: 'london city', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=500', simulatedPrice: '600' },
+  { origin: 'SYD', originCity: 'Sydney', destination: 'LAX', destinationCity: 'Los Angeles', hint: 'los angeles california', image: 'https://images.unsplash.com/photo-1542383237-67a0609062b8?w=500', simulatedPrice: '1300' },
 ];
 
 const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
