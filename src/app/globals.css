@@ -251,7 +251,7 @@
 @keyframes float-and-fade-ltr {
   0% {
     opacity: 0;
-    transform: translateX(-10vw) translateY(-10vh) scale(0.95);
+    transform: translateX(-100vw) translateY(-10vh) scale(0.95);
   }
   15% {
     opacity: 0.7;
@@ -261,7 +261,7 @@
   }
   100% {
     opacity: 0;
-    transform: translateX(110vw) translateY(10vh) scale(1.05);
+    transform: translateX(100vw) translateY(10vh) scale(1.05);
   }
 }
 
@@ -497,7 +497,35 @@
   }
 }
     
+@keyframes sweep-light {
+  0% {
+    transform: translateX(-100%) skewX(-30deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-30deg);
+  }
+}
 
+.loading-route-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-route-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: sweep-light 2s linear infinite;
+}
     
 
     

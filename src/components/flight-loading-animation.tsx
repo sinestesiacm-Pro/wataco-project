@@ -22,6 +22,33 @@ const baseWords = [
     { text: "aboard", weight: 300 }, { text: "welcome", weight: 300 },
 ];
 
+const generateWords = (count: number, isMobile: boolean) => {
+    const generated = [];
+    const sizeOptions = isMobile 
+        ? ['text-lg', 'text-xl', 'text-2xl'] 
+        : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
+    const durationRange = { min: 25, max: 55 }; // Adjusted range for speed variation
+
+    for (let i = 0; i < count; i++) {
+        const base = baseWords[i % baseWords.length];
+        const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
+        
+        // This positioning ensures the screen is always full
+        const leftPos = Math.random() * 200 - 50; // Range from -50vw to 150vw
+        const topPos = Math.random() * 100;
+
+        generated.push({
+            ...base,
+            size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
+            top: `${topPos}%`,
+            left: `${leftPos}%`,
+            animationDuration: `${duration}s`,
+            animationDelay: `-${Math.random() * duration}s`, // Negative delay starts the animation mid-cycle
+        });
+    }
+    return generated;
+};
+
 
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
@@ -43,48 +70,10 @@ const Word = React.memo(function Word({ word }: { word: any }) {
     );
 });
 
-// Generates a random number with a normal-like distribution (bell curve)
-// This will make words cluster in the center.
-const randomNormal = (mean: number, stdDev: number) => {
-    let u = 0, v = 0;
-    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
-    while(v === 0) v = Math.random();
-    let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-    return num * stdDev + mean;
-}
-
-
-const generateWords = (count: number, isMobile: boolean) => {
-    const generated = [];
-    const sizeOptions = isMobile 
-        ? ['text-lg', 'text-xl', 'text-2xl'] 
-        : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
-    const durationRange = { min: 35, max: 65 };
-
-    for (let i = 0; i < count; i++) {
-        const base = baseWords[i % baseWords.length];
-        const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
-        
-        // Use a wide range for left positioning to ensure the screen is always full.
-        const leftPos = Math.random() * 200 - 50; // Range from -50% to 150%
-        const topPos = Math.random() * 100;
-
-        generated.push({
-            ...base,
-            size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
-            top: `${topPos}%`,
-            left: `${leftPos}%`,
-            animationDuration: `${duration}s`,
-            animationDelay: `-${Math.random() * duration}s`, // Negative delay starts the animation mid-cycle
-        });
-    }
-    return generated;
-};
-
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 120 : 200; // Increased count for density
+    const wordCount = isMobile ? 240 : 400; // Increased count for density
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 
@@ -107,7 +96,7 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
     return (
         <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
             <WelcomeAboardCloud />
-            <div className="relative z-30 bg-black/30 backdrop-blur-md p-4 rounded-xl font-body">
+            <div className="relative z-30 bg-black/30 backdrop-blur-md p-4 rounded-xl font-body loading-route-box">
               <h2 className="text-2xl font-bold text-white drop-shadow-lg">De {from} a {to}</h2>
               <p className="text-white/80 mt-1 drop-shadow-lg">Buscando entre más de 400 aerolíneas...</p>
             </div>
