@@ -59,6 +59,7 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
     distance: null,
   });
 
+  const [localPriceRange, setLocalPriceRange] = useState([0, 1000]);
   const debouncedFilters = useDebounce(filters, 500);
 
   useEffect(() => {
@@ -88,15 +89,16 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
       
       <FilterSection title="Tu presupuesto">
           <Slider
-              defaultValue={filters.priceRange}
+              value={localPriceRange}
+              onValueChange={setLocalPriceRange}
               max={1000}
               step={10}
               onValueCommit={(value) => setFilters(prev => ({...prev, priceRange: value}))}
               className="w-full"
           />
           <div className="flex justify-between text-sm text-white/70 mt-2">
-              <span>${filters.priceRange[0]}</span>
-              <span>${filters.priceRange[1] === 1000 ? '1000+' : filters.priceRange[1]}</span>
+              <span>${localPriceRange[0]}</span>
+              <span>${localPriceRange[1] === 1000 ? '1000+' : localPriceRange[1]}</span>
           </div>
       </FilterSection>
       
