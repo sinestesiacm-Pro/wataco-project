@@ -12,10 +12,16 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
-import { useDebounce } from '@/hooks/use-debounce';
+
+interface HotelFiltersState {
+  priceRange: number[];
+  stars: number[];
+  amenities: string[];
+}
 
 interface HotelFiltersProps {
-  onFilterChange: (filters: any) => void;
+  filters: HotelFiltersState;
+  onFiltersChange: (filters: HotelFiltersState) => void;
 }
 
 const amenityOptions: { id: string; label: string; icon: LucideIcon }[] = [
@@ -49,36 +55,27 @@ const FilterSection = ({ title, children }: { title: string, children: React.Rea
     </div>
 );
 
-export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
-  const [filters, setFilters] = useState({
-    priceRange: [0, 1000],
-    stars: [] as number[],
-    userRating: null as number | null,
-    amenities: [] as string[],
-    accommodationTypes: [] as string[],
-    distance: null,
-  });
-
-  const [localPriceRange, setLocalPriceRange] = useState([0, 1000]);
-  const debouncedFilters = useDebounce(filters, 500);
+export function HotelFilters({ filters, onFiltersChange }: HotelFiltersProps) {
+  const [localPriceRange, setLocalPriceRange] = useState(filters.priceRange);
 
   useEffect(() => {
-    onFilterChange(debouncedFilters);
-  }, [debouncedFilters, onFilterChange]);
+    setLocalPriceRange(filters.priceRange);
+  }, [filters.priceRange]);
 
-
-  const handleCheckboxChange = useCallback((
+  const handleCheckboxChange = (
     value: string | number, 
-    type: 'stars' | 'amenities' | 'accommodationTypes'
+    type: 'stars' | 'amenities'
   ) => {
-    setFilters(prev => {
-        const list = prev[type] as any[];
-        const newList = list.includes(value as never)
-            ? list.filter(item => item !== value)
-            : [...list, value];
-        return { ...prev, [type]: newList };
-    });
-  }, []);
+    const list = filters[type] as any[];
+    const newList = list.includes(value as never)
+      ? list.filter(item => item !== value)
+      : [...list, value];
+    onFiltersChange({ ...filters, [type]: newList });
+  };
+  
+  const handlePriceCommit = (value: number[]) => {
+      onFiltersChange({...filters, priceRange: value});
+  }
 
   return (
     <Card className="sticky top-24 shadow-none bg-transparent border-none text-white">
@@ -91,9 +88,9 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
           <Slider
               value={localPriceRange}
               onValueChange={setLocalPriceRange}
+              onValueCommit={handlePriceCommit}
               max={1000}
               step={10}
-              onValueCommit={(value) => setFilters(prev => ({...prev, priceRange: value}))}
               className="w-full"
           />
           <div className="flex justify-between text-sm text-white/70 mt-2">
@@ -124,20 +121,6 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
       </FilterSection>
       
       <Separator className="bg-white/20" />
-
-      <FilterSection title="Calificación de los usuarios">
-         <RadioGroup 
-            value={filters.userRating?.toString()} 
-            onValueChange={(value) => setFilters(prev => ({...prev, userRating: value ? Number(value) : null}))}
-            className="space-y-2"
-        >
-            <div className="flex items-center space-x-2"><RadioGroupItem value="9" id="r1" className="border-white/50 text-primary" /><Label htmlFor="r1">Excelente: 9+</Label></div>
-            <div className="flex items-center space-x-2"><RadioGroupItem value="8" id="r2" className="border-white/50 text-primary" /><Label htmlFor="r2">Muy bien: 8+</Label></div>
-            <div className="flex items-center space-x-2"><RadioGroupItem value="7" id="r3" className="border-white/50 text-primary" /><Label htmlFor="r3">Bueno: 7+</Label></div>
-        </RadioGroup>
-      </FilterSection>
-
-      <Separator className="bg-white/20" />
       
       <FilterSection title="Servicios">
         <div className="space-y-2">
@@ -156,37 +139,6 @@ export function HotelFilters({ onFilterChange }: HotelFiltersProps) {
             </div>
           ))}
         </div>
-      </FilterSection>
-      
-      <Separator className="bg-white/20" />
-
-      <FilterSection title="Tipo de Alojamiento">
-        <div className="space-y-2">
-          {accommodationTypes.map(type => (
-            <div key={type.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`type-${type.id}`}
-                onCheckedChange={() => handleCheckboxChange(type.id, 'accommodationTypes')}
-                checked={filters.accommodationTypes.includes(type.id)}
-                 className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-              />
-              <Label htmlFor={`type-${type.id}`} className="flex items-center cursor-pointer gap-2 text-sm">
-                <Building2 className="w-4 h-4 text-white/70" />
-                {type.label}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </FilterSection>
-
-      <Separator className="bg-white/20" />
-
-      <FilterSection title="Distancia al centro">
-         <RadioGroup disabled className="space-y-2">
-            <div className="flex items-center space-x-2"><RadioGroupItem value="1" id="d1" /><Label htmlFor="d1">Menos de 1 km</Label></div>
-            <div className="flex items-center space-x-2"><RadioGroupItem value="3" id="d2" /><Label htmlFor="d2">Menos de 3 km</Label></div>
-            <div className="flex items-center space-x-2"><RadioGroupItem value="5" id="d3" /><Label htmlFor="d3">Menos de 5 km</Label></div>
-         </RadioGroup>
       </FilterSection>
 
     </CardContent>

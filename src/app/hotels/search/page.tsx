@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Loader2, Filter, Settings2 } from "lucide-react";
 import { searchHotels } from "@/app/actions";
@@ -19,18 +19,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
 type HotelFiltersState = {
+  priceRange: number[];
   stars: number[];
   amenities: string[];
-  priceRange: number[];
 };
 
 function HotelResultsPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [hotels, setHotels] = useState<AmadeusHotelOffer[] | null>(null);
-    const [filteredHotels, setFilteredHotels] = useState<AmadeusHotelOffer[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [filters, setFilters] = useState<HotelFiltersState>({
+      priceRange: [0, 1000],
+      stars: [],
+      amenities: [],
+    });
 
     const cityCode = searchParams.get('cityCode') || '';
     const checkInDate = searchParams.get('checkInDate') || '';
@@ -50,7 +54,6 @@ function HotelResultsPageContent() {
             });
             if(result.success && result.data) {
                 setHotels(result.data);
-                setFilteredHotels(result.data);
             } else {
                 setError(result.error || 'No se encontraron hoteles para tu búsqueda.');
             }
@@ -63,34 +66,35 @@ function HotelResultsPageContent() {
         runSearch();
     }, [runSearch]);
     
-    const handleFilterChange = (filters: HotelFiltersState) => {
-        if (!hotels) return;
+    const filteredHotels = useMemo(() => {
+      if (!hotels) return null;
+      
+      let tempHotels = [...hotels];
 
-        let tempHotels = [...hotels];
+      // Star rating filter
+      if (filters.stars.length > 0) {
+          tempHotels = tempHotels.filter(h => h.hotel.rating && filters.stars.includes(parseInt(h.hotel.rating)));
+      }
 
-        // Star rating filter
-        if (filters.stars.length > 0) {
-            tempHotels = tempHotels.filter(h => h.hotel.rating && filters.stars.includes(parseInt(h.hotel.rating)));
-        }
+      // Amenities filter
+      if (filters.amenities.length > 0) {
+          tempHotels = tempHotels.filter(h => {
+              if (!h.hotel.amenities) return false;
+              return filters.amenities.every(a => h.hotel.amenities?.includes(a));
+          });
+      }
+      
+      // Price range filter
+      if (filters.priceRange) {
+           tempHotels = tempHotels.filter(h => {
+              const price = h.offers[0]?.price?.total ? parseFloat(h.offers[0].price.total) : 0;
+              return price >= filters.priceRange[0] && price <= filters.priceRange[1];
+           });
+      }
+      
+      return tempHotels;
+    }, [hotels, filters]);
 
-        // Amenities filter
-        if (filters.amenities.length > 0) {
-            tempHotels = tempHotels.filter(h => {
-                if (!h.hotel.amenities) return false;
-                return filters.amenities.every(a => h.hotel.amenities?.includes(a));
-            });
-        }
-        
-        // Price range filter
-        if (filters.priceRange) {
-             tempHotels = tempHotels.filter(h => {
-                const price = h.offers[0]?.price?.total ? parseFloat(h.offers[0].price.total) : 0;
-                return price >= filters.priceRange[0] && price <= filters.priceRange[1];
-             });
-        }
-
-        setFilteredHotels(tempHotels);
-    };
 
     const LoadingSkeleton = () => (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -154,7 +158,10 @@ function HotelResultsPageContent() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <aside className="hidden lg:block lg:col-span-3 sticky top-24 self-start">
                   <div className="bg-black/20 backdrop-blur-2xl border border-white/20 rounded-2xl p-4">
-                    <HotelFilters onFilterChange={handleFilterChange} />
+                    <HotelFilters 
+                        filters={filters}
+                        onFiltersChange={setFilters}
+                    />
                   </div>
               </aside>
               <div className="lg:hidden fixed bottom-24 right-6 z-50">
@@ -171,7 +178,10 @@ function HotelResultsPageContent() {
                            <SheetDescription>Aplica filtros para refinar los resultados de tu búsqueda de hoteles.</SheetDescription>
                         </SheetHeader>
                          <ScrollArea className="h-full pr-4">
-                            <HotelFilters onFilterChange={handleFilterChange} />
+                            <HotelFilters 
+                                filters={filters}
+                                onFiltersChange={setFilters}
+                            />
                          </ScrollArea>
                       </SheetContent>
                     </Sheet>
