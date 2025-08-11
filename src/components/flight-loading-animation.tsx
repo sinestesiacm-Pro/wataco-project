@@ -22,71 +22,15 @@ const baseWords = [
     { text: "aboard", weight: 300 }, { text: "welcome", weight: 300 },
 ];
 
-// Layer 1: Structured background grid
-const generateGridWords = (isMobile: boolean) => {
-    const grid = [];
-    const rows = isMobile ? 12 : 10;
-    const cols = isMobile ? 3 : 5;
-    const durationRange = { min: 40, max: 70 };
-
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            const base = baseWords[(r * cols + c) % baseWords.length];
-            grid.push({
-                ...base,
-                size: isMobile ? 'text-lg' : 'text-xl',
-                top: `${(r / rows) * 100 + (Math.random() - 0.5) * 5}%`,
-                left: `${(c / cols) * 100 + (Math.random() - 0.5) * 10}%`,
-                '--translate-y-start': `${(Math.random() - 0.5) * 10}vh`,
-                '--translate-y-end': `${(Math.random() - 0.5) * 10}vh`,
-                animationName: 'grid-float-and-move',
-                animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
-                animationDelay: `-${Math.random() * (durationRange.max - durationRange.min)}s`,
-            });
-        }
-    }
-    return grid;
-};
-
-// Layer 2: Floating "dancer" words
-const generateFloatingWords = (count: number, isMobile: boolean) => {
-    const generated = [];
-    const sizeOptions = ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
-    const durationRange = { min: 25, max: 45 };
-    const translateRange = { y: 20, x: 20 };
-
-    for (let i = 0; i < count; i++) {
-        const base = baseWords[i % baseWords.length];
-        generated.push({
-            ...base,
-            size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            '--translate-x-start': `${(Math.random() - 0.5) * translateRange.x}vw`,
-            '--translate-x-end': `${(Math.random() - 0.5) * translateRange.x}vw`,
-            '--translate-y-start': `${(Math.random() - 0.5) * translateRange.y}vh`,
-            '--translate-y-end': `${(Math.random() - 0.5) * translateRange.y}vh`,
-            animationName: 'float-and-move',
-            animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
-            animationDelay: `-${Math.random() * (durationRange.max - durationRange.min)}s`,
-        });
-    }
-    return generated;
-};
-
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
-            className={cn("whitespace-nowrap absolute text-white", word.size)}
+            className={cn("whitespace-nowrap absolute text-white opacity-70", word.size)}
             style={{
                 top: word.top,
                 left: word.left,
                 fontWeight: word.weight,
-                '--translate-x-start': word['--translate-x-start'],
-                '--translate-x-end': word['--translate-x-end'],
-                '--translate-y-start': word['--translate-y-start'],
-                '--translate-y-end': word['--translate-y-end'],
-                animationName: word.animationName,
+                animationName: 'move-across-rtl',
                 animationDuration: word.animationDuration,
                 animationDelay: word.animationDelay,
                 animationTimingFunction: 'linear',
@@ -98,24 +42,41 @@ const Word = React.memo(function Word({ word }: { word: any }) {
     );
 });
 
+
+const generateWords = (count: number, isMobile: boolean) => {
+    const generated = [];
+    const sizeOptions = isMobile 
+        ? ['text-2xl', 'text-3xl', 'text-4xl'] 
+        : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
+    const durationRange = { min: 25, max: 45 };
+
+    for (let i = 0; i < count; i++) {
+        const base = baseWords[i % baseWords.length];
+        generated.push({
+            ...base,
+            size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`, // Start at random horizontal position
+            animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
+            animationDelay: `-${Math.random() * (durationRange.max - durationRange.min)}s`,
+        });
+    }
+    return generated;
+};
+
+
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const floatingWordCount = isMobile ? 15 : 25;
+    const wordCount = isMobile ? 40 : 60;
     
-    const gridWords = useMemo(() => generateGridWords(isMobile), [isMobile]);
-    const floatingWords = useMemo(() => generateFloatingWords(floatingWordCount, isMobile), [floatingWordCount, isMobile]);
+    const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 
     return (
         <>
             <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10" />
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
-                {/* Layer 1: Grid */}
-                {gridWords.map((word, index) => (
-                    <Word key={`grid-${index}`} word={word} />
-                ))}
-                 {/* Layer 2: Dancers */}
-                {floatingWords.map((word, index) => (
-                    <Word key={`float-${index}`} word={word} />
+                {words.map((word, index) => (
+                    <Word key={`word-${index}`} word={word} />
                 ))}
             </div>
         </>
