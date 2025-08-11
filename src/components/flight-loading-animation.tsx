@@ -43,24 +43,40 @@ const Word = React.memo(function Word({ word }: { word: any }) {
     );
 });
 
+// Generates a random number with a normal-like distribution (bell curve)
+// This will make words cluster in the center.
+const randomNormal = (mean: number, stdDev: number) => {
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while(v === 0) v = Math.random();
+    let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    return num * stdDev + mean;
+}
+
 
 const generateWords = (count: number, isMobile: boolean) => {
     const generated = [];
     const sizeOptions = isMobile 
-        ? ['text-2xl', 'text-3xl', 'text-4xl'] 
+        ? ['text-lg', 'text-xl', 'text-2xl'] 
         : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
-    const durationRange = { min: 25, max: 55 };
+    const durationRange = { min: 35, max: 65 };
 
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
         const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
+        
+        // Position words with a normal distribution around the center (50%)
+        // The standard deviation determines how spread out the "cloud" is.
+        const leftPos = randomNormal(50, 35); // Center at 50%, std dev of 35 makes it spread nicely
+        const topPos = randomNormal(50, 30);  // Center at 50%, std dev of 30 for vertical spread
+
         generated.push({
             ...base,
             size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
-            top: `${Math.random() * 100}%`,
-            left: `${-100 + Math.random() * 200}%`, // Start anywhere from -100% to 100% to fill screen
+            top: `${topPos}%`,
+            left: `${leftPos}%`,
             animationDuration: `${duration}s`,
-            animationDelay: `-${Math.random() * duration}s`, // Negative delay starts animation mid-cycle
+            animationDelay: `-${Math.random() * duration}s`,
         });
     }
     return generated;
@@ -69,7 +85,7 @@ const generateWords = (count: number, isMobile: boolean) => {
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 40 : 60;
+    const wordCount = isMobile ? 50 : 80;
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 
@@ -90,11 +106,11 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
     const to = destinationName.split(',')[0] || "Destino";
 
     return (
-        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden">
+        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
             <WelcomeAboardCloud />
-            <div className="relative z-30 bg-black/20 backdrop-blur-sm p-4 rounded-xl font-body mt-auto mb-4">
-              <h2 className="text-2xl font-bold text-white">De {from} a {to}</h2>
-              <p className="text-white/80 mt-1">Buscando entre más de 400 aerolíneas...</p>
+            <div className="relative z-30 bg-black/30 backdrop-blur-md p-4 rounded-xl font-body">
+              <h2 className="text-2xl font-bold text-white drop-shadow-lg">De {from} a {to}</h2>
+              <p className="text-white/80 mt-1 drop-shadow-lg">Buscando entre más de 400 aerolíneas...</p>
             </div>
         </div>
     );
