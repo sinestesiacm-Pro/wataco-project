@@ -13,7 +13,7 @@ const flightRoutes = [
   { origin: 'LHR', originCity: 'London', destination: 'NRT', destinationCity: 'Tokyo', hint: 'tokyo japan temple', image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=500', simulatedPrice: '1100' },
   { origin: 'LAX', originCity: 'Los Angeles', destination: 'BKK', destinationCity: 'Bangkok', hint: 'bangkok thailand temple', image: 'https://images.unsplash.com/photo-1573790387438-4da905039392?w=500', simulatedPrice: '980' },
   { origin: 'BOG', originCity: 'Bogotá', destination: 'MIA', destinationCity: 'Miami', hint: 'miami beach', image: 'https://images.unsplash.com/photo-1597535973747-951442d5dbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtaWFtaXxlbnwwfHx8fDE3NTQ4NjMwNTB8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '350' },
-  { origin: 'SYD', originCity: 'Sydney', destination: 'LAX', destinationCity: 'Los Angeles', hint: 'los angeles california', image: 'https://images.unsplash.com/photo-1542383237-67a0609062b8?w=500', simulatedPrice: '1300' },
+  { origin: 'SYD', originCity: 'Sydney', destination: 'LAX', destinationCity: 'Los Angeles', hint: 'los angeles california', image: 'https://images.unsplash.com/photo-1503891450247-ee5f8ec46dc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bG9zJTIwYW5nZWxlc3xlbnwwfHx8fDE3NTQ5Mjk3MjF8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '1300' },
 ];
 
 const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
