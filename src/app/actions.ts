@@ -237,12 +237,12 @@ export async function searchHotels(params: {
 
         const hotelbedsData = await response.json();
         
-        if (!hotelbedsData.hotels || hotelbedsData.hotels.length === 0) {
+        if (!hotelbedsData.hotels || hotelbedsData.hotels.hotels.length === 0) {
             return { success: false, error: 'No se encontraron hoteles para esta búsqueda.' };
         }
         
         // This is a simplified mapping. A real implementation would be more complex.
-        const hotelCodes = hotelbedsData.hotels.hotels.map((h: any) => h.code);
+        const hotelCodes = hotelbedsData.hotels.hotels.map((h: any) => h.code.toString());
         
         if(hotelCodes.length === 0) {
             return { success: false, error: 'No se encontraron hoteles disponibles.' };
@@ -254,8 +254,10 @@ export async function searchHotels(params: {
             hotel: {
                 ...mockHotel.hotel,
                 hotelId: hotelCodes[index % hotelCodes.length] || mockHotel.hotel.hotelId,
-            }
-        })).slice(0, 10); // Limit to 10 results for demo purposes
+            },
+             // Assign a new unique ID for each search result to avoid key issues
+            id: `search-result-${hotelCodes[index % hotelCodes.length]}-${index}`
+        })).slice(0, 15); // Limit to 15 results for demo purposes
         
 
         return { success: true, data: mappedData };
