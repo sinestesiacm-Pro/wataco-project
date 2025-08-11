@@ -224,24 +224,42 @@ export default function FlightSearchPage() {
             <div className="relative">
                 <div className="space-y-4">
                   <PopoverTrigger asChild>
-                      <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
-                          <div className="flex items-center w-full">
+                      <Button type="button" variant="ghost" className="w-full h-auto p-0 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}>
+                          <div className="flex items-center w-full p-4">
                               <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
                               <div>
                                   <p className="text-xs text-gray-700">From</p>
-                                  <p className="text-lg font-semibold text-gray-800">{originQuery}</p>
+                                  <Input 
+                                      id="origin" 
+                                      type="text" 
+                                      value={originQuery} 
+                                      onChange={e => setOriginQuery(e.target.value)} 
+                                      onFocus={() => { setActiveInput('origin'); activeInputRef.current = 'origin'; }}
+                                      placeholder="Ciudad o aeropuerto" 
+                                      className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
+                                      autoComplete="off"
+                                  />
                               </div>
                           </div>
                       </Button>
                   </PopoverTrigger>
                   
                    <PopoverTrigger asChild>
-                      <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
-                           <div className="flex items-center w-full">
+                      <Button type="button" variant="ghost" className="w-full h-auto p-0 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}>
+                           <div className="flex items-center w-full p-4">
                               <MapPin className="h-6 w-6 mr-4 text-tertiary" />
                               <div>
                                   <p className="text-xs text-gray-700">To</p>
-                                  <p className="text-lg font-semibold text-gray-800">{destinationQuery}</p>
+                                   <Input 
+                                      id="destination" 
+                                      type="text" 
+                                      value={destinationQuery} 
+                                      onChange={e => setDestinationQuery(e.target.value)}
+                                      onFocus={() => { setActiveInput('destination'); activeInputRef.current = 'destination'; }}
+                                      placeholder="Ciudad o aeropuerto" 
+                                      className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
+                                      autoComplete="off"
+                                  />
                               </div>
                           </div>
                       </Button>
@@ -374,3 +392,5 @@ export default function FlightSearchPage() {
       </div>
   );
 }
+
+    
