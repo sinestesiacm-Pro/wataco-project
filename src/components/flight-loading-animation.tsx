@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useMemo } from 'react';
@@ -5,82 +6,82 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const baseWords = [
-    { text: "Welcome Aboard", weight: 400 },
-    { text: "Bienvenido a bordo", weight: 400 },
-    { text: "Willkommen an Bord", weight: 300 },
-    { text: "Bienvenue à bord", weight: 300 },
-    { text: "Benvenuto a bordo", weight: 300 },
-    { text: "Bem-vindo a bordo", weight: 300 },
-    { text: "ようこそ", weight: 400 },
-    { text: "歡迎光臨", weight: 400 },
-    { text: "어서 오세요", weight: 300 },
-    { text: "Välkommen ombord", weight: 300 },
-    { text: "Witamy na pokładzie", weight: 300 },
-    { text: "Welkom aan boord", weight: 300 },
-    { text: "Dobrodošli na brodu", weight: 300 },
-    { text: "Fáilte ar bord", weight: 400 },
-    { text: "Vítejte na palubě", weight: 300 },
-    { text: "ยินดีต้อนรับ", weight: 400 },
-    { text: "Chào mừng", weight: 300 },
-    { text: "Καλώς ήρθατε", weight: 400 },
-    { text: "Tervetuloa kyytiin", weight: 300 },
-    { text: "Hoş geldiniz", weight: 400 },
-    { text: "Velkommen", weight: 300 },
-    { text: "Bun venit", weight: 300 },
-    { text: "Siyakwamukela", weight: 300},
-    { text: "Maligayang pagdating", weight: 400},
-    { text: "Sugeng rawuh", weight: 400},
-    { text: "Tervetuloa", weight: 300},
-    { text: "aboard", weight: 300 },
-    { text: "welcome", weight: 300 },
+    { text: "Welcome Aboard", weight: 400 }, { text: "Bienvenido a bordo", weight: 400 },
+    { text: "Willkommen an Bord", weight: 300 }, { text: "Bienvenue à bord", weight: 300 },
+    { text: "Benvenuto a bordo", weight: 300 }, { text: "Bem-vindo a bordo", weight: 300 },
+    { text: "ようこそ", weight: 400 }, { text: "歡迎光臨", weight: 400 },
+    { text: "어서 오세요", weight: 300 }, { text: "Välkommen ombord", weight: 300 },
+    { text: "Witamy na pokładzie", weight: 300 }, { text: "Welkom aan boord", weight: 300 },
+    { text: "Dobrodošli na brodu", weight: 300 }, { text: "Fáilte ar bord", weight: 400 },
+    { text: "Vítejte na palubě", weight: 300 }, { text: "ยินดีต้อนรับ", weight: 400 },
+    { text: "Chào mừng", weight: 300 }, { text: "Καλώς ήρθατε", weight: 400 },
+    { text: "Tervetuloa kyytiin", weight: 300 }, { text: "Hoş geldiniz", weight: 400 },
+    { text: "Velkommen", weight: 300 }, { text: "Bun venit", weight: 300 },
+    { text: "Siyakwamukela", weight: 300}, { text: "Maligayang pagdating", weight: 400},
+    { text: "Sugeng rawuh", weight: 400}, { text: "Tervetuloa", weight: 300},
+    { text: "aboard", weight: 300 }, { text: "welcome", weight: 300 },
 ];
 
-const generateWords = (count: number, isMobile: boolean) => {
+// Layer 1: Structured background grid
+const generateGridWords = (isMobile: boolean) => {
+    const grid = [];
+    const rows = isMobile ? 12 : 10;
+    const cols = isMobile ? 3 : 5;
+    const durationRange = { min: 40, max: 70 };
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            const base = baseWords[(r * cols + c) % baseWords.length];
+            grid.push({
+                ...base,
+                size: isMobile ? 'text-lg' : 'text-xl',
+                top: `${(r / rows) * 100 + (Math.random() - 0.5) * 5}%`,
+                left: `${(c / cols) * 100 + (Math.random() - 0.5) * 10}%`,
+                '--translate-y-start': `${(Math.random() - 0.5) * 10}vh`,
+                '--translate-y-end': `${(Math.random() - 0.5) * 10}vh`,
+                animationName: 'grid-float-and-move',
+                animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
+                animationDelay: `-${Math.random() * (durationRange.max - durationRange.min)}s`,
+            });
+        }
+    }
+    return grid;
+};
+
+// Layer 2: Floating "dancer" words
+const generateFloatingWords = (count: number, isMobile: boolean) => {
     const generated = [];
+    const sizeOptions = ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
+    const durationRange = { min: 25, max: 45 };
+    const translateRange = { y: 20, x: 20 };
+
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
-        const sizeClassOptions = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
-        
-        const mobileDurationRange = { min: 25, max: 45 };
-        const desktopDurationRange = { min: 30, max: 60 };
-        const durationRange = isMobile ? mobileDurationRange : desktopDurationRange;
-
-        const mobileTranslateYRange = { min: -10, max: 10 };
-        const desktopTranslateYRange = { min: -20, max: 20 };
-        const translateYRange = isMobile ? mobileTranslateYRange : desktopTranslateYRange;
-
         generated.push({
-            text: base.text,
-            size: sizeClassOptions[Math.floor(Math.random() * sizeClassOptions.length)],
+            ...base,
+            size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
             top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 200 - 50}%`, // Distribute from -50% to 150% to cover the whole screen evenly
-            fontWeight: base.weight.toString(),
-            '--translate-x-start': `${Math.random() * 20 - 10}vw`,
-            '--translate-x-end': `${Math.random() * 20 - 10}vw`,
-            '--translate-y-start': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
-            '--translate-y-end': `${Math.random() * (translateYRange.max - translateYRange.min) + translateYRange.min}vh`,
+            left: `${Math.random() * 100}%`,
+            '--translate-x-start': `${(Math.random() - 0.5) * translateRange.x}vw`,
+            '--translate-x-end': `${(Math.random() - 0.5) * translateRange.x}vw`,
+            '--translate-y-start': `${(Math.random() - 0.5) * translateRange.y}vh`,
+            '--translate-y-end': `${(Math.random() - 0.5) * translateRange.y}vh`,
             animationName: 'float-and-move',
             animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
             animationDelay: `-${Math.random() * (durationRange.max - durationRange.min)}s`,
-            animationTimingFunction: 'linear',
-            animationIterationCount: 'infinite',
         });
     }
     return generated;
 };
 
-
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
-            className={cn(
-                "whitespace-nowrap absolute text-white",
-                word.size
-            )}
+            className={cn("whitespace-nowrap absolute text-white", word.size)}
             style={{
                 top: word.top,
                 left: word.left,
-                fontWeight: word.fontWeight,
+                fontWeight: word.weight,
                 '--translate-x-start': word['--translate-x-start'],
                 '--translate-x-end': word['--translate-x-end'],
                 '--translate-y-start': word['--translate-y-start'],
@@ -88,8 +89,8 @@ const Word = React.memo(function Word({ word }: { word: any }) {
                 animationName: word.animationName,
                 animationDuration: word.animationDuration,
                 animationDelay: word.animationDelay,
-                animationTimingFunction: word.animationTimingFunction,
-                animationIterationCount: word.animationIterationCount,
+                animationTimingFunction: 'linear',
+                animationIterationCount: 'infinite',
             } as React.CSSProperties}
         >
             {word.text}
@@ -99,22 +100,27 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 120 : 350; // Increased word count
+    const floatingWordCount = isMobile ? 15 : 25;
     
-    const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
-    
+    const gridWords = useMemo(() => generateGridWords(isMobile), [isMobile]);
+    const floatingWords = useMemo(() => generateFloatingWords(floatingWordCount, isMobile), [floatingWordCount, isMobile]);
+
     return (
         <>
             <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10" />
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
-                {words.map((word, index) => (
-                    <Word key={index} word={word} />
+                {/* Layer 1: Grid */}
+                {gridWords.map((word, index) => (
+                    <Word key={`grid-${index}`} word={word} />
+                ))}
+                 {/* Layer 2: Dancers */}
+                {floatingWords.map((word, index) => (
+                    <Word key={`float-${index}`} word={word} />
                 ))}
             </div>
         </>
     )
 })
-
 
 export function FlightLoadingAnimation({ originName, destinationName }: { originName: string; destinationName: string }) {
     const from = originName.split(',')[0] || "Origen";
