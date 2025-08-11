@@ -47,23 +47,25 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                         <Input id="lastName" placeholder="Doe" className="bg-white border-gray-300" />
                     </div>
                 </div>
-                 <div>
-                    <Label htmlFor="birthDate">Fecha de Nacimiento</Label>
-                    <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" className="bg-white border-gray-300" />
-                </div>
-                <div>
-                    <Label>Género</Label>
-                     <RadioGroup defaultValue="female" className="flex items-center gap-4 pt-2">
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="female" id="female" />
-                            <Label htmlFor="female">Femenino</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="male" id="male" />
-                            <Label htmlFor="male">Masculino</Label>
-                        </div>
-                    </RadioGroup>
-                </div>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="birthDate">Fecha de Nacimiento</Label>
+                      <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" className="bg-white border-gray-300" />
+                    </div>
+                    <div>
+                        <Label>Género</Label>
+                         <RadioGroup defaultValue="female" className="flex items-center gap-4 pt-2">
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="female" id="female" />
+                                <Label htmlFor="female">Femenino</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="male" id="male" />
+                                <Label htmlFor="male">Masculino</Label>
+                            </div>
+                        </RadioGroup>
+                    </div>
+                 </div>
                 <div>
                   <Label htmlFor="residence-country">País de Residencia</Label>
                    <Select>
@@ -404,7 +406,7 @@ function CheckoutPageContent() {
     };
 
     const backgroundClass = isPackageBooking
-      ? 'bg-packages-gradient background-pan-animation'
+      ? 'bg-packages-gradient'
       : '';
 
     return (

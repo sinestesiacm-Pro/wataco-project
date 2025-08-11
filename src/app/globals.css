@@ -386,33 +386,18 @@
 }
 
 /* Packages Background Specifics */
-.bg-packages-background {
-    position: relative;
-    overflow: hidden;
+@keyframes packages-gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.bg-packages-background::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  background-image: linear-gradient(to bottom, rgba(40,10,60,0.4), rgba(10,0,20,0.8)), url('https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=2070');
-  background-size: cover;
-  background-position: center;
-  filter: blur(8px);
-  animation-name: ken-burns-animation;
-}
-.bg-packages-background::after {
-  animation-name: fade-in-out, rotating-backgrounds-packages;
-  animation-duration: 30s, 30s;
-  animation-timing-function: linear, linear;
-  animation-iteration-count: infinite, infinite;
+.bg-packages-gradient {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: packages-gradient-animation 15s ease infinite;
 }
 
-/* Activities Background Specifics */
 .bg-activities-background {
     position: relative;
     overflow: hidden;
