@@ -22,6 +22,7 @@ const baseWords = [
     { text: "aboard", weight: 300 }, { text: "welcome", weight: 300 },
 ];
 
+
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
@@ -48,17 +49,18 @@ const generateWords = (count: number, isMobile: boolean) => {
     const sizeOptions = isMobile 
         ? ['text-2xl', 'text-3xl', 'text-4xl'] 
         : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
-    const durationRange = { min: 25, max: 45 };
+    const durationRange = { min: 25, max: 55 }; // Wider range for more speed variation
 
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
+        const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
         generated.push({
             ...base,
             size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
             top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`, // Start at random horizontal position
-            animationDuration: `${Math.random() * (durationRange.max - durationRange.min) + durationRange.min}s`,
-            animationDelay: `-${Math.random() * (durationRange.max - durationRange.min)}s`,
+            left: `${-50 + Math.random() * 200}%`, // Start anywhere from -50% to 150%
+            animationDuration: `${duration}s`,
+            animationDelay: `-${Math.random() * duration}s`, // CRUCIAL: Negative delay starts animation mid-cycle
         });
     }
     return generated;
