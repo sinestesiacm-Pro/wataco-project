@@ -65,10 +65,9 @@ const generateWords = (count: number, isMobile: boolean) => {
         const base = baseWords[i % baseWords.length];
         const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
         
-        // Position words with a normal distribution around the center (50%)
-        // The standard deviation determines how spread out the "cloud" is.
-        const leftPos = randomNormal(50, 35); // Center at 50%, std dev of 35 makes it spread nicely
-        const topPos = randomNormal(50, 30);  // Center at 50%, std dev of 30 for vertical spread
+        // Use a wide range for left positioning to ensure the screen is always full.
+        const leftPos = Math.random() * 200 - 50; // Range from -50% to 150%
+        const topPos = Math.random() * 100;
 
         generated.push({
             ...base,
@@ -76,7 +75,7 @@ const generateWords = (count: number, isMobile: boolean) => {
             top: `${topPos}%`,
             left: `${leftPos}%`,
             animationDuration: `${duration}s`,
-            animationDelay: `-${Math.random() * duration}s`,
+            animationDelay: `-${Math.random() * duration}s`, // Negative delay starts the animation mid-cycle
         });
     }
     return generated;
@@ -85,7 +84,7 @@ const generateWords = (count: number, isMobile: boolean) => {
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 100 : 160;
+    const wordCount = isMobile ? 120 : 200; // Increased count for density
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 

@@ -251,7 +251,7 @@
 @keyframes float-and-fade-ltr {
   0% {
     opacity: 0;
-    transform: translateX(-20vw) translateY(-10vh) scale(0.95);
+    transform: translateX(-10vw) translateY(-10vh) scale(0.95);
   }
   15% {
     opacity: 0.7;
@@ -261,7 +261,7 @@
   }
   100% {
     opacity: 0;
-    transform: translateX(120vw) translateY(10vh) scale(1.05);
+    transform: translateX(110vw) translateY(10vh) scale(1.05);
   }
 }
 
