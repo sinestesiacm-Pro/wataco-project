@@ -39,10 +39,14 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
     const isFreeCancellation = true; 
     const hasBreakfast = roomOffer.room.type !== 'STANDARD_ROOM';
     const [mealPlan, setMealPlan] = useState(hasBreakfast ? 'breakfast' : 'none');
-    const [numberOfRooms, setNumberOfRooms] = useState(1);
-
+    
     const totalGuests = adults + children;
+    // Simple logic to suggest number of rooms. Assumes 2 people per room.
+    const suggestedRooms = Math.ceil(totalGuests / 2);
+    const [numberOfRooms, setNumberOfRooms] = useState(suggestedRooms);
+
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
+    const finalPrice = parseFloat(roomOffer.price.total) * numberOfRooms;
 
     return (
         <div className="flex flex-col md:flex-row flex-grow">
@@ -51,7 +55,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                  <div className="space-y-4">
                     {isRecommended && (
                         <Badge variant="default" className="bg-accent hover:bg-accent/90 mb-2">
-                            <Star className="mr-2 h-4 w-4 fill-white" /> Recomendado
+                            <Star className="mr-2 h-4 w-4 fill-white" /> Recomendado para tu grupo
                         </Badge>
                     )}
                      <div className="flex items-center gap-2 text-green-600 font-semibold">
@@ -91,8 +95,8 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
             {/* Price Column */}
             <div className="w-full md:w-1/2 p-6 flex flex-col bg-muted/50">
                 <div className="text-right text-card-foreground">
-                    <p className="text-xs text-muted-foreground">Precio por noche</p>
-                    <p className="text-3xl font-bold text-card-foreground">${roomOffer.price.total}</p>
+                    <p className="text-xs text-muted-foreground">Precio total por noche</p>
+                    <p className="text-3xl font-bold text-card-foreground">${finalPrice.toFixed(2)}</p>
                     <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
                 </div>
                 
@@ -100,22 +104,21 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                     <div>
                         <Label className="text-xs font-semibold text-muted-foreground">Habitaciones</Label>
                         <Select 
-                            defaultValue="1" 
+                            value={numberOfRooms.toString()}
                             onValueChange={(value) => setNumberOfRooms(parseInt(value, 10))}
-                            disabled={adults <= 1 && children === 0}
                         >
                           <SelectTrigger className="text-card-foreground">
                             <SelectValue placeholder="Seleccionar" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="1">1 habitación</SelectItem>
-                            <SelectItem value="2">2 habitaciones</SelectItem>
-                            <SelectItem value="3">3 habitaciones</SelectItem>
+                            {[...Array(Math.ceil(totalGuests / 2) + 2)].map((_, i) => (
+                                <SelectItem key={i+1} value={(i+1).toString()}>{i+1} habitación{i > 0 ? 'es' : ''}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                     </div>
                     <Button size="lg" className="w-full bg-primary hover:bg-primary/90 font-bold" onClick={() => onSelect(numberOfRooms)}>
-                        Continuar
+                        Reservar {numberOfRooms} habitacion{numberOfRooms > 1 ? 'es' : ''}
                     </Button>
                     <div className="mt-2 text-left space-y-2 text-xs text-muted-foreground">
                         <div className="flex items-center gap-2">
@@ -140,6 +143,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
 
 export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children }: RoomSelectionViewProps) {
   const rooms = hotelOffer.offers;
+  const totalGuests = adults + children;
 
   return (
     <div className="space-y-6">
@@ -156,58 +160,63 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children
             </div>
         </div>
 
-      {rooms.map((roomOffer, index) => (
-        <Card key={roomOffer.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col bg-card text-card-foreground rounded-2xl">
-          <div className="grid grid-cols-1 md:grid-cols-12 flex-grow">
+      {rooms.map((roomOffer, index) => {
+        const roomCapacity = 2; // Assuming standard rooms fit 2
+        const isGroupBooking = totalGuests > roomCapacity;
 
-            {/* Room Type Column */}
-            <div className="md:col-span-5 p-6">
-               <div className="relative h-48 w-full mb-4 rounded-lg overflow-hidden">
-                 <Image
-                    src={hotelOffer.hotel.media?.[3]?.uri || hotelOffer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
-                    alt={`Habitación ${roomOffer.room.description.text}`}
-                    fill
-                    className="object-cover"
-                    data-ai-hint="hotel room"
-                  />
-               </div>
-               <h3 className="text-xl font-bold font-headline mb-3">{roomOffer.room.description.text}</h3>
-               
-               <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground mb-4">
-                    <div className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /><span>2 Huéspedes</span></div>
-                    <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-primary" /><span>1 Cama Doble</span></div>
-                    <div className="flex items-center gap-2"><Square className="h-4 w-4 text-primary" /><span>25 m²</span></div>
-               </div>
+        return (
+            <Card key={roomOffer.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col bg-card text-card-foreground rounded-2xl">
+              <div className="grid grid-cols-1 md:grid-cols-12 flex-grow">
 
-               {roomOffer.room.amenities && (
-                    <div className="space-y-2 mt-4 text-sm text-muted-foreground">
-                        {roomOffer.room.amenities.map(amenity => {
-                            const Icon = roomAmenityIcons[amenity] || CheckCircle2;
-                            return (
-                                <div key={amenity} className="flex items-center gap-2">
-                                    <Icon className="h-4 w-4 text-primary" />
-                                    <span>{formatAmenity(amenity)}</span>
-                                </div>
-                            )
-                        })}
-                    </div>
-                )}
-            </div>
+                {/* Room Type Column */}
+                <div className="md:col-span-5 p-6">
+                   <div className="relative h-48 w-full mb-4 rounded-lg overflow-hidden">
+                     <Image
+                        src={hotelOffer.hotel.media?.[3]?.uri || hotelOffer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
+                        alt={`Habitación ${roomOffer.room.description.text}`}
+                        fill
+                        className="object-cover"
+                        data-ai-hint="hotel room"
+                      />
+                   </div>
+                   <h3 className="text-xl font-bold font-headline mb-3">{isGroupBooking ? `${roomOffer.room.description.text} (Opción para Grupo)` : roomOffer.room.description.text}</h3>
+                   
+                   <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground mb-4">
+                        <div className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /><span>Hasta {roomCapacity} Huéspedes</span></div>
+                        <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-primary" /><span>1 Cama Doble</span></div>
+                        <div className="flex items-center gap-2"><Square className="h-4 w-4 text-primary" /><span>25 m²</span></div>
+                   </div>
 
-            {/* Options & Price Wrapper */}
-            <div className="md:col-span-7 flex flex-col">
-                <RoomOption 
-                    roomOffer={roomOffer} 
-                    onSelect={(numRooms) => onRoomSelected(roomOffer, numRooms)} 
-                    isRecommended={index === 0}
-                    adults={adults}
-                    children={children}
-                />
-            </div>
+                   {roomOffer.room.amenities && (
+                        <div className="space-y-2 mt-4 text-sm text-muted-foreground">
+                            {roomOffer.room.amenities.map(amenity => {
+                                const Icon = roomAmenityIcons[amenity] || CheckCircle2;
+                                return (
+                                    <div key={amenity} className="flex items-center gap-2">
+                                        <Icon className="h-4 w-4 text-primary" />
+                                        <span>{formatAmenity(amenity)}</span>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    )}
+                </div>
 
-          </div>
-        </Card>
-      ))}
+                {/* Options & Price Wrapper */}
+                <div className="md:col-span-7 flex flex-col">
+                    <RoomOption 
+                        roomOffer={roomOffer} 
+                        onSelect={(numRooms) => onRoomSelected(roomOffer, numRooms)} 
+                        isRecommended={index === 0}
+                        adults={adults}
+                        children={children}
+                    />
+                </div>
+
+              </div>
+            </Card>
+        )
+      })}
     </div>
   );
 }

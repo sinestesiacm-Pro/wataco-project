@@ -32,10 +32,8 @@ export function HotelBookingFlow({ offerId, adults, children, checkInDate, check
       setLoading(true);
       setError(null);
       try {
-        // Use getFirestoreHotelDetails to ensure we fetch from the correct source
-        const result = await getFirestoreHotelDetails(offerId); 
+        const result = await getFirestoreHotelDetails(offerId);
         if (result.success && result.data) {
-          // Manually override dates in the fetched offer with the ones from the search
           const offerWithCorrectDates = {
             ...result.data,
             offers: result.data.offers.map(offer => ({
@@ -94,7 +92,6 @@ export function HotelBookingFlow({ offerId, adults, children, checkInDate, check
         return <RoomSelectionView hotelOffer={hotelOffer} onRoomSelected={handleRoomSelected} adults={adults} children={children} />;
       case 'checkout':
         if (!selectedRoom) {
-            // This should not happen in normal flow, but it's a good fallback
             return <p>Error: No se ha seleccionado ninguna habitación. <Button onClick={handleBackToRooms}>Volver</Button></p>
         }
         return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} onBack={handleBackToRooms} />;
