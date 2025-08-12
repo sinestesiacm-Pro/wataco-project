@@ -82,7 +82,7 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 items-end">
                     <div>
                         <Label htmlFor="document-type">Tipo de Documento</Label>
                         <Select>
