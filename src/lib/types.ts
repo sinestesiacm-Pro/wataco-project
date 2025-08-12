@@ -133,6 +133,9 @@ export interface Room {
       text: string;
     };
     amenities?: string[];
+    photo?: string;
+    size?: string;
+    bedType?: string;
   };
 }
 

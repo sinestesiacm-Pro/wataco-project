@@ -8,6 +8,7 @@ import { RoomSelectionView } from './room-selection-view';
 import { CheckoutView } from './checkout-view';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
+import { MOCK_ROOMS_DATA } from '@/lib/mock-data';
 
 type BookingStep = 'rooms' | 'checkout';
 
@@ -34,13 +35,15 @@ export function HotelBookingFlow({ offerId, adults, children, checkInDate, check
       try {
         const result = await getFirestoreHotelDetails(offerId);
         if (result.success && result.data) {
+           const offersWithCorrectDates = MOCK_ROOMS_DATA.map(offer => ({
+            ...offer,
+            checkInDate: checkInDate,
+            checkOutDate: checkOutDate,
+          }));
+
           const offerWithCorrectDates = {
             ...result.data,
-            offers: result.data.offers.map(offer => ({
-              ...offer,
-              checkInDate: checkInDate,
-              checkOutDate: checkOutDate,
-            }))
+            offers: offersWithCorrectDates,
           };
           setHotelOffer(offerWithCorrectDates);
         } else {

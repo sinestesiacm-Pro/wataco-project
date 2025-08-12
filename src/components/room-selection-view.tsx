@@ -42,7 +42,8 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
     
     const totalGuests = adults + children;
     // Simple logic to suggest number of rooms. Assumes 2 people per room.
-    const suggestedRooms = Math.ceil(totalGuests / 2);
+    const roomCapacity = parseInt(roomOffer.room.type.split('_')[0] || '2'); // e.g., '2_DOUBLE' -> 2
+    const suggestedRooms = Math.ceil(totalGuests / roomCapacity);
     const [numberOfRooms, setNumberOfRooms] = useState(suggestedRooms);
 
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
@@ -161,8 +162,9 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children
         </div>
 
       {rooms.map((roomOffer, index) => {
-        const roomCapacity = 2; // Assuming standard rooms fit 2
+        const roomCapacity = parseInt(roomOffer.room.type.split('_')[0] || '2');
         const isGroupBooking = totalGuests > roomCapacity;
+        const roomTypeName = roomOffer.room.description.text;
 
         return (
             <Card key={roomOffer.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col bg-card text-card-foreground rounded-2xl">
@@ -172,19 +174,19 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children
                 <div className="md:col-span-5 p-6">
                    <div className="relative h-48 w-full mb-4 rounded-lg overflow-hidden">
                      <Image
-                        src={hotelOffer.hotel.media?.[3]?.uri || hotelOffer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
-                        alt={`Habitación ${roomOffer.room.description.text}`}
+                        src={roomOffer.room.photo || 'https://placehold.co/400x300.png'}
+                        alt={`Habitación ${roomTypeName}`}
                         fill
                         className="object-cover"
                         data-ai-hint="hotel room"
                       />
                    </div>
-                   <h3 className="text-xl font-bold font-headline mb-3">{isGroupBooking ? `${roomOffer.room.description.text} (Opción para Grupo)` : roomOffer.room.description.text}</h3>
+                   <h3 className="text-xl font-bold font-headline mb-3">{isGroupBooking ? `${roomTypeName} (Opción para Grupo)` : roomTypeName}</h3>
                    
                    <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground mb-4">
                         <div className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /><span>Hasta {roomCapacity} Huéspedes</span></div>
-                        <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-primary" /><span>1 Cama Doble</span></div>
-                        <div className="flex items-center gap-2"><Square className="h-4 w-4 text-primary" /><span>25 m²</span></div>
+                        <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-primary" /><span>{roomOffer.room.bedType || '1 Cama Doble'}</span></div>
+                        <div className="flex items-center gap-2"><Square className="h-4 w-4 text-primary" /><span>{roomOffer.room.size || '25'} m²</span></div>
                    </div>
 
                    {roomOffer.room.amenities && (

@@ -1,4 +1,49 @@
-import { AmadeusHotelOffer } from '@/lib/types';
+import { AmadeusHotelOffer, Room } from '@/lib/types';
+
+export const MOCK_ROOMS_DATA: Room[] = [
+    {
+        id: 'room-std-01',
+        checkInDate: '2024-10-10',
+        checkOutDate: '2024-10-15',
+        price: { currency: 'USD', total: '250.00', base: '220.00' },
+        room: {
+            type: '2_STANDARD',
+            description: { text: 'Habitación Estándar' },
+            amenities: ['WIFI', 'MINIBAR'],
+            photo: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            size: '25',
+            bedType: '1 Cama Doble',
+        }
+    },
+    {
+        id: 'room-dlx-02',
+        checkInDate: '2024-10-10',
+        checkOutDate: '2024-10-15',
+        price: { currency: 'USD', total: '380.00', base: '340.00' },
+        room: {
+            type: '2_DELUXE',
+            description: { text: 'Suite Deluxe con Vistas' },
+            amenities: ['WIFI', 'BALCONY', 'SAFE'],
+            photo: 'https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            size: '45',
+            bedType: '1 Cama King',
+        }
+    },
+    {
+        id: 'room-fam-03',
+        checkInDate: '2024-10-10',
+        checkOutDate: '2024-10-15',
+        price: { currency: 'USD', total: '450.00', base: '400.00' },
+        room: {
+            type: '4_FAMILY',
+            description: { text: 'Habitación Familiar' },
+            amenities: ['WIFI', 'KITCHENETTE'],
+            photo: 'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            size: '55',
+            bedType: '2 Camas Dobles',
+        }
+    },
+];
 
 export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
     {
