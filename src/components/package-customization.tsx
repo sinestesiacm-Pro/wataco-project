@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -21,7 +21,7 @@ const getMockHotelsForDestination = (destination: string) => {
         case 'paris':
             return MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase() === 'paris');
         case 'tokyo':
-             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('tokyo') || h.hotel.name?.toLowerCase().includes('ritz-carlton'));
+             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('ritz-carlton'));
         case 'serengeti':
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('amangiri'));
         case 'amalfi coast':
@@ -29,7 +29,7 @@ const getMockHotelsForDestination = (destination: string) => {
         case 'rio de janeiro':
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('beverly hills'));
         case 'maldives':
-             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('beverly hills') || h.hotel.name?.toLowerCase().includes('burj al arab'));
+             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('burj al arab'));
         default:
             return MOCK_HOTELS_DATA.slice(3, 6);
     }
@@ -49,6 +49,14 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
     const [selectedHotel, setSelectedHotel] = useState(() => availableHotels[0] || null);
     const [selectedFlight, setSelectedFlight] = useState(mockFlights[0]);
     const [expandedHotel, setExpandedHotel] = useState<string | null>(() => (availableHotels[0]?.id) || null);
+    
+    useEffect(() => {
+        if (availableHotels.length > 0 && !selectedHotel) {
+            setSelectedHotel(availableHotels[0]);
+            setExpandedHotel(availableHotels[0].id);
+        }
+    }, [availableHotels, selectedHotel]);
+
 
     if (!availableHotels || availableHotels.length === 0 || !selectedHotel) {
         return (
