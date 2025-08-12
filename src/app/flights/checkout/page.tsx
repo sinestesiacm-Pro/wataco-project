@@ -52,7 +52,7 @@ const PassengerForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
                       <Label htmlFor="birthDate">Fecha de Nacimiento</Label>
                       <Input id="birthDate" type="date" placeholder="DD/MM/AAAA" className="bg-white border-gray-300" />
                     </div>
-                    <div>
+                    <div className='pt-2'>
                         <Label>Género</Label>
                          <RadioGroup defaultValue="female" className="flex items-center gap-4 pt-2">
                             <div className="flex items-center space-x-2">
@@ -305,7 +305,10 @@ const PaymentForm = ({ isPackageBooking }: { isPackageBooking: boolean }) => {
 const PriceSummary = ({ isPackageBooking, extraServicesPrice, onConfirm }: { isPackageBooking: boolean, extraServicesPrice: number, onConfirm: (e: React.FormEvent) => void }) => {
     const searchParams = useSearchParams();
     const packageId = searchParams.get('packageId');
-    const hotelPrice = parseFloat(searchParams.get('hotelPrice') || '0');
+    const hotelPriceModifier = parseFloat(searchParams.get('hotelPrice') || '0');
+    const flightPriceModifier = parseFloat(searchParams.get('flightPrice') || '0');
+    const adults = parseInt(searchParams.get('adults') || '1', 10);
+    const children = parseInt(searchParams.get('children') || '0', 10);
     
     const [pkg, setPackage] = useState<PackageOffer | null>(null);
 
@@ -319,10 +322,17 @@ const PriceSummary = ({ isPackageBooking, extraServicesPrice, onConfirm }: { isP
     const isPkg = !!pkg;
     const addons = parseFloat(searchParams.get('addons') || '0');
     const flightPrice = isPkg ? 0 : 134.00; // Flight price is part of package
-    const taxes = isPkg && pkg ? (pkg.price + hotelPrice) * 0.19 : 46.80; // Example tax
     
-    const baseTotal = isPkg && pkg ? pkg.price + hotelPrice : flightPrice + taxes;
-    const total = baseTotal + addons + extraServicesPrice;
+    let baseTotal = 0;
+    if (isPkg && pkg) {
+        const packageBasePerPerson = pkg.price + hotelPriceModifier + flightPriceModifier;
+        baseTotal = packageBasePerPerson * adults; // Multiply by number of adults
+    } else {
+        baseTotal = flightPrice; // Fallback for non-package bookings
+    }
+    
+    const taxes = baseTotal * 0.19; // Example tax
+    const total = baseTotal + taxes + addons + extraServicesPrice;
     
     return (
         <Card className="sticky top-28 shadow-lg bg-white text-gray-800">
@@ -339,11 +349,12 @@ const PriceSummary = ({ isPackageBooking, extraServicesPrice, onConfirm }: { isP
                         </div>
                         <div className="flex justify-between font-semibold">
                             <span><Hotel className="inline-block mr-2 h-4 w-4"/>Hotel</span>
-                            <span>+${hotelPrice.toFixed(2)}</span>
+                            <span>Incluido</span>
                         </div>
+                        <Separator/>
                          <div className="flex justify-between text-gray-500">
-                            <span>Precio base paquete</span>
-                            <span>${pkg.price.toFixed(2)}</span>
+                            <span>Precio base paquete ({adults} Adulto{adults > 1 ? 's': ''})</span>
+                            <span>${baseTotal.toFixed(2)}</span>
                         </div>
                     </>
                  ) : (

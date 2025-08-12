@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Hotel, Plane, Star, ArrowRight, CheckCircle, Wifi, Utensils, Sparkles } from 'lucide-react';
+import { Hotel, Plane, Star, ArrowRight, CheckCircle, Wifi, Utensils, Sparkles, Users, Baby, Minus, Plus } from 'lucide-react';
 import type { PackageOffer } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -14,6 +14,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Image from 'next/image';
 import { Badge } from './ui/badge';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 const getMockHotelsForDestination = (destination: string) => {
     const destinationCity = destination.split(',')[0].toLowerCase();
@@ -29,9 +30,13 @@ const getMockHotelsForDestination = (destination: string) => {
 
     // Fallback logic if no direct city match is found
     switch (destinationCity) {
+        case 'tokyo':
+            return MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase().includes('kyoto'));
         case 'serengeti':
             // For a safari, any luxury remote hotel could work as a simulation
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('amangiri') || h.hotel.name?.toLowerCase().includes('salento'));
+        case 'rio de janeiro':
+            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('beverly hills'));
         case 'amalfi coast':
             // Simulating a Mediterranean luxury hotel
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('santorini'));
@@ -55,20 +60,19 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
     const router = useRouter();
     const availableHotels = useMemo(() => getMockHotelsForDestination(pkg.destination), [pkg.destination]);
 
-    const [selectedHotel, setSelectedHotel] = useState(() => availableHotels.length > 0 ? availableHotels[0] : null);
+    const [selectedHotel, setSelectedHotel] = useState<typeof availableHotels[0] | null>(null);
     const [selectedFlight, setSelectedFlight] = useState(mockFlights[0]);
     const [expandedHotel, setExpandedHotel] = useState<string | null>(null);
-    
+
+    const [adults, setAdults] = useState(1);
+    const [children, setChildren] = useState(0);
+
     useEffect(() => {
-        if (availableHotels.length > 0) {
+        if (availableHotels.length > 0 && !selectedHotel) {
             setSelectedHotel(availableHotels[0]);
             setExpandedHotel(availableHotels[0].id);
-        } else {
-            setSelectedHotel(null);
-            setExpandedHotel(null);
         }
-    }, [availableHotels]);
-
+    }, [availableHotels, selectedHotel]);
 
     if (!availableHotels || availableHotels.length === 0 || !selectedHotel) {
         return (
@@ -90,13 +94,16 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
         return currentPrice - basePrice;
     }
     
-    const finalPrice = pkg.price + getPriceModifier(selectedHotel.id) + selectedFlight.priceModifier;
+    const finalPricePerPerson = pkg.price + getPriceModifier(selectedHotel.id) + selectedFlight.priceModifier;
+    const finalTotalPrice = finalPricePerPerson * adults; // Simple calculation, can be more complex
 
     const handleBooking = () => {
         const params = new URLSearchParams({
             packageId: pkg.id,
             hotelPrice: getPriceModifier(selectedHotel.id).toString(),
             flightPrice: selectedFlight.priceModifier.toString(),
+            adults: adults.toString(),
+            children: children.toString(),
         });
         router.push(`/flights/checkout?${params.toString()}`);
     }
@@ -105,14 +112,58 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
         setSelectedHotel(availableHotels.find(h => h.id === hotelId)!);
         setExpandedHotel(hotelId);
     }
+    
+    const totalTravelers = adults + children;
+    const travelerText = `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`;
+
 
     return (
         <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold font-headline">Personaliza tu Paquete</CardTitle>
-                <CardDescription className="text-white/80">Ajusta tu hotel y vuelo para crear el viaje perfecto. El precio se actualizará automáticamente.</CardDescription>
+                <CardDescription className="text-white/80">Ajusta tu hotel, vuelo y número de viajeros para crear el viaje perfecto. El precio se actualizará automáticamente.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
+                {/* Passenger Selection */}
+                 <div className="space-y-4">
+                    <h3 className="text-xl font-semibold flex items-center gap-2"><Users /> ¿Quiénes viajan?</h3>
+                     <Popover>
+                        <PopoverTrigger asChild>
+                            <Button variant="outline" className="w-full md:w-auto justify-start text-left font-normal bg-black/20 text-white border-white/30 hover:bg-black/30 hover:text-white">
+                                <Users className="mr-2 h-4 w-4" />
+                                {travelerText}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-80">
+                             <div className="grid gap-4">
+                                <div className="space-y-2">
+                                    <h4 className="font-medium leading-none">Pasajeros</h4>
+                                    <p className="text-sm text-muted-foreground">Selecciona el número de viajeros.</p>
+                                </div>
+                                <div className="grid gap-4">
+                                    <div className="flex items-center justify-between">
+                                        <p className="font-medium">Adultos</p>
+                                        <div className="flex items-center gap-2">
+                                            <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}><Minus className="h-4 w-4" /></Button>
+                                            <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                                            <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}><Plus className="h-4 w-4" /></Button>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2"><Baby className="h-5 w-5" /><p className="font-medium">Niños</p></div>
+                                        <div className="flex items-center gap-2">
+                                            <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => Math.max(0, v - 1))} disabled={children <= 0}><Minus className="h-4 w-4" /></Button>
+                                            <span className="font-bold text-lg w-4 text-center">{children}</span>
+                                            <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setChildren(v => v + 1)}><Plus className="h-4 w-4" /></Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+
+
                 {/* Hotel Selection */}
                 <div className="space-y-4">
                     <h3 className="text-xl font-semibold flex items-center gap-2"><Hotel /> Elige tu Hotel</h3>
@@ -191,8 +242,8 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
                 {/* Final Price and Booking */}
                 <div className="pt-6 border-t border-white/20 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div>
-                        <p className="text-sm text-white/80">Precio final por persona</p>
-                        <p className="text-4xl font-bold text-white">${finalPrice.toFixed(2)}</p>
+                        <p className="text-sm text-white/80">Precio total para {travelerText}</p>
+                        <p className="text-4xl font-bold text-white">${finalTotalPrice.toFixed(2)}</p>
                     </div>
                     <Button size="lg" className="w-full sm:w-auto bg-success hover:bg-success/90" onClick={handleBooking}>
                         <CheckCircle className="mr-2 h-5 w-5"/>
