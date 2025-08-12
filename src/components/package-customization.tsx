@@ -23,15 +23,20 @@ const getMockHotelsForDestination = (destination: string) => {
         case 'tokyo':
              return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('ritz-carlton'));
         case 'serengeti':
+             // Simulating a luxury safari lodge experience
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('amangiri'));
         case 'amalfi coast':
+             // Simulating a Mediterranean luxury hotel
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('santorini'));
         case 'rio de janeiro':
+            // Simulating a high-end city hotel
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('beverly hills'));
         case 'maldives':
+             // Simulating an iconic luxury resort
              return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('burj al arab'));
         default:
-            return MOCK_HOTELS_DATA.slice(3, 6);
+             // Fallback for any other destination
+            return MOCK_HOTELS_DATA.slice(0, 3);
     }
 }
 
@@ -48,10 +53,10 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
 
     const [selectedHotel, setSelectedHotel] = useState(() => availableHotels[0] || null);
     const [selectedFlight, setSelectedFlight] = useState(mockFlights[0]);
-    const [expandedHotel, setExpandedHotel] = useState<string | null>(() => (availableHotels[0]?.id) || null);
+    const [expandedHotel, setExpandedHotel] = useState<string | null>(null);
     
     useEffect(() => {
-        if (availableHotels.length > 0 && !selectedHotel) {
+        if (availableHotels.length > 0 && (!selectedHotel || !availableHotels.find(h => h.id === selectedHotel.id))) {
             setSelectedHotel(availableHotels[0]);
             setExpandedHotel(availableHotels[0].id);
         }
@@ -109,7 +114,7 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
                             const hotel = hotelOffer.hotel;
                             const priceModifier = getPriceModifier(hotelOffer.id);
                             return (
-                               <Collapsible key={hotel.hotelId} open={expandedHotel === hotelOffer.id}>
+                               <Collapsible key={hotel.hotelId} open={expandedHotel === hotelOffer.id} onOpenChange={(isOpen) => setExpandedHotel(isOpen ? hotelOffer.id : null)}>
                                  <CollapsibleTrigger asChild>
                                      <Label htmlFor={hotelOffer.id} className="flex items-center p-4 border border-white/20 rounded-lg cursor-pointer hover:bg-white/10 has-[:checked]:bg-primary/20 has-[:checked]:border-primary transition-all">
                                         <RadioGroupItem value={hotelOffer.id} id={hotelOffer.id} className="mr-4"/>
