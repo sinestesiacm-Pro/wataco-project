@@ -17,20 +17,24 @@ import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 
 const getMockHotelsForDestination = (destination: string) => {
     const destinationCity = destination.split(',')[0].toLowerCase();
+    
+    // Find hotels where the city name matches the destination
+    const cityMatch = MOCK_HOTELS_DATA.filter(h => 
+        h.hotel.address.cityName.toLowerCase() === destinationCity
+    );
+
+    if (cityMatch.length > 0) {
+        return cityMatch;
+    }
+
+    // Fallback logic if no direct city match is found
     switch (destinationCity) {
-        case 'paris':
-            return MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase() === 'paris');
-        case 'tokyo':
-             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('ritz-carlton'));
         case 'serengeti':
-             // Simulating a luxury safari lodge experience
-            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('amangiri'));
+            // For a safari, any luxury remote hotel could work as a simulation
+            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('amangiri') || h.hotel.name?.toLowerCase().includes('salento'));
         case 'amalfi coast':
-             // Simulating a Mediterranean luxury hotel
+            // Simulating a Mediterranean luxury hotel
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('santorini'));
-        case 'rio de janeiro':
-            // Simulating a high-end city hotel
-            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('beverly hills'));
         case 'maldives':
              // Simulating an iconic luxury resort
              return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('burj al arab'));
@@ -51,16 +55,19 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
     const router = useRouter();
     const availableHotels = useMemo(() => getMockHotelsForDestination(pkg.destination), [pkg.destination]);
 
-    const [selectedHotel, setSelectedHotel] = useState(() => availableHotels[0] || null);
+    const [selectedHotel, setSelectedHotel] = useState(() => availableHotels.length > 0 ? availableHotels[0] : null);
     const [selectedFlight, setSelectedFlight] = useState(mockFlights[0]);
     const [expandedHotel, setExpandedHotel] = useState<string | null>(null);
     
     useEffect(() => {
-        if (availableHotels.length > 0 && (!selectedHotel || !availableHotels.find(h => h.id === selectedHotel.id))) {
+        if (availableHotels.length > 0) {
             setSelectedHotel(availableHotels[0]);
             setExpandedHotel(availableHotels[0].id);
+        } else {
+            setSelectedHotel(null);
+            setExpandedHotel(null);
         }
-    }, [availableHotels, selectedHotel]);
+    }, [availableHotels]);
 
 
     if (!availableHotels || availableHotels.length === 0 || !selectedHotel) {
