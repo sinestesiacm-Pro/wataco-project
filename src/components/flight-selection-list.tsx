@@ -59,7 +59,7 @@ interface FlightCardProps {
   title: string;
 }
 
-const FlightCard: React.FC<FlightCardProps> = ({ flight, dictionaries, onSelectFlight, title }) => {
+const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSelectFlight, title }: FlightCardProps) {
     const isReturnFlight = title.toLowerCase().includes('vuelta');
     const itinerary = (isReturnFlight && flight.itineraries.length > 1) ? flight.itineraries[1] : flight.itineraries[0];
     const firstSegment = itinerary.segments[0];
@@ -136,7 +136,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, dictionaries, onSelectF
           </Card>
         </Collapsible>
     );
-};
+});
 
 
 export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight }: {

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -9,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Card, CardContent } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Label } from './ui/label';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from './ui/button';
 
@@ -37,27 +38,27 @@ export default function ProfileSidebar() {
 
   const userInitial = user?.displayName ? user.displayName[0].toUpperCase() : <Users className="h-5 w-5" />;
 
-  const handleLanguageChange = (value: string) => {
+  const handleLanguageChange = useCallback((value: string) => {
     setLanguage(value);
     toast({
         title: 'Idioma Actualizado',
         description: `La selección de idioma es una demostración. La aplicación permanecerá en español.`,
     });
-  };
+  }, [toast]);
 
-  const handleCurrencyChange = (value: string) => {
+  const handleCurrencyChange = useCallback((value: string) => {
     setCurrency(value);
      toast({
         title: 'Moneda Actualizada',
         description: `La selección de moneda es una demostración. Los precios seguirán mostrándose en USD.`,
     });
-  }
+  }, [toast]);
 
-  const handleAvatarClick = () => {
+  const handleAvatarClick = useCallback(() => {
       fileInputRef.current?.click();
-  }
+  }, []);
   
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (file) {
           console.log("Selected file:", file.name);
@@ -67,7 +68,7 @@ export default function ProfileSidebar() {
               variant: "success",
           })
       }
-  }
+  }, [toast]);
 
   return (
     <div className="flex flex-col h-full">
