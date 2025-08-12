@@ -47,9 +47,22 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
     const router = useRouter();
     const availableHotels = useMemo(() => getMockHotelsForDestination(pkg.destination), [pkg.destination]);
 
-    const [selectedHotel, setSelectedHotel] = useState(availableHotels[0]);
+    const [selectedHotel, setSelectedHotel] = useState(() => availableHotels[0] || null);
     const [selectedFlight, setSelectedFlight] = useState(mockFlights[0]);
-    const [expandedHotel, setExpandedHotel] = useState<string | null>(availableHotels[0].hotel.hotelId);
+    const [expandedHotel, setExpandedHotel] = useState<string | null>(() => availableHotels[0]?.hotel.hotelId || null);
+
+    if (!availableHotels || availableHotels.length === 0 || !selectedHotel) {
+        return (
+            <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
+                <CardHeader>
+                    <CardTitle className="text-2xl font-bold font-headline">Personaliza tu Paquete</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-white/80">Actualmente no hay hoteles sugeridos para este destino. Por favor, busca vuelos y hoteles por separado.</p>
+                </CardContent>
+            </Card>
+        );
+    }
 
     const getPriceModifier = (hotelId: string) => {
         const basePrice = availableHotels[0]?.offers[0]?.price.total ? parseFloat(availableHotels[0].offers[0].price.total) : 0;
