@@ -59,12 +59,17 @@ export function Header() {
 
   const currentTitle = getTitleFromPath(pathname);
   const isHomePage = pathname === '/';
+  const isLight = pathname.startsWith('/flights/checkout') || pathname.startsWith('/flights/select');
+  
+  const textColor = isLight ? 'text-gray-800' : 'text-white';
 
   return (
     <header 
       className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-colors duration-300",
-        "bg-white/20 backdrop-blur-xl shadow-lg"
+        isLight 
+            ? "bg-white/80 backdrop-blur-xl shadow-lg" 
+            : "bg-white/20 backdrop-blur-xl shadow-lg"
       )}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
@@ -80,9 +85,9 @@ export function Header() {
           <div className="flex-1 text-center">
              <div className="hidden md:flex justify-center">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
-                  <TabsList className="bg-white/20 backdrop-blur-lg">
+                  <TabsList className={cn("bg-white/20 backdrop-blur-lg", isLight ? "bg-gray-200" : "bg-white/20")}>
                     {TABS.map((item) => (
-                      <TabsTrigger key={item.id} value={item.id} className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-white">
+                      <TabsTrigger key={item.id} value={item.id} className={cn("gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground", textColor)}>
                         <item.icon className="h-4 w-4" />
                         {item.label}
                       </TabsTrigger>
@@ -90,14 +95,14 @@ export function Header() {
                   </TabsList>
                 </Tabs>
               </div>
-              <h1 className="text-2xl font-bold font-headline tracking-wider text-white md:hidden">{currentTitle}</h1>
+              <h1 className={cn("text-2xl font-bold font-headline tracking-wider md:hidden", textColor)}>{currentTitle}</h1>
           </div>
           
           <div className="flex-1 flex items-center justify-end gap-2">
             {user ? (
               <UserNav />
             ) : (
-              <Button asChild className="text-white bg-white/20 hover:bg-white/30">
+              <Button asChild className={cn("bg-white/20 hover:bg-white/30", textColor, isLight && "bg-gray-200 hover:bg-gray-300")}>
                 <Link href="/login">
                   <LogIn className="mr-0 sm:mr-2 h-4 w-4"/>
                   <span className="hidden sm:inline">Sign In</span>
@@ -110,5 +115,3 @@ export function Header() {
     </header>
   );
 }
-
-    

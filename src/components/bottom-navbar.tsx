@@ -1,4 +1,3 @@
-
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -12,6 +11,8 @@ export function BottomNavbar() {
   
   const isOnHomePage = pathname === '/';
   const activeTab = searchParams.get('tab') || 'Flights';
+
+  const isLight = pathname.startsWith('/flights/checkout') || pathname.startsWith('/flights/select');
 
   const handleTabClick = (tab: string) => {
     const params = new URLSearchParams(window.location.search);
@@ -30,7 +31,10 @@ export function BottomNavbar() {
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 z-50 bg-white/40 backdrop-blur-xl shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)] md:hidden"
+      className={cn(
+        "fixed bottom-0 left-0 right-0 z-50 shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)] md:hidden",
+        isLight ? "bg-white/80 backdrop-blur-xl" : "bg-white/40 backdrop-blur-xl"
+      )}
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="flex justify-around items-center h-16">
@@ -40,7 +44,9 @@ export function BottomNavbar() {
             onClick={() => handleTabClick(id)}
             className={cn(
               "flex flex-col items-center justify-center gap-1 w-full h-full text-muted-foreground transition-colors",
-              isOnHomePage && activeTab === id ? "text-primary scale-110" : "text-white/80"
+              isOnHomePage && activeTab === id 
+                ? "text-primary scale-110" 
+                : isLight ? "text-muted-foreground" : "text-white/80"
             )}
           >
             <Icon className="h-5 w-5" />

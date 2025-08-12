@@ -415,21 +415,17 @@ function CheckoutPageContent() {
         });
         setTimeout(() => router.push('/'), 2000);
     };
-
-    const backgroundClass = isPackageBooking
-      ? 'bg-packages-gradient'
-      : '';
-
+    
     return (
-      <div className={cn("min-h-screen relative pt-24 pb-24", backgroundClass)}>
+      <div className={cn("min-h-screen relative pt-24 pb-24 bg-background")}>
         <div className="relative z-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center mb-6">
-                <Button asChild variant="outline" className={cn("mr-4", isPackageBooking ? 'bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white' : 'bg-background/80')}>
+                <Button asChild variant="outline" className="mr-4 bg-background/80">
                     <Link href="/">
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>
                 </Button>
-                <h1 className={cn("text-3xl font-bold font-headline", isPackageBooking ? 'text-white' : 'text-gray-800')}>Finaliza tu Compra</h1>
+                <h1 className="text-3xl font-bold font-headline text-gray-800">Finaliza tu Compra</h1>
             </div>
             
             <form onSubmit={handleConfirmBooking}>
