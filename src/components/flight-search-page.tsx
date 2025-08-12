@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { addDays, format, parse } from 'date-fns';
 import type { Airport } from '@/lib/types';
 import { searchAirports } from '@/app/actions';
@@ -29,7 +29,7 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
   <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{children}</div>
 );
 
-export default function FlightSearchPage() {
+const FlightSearchPage = React.memo(function FlightSearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -89,7 +89,7 @@ export default function FlightSearchPage() {
   }, [searchParams, router]);
 
 
-  const fetchSuggestions = async (query: string) => {
+  const fetchSuggestions = useCallback(async (query: string) => {
     if (query.length < 2) {
       setSuggestions([]);
       return;
@@ -104,19 +104,19 @@ export default function FlightSearchPage() {
       setSuggestions([]);
     }
     setSuggestionsLoading(false);
-  };
+  }, []);
   
   useEffect(() => {
     if (activeInputRef.current === 'origin') {
       fetchSuggestions(debouncedOriginQuery);
     }
-  }, [debouncedOriginQuery]);
+  }, [debouncedOriginQuery, fetchSuggestions]);
 
   useEffect(() => {
      if (activeInputRef.current === 'destination') {
       fetchSuggestions(debouncedDestinationQuery);
     }
-  }, [debouncedDestinationQuery]);
+  }, [debouncedDestinationQuery, fetchSuggestions]);
 
 
   useEffect(() => {
@@ -130,7 +130,7 @@ export default function FlightSearchPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
-  const handleSelectSuggestion = (airport: Airport, type: 'origin' | 'destination') => {
+  const handleSelectSuggestion = useCallback((airport: Airport, type: 'origin' | 'destination') => {
     const locationName = airport.address?.cityName || airport.name;
     const countryName = airport.address?.countryName || '';
     const query = [locationName, countryName].filter(Boolean).join(', ');
@@ -145,9 +145,9 @@ export default function FlightSearchPage() {
     setActiveInput(null);
     activeInputRef.current = null;
     setSuggestions([]);
-  };
+  }, []);
 
-  const handleManualSearch = (e: React.FormEvent) => {
+  const handleManualSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!origin || !destination || !date?.from || (isRoundTrip && !date?.to)) {
       toast({
@@ -173,12 +173,12 @@ export default function FlightSearchPage() {
     if (infants > 0) query.set('infants', infants.toString());
     
     router.push(`/flights/select?${query.toString()}`);
-  };
+  }, [origin, destination, date, isRoundTrip, adults, children, infants, originQuery, destinationQuery, router, toast]);
 
-  const totalTravelers = adults + children + infants;
-  const travelerText = `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`;
+  const totalTravelers = useMemo(() => adults + children + infants, [adults, children, infants]);
+  const travelerText = useMemo(() => `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`, [totalTravelers]);
 
-  const renderSuggestions = (type: 'origin' | 'destination') => (
+  const renderSuggestions = useCallback((type: 'origin' | 'destination') => (
       <div ref={popoverContentRef} className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
         {suggestionsLoading ? (
           <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
@@ -207,14 +207,14 @@ export default function FlightSearchPage() {
            <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
         )}
       </div>
-  );
+  ), [suggestions, suggestionsLoading, handleSelectSuggestion]);
 
-  const handleSwapDestinations = () => {
+  const handleSwapDestinations = useCallback(() => {
     setOrigin(destination);
     setDestination(origin);
     setOriginQuery(destinationQuery);
     setDestinationQuery(originQuery);
-  };
+  }, [origin, destination, originQuery, destinationQuery]);
 
   return (
       <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
@@ -391,6 +391,7 @@ export default function FlightSearchPage() {
         </form>
       </div>
   );
-}
+});
 
+export default FlightSearchPage;
     

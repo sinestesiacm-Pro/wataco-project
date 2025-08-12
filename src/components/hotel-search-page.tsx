@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { addDays, format } from 'date-fns';
 import type { AmadeusHotelOffer, Airport } from '@/lib/types';
 import { searchHotels, searchHotelDestinations } from '@/app/actions';
@@ -36,7 +36,7 @@ type HotelFiltersState = {
   amenities: string[];
 };
 
-export default function HotelSearchPage() {
+const HotelSearchPage = React.memo(function HotelSearchPage() {
   const router = useRouter();
   const isMobile = useIsMobile();
 
@@ -62,35 +62,35 @@ export default function HotelSearchPage() {
   const checkInDate = date?.from;
   const checkOutDate = date?.to;
 
-  useEffect(() => {
-    const fetchSuggestions = async (query: string) => {
-      if (query.length < 2) {
-        setSuggestions([]);
-        return;
+  const fetchSuggestions = useCallback(async (query: string) => {
+    if (query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+    setSuggestionsLoading(true);
+    const result = await searchHotelDestinations(query);
+    if (result.success && result.data) {
+      if (activeInput) {
+          setSuggestions(result.data);
       }
-      setSuggestionsLoading(true);
-      const result = await searchHotelDestinations(query);
-      if (result.success && result.data) {
-        if (activeInput) {
-            setSuggestions(result.data);
-        }
-      } else {
-        setSuggestions([]);
-        toast({
-            title: "Error de Búsqueda de Ciudad",
-            description: result.error || "No se pudieron obtener las sugerencias.",
-            variant: "destructive",
-        });
-      }
-      setSuggestionsLoading(false);
-    };
+    } else {
+      setSuggestions([]);
+      toast({
+          title: "Error de Búsqueda de Ciudad",
+          description: result.error || "No se pudieron obtener las sugerencias.",
+          variant: "destructive",
+      });
+    }
+    setSuggestionsLoading(false);
+  }, [activeInput, toast]);
 
+  useEffect(() => {
     if (activeInput === 'destination' && debouncedDestinationQuery) {
       fetchSuggestions(debouncedDestinationQuery);
     } else {
        setSuggestions([]);
     }
-  }, [debouncedDestinationQuery, activeInput, toast]);
+  }, [debouncedDestinationQuery, activeInput, fetchSuggestions]);
 
 
   useEffect(() => {
@@ -103,15 +103,15 @@ export default function HotelSearchPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
-  const handleSelectSuggestion = (airport: Airport) => {
+  const handleSelectSuggestion = useCallback((airport: Airport) => {
     setDestination(airport);
     const query = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
     setDestinationQuery(query || airport.name);
     setActiveInput(null);
     setSuggestions([]);
-  };
+  }, []);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = useCallback((e: React.FormEvent) => {
       e.preventDefault();
       if ((!destination && !destinationQuery) || !date?.from || !date?.to) {
         toast({
@@ -142,13 +142,13 @@ export default function HotelSearchPage() {
         destinationName: destinationQuery,
       });
       router.push(`/hotels/search?${params.toString()}`);
-  }
+  }, [destination, destinationQuery, date, adults, children, router, toast]);
   
-  const totalGuests = adults + children;
-  const travelerText = `${totalGuests} huésped${totalGuests > 1 ? 's' : ''}`;
+  const totalGuests = useMemo(() => adults + children, [adults, children]);
+  const travelerText = useMemo(() => `${totalGuests} huésped${totalGuests > 1 ? 's' : ''}`, [totalGuests]);
 
 
-  const SuggestionsList = () => (
+  const SuggestionsList = useCallback(() => (
     <div className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
@@ -176,7 +176,7 @@ export default function HotelSearchPage() {
         <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
       )}
     </div>
-  );
+  ), [suggestions, suggestionsLoading, handleSelectSuggestion]);
 
   return (
     <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
@@ -299,4 +299,6 @@ export default function HotelSearchPage() {
         </form>
     </div>
   );
-}
+});
+
+export default HotelSearchPage;

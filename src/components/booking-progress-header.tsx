@@ -3,6 +3,7 @@
 
 import { cn } from "@/lib/utils";
 import { CheckCircle, Circle, Plane } from "lucide-react";
+import React from "react";
 
 interface BookingProgressHeaderProps {
   step: 'outbound' | 'return' | 'review';
@@ -24,7 +25,7 @@ const Step = ({ title, isActive, isCompleted }: { title: string; isActive: boole
     </div>
 );
 
-export function BookingProgressHeader({ step, isRoundTrip, origin, destination }: BookingProgressHeaderProps) {
+export const BookingProgressHeader = React.memo(function BookingProgressHeader({ step, isRoundTrip, origin, destination }: BookingProgressHeaderProps) {
   const outboundCompleted = step === 'return' || step === 'review';
   const returnCompleted = step === 'review' && isRoundTrip;
 
@@ -64,4 +65,4 @@ export function BookingProgressHeader({ step, isRoundTrip, origin, destination }
       </div>
     </div>
   );
-}
+});
