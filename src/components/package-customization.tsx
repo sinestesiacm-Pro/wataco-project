@@ -23,16 +23,15 @@ const getMockHotelsForDestination = (destination: string) => {
         case 'tokyo':
              return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('tokyo') || h.hotel.name?.toLowerCase().includes('ritz-carlton'));
         case 'serengeti':
-            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('amangiri')); // No direct match, using a similar "remote luxury" vibe
+            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('amangiri'));
         case 'amalfi coast':
-            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('santorini')); // No direct match, using similar mediterranean style
+            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('santorini'));
         case 'rio de janeiro':
-            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('beverly hills')); // No direct match, using a glamorous vibe
+            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('beverly hills'));
         case 'maldives':
              return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('beverly hills') || h.hotel.name?.toLowerCase().includes('burj al arab'));
         default:
-            // Fallback to a default set if no specific destination matches
-            return MOCK_HOTELS_DATA.slice(0, 3);
+            return MOCK_HOTELS_DATA.slice(3, 6);
     }
 }
 
@@ -49,7 +48,7 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
 
     const [selectedHotel, setSelectedHotel] = useState(() => availableHotels[0] || null);
     const [selectedFlight, setSelectedFlight] = useState(mockFlights[0]);
-    const [expandedHotel, setExpandedHotel] = useState<string | null>(() => availableHotels[0]?.hotel.hotelId || null);
+    const [expandedHotel, setExpandedHotel] = useState<string | null>(() => (availableHotels[0]?.id) || null);
 
     if (!availableHotels || availableHotels.length === 0 || !selectedHotel) {
         return (
@@ -133,7 +132,7 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
                                                 <CarouselContent>
                                                     {(hotel.media || []).map((img, i) => (
                                                         <CarouselItem key={i} className="relative aspect-video">
-                                                            <Image src={img.uri} alt={`${hotel.name} image ${i+1}`} layout="fill" objectFit="cover" />
+                                                            <Image src={img.uri} alt={`${hotel.name} image ${i+1}`} fill objectFit="cover" />
                                                         </CarouselItem>
                                                     ))}
                                                 </CarouselContent>
