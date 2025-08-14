@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';
@@ -30,8 +31,8 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
-    const originCity = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
-    const destinationCity = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
+    const originCityName = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
+    const destinationCityName = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
 
     return (
         <Card className="bg-card text-card-foreground">
@@ -54,10 +55,10 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
                     </div>
                 </div>
                 <div className="flex items-center justify-between">
-                     <div className="text-center">
+                     <div className="text-left">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-card-foreground">{firstSegment.departure.iataCode}</p>
-                        <p className="text-xs text-muted-foreground">{originCity}</p>
+                        <p className="text-xs text-muted-foreground truncate">{originCityName}</p>
                     </div>
                     <div className="flex-grow flex flex-col items-center text-muted-foreground px-4">
                         <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
@@ -66,10 +67,10 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
                         </div>
                          <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
                     </div>
-                     <div className="text-center">
+                     <div className="text-right">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-card-foreground">{lastSegment.arrival.iataCode}</p>
-                        <p className="text-xs text-muted-foreground">{destinationCity}</p>
+                        <p className="text-xs text-muted-foreground truncate">{destinationCityName}</p>
                     </div>
                 </div>
             </CardContent>

@@ -65,6 +65,8 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
+    const originCityName = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
+    const destinationCityName = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
 
     const stops = itinerary.segments.length - 1;
     const stopInfoText = stops > 1 ? `${stops} escalas` : stops === 1 ? '1 escala' : 'Directo';
@@ -91,6 +93,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     <div className="text-left">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-gray-600">{firstSegment.departure.iataCode}</p>
+                        <p className="text-xs text-gray-500 truncate">{originCityName}</p>
                     </div>
 
                     <CollapsibleTrigger asChild>
@@ -109,6 +112,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     <div className="text-right">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-gray-600">{lastSegment.arrival.iataCode}</p>
+                        <p className="text-xs text-gray-500 truncate">{destinationCityName}</p>
                     </div>
                 </div>
 
