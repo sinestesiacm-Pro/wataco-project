@@ -12,7 +12,7 @@ export function BottomNavbar() {
   const isOnHomePage = pathname === '/';
   const activeTab = searchParams.get('tab') || 'Flights';
 
-  const isLight = pathname.startsWith('/flights/checkout') || pathname.startsWith('/flights/select');
+  const isLight = pathname.startsWith('/flights/checkout') || pathname.startsWith('/flights/select') || /^\/hotels\/.*\/offers/.test(pathname);
 
   const handleTabClick = (tab: string) => {
     const params = new URLSearchParams(window.location.search);

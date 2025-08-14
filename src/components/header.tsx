@@ -53,13 +53,14 @@ export function Header() {
     if (path.startsWith('/profile')) return 'My Profile';
     if (path.startsWith('/login') || path.startsWith('/signup')) return 'Access';
     if (path.startsWith('/flights/checkout')) return 'Finalize Purchase';
+    if (/^\/hotels\/.*\/offers/.test(pathname)) return 'Select Room';
     
     return 'BE ON TRIP';
   }
 
   const currentTitle = getTitleFromPath(pathname);
   const isHomePage = pathname === '/';
-  const isLight = pathname.startsWith('/flights/checkout') || pathname.startsWith('/flights/select');
+  const isLight = pathname.startsWith('/flights/checkout') || pathname.startsWith('/flights/select') || /^\/hotels\/.*\/offers/.test(pathname);
   
   const textColor = isLight ? 'text-gray-800' : 'text-white';
 
@@ -78,7 +79,7 @@ export function Header() {
           
           <div className="flex-1 flex justify-start">
              <Link href="/">
-                <Icons.logo width={120} height={40} />
+                <Icons.logo width={120} height={40} className={cn(isLight && "invert-[60%]")} />
              </Link>
           </div>
           

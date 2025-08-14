@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 const BeOnTripLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
   <Image
@@ -6,7 +7,7 @@ const BeOnTripLogo = ({ width, height, className }: { width: number; height: num
     alt="BE ON TRIP Logo"
     width={width}
     height={height}
-    className={className}
+    className={cn(className)}
     priority
   />
 );
@@ -26,5 +27,3 @@ export const Icons = {
   icon: BeOnTripLogo,
   google: GoogleLogo,
 };
-
-    
