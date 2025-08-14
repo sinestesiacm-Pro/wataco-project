@@ -205,4 +205,3 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
     </Dialog>
   );
 }
-    
