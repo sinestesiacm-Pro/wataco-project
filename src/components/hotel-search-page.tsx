@@ -23,19 +23,6 @@ import type { DateRange } from 'react-day-picker';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const InputGroup = ({ children }: { children: React.ReactNode }) => (
-  <div className="relative flex flex-col w-full">{children}</div>
-);
-
-const InputIcon = ({ children }: { children: React.ReactNode }) => (
-  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{children}</div>
-);
-
-type HotelFiltersState = {
-  stars: number[];
-  amenities: string[];
-};
-
 const HotelSearchPage = React.memo(function HotelSearchPage() {
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -55,9 +42,9 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 
   const [suggestions, setSuggestions] = useState<Airport[]>([]);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
-  const [activeInput, setActiveInput] = useState<'destination' | null>(null);
+  const [isDestinationFocused, setIsDestinationFocused] = useState(false);
+
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
-  const destinationRef = useRef<HTMLDivElement>(null);
   
   const checkInDate = date?.from;
   const checkOutDate = date?.to;
@@ -70,9 +57,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
     setSuggestionsLoading(true);
     const result = await searchHotelDestinations(query);
     if (result.success && result.data) {
-      if (activeInput) {
-          setSuggestions(result.data);
-      }
+      setSuggestions(result.data);
     } else {
       setSuggestions([]);
       toast({
@@ -82,33 +67,20 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
       });
     }
     setSuggestionsLoading(false);
-  }, [activeInput, toast]);
+  }, [toast]);
 
   useEffect(() => {
-    if (activeInput === 'destination' && debouncedDestinationQuery) {
+    if (isDestinationFocused) {
       fetchSuggestions(debouncedDestinationQuery);
-    } else {
-       setSuggestions([]);
     }
-  }, [debouncedDestinationQuery, activeInput, fetchSuggestions]);
+  }, [debouncedDestinationQuery, isDestinationFocused, fetchSuggestions]);
 
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (destinationRef.current && !destinationRef.current.contains(event.target as Node)) {
-        setActiveInput(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-  
   const handleSelectSuggestion = useCallback((airport: Airport) => {
     setDestination(airport);
     const query = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
     setDestinationQuery(query || airport.name);
-    setActiveInput(null);
     setSuggestions([]);
+    setIsDestinationFocused(false);
   }, []);
 
   const handleFormSubmit = useCallback((e: React.FormEvent) => {
@@ -177,11 +149,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
       )}
     </div>
   ), [suggestions, suggestionsLoading, handleSelectSuggestion]);
-  
-  const handleFocus = useCallback(() => {
-      setActiveInput('destination');
-  }, []);
-  
+    
   const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     e.currentTarget.select();
   };
@@ -190,10 +158,10 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
     <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
-            <div className="w-full lg:col-span-5 relative" ref={destinationRef}>
-                <Popover open={activeInput === 'destination'} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
+            <div className="w-full lg:col-span-5 relative">
+                <Popover open={isDestinationFocused && destinationQuery.length > 1} onOpenChange={setIsDestinationFocused}>
                     <PopoverTrigger asChild>
-                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text" onClick={() => setActiveInput('destination')}>
+                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
                             <MapPin className="h-6 w-6 mr-4 text-primary" />
                             <div>
                                 <p className="text-xs text-gray-700">Destination</p>
@@ -202,7 +170,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
                                     type="text" 
                                     value={destinationQuery} 
                                     onChange={e => setDestinationQuery(e.target.value)}
-                                    onFocus={handleFocus}
+                                    onFocus={() => setIsDestinationFocused(true)}
                                     onClick={handleInputClick}
                                     placeholder="Ej. Nueva York" 
                                     className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
@@ -211,11 +179,9 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
                             </div>
                         </div>
                     </PopoverTrigger>
-                    {destinationQuery.length > 1 && (
                       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
                         <SuggestionsList />
                       </PopoverContent>
-                    )}
                 </Popover>
             </div>
             

@@ -19,15 +19,7 @@ import React from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const InputGroup = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <div className={cn("relative flex flex-col w-full", className)}>{children}</div>
-);
-
-const InputIcon = ({ children }: { children: React.ReactNode }) => (
-  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{children}</div>
-);
-
-export default function PackagesSearchPage() {
+const PackagesSearchPage = React.memo(function PackagesSearchPage() {
   const [origin, setOrigin] = useState('MAD');
   const [destination, setDestination] = useState('');
   const [originQuery, setOriginQuery] = useState('Madrid, Spain');
@@ -45,47 +37,46 @@ export default function PackagesSearchPage() {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const [suggestions, setSuggestions] = useState<Airport[]>([]);
+  const [originSuggestions, setOriginSuggestions] = useState<Airport[]>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<Airport[]>([]);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
-  const [activeInput, setActiveInput] = useState<'origin' | 'destination' | null>(null);
+  
+  const [isOriginFocused, setIsOriginFocused] = useState(false);
+  const [isDestinationFocused, setIsDestinationFocused] = useState(false);
+  
   const debouncedOriginQuery = useDebounce(originQuery, 300);
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
-  const suggestionsRef = useRef<HTMLDivElement>(null);
   const searchIdRef = useRef(0);
 
-  const fetchSuggestions = useCallback(async (query: string, subType: 'CITY,AIRPORT' | 'CITY' = 'CITY,AIRPORT') => {
+  const fetchSuggestions = useCallback(async (query: string, type: 'origin' | 'destination') => {
       if (query.length < 2) {
-        setSuggestions([]);
+        type === 'origin' ? setOriginSuggestions([]) : setDestinationSuggestions([]);
         return;
       }
       setSuggestionsLoading(true);
       const result = await searchAirports(query);
       if (result.success && result.data) {
-        const filteredData = subType === 'CITY' ? result.data.filter(a => a.subType === 'CITY') : result.data;
-        setSuggestions(filteredData);
+        const filteredData = type === 'destination' ? result.data.filter(a => a.subType === 'CITY') : result.data;
+        if (type === 'origin') setOriginSuggestions(filteredData);
+        else setDestinationSuggestions(filteredData);
       } else {
-        setSuggestions([]);
+        type === 'origin' ? setOriginSuggestions([]) : setDestinationSuggestions([]);
       }
       setSuggestionsLoading(false);
     }, []);
 
   useEffect(() => {
-    if (activeInput === 'origin' && debouncedOriginQuery) {
-      fetchSuggestions(debouncedOriginQuery);
-    } else if (activeInput === 'destination' && debouncedDestinationQuery) {
-      fetchSuggestions(debouncedDestinationQuery, 'CITY');
+    if (isOriginFocused) {
+      fetchSuggestions(debouncedOriginQuery, 'origin');
     }
-  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, fetchSuggestions]);
+  }, [debouncedOriginQuery, isOriginFocused, fetchSuggestions]);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
-        setActiveInput(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    if (isDestinationFocused) {
+      fetchSuggestions(debouncedDestinationQuery, 'destination');
+    }
+  }, [debouncedDestinationQuery, isDestinationFocused, fetchSuggestions]);
+
   
   const handleSelectSuggestion = useCallback((airport: Airport, type: 'origin' | 'destination') => {
     const locationName = airport.address?.cityName || airport.name;
@@ -95,12 +86,12 @@ export default function PackagesSearchPage() {
     if (type === 'origin') {
       setOrigin(airport.iataCode);
       setOriginQuery(query);
+      setIsOriginFocused(false);
     } else {
       setDestination(airport.iataCode);
       setDestinationQuery(query);
+      setIsDestinationFocused(false);
     }
-    setActiveInput(null);
-    setSuggestions([]);
   }, []);
 
   const handleSearch = useCallback(async (e: React.FormEvent) => {
@@ -147,8 +138,8 @@ export default function PackagesSearchPage() {
   
   const travelerText = `${adults} pasajero${adults > 1 ? 's' : ''}`;
 
-  const SuggestionsList = useCallback(({ type }: { type: 'origin' | 'destination' }) => (
-    <div ref={suggestionsRef} className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+  const SuggestionsList = useCallback(({ suggestions, type }: { suggestions: Airport[], type: 'origin' | 'destination' }) => (
+    <div className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
@@ -174,12 +165,8 @@ export default function PackagesSearchPage() {
         ))
       )}
     </div>
-  ), [suggestions, suggestionsLoading, handleSelectSuggestion]);
-  
-  const handleFocus = useCallback((type: 'origin' | 'destination') => {
-      setActiveInput(type);
-  }, []);
-
+  ), [suggestionsLoading, handleSelectSuggestion]);
+    
   const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     e.currentTarget.select();
   };
@@ -188,10 +175,10 @@ export default function PackagesSearchPage() {
     <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputGroup className='relative'>
-                <Popover open={activeInput === 'origin'} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
+            <div className='relative'>
+                <Popover open={isOriginFocused && originQuery.length > 1} onOpenChange={setIsOriginFocused}>
                     <PopoverTrigger asChild>
-                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text" onClick={() => setActiveInput('origin')}>
+                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
                             <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
                             <div>
                                 <p className="text-xs text-gray-700">Desde</p>
@@ -200,7 +187,7 @@ export default function PackagesSearchPage() {
                                     type="text" 
                                     value={originQuery} 
                                     onChange={e => setOriginQuery(e.target.value)} 
-                                    onFocus={() => handleFocus('origin')}
+                                    onFocus={() => setIsOriginFocused(true)}
                                     onClick={handleInputClick}
                                     placeholder="Ciudad o aeropuerto" 
                                     className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
@@ -209,17 +196,15 @@ export default function PackagesSearchPage() {
                             </div>
                         </div>
                     </PopoverTrigger>
-                    {originQuery.length > 1 && (
-                      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
-                        <SuggestionsList type="origin" />
-                      </PopoverContent>
-                    )}
+                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
+                      <SuggestionsList suggestions={originSuggestions} type="origin" />
+                    </PopoverContent>
                 </Popover>
-            </InputGroup>
-            <InputGroup className='relative'>
-                <Popover open={activeInput === 'destination'} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
+            </div>
+            <div className='relative'>
+                <Popover open={isDestinationFocused && destinationQuery.length > 1} onOpenChange={setIsDestinationFocused}>
                     <PopoverTrigger asChild>
-                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text" onClick={() => setActiveInput('destination')}>
+                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
                             <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
                             <div>
                                 <p className="text-xs text-gray-700">Hasta</p>
@@ -228,7 +213,7 @@ export default function PackagesSearchPage() {
                                     type="text" 
                                     value={destinationQuery} 
                                     onChange={e => setDestinationQuery(e.target.value)}
-                                    onFocus={() => handleFocus('destination')}
+                                    onFocus={() => setIsDestinationFocused(true)}
                                     onClick={handleInputClick}
                                     placeholder="Ciudad de destino" 
                                     className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
@@ -237,16 +222,14 @@ export default function PackagesSearchPage() {
                             </div>
                         </div>
                     </PopoverTrigger>
-                    {destinationQuery.length > 1 && (
-                      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
-                        <SuggestionsList type="destination" />
-                      </PopoverContent>
-                    )}
+                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
+                      <SuggestionsList suggestions={destinationSuggestions} type="destination" />
+                    </PopoverContent>
                 </Popover>
-            </InputGroup>
+            </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputGroup>
+            <div>
                 <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                     <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
@@ -276,8 +259,8 @@ export default function PackagesSearchPage() {
                     </div>
                 </PopoverContent>
                 </Popover>
-            </InputGroup>
-            <InputGroup>
+            </div>
+            <div>
                 <Popover>
                 <PopoverTrigger asChild>
                     <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
@@ -313,7 +296,7 @@ export default function PackagesSearchPage() {
                     </div>
                 </PopoverContent>
                 </Popover>
-            </InputGroup>
+            </div>
         </div>
         <Button type="submit" size="lg" className="w-full font-bold bg-primary hover:bg-primary/90 mt-1 text-primary-foreground rounded-xl shadow-md hover:shadow-lg transition-all h-14">
             <Luggage className="mr-2 h-5 w-5" /> Buscar Paquetes
@@ -321,7 +304,8 @@ export default function PackagesSearchPage() {
         </form>
     </div>
   );
-}
+});
+export default PackagesSearchPage;
     
 
     
