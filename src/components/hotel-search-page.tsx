@@ -177,13 +177,18 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
       )}
     </div>
   ), [suggestions, suggestionsLoading, handleSelectSuggestion]);
+  
+  const handleFocus = useCallback(() => {
+      setActiveInput('destination');
+      setDestinationQuery('');
+  }, []);
 
   return (
     <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
             <div className="w-full lg:col-span-5 relative" ref={destinationRef}>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => setActiveInput('destination')}>
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={handleFocus}>
                     <div className="flex items-center w-full">
                         <MapPin className="h-6 w-6 mr-4 text-primary" />
                         <div>
@@ -193,7 +198,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
                                 type="text" 
                                 value={destinationQuery} 
                                 onChange={e => setDestinationQuery(e.target.value)}
-                                onFocus={() => setActiveInput('destination')}
+                                onFocus={handleFocus}
                                 placeholder="Ej. Nueva York" 
                                 className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
                                 autoComplete="off"

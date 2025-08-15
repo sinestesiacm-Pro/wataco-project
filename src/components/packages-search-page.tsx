@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { addDays, format } from 'date-fns';
 import { searchPackages } from '@/app/actions';
 import type { PackageData, Airport } from '@/lib/types';
@@ -53,8 +53,7 @@ export default function PackagesSearchPage() {
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const searchIdRef = useRef(0);
 
-  useEffect(() => {
-    const fetchSuggestions = async (query: string, subType: 'CITY,AIRPORT' | 'CITY' = 'CITY,AIRPORT') => {
+  const fetchSuggestions = useCallback(async (query: string, subType: 'CITY,AIRPORT' | 'CITY' = 'CITY,AIRPORT') => {
       if (query.length < 2) {
         setSuggestions([]);
         return;
@@ -68,16 +67,15 @@ export default function PackagesSearchPage() {
         setSuggestions([]);
       }
       setSuggestionsLoading(false);
-    };
+    }, []);
 
-    if (activeInput === 'origin') {
-      if (debouncedOriginQuery !== originQuery) setSuggestions([]);
-      else fetchSuggestions(debouncedOriginQuery);
-    } else if (activeInput === 'destination') {
-      if (debouncedDestinationQuery !== destinationQuery) setSuggestions([]);
-      else fetchSuggestions(debouncedDestinationQuery, 'CITY');
+  useEffect(() => {
+    if (activeInput === 'origin' && debouncedOriginQuery) {
+      fetchSuggestions(debouncedOriginQuery);
+    } else if (activeInput === 'destination' && debouncedDestinationQuery) {
+      fetchSuggestions(debouncedDestinationQuery, 'CITY');
     }
-  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, originQuery, destinationQuery]);
+  }, [debouncedOriginQuery, debouncedDestinationQuery, activeInput, fetchSuggestions]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -89,7 +87,7 @@ export default function PackagesSearchPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
-  const handleSelectSuggestion = (airport: Airport, type: 'origin' | 'destination') => {
+  const handleSelectSuggestion = useCallback((airport: Airport, type: 'origin' | 'destination') => {
     const locationName = airport.address?.cityName || airport.name;
     const countryName = airport.address?.countryName || '';
     const query = [locationName, countryName].filter(Boolean).join(', ');
@@ -103,9 +101,9 @@ export default function PackagesSearchPage() {
     }
     setActiveInput(null);
     setSuggestions([]);
-  };
+  }, []);
 
-  const handleSearch = async (e: React.FormEvent) => {
+  const handleSearch = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!origin || !destination || !date?.from || !date?.to) {
       toast({
@@ -145,11 +143,11 @@ export default function PackagesSearchPage() {
     }
 
     setLoading(false);
-  };
+  }, [origin, destination, date, adults, toast]);
   
   const travelerText = `${adults} pasajero${adults > 1 ? 's' : ''}`;
 
-  const SuggestionsList = ({ type }: { type: 'origin' | 'destination' }) => (
+  const SuggestionsList = useCallback(({ type }: { type: 'origin' | 'destination' }) => (
     <div ref={suggestionsRef} className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
       {suggestionsLoading ? (
         <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
@@ -176,14 +174,23 @@ export default function PackagesSearchPage() {
         ))
       )}
     </div>
-  );
+  ), [suggestions, suggestionsLoading, handleSelectSuggestion]);
+  
+  const handleFocus = useCallback((type: 'origin' | 'destination') => {
+      setActiveInput(type);
+      if (type === 'origin') {
+          setOriginQuery('');
+      } else {
+          setDestinationQuery('');
+      }
+  }, []);
 
   return (
     <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputGroup className='relative'>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => setActiveInput('origin')}>
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => handleFocus('origin')}>
                     <div className="flex items-center w-full">
                         <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
                         <div>
@@ -191,7 +198,7 @@ export default function PackagesSearchPage() {
                             <Input 
                                 id="origin" type="text" value={originQuery} 
                                 onChange={e => setOriginQuery(e.target.value)} 
-                                onFocus={() => setActiveInput('origin')}
+                                onFocus={() => handleFocus('origin')}
                                 placeholder="Ciudad o aeropuerto" 
                                 className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
                                 autoComplete="off"
@@ -202,7 +209,7 @@ export default function PackagesSearchPage() {
                 {activeInput === 'origin' && <SuggestionsList type="origin" />}
             </InputGroup>
             <InputGroup className='relative'>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => setActiveInput('destination')}>
+                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => handleFocus('destination')}>
                     <div className="flex items-center w-full">
                         <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
                         <div>
@@ -210,7 +217,7 @@ export default function PackagesSearchPage() {
                             <Input 
                                 id="destination" type="text" value={destinationQuery} 
                                 onChange={e => setDestinationQuery(e.target.value)}
-                                onFocus={() => setActiveInput('destination')} 
+                                onFocus={() => handleFocus('destination')} 
                                 placeholder="Ciudad de destino" 
                                 className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
                                 autoComplete="off"
