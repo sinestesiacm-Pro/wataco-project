@@ -180,33 +180,43 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
   
   const handleFocus = useCallback(() => {
       setActiveInput('destination');
-      setDestinationQuery('');
   }, []);
+  
+  const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.currentTarget.select();
+  };
 
   return (
     <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
             <div className="w-full lg:col-span-5 relative" ref={destinationRef}>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={handleFocus}>
-                    <div className="flex items-center w-full">
-                        <MapPin className="h-6 w-6 mr-4 text-primary" />
-                        <div>
-                            <p className="text-xs text-gray-700">Destination</p>
-                            <Input 
-                                id="destination" 
-                                type="text" 
-                                value={destinationQuery} 
-                                onChange={e => setDestinationQuery(e.target.value)}
-                                onFocus={handleFocus}
-                                placeholder="Ej. Nueva York" 
-                                className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
-                                autoComplete="off"
-                            />
+                <Popover open={activeInput === 'destination'} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
+                    <PopoverTrigger asChild>
+                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text" onClick={() => setActiveInput('destination')}>
+                            <MapPin className="h-6 w-6 mr-4 text-primary" />
+                            <div>
+                                <p className="text-xs text-gray-700">Destination</p>
+                                <Input 
+                                    id="destination" 
+                                    type="text" 
+                                    value={destinationQuery} 
+                                    onChange={e => setDestinationQuery(e.target.value)}
+                                    onFocus={handleFocus}
+                                    onClick={handleInputClick}
+                                    placeholder="Ej. Nueva York" 
+                                    className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
+                                    autoComplete="off"
+                                />
+                            </div>
                         </div>
-                    </div>
-                </Button>
-                {activeInput === 'destination' && destinationQuery.length > 1 && <SuggestionsList />}
+                    </PopoverTrigger>
+                    {destinationQuery.length > 1 && (
+                      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
+                        <SuggestionsList />
+                      </PopoverContent>
+                    )}
+                </Popover>
             </div>
             
             <div className="w-full lg:col-span-3">
@@ -307,3 +317,5 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 });
 
 export default HotelSearchPage;
+
+    

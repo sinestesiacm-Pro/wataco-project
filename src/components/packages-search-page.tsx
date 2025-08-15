@@ -178,54 +178,71 @@ export default function PackagesSearchPage() {
   
   const handleFocus = useCallback((type: 'origin' | 'destination') => {
       setActiveInput(type);
-      if (type === 'origin') {
-          setOriginQuery('');
-      } else {
-          setDestinationQuery('');
-      }
   }, []);
+
+  const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.currentTarget.select();
+  };
 
   return (
     <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputGroup className='relative'>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => handleFocus('origin')}>
-                    <div className="flex items-center w-full">
-                        <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
-                        <div>
-                            <p className="text-xs text-gray-700">Desde</p>
-                            <Input 
-                                id="origin" type="text" value={originQuery} 
-                                onChange={e => setOriginQuery(e.target.value)} 
-                                onFocus={() => handleFocus('origin')}
-                                placeholder="Ciudad o aeropuerto" 
-                                className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
-                                autoComplete="off"
-                            />
+                <Popover open={activeInput === 'origin'} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
+                    <PopoverTrigger asChild>
+                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text" onClick={() => setActiveInput('origin')}>
+                            <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
+                            <div>
+                                <p className="text-xs text-gray-700">Desde</p>
+                                <Input 
+                                    id="origin" 
+                                    type="text" 
+                                    value={originQuery} 
+                                    onChange={e => setOriginQuery(e.target.value)} 
+                                    onFocus={() => handleFocus('origin')}
+                                    onClick={handleInputClick}
+                                    placeholder="Ciudad o aeropuerto" 
+                                    className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
+                                    autoComplete="off"
+                                />
+                            </div>
                         </div>
-                    </div>
-                </Button>
-                {activeInput === 'origin' && <SuggestionsList type="origin" />}
+                    </PopoverTrigger>
+                    {originQuery.length > 1 && (
+                      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
+                        <SuggestionsList type="origin" />
+                      </PopoverContent>
+                    )}
+                </Popover>
             </InputGroup>
             <InputGroup className='relative'>
-                <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => handleFocus('destination')}>
-                    <div className="flex items-center w-full">
-                        <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
-                        <div>
-                            <p className="text-xs text-gray-700">Hasta</p>
-                            <Input 
-                                id="destination" type="text" value={destinationQuery} 
-                                onChange={e => setDestinationQuery(e.target.value)}
-                                onFocus={() => handleFocus('destination')} 
-                                placeholder="Ciudad de destino" 
-                                className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
-                                autoComplete="off"
-                            />
+                <Popover open={activeInput === 'destination'} onOpenChange={(isOpen) => !isOpen && setActiveInput(null)}>
+                    <PopoverTrigger asChild>
+                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text" onClick={() => setActiveInput('destination')}>
+                            <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
+                            <div>
+                                <p className="text-xs text-gray-700">Hasta</p>
+                                <Input 
+                                    id="destination" 
+                                    type="text" 
+                                    value={destinationQuery} 
+                                    onChange={e => setDestinationQuery(e.target.value)}
+                                    onFocus={() => handleFocus('destination')}
+                                    onClick={handleInputClick}
+                                    placeholder="Ciudad de destino" 
+                                    className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
+                                    autoComplete="off"
+                                />
+                            </div>
                         </div>
-                    </div>
-                </Button>
-                {activeInput === 'destination' && <SuggestionsList type="destination" />}
+                    </PopoverTrigger>
+                    {destinationQuery.length > 1 && (
+                      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
+                        <SuggestionsList type="destination" />
+                      </PopoverContent>
+                    )}
+                </Popover>
             </InputGroup>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -305,4 +322,6 @@ export default function PackagesSearchPage() {
     </div>
   );
 }
+    
+
     

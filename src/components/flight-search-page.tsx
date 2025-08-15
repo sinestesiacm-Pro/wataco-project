@@ -59,7 +59,6 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   
   const popoverContentRef = useRef<HTMLDivElement>(null);
-  const activeInputRef = useRef<'origin' | 'destination' | null>(null);
 
   useEffect(() => {
     // This effect handles auto-search from promotion cards
@@ -97,9 +96,7 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
     setSuggestionsLoading(true);
     const result = await searchAirports(query);
     if (result.success && result.data) {
-      if (activeInputRef.current) {
-          setSuggestions(result.data);
-      }
+      setSuggestions(result.data);
     } else {
       setSuggestions([]);
     }
@@ -107,23 +104,22 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
   }, []);
   
   useEffect(() => {
-    if (activeInputRef.current === 'origin') {
+    if (activeInput === 'origin') {
       fetchSuggestions(debouncedOriginQuery);
     }
-  }, [debouncedOriginQuery, fetchSuggestions]);
+  }, [debouncedOriginQuery, fetchSuggestions, activeInput]);
 
   useEffect(() => {
-     if (activeInputRef.current === 'destination') {
+     if (activeInput === 'destination') {
       fetchSuggestions(debouncedDestinationQuery);
     }
-  }, [debouncedDestinationQuery, fetchSuggestions]);
+  }, [debouncedDestinationQuery, fetchSuggestions, activeInput]);
 
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popoverContentRef.current && !popoverContentRef.current.contains(event.target as Node)) {
         setActiveInput(null);
-        activeInputRef.current = null;
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -143,7 +139,6 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
       setDestinationQuery(query || locationName);
     }
     setActiveInput(null);
-    activeInputRef.current = null;
     setSuggestions([]);
   }, []);
 
@@ -218,13 +213,11 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
   
   const handleFocus = useCallback((type: 'origin' | 'destination') => {
       setActiveInput(type);
-      activeInputRef.current = type;
-      if (type === 'origin') {
-          setOriginQuery('');
-      } else {
-          setDestinationQuery('');
-      }
   }, []);
+  
+  const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.currentTarget.select();
+  };
 
   return (
       <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
@@ -234,45 +227,43 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
             <div className="relative">
                 <div className="space-y-4">
                   <PopoverTrigger asChild>
-                      <Button type="button" variant="ghost" className="w-full h-auto p-0 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => handleFocus('origin')}>
-                          <div className="flex items-center w-full p-4">
-                              <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
-                              <div>
-                                  <p className="text-xs text-gray-700">From</p>
-                                  <Input 
-                                      id="origin" 
-                                      type="text" 
-                                      value={originQuery} 
-                                      onChange={e => setOriginQuery(e.target.value)} 
-                                      onFocus={() => handleFocus('origin')}
-                                      placeholder="Ciudad o aeropuerto" 
-                                      className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
-                                      autoComplete="off"
-                                  />
-                              </div>
-                          </div>
-                      </Button>
+                    <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text" onClick={() => handleFocus('origin')}>
+                        <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
+                        <div>
+                            <p className="text-xs text-gray-700">From</p>
+                            <Input 
+                                id="origin" 
+                                type="text" 
+                                value={originQuery} 
+                                onChange={e => setOriginQuery(e.target.value)} 
+                                onFocus={() => handleFocus('origin')}
+                                onClick={handleInputClick}
+                                placeholder="Ciudad o aeropuerto" 
+                                className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
+                                autoComplete="off"
+                            />
+                        </div>
+                    </div>
                   </PopoverTrigger>
                   
-                   <PopoverTrigger asChild>
-                      <Button type="button" variant="ghost" className="w-full h-auto p-0 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl" onClick={() => handleFocus('destination')}>
-                           <div className="flex items-center w-full p-4">
-                              <MapPin className="h-6 w-6 mr-4 text-tertiary" />
-                              <div>
-                                  <p className="text-xs text-gray-700">To</p>
-                                   <Input 
-                                      id="destination" 
-                                      type="text" 
-                                      value={destinationQuery} 
-                                      onChange={e => setDestinationQuery(e.target.value)}
-                                      onFocus={() => handleFocus('destination')}
-                                      placeholder="Ciudad o aeropuerto" 
-                                      className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
-                                      autoComplete="off"
-                                  />
-                              </div>
-                          </div>
-                      </Button>
+                  <PopoverTrigger asChild>
+                    <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text" onClick={() => handleFocus('destination')}>
+                        <MapPin className="h-6 w-6 mr-4 text-tertiary" />
+                        <div>
+                            <p className="text-xs text-gray-700">To</p>
+                             <Input 
+                                id="destination" 
+                                type="text" 
+                                value={destinationQuery} 
+                                onChange={e => setDestinationQuery(e.target.value)}
+                                onFocus={() => handleFocus('destination')}
+                                onClick={handleInputClick}
+                                placeholder="Ciudad o aeropuerto" 
+                                className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
+                                autoComplete="off"
+                            />
+                        </div>
+                    </div>
                   </PopoverTrigger>
                 </div>
 
@@ -404,4 +395,6 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
 });
 
 export default FlightSearchPage;
+    
+
     
