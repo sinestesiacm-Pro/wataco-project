@@ -31,7 +31,8 @@ const getMockHotelsForDestination = (destination: string) => {
     // Fallback logic if no direct city match is found
     switch (destinationCity) {
         case 'tokyo':
-            return MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase().includes('kyoto'));
+             // The mock data has a luxury hotel in Kyoto, which is a good fallback for a Japan trip.
+            return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('ritz-carlton'));
         case 'serengeti':
             // For a safari, any luxury remote hotel could work as a simulation
             return MOCK_HOTELS_DATA.filter(h => h.hotel.name?.toLowerCase().includes('amangiri') || h.hotel.name?.toLowerCase().includes('salento'));
