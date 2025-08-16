@@ -43,12 +43,32 @@ function SearchSection({ tab }: { tab?: string }) {
   );
 }
 
+const airlinePartners = [
+  { name: 'American Airlines' }, { name: 'Lufthansa' }, { name: 'Emirates' },
+  { name: 'Delta' }, { name: 'British Airways' }, { name: 'Air France' },
+  { name: 'KLM' }, { name: 'Qatar Airways' }, { name: 'Avianca' },
+];
+
+const hotelPartners = [
+  { name: 'Marriott' }, { name: 'Hilton' }, { name: 'Hyatt' },
+  { name: 'Four Seasons' }, { name: 'InterContinental' }, { name: 'Sheraton' },
+  { name: 'Westin' }, { name: 'Ritz-Carlton' }, { name: 'Accor' },
+];
+
+
 function RecommendedContent({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   switch (activeTab) {
     case 'Hotels':
-      return <RecommendedHotels />;
+      return (
+          <>
+            <RecommendedHotels />
+            <div className="pt-16">
+              <PartnersSection title="Cadenas Hoteleras de Confianza" partners={hotelPartners} />
+            </div>
+          </>
+      )
     case 'Packages':
       return <RecommendedPackages />;
     case 'Cruises':
@@ -59,7 +79,14 @@ function RecommendedContent({ tab }: { tab?: string }) {
        return <ActivitiesSection />;
     case 'Flights':
     default:
-      return <RecommendedDestinations />;
+      return (
+          <>
+            <RecommendedDestinations />
+            <div className="pt-16">
+               <PartnersSection title="Nuestras Aerolíneas Asociadas" partners={airlinePartners} />
+            </div>
+          </>
+      )
   }
 }
 
@@ -82,18 +109,6 @@ const AnimatedWindows = () => (
         ))}
     </div>
 );
-
-const airlinePartners = [
-  { name: 'American Airlines' }, { name: 'Lufthansa' }, { name: 'Emirates' },
-  { name: 'Delta' }, { name: 'British Airways' }, { name: 'Air France' },
-  { name: 'KLM' }, { name: 'Qatar Airways' }, { name: 'Avianca' },
-];
-
-const hotelPartners = [
-  { name: 'Marriott' }, { name: 'Hilton' }, { name: 'Hyatt' },
-  { name: 'Four Seasons' }, { name: 'InterContinental' }, { name: 'Sheraton' },
-  { name: 'Westin' }, { name: 'Ritz-Carlton' }, { name: 'Accor' },
-];
 
 
 export function HomePageContent() {
@@ -127,8 +142,6 @@ export function HomePageContent() {
 
                 <div className="mt-auto">
                     <TestimonialsSection />
-                    <PartnersSection title="Nuestras Aerolíneas Asociadas" partners={airlinePartners} />
-                    <PartnersSection title="Cadenas Hoteleras de Confianza" partners={hotelPartners} />
                     <Footer />
                 </div>
             </div>
