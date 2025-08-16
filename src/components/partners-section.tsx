@@ -36,7 +36,7 @@ export function PartnersSection({ title, partners }: PartnersSectionProps) {
                 alt={partner.name}
                 width={140}
                 height={50}
-                className="object-contain h-14 w-auto transition-all duration-300"
+                className="object-contain h-14 w-auto transition-all duration-300 filter grayscale brightness-0 invert opacity-70 hover:opacity-100"
               />
             </div>
           ))}
