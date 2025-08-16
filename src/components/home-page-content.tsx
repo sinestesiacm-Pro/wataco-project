@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
+import { PartnersSection } from './partners-section';
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -82,6 +83,18 @@ const AnimatedWindows = () => (
     </div>
 );
 
+const airlinePartners = [
+  { name: 'American Airlines' }, { name: 'Lufthansa' }, { name: 'Emirates' },
+  { name: 'Delta' }, { name: 'British Airways' }, { name: 'Air France' },
+  { name: 'KLM' }, { name: 'Qatar Airways' }, { name: 'Avianca' },
+];
+
+const hotelPartners = [
+  { name: 'Marriott' }, { name: 'Hilton' }, { name: 'Hyatt' },
+  { name: 'Four Seasons' }, { name: 'InterContinental' }, { name: 'Sheraton' },
+  { name: 'Westin' }, { name: 'Ritz-Carlton' }, { name: 'Accor' },
+];
+
 
 export function HomePageContent() {
     const searchParams = useSearchParams();
@@ -114,11 +127,11 @@ export function HomePageContent() {
 
                 <div className="mt-auto">
                     <TestimonialsSection />
+                    <PartnersSection title="Nuestras Aerolíneas Asociadas" partners={airlinePartners} />
+                    <PartnersSection title="Cadenas Hoteleras de Confianza" partners={hotelPartners} />
                     <Footer />
                 </div>
             </div>
         </div>
     )
 }
-
-    
