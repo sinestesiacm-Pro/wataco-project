@@ -34,9 +34,9 @@ export function PartnersSection({ title, partners }: PartnersSectionProps) {
               <Image 
                 src={`https://logo.clearbit.com/${partner.domain}`}
                 alt={partner.name}
-                width={120}
-                height={40}
-                className="object-contain h-10 w-auto filter grayscale hover:filter-none transition-all duration-300 opacity-70 hover:opacity-100"
+                width={140}
+                height={50}
+                className="object-contain h-14 w-auto transition-all duration-300"
               />
             </div>
           ))}
