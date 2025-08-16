@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -32,6 +33,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
+    const airlineDomain = `${airlineName.toLowerCase().replace(/\s+/g, '')}.com`;
     const departureDate = formatDate(parseISO(firstSegment.departure.at), "d MMM, yyyy", { locale: es });
 
     const stops = itinerary.segments.length - 1;
@@ -52,11 +54,12 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
                             <p className="text-sm font-semibold text-gray-800">{departureDate}</p>
                         </div>
                         <Image
-                            src={`https://images.kiwi.com/airlines/64/${firstSegment.carrierCode}.png`}
+                            src={`https://logo.clearbit.com/${airlineDomain}`}
                             alt={airlineName}
                             width={48}
                             height={48}
                             className="rounded-full bg-white p-1 shadow-md"
+                            onError={(e) => { e.currentTarget.src = `https://images.kiwi.com/airlines/64/${firstSegment.carrierCode}.png` }}
                         />
                     </div>
                     

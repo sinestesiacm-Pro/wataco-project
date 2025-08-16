@@ -76,6 +76,12 @@ const nextConfig: NextConfig = {
         hostname: 'image-tc.galaxy.tf',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'logo.clearbit.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

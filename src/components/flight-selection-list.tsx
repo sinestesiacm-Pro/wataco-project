@@ -67,6 +67,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
     const originCityName = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
     const destinationCityName = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
+    const airlineDomain = `${airlineName.toLowerCase().replace(/\s+/g, '')}.com`;
 
     const stops = itinerary.segments.length - 1;
     const stopInfoText = stops > 1 ? `${stops} escalas` : stops === 1 ? '1 escala' : 'Directo';
@@ -78,11 +79,12 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                 <div className="flex justify-between items-center px-2">
                     <div className="flex items-center gap-2">
                         <Image
-                            src={`https://images.kiwi.com/airlines/32/${firstSegment.carrierCode}.png`}
+                            src={`https://logo.clearbit.com/${airlineDomain}`}
                             alt={airlineName}
                             width={24}
                             height={24}
                             className="rounded-full bg-white p-0.5 shadow-sm"
+                            onError={(e) => { e.currentTarget.src = `https://images.kiwi.com/airlines/32/${firstSegment.carrierCode}.png` }}
                         />
                         <span className="font-semibold text-sm">{airlineName}</span>
                     </div>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -40,6 +41,7 @@ export function PackagesResults({ packagesData }: PackagesResultsProps) {
           const hotel = pkg.hotelOffer;
           const airlineCode = flight.itineraries[0].segments[0].carrierCode;
           const airlineName = dictionaries.carriers[airlineCode];
+          const airlineDomain = `${airlineName.toLowerCase().replace(/\s+/g, '')}.com`;
 
           return (
             <Card key={pkg.id} className="overflow-hidden transition-all duration-300 hover:shadow-2xl rounded-2xl border bg-card/95 backdrop-blur-sm flex flex-col">
@@ -67,11 +69,12 @@ export function PackagesResults({ packagesData }: PackagesResultsProps) {
                     {/* Flight Info */}
                     <div className="flex items-center gap-4 mb-4">
                         <Image
-                            src={`https://images.kiwi.com/airlines/64/${airlineCode}.png`}
+                            src={`https://logo.clearbit.com/${airlineDomain}`}
                             alt={airlineName || airlineCode}
                             width={40}
                             height={40}
                             className="rounded-full bg-white p-1 shadow-md"
+                            onError={(e) => { e.currentTarget.src = `https://images.kiwi.com/airlines/64/${airlineCode}.png` }}
                         />
                         <div className="flex-grow">
                             <p className="font-semibold text-sm">{airlineName}</p>

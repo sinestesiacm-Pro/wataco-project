@@ -44,15 +44,27 @@ function SearchSection({ tab }: { tab?: string }) {
 }
 
 const airlinePartners = [
-  { name: 'American Airlines' }, { name: 'Lufthansa' }, { name: 'Emirates' },
-  { name: 'Delta' }, { name: 'British Airways' }, { name: 'Air France' },
-  { name: 'KLM' }, { name: 'Qatar Airways' }, { name: 'Avianca' },
+  { name: 'American Airlines', domain: 'aa.com' },
+  { name: 'Lufthansa', domain: 'lufthansa.com' },
+  { name: 'Emirates', domain: 'emirates.com' },
+  { name: 'Delta', domain: 'delta.com' },
+  { name: 'British Airways', domain: 'ba.com' },
+  { name: 'Air France', domain: 'airfrance.com' },
+  { name: 'KLM', domain: 'klm.com' },
+  { name: 'Qatar Airways', domain: 'qatarairways.com' },
+  { name: 'Avianca', domain: 'avianca.com' },
 ];
 
 const hotelPartners = [
-  { name: 'Marriott' }, { name: 'Hilton' }, { name: 'Hyatt' },
-  { name: 'Four Seasons' }, { name: 'InterContinental' }, { name: 'Sheraton' },
-  { name: 'Westin' }, { name: 'Ritz-Carlton' }, { name: 'Accor' },
+  { name: 'Marriott', domain: 'marriott.com' },
+  { name: 'Hilton', domain: 'hilton.com' },
+  { name: 'Hyatt', domain: 'hyatt.com' },
+  { name: 'Four Seasons', domain: 'fourseasons.com' },
+  { name: 'InterContinental', domain: 'ihg.com' },
+  { name: 'Sheraton', domain: 'sheraton.com' },
+  { name: 'Westin', domain: 'westin.com' },
+  { name: 'Ritz-Carlton', domain: 'ritzcarlton.com' },
+  { name: 'Accor', domain: 'accor.com' },
 ];
 
 
