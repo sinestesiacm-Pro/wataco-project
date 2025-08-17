@@ -60,7 +60,6 @@ const hotelPartners = [
   { name: 'Hilton', domain: 'hilton.com' },
   { name: 'Hyatt', domain: 'hyatt.com' },
   { name: 'Four Seasons', domain: 'fourseasons.com' },
-  { name: 'Sheraton', domain: 'sheraton.com' }, // Use Sheraton for better logo consistency (Part of IHG)
   { name: 'Westin', domain: 'westin.com' },
   { name: 'Ritz-Carlton', domain: 'ritzcarlton.com' },
   { name: 'Accor', domain: 'accor.com' },
