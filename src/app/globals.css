@@ -528,7 +528,7 @@
 
 .marquee-content {
   display: flex;
-  gap: var(--gap, 2rem);
+  gap: var(--gap, 2.5rem);
   width: fit-content;
   animation: marquee 40s linear infinite;
   will-change: transform;
@@ -596,8 +596,6 @@
   clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
   transform-origin: bottom;
 }
-
-
     
 
 
@@ -607,27 +605,30 @@
 
 
 
-    
-
 
     
-
-
-
-
-
-
-
-
-
-
-
 
 
     
 
 
 
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
 
     
 
