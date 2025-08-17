@@ -19,6 +19,47 @@ import React from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+
+const SuggestionsList = React.memo(function SuggestionsList({ 
+    suggestions, 
+    isLoading, 
+    onSelect 
+}: { 
+    suggestions: Airport[], 
+    isLoading: boolean, 
+    onSelect: (airport: Airport) => void 
+}) {
+    return (
+        <div className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+            {isLoading ? (
+                <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
+                </div>
+            ) : suggestions.length > 0 ? (
+                suggestions.map((airport, index) => (
+                    <div
+                        key={`${airport.iataCode}-${airport.name}-${index}`}
+                        className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
+                        onClick={() => onSelect(airport)}
+                    >
+                        <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4 text-muted-foreground" />
+                            <div className="flex-grow">
+                                <p className="font-semibold text-sm">
+                                    {airport.address?.cityName || airport.name}
+                                    {airport.address?.countryName ? `, ${airport.address.countryName}` : ''}
+                                </p>
+                                <p className="text-xs text-muted-foreground">{airport.name} ({airport.iataCode})</p>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            ) : null}
+        </div>
+    );
+});
+
+
 const PackagesSearchPage = React.memo(function PackagesSearchPage() {
   const [origin, setOrigin] = useState('MAD');
   const [destination, setDestination] = useState('');
@@ -39,10 +80,11 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
 
   const [originSuggestions, setOriginSuggestions] = useState<Airport[]>([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState<Airport[]>([]);
-  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
-  
-  const [isOriginFocused, setIsOriginFocused] = useState(false);
-  const [isDestinationFocused, setIsDestinationFocused] = useState(false);
+  const [originLoading, setOriginLoading] = useState(false);
+  const [destinationLoading, setDestinationLoading] = useState(false);
+
+  const [isOriginPopoverOpen, setIsOriginPopoverOpen] = useState(false);
+  const [isDestinationPopoverOpen, setIsDestinationPopoverOpen] = useState(false);
   
   const debouncedOriginQuery = useDebounce(originQuery, 300);
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
@@ -53,7 +95,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
         type === 'origin' ? setOriginSuggestions([]) : setDestinationSuggestions([]);
         return;
       }
-      setSuggestionsLoading(true);
+      type === 'origin' ? setOriginLoading(true) : setDestinationLoading(true);
       const result = await searchAirports(query);
       if (result.success && result.data) {
         const filteredData = type === 'destination' ? result.data.filter(a => a.subType === 'CITY') : result.data;
@@ -62,20 +104,20 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
       } else {
         type === 'origin' ? setOriginSuggestions([]) : setDestinationSuggestions([]);
       }
-      setSuggestionsLoading(false);
+      type === 'origin' ? setOriginLoading(false) : setDestinationLoading(false);
     }, []);
 
   useEffect(() => {
-    if (isOriginFocused) {
+    if (isOriginPopoverOpen) {
       fetchSuggestions(debouncedOriginQuery, 'origin');
     }
-  }, [debouncedOriginQuery, isOriginFocused, fetchSuggestions]);
+  }, [debouncedOriginQuery, isOriginPopoverOpen, fetchSuggestions]);
 
   useEffect(() => {
-    if (isDestinationFocused) {
+    if (isDestinationPopoverOpen) {
       fetchSuggestions(debouncedDestinationQuery, 'destination');
     }
-  }, [debouncedDestinationQuery, isDestinationFocused, fetchSuggestions]);
+  }, [debouncedDestinationQuery, isDestinationPopoverOpen, fetchSuggestions]);
 
   
   const handleSelectSuggestion = useCallback((airport: Airport, type: 'origin' | 'destination') => {
@@ -86,11 +128,11 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
     if (type === 'origin') {
       setOrigin(airport.iataCode);
       setOriginQuery(query);
-      setIsOriginFocused(false);
+      setIsOriginPopoverOpen(false);
     } else {
       setDestination(airport.iataCode);
       setDestinationQuery(query);
-      setIsDestinationFocused(false);
+      setIsDestinationPopoverOpen(false);
     }
   }, []);
 
@@ -137,35 +179,6 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
   }, [origin, destination, date, adults, toast]);
   
   const travelerText = `${adults} pasajero${adults > 1 ? 's' : ''}`;
-
-  const SuggestionsList = useCallback(({ suggestions, type }: { suggestions: Airport[], type: 'origin' | 'destination' }) => (
-    <div className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-      {suggestionsLoading ? (
-        <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
-        </div>
-      ) : (
-        suggestions.map((airport, index) => (
-          <div
-            key={`${airport.iataCode}-${airport.name}-${index}`}
-            className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
-            onClick={() => handleSelectSuggestion(airport, type)}
-          >
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-muted-foreground" />
-              <div className="flex-grow">
-                <p className="font-semibold text-sm">
-                  {airport.address?.cityName || airport.name}
-                  {airport.address?.countryName ? `, ${airport.address.countryName}`: ''}
-                </p>
-                <p className="text-xs text-muted-foreground">{airport.name} ({airport.iataCode})</p>
-              </div>
-            </div>
-          </div>
-        ))
-      )}
-    </div>
-  ), [suggestionsLoading, handleSelectSuggestion]);
     
   const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     e.currentTarget.select();
@@ -176,7 +189,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
         <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className='relative'>
-                <Popover open={isOriginFocused && originQuery.length > 1} onOpenChange={setIsOriginFocused}>
+                <Popover open={isOriginPopoverOpen && originQuery.length > 1} onOpenChange={setIsOriginPopoverOpen}>
                     <PopoverTrigger asChild>
                         <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
                             <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
@@ -187,7 +200,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
                                     type="text" 
                                     value={originQuery} 
                                     onChange={e => setOriginQuery(e.target.value)} 
-                                    onFocus={() => setIsOriginFocused(true)}
+                                    onFocus={() => setIsOriginPopoverOpen(true)}
                                     onClick={handleInputClick}
                                     placeholder="Ciudad o aeropuerto" 
                                     className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
@@ -197,12 +210,12 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
                         </div>
                     </PopoverTrigger>
                     <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
-                      <SuggestionsList suggestions={originSuggestions} type="origin" />
+                      <SuggestionsList suggestions={originSuggestions} isLoading={originLoading} onSelect={(airport) => handleSelectSuggestion(airport, 'origin')} />
                     </PopoverContent>
                 </Popover>
             </div>
             <div className='relative'>
-                <Popover open={isDestinationFocused && destinationQuery.length > 1} onOpenChange={setIsDestinationFocused}>
+                <Popover open={isDestinationPopoverOpen && destinationQuery.length > 1} onOpenChange={setIsDestinationPopoverOpen}>
                     <PopoverTrigger asChild>
                         <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
                             <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
@@ -213,7 +226,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
                                     type="text" 
                                     value={destinationQuery} 
                                     onChange={e => setDestinationQuery(e.target.value)}
-                                    onFocus={() => setIsDestinationFocused(true)}
+                                    onFocus={() => setIsDestinationPopoverOpen(true)}
                                     onClick={handleInputClick}
                                     placeholder="Ciudad de destino" 
                                     className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
@@ -223,7 +236,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
                         </div>
                     </PopoverTrigger>
                     <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
-                      <SuggestionsList suggestions={destinationSuggestions} type="destination" />
+                      <SuggestionsList suggestions={destinationSuggestions} isLoading={destinationLoading} onSelect={(airport) => handleSelectSuggestion(airport, 'destination')} />
                     </PopoverContent>
                 </Popover>
             </div>

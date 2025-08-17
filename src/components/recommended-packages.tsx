@@ -8,64 +8,67 @@ import { Badge } from './ui/badge';
 import { recommendedPackages } from '@/lib/mock-packages';
 import Link from 'next/link';
 import type { PackageOffer } from '@/lib/types';
+import React from 'react';
 
-const PackageCard = ({ pkg }: { pkg: PackageOffer }) => (
-    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-primary/50">
-        <div className="relative h-56 w-full">
-            <Image 
-                src={pkg.image} 
-                data-ai-hint={pkg.hint} 
-                alt={pkg.title} 
-                fill 
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            {pkg.special_offer && (
-                 <Badge className="absolute top-3 right-3 text-sm" variant="destructive">{pkg.special_offer}</Badge>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-             <div className="absolute bottom-4 left-4 text-white">
-                <h3 className="font-bold text-2xl font-headline drop-shadow-lg">{pkg.title}</h3>
-                <p className="text-white/90 drop-shadow-md">{pkg.destination}</p>
-            </div>
-        </div>
-        <CardContent className="p-4 flex flex-col flex-grow text-white">
-            <div className="flex justify-between items-center text-sm text-white/80 mb-3">
-                 <div className="flex items-center gap-2">
-                    <PlaneTakeoff className="h-4 w-4" />
-                    <span>Departs from {pkg.origin}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    <span>{pkg.duration} Nights</span>
+const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer }) {
+    return (
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-primary/50">
+            <div className="relative h-56 w-full">
+                <Image 
+                    src={pkg.image} 
+                    data-ai-hint={pkg.hint} 
+                    alt={pkg.title} 
+                    fill 
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                {pkg.special_offer && (
+                    <Badge className="absolute top-3 right-3 text-sm" variant="destructive">{pkg.special_offer}</Badge>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                    <h3 className="font-bold text-2xl font-headline drop-shadow-lg">{pkg.title}</h3>
+                    <p className="text-white/90 drop-shadow-md">{pkg.destination}</p>
                 </div>
             </div>
-
-            <ul className="text-xs text-white/70 space-y-1 mb-4 list-disc list-inside">
-                {pkg.includes.slice(0, 2).map((item, index) => <li key={index}>{item}</li>)}
-            </ul>
-            
-            <div className="flex-grow"></div>
-
-            <div className="flex justify-between items-end">
-                <div>
-                     <div className="flex items-center gap-2 text-sm">
-                        <div className="flex items-center gap-1 text-amber-400">
-                            {[...Array(pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                        </div>
-                        <p className="text-white/70">({pkg.reviews} reviews)</p>
+            <CardContent className="p-4 flex flex-col flex-grow text-white">
+                <div className="flex justify-between items-center text-sm text-white/80 mb-3">
+                    <div className="flex items-center gap-2">
+                        <PlaneTakeoff className="h-4 w-4" />
+                        <span>Departs from {pkg.origin}</span>
                     </div>
-                    <p className="text-xs text-white/80 mt-1">Price per person from</p>
-                    <p className="font-bold text-2xl text-white">${pkg.price}</p>
+                    <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        <span>{pkg.duration} Nights</span>
+                    </div>
                 </div>
-                <Button asChild className="font-semibold bg-success hover:bg-success/90" size="sm">
-                   <Link href={`/packages/${pkg.id}`}>
-                     View Package
-                   </Link>
-                </Button>
-            </div>
-        </CardContent>
-    </Card>
-);
+
+                <ul className="text-xs text-white/70 space-y-1 mb-4 list-disc list-inside">
+                    {pkg.includes.slice(0, 2).map((item, index) => <li key={index}>{item}</li>)}
+                </ul>
+                
+                <div className="flex-grow"></div>
+
+                <div className="flex justify-between items-end">
+                    <div>
+                        <div className="flex items-center gap-2 text-sm">
+                            <div className="flex items-center gap-1 text-amber-400">
+                                {[...Array(pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                            </div>
+                            <p className="text-white/70">({pkg.reviews} reviews)</p>
+                        </div>
+                        <p className="text-xs text-white/80 mt-1">Price per person from</p>
+                        <p className="font-bold text-2xl text-white">${pkg.price}</p>
+                    </div>
+                    <Button asChild className="font-semibold bg-success hover:bg-success/90" size="sm">
+                    <Link href={`/packages/${pkg.id}`}>
+                        View Package
+                    </Link>
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    );
+});
 
 
 export function RecommendedPackages() {
@@ -83,5 +86,3 @@ export function RecommendedPackages() {
     </div>
   );
 }
-
-    

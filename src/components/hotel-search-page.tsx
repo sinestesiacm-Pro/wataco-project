@@ -23,6 +23,47 @@ import type { DateRange } from 'react-day-picker';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+
+const SuggestionsList = React.memo(function SuggestionsList({ 
+    suggestions, 
+    isLoading, 
+    onSelect 
+}: { 
+    suggestions: Airport[], 
+    isLoading: boolean, 
+    onSelect: (airport: Airport) => void 
+}) {
+    return (
+        <div className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+            {isLoading ? (
+                <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
+                </div>
+            ) : suggestions.length > 0 ? (
+                suggestions.map((airport, index) => {
+                    const suggestionText = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
+                    return (
+                        <div
+                            key={`${airport.iataCode}-${index}`}
+                            className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
+                            onClick={() => onSelect(airport)}
+                        >
+                            <div className="flex items-center gap-2">
+                                <MapPin className="w-4 h-4 text-muted-foreground" />
+                                <div className="flex-grow">
+                                    <p className="font-semibold text-sm">{suggestionText || airport.name}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })
+            ) : (
+                <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
+            )}
+        </div>
+    );
+});
+
 const HotelSearchPage = React.memo(function HotelSearchPage() {
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -42,13 +83,10 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 
   const [suggestions, setSuggestions] = useState<Airport[]>([]);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
-  const [isDestinationFocused, setIsDestinationFocused] = useState(false);
+  const [isDestinationPopoverOpen, setIsDestinationPopoverOpen] = useState(false);
 
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   
-  const checkInDate = date?.from;
-  const checkOutDate = date?.to;
-
   const fetchSuggestions = useCallback(async (query: string) => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -70,17 +108,17 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
   }, [toast]);
 
   useEffect(() => {
-    if (isDestinationFocused) {
+    if (isDestinationPopoverOpen) {
       fetchSuggestions(debouncedDestinationQuery);
     }
-  }, [debouncedDestinationQuery, isDestinationFocused, fetchSuggestions]);
+  }, [debouncedDestinationQuery, isDestinationPopoverOpen, fetchSuggestions]);
 
   const handleSelectSuggestion = useCallback((airport: Airport) => {
     setDestination(airport);
     const query = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
     setDestinationQuery(query || airport.name);
     setSuggestions([]);
-    setIsDestinationFocused(false);
+    setIsDestinationPopoverOpen(false);
   }, []);
 
   const handleFormSubmit = useCallback((e: React.FormEvent) => {
@@ -118,37 +156,6 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
   
   const totalGuests = useMemo(() => adults + children, [adults, children]);
   const travelerText = useMemo(() => `${totalGuests} huésped${totalGuests > 1 ? 's' : ''}`, [totalGuests]);
-
-
-  const SuggestionsList = useCallback(() => (
-    <div className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-      {suggestionsLoading ? (
-        <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
-        </div>
-      ) : suggestions.length > 0 ? (
-        suggestions.map((airport, index) => {
-          const suggestionText = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
-          return (
-            <div
-              key={`${airport.iataCode}-${index}`}
-              className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
-              onClick={() => handleSelectSuggestion(airport)}
-            >
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-muted-foreground" />
-                <div className="flex-grow">
-                  <p className="font-semibold text-sm">{suggestionText || airport.name}</p>
-                </div>
-              </div>
-            </div>
-          )
-        })
-      ) : (
-        <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
-      )}
-    </div>
-  ), [suggestions, suggestionsLoading, handleSelectSuggestion]);
     
   const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     e.currentTarget.select();
@@ -159,7 +166,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
         <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
             <div className="w-full lg:col-span-5 relative">
-                <Popover open={isDestinationFocused && destinationQuery.length > 1} onOpenChange={setIsDestinationFocused}>
+                <Popover open={isDestinationPopoverOpen && destinationQuery.length > 1} onOpenChange={setIsDestinationPopoverOpen}>
                     <PopoverTrigger asChild>
                         <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
                             <MapPin className="h-6 w-6 mr-4 text-primary" />
@@ -170,7 +177,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
                                     type="text" 
                                     value={destinationQuery} 
                                     onChange={e => setDestinationQuery(e.target.value)}
-                                    onFocus={() => setIsDestinationFocused(true)}
+                                    onFocus={() => setIsDestinationPopoverOpen(true)}
                                     onClick={handleInputClick}
                                     placeholder="Ej. Nueva York" 
                                     className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
@@ -180,7 +187,11 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
                         </div>
                     </PopoverTrigger>
                       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
-                        <SuggestionsList />
+                        <SuggestionsList 
+                            suggestions={suggestions}
+                            isLoading={suggestionsLoading}
+                            onSelect={handleSelectSuggestion}
+                        />
                       </PopoverContent>
                 </Popover>
             </div>

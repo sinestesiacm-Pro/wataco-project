@@ -3,31 +3,61 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Plane, BedDouble, Zap, Luggage, Ship, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import React, { useMemo } from 'react';
 
-export function BottomNavbar() {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-  
-  const isOnHomePage = pathname === '/';
-  const activeTab = searchParams.get('tab') || 'Flights';
-
-  const isLight = pathname.startsWith('/flights/checkout') || pathname.startsWith('/flights/select') || /^\/hotels\/.*\/offers/.test(pathname);
-
-  const handleTabClick = (tab: string) => {
-    const params = new URLSearchParams(window.location.search);
-    params.set('tab', tab);
-    router.push(`/?${params.toString()}`);
-  };
-
-  const tabsConfig = [
+const tabsConfig = [
     { id: 'Flights', label: 'Vuelos', icon: Plane },
     { id: 'Hotels', label: 'Hoteles', icon: BedDouble },
     { id: 'Packages', label: 'Paquetes', icon: Luggage },
     { id: 'Cruises', label: 'Cruceros', icon: Ship },
     { id: 'Activities', label: 'Actividades', icon: Zap },
     { id: 'Social', label: 'Social', icon: Users },
-  ];
+];
+
+const TabButton = React.memo(function TabButton({ id, label, icon: Icon, isActive, isLight, onClick }: {
+    id: string;
+    label: string;
+    icon: React.ElementType;
+    isActive: boolean;
+    isLight: boolean;
+    onClick: (id: string) => void;
+}) {
+    return (
+        <button
+            onClick={() => onClick(id)}
+            className={cn(
+              "flex flex-col items-center justify-center gap-1 w-full h-full transition-colors",
+              isActive 
+                ? "text-primary scale-110" 
+                : isLight ? "text-muted-foreground" : "text-white/80"
+            )}
+          >
+            <Icon className="h-5 w-5" />
+            <span className="text-[10px] font-semibold">{label}</span>
+        </button>
+    );
+});
+
+
+export function BottomNavbar() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  
+  const activeTab = searchParams.get('tab') || 'Flights';
+  const isOnHomePage = pathname === '/';
+
+  const isLight = useMemo(() => 
+    pathname.startsWith('/flights/checkout') || 
+    pathname.startsWith('/flights/select') || 
+    /^\/hotels\/.*\/offers/.test(pathname)
+  , [pathname]);
+
+  const handleTabClick = (tab: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('tab', tab);
+    router.push(`/?${params.toString()}`);
+  };
 
   return (
     <div 
@@ -39,19 +69,15 @@ export function BottomNavbar() {
     >
       <div className="flex justify-around items-center h-16">
         {tabsConfig.map(({ id, label, icon: Icon }) => (
-          <button
+          <TabButton
             key={id}
-            onClick={() => handleTabClick(id)}
-            className={cn(
-              "flex flex-col items-center justify-center gap-1 w-full h-full text-muted-foreground transition-colors",
-              isOnHomePage && activeTab === id 
-                ? "text-primary scale-110" 
-                : isLight ? "text-muted-foreground" : "text-white/80"
-            )}
-          >
-            <Icon className="h-5 w-5" />
-            <span className="text-[10px] font-semibold">{label}</span>
-          </button>
+            id={id}
+            label={label}
+            icon={Icon}
+            isActive={isOnHomePage && activeTab === id}
+            isLight={isLight}
+            onClick={handleTabClick}
+          />
         ))}
       </div>
     </div>

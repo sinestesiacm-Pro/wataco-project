@@ -100,27 +100,6 @@ function RecommendedContent({ tab }: { tab?: string }) {
   }
 }
 
-const floatingShapes = Array.from({ length: 12 }).map((_, i) => ({
-  id: i,
-  style: {
-    width: `${Math.random() * 100 + 50}px`, // 50 a 150px
-    height: `${Math.random() * 100 + 50}px`, // 50 a 150px
-    top: `${Math.random() * 100}%`,
-    left: `${Math.random() * 100}%`,
-    '--float-duration': `${Math.random() * 30 + 30}s`, // 30s a 60s
-    '--float-delay': `${Math.random() * -30}s`,
-  } as React.CSSProperties,
-}));
-
-const AnimatedWindows = () => (
-    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        {floatingShapes.map(shape => (
-            <div key={shape.id} className="floating-shape" style={shape.style} />
-        ))}
-    </div>
-);
-
-
 export function HomePageContent() {
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'Flights';

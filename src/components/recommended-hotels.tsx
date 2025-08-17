@@ -20,8 +20,8 @@ interface Hotel {
     ubicacion: string;
     descripcion: string;
     media: string[];
-    rating: number; // Added rating for consistency
-    price: number; // Added price for consistency
+    rating: number; 
+    price: number; 
 }
 
 
@@ -70,7 +70,6 @@ const HotelCard = React.memo(function HotelCard({ hotel }: { hotel: Hotel }) {
                         <p className="text-xs text-gray-600">from</p>
                         <p className="font-semibold text-2xl text-white">${hotel.price}<span className="text-sm font-normal text-gray-700">/night</span></p>
                     </div>
-                    {/* The link should eventually lead to a proper details page that also fetches from firestore */}
                     <Button asChild className="font-semibold">
                         <Link href={`/hotels/${hotel.id}`}>View Hotel</Link>
                     </Button>
@@ -98,7 +97,6 @@ const HotelSkeleton = () => (
     </div>
 )
 
-// Function to shuffle an array
 const shuffleArray = <T,>(array: T[]): T[] => {
     let currentIndex = array.length, randomIndex;
 
@@ -119,8 +117,8 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
 
   useEffect(() => {
     const fetchHotels = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const hotelsCollection = collection(db, 'hoteles');
         const hotelSnapshot = await getDocs(hotelsCollection);
         if (hotelSnapshot.empty) {
@@ -176,4 +174,3 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
-

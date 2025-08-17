@@ -11,7 +11,7 @@ import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Label } from './ui/label';
-import { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 
@@ -35,23 +35,25 @@ interface RoomSelectionViewProps {
   children: number;
 }
 
-const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { roomOffer: Room, onSelect: (numberOfRooms: number) => void, isRecommended: boolean, adults: number, children: number }) => {
+const RoomOption = React.memo(function RoomOption({ roomOffer, onSelect, isRecommended, adults, children }: { roomOffer: Room, onSelect: (numberOfRooms: number) => void, isRecommended: boolean, adults: number, children: number }) {
     const isFreeCancellation = true; 
     const hasBreakfast = roomOffer.room.type !== 'STANDARD_ROOM';
     const [mealPlan, setMealPlan] = useState(hasBreakfast ? 'breakfast' : 'none');
     
     const totalGuests = adults + children;
-    // Simple logic to suggest number of rooms. Assumes 2 people per room.
     const roomCapacity = parseInt(roomOffer.room.type.split('_')[0] || '2'); // e.g., '2_DOUBLE' -> 2
     const suggestedRooms = Math.ceil(totalGuests / roomCapacity);
     const [numberOfRooms, setNumberOfRooms] = useState(suggestedRooms);
 
-    const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
-    const finalPrice = parseFloat(roomOffer.price.total) * numberOfRooms;
+    const guestsText = useMemo(() => `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : ''), [adults, children]);
+    const finalPrice = useMemo(() => parseFloat(roomOffer.price.total) * numberOfRooms, [roomOffer.price.total, numberOfRooms]);
+    
+    const handleSelect = useCallback(() => {
+        onSelect(numberOfRooms);
+    }, [onSelect, numberOfRooms]);
 
     return (
         <div className="flex flex-col md:flex-row flex-grow">
-            {/* Options Column */}
             <div className="w-full md:w-1/2 p-6 flex flex-col text-card-foreground">
                  <div className="space-y-4">
                     {isRecommended && (
@@ -93,7 +95,6 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                  <div className="flex-grow"></div>
             </div>
             
-            {/* Price Column */}
             <div className="w-full md:w-1/2 p-6 flex flex-col bg-muted/50">
                 <div className="text-right text-card-foreground">
                     <p className="text-xs text-muted-foreground">Precio total por noche</p>
@@ -118,7 +119,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
                           </SelectContent>
                         </Select>
                     </div>
-                    <Button size="lg" className="w-full bg-primary hover:bg-primary/90 font-bold" onClick={() => onSelect(numberOfRooms)}>
+                    <Button size="lg" className="w-full bg-primary hover:bg-primary/90 font-bold" onClick={handleSelect}>
                         Reservar {numberOfRooms} habitacion{numberOfRooms > 1 ? 'es' : ''}
                     </Button>
                     <div className="mt-2 text-left space-y-2 text-xs text-muted-foreground">
@@ -139,7 +140,7 @@ const RoomOption = ({ roomOffer, onSelect, isRecommended, adults, children }: { 
             </div>
         </div>
     )
-};
+});
 
 
 export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children }: RoomSelectionViewProps) {
@@ -208,7 +209,7 @@ export function RoomSelectionView({ hotelOffer, onRoomSelected, adults, children
                 <div className="md:col-span-7 flex flex-col">
                     <RoomOption 
                         roomOffer={roomOffer} 
-                        onSelect={(numRooms) => onRoomSelected(roomOffer, numRooms)} 
+                        onSelect={onRoomSelected} 
                         isRecommended={index === 0}
                         adults={adults}
                         children={children}

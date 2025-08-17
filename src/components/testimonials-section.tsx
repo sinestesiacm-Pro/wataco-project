@@ -5,7 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
+import React from 'react';
 
 const testimonials = [
   {
@@ -47,8 +48,29 @@ const renderStars = (rating: number) => {
     );
 };
 
-export function TestimonialsSection() {
+const TestimonialCard = memo(function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
+    return (
+        <Card className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white/40 backdrop-blur-xl border-none text-gray-800">
+            <CardContent className="p-6 flex flex-col flex-grow text-left">
+            <div className="flex items-center mb-4">
+                <Avatar className="h-14 w-14 mr-4 border-2 border-primary">
+                <AvatarImage src={testimonial.avatar} data-ai-hint={testimonial.hint} alt={testimonial.name} />
+                <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                <h3 className="font-bold font-headline text-lg text-gray-900">{testimonial.name}</h3>
+                <p className="text-sm text-gray-700">{testimonial.location}</p>
+                </div>
+            </div>
+            <blockquote className="text-gray-800 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
+            {renderStars(testimonial.rating)}
+            </CardContent>
+        </Card>
+    );
+});
 
+
+export function TestimonialsSection() {
   return (
     <section className="py-16 text-center flex-grow flex flex-col justify-end pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,27 +80,10 @@ export function TestimonialsSection() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
-                <Card key={index} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white/40 backdrop-blur-xl border-none text-gray-800">
-                    <CardContent className="p-6 flex flex-col flex-grow text-left">
-                    <div className="flex items-center mb-4">
-                        <Avatar className="h-14 w-14 mr-4 border-2 border-primary">
-                        <AvatarImage src={testimonial.avatar} data-ai-hint={testimonial.hint} alt={testimonial.name} />
-                        <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                        <h3 className="font-bold font-headline text-lg text-gray-900">{testimonial.name}</h3>
-                        <p className="text-sm text-gray-700">{testimonial.location}</p>
-                        </div>
-                    </div>
-                    <blockquote className="text-gray-800 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
-                    {renderStars(testimonial.rating)}
-                    </CardContent>
-                </Card>
+                    <TestimonialCard key={index} testimonial={testimonial} />
                 ))}
             </div>
         </div>
     </section>
   );
 }
-
-    

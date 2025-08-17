@@ -15,8 +15,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogOut, User as UserIcon, LayoutGrid, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { SettingsDialog } from './settings-dialog';
+import React from 'react';
 
-export function UserNav() {
+export const UserNav = React.memo(function UserNav() {
   const { user, logOut } = useAuth();
 
   if (!user) {
@@ -67,4 +68,4 @@ export function UserNav() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+});

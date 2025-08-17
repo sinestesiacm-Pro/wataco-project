@@ -21,6 +21,48 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Separator } from './ui/separator';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+const SuggestionsList = React.memo(function SuggestionsList({ 
+    suggestions, 
+    isLoading, 
+    onSelect 
+}: { 
+    suggestions: Airport[], 
+    isLoading: boolean, 
+    onSelect: (airport: Airport) => void 
+}) {
+    return (
+        <div className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+            {isLoading ? (
+                <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
+                </div>
+            ) : suggestions.length > 0 ? (
+                suggestions.map((airport, index) => (
+                    <div
+                        key={`${airport.iataCode}-${airport.name}-${index}`}
+                        className="px-3 py-2 hover:bg-accent cursor-pointer border-b border-border last:border-b-0"
+                        onClick={() => onSelect(airport)}
+                    >
+                        <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4 text-muted-foreground" />
+                            <div className="flex-grow">
+                                <p className="font-semibold text-sm">
+                                    {airport.address?.cityName || airport.name}
+                                    {airport.address?.countryName ? `, ${airport.address.countryName}` : ''}
+                                </p>
+                                <p className="text-xs text-muted-foreground">{airport.name} ({airport.iataCode})</p>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            ) : (
+                <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
+            )}
+        </div>
+    );
+});
+
+
 const FlightSearchPage = React.memo(function FlightSearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -46,42 +88,30 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
 
   const [originSuggestions, setOriginSuggestions] = useState<Airport[]>([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState<Airport[]>([]);
-  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [originLoading, setOriginLoading] = useState(false);
+  const [destinationLoading, setDestinationLoading] = useState(false);
   
-  const [isOriginFocused, setIsOriginFocused] = useState(false);
-  const [isDestinationFocused, setIsDestinationFocused] = useState(false);
+  const [isOriginPopoverOpen, setIsOriginPopoverOpen] = useState(false);
+  const [isDestinationPopoverOpen, setIsDestinationPopoverOpen] = useState(false);
 
   const debouncedOriginQuery = useDebounce(originQuery, 300);
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   
-  const popoverContentRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    // This effect handles auto-search from promotion cards
     const urlOrigin = searchParams.get('origin');
-    const urlDestination = searchParams.get('destination');
-    const urlFromDate = searchParams.get('from_date');
-    const urlToDate = searchParams.get('to_date');
-    const urlAdults = searchParams.get('adults');
-    const urlOriginQuery = searchParams.get('origin_query');
-    const urlDestinationQuery = searchParams.get('destination_query');
-    const autoSearch = searchParams.get('autosearch');
-
-    if (autoSearch === 'true' && urlOrigin && urlDestination && urlFromDate) {
+    if (urlOrigin) {
       const query = new URLSearchParams({
         origin: urlOrigin,
-        destination: urlDestination,
-        departureDate: urlFromDate,
-        adults: urlAdults || '1',
-        originQuery: urlOriginQuery || urlOrigin,
-        destinationQuery: urlDestinationQuery || urlDestination,
+        destination: searchParams.get('destination')!,
+        departureDate: searchParams.get('from_date')!,
+        adults: searchParams.get('adults') || '1',
+        originQuery: searchParams.get('origin_query') || urlOrigin,
+        destinationQuery: searchParams.get('destination_query') || searchParams.get('destination')!,
+        ...(searchParams.get('to_date') && { returnDate: searchParams.get('to_date')! }),
       });
-      if (urlToDate) {
-        query.set('returnDate', urlToDate);
-      }
       router.push(`/flights/select?${query.toString()}`);
     }
-  }, [searchParams, router]);
+  }, []);
 
 
   const fetchSuggestions = useCallback(async (query: string, type: 'origin' | 'destination') => {
@@ -89,7 +119,9 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
       type === 'origin' ? setOriginSuggestions([]) : setDestinationSuggestions([]);
       return;
     }
-    setSuggestionsLoading(true);
+
+    type === 'origin' ? setOriginLoading(true) : setDestinationLoading(true);
+
     const result = await searchAirports(query);
     if (result.success && result.data) {
         if (type === 'origin') setOriginSuggestions(result.data);
@@ -97,20 +129,21 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
     } else {
         type === 'origin' ? setOriginSuggestions([]) : setDestinationSuggestions([]);
     }
-    setSuggestionsLoading(false);
+
+    type === 'origin' ? setOriginLoading(false) : setDestinationLoading(false);
   }, []);
   
   useEffect(() => {
-    if (isOriginFocused) {
+    if (isOriginPopoverOpen) {
       fetchSuggestions(debouncedOriginQuery, 'origin');
     }
-  }, [debouncedOriginQuery, fetchSuggestions, isOriginFocused]);
+  }, [debouncedOriginQuery, fetchSuggestions, isOriginPopoverOpen]);
 
   useEffect(() => {
-     if (isDestinationFocused) {
+     if (isDestinationPopoverOpen) {
       fetchSuggestions(debouncedDestinationQuery, 'destination');
     }
-  }, [debouncedDestinationQuery, fetchSuggestions, isDestinationFocused]);
+  }, [debouncedDestinationQuery, fetchSuggestions, isDestinationPopoverOpen]);
   
   const handleSelectSuggestion = useCallback((airport: Airport, type: 'origin' | 'destination') => {
     const locationName = airport.address?.cityName || airport.name;
@@ -121,12 +154,12 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
       setOrigin(airport.iataCode);
       setOriginQuery(query || locationName);
       setOriginSuggestions([]);
-      setIsOriginFocused(false);
+      setIsOriginPopoverOpen(false);
     } else {
       setDestination(airport.iataCode);
       setDestinationQuery(query || locationName);
       setDestinationSuggestions([]);
-      setIsDestinationFocused(false);
+      setIsDestinationPopoverOpen(false);
     }
   }, []);
 
@@ -160,38 +193,7 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
 
   const totalTravelers = useMemo(() => adults + children + infants, [adults, children, infants]);
   const travelerText = useMemo(() => `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`, [totalTravelers]);
-
-  const renderSuggestions = useCallback((suggestions: Airport[], type: 'origin' | 'destination') => (
-      <div ref={popoverContentRef} className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-        {suggestionsLoading ? (
-          <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
-            <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
-          </div>
-        ) : suggestions.length > 0 ? (
-          suggestions.map((airport, index) => (
-            <div
-              key={`${airport.iataCode}-${airport.name}-${index}`}
-              className="px-3 py-2 hover:bg-accent cursor-pointer border-b border-border last:border-b-0"
-              onClick={() => handleSelectSuggestion(airport, type)}
-            >
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-muted-foreground" />
-                <div className="flex-grow">
-                  <p className="font-semibold text-sm">
-                    {airport.address?.cityName || airport.name}
-                    {airport.address?.countryName ? `, ${airport.address.countryName}`: ''}
-                  </p>
-                  <p className="text-xs text-muted-foreground">{airport.name} ({airport.iataCode})</p>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-           <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
-        )}
-      </div>
-  ), [suggestionsLoading, handleSelectSuggestion]);
-
+  
   const handleSwapDestinations = useCallback(() => {
     setOrigin(destination);
     setDestination(origin);
@@ -209,7 +211,7 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
           
             <div className="relative">
                 <div className="space-y-4">
-                  <Popover open={isOriginFocused && originQuery.length > 1} onOpenChange={setIsOriginFocused}>
+                  <Popover open={isOriginPopoverOpen && originQuery.length > 1} onOpenChange={setIsOriginPopoverOpen}>
                     <PopoverTrigger asChild>
                       <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
                           <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
@@ -220,7 +222,7 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
                                   type="text" 
                                   value={originQuery} 
                                   onChange={e => setOriginQuery(e.target.value)} 
-                                  onFocus={() => setIsOriginFocused(true)}
+                                  onFocus={() => setIsOriginPopoverOpen(true)}
                                   onClick={handleInputClick}
                                   placeholder="Ciudad o aeropuerto" 
                                   className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
@@ -230,11 +232,15 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
                       </div>
                     </PopoverTrigger>
                     <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
-                        {renderSuggestions(originSuggestions, 'origin')}
+                        <SuggestionsList 
+                            suggestions={originSuggestions} 
+                            isLoading={originLoading}
+                            onSelect={(airport) => handleSelectSuggestion(airport, 'origin')}
+                        />
                     </PopoverContent>
                   </Popover>
                   
-                  <Popover open={isDestinationFocused && destinationQuery.length > 1} onOpenChange={setIsDestinationFocused}>
+                  <Popover open={isDestinationPopoverOpen && destinationQuery.length > 1} onOpenChange={setIsDestinationPopoverOpen}>
                     <PopoverTrigger asChild>
                       <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
                           <MapPin className="h-6 w-6 mr-4 text-tertiary" />
@@ -245,7 +251,7 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
                                   type="text" 
                                   value={destinationQuery} 
                                   onChange={e => setDestinationQuery(e.target.value)}
-                                  onFocus={() => setIsDestinationFocused(true)}
+                                  onFocus={() => setIsDestinationPopoverOpen(true)}
                                   onClick={handleInputClick}
                                   placeholder="Ciudad o aeropuerto" 
                                   className="bg-transparent border-0 p-0 h-auto text-lg font-semibold text-gray-800 placeholder:text-gray-500 focus-visible:ring-0" 
@@ -255,7 +261,11 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
                       </div>
                     </PopoverTrigger>
                     <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
-                         {renderSuggestions(destinationSuggestions, 'destination')}
+                         <SuggestionsList 
+                            suggestions={destinationSuggestions}
+                            isLoading={destinationLoading}
+                            onSelect={(airport) => handleSelectSuggestion(airport, 'destination')}
+                        />
                     </PopoverContent>
                   </Popover>
                 </div>
