@@ -30,14 +30,21 @@ export function PartnersSection({ title, partners }: PartnersSectionProps) {
       >
         <div className="marquee-content">
           {extendedPartners.map((partner, index) => (
-            <div key={`${partner.domain}-${index}`} className="partner-logo">
+             <div key={`${partner.domain}-${index}`} className="partner-logo glitch-container" style={{background: `url(https://logo.clearbit.com/${partner.domain})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center'}}>
               <Image 
                 src={`https://logo.clearbit.com/${partner.domain}`}
                 alt={partner.name}
-                width={140}
-                height={50}
-                className="object-contain h-14 w-auto transition-all duration-300"
-                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                width={160}
+                height={60}
+                className="object-contain h-16 w-auto transition-all duration-300"
+                onError={(e) => { 
+                  const target = e.target as HTMLImageElement;
+                  const parent = target.parentElement;
+                  if(parent && parent.style.backgroundImage) {
+                    parent.style.backgroundImage = `url(https://images.kiwi.com/airlines/64/${partner.domain.split('.')[0]}.png)`;
+                  }
+                  target.src = `https://images.kiwi.com/airlines/64/${partner.domain.split('.')[0]}.png`;
+                 }}
               />
             </div>
           ))}
@@ -46,5 +53,7 @@ export function PartnersSection({ title, partners }: PartnersSectionProps) {
     </section>
   );
 }
+
+    
 
     
