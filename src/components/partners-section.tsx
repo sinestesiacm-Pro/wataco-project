@@ -1,3 +1,4 @@
+
 'use client';
 
 import { cn } from '@/lib/utils';
@@ -35,7 +36,7 @@ export function PartnersSection({ title, partners }: PartnersSectionProps) {
                 alt={partner.name}
                 width={140}
                 height={50}
-                className="object-contain h-14 w-auto transition-all duration-300 filter grayscale brightness-0 invert opacity-70 hover:opacity-100"
+                className="object-contain h-14 w-auto transition-all duration-300"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />
             </div>
@@ -45,3 +46,5 @@ export function PartnersSection({ title, partners }: PartnersSectionProps) {
     </section>
   );
 }
+
+    
