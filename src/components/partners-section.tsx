@@ -53,7 +53,3 @@ export function PartnersSection({ title, partners }: PartnersSectionProps) {
     </section>
   );
 }
-
-    
-
-    
