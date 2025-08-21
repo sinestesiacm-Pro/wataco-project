@@ -20,8 +20,6 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
-import { PartnersSection } from './partners-section';
-
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -50,20 +48,41 @@ const airlinePartners = [
   { name: 'Delta', domain: 'delta.com' },
   { name: 'British Airways', domain: 'ba.com' },
   { name: 'Air France', domain: 'airfrance.com' },
-  { name: 'KLM', domain: 'klm.com' },
-  { name: 'Qatar Airways', domain: 'qatarairways.com' },
-  { name: 'Avianca', domain: 'avianca.com' },
 ];
 
 const hotelPartners = [
+  { name: 'Accor', domain: 'accor.com' },
   { name: 'Marriott', domain: 'marriott.com' },
   { name: 'Hilton', domain: 'hilton.com' },
   { name: 'Hyatt', domain: 'hyatt.com' },
-  { name: 'Four Seasons', domain: 'fourseasons.com' },
-  { name: 'Westin', domain: 'westin.com' },
-  { name: 'Ritz-Carlton', domain: 'ritzcarlton.com' },
-  { name: 'Accor', domain: 'accor.com' },
+  { name: 'Choice Hotels', domain: 'choicehotels.com' },
+  { name: 'IHG', domain: 'ihg.com' },
 ];
+
+const PartnersGrid = ({ title, subtitle, partners }: { title: string, subtitle: string, partners: typeof airlinePartners }) => (
+    <div className="py-16 text-center">
+        <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">{title}</h2>
+        <p className="text-lg text-white/80 mt-2 drop-shadow-lg">{subtitle}</p>
+        <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto">
+            {partners.map(partner => (
+                <div key={partner.domain} className="bg-white/80 backdrop-blur-sm rounded-xl p-4 flex items-center justify-center aspect-square transition-all duration-300 hover:scale-110 hover:shadow-2xl">
+                    <Image
+                        src={`https://logo.clearbit.com/${partner.domain}`}
+                        alt={partner.name}
+                        width={100}
+                        height={60}
+                        className="object-contain h-12 w-auto"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            const airlineCode = partner.domain.split('.')[0];
+                            target.src = `https://images.kiwi.com/airlines/64/${airlineCode}.png`;
+                        }}
+                    />
+                </div>
+            ))}
+        </div>
+    </div>
+);
 
 
 function RecommendedContent({ tab }: { tab?: string }) {
@@ -74,9 +93,7 @@ function RecommendedContent({ tab }: { tab?: string }) {
       return (
           <>
             <RecommendedHotels />
-            <div className="pt-16">
-              <PartnersSection title="Cadenas Hoteleras de Confianza" partners={hotelPartners} />
-            </div>
+            <PartnersGrid title="Nuestros Hoteles de Confianza" subtitle="Red mundial de confianza" partners={hotelPartners} />
           </>
       )
     case 'Packages':
@@ -92,9 +109,7 @@ function RecommendedContent({ tab }: { tab?: string }) {
       return (
           <>
             <RecommendedDestinations />
-            <div className="pt-16">
-               <PartnersSection title="Nuestras Aerolíneas Asociadas" partners={airlinePartners} />
-            </div>
+            <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
           </>
       )
   }
