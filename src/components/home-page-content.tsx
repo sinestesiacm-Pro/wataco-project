@@ -15,7 +15,7 @@ import { useSearchParams } from 'next/navigation';
 import { SocialFeedSection } from './social-feed-section';
 import { Footer } from './footer';
 import { useTheme } from '@/contexts/theme-context';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
@@ -51,12 +51,12 @@ const airlinePartners = [
 ];
 
 const hotelPartners = [
-  { name: 'Accor', domain: 'accor.com' },
-  { name: 'Marriott', domain: 'marriott.com' },
-  { name: 'Hilton', domain: 'hilton.com' },
-  { name: 'Hyatt', domain: 'hyatt.com' },
-  { name: 'Choice Hotels', domain: 'choicehotels.com' },
-  { name: 'IHG', domain: 'ihg.com' },
+    { name: 'Marriott', domain: 'marriott.com' },
+    { name: 'Hilton', domain: 'hilton.com' },
+    { name: 'Hyatt', domain: 'hyatt.com' },
+    { name: 'Accor', domain: 'accor.com' },
+    { name: 'Choice Hotels', domain: 'choicehotels.com' },
+    { name: 'Sheraton', domain: 'sheraton.com' }, // Part of Marriott, good logo
 ];
 
 const PartnersGrid = ({ title, subtitle, partners }: { title: string, subtitle: string, partners: typeof airlinePartners }) => (
@@ -71,7 +71,7 @@ const PartnersGrid = ({ title, subtitle, partners }: { title: string, subtitle: 
                         alt={partner.name}
                         width={100}
                         height={60}
-                        className="object-contain h-12 w-auto"
+                        className="object-contain w-auto"
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             const airlineCode = partner.domain.split('.')[0];
