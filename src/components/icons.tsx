@@ -1,10 +1,11 @@
+
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 const BeOnTripLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
   <Image
     src="https://i.ibb.co/HS47tyK/Logo-moderno-ORVIAN-su-fondo-blu.png"
-    alt="BE ON TRIP Logo"
+    alt="ORVIAN Logo"
     width={width}
     height={height}
     className={cn(className)}

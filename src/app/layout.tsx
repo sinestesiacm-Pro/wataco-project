@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
@@ -8,8 +9,8 @@ import { BottomNavbar } from '@/components/bottom-navbar';
 import { ThemeProvider, ThemeWrapper } from '@/contexts/theme-context';
 
 export const metadata: Metadata = {
-  title: 'BE ON TRIP',
-  description: 'Your global travel platform to discover the world.',
+  title: 'ORVIAN',
+  description: 'ORVIAN - Your global travel platform to discover the world.',
 };
 
 export default function RootLayout({

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -55,7 +56,7 @@ export function Header() {
     if (path.startsWith('/flights/checkout')) return 'Finalize Purchase';
     if (/^\/hotels\/.*\/offers/.test(pathname)) return 'Select Room';
     
-    return 'BE ON TRIP';
+    return 'ORVIAN';
   }
 
   const currentTitle = getTitleFromPath(pathname);
