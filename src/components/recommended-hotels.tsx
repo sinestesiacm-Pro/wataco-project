@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -56,6 +55,7 @@ const HotelCard = React.memo(function HotelCard({ hotel }: { hotel: Hotel }) {
             <CardContent className="p-4 flex flex-col flex-grow text-gray-800">
                 <h3 className="font-bold text-lg">{hotel.nombre}</h3>
                 <p className="text-sm text-gray-600">{hotel.ubicacion}</p>
+                 <p className="text-sm text-gray-600 mt-2 line-clamp-2">{hotel.descripcion}</p>
                 
                 <div className="flex items-center gap-2 mt-2 text-sm">
                     <div className="flex items-center gap-1 text-amber-400">
