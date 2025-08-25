@@ -96,7 +96,7 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
     const to = destinationName.split(',')[0] || "Destino";
 
     return (
-        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
+        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-flights-background">
             <WelcomeAboardCloud />
             <div className="relative z-30 bg-gray-800/40 backdrop-blur-md p-6 rounded-2xl font-body loading-route-box shadow-2xl border border-white/20">
               <h2 className="text-2xl font-bold text-white drop-shadow-lg">De {from} a {to}</h2>
