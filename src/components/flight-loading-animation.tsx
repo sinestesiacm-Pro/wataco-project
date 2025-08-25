@@ -54,16 +54,18 @@ const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
             className={cn("whitespace-nowrap absolute text-white", word.size)}
-            style={{
-                top: word.top,
-                left: word.left,
-                fontWeight: word.weight,
-                animationName: 'float-and-fade-ltr',
-                animationDuration: word.animationDuration,
-                animationDelay: word.animationDelay,
-                animationTimingFunction: 'linear',
-                animationIterationCount: 'infinite',
-            } as React.CSSProperties}
+            style={
+                {
+                    top: word.top,
+                    left: word.left,
+                    fontWeight: word.weight,
+                    animationName: 'float-and-fade-ltr',
+                    animationDuration: word.animationDuration,
+                    animationDelay: word.animationDelay,
+                    animationTimingFunction: 'linear',
+                    animationIterationCount: 'infinite',
+                } as React.CSSProperties
+            }
         >
             {word.text}
         </span>
@@ -97,8 +99,8 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
         <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
             <WelcomeAboardCloud />
             <div className="relative z-30 bg-white/20 backdrop-blur-md p-6 rounded-2xl font-body loading-route-box shadow-2xl border border-white/30">
-              <h2 className="text-2xl font-bold text-gray-800 drop-shadow-lg">De {from} a {to}</h2>
-              <p className="text-gray-600 mt-1 drop-shadow-lg font-medium">Buscando entre más de 400 aerolíneas...</p>
+              <h2 className="text-2xl font-bold text-gray-900 drop-shadow-lg">De {from} a {to}</h2>
+              <p className="text-gray-700 mt-1 drop-shadow-lg font-medium">Buscando entre más de 400 aerolíneas...</p>
             </div>
         </div>
     );
