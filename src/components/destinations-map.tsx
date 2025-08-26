@@ -1,105 +1,73 @@
 'use client';
 
-import React from 'react';
-import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
+import React, { useState, useEffect, useCallback } from 'react';
+import { APIProvider, Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
 import { useTheme } from '@/contexts/theme-context';
 import { Icons } from './icons';
-
-const mapStyles = [
-    { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
-    { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
-    { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
-    {
-      featureType: 'administrative.locality',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#d59563' }],
-    },
-    {
-      featureType: 'poi',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#d59563' }],
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'geometry',
-      stylers: [{ color: '#263c3f' }],
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#6b9a76' }],
-    },
-    {
-      featureType: 'road',
-      elementType: 'geometry',
-      stylers: [{ color: '#38414e' }],
-    },
-    {
-      featureType: 'road',
-      elementType: 'geometry.stroke',
-      stylers: [{ color: '#212a37' }],
-    },
-    {
-      featureType: 'road',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#9ca5b3' }],
-    },
-    {
-      featureType: 'road.highway',
-      elementType: 'geometry',
-      stylers: [{ color: '#746855' }],
-    },
-    {
-      featureType: 'road.highway',
-      elementType: 'geometry.stroke',
-      stylers: [{ color: '#1f2835' }],
-    },
-    {
-      featureType: 'road.highway',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#f3d19c' }],
-    },
-    {
-      featureType: 'transit',
-      elementType: 'geometry',
-      stylers: [{ color: '#2f3948' }],
-    },
-    {
-      featureType: 'transit.station',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#d59563' }],
-    },
-    {
-      featureType: 'water',
-      elementType: 'geometry',
-      stylers: [{ color: '#17263c' }],
-    },
-    {
-      featureType: 'water',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#515c6d' }],
-    },
-    {
-      featureType: 'water',
-      elementType: 'labels.text.stroke',
-      stylers: [{ color: '#17263c' }],
-    },
-];
+import { Button } from './ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import FlightSearchPage from './flight-search-page';
+import { Navigation, X } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 const popularDestinations = [
-  { id: 'paris', name: 'Paris', position: { lat: 48.8566, lng: 2.3522 } },
-  { id: 'nyc', name: 'New York', position: { lat: 40.7128, lng: -74.0060 } },
-  { id: 'tokyo', name: 'Tokyo', position: { lat: 35.6895, lng: 139.6917 } },
-  { id: 'london', name: 'London', position: { lat: 51.5074, lng: -0.1278 } },
-  { id: 'rome', name: 'Rome', position: { lat: 41.9028, lng: 12.4964 } },
-  { id: 'bogota', name: 'Bogotá', position: { lat: 4.7110, lng: -74.0721 } },
+  { id: 'paris', name: 'Paris', position: { lat: 48.8566, lng: 2.3522 }, iata: 'CDG' },
+  { id: 'nyc', name: 'New York', position: { lat: 40.7128, lng: -74.0060 }, iata: 'JFK' },
+  { id: 'tokyo', name: 'Tokyo', position: { lat: 35.6895, lng: 139.6917 }, iata: 'NRT' },
+  { id: 'london', name: 'London', position: { lat: 51.5074, lng: -0.1278 }, iata: 'LHR' },
+  { id: 'rome', name: 'Rome', position: { lat: 41.9028, lng: 12.4964 }, iata: 'FCO' },
+  { id: 'bogota', name: 'Bogotá', position: { lat: 4.7110, lng: -74.0721 }, iata: 'BOG' },
+  { id: 'sydney', name: 'Sydney', position: { lat: -33.8688, lng: 151.2093 }, iata: 'SYD' },
+  { id: 'dubai', name: 'Dubai', position: { lat: 25.276987, lng: 55.296249 }, iata: 'DXB' },
+  { id: 'istanbul', name: 'Istanbul', position: { lat: 41.0082, lng: 28.9784 }, iata: 'IST' },
+  { id: 'cancun', name: 'Cancun', position: { lat: 21.1619, lng: -86.8515 }, iata: 'CUN' },
+  { id: 'bkk', name: 'Bangkok', position: { lat: 13.7563, lng: 100.5018 }, iata: 'BKK' },
+  { id: 'singapore', name: 'Singapore', position: { lat: 1.3521, lng: 103.8198 }, iata: 'SIN' },
 ];
 
+const nearbyAirports = [
+    { id: 'nearby-jfk', name: 'John F. Kennedy Intl.', position: { lat: 40.6413, lng: -73.7781 }, iata: 'JFK' },
+    { id: 'nearby-lga', name: 'LaGuardia Airport', position: { lat: 40.7769, lng: -73.8740 }, iata: 'LGA' },
+    { id: 'nearby-ewr', name: 'Newark Liberty Intl.', position: { lat: 40.6925, lng: -74.1687 }, iata: 'EWR' },
+]
 
 export function DestinationsMap() {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     const { colorTheme } = useTheme();
-    const [selectedDestination, setSelectedDestination] = React.useState<typeof popularDestinations[0] | null>(null);
+    const isMobile = useIsMobile();
+    
+    const [selectedDestination, setSelectedDestination] = useState<typeof popularDestinations[0] | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [mapCenter, setMapCenter] = useState({ lat: 25, lng: 10 });
+    const [mapZoom, setMapZoom] = useState(isMobile ? 1 : 2);
+    const [showNearby, setShowNearby] = useState(false);
+
+    useEffect(() => {
+        if (selectedDestination) {
+            setIsSheetOpen(true);
+        }
+    }, [selectedDestination]);
+
+    useEffect(() => {
+        if (!isSheetOpen) {
+            setSelectedDestination(null);
+        }
+    }, [isSheetOpen]);
+    
+    const handleGeolocate = useCallback(() => {
+        // In a real app, you'd use navigator.geolocation
+        // For this demo, we'll just center on a fixed point (e.g., New York)
+        setMapCenter({ lat: 40.7128, lng: -74.0060 });
+        setMapZoom(9);
+        setShowNearby(true);
+    }, []);
+    
+    const handlePinClick = useCallback((dest: typeof popularDestinations[0]) => {
+      setSelectedDestination(dest);
+      setMapCenter(dest.position);
+      setMapZoom(6);
+    }, []);
 
     if (!apiKey) {
       return (
@@ -110,47 +78,72 @@ export function DestinationsMap() {
     }
   
     return (
-        <div className="py-16 text-center">
-            <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">Explora Nuestros Destinos Más Populares</h2>
-            <p className="text-lg text-white/80 mt-2 drop-shadow-lg">Descubre a dónde viajan nuestros exploradores.</p>
-            <div className="mt-8 h-96 w-full rounded-2xl overflow-hidden shadow-2xl border border-white/20">
-                <APIProvider apiKey={apiKey}>
-                    <Map
-                    defaultCenter={{ lat: 25, lng: 0 }}
-                    defaultZoom={2}
-                    mapId="orvian-main-map"
-                    gestureHandling={'greedy'}
-                    disableDefaultUI={true}
-                    styles={colorTheme === 'dark' ? mapStyles : undefined}
-                    >
-                    {popularDestinations.map((dest) => (
-                        <AdvancedMarker
-                            key={dest.id}
-                            position={dest.position}
-                            onClick={() => setSelectedDestination(dest)}
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+            <div className="py-16 text-center">
+                <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">Explora Nuestros Destinos Más Populares</h2>
+                <p className="text-lg text-white/80 mt-2 drop-shadow-lg">Descubre a dónde viajan nuestros exploradores.</p>
+                <div className="mt-8 h-[60vh] max-h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-xl relative">
+                    <APIProvider apiKey={apiKey}>
+                        <Map
+                        center={mapCenter}
+                        zoom={mapZoom}
+                        mapId="orvian-main-map"
+                        gestureHandling={'greedy'}
+                        disableDefaultUI={true}
+                        className="transition-all duration-1000"
                         >
-                            <Pin 
-                                background={'#1C88FF'} 
-                                borderColor={'#ffffff'} 
-                                glyphColor={'#ffffff'}
+                        {popularDestinations.map((dest) => (
+                            <AdvancedMarker
+                                key={dest.id}
+                                position={dest.position}
+                                onClick={() => handlePinClick(dest)}
                             >
-                                <Icons.logo width={20} height={20} className="invert brightness-0" />
-                            </Pin>
-                        </AdvancedMarker>
-                    ))}
-
-                    {selectedDestination && (
-                        <InfoWindow
-                            position={selectedDestination.position}
-                            onCloseClick={() => setSelectedDestination(null)}
-                            pixelOffset={[0, -40]}
-                        >
-                            <p className="font-bold text-gray-800">{selectedDestination.name}</p>
-                        </InfoWindow>
-                    )}
-                    </Map>
-                </APIProvider>
+                                <Pin 
+                                    background={selectedDestination?.id === dest.id ? '#FF9800' : '#1C88FF'}
+                                    borderColor={'#ffffff'} 
+                                    glyphColor={'#ffffff'}
+                                />
+                            </AdvancedMarker>
+                        ))}
+                        {showNearby && nearbyAirports.map(airport => (
+                             <AdvancedMarker
+                                key={airport.id}
+                                position={airport.position}
+                                title={airport.name}
+                            >
+                               <div className="p-1.5 bg-green-500 rounded-full border-2 border-white shadow-lg">
+                                 <Icons.logo width={16} height={16} className="invert brightness-0" />
+                               </div>
+                            </AdvancedMarker>
+                        ))}
+                        </Map>
+                    </APIProvider>
+                    <Button
+                        size="icon"
+                        variant="secondary"
+                        onClick={handleGeolocate}
+                        className="absolute bottom-4 left-4 rounded-full shadow-lg h-12 w-12"
+                        aria-label="Find nearby airports"
+                    >
+                        <Navigation className="h-6 w-6"/>
+                    </Button>
+                </div>
             </div>
-      </div>
+            
+            <SheetContent side="bottom" className={cn(
+                "h-[90vh] bg-background/50 backdrop-blur-2xl border-t border-white/20 flex flex-col rounded-t-3xl p-0",
+                "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom"
+            )}>
+                 <SheetHeader className="p-4 flex-row items-center justify-between border-b border-white/20">
+                    <SheetTitle className="text-white font-headline text-2xl">Vuela a {selectedDestination?.name}</SheetTitle>
+                     <button onClick={() => setIsSheetOpen(false)} className="text-white/70 hover:text-white">
+                        <X className="h-6 w-6"/>
+                     </button>
+                </SheetHeader>
+                <div className="p-6 overflow-y-auto">
+                    <FlightSearchPage />
+                </div>
+            </SheetContent>
+        </Sheet>
     );
 }
