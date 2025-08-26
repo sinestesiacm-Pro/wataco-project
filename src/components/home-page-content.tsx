@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
+import { DestinationsMap } from './destinations-map';
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -108,6 +109,7 @@ function RecommendedContent({ tab }: { tab?: string }) {
       return (
           <>
             <RecommendedDestinations />
+            <DestinationsMap />
             <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
           </>
       )
