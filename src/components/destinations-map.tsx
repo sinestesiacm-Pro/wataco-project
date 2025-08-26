@@ -82,7 +82,7 @@ export function DestinationsMap() {
             <div className="py-16 text-center">
                 <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">Explora Nuestros Destinos Más Populares</h2>
                 <p className="text-lg text-white/80 mt-2 drop-shadow-lg">Descubre a dónde viajan nuestros exploradores.</p>
-                <div className="mt-8 h-[60vh] max-h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-xl relative">
+                <div className="mt-8 relative h-[60vh] max-h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-xl">
                     <APIProvider apiKey={apiKey}>
                         <Map
                         center={mapCenter}
