@@ -34,7 +34,6 @@ const nearbyAirports = [
 
 export function DestinationsMap() {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    const { colorTheme } = useTheme();
     const isMobile = useIsMobile();
     
     const [selectedDestination, setSelectedDestination] = useState<typeof popularDestinations[0] | null>(null);
