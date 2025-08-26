@@ -1,4 +1,3 @@
-
 'use client';
 
 import FlightSearchPage from '@/components/flight-search-page';
@@ -65,13 +64,13 @@ const PartnersGrid = ({ title, subtitle, partners }: { title: string, subtitle: 
         <p className="text-lg text-white/80 mt-2 drop-shadow-lg">{subtitle}</p>
         <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto">
             {partners.map(partner => (
-                <div key={partner.domain} className="bg-white/80 backdrop-blur-sm rounded-xl p-4 flex items-center justify-center aspect-square transition-all duration-300 hover:scale-110 hover:shadow-2xl">
+                <div key={partner.domain} className="bg-white rounded-xl p-4 flex items-center justify-center aspect-square transition-all duration-300 hover:scale-110 hover:shadow-2xl">
                     <Image
                         src={`https://logo.clearbit.com/${partner.domain}`}
                         alt={partner.name}
                         width={100}
                         height={60}
-                        className="object-contain w-auto bg-white"
+                        className="object-contain w-auto"
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             const airlineCode = partner.domain.split('.')[0];
