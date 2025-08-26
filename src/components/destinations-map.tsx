@@ -56,8 +56,6 @@ export function DestinationsMap() {
     }, [isSheetOpen]);
     
     const handleGeolocate = useCallback(() => {
-        // In a real app, you'd use navigator.geolocation
-        // For this demo, we'll just center on a fixed point (e.g., New York)
         setMapCenter({ lat: 40.7128, lng: -74.0060 });
         setMapZoom(9);
         setShowNearby(true);
@@ -82,51 +80,53 @@ export function DestinationsMap() {
             <div className="py-16 text-center">
                 <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">Explora Nuestros Destinos Más Populares</h2>
                 <p className="text-lg text-white/80 mt-2 drop-shadow-lg">Descubre a dónde viajan nuestros exploradores.</p>
-                <div className="mt-8 relative h-[60vh] max-h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-xl">
-                    <APIProvider apiKey={apiKey}>
-                        <Map
-                        center={mapCenter}
-                        zoom={mapZoom}
-                        mapId="orvian-main-map"
-                        gestureHandling={'greedy'}
-                        disableDefaultUI={true}
-                        className="transition-all duration-1000"
+                <div className="mt-8 relative bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-2">
+                    <div className="relative h-[60vh] max-h-[500px] w-full rounded-lg overflow-hidden">
+                        <APIProvider apiKey={apiKey}>
+                            <Map
+                            center={mapCenter}
+                            zoom={mapZoom}
+                            mapId="orvian-main-map"
+                            gestureHandling={'greedy'}
+                            disableDefaultUI={true}
+                            className="transition-all duration-1000"
+                            >
+                            {popularDestinations.map((dest) => (
+                                <AdvancedMarker
+                                    key={dest.id}
+                                    position={dest.position}
+                                    onClick={() => handlePinClick(dest)}
+                                >
+                                    <Pin 
+                                        background={selectedDestination?.id === dest.id ? '#FF9800' : '#1C88FF'}
+                                        borderColor={'#ffffff'} 
+                                        glyphColor={'#ffffff'}
+                                    />
+                                </AdvancedMarker>
+                            ))}
+                            {showNearby && nearbyAirports.map(airport => (
+                                 <AdvancedMarker
+                                    key={airport.id}
+                                    position={airport.position}
+                                    title={airport.name}
+                                >
+                                   <div className="p-1.5 bg-green-500 rounded-full border-2 border-white shadow-lg">
+                                     <Icons.logo width={16} height={16} className="invert brightness-0" />
+                                   </div>
+                                </AdvancedMarker>
+                            ))}
+                            </Map>
+                        </APIProvider>
+                        <Button
+                            size="icon"
+                            variant="secondary"
+                            onClick={handleGeolocate}
+                            className="absolute bottom-4 left-4 rounded-full shadow-lg h-12 w-12"
+                            aria-label="Find nearby airports"
                         >
-                        {popularDestinations.map((dest) => (
-                            <AdvancedMarker
-                                key={dest.id}
-                                position={dest.position}
-                                onClick={() => handlePinClick(dest)}
-                            >
-                                <Pin 
-                                    background={selectedDestination?.id === dest.id ? '#FF9800' : '#1C88FF'}
-                                    borderColor={'#ffffff'} 
-                                    glyphColor={'#ffffff'}
-                                />
-                            </AdvancedMarker>
-                        ))}
-                        {showNearby && nearbyAirports.map(airport => (
-                             <AdvancedMarker
-                                key={airport.id}
-                                position={airport.position}
-                                title={airport.name}
-                            >
-                               <div className="p-1.5 bg-green-500 rounded-full border-2 border-white shadow-lg">
-                                 <Icons.logo width={16} height={16} className="invert brightness-0" />
-                               </div>
-                            </AdvancedMarker>
-                        ))}
-                        </Map>
-                    </APIProvider>
-                    <Button
-                        size="icon"
-                        variant="secondary"
-                        onClick={handleGeolocate}
-                        className="absolute bottom-4 left-4 rounded-full shadow-lg h-12 w-12"
-                        aria-label="Find nearby airports"
-                    >
-                        <Navigation className="h-6 w-6"/>
-                    </Button>
+                            <Navigation className="h-6 w-6"/>
+                        </Button>
+                    </div>
                 </div>
             </div>
             
