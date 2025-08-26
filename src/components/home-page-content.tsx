@@ -71,7 +71,7 @@ const PartnersGrid = ({ title, subtitle, partners }: { title: string, subtitle: 
                         alt={partner.name}
                         width={100}
                         height={60}
-                        className="object-contain w-auto"
+                        className="object-contain w-auto bg-white"
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             const airlineCode = partner.domain.split('.')[0];
