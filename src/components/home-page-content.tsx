@@ -135,7 +135,7 @@ export function HomePageContent() {
             <div className="relative z-10 flex flex-col flex-grow">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="pt-24">
-                         {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
+                         {tab !== 'Activities' && tab !== 'Social' && tab !== 'Flights' && <SearchSection tab={tab} />}
                     </div>
                 </div>
           
