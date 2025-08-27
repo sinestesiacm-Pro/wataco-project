@@ -196,9 +196,9 @@
     height: 300px; /* Taller card */
     width: 200px; /* Fixed width */
     border-radius: 9999px; /* Pill shape */
-    background-color: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -211,7 +211,7 @@
 }
 
 .destination-card-oval:hover {
-    transform: scale(1.2); /* Epic growth effect */
+    transform: translateY(-10px) scale(1.05);
     box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.3);
     z-index: 10;
 }
@@ -633,3 +633,4 @@
     
 
     
+

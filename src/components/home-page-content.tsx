@@ -19,14 +19,13 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
-import { DestinationsMap } from './destinations-map';
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   const renderSearch = () => {
     switch(activeTab) {
-      case 'Flights': return <FlightSearchPage />;
+      // The FlightSearchPage is now directly embedded in the Flights tab content
       case 'Hotels': return <HotelSearchPage />;
       case 'Packages': return <PackagesSearchPage />;
       case 'Cruises': return <CruiseSearchPage />;
@@ -109,7 +108,9 @@ function RecommendedContent({ tab }: { tab?: string }) {
       return (
           <>
             <RecommendedDestinations />
-            <DestinationsMap />
+            <div className="mt-16">
+              <FlightSearchPage />
+            </div>
             <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
           </>
       )

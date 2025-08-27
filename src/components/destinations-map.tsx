@@ -1,148 +1,156 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { APIProvider, Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
+import FlightSearchPage from '@/components/flight-search-page';
+import HotelSearchPage from '@/components/hotel-search-page';
+import PackagesSearchPage from '@/components/packages-search-page';
+import CruiseSearchPage from '@/components/cruise-search-page';
+import { ActivitiesSection } from '@/components/activities-section';
+import { TestimonialsSection } from '@/components/testimonials-section';
+import { RecommendedDestinations } from '@/components/recommended-destinations';
+import { RecommendedHotels } from '@/components/recommended-hotels';
+import { RecommendedPackages } from '@/components/recommended-packages';
+import { RecommendedCruises } from '@/components/recommended-cruises';
+import { useSearchParams } from 'next/navigation';
+import { SocialFeedSection } from './social-feed-section';
+import { Footer } from './footer';
 import { useTheme } from '@/contexts/theme-context';
-import { Icons } from './icons';
-import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import FlightSearchPage from './flight-search-page';
-import { Navigation, X } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { AnimatedClouds } from '@/components/animated-clouds';
+import { UnderwaterScene } from './underwater-scene';
 
-const popularDestinations = [
-  { id: 'paris', name: 'Paris', position: { lat: 48.8566, lng: 2.3522 }, iata: 'CDG' },
-  { id: 'nyc', name: 'New York', position: { lat: 40.7128, lng: -74.0060 }, iata: 'JFK' },
-  { id: 'tokyo', name: 'Tokyo', position: { lat: 35.6895, lng: 139.6917 }, iata: 'NRT' },
-  { id: 'london', name: 'London', position: { lat: 51.5074, lng: -0.1278 }, iata: 'LHR' },
-  { id: 'rome', name: 'Rome', position: { lat: 41.9028, lng: 12.4964 }, iata: 'FCO' },
-  { id: 'bogota', name: 'Bogotá', position: { lat: 4.7110, lng: -74.0721 }, iata: 'BOG' },
-  { id: 'sydney', name: 'Sydney', position: { lat: -33.8688, lng: 151.2093 }, iata: 'SYD' },
-  { id: 'dubai', name: 'Dubai', position: { lat: 25.276987, lng: 55.296249 }, iata: 'DXB' },
-  { id: 'istanbul', name: 'Istanbul', position: { lat: 41.0082, lng: 28.9784 }, iata: 'IST' },
-  { id: 'cancun', name: 'Cancun', position: { lat: 21.1619, lng: -86.8515 }, iata: 'CUN' },
-  { id: 'bkk', name: 'Bangkok', position: { lat: 13.7563, lng: 100.5018 }, iata: 'BKK' },
-  { id: 'singapore', name: 'Singapore', position: { lat: 1.3521, lng: 103.8198 }, iata: 'SIN' },
+function SearchSection({ tab }: { tab?: string }) {
+  const activeTab = tab || 'Flights';
+
+  const renderSearch = () => {
+    switch(activeTab) {
+      // The FlightSearchPage is now directly embedded in the Flights tab content
+      case 'Hotels': return <HotelSearchPage />;
+      case 'Packages': return <PackagesSearchPage />;
+      case 'Cruises': return <CruiseSearchPage />;
+      default: return null;
+    }
+  }
+
+  return (
+    <>
+      {renderSearch()}
+    </>
+  );
+}
+
+const airlinePartners = [
+  { name: 'American Airlines', domain: 'aa.com' },
+  { name: 'Lufthansa', domain: 'lufthansa.com' },
+  { name: 'Emirates', domain: 'emirates.com' },
+  { name: 'Delta', domain: 'delta.com' },
+  { name: 'British Airways', domain: 'ba.com' },
+  { name: 'Air France', domain: 'airfrance.com' },
 ];
 
-const nearbyAirports = [
-    { id: 'nearby-jfk', name: 'John F. Kennedy Intl.', position: { lat: 40.6413, lng: -73.7781 }, iata: 'JFK' },
-    { id: 'nearby-lga', name: 'LaGuardia Airport', position: { lat: 40.7769, lng: -73.8740 }, iata: 'LGA' },
-    { id: 'nearby-ewr', name: 'Newark Liberty Intl.', position: { lat: 40.6925, lng: -74.1687 }, iata: 'EWR' },
-]
+const hotelPartners = [
+    { name: 'Marriott', domain: 'marriott.com' },
+    { name: 'Hilton', domain: 'hilton.com' },
+    { name: 'Hyatt', domain: 'hyatt.com' },
+    { name: 'Accor', domain: 'accor.com' },
+    { name: 'Choice Hotels', domain: 'choicehotels.com' },
+    { name: 'Sheraton', domain: 'sheraton.com' }, // Part of Marriott, good logo
+];
 
-export function DestinationsMap() {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    const isMobile = useIsMobile();
-    
-    const [selectedDestination, setSelectedDestination] = useState<typeof popularDestinations[0] | null>(null);
-    const [isSheetOpen, setIsSheetOpen] = useState(false);
-    const [mapCenter, setMapCenter] = useState({ lat: 25, lng: 10 });
-    const [mapZoom, setMapZoom] = useState(isMobile ? 1 : 2);
-    const [showNearby, setShowNearby] = useState(false);
-
-    useEffect(() => {
-        if (selectedDestination) {
-            setIsSheetOpen(true);
-        }
-    }, [selectedDestination]);
-
-    useEffect(() => {
-        if (!isSheetOpen) {
-            setSelectedDestination(null);
-        }
-    }, [isSheetOpen]);
-    
-    const handleGeolocate = useCallback(() => {
-        setMapCenter({ lat: 40.7128, lng: -74.0060 });
-        setMapZoom(9);
-        setShowNearby(true);
-    }, []);
-    
-    const handlePinClick = useCallback((dest: typeof popularDestinations[0]) => {
-      setSelectedDestination(dest);
-      setMapCenter(dest.position);
-      setMapZoom(6);
-    }, []);
-
-    if (!apiKey) {
-      return (
-        <div className="flex items-center justify-center h-96 bg-muted rounded-lg">
-          <p className="text-muted-foreground">La clave de API de Google Maps no está configurada.</p>
-        </div>
-      );
-    }
-  
-    return (
-        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <div className="py-16 text-center">
-                <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">Explora Nuestros Destinos Más Populares</h2>
-                <p className="text-lg text-white/80 mt-2 drop-shadow-lg">Descubre a dónde viajan nuestros exploradores.</p>
-                <div className="mt-8 relative bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-2">
-                    <div className="relative h-[60vh] max-h-[500px] w-full rounded-lg overflow-hidden">
-                        <APIProvider apiKey={apiKey}>
-                            <Map
-                            center={mapCenter}
-                            zoom={mapZoom}
-                            mapId="orvian-main-map"
-                            gestureHandling={'greedy'}
-                            disableDefaultUI={true}
-                            className="transition-all duration-1000"
-                            >
-                            {popularDestinations.map((dest) => (
-                                <AdvancedMarker
-                                    key={dest.id}
-                                    position={dest.position}
-                                    onClick={() => handlePinClick(dest)}
-                                >
-                                    <Pin 
-                                        background={selectedDestination?.id === dest.id ? '#FF9800' : '#1C88FF'}
-                                        borderColor={'#ffffff'} 
-                                        glyphColor={'#ffffff'}
-                                    />
-                                </AdvancedMarker>
-                            ))}
-                            {showNearby && nearbyAirports.map(airport => (
-                                 <AdvancedMarker
-                                    key={airport.id}
-                                    position={airport.position}
-                                    title={airport.name}
-                                >
-                                   <div className="p-1.5 bg-green-500 rounded-full border-2 border-white shadow-lg">
-                                     <Icons.logo width={16} height={16} className="invert brightness-0" />
-                                   </div>
-                                </AdvancedMarker>
-                            ))}
-                            </Map>
-                        </APIProvider>
-                        <Button
-                            size="icon"
-                            variant="secondary"
-                            onClick={handleGeolocate}
-                            className="absolute bottom-4 left-4 rounded-full shadow-lg h-12 w-12"
-                            aria-label="Find nearby airports"
-                        >
-                            <Navigation className="h-6 w-6"/>
-                        </Button>
-                    </div>
+const PartnersGrid = ({ title, subtitle, partners }: { title: string, subtitle: string, partners: typeof airlinePartners }) => (
+    <div className="py-16 text-center">
+        <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">{title}</h2>
+        <p className="text-lg text-white/80 mt-2 drop-shadow-lg">{subtitle}</p>
+        <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto">
+            {partners.map(partner => (
+                <div key={partner.domain} className="bg-white rounded-xl p-4 flex items-center justify-center aspect-square transition-all duration-300 hover:scale-110 hover:shadow-2xl">
+                    <Image
+                        src={`https://logo.clearbit.com/${partner.domain}`}
+                        alt={partner.name}
+                        width={100}
+                        height={60}
+                        className="object-contain w-auto"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            const airlineCode = partner.domain.split('.')[0];
+                            target.src = `https://images.kiwi.com/airlines/64/${airlineCode}.png`;
+                        }}
+                    />
                 </div>
+            ))}
+        </div>
+    </div>
+);
+
+
+function RecommendedContent({ tab }: { tab?: string }) {
+  const activeTab = tab || 'Flights';
+
+  switch (activeTab) {
+    case 'Hotels':
+      return (
+          <>
+            <RecommendedHotels />
+            <PartnersGrid title="Nuestros Hoteles de Confianza" subtitle="Red mundial de confianza" partners={hotelPartners} />
+          </>
+      )
+    case 'Packages':
+      return <RecommendedPackages />;
+    case 'Cruises':
+      return <RecommendedCruises />;
+    case 'Social':
+      return <SocialFeedSection />;
+    case 'Activities':
+       return <ActivitiesSection />;
+    case 'Flights':
+    default:
+      return (
+          <>
+            <RecommendedDestinations />
+            <div className="mt-16">
+              <FlightSearchPage />
+            </div>
+            <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
+          </>
+      )
+  }
+}
+
+export function HomePageContent() {
+    const searchParams = useSearchParams();
+    const tab = searchParams.get('tab') || 'Flights';
+    const { setTabTheme } = useTheme();
+
+    useEffect(() => {
+        setTabTheme(tab);
+    }, [tab, setTabTheme]);
+
+    return (
+        <div className="w-full flex-grow flex flex-col relative">
+            <div className="absolute inset-0 z-0">
+                {(tab === 'Flights' || tab === 'Social') && <AnimatedClouds />}
+                {tab === 'Cruises' && <UnderwaterScene />}
             </div>
             
-            <SheetContent side="bottom" className={cn(
-                "h-[90vh] bg-background/50 backdrop-blur-2xl border-t border-white/20 flex flex-col rounded-t-3xl p-0",
-                "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom"
-            )}>
-                 <SheetHeader className="p-4 flex-row items-center justify-between border-b border-white/20">
-                    <SheetTitle className="text-white font-headline text-2xl">Vuela a {selectedDestination?.name}</SheetTitle>
-                     <button onClick={() => setIsSheetOpen(false)} className="text-white/70 hover:text-white">
-                        <X className="h-6 w-6"/>
-                     </button>
-                </SheetHeader>
-                <div className="p-6 overflow-y-auto">
-                    <FlightSearchPage />
+            <div className="relative z-10 flex flex-col flex-grow">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div className="pt-24">
+                         {tab !== 'Activities' && tab !== 'Social' && tab !== 'Flights' && <SearchSection tab={tab} />}
+                    </div>
                 </div>
-            </SheetContent>
-        </Sheet>
-    );
+          
+                <div className="py-8">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                         <RecommendedContent tab={tab} />
+                    </div>
+                </div>
+
+                <div className="mt-auto">
+                    <TestimonialsSection />
+                    <Footer />
+                </div>
+            </div>
+        </div>
+    )
 }

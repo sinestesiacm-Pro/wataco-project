@@ -7,6 +7,7 @@ import { Plane } from 'lucide-react';
 import { addMonths, addDays, format } from 'date-fns';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 const flightRoutes = [
   { origin: 'JFK', originCity: 'New York', destination: 'CDG', destinationCity: 'Paris', hint: 'paris eiffel tower', image: 'https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=500', simulatedPrice: '750' },
@@ -17,8 +18,25 @@ const flightRoutes = [
 ];
 
 const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
+    const router = useRouter();
     
-    const buttonHref = `/?origin=${route.origin}&destination=${route.destination}&origin_query=${encodeURIComponent(route.originCity)}&destination_query=${encodeURIComponent(route.destinationCity)}&from_date=${format(addMonths(new Date(), 2), 'yyyy-MM-dd')}&to_date=${format(addDays(addMonths(new Date(), 2), 7), 'yyyy-MM-dd')}&adults=1&autosearch=true`;
+    const handleClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const departureDate = format(addMonths(new Date(), 2), 'yyyy-MM-dd');
+        const returnDate = format(addDays(new Date(departureDate), 7), 'yyyy-MM-dd');
+
+        const params = new URLSearchParams({
+            origin: route.origin,
+            destination: route.destination,
+            departureDate: departureDate,
+            returnDate: returnDate,
+            adults: '1',
+            originQuery: route.originCity,
+            destinationQuery: route.destinationCity,
+        });
+        
+        router.push(`/flights/select?${params.toString()}`);
+    }
     
     return (
         <div className="destination-card-oval flex-shrink-0 group">
@@ -37,11 +55,9 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
                 <p className="font-bold text-2xl text-white my-1 drop-shadow-lg">${route.simulatedPrice}</p>
             </div>
             <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button asChild size="default" className="central-flight-button rounded-full font-semibold text-sm py-5 px-6 bg-accent/40 backdrop-blur-md text-white hover:bg-accent/80 shadow-2xl border border-white/20">
-                    <Link href={buttonHref}>
+                <Button onClick={handleClick} size="default" className="central-flight-button rounded-full font-semibold text-sm py-5 px-6 bg-accent/40 backdrop-blur-md text-white hover:bg-accent/80 shadow-2xl border border-white/20">
                     <Plane className="mr-2 h-4 w-4" />
                     Find Flight
-                    </Link>
                 </Button>
             </div>
         </div>
@@ -49,12 +65,11 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
 }
 
 export function RecommendedDestinations() {
-
   return (
-    <div className="space-y-4 mt-16">
+    <div className="space-y-4 pt-16 pb-8">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold text-white drop-shadow-lg">The World is Waiting for You</h2>
-        <p className="text-lg text-white mt-2 drop-shadow-lg">Discover the best routes to start your next adventure.</p>
+        <h2 className="text-4xl font-headline font-bold text-white drop-shadow-lg">Explora Nuestros Destinos Más Populares</h2>
+        <p className="text-lg text-white/80 mt-2 drop-shadow-lg">Descubre a dónde viajan nuestros exploradores.</p>
       </div>
       
       <div className="relative flex justify-center items-center h-[400px]">
