@@ -134,14 +134,18 @@ const FlightSearchPage = React.memo(function FlightSearchPage() {
   }, []);
   
   useEffect(() => {
-    if (isOriginPopoverOpen) {
+    if (isOriginPopoverOpen && debouncedOriginQuery) {
       fetchSuggestions(debouncedOriginQuery, 'origin');
+    } else {
+        setOriginSuggestions([]);
     }
   }, [debouncedOriginQuery, fetchSuggestions, isOriginPopoverOpen]);
 
   useEffect(() => {
-     if (isDestinationPopoverOpen) {
+     if (isDestinationPopoverOpen && debouncedDestinationQuery) {
       fetchSuggestions(debouncedDestinationQuery, 'destination');
+    } else {
+        setDestinationSuggestions([]);
     }
   }, [debouncedDestinationQuery, fetchSuggestions, isDestinationPopoverOpen]);
   
