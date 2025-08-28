@@ -17,14 +17,18 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
-import { FlightSearchSwitcher } from './flight-search-switcher';
+import FlightSearchPage from './flight-search-page';
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   const renderSearch = () => {
     switch(activeTab) {
-      case 'Flights': return <FlightSearchSwitcher />;
+      case 'Flights': return (
+        <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
+          <FlightSearchPage />
+        </div>
+      );
       case 'Hotels': return <HotelSearchPage />;
       case 'Packages': return <PackagesSearchPage />;
       case 'Cruises': return <CruiseSearchPage />;
