@@ -10,8 +10,9 @@ import { Loader2, Search } from 'lucide-react';
 import { useDebounce } from '@/hooks/use-debounce';
 import { searchAirports } from '@/app/actions';
 import type { Airport } from '@/lib/types';
-import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
+import MapComponent from './map-component';
+
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -29,11 +30,6 @@ const airportIcon = new L.DivIcon({
     iconAnchor: [12, 12]
 });
 
-// Create a dynamically imported Map component that only renders on the client
-const DynamicMap = dynamic(() => import('./map-component'), {
-  ssr: false,
-  loading: () => <div className="flex items-center justify-center w-full h-full bg-muted"><Loader2 className="animate-spin" /></div>
-});
 
 export function FlightSearchMap() {
     const [searchQuery, setSearchQuery] = useState('New York');
@@ -55,11 +51,13 @@ export function FlightSearchMap() {
             setAirports(result.data);
             if(result.data.length > 0) {
                  const firstAirport = result.data[0];
-                 const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${firstAirport.address?.cityName || firstAirport.name}&format=json&limit=1`);
-                 const geoData = await res.json();
-                 if (geoData.length > 0) {
-                     setMapCenter([parseFloat(geoData[0].lat), parseFloat(geoData[0].lon)]);
-                     setZoom(7);
+                 if (firstAirport?.address?.cityName) {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${firstAirport.address.cityName}&format=json&limit=1`);
+                    const geoData = await res.json();
+                    if (geoData.length > 0) {
+                        setMapCenter([parseFloat(geoData[0].lat), parseFloat(geoData[0].lon)]);
+                        setZoom(7);
+                    }
                  }
             }
         }
@@ -70,17 +68,6 @@ export function FlightSearchMap() {
         handleSearch(debouncedSearchQuery);
     }, [debouncedSearchQuery, handleSearch])
     
-    // In a real app, geocoded coordinates would come from the API. We'll simulate it.
-    const airportCoordinates: { [key: string]: [number, number] } = useMemo(() => ({
-        'JFK': [40.6413, -73.7781],
-        'LGA': [40.7769, -73.8740],
-        'EWR': [40.6925, -74.1687],
-        'CDG': [49.0097, 2.5479],
-        'ORY': [48.7233, 2.3794],
-        'NRT': [35.7647, 140.3864],
-        'HND': [35.5494, 139.7798],
-    }), []);
-
   return (
     <div className="relative h-[50vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
         <div className="absolute top-4 left-4 z-[1000] w-full max-w-xs">
@@ -97,7 +84,7 @@ export function FlightSearchMap() {
                 </div>
             </div>
         </div>
-      <DynamicMap 
+      <MapComponent 
           center={mapCenter} 
           zoom={zoom} 
           airports={airports} 
