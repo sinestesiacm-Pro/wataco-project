@@ -49,9 +49,8 @@ export function FlightSearchMap() {
                     setOrigin({ lat: latitude, lng: longitude, name: 'Mi Ubicación Actual'});
                 },
                 (error) => {
-                    console.warn(`Geolocation error: ${error.message}`);
-                    // Fallback to NYC if permission is denied or fails
-                    setMapCenter([40.7128, -74.0060]);
+                    console.error("Error getting user's location:", error);
+                    setMapCenter([40.7128, -74.0060]); // Fallback to NYC
                     setZoom(5);
                 }
             );
