@@ -39,7 +39,7 @@ const nearbyAirports = [
 
 type Destination = typeof popularDestinations[0];
 
-export function FlightSearchMap() {
+export function FlightSearchMap({ apiKey }: { apiKey?: string }) {
   const router = useRouter();
   const isMobile = useIsMobile();
   const { colorTheme } = useTheme();
@@ -87,10 +87,19 @@ export function FlightSearchMap() {
   const totalTravelers = useMemo(() => adults + children, [adults, children]);
   const travelerText = useMemo(() => `${totalTravelers} pasajero${totalTravelers > 1 ? 's' : ''}`, [totalTravelers]);
 
+  if (!apiKey) {
+    return (
+        <div className="relative h-[60vh] max-h-[500px] w-full rounded-2xl border border-destructive/50 bg-destructive/10 flex flex-col items-center justify-center text-center p-4">
+            <h3 className="font-bold text-destructive-foreground">Error de Configuración</h3>
+            <p className="text-sm text-destructive-foreground/80">La clave API de Google Maps no se ha proporcionado. Por favor, añádela al archivo .env.</p>
+        </div>
+    )
+  }
+
   return (
     <div className="relative">
       <div className="relative h-[60vh] max-h-[500px] w-full rounded-2xl overflow-hidden border border-white/20 shadow-inner">
-        <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+        <APIProvider apiKey={apiKey}>
             <Map
                 center={mapCenter}
                 zoom={mapZoom}

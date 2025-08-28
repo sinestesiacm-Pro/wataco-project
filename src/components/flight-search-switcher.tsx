@@ -12,6 +12,7 @@ type SearchMode = 'classic' | 'interactive';
 
 export function FlightSearchSwitcher() {
   const [mode, setMode] = useLocalStorage<SearchMode>('flight-search-mode', 'classic');
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   return (
     <div className="relative bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
@@ -49,7 +50,7 @@ export function FlightSearchSwitcher() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
             >
-                {mode === 'classic' ? <FlightSearchClassic /> : <FlightSearchMap />}
+                {mode === 'classic' ? <FlightSearchClassic /> : <FlightSearchMap apiKey={apiKey} />}
             </motion.div>
         </AnimatePresence>
       </div>
