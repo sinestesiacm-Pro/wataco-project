@@ -39,7 +39,7 @@ export function FlightSearchMap() {
     const [searchQuery, setSearchQuery] = useState('New York');
     const [airports, setAirports] = useState<Airport[]>([]);
     const [loading, setLoading] = useState(false);
-    const [mapCenter, setMapCenter] = useState<[number, number]>([40.7128, -74.0060]);
+    const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
     const [zoom, setZoom] = useState(5);
     
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
@@ -56,13 +56,25 @@ export function FlightSearchMap() {
             if(result.data.length > 0) {
                  const firstAirport = result.data[0];
                  if (firstAirport?.address?.cityName) {
-                    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${firstAirport.address.cityName}&format=json&limit=1`);
-                    const geoData = await res.json();
-                    if (geoData.length > 0) {
-                        setMapCenter([parseFloat(geoData[0].lat), parseFloat(geoData[0].lon)]);
-                        setZoom(7);
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(firstAirport.address.cityName)}&format=json&limit=1`);
+                        const geoData = await res.json();
+                        if (geoData.length > 0) {
+                            setMapCenter([parseFloat(geoData[0].lat), parseFloat(geoData[0].lon)]);
+                            setZoom(7);
+                        } else {
+                           setMapCenter([40.7128, -74.0060]); // Fallback to NYC
+                           setZoom(5);
+                        }
+                    } catch (error) {
+                        console.error("Geocoding API failed, using fallback.", error);
+                        setMapCenter([40.7128, -74.0060]); // Fallback to NYC
+                        setZoom(5);
                     }
                  }
+            } else {
+                 setMapCenter([40.7128, -74.0060]); // Fallback if no results
+                 setZoom(5);
             }
         }
         setLoading(false);
@@ -88,12 +100,12 @@ export function FlightSearchMap() {
                 </div>
             </div>
         </div>
-      <DynamicMap 
+      {mapCenter && <DynamicMap 
           center={mapCenter} 
           zoom={zoom} 
           airports={airports} 
           airportIcon={airportIcon}
-      />
+      />}
     </div>
   );
 }

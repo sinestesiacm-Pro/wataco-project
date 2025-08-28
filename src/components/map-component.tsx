@@ -1,10 +1,10 @@
 'use client';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { useTheme } from '@/contexts/theme-context';
 import { Button } from '@/components/ui/button';
 import { Airport } from '@/lib/types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 // This component is dynamically imported and will only run on the client.
 
@@ -25,6 +25,17 @@ interface MapComponentProps {
 
 const MapComponent = ({ center, zoom, airports, airportIcon }: MapComponentProps) => {
     const { colorTheme } = useTheme();
+    const mapRef = useRef<L.Map | null>(null);
+
+    // This effect handles the cleanup of the map instance to prevent initialization errors.
+    useEffect(() => {
+        return () => {
+            if (mapRef.current) {
+                mapRef.current.remove();
+                mapRef.current = null;
+            }
+        };
+    }, []);
 
     // Mock coordinates for demo purposes
     const getAirportCoordinates = (iata: string): [number, number] | null => {
@@ -35,11 +46,25 @@ const MapComponent = ({ center, zoom, airports, airportIcon }: MapComponentProps
             'NRT': [35.7647, 140.3864], 'HND': [35.5494, 139.7798],
             // Add more mock coordinates as needed
         };
-        return coords[iata] || null;
+        // Simple hash for pseudo-random coordinates for unlisted airports
+        let hash = 0;
+        for (let i = 0; i < iata.length; i++) {
+            hash = iata.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const latJitter = (hash & 0x0000FFFF) / 0x0000FFFF * 0.5 - 0.25;
+        const lonJitter = (hash & 0xFFFF0000) / 0xFFFF0000 * 0.5 - 0.25;
+        
+        return coords[iata] || [center[0] + latJitter, center[1] + lonJitter];
     }
 
     return (
-        <MapContainer center={center} zoom={zoom} scrollWheelZoom={true} className="w-full h-full">
+        <MapContainer 
+            whenCreated={mapInstance => { mapRef.current = mapInstance; }}
+            center={center} 
+            zoom={zoom} 
+            scrollWheelZoom={true} 
+            className="w-full h-full"
+        >
             <RecenterAutomatically lat={center[0]} lng={center[1]} zoom={zoom} />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
