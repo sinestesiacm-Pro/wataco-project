@@ -10,6 +10,7 @@ import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
 import L from 'leaflet';
 import { MapPopupForm } from './map-popup-form';
+import { cn } from '@/lib/utils';
 
 // Dynamically import MapComponent to ensure it's client-side only
 const DynamicMap = dynamic(
@@ -47,8 +48,7 @@ export function FlightSearchMap() {
                     setZoom(13);
                     setOrigin({ lat: latitude, lng: longitude, name: 'Mi Ubicación Actual'});
                 },
-                (error) => {
-                    console.error("Error getting user's location:", error);
+                () => { // Simplified error handling
                     setMapCenter([40.7128, -74.0060]); // Fallback to NYC
                     setZoom(5);
                 }
@@ -64,9 +64,9 @@ export function FlightSearchMap() {
         <div className="relative h-[60vh] md:h-[70vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
             <div className="absolute top-4 right-4 z-[1000]">
                  <Button
-                    size="icon"
+                    size="lg"
                     variant="secondary"
-                    className="shadow-lg rounded-full h-12 w-12"
+                    className="shadow-lg rounded-full h-12 w-12 p-0"
                     onClick={handleGeolocate}
                 >
                     <LocateFixed className="h-6 w-6" />
