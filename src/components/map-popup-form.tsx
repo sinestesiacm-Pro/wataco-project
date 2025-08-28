@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
@@ -11,6 +12,7 @@ import { Label } from './ui/label';
 import { Calendar as CalendarIcon, Users, Plane, Minus, Plus } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface MapPopupFormProps {
     latlng: L.LatLng;
@@ -20,6 +22,7 @@ interface MapPopupFormProps {
 
 export function MapPopupForm({ latlng, onSearch, originName }: MapPopupFormProps) {
     const router = useRouter();
+    const isMobile = useIsMobile();
     const { toast } = useToast();
     const [originQuery, setOriginQuery] = useState(originName || '');
     const [destinationQuery, setDestinationQuery] = useState(`Lat: ${latlng.lat.toFixed(4)}, Lng: ${latlng.lng.toFixed(4)}`);
@@ -78,7 +81,7 @@ export function MapPopupForm({ latlng, onSearch, originName }: MapPopupFormProps
                             mode="range"
                             selected={date}
                             onSelect={setDate}
-                            numberOfMonths={1}
+                            numberOfMonths={isMobile ? 1 : 2}
                             initialFocus
                         />
                     </PopoverContent>
@@ -95,7 +98,7 @@ export function MapPopupForm({ latlng, onSearch, originName }: MapPopupFormProps
                             mode="range"
                             selected={date}
                             onSelect={setDate}
-                            numberOfMonths={1}
+                            numberOfMonths={isMobile ? 1 : 2}
                             initialFocus
                         />
                     </PopoverContent>

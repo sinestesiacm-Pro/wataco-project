@@ -1,14 +1,25 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { Airport } from '@/lib/types';
 import { searchAirports } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
-import MapComponent from './map-component';
 import { Button } from './ui/button';
 import { LocateFixed } from 'lucide-react';
-import MarkerClusterGroup from 'react-leaflet-cluster';
+import dynamic from 'next/dynamic';
+import { Loader2 } from 'lucide-react';
+import { Popup } from 'react-leaflet';
+import { MapPopupForm } from './map-popup-form';
+
+// Dynamically import MapComponent to ensure it's client-side only
+const DynamicMap = dynamic(
+    () => import('./map-component').then(mod => mod.default),
+    { 
+        ssr: false,
+        loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+    }
+);
 
 // This is the main component that will be dynamically imported
 export function FlightSearchMap() {
@@ -17,6 +28,7 @@ export function FlightSearchMap() {
     const [origin, setOrigin] = useState<{lat: number, lng: number, name: string} | null>(null);
     const [destination, setDestination] = useState<{lat: number, lng: number, name: string} | null>(null);
     const [airports, setAirports] = useState<Airport[]>([]);
+    const [popupData, setPopupData] = useState<{latlng: L.LatLng, name?: string} | null>(null);
     
     // Set initial map center to NYC on component mount
     useEffect(() => {
@@ -24,17 +36,8 @@ export function FlightSearchMap() {
     }, []);
 
     const handleMapAction = useCallback((data: { latlng: L.LatLng, name?: string }) => {
-        const { lat, lng } = data.latlng;
-        const name = data.name || `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
-        
-        // Simple logic to alternate between setting origin and destination
-        if (!origin || (origin && destination)) {
-            setOrigin({ lat, lng, name });
-            setDestination(null);
-        } else {
-            setDestination({ lat, lng, name });
-        }
-    }, [origin, destination]);
+        setPopupData(data);
+    }, []);
     
      const handleGeolocate = useCallback(() => {
         if (navigator.geolocation) {
@@ -71,19 +74,36 @@ export function FlightSearchMap() {
                     <LocateFixed className="h-6 w-6" />
                 </Button>
             </div>
-            {mapCenter ? (
-                <MapComponent
+            {mapCenter && (
+                <DynamicMap
                     center={mapCenter}
                     zoom={zoom}
                     onMapAction={handleMapAction}
                     origin={origin}
                     destination={destination}
                     airports={airports}
-                />
-            ) : <p>Loading map...</p>}
+                >
+                    {popupData && (
+                        <Popup position={popupData.latlng} minWidth={320}>
+                             <MapPopupForm 
+                                latlng={popupData.latlng} 
+                                onSearch={(originName, destName) => {
+                                    const { lat, lng } = popupData.latlng;
+                                    if (!origin) {
+                                        setOrigin({ lat, lng, name: originName });
+                                    } else {
+                                        setDestination({ lat, lng, name: destName });
+                                    }
+                                    setPopupData(null); // Close popup on search
+                                }} 
+                                originName={origin?.name} 
+                            />
+                        </Popup>
+                    )}
+                </DynamicMap>
+            )}
         </div>
     );
 }
 
 export default FlightSearchMap;
-
