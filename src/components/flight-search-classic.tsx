@@ -382,7 +382,6 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
               </Popover>
           </div>
           
-
           <Button
               type="submit"
               size="lg"
