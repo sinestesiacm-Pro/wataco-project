@@ -18,7 +18,7 @@ import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
 import { RecommendedDestinations } from './recommended-destinations';
-import { FlightSearchClassic } from './flight-search-classic';
+import { FlightSearchSwitcher } from './flight-search-switcher';
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -28,7 +28,7 @@ function SearchSection({ tab }: { tab?: string }) {
     switch(activeTab) {
       case 'Flights': return (
         <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
-            <FlightSearchClassic />
+            <FlightSearchSwitcher />
         </div>
       );
       case 'Hotels': return <HotelSearchPage />;
@@ -112,7 +112,6 @@ function RecommendedContent({ tab }: { tab?: string }) {
     default:
       return (
           <>
-            <RecommendedDestinations />
             <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
           </>
       )
