@@ -1,23 +1,12 @@
 
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
-import L from 'leaflet';
+import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
-import { Loader2, PlaneTakeoff, PlaneLanding, Search, X } from 'lucide-react';
+import { PlaneTakeoff, PlaneLanding } from 'lucide-react';
 import type { Airport } from '@/lib/types';
-import 'leaflet/dist/leaflet.css';
-import dynamic from 'next/dynamic';
 import { Card } from './ui/card';
-import { useDebounce } from '@/hooks/use-debounce';
-import { searchAirports } from '@/app/actions';
-import { Input } from './ui/input';
-
-const DynamicMap = dynamic(() => import('./map-component'), {
-  ssr: false,
-  loading: () => <div className="h-full w-full bg-muted flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
-});
-
+import MapComponent from './map-component';
 
 export function FlightSearchMap() {
     const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
@@ -76,7 +65,7 @@ export function FlightSearchMap() {
            </Card>
         </div>
         {mapCenter && (
-            <DynamicMap
+            <MapComponent
                 center={mapCenter}
                 zoom={zoom}
                 onMapAction={handleMapAction}
