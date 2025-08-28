@@ -1,3 +1,4 @@
+
 'use client';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
@@ -7,6 +8,7 @@ import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { MapPopupForm } from './map-popup-form';
 import { LocateFixed } from 'lucide-react';
+import 'leaflet-ant-path';
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -43,7 +45,7 @@ interface MapComponentProps {
 }
 
 // Component to handle map events like clicks
-const MapEvents = ({ onMapAction }: { onMapAction: MapComponentProps['onMapAction']}) => {
+const MapEvents = ({ onMapAction, origin }: { onMapAction: MapComponentProps['onMapAction'], origin: MapComponentProps['origin']}) => {
     const map = useMapEvents({
         click(e) {
             const container = document.createElement('div');
@@ -51,7 +53,7 @@ const MapEvents = ({ onMapAction }: { onMapAction: MapComponentProps['onMapActio
             root.render(<MapPopupForm latlng={e.latlng} onSearch={(originName, destName) => {
                 onMapAction({ latlng: e.latlng, name: destName });
                 map.closePopup();
-            }} />);
+            }} originName={origin?.name}/>);
 
             L.popup({ minWidth: 320 })
                 .setLatLng(e.latlng)
@@ -68,6 +70,37 @@ const RecenterAutomatically = ({ lat, lng, zoom }: { lat: number; lng: number; z
     useEffect(() => {
         map.setView([lat, lng], zoom);
     }, [lat, lng, zoom, map]);
+    return null;
+};
+
+// Component to draw the route line
+const RouteLine = ({ origin, destination }: { origin: {lat: number, lng: number} | null, destination: {lat: number, lng: number} | null }) => {
+    const map = useMap();
+    const antPathRef = useRef<L.Polyline.AntPath | null>(null);
+
+    useEffect(() => {
+        if (antPathRef.current) {
+            map.removeLayer(antPathRef.current);
+            antPathRef.current = null;
+        }
+
+        if (origin && destination) {
+            const latLngs = [[origin.lat, origin.lng], [destination.lat, destination.lng]];
+            antPathRef.current = (L as any).polyline.antPath(latLngs, {
+                delay: 800,
+                dashArray: [10, 20],
+                weight: 5,
+                color: '#42a5f5', // primary color
+                pulseColor: '#FFFFFF',
+                paused: false,
+                reverse: false,
+                hardwareAccelerated: true,
+            });
+            antPathRef.current.addTo(map);
+            map.fitBounds(L.latLngBounds(latLngs), { padding: [50, 50] });
+        }
+    }, [origin, destination, map]);
+
     return null;
 };
 
@@ -88,7 +121,6 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCe
             },
             (error) => {
                 console.error("Error getting user's location:", error);
-                // Fallback to a default location if permission is denied
                 setMapCenter([40.7128, -74.0060]);
                 setZoom(5);
             }
@@ -103,7 +135,7 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCe
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url={tileLayerUrl}
                 />
-                <MapEvents onMapAction={onMapAction} />
+                <MapEvents onMapAction={onMapAction} origin={origin} />
 
                 {origin && (
                     <Marker position={[origin.lat, origin.lng]} icon={originIcon}>
@@ -115,21 +147,7 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCe
                         <Popup><b>Punto de Destino</b><br/>{destination.name}</Popup>
                     </Marker>
                 )}
-                {origin && destination && (
-                     L.polyline.antPath([[origin.lat, origin.lng], [destination.lat, destination.lng]], {
-                        "delay": 400,
-                        "dashArray": [
-                           10,
-                           20
-                        ],
-                        "weight": 5,
-                        "color": "#1C88FF",
-                        "pulseColor": "#FFFFFF",
-                        "paused": false,
-                        "reverse": false,
-                        "hardwareAccelerated": true
-                     })
-                )}
+                <RouteLine origin={origin} destination={destination} />
             </MapContainer>
             <Button
                 size="icon"

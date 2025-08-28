@@ -15,12 +15,13 @@ import { useToast } from '@/hooks/use-toast';
 interface MapPopupFormProps {
     latlng: L.LatLng;
     onSearch: (originName: string, destName: string) => void;
+    originName?: string;
 }
 
-export function MapPopupForm({ latlng, onSearch }: MapPopupFormProps) {
+export function MapPopupForm({ latlng, onSearch, originName }: MapPopupFormProps) {
     const router = useRouter();
     const { toast } = useToast();
-    const [originQuery, setOriginQuery] = useState('');
+    const [originQuery, setOriginQuery] = useState(originName || '');
     const [destinationQuery, setDestinationQuery] = useState(`Lat: ${latlng.lat.toFixed(4)}, Lng: ${latlng.lng.toFixed(4)}`);
     const [date, setDate] = useState<DateRange | undefined>({ from: new Date(), to: addDays(new Date(), 7) });
     const [adults, setAdults] = useState(1);
