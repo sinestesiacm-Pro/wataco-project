@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import L from 'leaflet';
 import { useTheme } from '@/contexts/theme-context';
 import { Icons } from './icons';
@@ -68,7 +68,7 @@ export function FlightSearchMap() {
         setLoading(false);
     }, []);
 
-    useMemo(() => {
+    useEffect(() => {
         handleSearch(debouncedSearchQuery);
     }, [debouncedSearchQuery, handleSearch])
     
