@@ -1,6 +1,5 @@
 'use client';
 
-import FlightSearchPage from '@/components/flight-search-page';
 import HotelSearchPage from '@/components/hotel-search-page';
 import PackagesSearchPage from '@/components/packages-search-page';
 import CruiseSearchPage from '@/components/cruise-search-page';
@@ -14,18 +13,19 @@ import { useSearchParams } from 'next/navigation';
 import { SocialFeedSection } from './social-feed-section';
 import { Footer } from './footer';
 import { useTheme } from '@/contexts/theme-context';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
+import { FlightSearchSwitcher } from './flight-search-switcher';
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   const renderSearch = () => {
     switch(activeTab) {
-      case 'Flights': return <FlightSearchPage />;
+      case 'Flights': return <FlightSearchSwitcher />;
       case 'Hotels': return <HotelSearchPage />;
       case 'Packages': return <PackagesSearchPage />;
       case 'Cruises': return <CruiseSearchPage />;
