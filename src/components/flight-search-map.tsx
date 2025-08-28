@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -19,9 +18,10 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 
 const AirportMarker = ({ airport, onSelect }: { airport: Airport, onSelect: (airport: Airport) => void }) => {
+    if (!airport.geoCode) return null;
     return (
         <AdvancedMarker
-            position={{ lat: airport.geoCode!.latitude, lng: airport.geoCode!.longitude }}
+            position={{ lat: airport.geoCode.latitude, lng: airport.geoCode.longitude }}
             onClick={() => onSelect(airport)}
             title={airport.name}
         >
@@ -36,6 +36,8 @@ const AirportInfoWindow = ({ airport, onClose }: { airport: Airport, onClose: ()
     const [date, setDate] = useState<DateRange | undefined>({ from: addDays(new Date(), 7), to: addDays(new Date(), 14) });
     const [adults, setAdults] = useState(1);
     
+    if (!airport.geoCode) return null;
+
     const handleSearch = () => {
         const params = new URLSearchParams({
             origin: "BOG", // Placeholder origin
@@ -51,7 +53,7 @@ const AirportInfoWindow = ({ airport, onClose }: { airport: Airport, onClose: ()
 
     return (
         <InfoWindow
-            position={{ lat: airport.geoCode!.latitude, lng: airport.geoCode!.longitude }}
+            position={{ lat: airport.geoCode.latitude, lng: airport.geoCode.longitude }}
             onCloseClick={onClose}
         >
             <div className="p-2 space-y-3 font-body w-64 text-gray-800">
@@ -112,18 +114,15 @@ export function FlightSearchMap() {
     const [zoom, setZoom] = useState(6);
     const [airports, setAirports] = useState<Airport[]>([]);
     const [selectedAirport, setSelectedAirport] = useState<Airport | null>(null);
-    const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
+    const [map, setMap] = useState<google.maps.Map | null>(null);
     
-    const debouncedBounds = useDebounce(mapBounds, 800);
+    const debouncedBounds = useDebounce(map?.getBounds(), 800);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     useEffect(() => {
         if (debouncedBounds) {
-            const center = debouncedBounds.getCenter();
-            const keyword = 'airport';
-            searchAirports(keyword).then(result => {
+            searchAirports('airport').then(result => {
                 if (result.success && result.data) {
-                    // Filter airports to be within the current view for better performance
                     const visibleAirports = result.data.filter(a => 
                         a.geoCode && debouncedBounds.contains({lat: a.geoCode.latitude, lng: a.geoCode.longitude})
                     );
@@ -133,13 +132,20 @@ export function FlightSearchMap() {
         }
     }, [debouncedBounds]);
 
+
     const handleGeolocate = useCallback(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
-                    setMapCenter({ lat: latitude, lng: longitude });
-                    setZoom(12);
+                    const newCenter = { lat: latitude, lng: longitude };
+                    setMapCenter(newCenter);
+                    if (map) {
+                        map.setCenter(newCenter);
+                        map.setZoom(12);
+                    } else {
+                        setZoom(12);
+                    }
                     toast({
                         title: "Ubicación Encontrada",
                         description: "Mostrando aeropuertos cercanos a ti.",
@@ -161,7 +167,7 @@ export function FlightSearchMap() {
                 variant: "destructive",
             });
         }
-    }, [toast]);
+    }, [toast, map]);
 
     if (!apiKey) {
         return (
@@ -175,9 +181,9 @@ export function FlightSearchMap() {
         <div className="relative h-[60vh] md:h-[70vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
             <APIProvider apiKey={apiKey}>
                 <Map
+                    ref={setMap}
                     center={mapCenter}
                     zoom={zoom}
-                    onCameraChanged={(ev) => setMapBounds(ev.map.getBounds())}
                     mapId="orvian-map"
                     gestureHandling={'greedy'}
                     disableDefaultUI={true}
