@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -9,7 +8,7 @@ import { Button } from './ui/button';
 import { LocateFixed } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
-import { Popup } from 'react-leaflet';
+import L from 'leaflet';
 import { MapPopupForm } from './map-popup-form';
 
 // Dynamically import MapComponent to ensure it's client-side only
@@ -83,21 +82,23 @@ export function FlightSearchMap() {
                     airports={airports}
                 >
                     {popupData && (
-                        <Popup position={popupData.latlng} minWidth={320}>
-                             <MapPopupForm 
-                                latlng={popupData.latlng} 
-                                onSearch={(originName, destName) => {
-                                    const { lat, lng } = popupData.latlng;
-                                    if (!origin) {
-                                        setOrigin({ lat, lng, name: originName });
-                                    } else {
-                                        setDestination({ lat, lng, name: destName });
-                                    }
-                                    setPopupData(null); // Close popup on search
-                                }} 
-                                originName={origin?.name} 
-                            />
-                        </Popup>
+                        <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 1001, pointerEvents: 'none' }}>
+                             <div style={{ position: 'fixed', top: `${popupData.latlng.lat}px`, left: `${popupData.latlng.lng}px`}}>
+                                <MapPopupForm 
+                                    latlng={popupData.latlng} 
+                                    onSearch={(originName, destName) => {
+                                        const { lat, lng } = popupData.latlng;
+                                        if (!origin) {
+                                            setOrigin({ lat, lng, name: originName });
+                                        } else {
+                                            setDestination({ lat, lng, name: destName });
+                                        }
+                                        setPopupData(null); // Close popup on search
+                                    }} 
+                                    originName={origin?.name} 
+                                />
+                             </div>
+                        </div>
                     )}
                 </DynamicMap>
             )}

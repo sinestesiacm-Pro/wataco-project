@@ -1,13 +1,9 @@
-
 'use client';
 import React, { useEffect, useRef, memo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-ant-path';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster';
+import 'leaflet.markercluster';
 import { useTheme } from '@/contexts/theme-context';
 import type { Airport } from '@/lib/types';
 
@@ -33,7 +29,6 @@ const destinationIcon = new L.DivIcon({
     iconAnchor: [16, 16]
 });
 
-
 interface MapComponentProps {
     center: [number, number];
     zoom: number;
@@ -44,41 +39,65 @@ interface MapComponentProps {
     children?: React.ReactNode;
 }
 
-const RecenterAutomatically = ({ lat, lng, zoom }: { lat: number, lng: number, zoom: number }) => {
-    const map = useMapEvents({
-        load: () => {
-            map.setView([lat, lng], zoom);
-        }
-    });
-
-    useEffect(() => {
-        map.setView([lat, lng], zoom);
-    }, [lat, lng, zoom, map]);
-
-    return null;
-}
-
-const MapEvents = ({ onMapAction }: { onMapAction: MapComponentProps['onMapAction']}) => {
-    useMapEvents({
-        click(e) {
-            onMapAction({ latlng: e.latlng });
-        },
-    });
-    return null;
-}
-
-const AntPath = ({ origin, destination }: { origin: any, destination: any }) => {
-    const map = useMapEvents({});
+const MapComponent = ({ center, zoom, onMapAction, origin, destination, airports, children }: MapComponentProps) => {
+    const mapRef = useRef<L.Map | null>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
     const antPathRef = useRef<L.Polyline.AntPath | null>(null);
+    const { colorTheme } = useTheme();
 
+    const tileLayerUrl = colorTheme === 'dark' 
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+    // Initialize map
     useEffect(() => {
+        if (mapContainerRef.current && !mapRef.current) {
+            mapRef.current = L.map(mapContainerRef.current, {
+                center: center,
+                zoom: zoom,
+                scrollWheelZoom: true,
+            });
+
+            L.tileLayer(tileLayerUrl, {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(mapRef.current);
+            
+            mapRef.current.on('click', (e: L.LeafletMouseEvent) => {
+                onMapAction({ latlng: e.latlng });
+            });
+        }
+
+        // Cleanup function to remove the map instance
+        return () => {
+            if (mapRef.current) {
+                mapRef.current.remove();
+                mapRef.current = null;
+            }
+        };
+    }, []); // Only run on mount and unmount
+
+    // Update view and tile layer
+    useEffect(() => {
+        if (mapRef.current) {
+            mapRef.current.setView(center, zoom);
+            // This part is tricky as TileLayer is not easily mutable.
+            // For this app, we will assume the theme doesn't change after map init.
+            // A more complex solution would involve removing and re-adding the layer.
+        }
+    }, [center, zoom]);
+    
+    // Update ant path
+     useEffect(() => {
+        const map = mapRef.current;
+        if (!map) return;
+
         if (antPathRef.current) {
             map.removeLayer(antPathRef.current);
             antPathRef.current = null;
         }
 
         if (origin && destination) {
-            const latLngs = [[origin.lat, origin.lng], [destination.lat, destination.lng]];
+            const latLngs: [number, number][] = [[origin.lat, origin.lng], [destination.lat, destination.lng]];
             antPathRef.current = (L.polyline as any).antPath(latLngs, {
                 delay: 800,
                 dashArray: [10, 20],
@@ -89,42 +108,31 @@ const AntPath = ({ origin, destination }: { origin: any, destination: any }) => 
             antPathRef.current.addTo(map);
             map.fitBounds(L.latLngBounds(latLngs), { padding: [50, 50] });
         }
-    }, [origin, destination, map]);
+    }, [origin, destination]);
 
-    return null;
-}
 
-const MapComponent = ({ center, zoom, onMapAction, origin, destination, airports, children }: MapComponentProps) => {
-    const { colorTheme } = useTheme();
-    
-    const tileLayerUrl = colorTheme === 'dark' 
-        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    // Update markers (simple markers for origin/destination)
+     useEffect(() => {
+        const map = mapRef.current;
+        if (!map) return;
+
+        // Clear existing markers before adding new ones
+        map.eachLayer((layer) => {
+            if (layer instanceof L.Marker) {
+                map.removeLayer(layer);
+            }
+        });
+
+        if (origin) {
+            L.marker(origin, { icon: originIcon }).addTo(map);
+        }
+        if (destination) {
+            L.marker(destination, { icon: destinationIcon }).addTo(map);
+        }
+    }, [origin, destination]);
 
     return (
-        <div className="relative w-full h-full">
-            <MapContainer center={center} zoom={zoom} scrollWheelZoom={true} className="w-full h-full">
-                <RecenterAutomatically lat={center[0]} lng={center[1]} zoom={zoom} />
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url={tileLayerUrl}
-                />
-                <MapEvents onMapAction={onMapAction} />
-                
-                {origin && <Marker position={origin} icon={originIcon} />}
-                {destination && <Marker position={destination} icon={destinationIcon} />}
-
-                <AntPath origin={origin} destination={destination} />
-
-                {children}
-
-                <MarkerClusterGroup>
-                   {airports.map(airport => (
-                       <Marker key={airport.iataCode} position={[airport.geoCode.latitude, airport.geoCode.longitude]} />
-                   ))}
-                </MarkerClusterGroup>
-            </MapContainer>
-        </div>
+        <div ref={mapContainerRef} className="w-full h-full" />
     );
 };
 

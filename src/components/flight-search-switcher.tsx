@@ -14,7 +14,7 @@ type SearchMode = 'list' | 'map';
 const DynamicFlightSearchMap = dynamic(
     () => import('./flight-search-map').then(mod => mod.FlightSearchMap),
     { 
-        ssr: false,
+        ssr: false, // This is crucial
         loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
     }
 );
