@@ -19,6 +19,7 @@ import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
 import FlightSearchPage from './flight-search-page';
 import FlightSearchSwitcher from './flight-search-switcher';
+import { RecommendedDestinations } from './recommended-destinations';
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -109,6 +110,7 @@ function RecommendedContent({ tab }: { tab?: string }) {
     default:
       return (
           <>
+            <RecommendedDestinations />
             <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
           </>
       )
