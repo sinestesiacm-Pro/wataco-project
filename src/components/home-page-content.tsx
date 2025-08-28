@@ -1,4 +1,3 @@
-
 'use client';
 
 import HotelSearchPage from '@/components/hotel-search-page';
@@ -19,7 +18,7 @@ import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
 import { RecommendedDestinations } from './recommended-destinations';
-import { FlightSearchSwitcher } from './flight-search-switcher';
+import { FlightSearchClassic } from './flight-search-classic';
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -29,7 +28,7 @@ function SearchSection({ tab }: { tab?: string }) {
     switch(activeTab) {
       case 'Flights': return (
         <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
-            <FlightSearchSwitcher />
+            <FlightSearchClassic />
         </div>
       );
       case 'Hotels': return <HotelSearchPage />;
