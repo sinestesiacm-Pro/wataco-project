@@ -3,10 +3,19 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 're
 import L from 'leaflet';
 import { useTheme } from '@/contexts/theme-context';
 import { Button } from '@/components/ui/button';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { MapPopupForm } from './map-popup-form';
 import { LocateFixed } from 'lucide-react';
+
+// Fix for default icon path issue with Webpack
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
+
 
 const originIcon = new L.DivIcon({
     html: `<div class="relative flex items-center justify-center w-8 h-8 bg-blue-500/30 rounded-full border-2 border-blue-500"><div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div></div>`,
@@ -26,7 +35,7 @@ interface MapComponentProps {
     center: [number, number];
     zoom: number;
     origin: {lat: number, lng: number, name: string} | null;
-    destination: {lat: number, lng: number} | null;
+    destination: {lat: number, lng: number, name: string} | null;
     onMapAction: (data: { latlng: L.LatLng, name?: string }) => void;
     setMapCenter: (center: [number, number]) => void;
     setZoom: (zoom: number) => void;
@@ -103,11 +112,23 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCe
                 )}
                 {destination && (
                     <Marker position={[destination.lat, destination.lng]} icon={destinationIcon}>
-                        <Popup><b>Punto de Destino</b></Popup>
+                        <Popup><b>Punto de Destino</b><br/>{destination.name}</Popup>
                     </Marker>
                 )}
                 {origin && destination && (
-                    <L.Polyline positions={[[origin.lat, origin.lng], [destination.lat, destination.lng]]} color={'#1C88FF'} weight={3} dashArray={'5, 10'} />
+                     L.polyline.antPath([[origin.lat, origin.lng], [destination.lat, destination.lng]], {
+                        "delay": 400,
+                        "dashArray": [
+                           10,
+                           20
+                        ],
+                        "weight": 5,
+                        "color": "#1C88FF",
+                        "pulseColor": "#FFFFFF",
+                        "paused": false,
+                        "reverse": false,
+                        "hardwareAccelerated": true
+                     })
                 )}
             </MapContainer>
             <Button
