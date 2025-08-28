@@ -1,82 +1,157 @@
+
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { Airport } from '@/lib/types';
 import { searchAirports } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
 import { Button } from './ui/button';
-import { LocateFixed } from 'lucide-react';
-import dynamic from 'next/dynamic';
+import { LocateFixed, Plane, Users, Calendar, Minus, Plus } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
-import L from 'leaflet';
-import { MapPopupForm } from './map-popup-form';
-import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
+import { useRouter } from 'next/navigation';
+import { format, addDays } from 'date-fns';
+import { DateRange } from 'react-day-picker';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Calendar as CalendarComponent } from './ui/calendar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-// Dynamically import MapComponent to ensure it's client-side only
-const DynamicMap = dynamic(
-    () => import('./map-component').then(mod => mod.default),
-    { 
-        ssr: false,
-        loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+
+const AirportMarker = ({ airport, onSelect }: { airport: Airport, onSelect: (airport: Airport) => void }) => {
+    return (
+        <AdvancedMarker
+            position={{ lat: airport.geoCode!.latitude, lng: airport.geoCode!.longitude }}
+            onClick={() => onSelect(airport)}
+            title={airport.name}
+        >
+            <Pin background={'#007BFF'} glyph={<Plane />} borderColor={'#0056b3'} />
+        </AdvancedMarker>
+    );
+};
+
+const AirportInfoWindow = ({ airport, onClose }: { airport: Airport, onClose: () => void }) => {
+    const router = useRouter();
+    const isMobile = useIsMobile();
+    const [date, setDate] = useState<DateRange | undefined>({ from: addDays(new Date(), 7), to: addDays(new Date(), 14) });
+    const [adults, setAdults] = useState(1);
+    
+    const handleSearch = () => {
+        const params = new URLSearchParams({
+            origin: "BOG", // Placeholder origin
+            destination: airport.iataCode,
+            departureDate: format(date!.from!, 'yyyy-MM-dd'),
+            returnDate: format(date!.to!, 'yyyy-MM-dd'),
+            adults: adults.toString(),
+            originQuery: "Bogotá, Colombia",
+            destinationQuery: airport.address?.cityName || airport.name
+        });
+        router.push(`/flights/select?${params.toString()}`);
     }
-);
 
-// This is the main component that will be dynamically imported
+    return (
+        <InfoWindow
+            position={{ lat: airport.geoCode!.latitude, lng: airport.geoCode!.longitude }}
+            onCloseClick={onClose}
+        >
+            <div className="p-2 space-y-3 font-body w-64 text-gray-800">
+                <h3 className="font-bold text-base font-headline">{airport.name} ({airport.iataCode})</h3>
+                <p className="text-xs text-gray-600">{airport.address?.cityName}, {airport.address?.countryName}</p>
+                
+                <Popover>
+                    <PopoverTrigger asChild>
+                      <Button type="button" variant="outline" className="w-full justify-start text-left font-normal">
+                          <Calendar className="mr-2 h-4 w-4" />
+                          {date?.from && date.to ? `${format(date.from, "dd LLL")} - ${format(date.to, "dd LLL")}` : "Elige tus fechas"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                        <CalendarComponent
+                            initialFocus
+                            mode="range"
+                            defaultMonth={date?.from}
+                            selected={date}
+                            onSelect={setDate}
+                            numberOfMonths={isMobile ? 1 : 2}
+                            disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
+                        />
+                    </PopoverContent>
+                </Popover>
+
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button variant={'outline'} className="w-full justify-start text-left font-normal">
+                             <Users className="mr-2 h-4 w-4" />
+                             {adults} Adulto{adults > 1 ? 's' : ''}
+                        </Button>
+                    </PopoverTrigger>
+                     <PopoverContent className="w-60">
+                        <div className="flex items-center justify-between">
+                            <p className="font-medium">Adultos</p>
+                            <div className="flex items-center gap-2">
+                                <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))}><Minus className="h-4 w-4" /></Button>
+                                <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                                <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)}><Plus className="h-4 w-4" /></Button>
+                            </div>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+
+                <Button onClick={handleSearch} className="w-full bg-primary hover:bg-primary/90">
+                    <Plane className="mr-2 h-4 w-4" />
+                    Cotizar Vuelo
+                </Button>
+            </div>
+        </InfoWindow>
+    );
+};
+
 export function FlightSearchMap() {
     const { toast } = useToast();
-    const [mapCenter, setMapCenter] = useState<[number, number]>([40.7128, -74.0060]); // Start with a default
-    const [zoom, setZoom] = useState(5);
-    const [origin, setOrigin] = useState<{lat: number, lng: number, name: string} | null>(null);
-    const [destination, setDestination] = useState<{lat: number, lng: number, name: string} | null>(null);
+    const [mapCenter, setMapCenter] = useState({ lat: 4.60971, lng: -74.08175 }); // Default to Bogotá
+    const [zoom, setZoom] = useState(6);
     const [airports, setAirports] = useState<Airport[]>([]);
-    const [popupData, setPopupData] = useState<{latlng: L.LatLng, name?: string} | null>(null);
-    const [mapBounds, setMapBounds] = useState<L.LatLngBounds | null>(null);
+    const [selectedAirport, setSelectedAirport] = useState<Airport | null>(null);
+    const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
     
-    const debouncedBounds = useDebounce(mapBounds, 1000);
+    const debouncedBounds = useDebounce(mapBounds, 800);
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     useEffect(() => {
         if (debouncedBounds) {
             const center = debouncedBounds.getCenter();
-            // A simple way to get a keyword is from the center lat/lng,
-            // but the API expects a city/airport name.
-            // Let's fetch based on a generic keyword for the visible area for demo purposes.
-            // A more advanced implementation would use a geo-search API.
-            searchAirports('airport').then(result => {
+            const keyword = 'airport';
+            searchAirports(keyword).then(result => {
                 if (result.success && result.data) {
-                    setAirports(result.data);
+                    // Filter airports to be within the current view for better performance
+                    const visibleAirports = result.data.filter(a => 
+                        a.geoCode && debouncedBounds.contains({lat: a.geoCode.latitude, lng: a.geoCode.longitude})
+                    );
+                    setAirports(visibleAirports);
                 }
             });
         }
     }, [debouncedBounds]);
 
-
-    const handleMapAction = useCallback((data: { latlng: L.LatLng, name?: string }) => {
-        setPopupData(data);
-    }, []);
-    
-     const handleGeolocate = useCallback(() => {
+    const handleGeolocate = useCallback(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
-                    setMapCenter([latitude, longitude]);
-                    setZoom(13);
-                    setOrigin({ lat: latitude, lng: longitude, name: 'Mi Ubicación Actual'});
+                    setMapCenter({ lat: latitude, lng: longitude });
+                    setZoom(12);
                     toast({
                         title: "Ubicación Encontrada",
                         description: "Mostrando aeropuertos cercanos a ti.",
                         variant: "success",
-                    })
+                    });
                 },
-                () => { // Simplified error handling
+                () => {
                     toast({
                         title: "Error de Geolocalización",
                         description: "No se pudo obtener tu ubicación. Mostrando ubicación predeterminada.",
                         variant: "destructive",
-                    })
-                    setMapCenter([40.7128, -74.0060]); // Fallback to NYC
-                    setZoom(5);
+                    });
                 }
             );
         } else {
@@ -84,61 +159,155 @@ export function FlightSearchMap() {
                 title: "Geolocalización no Soportada",
                 description: "Tu navegador no soporta la geolocalización.",
                 variant: "destructive",
-            })
-             setMapCenter([40.7128, -74.0060]);
-             setZoom(5);
+            });
         }
     }, [toast]);
 
+    if (!apiKey) {
+        return (
+            <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted flex items-center justify-center text-center p-4">
+                <p>La clave API de Google Maps no está configurada. Por favor, añade `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` a tu fichero `.env` para habilitar el mapa.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="relative h-[60vh] md:h-[70vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
-            <div className="absolute top-4 right-4 z-[1000]">
+            <APIProvider apiKey={apiKey}>
+                <Map
+                    center={mapCenter}
+                    zoom={zoom}
+                    onCameraChanged={(ev) => setMapBounds(ev.map.getBounds())}
+                    mapId="orvian-map"
+                    gestureHandling={'greedy'}
+                    disableDefaultUI={true}
+                    styles={mapStyles}
+                >
+                    {airports.map(airport => (
+                        <AirportMarker key={airport.iataCode} airport={airport} onSelect={setSelectedAirport} />
+                    ))}
+
+                    {selectedAirport && (
+                       <AirportInfoWindow airport={selectedAirport} onClose={() => setSelectedAirport(null)} />
+                    )}
+
+                </Map>
+            </APIProvider>
+            <div className="absolute top-4 right-4 z-10">
                  <Button
                     size="lg"
-                    variant="secondary"
-                    className="shadow-lg rounded-full h-12 w-12 p-0"
+                    className="shadow-lg rounded-full h-12 w-12 p-0 bg-white/30 backdrop-blur-md text-white hover:bg-white/50"
                     onClick={handleGeolocate}
                 >
                     <LocateFixed className="h-6 w-6" />
                 </Button>
             </div>
-            {mapCenter && (
-                <DynamicMap
-                    center={mapCenter}
-                    zoom={zoom}
-                    onMapAction={handleMapAction}
-                    onViewChanged={(center, zoom, bounds) => {
-                        setMapCenter(center);
-                        setZoom(zoom);
-                        setMapBounds(bounds);
-                    }}
-                    origin={origin}
-                    destination={destination}
-                    airports={airports}
-                >
-                    {popupData && (
-                        <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 1001, pointerEvents: 'none' }}>
-                             <div style={{ position: 'fixed', top: `${popupData.latlng.lat}px`, left: `${popupData.latlng.lng}px`}}>
-                                <MapPopupForm 
-                                    latlng={popupData.latlng} 
-                                    onSearch={(originName, destName) => {
-                                        const { lat, lng } = popupData.latlng;
-                                        if (!origin) {
-                                            setOrigin({ lat, lng, name: originName });
-                                        } else {
-                                            setDestination({ lat, lng, name: destName });
-                                        }
-                                        setPopupData(null); // Close popup on search
-                                    }} 
-                                    originName={origin?.name} 
-                                />
-                             </div>
-                        </div>
-                    )}
-                </DynamicMap>
-            )}
         </div>
     );
 }
+
+const mapStyles = [
+    {
+      "featureType": "all",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        { "color": "#ffffff" }
+      ]
+    },
+    {
+      "featureType": "all",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        { "visibility": "on" },
+        { "color": "#000000" },
+        { "lightness": 16 }
+      ]
+    },
+    {
+      "featureType": "all",
+      "elementType": "labels.icon",
+      "stylers": [
+        { "visibility": "off" }
+      ]
+    },
+    {
+      "featureType": "administrative",
+      "elementType": "geometry.fill",
+      "stylers": [
+        { "color": "#000000" },
+        { "lightness": 20 }
+      ]
+    },
+    {
+      "featureType": "administrative",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        { "color": "#000000" },
+        { "lightness": 17 },
+        { "weight": 1.2 }
+      ]
+    },
+    {
+      "featureType": "landscape",
+      "elementType": "geometry",
+      "stylers": [
+        { "color": "#2c3e50" }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "geometry",
+      "stylers": [
+        { "color": "#34495e" }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry.fill",
+      "stylers": [
+        { "color": "#2c3e50" },
+        { "lightness": 17 }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        { "color": "#2c3e50" },
+        { "lightness": 29 },
+        { "weight": 0.2 }
+      ]
+    },
+    {
+      "featureType": "road.arterial",
+      "elementType": "geometry",
+      "stylers": [
+        { "color": "#2c3e50" },
+        { "lightness": 18 }
+      ]
+    },
+    {
+      "featureType": "road.local",
+      "elementType": "geometry",
+      "stylers": [
+        { "color": "#34495e" }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "elementType": "geometry",
+      "stylers": [
+        { "color": "#2c3e50" },
+        { "lightness": 19 }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "geometry",
+      "stylers": [
+        { "color": "#17263c" }
+      ]
+    }
+  ];
 
 export default FlightSearchMap;

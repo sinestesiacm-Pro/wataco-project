@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { Button } from './ui/button';
@@ -14,8 +15,8 @@ type SearchMode = 'list' | 'map';
 const DynamicFlightSearchMap = dynamic(
     () => import('./flight-search-map').then(mod => mod.FlightSearchMap),
     { 
-        ssr: false, // This is crucial
-        loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+        ssr: false,
+        loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted/20 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-white" /></div>
     }
 );
 
@@ -27,7 +28,6 @@ export function FlightSearchSwitcher() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-white">
-          <Icons.logo width={100} height={40} className="invert-[60%]" />
         </div>
         <div className="flex items-center gap-2 rounded-full p-1 bg-black/20 backdrop-blur-sm">
           <Button
