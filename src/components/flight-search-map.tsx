@@ -101,11 +101,14 @@ export function FlightSearchMap({ apiKey }: { apiKey?: string }) {
   return (
     <div className="relative">
       <div className="relative h-[60vh] max-h-[500px] w-full rounded-2xl overflow-hidden border border-white/20 shadow-inner">
-        <APIProvider apiKey={apiKey} onLoadingFailure={() => (
+        <APIProvider apiKey={apiKey} onLoadingFailure={(error) => (
              <div className="absolute inset-0 bg-destructive/10 flex flex-col items-center justify-center text-center p-4">
-                <h3 className="font-bold text-destructive-foreground">Error de Facturación de Google Maps</h3>
-                <p className="text-sm text-destructive-foreground/80 mt-2">
-                   La facturación no está habilitada para tu proyecto de Google Cloud. Por favor, actívala en la consola para usar el mapa.
+                <h3 className="font-bold text-destructive-foreground">Error al Cargar el Mapa</h3>
+                <p className="text-sm text-destructive-foreground/80 mt-2 max-w-md">
+                   { (error as any).message.includes('BillingNotEnabledMapError')
+                   ? 'La facturación no está habilitada para tu proyecto de Google Cloud. Por favor, actívala en la consola para usar el mapa.'
+                   : 'No se pudo cargar Google Maps. Por favor, verifica tu clave de API y la configuración de tu proyecto.'
+                   }
                 </p>
              </div>
         )}>

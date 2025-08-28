@@ -5,7 +5,6 @@ import PackagesSearchPage from '@/components/packages-search-page';
 import CruiseSearchPage from '@/components/cruise-search-page';
 import { ActivitiesSection } from '@/components/activities-section';
 import { TestimonialsSection } from '@/components/testimonials-section';
-import { RecommendedDestinations } from '@/components/recommended-destinations';
 import { RecommendedHotels } from '@/components/recommended-hotels';
 import { RecommendedPackages } from '@/components/recommended-packages';
 import { RecommendedCruises } from '@/components/recommended-cruises';
@@ -18,18 +17,14 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
-import FlightSearchPage from './flight-search-page';
+import { FlightSearchSwitcher } from './flight-search-switcher';
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   const renderSearch = () => {
     switch(activeTab) {
-      case 'Flights': return (
-          <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
-            <FlightSearchPage />
-          </div>
-        );
+      case 'Flights': return <FlightSearchSwitcher />;
       case 'Hotels': return <HotelSearchPage />;
       case 'Packages': return <PackagesSearchPage />;
       case 'Cruises': return <CruiseSearchPage />;
@@ -111,7 +106,6 @@ function RecommendedContent({ tab }: { tab?: string }) {
     default:
       return (
           <>
-            <RecommendedDestinations />
             <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
           </>
       )
