@@ -1,10 +1,9 @@
 'use client';
-import { useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { useTheme } from '@/contexts/theme-context';
 import { Button } from '@/components/ui/button';
-import { Airport } from '@/lib/types';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { MapPopupForm } from './map-popup-form';
 import { LocateFixed } from 'lucide-react';
@@ -23,11 +22,10 @@ const destinationIcon = new L.DivIcon({
     iconAnchor: [16, 16]
 });
 
-
 interface MapComponentProps {
     center: [number, number];
     zoom: number;
-    origin: {lat: number, lng: number} | null;
+    origin: {lat: number, lng: number, name: string} | null;
     destination: {lat: number, lng: number} | null;
     onMapAction: (data: { latlng: L.LatLng, name?: string }) => void;
     setMapCenter: (center: [number, number]) => void;
@@ -35,6 +33,7 @@ interface MapComponentProps {
     setOrigin: (origin: {lat: number, lng: number, name: string} | null) => void;
 }
 
+// Component to handle map events like clicks
 const MapEvents = ({ onMapAction }: { onMapAction: MapComponentProps['onMapAction']}) => {
     const map = useMapEvents({
         click(e) {
@@ -54,78 +53,64 @@ const MapEvents = ({ onMapAction }: { onMapAction: MapComponentProps['onMapActio
     return null;
 }
 
+// Component to recenter the map view
+const RecenterAutomatically = ({ lat, lng, zoom }: { lat: number; lng: number; zoom: number }) => {
+    const map = useMap();
+    useEffect(() => {
+        map.setView([lat, lng], zoom);
+    }, [lat, lng, zoom, map]);
+    return null;
+};
+
 const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCenter, setZoom, setOrigin }: MapComponentProps) => {
-    const mapRef = useRef<L.Map | null>(null);
     const { colorTheme } = useTheme();
 
+    const tileLayerUrl = colorTheme === 'dark' 
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
     const handleGeolocate = () => {
-        mapRef.current?.locate().on('locationfound', function (e) {
-            setMapCenter([e.latlng.lat, e.latlng.lng]);
-            setZoom(13);
-            setOrigin({ lat: e.latlng.lat, lng: e.latlng.lng, name: 'Mi Ubicación Actual'});
-        });
-    }
-
-    useEffect(() => {
-        const mapElement = document.getElementById('map');
-        if (mapElement && !mapRef.current) {
-            const map = L.map(mapElement).setView(center, zoom);
-            mapRef.current = map;
-
-            const tileLayerUrl = colorTheme === 'dark' 
-                ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-                : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-            
-            L.tileLayer(tileLayerUrl, {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-        }
-
-        return () => {
-            if (mapRef.current) {
-                mapRef.current.remove();
-                mapRef.current = null;
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setMapCenter([latitude, longitude]);
+                setZoom(13);
+                setOrigin({ lat: latitude, lng: longitude, name: 'Mi Ubicación Actual'});
+            },
+            (error) => {
+                console.error("Error getting user's location:", error);
+                // Fallback to a default location if permission is denied
+                setMapCenter([40.7128, -74.0060]);
+                setZoom(5);
             }
-        };
-    }, []);
-
-    useEffect(() => {
-        if (mapRef.current) {
-            mapRef.current.setView(center, zoom);
-        }
-    }, [center, zoom]);
-
-    // Effect for markers and lines
-    useEffect(() => {
-        const map = mapRef.current;
-        if (!map) return;
-
-        // Clear existing markers and lines
-        map.eachLayer((layer) => {
-            if (layer instanceof L.Marker || layer instanceof L.Polyline) {
-                map.removeLayer(layer);
-            }
-        });
-
-        if(origin) {
-            L.marker([origin.lat, origin.lng], { icon: originIcon }).addTo(map)
-                .bindPopup("<b>Punto de Origen</b>").openPopup();
-        }
-        if(destination) {
-            L.marker([destination.lat, destination.lng], { icon: destinationIcon }).addTo(map)
-                .bindPopup("<b>Punto de Destino</b>").openPopup();
-        }
-        if(origin && destination) {
-            L.polyline([[origin.lat, origin.lng], [destination.lat, destination.lng]], {color: '#1C88FF', weight: 3, dashArray: '5, 10'}).addTo(map);
-        }
-
-    }, [origin, destination]);
-
+        );
+    };
 
     return (
         <div className="relative w-full h-full">
-            <div id="map" className="w-full h-full z-0" />
-             <Button
+            <MapContainer center={center} zoom={zoom} scrollWheelZoom={true} className="w-full h-full">
+                <RecenterAutomatically lat={center[0]} lng={center[1]} zoom={zoom} />
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url={tileLayerUrl}
+                />
+                <MapEvents onMapAction={onMapAction} />
+
+                {origin && (
+                    <Marker position={[origin.lat, origin.lng]} icon={originIcon}>
+                        <Popup><b>Punto de Origen</b><br/>{origin.name}</Popup>
+                    </Marker>
+                )}
+                {destination && (
+                    <Marker position={[destination.lat, destination.lng]} icon={destinationIcon}>
+                        <Popup><b>Punto de Destino</b></Popup>
+                    </Marker>
+                )}
+                {origin && destination && (
+                    <L.Polyline positions={[[origin.lat, origin.lng], [destination.lat, destination.lng]]} color={'#1C88FF'} weight={3} dashArray={'5, 10'} />
+                )}
+            </MapContainer>
+            <Button
                 size="icon"
                 variant="secondary"
                 className="absolute bottom-4 right-4 z-[1000] shadow-lg rounded-full h-12 w-12"
@@ -133,7 +118,6 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCe
             >
                 <LocateFixed className="h-6 w-6" />
             </Button>
-            {mapRef.current && <MapEvents onMapAction={onMapAction} />}
         </div>
     );
 };

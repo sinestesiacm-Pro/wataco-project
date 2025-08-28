@@ -2,14 +2,13 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import L from 'leaflet';
-import { useTheme } from '@/contexts/theme-context';
 import { Button } from './ui/button';
-import { Loader2, Search, LocateFixed, PlaneTakeoff, PlaneLanding } from 'lucide-react';
-import { searchAirports } from '@/app/actions';
+import { Loader2, PlaneTakeoff, PlaneLanding } from 'lucide-react';
 import type { Airport } from '@/lib/types';
 import 'leaflet/dist/leaflet.css';
 import dynamic from 'next/dynamic';
 import { Card } from './ui/card';
+import MapComponent from './map-component';
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -19,7 +18,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-// Dynamically import the MapComponent to ensure it's client-side only
+// Use dynamic import for the map component to ensure it's client-side only
 const DynamicMap = dynamic(() => import('./map-component'), {
   ssr: false,
   loading: () => <div className="h-full w-full bg-muted flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
@@ -27,11 +26,16 @@ const DynamicMap = dynamic(() => import('./map-component'), {
 
 
 export function FlightSearchMap() {
-    const [mapCenter, setMapCenter] = useState<[number, number]>([40.7128, -74.0060]); // Default to NYC
+    const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
     const [zoom, setZoom] = useState(5);
     const [origin, setOrigin] = useState<{lat: number, lng: number, name: string} | null>(null);
     const [destination, setDestination] = useState<{lat: number, lng: number, name: string} | null>(null);
     const [selectionMode, setSelectionMode] = useState<'origin' | 'destination'>('origin');
+
+    useEffect(() => {
+        // Set initial map center to NYC
+        setMapCenter([40.7128, -74.0060]);
+    }, []);
 
     const handleMapAction = (data: { latlng: L.LatLng, name?: string }) => {
         const { lat, lng } = data.latlng;
@@ -76,20 +80,19 @@ export function FlightSearchMap() {
                     </button>
                 </div>
            </Card>
-           
         </div>
-      {mapCenter && (
-        <DynamicMap 
-          center={mapCenter} 
-          zoom={zoom} 
-          onMapAction={handleMapAction}
-          origin={origin}
-          destination={destination}
-          setMapCenter={setMapCenter}
-          setZoom={setZoom}
-          setOrigin={setOrigin}
-        />
-      )}
+        {mapCenter && (
+            <DynamicMap
+                center={mapCenter}
+                zoom={zoom}
+                onMapAction={handleMapAction}
+                origin={origin}
+                destination={destination}
+                setMapCenter={setMapCenter}
+                setZoom={setZoom}
+                setOrigin={setOrigin}
+            />
+        )}
     </div>
   );
 }
