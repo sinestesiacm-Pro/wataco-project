@@ -90,8 +90,10 @@ export function FlightSearchMap({ apiKey }: { apiKey?: string }) {
   if (!apiKey) {
     return (
         <div className="relative h-[60vh] max-h-[500px] w-full rounded-2xl border border-destructive/50 bg-destructive/10 flex flex-col items-center justify-center text-center p-4">
-            <h3 className="font-bold text-destructive-foreground">Error de Configuración</h3>
-            <p className="text-sm text-destructive-foreground/80">La clave API de Google Maps no se ha proporcionado. Por favor, añádela al archivo .env.</p>
+            <h3 className="font-bold text-destructive-foreground">Error de Configuración del Mapa</h3>
+            <p className="text-sm text-destructive-foreground/80 mt-2">
+                La clave API de Google Maps no se ha proporcionado. Por favor, añade <code className="bg-destructive/20 p-1 rounded-sm">NEXT_PUBLIC_GOOGLE_MAPS_API_KEY</code> a tu archivo .env y asegúrate de que la facturación esté habilitada en tu proyecto de Google Cloud.
+            </p>
         </div>
     )
   }
