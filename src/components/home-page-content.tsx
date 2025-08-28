@@ -112,6 +112,7 @@ function RecommendedContent({ tab }: { tab?: string }) {
     default:
       return (
           <>
+            <RecommendedDestinations />
             <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
           </>
       )
