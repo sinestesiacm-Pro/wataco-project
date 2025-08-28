@@ -3,15 +3,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import L from 'leaflet';
 import { useTheme } from '@/contexts/theme-context';
-import { Icons } from './icons';
-import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { Loader2, Search } from 'lucide-react';
-import { useDebounce } from '@/hooks/use-debounce';
+import { Loader2, Search, LocateFixed, PlaneTakeoff, PlaneLanding } from 'lucide-react';
 import { searchAirports } from '@/app/actions';
 import type { Airport } from '@/lib/types';
 import 'leaflet/dist/leaflet.css';
 import dynamic from 'next/dynamic';
+import { Card } from './ui/card';
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -21,91 +19,77 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-
-const airportIcon = new L.DivIcon({
-    html: `<div class="relative flex items-center justify-center w-6 h-6 bg-primary/20 rounded-full border-2 border-primary"><div class="w-2 h-2 bg-primary rounded-full"></div></div>`,
-    className: '',
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
-});
-
 // Dynamically import the MapComponent to ensure it's client-side only
 const DynamicMap = dynamic(() => import('./map-component'), {
   ssr: false,
   loading: () => <div className="h-full w-full bg-muted flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
 });
 
+
 export function FlightSearchMap() {
-    const [searchQuery, setSearchQuery] = useState('New York');
-    const [airports, setAirports] = useState<Airport[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
+    const [mapCenter, setMapCenter] = useState<[number, number]>([40.7128, -74.0060]); // Default to NYC
     const [zoom, setZoom] = useState(5);
-    
-    const debouncedSearchQuery = useDebounce(searchQuery, 500);
+    const [origin, setOrigin] = useState<{lat: number, lng: number, name: string} | null>(null);
+    const [destination, setDestination] = useState<{lat: number, lng: number, name: string} | null>(null);
+    const [selectionMode, setSelectionMode] = useState<'origin' | 'destination'>('origin');
 
-    const handleSearch = useCallback(async (query: string) => {
-        if (query.length < 3) {
-            setAirports([]);
-            return;
-        };
-        setLoading(true);
-        const result = await searchAirports(query);
-        if (result.success && result.data) {
-            setAirports(result.data);
-            if(result.data.length > 0) {
-                 const firstAirport = result.data[0];
-                 if (firstAirport?.address?.cityName) {
-                    try {
-                        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(firstAirport.address.cityName)}&format=json&limit=1`);
-                        const geoData = await res.json();
-                        if (geoData.length > 0) {
-                            setMapCenter([parseFloat(geoData[0].lat), parseFloat(geoData[0].lon)]);
-                            setZoom(7);
-                        } else {
-                           setMapCenter([40.7128, -74.0060]); // Fallback to NYC
-                           setZoom(5);
-                        }
-                    } catch (error) {
-                        console.error("Geocoding API failed, using fallback.", error);
-                        setMapCenter([40.7128, -74.0060]); // Fallback to NYC
-                        setZoom(5);
-                    }
-                 }
-            } else {
-                 setMapCenter([40.7128, -74.0060]); // Fallback if no results
-                 setZoom(5);
-            }
+    const handleMapAction = (data: { latlng: L.LatLng, name?: string }) => {
+        const { lat, lng } = data.latlng;
+        const name = data.name || `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+        
+        if (selectionMode === 'origin') {
+            setOrigin({ lat, lng, name });
+            setSelectionMode('destination'); // Switch to destination selection
+        } else {
+            setDestination({ lat, lng, name });
         }
-        setLoading(false);
-    }, []);
-
-    useEffect(() => {
-        handleSearch(debouncedSearchQuery);
-    }, [debouncedSearchQuery, handleSearch])
+    };
     
   return (
-    <div className="relative h-[50vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
-        <div className="absolute top-4 left-4 z-[1000] w-full max-w-xs">
-            <div className="relative">
-                <Input
-                    type="text"
-                    placeholder="Busca una ciudad o aeropuerto..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 shadow-lg h-12 text-lg"
-                />
-                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                    {loading ? <Loader2 className="animate-spin text-muted-foreground" /> : <Search className="text-muted-foreground" />}
+    <div className="relative h-[60vh] md:h-[70vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
+        <div className="absolute top-4 left-4 z-[1000] w-full max-w-sm space-y-2">
+           <Card className="p-3 bg-card/80 backdrop-blur-md shadow-lg">
+                <div className="flex items-center gap-2">
+                     <button 
+                        onClick={() => setSelectionMode('origin')} 
+                        className={`flex-1 p-2 rounded-md transition-colors text-left ${selectionMode === 'origin' ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-muted'}`}
+                    >
+                         <div className="flex items-center gap-2">
+                            <PlaneTakeoff className="h-5 w-5" />
+                            <div>
+                                <p className="text-xs font-bold">Origen</p>
+                                <p className="text-sm truncate">{origin?.name || "Selecciona en el mapa"}</p>
+                            </div>
+                        </div>
+                    </button>
+                     <button 
+                        onClick={() => setSelectionMode('destination')}
+                        className={`flex-1 p-2 rounded-md transition-colors text-left ${selectionMode === 'destination' ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-muted'}`}
+                    >
+                        <div className="flex items-center gap-2">
+                            <PlaneLanding className="h-5 w-5" />
+                             <div>
+                                <p className="text-xs font-bold">Destino</p>
+                                <p className="text-sm truncate">{destination?.name || "Selecciona en el mapa"}</p>
+                            </div>
+                        </div>
+                    </button>
                 </div>
-            </div>
+           </Card>
+           
         </div>
-      {mapCenter && <DynamicMap 
+      {mapCenter && (
+        <DynamicMap 
           center={mapCenter} 
           zoom={zoom} 
-          airports={airports} 
-          airportIcon={airportIcon}
-      />}
+          onMapAction={handleMapAction}
+          origin={origin}
+          destination={destination}
+          setMapCenter={setMapCenter}
+          setZoom={setZoom}
+          setOrigin={setOrigin}
+        />
+      )}
     </div>
   );
 }

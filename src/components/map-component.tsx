@@ -5,36 +5,72 @@ import { useTheme } from '@/contexts/theme-context';
 import { Button } from '@/components/ui/button';
 import { Airport } from '@/lib/types';
 import React, { useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom/client';
+import { MapPopupForm } from './map-popup-form';
+import { LocateFixed } from 'lucide-react';
 
-// This component is dynamically imported and will only run on the client.
+const originIcon = new L.DivIcon({
+    html: `<div class="relative flex items-center justify-center w-8 h-8 bg-blue-500/30 rounded-full border-2 border-blue-500"><div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div></div>`,
+    className: '',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16]
+});
 
-const RecenterAutomatically = ({map, lat, lng, zoom}: {map: L.Map | null, lat: number, lng: number, zoom: number}) => {
-     useEffect(() => {
-       if (map) {
-         map.setView([lat, lng], zoom);
-       }
-     }, [lat, lng, zoom, map]);
-     return null;
-}
+const destinationIcon = new L.DivIcon({
+    html: `<div class="relative flex items-center justify-center w-8 h-8 bg-green-500/30 rounded-full border-2 border-green-500"><div class="w-3 h-3 bg-green-500 rounded-full"></div></div>`,
+    className: '',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16]
+});
+
 
 interface MapComponentProps {
     center: [number, number];
     zoom: number;
-    airports: Airport[];
-    airportIcon: L.DivIcon;
+    origin: {lat: number, lng: number} | null;
+    destination: {lat: number, lng: number} | null;
+    onMapAction: (data: { latlng: L.LatLng, name?: string }) => void;
+    setMapCenter: (center: [number, number]) => void;
+    setZoom: (zoom: number) => void;
+    setOrigin: (origin: {lat: number, lng: number, name: string} | null) => void;
 }
 
-const MapComponent = ({ center, zoom, airports, airportIcon }: MapComponentProps) => {
-    const { colorTheme } = useTheme();
-    const mapRef = useRef<HTMLDivElement>(null);
-    const mapInstanceRef = useRef<L.Map | null>(null);
+const MapEvents = ({ onMapAction }: { onMapAction: MapComponentProps['onMapAction']}) => {
+    const map = useMapEvents({
+        click(e) {
+            const container = document.createElement('div');
+            const root = ReactDOM.createRoot(container);
+            root.render(<MapPopupForm latlng={e.latlng} onSearch={(originName, destName) => {
+                onMapAction({ latlng: e.latlng, name: destName });
+                map.closePopup();
+            }} />);
 
-    // This effect handles the creation and cleanup of the map instance
+            L.popup({ minWidth: 320 })
+                .setLatLng(e.latlng)
+                .setContent(container)
+                .openOn(map);
+        },
+    });
+    return null;
+}
+
+const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCenter, setZoom, setOrigin }: MapComponentProps) => {
+    const mapRef = useRef<L.Map | null>(null);
+    const { colorTheme } = useTheme();
+
+    const handleGeolocate = () => {
+        mapRef.current?.locate().on('locationfound', function (e) {
+            setMapCenter([e.latlng.lat, e.latlng.lng]);
+            setZoom(13);
+            setOrigin({ lat: e.latlng.lat, lng: e.latlng.lng, name: 'Mi Ubicación Actual'});
+        });
+    }
+
     useEffect(() => {
-        // Only initialize the map if the ref is available and no map instance exists
-        if (mapRef.current && !mapInstanceRef.current) {
-            const map = L.map(mapRef.current).setView(center, zoom);
-            mapInstanceRef.current = map;
+        const mapElement = document.getElementById('map');
+        if (mapElement && !mapRef.current) {
+            const map = L.map(mapElement).setView(center, zoom);
+            mapRef.current = map;
 
             const tileLayerUrl = colorTheme === 'dark' 
                 ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
@@ -45,68 +81,60 @@ const MapComponent = ({ center, zoom, airports, airportIcon }: MapComponentProps
             }).addTo(map);
         }
 
-        // Cleanup function: remove the map instance when the component unmounts
         return () => {
-            if (mapInstanceRef.current) {
-                mapInstanceRef.current.remove();
-                mapInstanceRef.current = null;
+            if (mapRef.current) {
+                mapRef.current.remove();
+                mapRef.current = null;
             }
         };
-    }, []); // Empty dependency array ensures this runs only once on mount and cleanup on unmount
+    }, []);
 
-    // This effect handles updates to the map's view (center, zoom)
     useEffect(() => {
-        if (mapInstanceRef.current) {
-            mapInstanceRef.current.setView(center, zoom);
+        if (mapRef.current) {
+            mapRef.current.setView(center, zoom);
         }
     }, [center, zoom]);
-    
-    // This effect handles adding/updating markers
+
+    // Effect for markers and lines
     useEffect(() => {
-        const map = mapInstanceRef.current;
+        const map = mapRef.current;
         if (!map) return;
 
-        // Clear existing markers to prevent duplicates
+        // Clear existing markers and lines
         map.eachLayer((layer) => {
-            if (layer instanceof L.Marker) {
+            if (layer instanceof L.Marker || layer instanceof L.Polyline) {
                 map.removeLayer(layer);
             }
         });
 
-        // Add new markers
-        airports.forEach(airport => {
-            const pos = getAirportCoordinates(airport.iataCode, center);
-            if (!pos) return;
-
-            const popupContent = `
-                <div class="font-sans p-1">
-                    <p class="font-bold text-base">${airport.name} (${airport.iataCode})</p>
-                    <p class="text-sm text-gray-600">${airport.address?.cityName || ''}</p>
-                    <button class="mt-2 w-full bg-primary text-primary-foreground px-3 py-1 rounded-md text-sm font-semibold hover:bg-primary/90">Vuelos desde aquí</button>
-                </div>
-            `;
-            
-            L.marker(pos, { icon: airportIcon })
-              .addTo(map)
-              .bindPopup(popupContent);
-        });
-
-    }, [airports, airportIcon, center]);
-
-    // Mock coordinates for demo purposes
-    const getAirportCoordinates = (iata: string, baseCoords: [number, number]): [number, number] | null => {
-        let hash = 0;
-        for (let i = 0; i < iata.length; i++) {
-            hash = iata.charCodeAt(i) + ((hash << 5) - hash);
+        if(origin) {
+            L.marker([origin.lat, origin.lng], { icon: originIcon }).addTo(map)
+                .bindPopup("<b>Punto de Origen</b>").openPopup();
         }
-        const latJitter = (hash & 0x0000FFFF) / 0xFFFF * 0.5 - 0.25;
-        const lonJitter = ((hash & 0xFFFF0000) >> 16) / 0xFFFF * 0.5 - 0.25;
-        
-        return [baseCoords[0] + latJitter, baseCoords[1] + lonJitter];
-    }
+        if(destination) {
+            L.marker([destination.lat, destination.lng], { icon: destinationIcon }).addTo(map)
+                .bindPopup("<b>Punto de Destino</b>").openPopup();
+        }
+        if(origin && destination) {
+            L.polyline([[origin.lat, origin.lng], [destination.lat, destination.lng]], {color: '#1C88FF', weight: 3, dashArray: '5, 10'}).addTo(map);
+        }
+
+    }, [origin, destination]);
+
 
     return (
-        <div ref={mapRef} className="w-full h-full" />
+        <div className="relative w-full h-full">
+            <div id="map" className="w-full h-full z-0" />
+             <Button
+                size="icon"
+                variant="secondary"
+                className="absolute bottom-4 right-4 z-[1000] shadow-lg rounded-full h-12 w-12"
+                onClick={handleGeolocate}
+            >
+                <LocateFixed className="h-6 w-6" />
+            </Button>
+            {mapRef.current && <MapEvents onMapAction={onMapAction} />}
+        </div>
     );
 };
 
