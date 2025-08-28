@@ -3,11 +3,12 @@ import React, { useEffect, useRef, memo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-ant-path';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import MarkerClusterGroup from 'react-leaflet-cluster';
+import 'leaflet.markercluster';
 import { useTheme } from '@/contexts/theme-context';
 import type { Airport } from '@/lib/types';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -50,139 +51,75 @@ interface MapComponentProps {
     children?: React.ReactNode;
 }
 
+const RecenterAutomatically = ({ lat, lng, zoom }: { lat: number; lng: number; zoom: number }) => {
+    const map = useMapEvents({
+        moveend: () => {
+            // This could be used to update parent state on map move
+        },
+    });
+    useEffect(() => {
+        map.setView([lat, lng], zoom);
+    }, [lat, lng, zoom, map]);
+    return null;
+};
+
+const MapEvents = ({ onClick, onViewChanged }: { onClick: (e: L.LeafletMouseEvent) => void, onViewChanged: (map: L.Map) => void }) => {
+    const map = useMapEvents({
+        click(e) {
+            onClick(e);
+        },
+        moveend() {
+            onViewChanged(map);
+        },
+        zoomend() {
+            onViewChanged(map);
+        }
+    });
+    return null;
+}
+
+
 const MapComponent = ({ center, zoom, onMapAction, onViewChanged, origin, destination, airports, children }: MapComponentProps) => {
-    const mapRef = useRef<L.Map | null>(null);
-    const mapContainerRef = useRef<HTMLDivElement>(null);
-    const antPathRef = useRef<L.Polyline.AntPath | null>(null);
-    const originMarkerRef = useRef<L.Marker | null>(null);
-    const destinationMarkerRef = useRef<L.Marker | null>(null);
-    const airportMarkersRef = useRef<L.LayerGroup | null>(null);
     const { colorTheme } = useTheme();
 
     const tileLayerUrl = colorTheme === 'dark' 
         ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
         : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-    // Initialize map
-    useEffect(() => {
-        if (mapContainerRef.current && !mapRef.current) {
-            mapRef.current = L.map(mapContainerRef.current, {
-                center: center,
-                zoom: zoom,
-                scrollWheelZoom: true,
-            });
-
-            L.tileLayer(tileLayerUrl, {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            }).addTo(mapRef.current);
-            
-            mapRef.current.on('click', (e: L.LeafletMouseEvent) => {
-                onMapAction({ latlng: e.latlng });
-            });
-
-            mapRef.current.on('moveend', () => {
-                if (mapRef.current) {
-                    const newCenter = mapRef.current.getCenter();
-                    const newZoom = mapRef.current.getZoom();
-                    const newBounds = mapRef.current.getBounds();
-                    onViewChanged([newCenter.lat, newCenter.lng], newZoom, newBounds);
-                }
-            });
-        }
-
-        // Cleanup function to remove the map instance
-        return () => {
-            if (mapRef.current) {
-                mapRef.current.remove();
-                mapRef.current = null;
-            }
-        };
-    }, []); // Only run on mount and unmount
-
-    // Update view
-    useEffect(() => {
-        if (mapRef.current && (mapRef.current.getCenter().lat !== center[0] || mapRef.current.getCenter().lng !== center[1] || mapRef.current.getZoom() !== zoom)) {
-            mapRef.current.setView(center, zoom);
-        }
-    }, [center, zoom]);
     
-    // Update ant path
-     useEffect(() => {
-        const map = mapRef.current;
-        if (!map) return;
-
-        if (antPathRef.current) {
-            map.removeLayer(antPathRef.current);
-            antPathRef.current = null;
-        }
-
-        if (origin && destination) {
-            const latLngs: [number, number][] = [[origin.lat, origin.lng], [destination.lat, destination.lng]];
-            antPathRef.current = (L.polyline as any).antPath(latLngs, {
-                delay: 800,
-                dashArray: [10, 20],
-                weight: 5,
-                color: '#42a5f5',
-                pulseColor: '#FFFFFF',
-            });
-            antPathRef.current.addTo(map);
-            map.fitBounds(L.latLngBounds(latLngs), { padding: [50, 50] });
-        }
-    }, [origin, destination]);
-
-
-    // Update origin/destination markers
-     useEffect(() => {
-        const map = mapRef.current;
-        if (!map) return;
-
-        if (origin) {
-            if (!originMarkerRef.current) {
-                originMarkerRef.current = L.marker(origin, { icon: originIcon }).addTo(map);
-            } else {
-                originMarkerRef.current.setLatLng(origin);
-            }
-        } else if (originMarkerRef.current) {
-            map.removeLayer(originMarkerRef.current);
-            originMarkerRef.current = null;
-        }
-
-        if (destination) {
-            if (!destinationMarkerRef.current) {
-                destinationMarkerRef.current = L.marker(destination, { icon: destinationIcon }).addTo(map);
-            } else {
-                destinationMarkerRef.current.setLatLng(destination);
-            }
-        } else if (destinationMarkerRef.current) {
-            map.removeLayer(destinationMarkerRef.current);
-            destinationMarkerRef.current = null;
-        }
-    }, [origin, destination]);
-    
-     // Update airport markers
-    useEffect(() => {
-        const map = mapRef.current;
-        if (!map) return;
-    
-        if (airportMarkersRef.current) {
-            map.removeLayer(airportMarkersRef.current);
-        }
-        
-        const clusterGroup = L.markerClusterGroup();
-        
-        airports.forEach(airport => {
-            // Airport locations are not available in the provided data.
-            // We'll skip adding them to the map for now.
-        });
-        
-        airportMarkersRef.current = clusterGroup;
-        map.addLayer(airportMarkersRef.current);
-
-    }, [airports]);
-
-
     return (
-        <div ref={mapContainerRef} className="w-full h-full" />
+        <MapContainer center={center} zoom={zoom} scrollWheelZoom={true} className="w-full h-full">
+            <RecenterAutomatically lat={center[0]} lng={center[1]} zoom={zoom} />
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url={tileLayerUrl}
+            />
+            <MapEvents 
+                onClick={(e) => onMapAction({ latlng: e.latlng })}
+                onViewChanged={(map) => onViewChanged([map.getCenter().lat, map.getCenter().lng], map.getZoom(), map.getBounds())}
+            />
+
+            {origin && <Marker position={[origin.lat, origin.lng]} icon={originIcon} />}
+            {destination && <Marker position={[destination.lat, destination.lng]} icon={destinationIcon} />}
+
+            <MarkerClusterGroup>
+                {airports.map(airport => (
+                    airport.geoCode && (
+                        <Marker 
+                            key={airport.iataCode} 
+                            position={[airport.geoCode.latitude, airport.geoCode.longitude]}
+                            icon={airplaneIcon}
+                            eventHandlers={{
+                                click: () => {
+                                    onMapAction({ latlng: L.latLng(airport.geoCode!.latitude, airport.geoCode!.longitude), name: airport.name });
+                                }
+                            }}
+                        />
+                    )
+                ))}
+            </MarkerClusterGroup>
+
+            {children}
+        </MapContainer>
     );
 };
 

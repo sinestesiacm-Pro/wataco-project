@@ -105,6 +105,10 @@ export interface Airport {
   iataCode: string;
   subType: string;
   address?: AirportAddress;
+  geoCode?: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export interface AirportSearchResponse {

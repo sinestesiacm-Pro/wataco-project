@@ -121,7 +121,7 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
     }
 
     const apiData: AirportSearchResponse = await response.json();
-    const apiResults = apiData.data.filter(location => location.iataCode && location.name);
+    const apiResults = apiData.data.filter(location => location.iataCode && location.name && location.geoCode);
     
     // Deduplicate results, as API can return city and airport for the same place
     const uniqueResults = Array.from(new Map(apiResults.map(item => [item.iataCode, item])).values());
