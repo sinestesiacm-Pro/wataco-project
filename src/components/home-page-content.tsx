@@ -25,7 +25,7 @@ function SearchSection({ tab }: { tab?: string }) {
 
   const renderSearch = () => {
     switch(activeTab) {
-      // The FlightSearchPage is now directly embedded in the Flights tab content
+      case 'Flights': return <FlightSearchPage />;
       case 'Hotels': return <HotelSearchPage />;
       case 'Packages': return <PackagesSearchPage />;
       case 'Cruises': return <CruiseSearchPage />;
@@ -108,9 +108,6 @@ function RecommendedContent({ tab }: { tab?: string }) {
       return (
           <>
             <RecommendedDestinations />
-            <div className="mt-16">
-              <FlightSearchPage />
-            </div>
             <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} />
           </>
       )
@@ -136,7 +133,7 @@ export function HomePageContent() {
             <div className="relative z-10 flex flex-col flex-grow">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="pt-24">
-                         {tab !== 'Activities' && tab !== 'Social' && tab !== 'Flights' && <SearchSection tab={tab} />}
+                         {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
                     </div>
                 </div>
           
