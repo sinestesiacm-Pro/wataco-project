@@ -3,12 +3,14 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import L from 'leaflet';
 import { Button } from './ui/button';
-import { Loader2, PlaneTakeoff, PlaneLanding } from 'lucide-react';
+import { Loader2, PlaneTakeoff, PlaneLanding, Search, X } from 'lucide-react';
 import type { Airport } from '@/lib/types';
 import 'leaflet/dist/leaflet.css';
 import dynamic from 'next/dynamic';
 import { Card } from './ui/card';
-import MapComponent from './map-component';
+import { useDebounce } from '@/hooks/use-debounce';
+import { searchAirports } from '@/app/actions';
+import { Input } from './ui/input';
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
