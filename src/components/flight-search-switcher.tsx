@@ -6,13 +6,7 @@ import { Icons } from './icons';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FlightSearchClassic } from './flight-search-classic';
-import dynamic from 'next/dynamic';
-import { Loader2 } from 'lucide-react';
-
-const DynamicFlightSearchMap = dynamic(() => import('./flight-search-map').then(mod => mod.FlightSearchMap), {
-  ssr: false,
-  loading: () => <div className="h-[50vh] flex items-center justify-center bg-muted/50 rounded-2xl"><Loader2 className="animate-spin h-8 w-8 text-primary"/></div>
-});
+import { FlightSearchMap } from './flight-search-map';
 
 type SearchMode = 'list' | 'map';
 
@@ -55,7 +49,7 @@ export function FlightSearchSwitcher() {
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.2 }}
         >
-          {mode === 'list' ? <FlightSearchClassic /> : <DynamicFlightSearchMap />}
+          {mode === 'list' ? <FlightSearchClassic /> : <FlightSearchMap />}
         </motion.div>
       </AnimatePresence>
     </div>

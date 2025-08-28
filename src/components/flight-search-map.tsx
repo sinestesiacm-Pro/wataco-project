@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import L from 'leaflet';
 import { useTheme } from '@/contexts/theme-context';
 import { Icons } from './icons';
@@ -11,8 +11,7 @@ import { useDebounce } from '@/hooks/use-debounce';
 import { searchAirports } from '@/app/actions';
 import type { Airport } from '@/lib/types';
 import 'leaflet/dist/leaflet.css';
-import MapComponent from './map-component';
-
+import dynamic from 'next/dynamic';
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -30,6 +29,11 @@ const airportIcon = new L.DivIcon({
     iconAnchor: [12, 12]
 });
 
+// Dynamically import the MapComponent to ensure it's client-side only
+const DynamicMap = dynamic(() => import('./map-component'), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-muted flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+});
 
 export function FlightSearchMap() {
     const [searchQuery, setSearchQuery] = useState('New York');
@@ -64,7 +68,7 @@ export function FlightSearchMap() {
         setLoading(false);
     }, []);
 
-    useEffect(() => {
+    useMemo(() => {
         handleSearch(debouncedSearchQuery);
     }, [debouncedSearchQuery, handleSearch])
     
@@ -84,7 +88,7 @@ export function FlightSearchMap() {
                 </div>
             </div>
         </div>
-      <MapComponent 
+      <DynamicMap 
           center={mapCenter} 
           zoom={zoom} 
           airports={airports} 
