@@ -1,81 +1,89 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Button } from './ui/button';
-import { PlaneTakeoff, PlaneLanding } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { Airport } from '@/lib/types';
-import { Card } from './ui/card';
+import { searchAirports } from '@/app/actions';
+import { useDebounce } from '@/hooks/use-debounce';
 import MapComponent from './map-component';
+import { Button } from './ui/button';
+import { LocateFixed } from 'lucide-react';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 
+// This is the main component that will be dynamically imported
 export function FlightSearchMap() {
     const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
     const [zoom, setZoom] = useState(5);
     const [origin, setOrigin] = useState<{lat: number, lng: number, name: string} | null>(null);
     const [destination, setDestination] = useState<{lat: number, lng: number, name: string} | null>(null);
-    const [selectionMode, setSelectionMode] = useState<'origin' | 'destination'>('origin');
-
+    const [airports, setAirports] = useState<Airport[]>([]);
+    
+    // Set initial map center to NYC on component mount
     useEffect(() => {
-        // Set initial map center to NYC
-        setMapCenter([40.7128, -74.0060]);
+        setMapCenter([40.7128, -74.0060]); 
     }, []);
 
-    const handleMapAction = (data: { latlng: L.LatLng, name?: string }) => {
+    const handleMapAction = useCallback((data: { latlng: L.LatLng, name?: string }) => {
         const { lat, lng } = data.latlng;
         const name = data.name || `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
         
-        if (selectionMode === 'origin') {
+        // Simple logic to alternate between setting origin and destination
+        if (!origin || (origin && destination)) {
             setOrigin({ lat, lng, name });
-            setSelectionMode('destination'); // Switch to destination selection
+            setDestination(null);
         } else {
             setDestination({ lat, lng, name });
         }
-    };
+    }, [origin, destination]);
     
-  return (
-    <div className="relative h-[60vh] md:h-[70vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
-        <div className="absolute top-4 left-4 z-[1000] w-full max-w-sm space-y-2">
-           <Card className="p-3 bg-card/80 backdrop-blur-md shadow-lg">
-                <div className="flex items-center gap-2">
-                     <button 
-                        onClick={() => setSelectionMode('origin')} 
-                        className={`flex-1 p-2 rounded-md transition-colors text-left ${selectionMode === 'origin' ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-muted'}`}
-                    >
-                         <div className="flex items-center gap-2">
-                            <PlaneTakeoff className="h-5 w-5" />
-                            <div>
-                                <p className="text-xs font-bold">Origen</p>
-                                <p className="text-sm truncate">{origin?.name || "Selecciona en el mapa"}</p>
-                            </div>
-                        </div>
-                    </button>
-                     <button 
-                        onClick={() => setSelectionMode('destination')}
-                        className={`flex-1 p-2 rounded-md transition-colors text-left ${selectionMode === 'destination' ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-muted'}`}
-                    >
-                        <div className="flex items-center gap-2">
-                            <PlaneLanding className="h-5 w-5" />
-                             <div>
-                                <p className="text-xs font-bold">Destino</p>
-                                <p className="text-sm truncate">{destination?.name || "Selecciona en el mapa"}</p>
-                            </div>
-                        </div>
-                    </button>
-                </div>
-           </Card>
+     const handleGeolocate = useCallback(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setMapCenter([latitude, longitude]);
+                    setZoom(13);
+                    setOrigin({ lat: latitude, lng: longitude, name: 'Mi Ubicación Actual'});
+                },
+                (error) => {
+                    console.warn(`Geolocation error: ${error.message}`);
+                    // Fallback to NYC if permission is denied or fails
+                    setMapCenter([40.7128, -74.0060]);
+                    setZoom(5);
+                }
+            );
+        } else {
+             console.warn("Geolocation is not supported by this browser.");
+             setMapCenter([40.7128, -74.0060]);
+             setZoom(5);
+        }
+    }, []);
+
+    return (
+        <div className="relative h-[60vh] md:h-[70vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
+            <div className="absolute top-4 right-4 z-[1000]">
+                 <Button
+                    size="icon"
+                    variant="secondary"
+                    className="shadow-lg rounded-full h-12 w-12"
+                    onClick={handleGeolocate}
+                >
+                    <LocateFixed className="h-6 w-6" />
+                </Button>
+            </div>
+            {mapCenter ? (
+                <MapComponent
+                    center={mapCenter}
+                    zoom={zoom}
+                    onMapAction={handleMapAction}
+                    origin={origin}
+                    destination={destination}
+                    airports={airports}
+                />
+            ) : <p>Loading map...</p>}
         </div>
-        {mapCenter && (
-            <MapComponent
-                center={mapCenter}
-                zoom={zoom}
-                onMapAction={handleMapAction}
-                origin={origin}
-                destination={destination}
-                setMapCenter={setMapCenter}
-                setZoom={setZoom}
-                setOrigin={setOrigin}
-            />
-        )}
-    </div>
-  );
+    );
 }
+
+export default FlightSearchMap;
+

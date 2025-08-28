@@ -10,6 +10,9 @@ import { Button } from '@/components/ui/button';
 import ReactDOM from 'react-dom/client';
 import { MapPopupForm } from './map-popup-form';
 import { LocateFixed } from 'lucide-react';
+import type { Airport } from '@/lib/types';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -38,13 +41,11 @@ interface MapComponentProps {
     zoom: number;
     origin: {lat: number, lng: number, name: string} | null;
     destination: {lat: number, lng: number, name: string} | null;
+    airports: Airport[];
     onMapAction: (data: { latlng: L.LatLng, name?: string }) => void;
-    setMapCenter: (center: [number, number]) => void;
-    setZoom: (zoom: number) => void;
-    setOrigin: (origin: {lat: number, lng: number, name: string} | null) => void;
 }
 
-const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCenter, setZoom, setOrigin }: MapComponentProps) => {
+const MapComponent = ({ center, zoom, onMapAction, origin, destination, airports }: MapComponentProps) => {
     const mapRef = useRef<L.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const originMarkerRef = useRef<L.Marker | null>(null);
@@ -66,7 +67,7 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCe
             });
 
             L.tileLayer(tileLayerUrl, {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             }).addTo(mapRef.current);
             
             // Handle map click events
@@ -163,34 +164,8 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, setMapCe
         }
     }, [origin, destination, mapRef.current]);
 
-    const handleGeolocate = () => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                setMapCenter([latitude, longitude]);
-                setZoom(13);
-                setOrigin({ lat: latitude, lng: longitude, name: 'Mi Ubicación Actual'});
-            },
-            (error) => {
-                console.error("Error getting user's location:", error);
-                setMapCenter([40.7128, -74.0060]); // Fallback to NYC
-                setZoom(5);
-            }
-        );
-    };
-
     return (
-        <div className="relative w-full h-full">
-            <div ref={mapContainerRef} className="w-full h-full" />
-            <Button
-                size="icon"
-                variant="secondary"
-                className="absolute bottom-4 right-4 z-[1000] shadow-lg rounded-full h-12 w-12"
-                onClick={handleGeolocate}
-            >
-                <LocateFixed className="h-6 w-6" />
-            </Button>
-        </div>
+        <div ref={mapContainerRef} className="w-full h-full" />
     );
 };
 
