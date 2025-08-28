@@ -3,7 +3,9 @@ import React, { useEffect, useRef, memo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-ant-path';
-import 'leaflet.markercluster';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import { useTheme } from '@/contexts/theme-context';
 import type { Airport } from '@/lib/types';
 
@@ -29,6 +31,14 @@ const destinationIcon = new L.DivIcon({
     iconAnchor: [16, 16]
 });
 
+const airplaneIcon = new L.DivIcon({
+    html: `<div class="p-1 bg-gray-800/60 rounded-full shadow-lg"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div>`,
+    className: '',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+});
+
+
 interface MapComponentProps {
     center: [number, number];
     zoom: number;
@@ -36,13 +46,17 @@ interface MapComponentProps {
     destination: {lat: number, lng: number, name: string} | null;
     airports: Airport[];
     onMapAction: (data: { latlng: L.LatLng, name?: string }) => void;
+    onViewChanged: (center: [number, number], zoom: number, bounds: L.LatLngBounds) => void;
     children?: React.ReactNode;
 }
 
-const MapComponent = ({ center, zoom, onMapAction, origin, destination, airports, children }: MapComponentProps) => {
+const MapComponent = ({ center, zoom, onMapAction, onViewChanged, origin, destination, airports, children }: MapComponentProps) => {
     const mapRef = useRef<L.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const antPathRef = useRef<L.Polyline.AntPath | null>(null);
+    const originMarkerRef = useRef<L.Marker | null>(null);
+    const destinationMarkerRef = useRef<L.Marker | null>(null);
+    const airportMarkersRef = useRef<L.LayerGroup | null>(null);
     const { colorTheme } = useTheme();
 
     const tileLayerUrl = colorTheme === 'dark' 
@@ -65,6 +79,15 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, airports
             mapRef.current.on('click', (e: L.LeafletMouseEvent) => {
                 onMapAction({ latlng: e.latlng });
             });
+
+            mapRef.current.on('moveend', () => {
+                if (mapRef.current) {
+                    const newCenter = mapRef.current.getCenter();
+                    const newZoom = mapRef.current.getZoom();
+                    const newBounds = mapRef.current.getBounds();
+                    onViewChanged([newCenter.lat, newCenter.lng], newZoom, newBounds);
+                }
+            });
         }
 
         // Cleanup function to remove the map instance
@@ -76,13 +99,10 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, airports
         };
     }, []); // Only run on mount and unmount
 
-    // Update view and tile layer
+    // Update view
     useEffect(() => {
-        if (mapRef.current) {
+        if (mapRef.current && (mapRef.current.getCenter().lat !== center[0] || mapRef.current.getCenter().lng !== center[1] || mapRef.current.getZoom() !== zoom)) {
             mapRef.current.setView(center, zoom);
-            // This part is tricky as TileLayer is not easily mutable.
-            // For this app, we will assume the theme doesn't change after map init.
-            // A more complex solution would involve removing and re-adding the layer.
         }
     }, [center, zoom]);
     
@@ -111,25 +131,55 @@ const MapComponent = ({ center, zoom, onMapAction, origin, destination, airports
     }, [origin, destination]);
 
 
-    // Update markers (simple markers for origin/destination)
+    // Update origin/destination markers
      useEffect(() => {
         const map = mapRef.current;
         if (!map) return;
 
-        // Clear existing markers before adding new ones
-        map.eachLayer((layer) => {
-            if (layer instanceof L.Marker) {
-                map.removeLayer(layer);
-            }
-        });
-
         if (origin) {
-            L.marker(origin, { icon: originIcon }).addTo(map);
+            if (!originMarkerRef.current) {
+                originMarkerRef.current = L.marker(origin, { icon: originIcon }).addTo(map);
+            } else {
+                originMarkerRef.current.setLatLng(origin);
+            }
+        } else if (originMarkerRef.current) {
+            map.removeLayer(originMarkerRef.current);
+            originMarkerRef.current = null;
         }
+
         if (destination) {
-            L.marker(destination, { icon: destinationIcon }).addTo(map);
+            if (!destinationMarkerRef.current) {
+                destinationMarkerRef.current = L.marker(destination, { icon: destinationIcon }).addTo(map);
+            } else {
+                destinationMarkerRef.current.setLatLng(destination);
+            }
+        } else if (destinationMarkerRef.current) {
+            map.removeLayer(destinationMarkerRef.current);
+            destinationMarkerRef.current = null;
         }
     }, [origin, destination]);
+    
+     // Update airport markers
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map) return;
+    
+        if (airportMarkersRef.current) {
+            map.removeLayer(airportMarkersRef.current);
+        }
+        
+        const clusterGroup = L.markerClusterGroup();
+        
+        airports.forEach(airport => {
+            // Airport locations are not available in the provided data.
+            // We'll skip adding them to the map for now.
+        });
+        
+        airportMarkersRef.current = clusterGroup;
+        map.addLayer(airportMarkersRef.current);
+
+    }, [airports]);
+
 
     return (
         <div ref={mapContainerRef} className="w-full h-full" />
