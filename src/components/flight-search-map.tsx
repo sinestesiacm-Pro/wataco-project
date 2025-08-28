@@ -187,7 +187,6 @@ export function FlightSearchMap() {
                     mapId="orvian-map"
                     gestureHandling={'greedy'}
                     disableDefaultUI={true}
-                    styles={mapStyles}
                 >
                     {airports.map(airport => (
                         <AirportMarker key={airport.iataCode} airport={airport} onSelect={setSelectedAirport} />
@@ -211,109 +210,5 @@ export function FlightSearchMap() {
         </div>
     );
 }
-
-const mapStyles = [
-    {
-      "featureType": "all",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        { "color": "#ffffff" }
-      ]
-    },
-    {
-      "featureType": "all",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        { "visibility": "on" },
-        { "color": "#000000" },
-        { "lightness": 16 }
-      ]
-    },
-    {
-      "featureType": "all",
-      "elementType": "labels.icon",
-      "stylers": [
-        { "visibility": "off" }
-      ]
-    },
-    {
-      "featureType": "administrative",
-      "elementType": "geometry.fill",
-      "stylers": [
-        { "color": "#000000" },
-        { "lightness": 20 }
-      ]
-    },
-    {
-      "featureType": "administrative",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        { "color": "#000000" },
-        { "lightness": 17 },
-        { "weight": 1.2 }
-      ]
-    },
-    {
-      "featureType": "landscape",
-      "elementType": "geometry",
-      "stylers": [
-        { "color": "#2c3e50" }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "geometry",
-      "stylers": [
-        { "color": "#34495e" }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry.fill",
-      "stylers": [
-        { "color": "#2c3e50" },
-        { "lightness": 17 }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        { "color": "#2c3e50" },
-        { "lightness": 29 },
-        { "weight": 0.2 }
-      ]
-    },
-    {
-      "featureType": "road.arterial",
-      "elementType": "geometry",
-      "stylers": [
-        { "color": "#2c3e50" },
-        { "lightness": 18 }
-      ]
-    },
-    {
-      "featureType": "road.local",
-      "elementType": "geometry",
-      "stylers": [
-        { "color": "#34495e" }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "geometry",
-      "stylers": [
-        { "color": "#2c3e50" },
-        { "lightness": 19 }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "geometry",
-      "stylers": [
-        { "color": "#17263c" }
-      ]
-    }
-  ];
 
 export default FlightSearchMap;

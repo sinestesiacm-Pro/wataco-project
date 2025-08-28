@@ -22,7 +22,7 @@ const DynamicFlightSearchMap = dynamic(
 
 
 export function FlightSearchSwitcher() {
-  const [mode, setMode] = useLocalStorage<SearchMode>('flight-search-mode', 'list');
+  const [mode, setMode] = useLocalStorage<SearchMode>('list', 'list');
 
   return (
     <div className="space-y-4">
