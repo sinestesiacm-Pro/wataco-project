@@ -92,7 +92,7 @@ export function FlightSearchMap({ apiKey }: { apiKey?: string }) {
         <div className="relative h-[60vh] max-h-[500px] w-full rounded-2xl border border-destructive/50 bg-destructive/10 flex flex-col items-center justify-center text-center p-4">
             <h3 className="font-bold text-destructive-foreground">Error de Configuración del Mapa</h3>
             <p className="text-sm text-destructive-foreground/80 mt-2">
-                La clave API de Google Maps no se ha proporcionado. Por favor, añade <code className="bg-destructive/20 p-1 rounded-sm">NEXT_PUBLIC_GOOGLE_MAPS_API_KEY</code> a tu archivo .env y asegúrate de que la facturación esté habilitada en tu proyecto de Google Cloud.
+                La clave API de Google Maps no se ha proporcionado. Por favor, añade <code className="bg-destructive/20 p-1 rounded-sm">NEXT_PUBLIC_GOOGLE_MAPS_API_KEY</code> a tu archivo .env.
             </p>
         </div>
     )
@@ -101,7 +101,14 @@ export function FlightSearchMap({ apiKey }: { apiKey?: string }) {
   return (
     <div className="relative">
       <div className="relative h-[60vh] max-h-[500px] w-full rounded-2xl overflow-hidden border border-white/20 shadow-inner">
-        <APIProvider apiKey={apiKey}>
+        <APIProvider apiKey={apiKey} onLoadingFailure={() => (
+             <div className="absolute inset-0 bg-destructive/10 flex flex-col items-center justify-center text-center p-4">
+                <h3 className="font-bold text-destructive-foreground">Error de Facturación de Google Maps</h3>
+                <p className="text-sm text-destructive-foreground/80 mt-2">
+                   La facturación no está habilitada para tu proyecto de Google Cloud. Por favor, actívala en la consola para usar el mapa.
+                </p>
+             </div>
+        )}>
             <Map
                 center={mapCenter}
                 zoom={mapZoom}
