@@ -1,6 +1,6 @@
 'use client';
+
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useTheme } from '@/contexts/theme-context';
 import { Icons } from './icons';
@@ -10,6 +10,8 @@ import { Loader2, Search } from 'lucide-react';
 import { useDebounce } from '@/hooks/use-debounce';
 import { searchAirports } from '@/app/actions';
 import type { Airport } from '@/lib/types';
+import dynamic from 'next/dynamic';
+import 'leaflet/dist/leaflet.css';
 
 // Fix for default icon path issue with Webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -27,17 +29,13 @@ const airportIcon = new L.DivIcon({
     iconAnchor: [12, 12]
 });
 
-
-const RecenterAutomatically = ({lat, lng, zoom}: {lat: number, lng: number, zoom: number}) => {
-    const map = useMap();
-     useEffect(() => {
-       map.setView([lat, lng], zoom);
-     }, [lat, lng, zoom, map]);
-     return null;
-}
+// Create a dynamically imported Map component that only renders on the client
+const DynamicMap = dynamic(() => import('./map-component'), {
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center w-full h-full bg-muted"><Loader2 className="animate-spin" /></div>
+});
 
 export function FlightSearchMap() {
-    const { colorTheme } = useTheme();
     const [searchQuery, setSearchQuery] = useState('New York');
     const [airports, setAirports] = useState<Airport[]>([]);
     const [loading, setLoading] = useState(false);
@@ -56,9 +54,13 @@ export function FlightSearchMap() {
         if (result.success && result.data) {
             setAirports(result.data);
             if(result.data.length > 0) {
-                // This is a mock lat/lng, in a real app you'd get this from the API
-                 setMapCenter([40.7128, -74.0060]); 
-                 setZoom(7);
+                 const firstAirport = result.data[0];
+                 const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${firstAirport.address?.cityName || firstAirport.name}&format=json&limit=1`);
+                 const geoData = await res.json();
+                 if (geoData.length > 0) {
+                     setMapCenter([parseFloat(geoData[0].lat), parseFloat(geoData[0].lon)]);
+                     setZoom(7);
+                 }
             }
         }
         setLoading(false);
@@ -95,32 +97,12 @@ export function FlightSearchMap() {
                 </div>
             </div>
         </div>
-
-      <MapContainer center={mapCenter} zoom={zoom} scrollWheelZoom={true} className="w-full h-full">
-          <RecenterAutomatically lat={mapCenter[0]} lng={mapCenter[1]} zoom={zoom} />
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url={colorTheme === 'dark' 
-            ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-            : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          }
-        />
-        {airports.map(airport => {
-            const pos = airportCoordinates[airport.iataCode];
-            if (!pos) return null;
-            return (
-                <Marker key={airport.iataCode} position={pos} icon={airportIcon}>
-                    <Popup>
-                        <div className="font-sans">
-                            <p className="font-bold">{airport.name} ({airport.iataCode})</p>
-                            <p className="text-sm">{airport.address?.cityName}</p>
-                            <Button size="sm" className="mt-2 w-full">Vuelos desde aquí</Button>
-                        </div>
-                    </Popup>
-                </Marker>
-            );
-        })}
-      </MapContainer>
+      <DynamicMap 
+          center={mapCenter} 
+          zoom={zoom} 
+          airports={airports} 
+          airportIcon={airportIcon}
+      />
     </div>
   );
 }
