@@ -17,8 +17,8 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
-import FlightSearchPage from './flight-search-page';
 import { RecommendedDestinations } from './recommended-destinations';
+import { FlightSearchSwitcher } from './flight-search-switcher';
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
@@ -27,7 +27,7 @@ function SearchSection({ tab }: { tab?: string }) {
     switch(activeTab) {
       case 'Flights': return (
         <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
-            <FlightSearchPage />
+            <FlightSearchSwitcher />
         </div>
       );
       case 'Hotels': return <HotelSearchPage />;
