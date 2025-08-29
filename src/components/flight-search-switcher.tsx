@@ -4,7 +4,6 @@ import { Button } from './ui/button';
 import { List, Map } from 'lucide-react';
 import { Icons } from './icons';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { AnimatePresence, motion } from 'framer-motion';
 import { FlightSearchClassic } from './flight-search-classic';
 import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
@@ -50,17 +49,9 @@ export function FlightSearchSwitcher() {
         </div>
       </div>
       
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={mode}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.2 }}
-        >
-          {mode === 'list' ? <FlightSearchClassic /> : <DynamicFlightSearchMap />}
-        </motion.div>
-      </AnimatePresence>
+      <div>
+        {mode === 'list' ? <FlightSearchClassic /> : <DynamicFlightSearchMap />}
+      </div>
     </div>
   );
 }
