@@ -1,7 +1,8 @@
+
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useEffect, useState, useRef } from 'react';
+import { TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -14,24 +15,37 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-// This component contains the actual map logic.
-// It will only be rendered on the client side.
 const LeafletMap = () => {
+    const mapRef = useRef<L.Map | null>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
     const position: [number, number] = [4.60971, -74.08175]; // Bogotá
-    return (
-         <MapContainer center={position} zoom={6} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={position}>
-                <Popup>
-                    Bogotá, Colombia. <br /> El punto de partida de tu próxima aventura.
-                </Popup>
-            </Marker>
-        </MapContainer>
-    )
+
+    useEffect(() => {
+        // Initialize map only if the container is available and the map is not already initialized
+        if (mapContainerRef.current && !mapRef.current) {
+            const map = L.map(mapContainerRef.current).setView(position, 6);
+            mapRef.current = map;
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker(position).addTo(map)
+                .bindPopup('Bogotá, Colombia. <br /> El punto de partida de tu próxima aventura.');
+        }
+
+        // Cleanup function to remove the map instance when the component is unmounted
+        return () => {
+            if (mapRef.current) {
+                mapRef.current.remove();
+                mapRef.current = null;
+            }
+        };
+    }, [position]); // Dependency array ensures this effect runs only when position changes (which it doesn't here)
+
+    return <div ref={mapContainerRef} style={{ height: '100%', width: '100%' }} />;
 }
+
 
 // This is the main exported component. It ensures that the LeafletMap
 // component is only rendered on the client, preventing initialization errors.
