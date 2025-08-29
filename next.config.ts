@@ -72,7 +72,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https/g, 'http'),
+        protocol: 'https',
         hostname: 'image-tc.galaxy.tf',
         port: '',
         pathname: '/**',
