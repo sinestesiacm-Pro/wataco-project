@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -15,32 +14,38 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-export function FlightSearchMap() {
+// This component contains the actual map logic.
+// It will only be rendered on the client side.
+const LeafletMap = () => {
     const position: [number, number] = [4.60971, -74.08175]; // Bogotá
+    return (
+         <MapContainer center={position} zoom={6} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={position}>
+                <Popup>
+                    Bogotá, Colombia. <br /> El punto de partida de tu próxima aventura.
+                </Popup>
+            </Marker>
+        </MapContainer>
+    )
+}
+
+// This is the main exported component. It ensures that the LeafletMap
+// component is only rendered on the client, preventing initialization errors.
+export function FlightSearchMap() {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
+        // This effect runs only once on the client, after the component mounts.
         setIsClient(true);
     }, []);
 
-    // Render the map only on the client side to avoid SSR issues
-    if (!isClient) {
-        return <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted/20 animate-pulse" />;
-    }
-
     return (
         <div className="relative h-[60vh] md:h-[70vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
-            <MapContainer center={position} zoom={6} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={position}>
-                    <Popup>
-                        Bogotá, Colombia. <br /> El punto de partida de tu próxima aventura.
-                    </Popup>
-                </Marker>
-            </MapContainer>
+            {isClient ? <LeafletMap /> : <div className="h-full w-full bg-muted/20 animate-pulse" />}
         </div>
     );
 }
