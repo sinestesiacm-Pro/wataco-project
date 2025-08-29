@@ -1,32 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix for default icon issue with webpack
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+
 
 export function FlightSearchMap() {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    const [center] = useState({ lat: 4.60971, lng: -74.08175 }); // Bogotá
-
-    if (!apiKey) {
-        return (
-            <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted flex items-center justify-center text-center p-4">
-                <p>La clave API de Google Maps no está configurada. Por favor, añade `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` a tu fichero `.env` para habilitar el mapa.</p>
-            </div>
-        );
-    }
+    const position: [number, number] = [4.60971, -74.08175]; // Bogotá
 
     return (
         <div className="relative h-[60vh] md:h-[70vh] w-full rounded-2xl overflow-hidden border-2 border-primary/20">
-            <APIProvider apiKey={apiKey}>
-                <Map
-                    center={center}
-                    zoom={6}
-                    mapId="orvian-map"
-                    gestureHandling={'greedy'}
-                    disableDefaultUI={true}
+            <MapContainer center={position} zoom={6} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-            </APIProvider>
+                <Marker position={position}>
+                    <Popup>
+                        Bogotá, Colombia. <br /> El punto de partida de tu próxima aventura.
+                    </Popup>
+                </Marker>
+            </MapContainer>
         </div>
     );
 }
