@@ -1,3 +1,4 @@
+
 'use client';
 
 import HotelSearchPage from '@/components/hotel-search-page';
@@ -18,17 +19,62 @@ import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
 import { UnderwaterScene } from './underwater-scene';
 import { RecommendedDestinations } from './recommended-destinations';
-import { FlightSearchSwitcher } from './flight-search-switcher';
+import { FlightSearchClassic } from './flight-search-classic';
+import { List, Map } from 'lucide-react';
+import { Button } from './ui/button';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import dynamic from 'next/dynamic';
+import { Loader2 } from 'lucide-react';
+
+type SearchMode = 'list' | 'map';
+
+const DynamicFlightSearchMap = dynamic(
+    () => import('./flight-search-map').then(mod => mod.FlightSearchMap),
+    { 
+        ssr: false,
+        loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted/20 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-white" /></div>
+    }
+);
 
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
+  const [mode, setMode] = useLocalStorage<SearchMode>('list', 'list');
 
   const renderSearch = () => {
     switch(activeTab) {
       case 'Flights': return (
-        <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
-            <FlightSearchSwitcher />
+         <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
+            <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-white">
+                    </div>
+                    <div className="flex items-center gap-2 rounded-full p-1 bg-black/20 backdrop-blur-sm">
+                    <Button
+                        size="sm"
+                        variant={mode === 'list' ? 'secondary' : 'ghost'}
+                        onClick={() => setMode('list')}
+                        className="rounded-full"
+                    >
+                        <List className="h-4 w-4 mr-2" />
+                        Clásico
+                    </Button>
+                    <Button
+                        size="sm"
+                        variant={mode === 'map' ? 'secondary' : 'ghost'}
+                        onClick={() => setMode('map')}
+                        className="rounded-full"
+                    >
+                        <Map className="h-4 w-4 mr-2" />
+                        Mapa
+                    </Button>
+                    </div>
+                </div>
+                
+                <div>
+                    {mode === 'list' ? <FlightSearchClassic /> : <DynamicFlightSearchMap />}
+                </div>
+            </div>
         </div>
       );
       case 'Hotels': return <HotelSearchPage />;

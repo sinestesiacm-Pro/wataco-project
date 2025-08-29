@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -15,7 +15,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-
 export function FlightSearchMap() {
     const position: [number, number] = [4.60971, -74.08175]; // Bogotá
     const [isClient, setIsClient] = useState(false);
@@ -26,7 +25,7 @@ export function FlightSearchMap() {
 
     // Render the map only on the client side to avoid SSR issues
     if (!isClient) {
-        return null; // Or a placeholder/loader
+        return <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted/20 animate-pulse" />;
     }
 
     return (
