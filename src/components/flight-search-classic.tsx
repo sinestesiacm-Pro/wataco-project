@@ -98,19 +98,8 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
   const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
   
   useEffect(() => {
-    const urlOrigin = searchParams.get('origin');
-    if (urlOrigin) {
-      const query = new URLSearchParams({
-        origin: urlOrigin,
-        destination: searchParams.get('destination')!,
-        departureDate: searchParams.get('from_date')!,
-        adults: searchParams.get('adults') || '1',
-        originQuery: searchParams.get('origin_query') || urlOrigin,
-        destinationQuery: searchParams.get('destination_query') || searchParams.get('destination')!,
-        ...(searchParams.get('to_date') && { returnDate: searchParams.get('to_date')! }),
-      });
-      router.push(`/flights/select?${query.toString()}`);
-    }
+    // This effect can be used to pre-fill the form from URL params if needed,
+    // but the primary navigation logic is now in handleManualSearch.
   }, []);
 
 
@@ -169,12 +158,12 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
 
   const handleManualSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    const departureDate = date?.from || addDays(new Date(), 7);
+    const departureDate = date?.from;
 
-    if (!origin || !destination) {
+    if (!origin || !destination || !departureDate) {
       toast({
         title: 'Información Faltante',
-        description: 'Por favor, completa todos los detalles del vuelo requeridos.',
+        description: 'Por favor, completa el origen, destino y fecha de salida.',
         variant: 'destructive',
       });
       return;
@@ -188,6 +177,7 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
         originQuery,
         destinationQuery,
     });
+    
     if (isRoundTrip && date?.to) {
         query.set('returnDate', format(date.to, 'yyyy-MM-dd'))
     }

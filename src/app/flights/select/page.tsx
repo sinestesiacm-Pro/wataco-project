@@ -45,16 +45,28 @@ function FlightSelectionPage() {
 
   const [filters, setFilters] = useState<FiltersState>({ stops: [], airlines: [], bags: [] });
 
-  const origin = searchParams.get('origin')!;
-  const destination = searchParams.get('destination')!;
-  const departureDate = searchParams.get('departureDate')!;
+  const origin = searchParams.get('origin');
+  const destination = searchParams.get('destination');
+  const departureDate = searchParams.get('departureDate');
   const returnDate = searchParams.get('returnDate');
-  const adults = parseInt(searchParams.get('adults') || '1', 10);
+  const adultsStr = searchParams.get('adults');
+  const childrenStr = searchParams.get('children');
+  const infantsStr = searchParams.get('infants');
   const originQuery = searchParams.get('originQuery') || origin;
   const destinationQuery = searchParams.get('destinationQuery') || destination;
 
   useEffect(() => {
     const fetchInitialFlights = async () => {
+      if (!origin || !destination || !departureDate || !adultsStr) {
+          setError("Parámetros de búsqueda incompletos. Por favor, vuelve a intentarlo.");
+          setLoading(false);
+          return;
+      }
+      
+      const adults = parseInt(adultsStr, 10);
+      const children = childrenStr ? parseInt(childrenStr, 10) : undefined;
+      const infants = infantsStr ? parseInt(infantsStr, 10) : undefined;
+
       setLoading(true);
       setError(null);
       const result = await searchFlights({
@@ -63,6 +75,8 @@ function FlightSelectionPage() {
         departureDate,
         returnDate: returnDate || undefined,
         adults,
+        children,
+        infants,
       });
 
       if (result.success && result.data) {
@@ -73,10 +87,8 @@ function FlightSelectionPage() {
       setLoading(false);
     };
 
-    if (origin && destination && departureDate) {
-      fetchInitialFlights();
-    }
-  }, [origin, destination, departureDate, returnDate, adults]);
+    fetchInitialFlights();
+  }, [origin, destination, departureDate, returnDate, adultsStr, childrenStr, infantsStr]);
 
   const handleOutboundSelect = useCallback((flight: FlightOffer, addons: number) => {
     setSelectedOutbound(flight);
@@ -161,7 +173,7 @@ function FlightSelectionPage() {
   if (loading) {
     return (
       <div className="w-full h-screen relative overflow-hidden">
-            <FlightLoadingAnimation originName={originQuery} destinationName={destinationQuery} />
+            <FlightLoadingAnimation originName={originQuery || ''} destinationName={destinationQuery || ''} />
         </div>
     );
   }
@@ -243,8 +255,8 @@ function FlightSelectionPage() {
           <BookingProgressHeader 
               step={step} 
               isRoundTrip={!!returnDate}
-              origin={originQuery}
-              destination={destinationQuery}
+              origin={originQuery || ''}
+              destination={destinationQuery || ''}
           />
           
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 mt-8">
