@@ -1,8 +1,8 @@
+
 // This file is designated to run on the server only.
 // Do not import it in client-side components.
+import { AMADEUS_API_KEY, AMADEUS_API_SECRET } from './firebase';
 
-const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
-const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 
 // In-memory cache for Amadeus token - this will be reset on server restart

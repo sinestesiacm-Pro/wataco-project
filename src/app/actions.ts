@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db, AMADEUS_API_KEY, AMADEUS_API_SECRET } from '@/lib/firebase';
 import crypto from 'crypto';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
@@ -25,10 +25,6 @@ const searchSchema = z.object({
   infants: z.number().int().min(0).optional(),
 });
 
-// Simple in-memory cache for flight search results
-const flightCache = new Map<string, { data: FlightData; timestamp: number }>();
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
 export async function searchFlights(params: {
   origin: string,
   destination: string,
@@ -45,18 +41,6 @@ export async function searchFlights(params: {
   }
 
   const { origin, destination, departureDate, returnDate, adults, children, infants } = validation.data;
-  
-  // Create a unique key for the search parameters
-  const cacheKey = `${origin}-${destination}-${departureDate}-${returnDate || ''}-${adults}-${children || 0}-${infants || 0}`;
-
-  // Check cache first
-  if (flightCache.has(cacheKey)) {
-    const cached = flightCache.get(cacheKey)!;
-    if (Date.now() - cached.timestamp < CACHE_TTL) {
-      console.log("diagnose: Returning flights from cache.");
-      return { success: true, data: cached.data };
-    }
-  }
 
   try {
     const token = await getAmadeusToken();
@@ -102,10 +86,6 @@ export async function searchFlights(params: {
       return { success: false, error: 'No flights found for this route.' };
     }
     
-    // Store result in cache
-    flightCache.set(cacheKey, { data, timestamp: Date.now() });
-    console.log("diagnose: Storing flight results in cache.");
-
     return { success: true, data };
   } catch (err: any) {
     console.error('diagnose: Error in searchFlights action:', err);
