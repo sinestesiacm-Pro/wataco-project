@@ -25,6 +25,10 @@ const searchSchema = z.object({
   infants: z.number().int().min(0).optional(),
 });
 
+// Simple in-memory cache for flight search results
+const flightCache = new Map<string, { data: FlightData; timestamp: number }>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 export async function searchFlights(params: {
   origin: string,
   destination: string,
@@ -41,6 +45,18 @@ export async function searchFlights(params: {
   }
 
   const { origin, destination, departureDate, returnDate, adults, children, infants } = validation.data;
+  
+  // Create a unique key for the search parameters
+  const cacheKey = `${origin}-${destination}-${departureDate}-${returnDate || ''}-${adults}-${children || 0}-${infants || 0}`;
+
+  // Check cache first
+  if (flightCache.has(cacheKey)) {
+    const cached = flightCache.get(cacheKey)!;
+    if (Date.now() - cached.timestamp < CACHE_TTL) {
+      console.log("diagnose: Returning flights from cache.");
+      return { success: true, data: cached.data };
+    }
+  }
 
   try {
     const token = await getAmadeusToken();
@@ -73,7 +89,10 @@ export async function searchFlights(params: {
     if (!response.ok) {
       const errorBody = await response.json();
       console.error('Amadeus API Error:', errorBody);
-      const errorMessage = errorBody.errors?.[0]?.detail || 'Error searching for flights.';
+       const errorMessage = errorBody.errors?.[0]?.detail || 'Error searching for flights.';
+      if (response.status === 429) { // Too Many Requests
+          return { success: false, error: 'The network rate limit is exceeded, please try again later' };
+      }
       return { success: false, error: errorMessage };
     }
 
@@ -82,6 +101,10 @@ export async function searchFlights(params: {
     if (!data.data || data.data.length === 0) {
       return { success: false, error: 'No flights found for this route.' };
     }
+    
+    // Store result in cache
+    flightCache.set(cacheKey, { data, timestamp: Date.now() });
+    console.log("diagnose: Storing flight results in cache.");
 
     return { success: true, data };
   } catch (err: any) {
@@ -444,5 +467,7 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
+
+    
 
     
