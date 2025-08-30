@@ -3,8 +3,8 @@ import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore, doc } from "firebase/firestore";
 
-export const AMADEUS_API_KEY = "REPLACE_WITH_YOUR_API_KEY";
-export const AMADEUS_API_SECRET = "REPLACE_WITH_YOUR_API_SECRET";
+export const AMADEUS_API_KEY = "pSg6Cf912d8dAG1hAWG8mG6q68A5AsG6";
+export const AMADEUS_API_SECRET = "WACDAA6GsA45G5Q1";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDNbwoek_BuA76NtTdaS-emwDj92jhbLdo",
