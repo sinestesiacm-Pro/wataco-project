@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { addDays, format, parse } from 'date-fns';
@@ -168,7 +169,9 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
 
   const handleManualSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    if (!origin || !destination || !date?.from || (isRoundTrip && !date?.to)) {
+    const departureDate = date?.from || addDays(new Date(), 7);
+
+    if (!origin || !destination) {
       toast({
         title: 'Información Faltante',
         description: 'Por favor, completa todos los detalles del vuelo requeridos.',
@@ -180,12 +183,12 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
     const query = new URLSearchParams({
         origin,
         destination,
-        departureDate: format(date.from, 'yyyy-MM-dd'),
+        departureDate: format(departureDate, 'yyyy-MM-dd'),
         adults: adults.toString(),
         originQuery,
         destinationQuery,
     });
-    if (isRoundTrip && date.to) {
+    if (isRoundTrip && date?.to) {
         query.set('returnDate', format(date.to, 'yyyy-MM-dd'))
     }
     if (children > 0) query.set('children', children.toString());
