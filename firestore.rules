@@ -1,0 +1,26 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access to hotels and vip memberships for the demo
+    match /hoteles/{hotelId} {
+      allow read: if true;
+      allow write: if false; // Disallow client-side writes for security
+    }
+    match /vip_memberships/{vipId} {
+      allow read: if true;
+      allow write: if request.auth != null; // Allow writes only for authenticated users
+    }
+
+    // Secure user data: only the authenticated user can read/write their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
