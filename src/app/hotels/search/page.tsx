@@ -172,12 +172,12 @@ function HotelResultsPageContent() {
                            Filtros
                          </Button>
                       </DialogTrigger>
-                      <DialogContent className="w-[90vw] max-w-md bg-black/30 backdrop-blur-2xl border-white/20 rounded-2xl text-white">
-                        <DialogHeader>
-                           <DialogTitle>Filtros de Hotel</DialogTitle>
-                           <DialogDescription>Aplica filtros para refinar los resultados de tu búsqueda de hoteles.</DialogDescription>
+                       <DialogContent className="w-[90vw] max-w-md bg-black/30 backdrop-blur-2xl border-white/20 rounded-2xl text-white shadow-2xl">
+                        <DialogHeader className="text-left">
+                           <DialogTitle className="font-headline text-2xl">Filtros de Hotel</DialogTitle>
+                           <DialogDescription className="text-white/80">Aplica filtros para refinar los resultados de tu búsqueda de hoteles.</DialogDescription>
                         </DialogHeader>
-                         <ScrollArea className="h-full pr-4">
+                         <ScrollArea className="h-full pr-4 py-4">
                             <HotelFilters 
                                 filters={filters}
                                 onFiltersChange={setFilters}
@@ -215,3 +215,5 @@ export default function HotelSearchPageWrapper() {
     </Suspense>
   )
 }
+
+    
