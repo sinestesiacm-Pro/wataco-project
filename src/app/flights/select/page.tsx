@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import { AnimatedClouds } from '@/components/animated-clouds';
 
@@ -271,24 +271,24 @@ function FlightSelectionPage() {
                       </div>
                   </aside>
                   <div className="lg:hidden fixed bottom-24 right-6 z-50">
-                    <Sheet>
-                      <SheetTrigger asChild>
+                    <Dialog>
+                      <DialogTrigger asChild>
                          <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4 bg-white/40 backdrop-blur-xl border border-white/20 text-white hover:bg-white/60">
                            <Filter className="mr-2 h-5 w-5"/>
                            Filtros
                          </Button>
-                      </SheetTrigger>
-                      <SheetContent side="bottom" className="h-[80vh] bg-black/20 backdrop-blur-2xl border-t border-white/20">
-                        <SheetHeader className="sr-only">
-                           <SheetTitle>Filtros de Vuelo</SheetTitle>
-                           <SheetDescription>Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</SheetDescription>
-                        </SheetHeader>
+                      </DialogTrigger>
+                      <DialogContent className="w-[90vw] max-w-md bg-black/30 backdrop-blur-2xl border-white/20 rounded-2xl text-white">
+                        <DialogHeader>
+                           <DialogTitle>Filtros de Vuelo</DialogTitle>
+                           <DialogDescription>Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</DialogDescription>
+                        </DialogHeader>
                         <FlightFilters 
                             availableAirlines={availableAirlines}
                             onFilterChange={handleFilterChange}
                         />
-                      </SheetContent>
-                    </Sheet>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </>
               )}

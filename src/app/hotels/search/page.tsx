@@ -11,7 +11,7 @@ import { HotelFilters } from "@/components/hotel-filters";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AITravelTips } from "@/components/ai-travel-tips";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import HotelSearchPage from "@/components/hotel-search-page";
@@ -165,26 +165,26 @@ function HotelResultsPageContent() {
                   </div>
               </aside>
               <div className="lg:hidden fixed bottom-24 right-6 z-50">
-                    <Sheet>
-                      <SheetTrigger asChild>
+                    <Dialog>
+                      <DialogTrigger asChild>
                          <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4 bg-white/40 backdrop-blur-xl border border-white/20 text-white hover:bg-white/60">
                            <Filter className="mr-2 h-5 w-5"/>
                            Filtros
                          </Button>
-                      </SheetTrigger>
-                      <SheetContent side="bottom" className="h-[80vh] bg-black/20 backdrop-blur-2xl border-t border-white/20">
-                        <SheetHeader className="sr-only">
-                           <SheetTitle>Filtros de Hotel</SheetTitle>
-                           <SheetDescription>Aplica filtros para refinar los resultados de tu búsqueda de hoteles.</SheetDescription>
-                        </SheetHeader>
+                      </DialogTrigger>
+                      <DialogContent className="w-[90vw] max-w-md bg-black/30 backdrop-blur-2xl border-white/20 rounded-2xl text-white">
+                        <DialogHeader>
+                           <DialogTitle>Filtros de Hotel</DialogTitle>
+                           <DialogDescription>Aplica filtros para refinar los resultados de tu búsqueda de hoteles.</DialogDescription>
+                        </DialogHeader>
                          <ScrollArea className="h-full pr-4">
                             <HotelFilters 
                                 filters={filters}
                                 onFiltersChange={setFilters}
                             />
                          </ScrollArea>
-                      </SheetContent>
-                    </Sheet>
+                      </DialogContent>
+                    </Dialog>
                   </div>
               <main className="lg:col-span-9">
                 {filteredHotels && filteredHotels.length > 0 ? (
