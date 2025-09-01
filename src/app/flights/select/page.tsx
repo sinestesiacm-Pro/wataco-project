@@ -278,7 +278,7 @@ function FlightSelectionPage() {
                            Filtros
                          </Button>
                       </SheetTrigger>
-                      <SheetContent side="bottom" className="h-[80vh] bg-background/50 backdrop-blur-2xl border-t border-white/20">
+                      <SheetContent side="bottom" className="h-[80vh] bg-background/30 backdrop-blur-2xl border-t border-white/20">
                         <SheetHeader className="sr-only">
                            <SheetTitle>Filtros de Vuelo</SheetTitle>
                            <SheetDescription>Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</SheetDescription>
