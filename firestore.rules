@@ -1,0 +1,15 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access to all collections for the demo app
+    match /{document=**} {
+      allow read: if true;
+      
+      // For write operations, only authenticated users should be allowed.
+      // This is a basic rule; for a real app, you'd have more specific
+      // rules per collection (e.g., a user can only write to their own documents).
+      allow write: if request.auth != null;
+    }
+  }
+}
