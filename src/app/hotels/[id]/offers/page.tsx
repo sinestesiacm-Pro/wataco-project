@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { Suspense } from 'react';
@@ -18,9 +19,8 @@ function HotelOffersPageContent() {
   const checkInDate = searchParams.get('checkInDate');
   const checkOutDate = searchParams.get('checkOutDate');
   
-  // Construct the back link to the hotel details page, not the search results
-  const backLinkHref = `/hotels/${hotelId}?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adults=${adults}&children=${children}`;
-
+  // Construct the back link to the hotel search results
+  const backLinkHref = `/hotels/search?${searchParams.toString()}`;
 
   if (!hotelId || !checkInDate || !checkOutDate) {
     return <div className="text-center text-white">Parámetros de búsqueda no válidos.</div>;
@@ -34,7 +34,7 @@ function HotelOffersPageContent() {
                 <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
                   <Link href={backLinkHref}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Volver a Detalles del Hotel
+                    Volver a los resultados
                   </Link>
                 </Button>
                 <HotelBookingFlow 

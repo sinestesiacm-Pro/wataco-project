@@ -202,20 +202,19 @@ export async function searchHotels(params: {
     try {
         const token = await getAmadeusToken();
         
-        // Use the Hotel Offers API which is more suitable for searching by city
         const offersParams = new URLSearchParams({
             cityCode,
             checkInDate,
             checkOutDate,
             adults: adults.toString(),
-            radius: '50', // Search within a 50km radius
+            radius: '50', 
             radiusUnit: 'KM',
             paymentPolicy: 'NONE',
             includeClosed: 'false',
             bestRateOnly: 'true',
             view: 'FULL',
             sort: 'PRICE',
-            'page[limit]': '25' // Get up to 25 results
+            'page[limit]': '25' 
         });
         
         if (ratings && ratings.length > 0) {
@@ -237,7 +236,6 @@ export async function searchHotels(params: {
         
         const offersData = await offersResponse.json();
         
-        // Filter out hotels that don't have available offers
         const availableOffers = offersData.data.filter((offer: any) => offer.available);
 
         if (availableOffers.length === 0) {
@@ -252,10 +250,6 @@ export async function searchHotels(params: {
     }
 }
 
-
-const hotelDetailsSchema = z.object({
-  offerId: z.string(),
-});
 
 export async function getHotelOffers(hotelId: string, checkInDate: string, checkOutDate: string, adults: number): Promise<{ success: boolean; data?: Room[]; error?: string }> {
     try {
@@ -303,7 +297,6 @@ export async function getFirestoreHotelDetails(id: string): Promise<{ success: b
 
         const data = hotelDoc.data();
         
-        // Map Firestore data to AmadeusHotelOffer structure
         const hotelData: AmadeusHotel = {
             hotelId: hotelDoc.id,
             name: data.nombre,
@@ -351,8 +344,6 @@ export async function searchPackages(params: {
     return { success: false, error: 'Invalid package search parameters.' };
   }
 
-  // The actual Amadeus Flight+Hotel Search API is complex and may not be available in the standard test environment.
-  // This is a placeholder response that informs the user.
   return { success: false, error: "Package search is not available in this demo. Please search for flights and hotels separately." };
 }
 
@@ -372,8 +363,6 @@ export async function searchCruises(params: {
     return { success: false, error: 'Invalid cruise search parameters.' };
   }
 
-  // The Amadeus Cruise API is not available in the standard test environment.
-  // This is a placeholder response.
   return { success: false, error: "Cruise search is not available in this demo." };
 }
 
@@ -407,15 +396,13 @@ export async function activateVipMembership(params: { userId: string, membership
             return { success: false, error: "This membership code has already been used." };
         }
         
-        const vipTier = vipData.tier || 'gold'; // Default to gold if tier is not specified
+        const vipTier = vipData.tier || 'gold'; 
 
         const batch = writeBatch(db);
 
-        // Mark the VIP code as used and assign it to the user
         const vipDocRef = doc(db, "vip_memberships", vipDoc.id);
         batch.update(vipDocRef, { isUsed: true, usedBy: userId });
 
-        // Update the user's profile to mark them as a VIP
         const userDocRef = doc(db, "users", userId);
         batch.set(userDocRef, { vipTier: vipTier }, { merge: true });
 

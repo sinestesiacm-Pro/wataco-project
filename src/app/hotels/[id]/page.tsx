@@ -43,7 +43,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
         if (!loading && hotel && cameFromSearch) {
             const params = new URLSearchParams(searchParams.toString());
             params.set('hotelId', id);
-            router.replace(`/hotels/offers?${params.toString()}`);
+            router.replace(`/hotels/${id}/offers?${params.toString()}`);
         }
     }, [loading, hotel, cameFromSearch, searchParams, router, id]);
 
@@ -56,7 +56,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
         });
-        router.push(`/hotels/offers?${params.toString()}`);
+        router.push(`/hotels/${id}/offers?${params.toString()}`);
     };
 
     if (loading || cameFromSearch) { // Show loader if loading or during the brief redirect
