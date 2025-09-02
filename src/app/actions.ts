@@ -415,5 +415,3 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
-
-    
