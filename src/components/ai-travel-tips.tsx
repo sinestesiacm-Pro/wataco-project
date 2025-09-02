@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -26,9 +27,11 @@ export function AITravelTips({ destination, destinationName }: AITravelTipsProps
   const [isOpen, setIsOpen] = useState(false);
 
   const handleGenerateTips = async () => {
+    // Only fetch if tips are not already loaded
+    if (tips) return;
+
     setLoading(true);
     setError(null);
-    setTips(null);
     try {
       const result = await generateDestinationTravelTips({ destination: destinationName });
       setTips(result.tips);
@@ -41,21 +44,26 @@ export function AITravelTips({ destination, destinationName }: AITravelTipsProps
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+        setIsOpen(open);
+        if (open) {
+            handleGenerateTips();
+        }
+    }}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" onClick={() => !isOpen && handleGenerateTips()}>
+        <Button variant="outline" size="sm" className="text-white bg-transparent border-white/20 hover:bg-white/10 hover:text-white">
           <Wand2 className="mr-2 h-4 w-4" />
           Consejos de Viaje con IA para {destinationName}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] md:max-w-lg">
+      <DialogContent className="sm:max-w-[425px] md:max-w-lg text-white">
         <DialogHeader>
-          <DialogTitle className="font-headline text-2xl flex items-center">
+          <DialogTitle className="font-headline text-2xl flex items-center text-white">
             <Wand2 className="mr-2 h-6 w-6 text-primary" />
-            Consejos de Viaje con IA para {destinationName}
+            Consejos de Viaje con IA
           </DialogTitle>
-          <DialogDescription>
-            Descubre consejos de expertos para tu viaje, con la ayuda de IA.
+          <DialogDescription className="text-white/80">
+            Descubre consejos de expertos para tu viaje a {destinationName}, con la ayuda de IA.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
@@ -66,8 +74,8 @@ export function AITravelTips({ destination, destinationName }: AITravelTipsProps
           )}
           {error && <p className="text-destructive">{error}</p>}
           {tips && (
-            <ScrollArea className="h-72 w-full rounded-md border p-4">
-              <div className="prose prose-sm dark:prose-invert whitespace-pre-wrap font-body">
+            <ScrollArea className="h-72 w-full rounded-md border border-white/20 bg-black/20 p-4">
+              <div className="prose prose-sm prose-invert whitespace-pre-wrap font-body text-white">
                 {tips}
               </div>
             </ScrollArea>
