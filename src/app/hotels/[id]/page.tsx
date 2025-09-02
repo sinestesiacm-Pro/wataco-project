@@ -4,10 +4,10 @@ import { Loader2 } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, notFound } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { getFirestoreHotelDetails } from '@/app/actions';
-import { AmadeusHotelOffer } from '@/lib/types';
+import { AmadeusHotel } from '@/lib/types';
 import { HotelDetailsView } from '@/components/hotel-details-view';
 import { AvailabilitySearch } from '@/components/availability-search';
 import { addDays, format } from 'date-fns';
@@ -16,16 +16,19 @@ import { Card, CardContent } from '@/components/ui/card';
 function HotelDetailPageContent({ id }: { id: string }) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
+    const [hotel, setHotel] = useState<AmadeusHotel | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    // Check if we came from a search or are just viewing the hotel
+    const cameFromSearch = searchParams.has('checkInDate');
 
     useEffect(() => {
         const fetchDetails = async () => {
             setLoading(true);
             const result = await getFirestoreHotelDetails(id);
             if (result.success && result.data) {
-                setHotelOffer(result.data);
+                setHotel(result.data);
             } else {
                 setError(result.error || 'No se pudieron cargar los detalles del hotel.');
             }
@@ -34,17 +37,28 @@ function HotelDetailPageContent({ id }: { id: string }) {
         fetchDetails();
     }, [id]);
 
+    useEffect(() => {
+        // If we came from search, automatically redirect to offers page
+        if (!loading && hotel && cameFromSearch) {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set('hotelId', hotel.hotelId);
+            router.replace(`/hotels/offers?${params.toString()}`);
+        }
+    }, [loading, hotel, cameFromSearch, searchParams, router]);
+
+
     const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number }) => {
         const params = new URLSearchParams({
+            hotelId: id,
             checkInDate: format(searchData.checkInDate, 'yyyy-MM-dd'),
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
         });
-        router.push(`/hotels/${id}/offers?${params.toString()}`);
+        router.push(`/hotels/offers?${params.toString()}`);
     };
 
-    if (loading) {
+    if (loading || cameFromSearch) { // Show loader if loading or during the brief redirect
         return (
             <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
                 <Loader2 className="h-12 w-12 animate-spin text-white" />
@@ -52,7 +66,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
         );
     }
 
-    if (error || !hotelOffer) {
+    if (error || !hotel) {
         return (
              <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                 <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
@@ -68,17 +82,11 @@ function HotelDetailPageContent({ id }: { id: string }) {
         );
     }
     
-    // Get initial dates from URL or set defaults
-    const urlCheckIn = searchParams.get('checkInDate');
-    const urlCheckOut = searchParams.get('checkOutDate');
-    const urlAdults = searchParams.get('adults');
-    const urlChildren = searchParams.get('children');
-
     const initialData = {
-        checkInDate: urlCheckIn ? new Date(urlCheckIn) : addDays(new Date(), 7),
-        checkOutDate: urlCheckOut ? new Date(urlCheckOut) : addDays(new Date(), 14),
-        adults: urlAdults ? parseInt(urlAdults, 10) : 2,
-        children: urlChildren ? parseInt(urlChildren, 10) : 0,
+        checkInDate: addDays(new Date(), 7),
+        checkOutDate: addDays(new Date(), 14),
+        adults: 2,
+        children: 0,
     };
 
   return (
@@ -93,7 +101,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
             </Button>
         </div>
         
-        <HotelDetailsView hotelOffer={hotelOffer} />
+        <HotelDetailsView hotel={hotel} />
 
         <AvailabilitySearch onSearch={handleAvailabilitySearch} initialData={initialData} />
 
@@ -102,8 +110,8 @@ function HotelDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = React.use(params);
+export default function HotelDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   
   return (
     <Suspense fallback={

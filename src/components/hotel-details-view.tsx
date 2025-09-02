@@ -1,6 +1,6 @@
 'use client';
 
-import type { AmadeusHotelOffer } from '@/lib/types';
+import type { AmadeusHotel } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
@@ -34,11 +34,10 @@ const renderStars = (rating: string) => {
 };
 
 interface HotelDetailsViewProps {
-  hotelOffer: AmadeusHotelOffer;
+  hotel: AmadeusHotel;
 }
 
-export function HotelDetailsView({ hotelOffer }: HotelDetailsViewProps) {
-  const hotel = hotelOffer.hotel;
+export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
 
   return (
     <div className="space-y-8">

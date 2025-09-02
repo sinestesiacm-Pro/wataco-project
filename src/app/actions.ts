@@ -1,7 +1,7 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData, AmadeusHotel } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData, AmadeusHotel, Room } from '@/lib/types';
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
@@ -196,100 +196,109 @@ export async function searchHotels(params: {
     if (!validation.success) {
         return { success: false, error: 'Invalid hotel search parameters.' };
     }
+
+    const { cityCode, checkInDate, checkOutDate, adults, ratings, amenities } = validation.data;
     
-    // For this demo, we will always return a shuffled list from our Firestore mock data.
-    // This simplifies the flow and avoids external API failures.
     try {
-        const hotelsCollection = collection(db, 'hoteles');
-        const hotelSnapshot = await getDocs(hotelsCollection);
+        const token = await getAmadeusToken();
         
-        if (hotelSnapshot.empty) {
-            return { success: false, error: "No hay hoteles en la base de datos. Ejecuta el script de siembra." };
+        // Step 1: Get Hotel IDs for the given city
+        const hotelListParams = new URLSearchParams({ cityCode });
+        if (ratings && ratings.length > 0) hotelListParams.append('ratings', ratings.join(','));
+        if (amenities && amenities.length > 0) hotelListParams.append('amenities', amenities.join(','));
+
+        const hotelListResponse = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city?${hotelListParams.toString()}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!hotelListResponse.ok) {
+            return { success: false, error: `Error fetching hotel list: ${hotelListResponse.statusText}` };
+        }
+        const hotelListData = await hotelListResponse.json();
+        const hotelIds = hotelListData.data.map((hotel: any) => hotel.hotelId).slice(0, 15); // Limit to 15 hotels for demo purposes
+
+        if (hotelIds.length === 0) {
+            return { success: false, error: "No se encontraron hoteles para esta ciudad o filtros." };
         }
 
-        const allHotels: AmadeusHotelOffer[] = hotelSnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                id: doc.id,
-                type: 'hotel-offer',
-                available: true,
-                hotel: {
-                    hotelId: doc.id,
-                    name: data.nombre,
-                    rating: data.rating?.toString(),
-                    media: (data.media || []).map((url: string) => ({ uri: url, category: 'GENERAL' })),
-                    address: {
-                        cityName: data.ubicacion.split(',')[0],
-                        countryCode: data.ubicacion.split(',')[1]?.trim() || '',
-                        lines: [data.ubicacion],
-                        postalCode: '',
-                    },
-                    description: {
-                        lang: 'es',
-                        text: data.descripcion,
-                    },
-                    amenities: data.amenities || [],
-                },
-                offers: [
-                    {
-                        id: `offer-${doc.id}`,
-                        checkInDate: params.checkInDate,
-                        checkOutDate: params.checkOutDate,
-                        price: {
-                            currency: 'USD',
-                            total: data.price?.toFixed(2) || '0.00',
-                            base: (data.price * 0.9).toFixed(2) || '0.00'
-                        },
-                        room: {
-                            type: 'STANDARD_ROOM',
-                            description: { text: 'Habitación Estándar' },
-                            amenities: [],
-                        }
-                    }
-                ],
-            };
+        // Step 2: Get Offers for these Hotel IDs
+        const offersParams = new URLSearchParams({
+            hotelIds: hotelIds.join(','),
+            checkInDate,
+            checkOutDate,
+            adults: adults.toString(),
+            paymentPolicy: 'NONE', // To get rates without credit card
+            bestRateOnly: 'true'
         });
         
-        // Shuffle the array to simulate different search results
-        const shuffledHotels = allHotels.sort(() => 0.5 - Math.random());
+        const offersResponse = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${offersParams.toString()}`, {
+             headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!offersResponse.ok) {
+            const errorBody = await offersResponse.json();
+            console.error('Amadeus Hotel Offers API Error:', errorBody);
+            return { success: false, error: `Error fetching hotel offers: ${errorBody.errors?.[0]?.detail || offersResponse.statusText}` };
+        }
         
-        return { success: true, data: shuffledHotels.slice(0, 15) };
+        const offersData = await offersResponse.json();
+        
+        // Filter out hotels that don't have available offers
+        const availableOffers = offersData.data.filter((offer: any) => offer.available);
+
+        if (availableOffers.length === 0) {
+            return { success: false, error: "No hay ofertas de hotel disponibles para las fechas y el destino seleccionados." };
+        }
+        
+        return { success: true, data: availableOffers };
 
     } catch (err: any) {
-        console.error('Error fetching hotels from Firestore in searchHotels:', err);
+        console.error('Error in searchHotels action:', err);
         return { success: false, error: err.message || 'An unexpected error occurred while searching for hotels.' };
     }
 }
-
 
 
 const hotelDetailsSchema = z.object({
   offerId: z.string(),
 });
 
-export async function getHotelDetails(params: { offerId: string }): Promise<{ success: boolean; data?: AmadeusHotelOffer; error?: string }> {
-  const validation = hotelDetailsSchema.safeParse(params);
-  if (!validation.success) {
-    return { success: false, error: 'Invalid hotel detail parameters.' };
-  }
+export async function getHotelOffers(hotelId: string, checkInDate: string, checkOutDate: string, adults: number): Promise<{ success: boolean; data?: Room[]; error?: string }> {
+    try {
+        const token = await getAmadeusToken();
+        const params = new URLSearchParams({
+            hotelIds: hotelId,
+            checkInDate,
+            checkOutDate,
+            adults: adults.toString(),
+            paymentPolicy: 'NONE',
+        });
 
-  const { offerId } = validation.data;
+        const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${params.toString()}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        if (!response.ok) {
+             const errorBody = await response.json();
+             console.error('Amadeus Hotel Offers API Error:', errorBody);
+             return { success: false, error: `Error fetching hotel room offers: ${errorBody.errors?.[0]?.detail || response.statusText}` };
+        }
+        const data = await response.json();
+        
+        if (!data.data || data.data.length === 0 || !data.data[0].offers) {
+            return { success: false, error: "No room offers available for the selected dates." };
+        }
+        
+        return { success: true, data: data.data[0].offers };
 
-  // In a real app, you would fetch from Amadeus or another API.
-  // Here, we find the hotel from our mocked data for the demo.
-  const hotelOffer = MOCK_HOTELS_DATA.find(offer => offer.id === offerId);
-
-  if (!hotelOffer) {
-    return { success: false, error: 'Could not fetch hotel details.' };
-  }
-  
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  return { success: true, data: hotelOffer };
+    } catch (err: any) {
+        console.error('Error fetching hotel room offers:', err);
+        return { success: false, error: 'An unexpected error occurred while fetching room offers.' };
+    }
 }
 
-export async function getFirestoreHotelDetails(id: string): Promise<{ success: boolean; data?: AmadeusHotelOffer; error?: string }> {
+
+export async function getFirestoreHotelDetails(id: string): Promise<{ success: boolean; data?: AmadeusHotel; error?: string }> {
     try {
         const hotelDocRef = doc(db, 'hoteles', id);
         const hotelDoc = await getDoc(hotelDocRef);
@@ -301,47 +310,25 @@ export async function getFirestoreHotelDetails(id: string): Promise<{ success: b
         const data = hotelDoc.data();
         
         // Map Firestore data to AmadeusHotelOffer structure
-        const hotelOffer: AmadeusHotelOffer = {
-            id: hotelDoc.id,
-            type: 'hotel-offer',
-            available: true,
-            hotel: {
-                hotelId: hotelDoc.id,
-                name: data.nombre,
-                rating: data.rating?.toString(),
-                media: (data.media || []).map((url: string) => ({ uri: url, category: 'GENERAL' })),
-                address: {
-                    cityName: data.ubicacion.split(',')[0],
-                    countryCode: data.ubicacion.split(',')[1]?.trim() || '',
-                    lines: [data.ubicacion],
-                    postalCode: '',
-                },
-                description: {
-                    lang: 'es',
-                    text: data.descripcion,
-                },
-                amenities: data.amenities || [],
+        const hotelData: AmadeusHotel = {
+            hotelId: hotelDoc.id,
+            name: data.nombre,
+            rating: data.rating?.toString(),
+            media: (data.media || []).map((url: string) => ({ uri: url, category: 'GENERAL' })),
+            address: {
+                cityName: data.ubicacion.split(',')[0],
+                countryCode: data.ubicacion.split(',')[1]?.trim() || '',
+                lines: [data.ubicacion],
+                postalCode: '',
             },
-            offers: [
-                {
-                    id: `offer-${hotelDoc.id}`,
-                    checkInDate: '2024-10-10', // Placeholder date
-                    checkOutDate: '2024-10-15', // Placeholder date
-                    price: {
-                        currency: 'USD',
-                        total: data.price?.toFixed(2) || '0.00',
-                        base: (data.price * 0.9).toFixed(2) || '0.00' // Placeholder
-                    },
-                    room: {
-                        type: 'STANDARD_ROOM',
-                        description: { text: 'Habitación Estándar' },
-                        amenities: [],
-                    }
-                }
-            ],
+            description: {
+                lang: 'es',
+                text: data.descripcion,
+            },
+            amenities: data.amenities || [],
         };
 
-        return { success: true, data: hotelOffer };
+        return { success: true, data: hotelData };
     } catch (err: any) {
         console.error('Error fetching hotel from Firestore:', err);
         return { success: false, error: err.message || 'Ocurrió un error inesperado al buscar el hotel.' };
@@ -447,7 +434,3 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
-
-    
-
-    
