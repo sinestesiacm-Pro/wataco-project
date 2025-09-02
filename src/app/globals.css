@@ -121,15 +121,14 @@
 }
 
 @keyframes animate-bg-pan {
-  0% { background-position: 0% 50%; }
-  25% { background-position: 50% 100%; }
-  50% { background-position: 100% 50%; }
-  75% { background-position: 50% 0%; }
-  100% { background-position: 0% 50%; }
+  0% { background-position: 0% 0%; }
+  33% { background-position: 100% 0%; }
+  66% { background-position: 50% 100%; }
+  100% { background-position: 0% 0%; }
 }
 
 .background-pan-animation {
-  background-size: 300% 300%;
+  background-size: 400% 400%;
   animation: animate-bg-pan 25s ease-in-out infinite;
 }
 
@@ -661,5 +660,6 @@
     
 
     
+
 
 
