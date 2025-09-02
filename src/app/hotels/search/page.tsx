@@ -46,6 +46,8 @@ function HotelResultsPageContent() {
     const runSearch = useCallback(async () => {
         if (cityCode && checkInDate && checkOutDate) {
             setLoading(true);
+            setHotels(null);
+            setError(null);
             const result = await searchHotels({
                 cityCode,
                 checkInDate,
@@ -221,4 +223,5 @@ export default function HotelSearchPageWrapper() {
   )
 }
 
+    
     

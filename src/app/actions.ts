@@ -202,32 +202,43 @@ export async function searchHotels(params: {
     try {
         const token = await getAmadeusToken();
         
+        // 1. Get Hotel List by cityCode
+        const hotelListParams = new URLSearchParams({ cityCode, radius: '50', radiusUnit: 'KM', 'page[limit]': '50' });
+        const hotelListResponse = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city?${hotelListParams.toString()}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!hotelListResponse.ok) {
+            const errorBody = await hotelListResponse.json();
+            console.error('Amadeus Hotel List API Error:', errorBody);
+            return { success: false, error: `Error fetching hotel list: ${errorBody.errors?.[0]?.detail || hotelListResponse.statusText}` };
+        }
+        
+        const hotelListData = await hotelListResponse.json();
+        const hotelIds = hotelListData.data.map((hotel: any) => hotel.hotelId).slice(0, 30); // Limit to 30 hotels per search to avoid API limits
+        
+        if (hotelIds.length === 0) {
+            return { success: false, error: "No se encontraron hoteles para el destino especificado." };
+        }
+
+        // 2. Get Hotel Offers for the list of hotels
         const offersParams = new URLSearchParams({
-            cityCode,
+            hotelIds: hotelIds.join(','),
             checkInDate,
             checkOutDate,
             adults: adults.toString(),
-            radius: '50', 
-            radiusUnit: 'KM',
             paymentPolicy: 'NONE',
             includeClosed: 'false',
             bestRateOnly: 'true',
             view: 'FULL',
             sort: 'PRICE',
-            'page[limit]': '25' 
+            'page[limit]': '30' 
         });
-        
-        if (ratings && ratings.length > 0) {
-            offersParams.append('ratings', ratings.join(','));
-        }
-        if (amenities && amenities.length > 0) {
-            offersParams.append('amenities', amenities.join(','));
-        }
 
         const offersResponse = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${offersParams.toString()}`, {
              headers: { Authorization: `Bearer ${token}` }
         });
-
+        
         if (!offersResponse.ok) {
             const errorBody = await offersResponse.json();
             console.error('Amadeus Hotel Offers API Error:', errorBody);
@@ -235,8 +246,7 @@ export async function searchHotels(params: {
         }
         
         const offersData = await offersResponse.json();
-        
-        const availableOffers = offersData.data.filter((offer: any) => offer.available && offer.hotel && offer.hotel.hotelId);
+        const availableOffers = offersData.data.filter((offer: any) => offer.available);
 
         if (availableOffers.length === 0) {
             return { success: false, error: "No hay ofertas de hotel disponibles para las fechas y el destino seleccionados." };
@@ -380,3 +390,5 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
+
+    

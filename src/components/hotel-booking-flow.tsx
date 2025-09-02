@@ -21,15 +21,6 @@ interface HotelBookingFlowProps {
   checkOutDate: string;
 }
 
-// In a real app, this would be fetched or passed, but for this component we can create a mock
-const createMockHotelOffer = (hotel: AmadeusHotel, rooms: Room[]): AmadeusHotelOffer => ({
-    id: hotel.hotelId,
-    type: 'hotel-offer',
-    available: true,
-    hotel,
-    offers: rooms,
-});
-
 export function HotelBookingFlow({ hotelId, adults, children, checkInDate, checkOutDate }: HotelBookingFlowProps) {
   const [step, setStep] = useState<BookingStep>('rooms');
   const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
@@ -41,35 +32,41 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
     const fetchHotelData = async () => {
       setLoading(true);
       setError(null);
-      try {
-        const detailsResult = await getFirestoreHotelDetails(hotelId);
-        if (!detailsResult.success || !detailsResult.data) {
-          throw new Error(detailsResult.error || 'No se pudieron cargar los detalles del hotel.');
+      // Check if hotel offer data is passed via history state
+      if (typeof window !== "undefined" && window.history.state?.offer) {
+          setHotelOffer(window.history.state.offer);
+          setLoading(false);
+      } else {
+        // Fallback to fetching if no state is present (direct navigation)
+        // This is not ideal as we don't have the offer ID. We'll use mock data.
+        console.warn("No offer data found in state, falling back to mock data.");
+        try {
+            const detailsResult = await getFirestoreHotelDetails(hotelId);
+            if (!detailsResult.success || !detailsResult.data) {
+              throw new Error(detailsResult.error || 'Could not load hotel details for mock offer.');
+            }
+            const mockOffer: AmadeusHotelOffer = {
+                type: 'hotel-offer',
+                id: hotelId,
+                hotel: detailsResult.data,
+                available: true,
+                offers: MOCK_ROOMS_DATA.map(r => ({
+                    ...r,
+                    checkInDate: checkInDate,
+                    checkOutDate: checkOutDate
+                }))
+            };
+            setHotelOffer(mockOffer);
+        } catch(e: any) {
+            setError(e.message || 'An unexpected error occurred.');
+        } finally {
+            setLoading(false);
         }
-        
-        // As the offers are now passed from the search results page,
-        // we can just use the details from Firestore and mock rooms for the offer object.
-        // In a real scenario, the full offer object would be passed as a prop.
-        const mockOffer = createMockHotelOffer(detailsResult.data, MOCK_ROOMS_DATA);
-        setHotelOffer(mockOffer);
-
-      } catch (e: any) {
-        setError(e.message || 'Ocurrió un error inesperado.');
-      } finally {
-        setLoading(false);
       }
     };
     
-    // Check if hotel offer data is passed via history state
-    if (typeof window !== "undefined" && window.history.state?.offer) {
-        setHotelOffer(window.history.state.offer);
-        setLoading(false);
-    } else {
-        // Fallback to fetching if no state is present (e.g., direct navigation)
-        fetchHotelData();
-    }
-
-  }, [hotelId]);
+    fetchHotelData();
+  }, [hotelId, checkInDate, checkOutDate]);
 
   const handleRoomsSelected = (rooms: SelectedRoom[]) => {
     setSelectedRooms(rooms);
@@ -118,3 +115,5 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
 
   return <div>{renderStep()}</div>;
 }
+
+    
