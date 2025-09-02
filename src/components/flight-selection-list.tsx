@@ -65,9 +65,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
-    const originCityName = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
-    const destinationCityName = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
-    const airlineDomain = `${airlineName.toLowerCase().replace(/\s+/g, '')}.com`;
+    const flightNumber = `${firstSegment.carrierCode} ${firstSegment.number}`;
 
     const stops = itinerary.segments.length - 1;
     const stopInfoText = stops > 1 ? `${stops} escalas` : stops === 1 ? '1 escala' : 'Directo';
@@ -76,60 +74,44 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
         <Collapsible asChild>
           <Card className="bg-white/60 backdrop-blur-lg border border-white/20 text-gray-800 rounded-2xl shadow-lg">
             <CardContent className="p-4 space-y-4">
-                <div className="flex justify-between items-center px-2">
-                    <div className="flex items-center gap-2">
-                        <Image
-                            src={`https://logo.clearbit.com/${airlineDomain}`}
-                            alt={airlineName}
-                            width={24}
-                            height={24}
-                            className="rounded-full bg-white p-0.5 shadow-sm"
-                            onError={(e) => { e.currentTarget.src = `https://images.kiwi.com/airlines/32/${firstSegment.carrierCode}.png` }}
-                        />
-                        <span className="font-semibold text-sm">{airlineName}</span>
-                    </div>
-                    <FlightBaggageInfo flight={flight} />
+                <div className="flex justify-between items-center px-2 text-sm">
+                    <p className="font-semibold">{airlineName}</p>
+                    <p className="text-gray-600 font-mono">{flightNumber}</p>
                 </div>
                 
-                <div className="grid grid-cols-3 items-center text-center">
-                    <div className="text-left">
+                <div className="flex items-center justify-between">
+                    <div className="text-center">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-gray-600">{firstSegment.departure.iataCode}</p>
-                        <p className="text-xs text-gray-500 truncate">{originCityName}</p>
                     </div>
-
-                    <CollapsibleTrigger asChild>
-                         <button className={cn("flex flex-col items-center cursor-pointer", stops === 0 && "pointer-events-none")}>
-                            <span className="text-xs font-semibold">{formatDuration(itinerary.duration)}</span>
+                    
+                     <CollapsibleTrigger asChild>
+                         <button className={cn("flex flex-col items-center cursor-pointer text-center px-2", stops === 0 && "pointer-events-none")}>
                             <div className="w-full h-px bg-gray-400/50 relative my-1">
-                                <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 p-0.5 rounded-full border border-gray-300"/>
-                            </div>
-                            <div className="flex items-center gap-1 text-xs text-gray-600">
-                                <span>{stopInfoText}</span>
-                                {stops > 0 && <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />}
+                                <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-white/60 text-gray-800 p-0.5 rounded-full border border-gray-300"/>
                             </div>
                         </button>
                     </CollapsibleTrigger>
                     
-                    <div className="text-right">
+                    <div className="text-center">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-gray-600">{lastSegment.arrival.iataCode}</p>
-                        <p className="text-xs text-gray-500 truncate">{destinationCityName}</p>
                     </div>
                 </div>
-
+                
                 <CollapsibleContent>
-                    <Separator className="my-3 bg-gray-400/30" />
                     <StopInfo itinerary={itinerary} dictionaries={dictionaries} />
                 </CollapsibleContent>
-
-                <Separator className="my-3 bg-gray-400/30" />
-
-                <div className="text-center">
-                    <p className="text-xs text-gray-600">Precio</p>
-                    <p className="text-2xl font-bold text-gray-800">${flight.price.total}</p>
-                </div>
                 
+                <div className="flex justify-between items-center text-sm px-2 text-gray-600">
+                    <div className="flex items-center gap-1">
+                        <Clock className="w-3 h-3"/>
+                        <span>{formatDuration(itinerary.duration)}</span>
+                    </div>
+                    <span>{stopInfoText}</span>
+                    <p className="text-xl font-bold text-gray-800">${flight.price.total}</p>
+                </div>
+
                 <div className="pt-2">
                   <FlightDetailsDialog
                       flight={flight}
