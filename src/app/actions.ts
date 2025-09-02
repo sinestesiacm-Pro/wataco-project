@@ -251,41 +251,6 @@ export async function searchHotels(params: {
 }
 
 
-export async function getHotelOffers(hotelId: string, checkInDate: string, checkOutDate: string, adults: number): Promise<{ success: boolean; data?: Room[]; error?: string }> {
-    try {
-        const token = await getAmadeusToken();
-        const params = new URLSearchParams({
-            hotelIds: hotelId,
-            checkInDate,
-            checkOutDate,
-            adults: adults.toString(),
-            paymentPolicy: 'NONE',
-        });
-
-        const response = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${params.toString()}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        if (!response.ok) {
-             const errorBody = await response.json();
-             console.error('Amadeus Hotel Offers API Error:', errorBody);
-             return { success: false, error: `Error fetching hotel room offers: ${errorBody.errors?.[0]?.detail || response.statusText}` };
-        }
-        const data = await response.json();
-        
-        if (!data.data || data.data.length === 0 || !data.data[0].offers) {
-            return { success: false, error: "No room offers available for the selected dates." };
-        }
-        
-        return { success: true, data: data.data[0].offers };
-
-    } catch (err: any) {
-        console.error('Error fetching hotel room offers:', err);
-        return { success: false, error: 'An unexpected error occurred while fetching room offers.' };
-    }
-}
-
-
 export async function getFirestoreHotelDetails(id: string): Promise<{ success: boolean; data?: AmadeusHotel; error?: string }> {
     try {
         const hotelDocRef = doc(db, 'hoteles', id);

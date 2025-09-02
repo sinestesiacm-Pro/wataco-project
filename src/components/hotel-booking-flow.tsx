@@ -2,8 +2,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getFirestoreHotelDetails, getHotelOffers } from '@/app/actions';
-import { AmadeusHotel, Room } from '@/lib/types';
+import { getFirestoreHotelDetails } from '@/app/actions';
+import { AmadeusHotel, Room, AmadeusHotelOffer } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { RoomSelectionView, SelectedRoom } from './room-selection-view';
 import { CheckoutView } from './checkout-view';
@@ -21,10 +21,18 @@ interface HotelBookingFlowProps {
   checkOutDate: string;
 }
 
+// In a real app, this would be fetched or passed, but for this component we can create a mock
+const createMockHotelOffer = (hotel: AmadeusHotel, rooms: Room[]): AmadeusHotelOffer => ({
+    id: hotel.hotelId,
+    type: 'hotel-offer',
+    available: true,
+    hotel,
+    offers: rooms,
+});
+
 export function HotelBookingFlow({ hotelId, adults, children, checkInDate, checkOutDate }: HotelBookingFlowProps) {
   const [step, setStep] = useState<BookingStep>('rooms');
-  const [hotel, setHotel] = useState<AmadeusHotel | null>(null);
-  const [roomOffers, setRoomOffers] = useState<Room[]>([]);
+  const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
   const [selectedRooms, setSelectedRooms] = useState<SelectedRoom[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,22 +42,16 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
       setLoading(true);
       setError(null);
       try {
-        // Fetch hotel static details from Firestore first
         const detailsResult = await getFirestoreHotelDetails(hotelId);
         if (!detailsResult.success || !detailsResult.data) {
           throw new Error(detailsResult.error || 'No se pudieron cargar los detalles del hotel.');
         }
-        setHotel(detailsResult.data);
-
-        // Then, fetch real-time room offers from Amadeus
-        const offersResult = await getHotelOffers(hotelId, checkInDate, checkOutDate, adults);
-        if (offersResult.success && offersResult.data) {
-          setRoomOffers(offersResult.data);
-        } else {
-          // If Amadeus fails, fallback to mock data for demo purposes
-          console.warn("Amadeus API failed, falling back to mock room data.");
-          setRoomOffers(MOCK_ROOMS_DATA);
-        }
+        
+        // As the offers are now passed from the search results page,
+        // we can just use the details from Firestore and mock rooms for the offer object.
+        // In a real scenario, the full offer object would be passed as a prop.
+        const mockOffer = createMockHotelOffer(detailsResult.data, MOCK_ROOMS_DATA);
+        setHotelOffer(mockOffer);
 
       } catch (e: any) {
         setError(e.message || 'Ocurrió un error inesperado.');
@@ -57,8 +59,17 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
         setLoading(false);
       }
     };
-    fetchHotelData();
-  }, [hotelId, checkInDate, checkOutDate, adults]);
+    
+    // Check if hotel offer data is passed via history state
+    if (typeof window !== "undefined" && window.history.state?.offer) {
+        setHotelOffer(window.history.state.offer);
+        setLoading(false);
+    } else {
+        // Fallback to fetching if no state is present (e.g., direct navigation)
+        fetchHotelData();
+    }
+
+  }, [hotelId]);
 
   const handleRoomsSelected = (rooms: SelectedRoom[]) => {
     setSelectedRooms(rooms);
@@ -79,7 +90,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
     );
   }
 
-  if (error || !hotel) {
+  if (error || !hotelOffer) {
     return (
         <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
             <CardContent className="pt-6 text-center">
@@ -90,26 +101,16 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
     )
   }
   
-  // Construct a temporary AmadeusHotelOffer object to pass to children components
-  const hotelOfferForDisplay = {
-    id: hotelId,
-    type: 'hotel-offer' as const,
-    available: true,
-    hotel: hotel,
-    offers: roomOffers,
-  };
-
-
   const renderStep = () => {
     switch (step) {
       case 'rooms':
-        return <RoomSelectionView hotelOffer={hotelOfferForDisplay} onRoomsSelected={handleRoomsSelected} adults={adults} children={children} />;
+        return <RoomSelectionView hotelOffer={hotelOffer} onRoomsSelected={handleRoomsSelected} adults={adults} children={children} />;
       case 'checkout':
         if (!selectedRooms || selectedRooms.length === 0) {
             return <p>Error: No se ha seleccionado ninguna habitación. <Button onClick={handleBackToRooms}>Volver</Button></p>
         }
         const totalRooms = selectedRooms.reduce((acc, curr) => acc + curr.quantity, 0);
-        return <CheckoutView hotelOffer={hotelOfferForDisplay} selectedRoom={selectedRooms[0].room} adults={adults} children={children} numberOfRooms={totalRooms} onBack={handleBackToRooms} />;
+        return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRooms[0].room} adults={adults} children={children} numberOfRooms={totalRooms} onBack={handleBackToRooms} />;
       default:
         return null;
     }

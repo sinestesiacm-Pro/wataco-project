@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
@@ -8,6 +9,7 @@ import { Badge } from './ui/badge';
 import { HotelDetailsDialog } from './hotel-details-dialog';
 import { Button } from './ui/button';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
@@ -33,10 +35,21 @@ const formatAmenity = (amenity: string) => {
 }
 
 export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
+  const router = useRouter();
+
+  const handleViewHotel = (offer: AmadeusHotelOffer) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('hotelId', offer.hotel.hotelId);
+
+      // Pass the entire offer object via history state to avoid another API call
+      // This is a client-side navigation optimization
+      window.history.pushState({ offer }, '', `/hotels/${offer.hotel.hotelId}/offers?${params.toString()}`);
+      router.push(`/hotels/${offer.hotel.hotelId}/offers?${params.toString()}`);
+  }
+
   return (
     <div className="space-y-4">
       {hotels.map((offer) => {
-        const detailsLink = `/hotels/${offer.id}?${searchParams.toString()}`;
         return (
             <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-black/10 backdrop-blur-xl border border-white/20 flex flex-col md:flex-row">
                 <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4 flex-shrink-0">
@@ -89,9 +102,9 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                           ${offer.offers?.[0]?.price?.total}
                         </p>
                     </div>
-                     <Button asChild size="lg" className="bg-primary hover:bg-primary/90 font-semibold w-full sm:w-auto">
-                        <Link href={detailsLink}>Ver Hotel</Link>
-                    </Button>
+                     <Button onClick={() => handleViewHotel(offer)} size="lg" className="bg-primary hover:bg-primary/90 font-semibold w-full sm:w-auto">
+                        Ver Habitaciones
+                     </Button>
                   </div>
                 </div>
             </Card>
