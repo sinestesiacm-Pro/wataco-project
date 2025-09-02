@@ -87,9 +87,8 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     
                      <CollapsibleTrigger asChild>
                          <button className={cn("flex-grow flex flex-col items-center cursor-pointer text-center px-2", stops === 0 && "pointer-events-none")}>
-                            <div className="w-full relative h-6 flex items-center justify-center">
-                                <div className="absolute w-full h-px bg-gray-400/50 top-[9px]"></div>
-                                <div className="absolute w-full h-px bg-gray-400/50 bottom-[9px]"></div>
+                            <div className="w-full relative h-6 flex items-center">
+                                <div className="absolute w-full h-px bg-gray-400/50"></div>
                                 <div className="relative bg-white/60 p-1 rounded-full border border-gray-300">
                                    <Plane className="w-5 h-5 text-gray-800"/>
                                 </div>
