@@ -205,7 +205,7 @@ export function RoomSelectionView({ hotelOffer, onRoomsSelected, adults, childre
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 200, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 260, damping: 30 }}
-                className="fixed bottom-4 left-4 right-4 md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:max-w-4xl z-50"
+                className="fixed bottom-20 left-4 right-4 md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:max-w-4xl z-50"
             >
                 <Card className="bg-primary/90 backdrop-blur-lg border-2 border-primary-foreground/50 text-primary-foreground p-4 shadow-2xl">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
