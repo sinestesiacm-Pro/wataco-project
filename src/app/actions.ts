@@ -202,35 +202,29 @@ export async function searchHotels(params: {
     try {
         const token = await getAmadeusToken();
         
-        // Step 1: Get Hotel IDs for the given city
-        const hotelListParams = new URLSearchParams({ cityCode });
-        if (ratings && ratings.length > 0) hotelListParams.append('ratings', ratings.join(','));
-        if (amenities && amenities.length > 0) hotelListParams.append('amenities', amenities.join(','));
-
-        const hotelListResponse = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city?${hotelListParams.toString()}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (!hotelListResponse.ok) {
-            return { success: false, error: `Error fetching hotel list: ${hotelListResponse.statusText}` };
-        }
-        const hotelListData = await hotelListResponse.json();
-        const hotelIds = hotelListData.data.map((hotel: any) => hotel.hotelId).slice(0, 15); // Limit to 15 hotels for demo purposes
-
-        if (hotelIds.length === 0) {
-            return { success: false, error: "No se encontraron hoteles para esta ciudad o filtros." };
-        }
-
-        // Step 2: Get Offers for these Hotel IDs
+        // Use the Hotel Offers API which is more suitable for searching by city
         const offersParams = new URLSearchParams({
-            hotelIds: hotelIds.join(','),
+            cityCode,
             checkInDate,
             checkOutDate,
             adults: adults.toString(),
-            paymentPolicy: 'NONE', // To get rates without credit card
-            bestRateOnly: 'true'
+            radius: '50', // Search within a 50km radius
+            radiusUnit: 'KM',
+            paymentPolicy: 'NONE',
+            includeClosed: 'false',
+            bestRateOnly: 'true',
+            view: 'FULL',
+            sort: 'PRICE',
+            'page[limit]': '25' // Get up to 25 results
         });
         
+        if (ratings && ratings.length > 0) {
+            offersParams.append('ratings', ratings.join(','));
+        }
+        if (amenities && amenities.length > 0) {
+            offersParams.append('amenities', amenities.join(','));
+        }
+
         const offersResponse = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${offersParams.toString()}`, {
              headers: { Authorization: `Bearer ${token}` }
         });
