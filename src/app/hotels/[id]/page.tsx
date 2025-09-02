@@ -1,10 +1,11 @@
+
 'use client';
 import React, { Suspense, useEffect, useState } from 'react';
 import { Loader2 } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams, useRouter, notFound } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { getFirestoreHotelDetails } from '@/app/actions';
 import { AmadeusHotel } from '@/lib/types';
@@ -41,10 +42,10 @@ function HotelDetailPageContent({ id }: { id: string }) {
         // If we came from search, automatically redirect to offers page
         if (!loading && hotel && cameFromSearch) {
             const params = new URLSearchParams(searchParams.toString());
-            params.set('hotelId', hotel.hotelId);
+            params.set('hotelId', id);
             router.replace(`/hotels/offers?${params.toString()}`);
         }
-    }, [loading, hotel, cameFromSearch, searchParams, router]);
+    }, [loading, hotel, cameFromSearch, searchParams, router, id]);
 
 
     const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number }) => {
@@ -110,8 +111,8 @@ function HotelDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function HotelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   
   return (
     <Suspense fallback={
