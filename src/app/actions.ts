@@ -236,7 +236,7 @@ export async function searchHotels(params: {
         
         const offersData = await offersResponse.json();
         
-        const availableOffers = offersData.data.filter((offer: any) => offer.available);
+        const availableOffers = offersData.data.filter((offer: any) => offer.available && offer.hotel && offer.hotel.hotelId);
 
         if (availableOffers.length === 0) {
             return { success: false, error: "No hay ofertas de hotel disponibles para las fechas y el destino seleccionados." };
@@ -415,3 +415,5 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
+
+    

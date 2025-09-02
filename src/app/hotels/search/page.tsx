@@ -99,7 +99,12 @@ function HotelResultsPageContent() {
     const LoadingSkeleton = () => (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="hidden lg:block lg:col-span-3">
-               <Skeleton className="h-96 w-full rounded-2xl" />
+               <div className="bg-black/20 backdrop-blur-2xl border border-white/20 rounded-2xl p-4 space-y-4">
+                    <Skeleton className="h-8 w-1/2" />
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-8 w-1/3" />
+                    <Skeleton className="h-32 w-full" />
+               </div>
           </div>
           <div className="lg:col-span-9 space-y-4">
               {[...Array(3)].map((_, i) => (
@@ -116,10 +121,10 @@ function HotelResultsPageContent() {
     if(error) {
         return (
             <div className="max-w-4xl mx-auto py-8 px-4">
-                <Card>
-                    <CardContent className="pt-6 text-center">
+                <Card className="bg-black/10 backdrop-blur-xl border border-white/20">
+                    <CardContent className="pt-6 text-center text-white/90">
                         <h2 className="text-xl font-bold text-destructive">Error de Búsqueda</h2>
-                        <p className="text-muted-foreground mt-2">{error}</p>
+                        <p className=" mt-2">{error}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -215,3 +220,5 @@ export default function HotelSearchPageWrapper() {
     </Suspense>
   )
 }
+
+    
