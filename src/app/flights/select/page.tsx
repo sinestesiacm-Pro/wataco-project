@@ -278,12 +278,12 @@ function FlightSelectionPage() {
                            Filtros
                          </Button>
                       </DialogTrigger>
-                      <DialogContent className="w-[90vw] max-w-md bg-black/30 backdrop-blur-2xl border-white/20 rounded-2xl text-white shadow-2xl">
-                        <DialogHeader className="text-left">
+                      <DialogContent className="w-[90vw] max-w-md bg-black/30 backdrop-blur-2xl border-white/20 rounded-2xl text-white shadow-2xl p-0">
+                        <DialogHeader className="p-6 pb-4 text-left">
                            <DialogTitle className="font-headline text-2xl">Filtros de Vuelo</DialogTitle>
                            <DialogDescription className="text-white/80">Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</DialogDescription>
                         </DialogHeader>
-                        <div className="py-4">
+                        <div className="p-6 pt-0">
                             <FlightFilters 
                                 availableAirlines={availableAirlines}
                                 onFilterChange={handleFilterChange}
@@ -317,5 +317,3 @@ export default function FlightSelectPageWrapper() {
     </Suspense>
   )
 }
-
-    
