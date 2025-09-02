@@ -79,15 +79,15 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     <p className="text-gray-600 font-mono">{flightNumber}</p>
                 </div>
                 
-                <div className="flex items-center justify-between">
-                    <div className="text-center">
+                <div className="flex items-center justify-around">
+                    <div className="text-center flex-grow flex-shrink-0 basis-0">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-gray-600">{firstSegment.departure.iataCode}</p>
                     </div>
                     
                      <CollapsibleTrigger asChild>
-                         <button className={cn("flex-grow flex flex-col items-center cursor-pointer text-center px-2", stops === 0 && "pointer-events-none")}>
-                            <div className="w-full relative h-6 flex items-center">
+                         <button className={cn("flex w-auto flex-col items-center cursor-pointer text-center px-2", stops === 0 && "pointer-events-none")}>
+                            <div className="w-full relative h-6 flex items-center justify-center">
                                 <div className="absolute w-full h-px bg-gray-400/50"></div>
                                 <div className="relative bg-white/60 p-1 rounded-full border border-gray-300">
                                    <Plane className="w-5 h-5 text-gray-800"/>
@@ -96,7 +96,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                         </button>
                     </CollapsibleTrigger>
                     
-                    <div className="text-center">
+                    <div className="text-center flex-grow flex-shrink-0 basis-0">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-gray-600">{lastSegment.arrival.iataCode}</p>
                     </div>
