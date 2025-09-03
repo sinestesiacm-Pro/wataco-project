@@ -428,6 +428,7 @@
 .bg-packages-background {
   position: relative;
   overflow: hidden;
+  background-image: var(--packages-gradient);
 }
 
 .bg-packages-background::before {
@@ -438,7 +439,7 @@
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-image: linear-gradient(to bottom, rgba(10,40,60,0.4), rgba(0,10,20,0.8)), url('https://images.unsplash.com/photo-1577017042524-97b7521583d7?q=80&w=2070');
+  background-image: linear-gradient(to bottom, rgba(10,40,60,0.4), rgba(0,10,20,0.8)), url('https://images.unsplash.com/photo-1549925233-a7a2a6288b6b?q=80&w=2070');
   background-size: cover;
   background-position: center;
   filter: blur(8px);
@@ -684,6 +685,7 @@
     
 
     
+
 
 
 
