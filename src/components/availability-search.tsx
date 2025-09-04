@@ -6,14 +6,61 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Calendar } from './ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { CalendarIcon, Users, Minus, Plus, BedDouble, Baby } from 'lucide-react';
+import { CalendarIcon, Users, Minus, Plus, BedDouble, Baby, MapPin } from 'lucide-react';
 import { format, addDays } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { es } from 'date-fns/locale';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { searchHotelDestinations } from '@/app/actions';
+import { useDebounce } from '@/hooks/use-debounce';
+import { Airport } from '@/lib/types';
+import { Input } from './ui/input';
+import { Loader2 } from 'lucide-react';
+
+
+const SuggestionsList = React.memo(function SuggestionsList({ 
+    suggestions, 
+    isLoading, 
+    onSelect 
+}: { 
+    suggestions: Airport[], 
+    isLoading: boolean, 
+    onSelect: (airport: Airport) => void 
+}) {
+    return (
+        <div className="absolute z-20 w-full mt-1 bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+            {isLoading ? (
+                <div className="p-4 flex items-center justify-center text-sm text-muted-foreground">
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" /> Buscando...
+                </div>
+            ) : suggestions.length > 0 ? (
+                suggestions.map((airport, index) => {
+                    const suggestionText = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
+                    return (
+                        <div
+                            key={`${airport.iataCode}-${index}`}
+                            className="p-3 hover:bg-accent cursor-pointer border-b last:border-b-0"
+                            onClick={() => onSelect(airport)}
+                        >
+                            <div className="flex items-center gap-2">
+                                <MapPin className="w-4 h-4 text-muted-foreground" />
+                                <div className="flex-grow">
+                                    <p className="font-semibold text-sm">{suggestionText || airport.name}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })
+            ) : (
+                <div className="p-4 text-center text-sm text-muted-foreground">No se encontraron resultados.</div>
+            )}
+        </div>
+    );
+});
+
 
 interface AvailabilitySearchProps {
-    onSearch: (data: { checkInDate: Date, checkOutDate: Date, adults: number, children: number }) => void;
+    onSearch: (data: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, geo: { lat: number, lon: number}, destinationName: string }) => void;
     initialData: {
         checkInDate: Date;
         checkOutDate: Date;
@@ -31,20 +78,64 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
     const [children, setChildren] = useState(initialData.children);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const isMobile = useIsMobile();
+    
+    // New state for destination search
+    const [destination, setDestination] = useState<Airport | null>(null);
+    const [destinationQuery, setDestinationQuery] = useState('');
+    const [suggestions, setSuggestions] = useState<Airport[]>([]);
+    const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+    const [isDestinationPopoverOpen, setIsDestinationPopoverOpen] = useState(false);
+    const debouncedDestinationQuery = useDebounce(destinationQuery, 300);
+
+
+    const fetchSuggestions = React.useCallback(async (query: string) => {
+        if (query.length < 2) {
+          setSuggestions([]);
+          return;
+        }
+        setSuggestionsLoading(true);
+        const result = await searchHotelDestinations(query);
+        if (result.success && result.data) {
+          setSuggestions(result.data);
+        } else {
+          setSuggestions([]);
+        }
+        setSuggestionsLoading(false);
+      }, []);
+
+    React.useEffect(() => {
+        if (isDestinationPopoverOpen) {
+          fetchSuggestions(debouncedDestinationQuery);
+        }
+    }, [debouncedDestinationQuery, isDestinationPopoverOpen, fetchSuggestions]);
+
+
+    const handleSelectSuggestion = React.useCallback((airport: Airport) => {
+        setDestination(airport);
+        const query = [airport.address?.cityName, airport.address?.countryName].filter(Boolean).join(', ');
+        setDestinationQuery(query || airport.name);
+        setSuggestions([]);
+        setIsDestinationPopoverOpen(false);
+    }, []);
 
     const handleSearchClick = () => {
-        if (date?.from && date?.to) {
+        if (date?.from && date?.to && destination?.geoCode) {
             onSearch({
                 checkInDate: date.from,
                 checkOutDate: date.to,
                 adults,
                 children,
+                geo: { lat: destination.geoCode.latitude, lon: destination.geoCode.longitude },
+                destinationName: destinationQuery
             });
         }
     };
     
     const totalGuests = adults + children;
     const travelerText = `${totalGuests} huésped${totalGuests > 1 ? 'es' : ''}`;
+     const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
+        e.currentTarget.select();
+    };
 
     return (
         <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
@@ -52,9 +143,37 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
                 <CardTitle className="text-white font-headline text-2xl">Consultar Disponibilidad y Precios</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                    
+                    {/* Destination Search */}
+                     <div className="lg:col-span-1 relative">
+                        <label className="text-white/80 text-sm font-semibold mb-2 block">Destino</label>
+                        <Popover open={isDestinationPopoverOpen && destinationQuery.length > 1} onOpenChange={setIsDestinationPopoverOpen}>
+                            <PopoverTrigger asChild>
+                                 <Input 
+                                    id="destination" 
+                                    type="text" 
+                                    value={destinationQuery} 
+                                    onChange={e => setDestinationQuery(e.target.value)}
+                                    onFocus={() => setIsDestinationPopoverOpen(true)}
+                                    onClick={handleInputClick}
+                                    placeholder="Ej. Nueva York" 
+                                    className="bg-black/20 text-white border-white/30 h-10" 
+                                    autoComplete="off"
+                                />
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-transparent border-none shadow-none" align="start">
+                                <SuggestionsList 
+                                    suggestions={suggestions}
+                                    isLoading={suggestionsLoading}
+                                    onSelect={handleSelectSuggestion}
+                                />
+                            </PopoverContent>
+                        </Popover>
+                    </div>
+
                     {/* Date Picker */}
-                    <div className="md:col-span-1">
+                    <div className="lg:col-span-1">
                         <label className="text-white/80 text-sm font-semibold mb-2 block">Fechas</label>
                         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                             <PopoverTrigger asChild>
@@ -92,7 +211,7 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
                     </div>
 
                     {/* Guest Picker */}
-                    <div className="md:col-span-1">
+                    <div className="lg:col-span-1">
                          <label className="text-white/80 text-sm font-semibold mb-2 block">Huéspedes</label>
                         <Popover>
                             <PopoverTrigger asChild>
@@ -131,7 +250,7 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
                     </div>
 
                     {/* Search Button */}
-                    <div className="md:col-span-1">
+                    <div className="lg:col-span-1">
                         <Button size="lg" className="w-full bg-primary hover:bg-primary/90" onClick={handleSearchClick}>
                             <BedDouble className="mr-2 h-5 w-5" />
                             Buscar

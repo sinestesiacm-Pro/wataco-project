@@ -38,28 +38,20 @@ function HotelDetailPageContent({ id }: { id: string }) {
         fetchDetails();
     }, [id]);
 
-    useEffect(() => {
-        // If we came from search, automatically redirect to offers page
-        if (!loading && hotel && cameFromSearch) {
-            const params = new URLSearchParams(searchParams.toString());
-            params.set('hotelId', id);
-            router.replace(`/hotels/${id}/offers?${params.toString()}`);
-        }
-    }, [loading, hotel, cameFromSearch, searchParams, router, id]);
-
-
-    const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number }) => {
+    const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, geo: { lat: number, lon: number}, destinationName: string }) => {
         const params = new URLSearchParams({
-            hotelId: id,
+            latitude: searchData.geo.lat.toString(),
+            longitude: searchData.geo.lon.toString(),
             checkInDate: format(searchData.checkInDate, 'yyyy-MM-dd'),
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
+            destinationName: searchData.destinationName,
         });
-        router.push(`/hotels/${id}/offers?${params.toString()}`);
+        router.push(`/hotels/search?${params.toString()}`);
     };
 
-    if (loading || cameFromSearch) { // Show loader if loading or during the brief redirect
+    if (loading) { // Show loader if loading
         return (
             <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
                 <Loader2 className="h-12 w-12 animate-spin text-white" />

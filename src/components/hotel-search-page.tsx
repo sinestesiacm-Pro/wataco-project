@@ -2,25 +2,20 @@
 'use client';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { addDays, format } from 'date-fns';
-import type { AmadeusHotelOffer, Airport } from '@/lib/types';
-import { searchHotels, searchHotelDestinations } from '@/app/actions';
+import type { Airport } from '@/lib/types';
+import { searchHotelDestinations } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
 
-import { HotelResults } from '@/components/hotel-results';
-import { HotelFilters } from '@/components/hotel-filters';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Users, Loader2, Minus, Plus, MapPin, BedDouble, X, Baby } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { CalendarIcon, Users, Loader2, Minus, Plus, MapPin, BedDouble, Baby } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
-import { Card, CardContent } from './ui/card';
 import type { DateRange } from 'react-day-picker';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 
@@ -123,33 +118,23 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 
   const handleFormSubmit = useCallback((e: React.FormEvent) => {
       e.preventDefault();
-      if ((!destination && !destinationQuery) || !date?.from || !date?.to) {
+      if (!destination?.geoCode || !date?.from || !date?.to) {
         toast({
             title: 'Información Faltante',
-            description: 'Por favor, selecciona un destino y las fechas.',
-            variant: 'destructive',
-        });
-        return;
-      }
-      
-      const cityCode = destination?.iataCode || (destinationQuery.toLowerCase().includes('nueva york') ? 'NYC' : '');
-
-       if (!cityCode) {
-         toast({
-            title: 'Destino no válido',
-            description: 'Por favor, selecciona un destino de la lista o escribe un destino conocido.',
+            description: 'Por favor, selecciona un destino de la lista y las fechas.',
             variant: 'destructive',
         });
         return;
       }
 
       const params = new URLSearchParams({
-        cityCode: cityCode,
+        latitude: destination.geoCode.latitude.toString(),
+        longitude: destination.geoCode.longitude.toString(),
         checkInDate: format(date.from, 'yyyy-MM-dd'),
         checkOutDate: format(date.to, 'yyyy-MM-dd'),
         adults: adults.toString(),
         children: children.toString(),
-        destinationName: destinationQuery,
+        destinationName: destinationQuery || destination.name,
       });
       router.push(`/hotels/search?${params.toString()}`);
   }, [destination, destinationQuery, date, adults, children, router, toast]);
@@ -294,5 +279,3 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 });
 
 export default HotelSearchPage;
-
-    
