@@ -71,7 +71,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
             return "color-change-animation";
         }
         if (isPackagesPage) {
-            return 'relative'; // Need relative positioning for the full-screen image
+            return 'bg-packages-background';
         }
 
         const baseAnimationClass = 'background-pan-animation';
@@ -85,6 +85,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
             switch(tabTheme) {
                 case 'Flights': return 'bg-flights-background'; 
                 case 'Hotels': return 'bg-hotels-background';
+                case 'Packages': return 'bg-packages-background';
                 case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
                 case 'Activities': return 'bg-activities-background';
                 case 'Social': return 'bg-flights-background';
@@ -97,19 +98,9 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
 
     return (
         <div className={cn('flex flex-col min-h-dvh', getBackgroundClass())}>
-             {isPackagesPage && (
-                <>
-                    <Image
-                        src="https://images.unsplash.com/photo-1571782632662-763483b42188?q=80&w=2070&auto=format&fit=crop"
-                        alt="Background image of Cartagena"
-                        fill
-                        className="object-cover -z-10"
-                        style={{ filter: 'blur(8px)' }}
-                    />
-                    <div className="absolute inset-0 bg-black/50 -z-10" />
-                </>
-            )}
             {children}
         </div>
     )
 }
+
+    
