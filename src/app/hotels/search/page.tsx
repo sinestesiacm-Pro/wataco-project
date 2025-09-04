@@ -17,6 +17,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import HotelSearchPage from "@/components/hotel-search-page";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { HotelLoadingAnimation } from "@/components/hotel-loading-animation";
 
 type HotelFiltersState = {
   priceRange: number[];
@@ -99,25 +100,13 @@ function HotelResultsPageContent() {
 
 
     const LoadingSkeleton = () => (
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="hidden lg:block lg:col-span-3">
-               <div className="bg-black/20 backdrop-blur-2xl border border-white/20 rounded-2xl p-4 space-y-4">
-                    <Skeleton className="h-8 w-1/2" />
-                    <Skeleton className="h-20 w-full" />
-                    <Skeleton className="h-8 w-1/3" />
-                    <Skeleton className="h-32 w-full" />
-               </div>
-          </div>
-          <div className="lg:col-span-9 space-y-4">
-              {[...Array(3)].map((_, i) => (
-                  <Skeleton key={i} className="h-64 w-full rounded-2xl" />
-              ))}
-          </div>
-      </div>
+        <div className="w-full h-screen relative overflow-hidden">
+            <HotelLoadingAnimation destinationName={destinationName} />
+        </div>
     );
 
     if(loading) {
-        return <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8"><LoadingSkeleton /></div>;
+        return <LoadingSkeleton />;
     }
 
     if(error) {
