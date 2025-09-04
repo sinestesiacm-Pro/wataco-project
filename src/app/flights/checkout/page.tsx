@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { Suspense, useState, useEffect } from 'react';
@@ -453,9 +454,9 @@ export default function CheckoutPage() {
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
             </div>
         }>
-            <CheckoutPageContent />
+            <div className="bg-background">
+                <CheckoutPageContent />
+            </div>
         </Suspense>
     )
 }
-
-    

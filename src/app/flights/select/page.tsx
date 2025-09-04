@@ -243,7 +243,8 @@ function FlightSelectionPage() {
   }
 
   return (
-    <div className={cn('min-h-screen w-full pt-24 pb-24 md:pb-8 relative overflow-hidden')}>
+    <div className={cn('min-h-screen w-full pt-24 pb-24 md:pb-8 relative overflow-hidden bg-flights-gradient background-pan-animation')}>
+      <AnimatedClouds />
       <div className="relative z-10 min-h-full bg-transparent">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">

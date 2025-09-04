@@ -61,7 +61,7 @@ export function Header() {
 
   const currentTitle = getTitleFromPath(pathname);
   const isHomePage = pathname === '/';
-  const isLight = pathname.startsWith('/flights/checkout') || pathname.startsWith('/flights/select') || /^\/hotels\/.*\/offers/.test(pathname);
+  const isLight = pathname.startsWith('/flights/checkout');
   
   const textColor = isLight ? 'text-gray-800' : 'text-white';
 
@@ -71,7 +71,7 @@ export function Header() {
         "fixed top-0 left-0 right-0 z-40 transition-colors duration-300",
         isLight 
             ? "bg-white/80 backdrop-blur-xl shadow-lg" 
-            : "bg-white/20 backdrop-blur-xl shadow-lg"
+            : "bg-black/20 backdrop-blur-xl shadow-lg"
       )}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
@@ -87,7 +87,7 @@ export function Header() {
           <div className="flex-1 text-center">
              <div className="hidden md:flex justify-center">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
-                  <TabsList className={cn("bg-white/20 backdrop-blur-lg", isLight ? "bg-gray-200" : "bg-white/20")}>
+                  <TabsList className={cn("bg-white/20 backdrop-blur-lg", isLight ? "bg-gray-200" : "bg-black/20")}>
                     {TABS.map((item) => (
                       <TabsTrigger key={item.id} value={item.id} className={cn("gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground", textColor)}>
                         <item.icon className="h-4 w-4" />

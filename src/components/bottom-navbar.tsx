@@ -1,3 +1,4 @@
+
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -48,9 +49,7 @@ export function BottomNavbar() {
   const isOnHomePage = pathname === '/';
 
   const isLight = useMemo(() => 
-    pathname.startsWith('/flights/checkout') || 
-    pathname.startsWith('/flights/select') || 
-    /^\/hotels\/.*\/offers/.test(pathname)
+    pathname.startsWith('/flights/checkout')
   , [pathname]);
 
   const handleTabClick = (tab: string) => {
@@ -63,7 +62,7 @@ export function BottomNavbar() {
     <div 
       className={cn(
         "fixed bottom-0 left-0 right-0 z-50 shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)] md:hidden",
-        isLight ? "bg-white/80 backdrop-blur-xl" : "bg-white/40 backdrop-blur-xl"
+        isLight ? "bg-white/80 backdrop-blur-xl" : "bg-black/20 backdrop-blur-xl"
       )}
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
