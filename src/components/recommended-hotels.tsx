@@ -28,18 +28,18 @@ interface Hotel {
 const HotelCard = React.memo(function HotelCard({ hotel }: { hotel: Hotel }) {
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-none hover:scale-105 overflow-hidden">
-            <div className="relative w-full h-80 flex-shrink-0">
+            <div className="relative w-full h-48 flex-shrink-0">
                  <Carousel className="w-full h-full">
                     <CarouselContent>
                         {(hotel.media || []).map((photo, index) => (
                             <CarouselItem key={index}>
-                                 <div className="relative h-80 w-full">
+                                 <div className="relative h-48 w-full">
                                     <Image 
                                         src={photo}
                                         data-ai-hint="hotel photo" 
                                         alt={`${hotel.nombre} image ${index + 1}`}
                                         fill 
-                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                        className="object-cover"
                                         draggable={false}
                                     />
                                  </div>
@@ -49,31 +49,29 @@ const HotelCard = React.memo(function HotelCard({ hotel }: { hotel: Hotel }) {
                      <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                      <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Carousel>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                 <div className="absolute top-0 right-0 p-3 z-10">
+                <div className="absolute top-0 right-0 p-3 z-10">
                     <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white bg-black/30 hover:bg-black/50 hover:text-white rounded-full">
                         <Heart className="h-5 w-5" />
                     </Button>
                 </div>
-                <div className="absolute bottom-0 left-0 p-4 w-full text-white">
-                     <h3 className="font-bold font-headline text-xl text-white drop-shadow-lg">{hotel.nombre}</h3>
-                     <div className="flex items-center gap-2 text-sm text-white/90">
-                       <MapPin className="h-4 w-4" />
-                       {hotel.ubicacion}
-                     </div>
-                     <div className="flex justify-between items-end mt-2">
-                        <div>
-                             <div className="flex items-center gap-1 text-amber-400">
-                                {[...Array(hotel.rating || 0)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                             </div>
-                             <p className="font-semibold text-xl text-white drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
-                        </div>
-                        <Button asChild className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
-                            <Link href={`/hotels/${hotel.id}`}>Ver Hotel</Link>
-                        </Button>
-                     </div>
-                </div>
             </div>
+            <CardContent className="p-4 flex flex-col flex-grow text-white">
+                 <h3 className="font-bold font-headline text-lg text-white">{hotel.nombre}</h3>
+                 <div className="flex items-center gap-2 text-sm text-white/90">
+                   <MapPin className="h-4 w-4" />
+                   {hotel.ubicacion}
+                 </div>
+                 <div className="flex items-center gap-1 text-amber-400 mt-1">
+                    {[...Array(hotel.rating || 0)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                 </div>
+                <div className="flex-grow"></div>
+                <div className="flex justify-between items-end mt-2">
+                    <p className="font-semibold text-xl text-white drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
+                    <Button asChild className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
+                        <Link href={`/hotels/${hotel.id}`}>Ver Hotel</Link>
+                    </Button>
+                 </div>
+            </CardContent>
         </Card>
     );
 });
