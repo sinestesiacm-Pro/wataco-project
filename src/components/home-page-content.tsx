@@ -168,11 +168,6 @@ function RecommendedContent({ tab }: { tab?: string }) {
 export function HomePageContent() {
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'Flights';
-    const { setTabTheme } = useTheme();
-
-    useEffect(() => {
-        setTabTheme(tab);
-    }, [tab, setTabTheme]);
     
     const getBackgroundClass = () => {
         switch(tab) {

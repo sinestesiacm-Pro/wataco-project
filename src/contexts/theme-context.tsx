@@ -10,8 +10,6 @@ type TabTheme = 'Flights' | 'Hotels' | 'Packages' | 'Cruises' | 'Activities' | '
 type ColorTheme = 'light' | 'dark';
 
 interface ThemeContextType {
-  tabTheme: TabTheme;
-  setTabTheme: (theme: TabTheme | string) => void;
   colorTheme: ColorTheme;
   setColorTheme: (theme: ColorTheme) => void;
 }
@@ -19,12 +17,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [tabTheme, setTabThemeState] = useState<TabTheme>('Default');
   const [colorTheme, setColorThemeState] = useState<ColorTheme>('light');
-
-  const setTabTheme = (newTheme: TabTheme | string) => {
-    setTabThemeState(newTheme as TabTheme);
-  };
   
   const setColorTheme = (newTheme: ColorTheme) => {
       setColorThemeState(newTheme);
@@ -42,7 +35,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ tabTheme, setTabTheme, colorTheme, setColorTheme }}>
+    <ThemeContext.Provider value={{ colorTheme, setColorTheme }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -60,8 +53,6 @@ export const useTheme = () => {
 export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     const pathname = usePathname();
     
-    // This wrapper now only handles the main layout structure, 
-    // background logic is moved to HomePageContent for robustness.
     const isSpecialPage = pathname.startsWith('/login') || pathname.startsWith('/signup') || pathname.startsWith('/profile');
 
     return (
