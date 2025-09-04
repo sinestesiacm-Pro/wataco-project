@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Heart, Star } from 'lucide-react';
+import ActivitySearchPage from './activity-search-page';
 
 const activities = [
   { id: 'guatape-tour-1', name: 'Excursion to Guatapé & El Peñol', description: 'A full day to explore the iconic stone and the colorful town.', image: 'https://images.unsplash.com/photo-1639534448069-a47cf42d7cb9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z3VhdGFwZSUyMGNvbG9tYmlhfGVufDB8fHx8MTc1NDEzOTEzOXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'guatape colombia', rating: 5, reviews: 1532, price: '65' },
@@ -51,8 +52,8 @@ export function ActivitiesSection() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-3xl font-bold font-headline text-white">Activities & Experiences</h2>
-        <p className="text-white/80 mt-2">Discover unforgettable adventures on your next destination.</p>
+        <h2 className="text-3xl font-bold font-headline text-white">Actividades y Experiencias</h2>
+        <p className="text-white/80 mt-2">Descubre aventuras inolvidables en tu próximo destino.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {activities.map((activity, index) => (
@@ -62,4 +63,3 @@ export function ActivitiesSection() {
     </div>
   );
 }
-    

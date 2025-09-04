@@ -12,8 +12,6 @@ import { RecommendedCruises } from '@/components/recommended-cruises';
 import { useSearchParams } from 'next/navigation';
 import { SocialFeedSection } from './social-feed-section';
 import { Footer } from './footer';
-import { useTheme } from '@/contexts/theme-context';
-import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AnimatedClouds } from '@/components/animated-clouds';
@@ -25,6 +23,7 @@ import { Button } from './ui/button';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
+import ActivitySearchPage from './activity-search-page';
 
 type SearchMode = 'list' | 'map';
 
@@ -80,6 +79,7 @@ function SearchSection({ tab }: { tab?: string }) {
       case 'Hotels': return <HotelSearchPage />;
       case 'Packages': return <PackagesSearchPage />;
       case 'Cruises': return <CruiseSearchPage />;
+      case 'Activities': return <ActivitySearchPage />;
       default: return null;
     }
   }
@@ -192,7 +192,7 @@ export function HomePageContent() {
             <div className="relative z-10 flex flex-col flex-grow">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="pt-24">
-                         {tab !== 'Activities' && tab !== 'Social' && <SearchSection tab={tab} />}
+                         {tab !== 'Social' && <SearchSection tab={tab} />}
                     </div>
                 </div>
           
