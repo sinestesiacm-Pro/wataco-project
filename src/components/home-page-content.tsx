@@ -173,9 +173,22 @@ export function HomePageContent() {
     useEffect(() => {
         setTabTheme(tab);
     }, [tab, setTabTheme]);
+    
+    const getBackgroundClass = () => {
+        switch(tab) {
+            case 'Flights': return 'bg-flights-background'; 
+            case 'Hotels': return 'bg-hotels-background';
+            case 'Packages': return 'bg-packages-background';
+            case 'Cruises': return 'bg-cruises-gradient background-pan-animation';
+            case 'Activities': return 'bg-activities-background';
+            case 'Social': return 'bg-flights-background';
+            default: return 'bg-flights-background';
+        }
+    }
+
 
     return (
-        <div className="w-full flex-grow flex flex-col relative">
+        <div className={cn("w-full flex-grow flex flex-col relative", getBackgroundClass())}>
             <div className="absolute inset-0 z-0">
                 {(tab === 'Flights' || tab === 'Social') && <AnimatedClouds />}
                 {tab === 'Cruises' && <UnderwaterScene />}

@@ -58,51 +58,15 @@ export const useTheme = () => {
 
 
 export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
-    const { tabTheme } = useTheme();
     const pathname = usePathname();
-    const isPackagesPage = (pathname === '/' && tabTheme === 'Packages') || pathname.startsWith('/packages');
-
-    const getBackgroundClass = () => {
-        
-        if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
-            return "color-change-animation";
-        }
-        if (pathname.startsWith('/profile')) {
-            return "color-change-animation";
-        }
-        if (isPackagesPage) {
-            return 'bg-packages-background';
-        }
-
-        const baseAnimationClass = 'background-pan-animation';
-
-        if (pathname.startsWith('/hotels')) return 'bg-hotels-background';
-        if (pathname.startsWith('/cruises')) return cn('bg-cruises-gradient', baseAnimationClass);
-        if (pathname.startsWith('/activities')) return 'bg-activities-background';
-        if (pathname.startsWith('/flights')) return 'bg-flights-background';
-        
-        if (pathname === '/') {
-            switch(tabTheme) {
-                case 'Flights': return 'bg-flights-background'; 
-                case 'Hotels': return 'bg-hotels-background';
-                case 'Packages': return 'bg-packages-background';
-                case 'Cruises': return cn('bg-cruises-gradient', baseAnimationClass);
-                case 'Activities': return 'bg-activities-background';
-                case 'Social': return 'bg-flights-background';
-                default: return 'bg-flights-background';
-            }
-        }
-        
-        return 'bg-background';
-    }
+    
+    // This wrapper now only handles the main layout structure, 
+    // background logic is moved to HomePageContent for robustness.
+    const isSpecialPage = pathname.startsWith('/login') || pathname.startsWith('/signup') || pathname.startsWith('/profile');
 
     return (
-        <div className={cn('flex flex-col min-h-dvh', getBackgroundClass())}>
+        <div className={cn('flex flex-col min-h-dvh', isSpecialPage && 'color-change-animation')}>
             {children}
         </div>
     )
 }
-
-    
-
-    
