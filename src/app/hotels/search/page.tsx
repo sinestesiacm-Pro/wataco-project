@@ -17,6 +17,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import HotelSearchPage from "@/components/hotel-search-page";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 
 type HotelFiltersState = {
   priceRange: number[];
@@ -251,3 +252,5 @@ export default function HotelSearchPageWrapper() {
     </Suspense>
   )
 }
+
+    
