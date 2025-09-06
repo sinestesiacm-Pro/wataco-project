@@ -2,10 +2,10 @@
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-const BeOnTripLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
+const BOnTravelLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
   <Image
-    src="https://i.ibb.co/HS47tyK/Logo-moderno-ORVIAN-su-fondo-blu.png"
-    alt="ORVIAN Logo"
+    src="https://i.ibb.co/ZsRBXXr/Chat-GPT-Image-6-set-2025-21-28-17.png"
+    alt="B on travel Logo"
     width={width}
     height={height}
     className={cn(className)}
@@ -24,7 +24,7 @@ const GoogleLogo = (props: React.ComponentProps<'svg'>) => (
 
 
 export const Icons = {
-  logo: BeOnTripLogo,
-  icon: BeOnTripLogo,
+  logo: BOnTravelLogo,
+  icon: BOnTravelLogo,
   google: GoogleLogo,
 };

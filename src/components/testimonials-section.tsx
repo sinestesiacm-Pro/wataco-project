@@ -15,7 +15,7 @@ const testimonials = [
     avatar: 'https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc1MjE1NjYyOXww&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'woman portrait',
     rating: 5,
-    text: 'An unforgettable experience! BE ON TRIP took care of everything. The flight was comfortable and the hotel exceeded our expectations. I will definitely book with them again!',
+    text: 'An unforgettable experience! B on travel took care of everything. The flight was comfortable and the hotel exceeded our expectations. I will definitely book with them again!',
   },
   {
     name: 'Carlos Rodríguez',

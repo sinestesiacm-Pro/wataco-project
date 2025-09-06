@@ -9,8 +9,8 @@ import { BottomNavbar } from '@/components/bottom-navbar';
 import { ThemeProvider, ThemeWrapper } from '@/contexts/theme-context';
 
 export const metadata: Metadata = {
-  title: 'ORVIAN',
-  description: 'ORVIAN - Your global travel platform to discover the world.',
+  title: 'B on travel',
+  description: 'B on travel - Your global travel platform to discover the world.',
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="icon" href="https://i.ibb.co/HS47tyK/Logo-moderno-ORVIAN-su-fondo-blu.png" type="image/png" />
+        <link rel="icon" href="https://i.ibb.co/ZsRBXXr/Chat-GPT-Image-6-set-2025-21-28-17.png" type="image/png" />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>

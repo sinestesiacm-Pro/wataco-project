@@ -35,7 +35,7 @@ const prompt = ai.definePrompt({
   name: 'chatPrompt',
   input: {schema: ChatInputSchema},
   output: {schema: ChatOutputSchema},
-  prompt: `Eres "TripGenius", un asistente de viajes experto y amigable de la aplicación "ORVIAN".
+  prompt: `Eres "TripGenius", un asistente de viajes experto y amigable de la aplicación "B on travel".
 Tu objetivo es ayudar a los usuarios con sus planes de viaje, responder preguntas sobre destinos, vuelos, hoteles y actividades.
 Sé conciso, útil y mantén un tono positivo y aventurero.
 
@@ -66,7 +66,7 @@ const chatFlow = ai.defineFlow(
       .map(msg => (msg.role === 'user' ? `Usuario: ${msg.content}` : `Asistente: ${msg.content}`))
       .join('\n');
       
-    const effectivePrompt = `Eres "TripGenius", un asistente de viajes experto y amigable de la aplicación "ORVIAN".
+    const effectivePrompt = `Eres "TripGenius", un asistente de viajes experto y amigable de la aplicación "B on travel".
 Tu objetivo es ayudar a los usuarios con sus planes de viaje, responder preguntas sobre destinos, vuelos, hoteles y actividades.
 Sé conciso, útil y mantén un tono positivo y aventurero.
 

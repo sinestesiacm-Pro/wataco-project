@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -56,7 +57,7 @@ const initialFeedItems: SocialPost[] = [
     user: { name: 'Ana M.', avatar: 'https://images.pexels.com/photos/3772506/pexels-photo-3772506.jpeg?auto=compress&cs=tinysrgb&w=100' },
     image: 'https://images.pexels.com/photos/1796715/pexels-photo-1796715.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     hint: 'kyoto japan',
-    caption: 'Encontré el hotel perfecto en el corazón de Tokio gracias a ORVIAN. ¡Las vistas son espectaculares!',
+    caption: 'Encontré el hotel perfecto en el corazón de Tokio gracias a B on travel. ¡Las vistas son espectaculares!',
     likes: 98,
     comments: [],
     isLiked: false,

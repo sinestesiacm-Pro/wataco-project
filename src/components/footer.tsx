@@ -12,7 +12,7 @@ export function Footer() {
             <Icons.logo width={100} height={40} />
           </div>
           <div className="text-center text-sm text-white">
-            © {new Date().getFullYear()} ORVIAN. All rights reserved.
+            © {new Date().getFullYear()} B on travel. All rights reserved.
           </div>
           <div className="flex items-center justify-center md:justify-end space-x-6">
             <Link href="#" className="text-white hover:text-primary transition-colors">

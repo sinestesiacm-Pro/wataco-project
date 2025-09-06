@@ -56,7 +56,7 @@ export function Header() {
     if (path.startsWith('/flights/checkout')) return 'Finalize Purchase';
     if (/^\/hotels\/.*\/offers/.test(pathname)) return 'Select Room';
     
-    return 'ORVIAN';
+    return 'B on travel';
   }
 
   const currentTitle = getTitleFromPath(pathname);
