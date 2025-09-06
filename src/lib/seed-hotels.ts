@@ -10,12 +10,12 @@ const hotelsData = [
       ubicacion: 'Bogotá, Colombia',
       descripcion: 'Hotel de diseño moderno y único en el corazón de la ciudad.',
       media: [
-        "https://www.clickclackhotel.com/media/uploads/galeriahoteles/hoteles_bogota.jpg?q=pr:sharp/rs:fill/w:960/h:1000/g:ce/f:jpg",
-        "https://www.clickclackhotel.com/media/uploads/info_landing/PRODUCTOS_CUIDADO_-74.jpg?q=pr:sharp/rs:fill/w:1200/h:800/f:jpg",
-        "https://www.clickclackhotel.com/media/uploads/galeriahabitaciones/Portada.jpg?q=pr:sharp/rs:fill/w:1920/h:1000/g:ce/f:jpg",
-        "https://www.clickclackhotel.com/media/uploads/galeriahabitaciones/l5.jpg?q=pr:sharp/rs:fill/w:1920/h:1000/f:jpg",
-        "https://www.clickclackhotel.com/media/uploads/galeriahabitaciones/portadal.jpg?q=pr:sharp/rs:fill/w:1920/h:1000/g:ce/f:jpg",
-        "https://cf.bstatic.com/xdata/images/hotel/max1024x768/268205097.jpg?k=adda31e2de3d98f1a16d2bf686e6db20d1c3bb24b751201d425296527c428c18&o=&hp=1"
+        "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+        "https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=800",
+        "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800",
+        "https://images.unsplash.com/photo-1590490359853-39518d05c5fd?w=800",
+        "https://images.unsplash.com/photo-1549294413-26f195200c16?w=800"
       ],
       rating: 5,
       price: 280
@@ -25,12 +25,12 @@ const hotelsData = [
       ubicacion: 'Cartagena, Colombia',
       descripcion: 'Lujo y historia en la ciudad amurallada.',
       media: [
-        "https://live.staticflickr.com/590/33257495121_2cb15ce3a0_b.jpg",
-        "https://image-tc.galaxy.tf/wiwebp-efi4bkfvzvb3h5hzbu4ld4lop/hotel-charleston-santa-teresa-cartagena-aerial-view.webp?width=1920",
-        "https://image-tc.galaxy.tf/wiwebp-4qzziexjtttbeiuklh0b7wyf2/piscina-en-la-azotea-hotel-charleston-santa-teresa-cartagena.webp?width=1920",
-        "https://image-tc.galaxy.tf/wijpeg-3zwht0g3k68140bt7dot77uoy/spa-jacuzzi-hotel-charleston-santa-teresa-cartagena_standard.jpg?width=2000&crop=110%2C0%2C1780%2C1335",
-        "https://image-tc.galaxy.tf/wijpeg-3bv4d6k0npormxm79rk2u1x5e/grand-suite-city-view-charleston-santa-teresa-cartagena-01_standard.jpg?width=800&crop=121%2C0%2C1759%2C1319",
-        "https://image-tc.galaxy.tf/wijpeg-xkzv7vouldhq3fpeaay07iax/pasillo-restaurante-harry-sasson-cartagena-santa-teresa_standard.jpg?width=1140&crop=106%2C0%2C1709%2C1282"
+        "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg",
+        "https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg",
+        "https://images.pexels.com/photos/161758/pexels-photo-161758.jpeg",
+        "https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg",
+        "https://images.pexels.com/photos/2096983/pexels-photo-2096983.jpeg",
+        "https://images.pexels.com/photos/2292919/pexels-photo-2292919.jpeg"
       ],
       rating: 5,
       price: 320

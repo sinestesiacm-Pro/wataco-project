@@ -31,7 +31,7 @@ const HotelCard = React.memo(function HotelCard({ hotel }: { hotel: Hotel }) {
             <div className="relative w-full h-48 flex-shrink-0">
                  <Carousel className="w-full h-full">
                     <CarouselContent>
-                        {(hotel.media || []).map((photo, index) => (
+                        {(hotel.media && hotel.media.length > 0) ? hotel.media.map((photo, index) => (
                             <CarouselItem key={index}>
                                  <div className="relative h-48 w-full">
                                     <Image 
@@ -44,7 +44,20 @@ const HotelCard = React.memo(function HotelCard({ hotel }: { hotel: Hotel }) {
                                     />
                                  </div>
                             </CarouselItem>
-                        ))}
+                        )) : (
+                           <CarouselItem>
+                                <div className="relative h-48 w-full bg-muted">
+                                    <Image 
+                                        src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800"
+                                        data-ai-hint="hotel placeholder" 
+                                        alt="Placeholder hotel image"
+                                        fill 
+                                        className="object-cover"
+                                        draggable={false}
+                                    />
+                                </div>
+                           </CarouselItem>
+                        )}
                     </CarouselContent>
                      <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                      <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
