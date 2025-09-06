@@ -80,7 +80,7 @@ export function Header() {
           
           <div className="flex-1 flex justify-start">
              <Link href="/">
-                <Icons.logo width={150} height={50} className={cn(isLight && "invert-[60%]")} />
+                <Icons.logo width={100} height={40} className={cn(isLight && "invert-[60%]")} />
              </Link>
           </div>
           
