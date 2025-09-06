@@ -26,7 +26,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="icon" href="https://i.ibb.co/ZsRBXXr/Chat-GPT-Image-6-set-2025-21-28-17.png" type="image/png" />
+        <link rel="icon" href="https://i.ibb.co/0Rxqw4bP/a-photograph-showcasing-a-clean-and-mode-WLZN1k-NRAOVyn-XGm-ke5-Q-EPpm-My-Pw-TMi-Yw0lp-AA2-IVA-remov.png" type="image/png" />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
