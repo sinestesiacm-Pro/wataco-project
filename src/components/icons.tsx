@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 const BOnTravelLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
   <Image
-    src="https://i.ibb.co/XZSYmnrH/a-photograph-displaying-a-clean-and-mode-SQWeem-WSo-O0x-Qaa6i-Z2-PQ-h4kl-XGy-RQOa2q8-KBGvx4-LA.png"
+    src="https://i.ibb.co/B2PBkQWX/c3f35c75-5e74-41f9-8a9c-718e637b5eb4-removebg-preview.png"
     alt="B on travel Logo"
     width={width}
     height={height}
