@@ -152,6 +152,28 @@
 .bg-flights-gradient {
    background: linear-gradient(135deg, hsl(205, 70%, 40%), hsl(220, 70%, 60%));
 }
+.bg-hotels-gradient {
+    position: relative;
+    overflow: hidden;
+    background-color: #1C6C63; /* Fallback color */
+}
+.bg-hotels-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    animation-name: ken-burns-animation;
+    animation-duration: 40s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
+}
 .bg-cruises-gradient {
   background: radial-gradient(circle at 10% 10%, hsla(180, 60%, 50%, 0.7), transparent 40%), radial-gradient(circle at 90% 80%, #00A3D4, #00506D 50%);
 }
@@ -705,6 +727,7 @@
     
 
     
+
 
 
 

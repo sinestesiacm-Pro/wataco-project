@@ -172,7 +172,7 @@ export function HomePageContent() {
     const getBackgroundClass = () => {
         switch(tab) {
             case 'Flights': return 'bg-flights-background'; 
-            case 'Hotels': return 'bg-hotels-background';
+            case 'Hotels': return 'bg-hotels-gradient';
             case 'Packages': return 'bg-packages-background';
             case 'Cruises': return 'bg-cruises-gradient background-pan-animation';
             case 'Activities': return 'bg-activities-background';

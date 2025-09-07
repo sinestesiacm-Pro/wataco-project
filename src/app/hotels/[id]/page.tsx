@@ -38,15 +38,14 @@ function HotelDetailPageContent({ id }: { id: string }) {
         fetchDetails();
     }, [id]);
 
-    const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, geo: { lat: number, lon: number}, destinationName: string }) => {
+    const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode: string, destinationName: string }) => {
         const params = new URLSearchParams({
-            latitude: searchData.geo.lat.toString(),
-            longitude: searchData.geo.lon.toString(),
+            cityCode: searchData.cityCode,
+            destinationName: searchData.destinationName,
             checkInDate: format(searchData.checkInDate, 'yyyy-MM-dd'),
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
-            destinationName: searchData.destinationName,
         });
         router.push(`/hotels/search?${params.toString()}`);
     };
@@ -83,7 +82,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
     };
 
   return (
-    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-gradient background-pan-animation')}>
+    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-gradient')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
             <Button asChild variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
