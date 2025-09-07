@@ -26,7 +26,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="icon" href="https://i.ibb.co/B2PBkQWX/c3f35c75-5e74-41f9-8a9c-718e637b5eb4-removebg-preview.png" type="image/png" />
+        <link rel="icon" href="https://i.ibb.co/cSZJSyx7/Generated-Image-September-07-2025-1-44-PM-removebg-preview.png" type="image/png" />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
