@@ -38,10 +38,10 @@ function HotelResultsPageContent() {
     });
 
     const cityCode = searchParams.get('cityCode') || '';
+    const destinationName = searchParams.get('destinationName') || 'tu destino';
     const checkInDate = searchParams.get('checkInDate') || '';
     const checkOutDate = searchParams.get('checkOutDate') || '';
     const adults = searchParams.get('adults') || '1';
-    const destinationName = searchParams.get('destinationName') || 'tu destino';
     
     const runSearch = useCallback(async () => {
         if (cityCode && checkInDate && checkOutDate) {
@@ -50,6 +50,7 @@ function HotelResultsPageContent() {
             setError(null);
             const result = await searchHotels({
                 cityCode: cityCode,
+                destinationName: destinationName,
                 checkInDate,
                 checkOutDate,
                 adults: parseInt(adults, 10),
@@ -64,7 +65,7 @@ function HotelResultsPageContent() {
             setError("Parámetros de búsqueda incompletos. Por favor, realiza una nueva búsqueda.");
             setLoading(false);
         }
-    }, [cityCode, checkInDate, checkOutDate, adults]);
+    }, [cityCode, checkInDate, checkOutDate, adults, destinationName]);
 
 
     useEffect(() => {
@@ -211,5 +212,3 @@ export default function HotelSearchPageWrapper() {
     </Suspense>
   )
 }
-
-    

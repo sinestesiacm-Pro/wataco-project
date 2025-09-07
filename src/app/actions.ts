@@ -176,6 +176,7 @@ export async function searchHotelDestinations(keyword: string): Promise<{ succes
 
 const hotelSearchSchema = z.object({
   cityCode: z.string().min(3).max(3),
+  destinationName: z.string().optional(),
   checkInDate: z.string(),
   checkOutDate: z.string(),
   adults: z.number().int().min(1),
@@ -185,6 +186,7 @@ const hotelSearchSchema = z.object({
 
 export async function searchHotels(params: {
   cityCode: string;
+  destinationName?: string;
   checkInDate: string;
   checkOutDate: string;
   adults: number;
@@ -250,12 +252,17 @@ export async function searchHotels(params: {
             return hotelOffer;
         });
 
-        // Correctly filter by cityCode
-        const filteredByCity = allOffers.filter(offer => 
-            offer.hotel.address.cityName.toLowerCase().includes(params.cityCode.toLowerCase()) || 
-            offer.hotel.address.countryCode.toLowerCase().includes(params.cityCode.toLowerCase()) ||
-            offer.hotel.address.lines[0].toLowerCase().includes(params.cityCode.toLowerCase())
+        // Filter by cityCode first for exact matches, then by destinationName for broader matches
+        let filteredByCity = allOffers.filter(offer => 
+            offer.hotel.address.countryCode.toLowerCase() === params.cityCode.toLowerCase()
         );
+        
+        if (filteredByCity.length === 0 && params.destinationName) {
+            const searchName = params.destinationName.split(',')[0].toLowerCase();
+             filteredByCity = allOffers.filter(offer => 
+                offer.hotel.address.cityName.toLowerCase().includes(searchName)
+             );
+        }
         
 
         if (filteredByCity.length === 0) {

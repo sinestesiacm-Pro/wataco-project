@@ -129,11 +129,11 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 
       const params = new URLSearchParams({
         cityCode: destination.iataCode,
+        destinationName: destinationQuery || destination.name,
         checkInDate: format(date.from, 'yyyy-MM-dd'),
         checkOutDate: format(date.to, 'yyyy-MM-dd'),
         adults: adults.toString(),
         children: children.toString(),
-        destinationName: destinationQuery || destination.name,
       });
       router.push(`/hotels/search?${params.toString()}`);
   }, [destination, destinationQuery, date, adults, children, router, toast]);
