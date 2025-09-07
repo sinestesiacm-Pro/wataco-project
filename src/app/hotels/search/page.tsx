@@ -18,6 +18,7 @@ import HotelSearchPage from "@/components/hotel-search-page";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { HotelLoadingAnimation } from "@/components/hotel-loading-animation";
 
 type HotelFiltersState = {
   priceRange: number[];
@@ -103,50 +104,11 @@ function HotelResultsPageContent() {
     }, [hotels, filters]);
 
 
-    const LoadingSkeleton = () => (
-       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="hidden lg:block lg:col-span-3">
-               <div className="bg-black/20 backdrop-blur-2xl border border-white/20 rounded-2xl p-4 space-y-4">
-                    <Skeleton className="h-8 w-1/2" />
-                    <Skeleton className="h-20 w-full" />
-                    <Separator className="bg-white/20"/>
-                    <Skeleton className="h-8 w-1/3" />
-                    <Skeleton className="h-32 w-full" />
-               </div>
-          </div>
-          <main className="lg:col-span-9 space-y-4">
-              {[...Array(3)].map((_, i) => (
-                <Card key={i} className="rounded-2xl overflow-hidden shadow-lg bg-black/10 backdrop-blur-xl border border-white/20 flex flex-col md:flex-row">
-                    <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4 flex-shrink-0">
-                       <Skeleton className="h-full w-full" />
-                    </div>
-                    <div className="flex flex-col flex-grow p-6 space-y-3">
-                      <Skeleton className="h-6 w-3/4" />
-                      <Skeleton className="h-4 w-1/2" />
-                      <Skeleton className="h-4 w-full" />
-                      <div className="flex-grow"></div>
-                       <div className="flex justify-between items-center pt-4">
-                           <div className="space-y-2">
-                             <Skeleton className="h-4 w-20" />
-                             <Skeleton className="h-8 w-24" />
-                           </div>
-                           <Skeleton className="h-12 w-32" />
-                       </div>
-                    </div>
-                </Card>
-              ))}
-          </main>
-      </div>
-    );
-
     if(loading) {
         return (
-          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <Collapsible className="mb-6 bg-black/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl">
-              <Skeleton className="h-12 w-1/2" />
-            </Collapsible>
-            <LoadingSkeleton />
-          </div>
+            <div className="w-full h-screen relative overflow-hidden">
+                <HotelLoadingAnimation destinationName={destinationName} />
+            </div>
         );
     }
 
