@@ -1,13 +1,14 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData, AmadeusHotel, Room } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData, AmadeusHotel, Room, CruisePackage } from '@/lib/types';
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db, HOTELBEDS_API_KEY, HOTELBEDS_SECRET } from '@/lib/firebase';
 import crypto from 'crypto';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
+import { recommendedCruises } from '@/lib/mock-cruises';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 const HOTELBEDS_API_URL = "https://api.test.hotelbeds.com";
@@ -346,7 +347,27 @@ export async function searchCruises(params: {
     return { success: false, error: 'Invalid cruise search parameters.' };
   }
 
-  return { success: false, error: "Cruise search is not available in this demo." };
+  const { destinationRegion } = validation.data;
+
+  // Simulate API call and filtering based on mock data
+  try {
+    const filteredCruises = recommendedCruises.filter(
+      (cruise) => cruise.region === destinationRegion
+    );
+
+    if (filteredCruises.length === 0) {
+      return { success: false, error: "No se encontraron cruceros para la región seleccionada." };
+    }
+    
+    // We need to add a small delay to simulate a real API call for better UX
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    return { success: true, data: { data: filteredCruises } };
+    
+  } catch (err: any) {
+    console.error('Error in searchCruises action:', err);
+    return { success: false, error: err.message || 'An unexpected error occurred while searching for cruises.' };
+  }
 }
 
 const vipActivationSchema = z.object({
@@ -398,5 +419,3 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
-
-    

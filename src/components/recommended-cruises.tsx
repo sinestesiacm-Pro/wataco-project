@@ -2,7 +2,7 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Heart, Star } from 'lucide-react';
+import { Heart, Star, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { Card } from './ui/card';
 import { recommendedCruises } from '@/lib/mock-cruises';
 import type { CruisePackage } from '@/lib/types';
@@ -43,17 +43,15 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
 );
 
 
-export function RecommendedCruises() {
+export function RecommendedCruises({ cruises = recommendedCruises }: { cruises?: CruisePackage[] }) {
   return (
     <div className="space-y-6">
       <h2 className="text-3xl font-bold font-headline text-white">Recommended Cruises</h2>
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {recommendedCruises.map((cruise, index) => (
+        {cruises.map((cruise, index) => (
           <CruiseCard key={index} cruise={cruise} />
         ))}
       </div>
     </div>
   );
 }
-
-    

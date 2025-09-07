@@ -13,8 +13,9 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { Label } from './ui/label';
-import { recommendedCruises } from '@/lib/mock-cruises';
+import { RecommendedCruises } from '@/components/recommended-cruises';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function CruiseSearchPage() {
   const [destinationRegion, setDestinationRegion] = useState('');
@@ -87,6 +88,7 @@ export default function CruiseSearchPage() {
   ];
 
   return (
+    <>
     <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -181,5 +183,35 @@ export default function CruiseSearchPage() {
             </Button>
         </form>
     </div>
+    <div className="mt-8">
+        <AnimatePresence>
+          {loading && (
+             <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                  <div className="flex flex-col items-center justify-center gap-4 text-white p-8">
+                     <Loader2 className="w-10 h-10 animate-spin" />
+                     <p className="font-semibold text-lg">Buscando los mejores cruceros para ti...</p>
+                  </div>
+              </motion.div>
+          )}
+          {cruiseData && cruiseData.data.length > 0 && (
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
+            >
+                <h2 className="text-3xl font-bold font-headline text-white">Resultados de la Búsqueda</h2>
+                <RecommendedCruises cruises={cruiseData.data} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+    </div>
+    </>
   );
 }

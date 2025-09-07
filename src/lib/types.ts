@@ -226,7 +226,7 @@ export interface CruiseOffer {
 }
 
 export interface CruiseData {
-    data: CruiseOffer[];
+    data: CruisePackage[];
 }
 
 export interface CruiseItineraryItem {
@@ -245,6 +245,7 @@ export interface CruisePackage {
   ship: string;
   duration: string;
   image: string;
+  region: string;
   videoUrl?: string;
   carouselImages: string[];
   hint: string;
