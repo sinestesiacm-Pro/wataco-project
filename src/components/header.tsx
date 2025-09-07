@@ -64,6 +64,9 @@ export function Header() {
   const isLight = pathname.startsWith('/flights/checkout');
   
   const textColor = isLight ? 'text-gray-800' : 'text-white';
+  
+  const LogoComponent = tab === 'Hotels' ? Icons.hotels : Icons.logo;
+
 
   return (
     <header 
@@ -80,7 +83,7 @@ export function Header() {
           
           <div className="flex-1 flex justify-start">
              <Link href="/">
-                <Icons.logo width={100} height={40} className={cn(isLight && "invert-[60%]")} />
+                <LogoComponent width={100} height={40} className={cn(isLight && "invert-[60%]")} />
              </Link>
           </div>
           

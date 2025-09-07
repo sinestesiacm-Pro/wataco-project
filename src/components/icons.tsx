@@ -4,13 +4,24 @@ import { cn } from '@/lib/utils';
 
 const BOnTravelLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
   <Image
-    src="https://i.ibb.co/cSZJSyx7/Generated-Image-September-07-2025-1-44-PM-removebg-preview.png"
+    src="https://i.ibb.co/B2PBkQWX/c3f35c75-5e74-41f9-8a9c-718e637b5eb4-removebg-preview.png"
     alt="B on travel Logo"
     width={width}
     height={height}
     className={cn(className)}
     priority
   />
+);
+
+const HotelsLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
+    <Image
+      src="https://i.ibb.co/S73BjP4M/Generated-Image-September-07-2025-1-53-PM-removebg-preview.png"
+      alt="B on travel Hotels Logo"
+      width={width}
+      height={height}
+      className={cn(className)}
+      priority
+    />
 );
 
 const GoogleLogo = (props: React.ComponentProps<'svg'>) => (
@@ -25,6 +36,7 @@ const GoogleLogo = (props: React.ComponentProps<'svg'>) => (
 
 export const Icons = {
   logo: BOnTravelLogo,
+  hotels: HotelsLogo,
   icon: BOnTravelLogo,
   google: GoogleLogo,
 };
