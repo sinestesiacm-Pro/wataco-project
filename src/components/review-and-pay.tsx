@@ -27,12 +27,22 @@ const formatDuration = (duration: string) => duration.replace('PT', '').replace(
 const formatTime = (dateString: string) => new Date(dateString).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
 const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('es-ES', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
 
+const getCityName = (iataCode: string, dictionaries: Dictionaries) => {
+    const locationInfo = dictionaries.locations[iataCode];
+    if (!locationInfo) return iataCode;
+    // The API might return a city code (e.g., 'YTO') which is a key in the locations dictionary,
+    // or an airport code ('YYZ') which has a city code associated.
+    const cityCode = locationInfo.cityCode;
+    return dictionaries.locations[cityCode]?.cityCode || cityCode || iataCode;
+};
+
+
 const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { title: string, itinerary: Itinerary, dictionaries: Dictionaries, onChangeClick: () => void }) => {
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
-    const originCityName = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
-    const destinationCityName = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
+    const originCityName = getCityName(firstSegment.departure.iataCode, dictionaries);
+    const destinationCityName = getCityName(lastSegment.arrival.iataCode, dictionaries);
     const airlineCode = firstSegment.carrierCode;
 
     return (

@@ -40,7 +40,12 @@ const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
                 const layoverDuration = new Date(nextSegment.departure.at).getTime() - new Date(segment.arrival.at).getTime();
                 const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
                 const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
-                const cityName = dictionaries.locations[segment.arrival.iataCode]?.cityCode;
+                
+                // Find the city name from the dictionaries using the arrival airport's IATA code.
+                const locationInfo = dictionaries.locations[segment.arrival.iataCode];
+                // The API might return a city code (e.g., 'YTO') which itself is a key in the locations dictionary.
+                // Or it might return the airport code ('YYZ') which has a city code associated with it.
+                const cityName = dictionaries.locations[locationInfo?.cityCode]?.cityCode || locationInfo?.cityCode;
 
                 return (
                      <div key={`stop-${index}`} className="text-xs text-center text-gray-600">

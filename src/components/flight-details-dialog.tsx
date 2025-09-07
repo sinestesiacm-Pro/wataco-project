@@ -38,7 +38,7 @@ const BoardingPassCard = ({ itinerary, dictionaries, title }: { itinerary: Itine
 
     const stops = itinerary.segments.length - 1;
     const stopInfo = stops === 1 
-        ? `1 escala en ${itinerary.segments[0].arrival.iataCode}`
+        ? `1 escala en ${dictionaries.locations[itinerary.segments[0].arrival.iataCode]?.cityCode || itinerary.segments[0].arrival.iataCode}`
         : stops > 1 
             ? `${stops} escalas`
             : 'Directo';
