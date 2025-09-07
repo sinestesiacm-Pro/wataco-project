@@ -27,7 +27,7 @@ function HotelOffersPageContent() {
   }
 
   return (
-    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-gradient')}>
+    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-background')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-12">
             <div>
@@ -54,7 +54,7 @@ function HotelOffersPageContent() {
 export default function HotelOffersPage() {
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-hotels-gradient">
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-hotels-background">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>

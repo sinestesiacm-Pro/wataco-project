@@ -206,7 +206,7 @@ export default function HotelSearchPageWrapper() {
             <Loader2 className="h-12 w-12 animate-spin text-white" />
         </div>
     }>
-      <div className={cn('w-full min-h-screen pt-24 pb-24 md:pb-8', 'bg-hotels-gradient')}>
+      <div className={cn('w-full min-h-screen pt-24 pb-24 md:pb-8', 'bg-hotels-background')}>
         <HotelResultsPageContent />
       </div>
     </Suspense>

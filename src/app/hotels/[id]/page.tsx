@@ -82,7 +82,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
     };
 
   return (
-    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-gradient')}>
+    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-background')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
             <Button asChild variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
@@ -107,7 +107,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
   
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-hotels-gradient">
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-hotels-background">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
