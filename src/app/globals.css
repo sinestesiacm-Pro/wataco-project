@@ -155,7 +155,6 @@
 .bg-hotels-gradient {
     position: relative;
     overflow: hidden;
-    background-color: #1C6C63; /* Fallback color */
 }
 .bg-hotels-gradient::before {
     content: '';
@@ -165,7 +164,7 @@
     right: 0;
     bottom: 0;
     z-index: -1;
-    background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070');
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1549294413-26f195200c16?q=80&w=1920&auto=format&fit=crop');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -532,7 +531,7 @@
     background-image: linear-gradient(to bottom, rgba(80, 60, 0, 0.4), rgba(30, 20, 0, 0.8)), url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=2070');
   }
   66.66%, 99.99% {
-    background-image: linear-gradient(to bottom, rgba(100, 40, 0, 0.4), rgba(40, 10, 0, 0.8)), url('https://images.unsplash.com/photo-1621204683036-7c0595a43b40?w=2070');
+    background-image: linear-gradient(to bottom, rgba(100, 40, 0, 0.4), rgba(40, 10, 0, 0.8)), url('https://images.unsplash.com/photo-1621204683036-7c02e4f92cc?w=2070');
   }
 }
 
@@ -727,6 +726,7 @@
     
 
     
+
 
 
 
