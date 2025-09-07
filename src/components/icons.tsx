@@ -46,6 +46,17 @@ const CruisesLogo = ({ width, height, className }: { width: number; height: numb
     />
 );
 
+const PackagesLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
+    <Image
+      src="https://i.ibb.co/39T4qvSX/Generated-Image-September-07-2025-2-27-PM-removebg-preview.png"
+      alt="B on travel Packages Logo"
+      width={width}
+      height={height}
+      className={cn(className)}
+      priority
+    />
+);
+
 
 const GoogleLogo = (props: React.ComponentProps<'svg'>) => (
     <svg viewBox="0 0 48 48" {...props}>
@@ -62,6 +73,7 @@ export const Icons = {
   hotels: HotelsLogo,
   flights: FlightsLogo,
   cruises: CruisesLogo,
+  packages: PackagesLogo,
   icon: BOnTravelLogo,
   google: GoogleLogo,
 };
