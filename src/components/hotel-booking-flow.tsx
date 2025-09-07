@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getFirestoreHotelDetails } from '@/app/actions';
+import { getFirestoreHotelDetails, searchHotels } from '@/app/actions';
 import { AmadeusHotel, Room, AmadeusHotelOffer } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { RoomSelectionView, SelectedRoom } from './room-selection-view';
@@ -45,6 +45,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
             if (!detailsResult.success || !detailsResult.data) {
               throw new Error(detailsResult.error || 'Could not load hotel details for mock offer.');
             }
+
             const mockOffer: AmadeusHotelOffer = {
                 type: 'hotel-offer',
                 id: hotelId,
