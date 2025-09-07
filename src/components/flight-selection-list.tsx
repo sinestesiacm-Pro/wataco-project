@@ -33,6 +33,26 @@ interface StopInfoProps {
 const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
     if (itinerary.segments.length <= 1) return null;
 
+    const getCityName = (iataCode: string) => {
+      const location = dictionaries.locations[iataCode];
+      if (!location) return iataCode;
+      
+      // If the location itself is a city, return its name (e.g., YTO is Toronto)
+      if (location.cityCode === iataCode) {
+          const cityEntry = Object.values(dictionaries.locations).find(loc => loc.cityCode === iataCode);
+           // This logic is a bit tricky. We find the first airport in that city and get its city name.
+          const matchingAirport = Object.entries(dictionaries.locations).find(([key, value]) => value.cityCode === iataCode);
+          if (matchingAirport) {
+              const airportLocation = dictionaries.locations[matchingAirport[0]];
+              return airportLocation?.cityCode ? dictionaries.locations[airportLocation.cityCode]?.cityCode || airportLocation.cityCode : iataCode;
+          }
+      }
+      
+      // If the location is an airport, return its city name
+      return dictionaries.locations[location.cityCode]?.cityCode || location.cityCode || iataCode;
+    };
+
+
     return (
         <div className="space-y-4 px-2">
             {itinerary.segments.slice(0, -1).map((segment, index) => {
@@ -41,15 +61,11 @@ const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
                 const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
                 const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
                 
-                // Find the city name from the dictionaries using the arrival airport's IATA code.
-                const locationInfo = dictionaries.locations[segment.arrival.iataCode];
-                // The API might return a city code (e.g., 'YTO') which itself is a key in the locations dictionary.
-                // Or it might return the airport code ('YYZ') which has a city code associated with it.
-                const cityName = dictionaries.locations[locationInfo?.cityCode]?.cityCode || locationInfo?.cityCode;
+                const cityName = getCityName(segment.arrival.iataCode);
 
                 return (
                      <div key={`stop-${index}`} className="text-xs text-center text-gray-600">
-                        <p>Escala en {cityName || segment.arrival.iataCode}</p>
+                        <p>Escala en {cityName}</p>
                         <p>Duración: {hours}h {minutes}m</p>
                     </div>
                 )
