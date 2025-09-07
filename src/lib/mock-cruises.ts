@@ -65,7 +65,7 @@ export const recommendedCruises: CruisePackage[] = [
     ship: 'Celebrity Apex',
     duration: '7 Nights',
     region: 'CARIBBEAN',
-    image: 'https://images.unsplash.com/photo-1589463901957-c73eb43a2328?w=500',
+    image: 'https://images.unsplash.com/photo-1706105551132-b78c2483c267?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxDYXJpYmJlYW4lMjBDZWxlYnJhdGlvbnxlbnwwfHx8fDE3NTcyNzc1MDV8MA&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'modern cruise ship',
     videoUrl: 'https://videos.pexels.com/video-files/857251/857251-hd.mp4',
     carouselImages: [
