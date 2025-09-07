@@ -65,7 +65,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
-    const flightNumber = `${firstSegment.carrierCode} ${firstSegment.number}`;
+    const airlineCode = firstSegment.carrierCode;
 
     const stops = itinerary.segments.length - 1;
     const stopInfoText = stops > 1 ? `${stops} escalas` : stops === 1 ? '1 escala' : 'Directo';
@@ -75,8 +75,18 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
           <Card className="bg-white/60 backdrop-blur-lg border border-white/20 text-gray-800 rounded-2xl shadow-lg">
             <CardContent className="p-4 space-y-4">
                 <div className="flex justify-between items-center px-2 text-sm">
-                    <p className="font-semibold">{airlineName}</p>
-                    <p className="text-gray-600 font-mono">{flightNumber}</p>
+                    <div className="flex items-center gap-2">
+                        <Image
+                            src={`https://images.kiwi.com/airlines/32/${airlineCode}.png`}
+                            alt={airlineName}
+                            width={24}
+                            height={24}
+                            className="rounded-sm bg-white/50"
+                            unoptimized
+                        />
+                        <p className="font-semibold">{airlineName}</p>
+                    </div>
+                    <p className="text-gray-600 font-mono">{firstSegment.carrierCode} {firstSegment.number}</p>
                 </div>
                 
                 <div className="flex items-center justify-around">

@@ -33,7 +33,7 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
     const originCityName = dictionaries.locations[firstSegment.departure.iataCode]?.cityCode;
     const destinationCityName = dictionaries.locations[lastSegment.arrival.iataCode]?.cityCode;
-    const airlineCode = firstSegment.carrierCode.toLowerCase();
+    const airlineCode = firstSegment.carrierCode;
 
     return (
         <Card className="bg-card text-card-foreground">
@@ -44,12 +44,12 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
             <CardContent className="space-y-4">
                 <div className="flex items-center gap-4">
                      <Image
-                        src={`https://logo.clearbit.com/${airlineCode}.com`}
+                        src={`https://images.kiwi.com/airlines/64/${airlineCode}.png`}
                         alt={airlineName}
                         width={40}
                         height={40}
                         className="rounded-full bg-white p-1 shadow-md"
-                        onError={(e) => { e.currentTarget.src = `https://images.kiwi.com/airlines/64/${firstSegment.carrierCode}.png` }}
+                        unoptimized
                     />
                     <div>
                         <p className="font-semibold">{formatDate(firstSegment.departure.at)}</p>

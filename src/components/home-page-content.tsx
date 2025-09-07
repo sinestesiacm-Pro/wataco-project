@@ -113,15 +113,15 @@ const PartnersGrid = ({ title, subtitle, partners, partnerType }: { title: strin
     <div className="py-16 text-center">
         <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">{title}</h2>
         <p className="text-lg text-white/80 mt-2 drop-shadow-lg">{subtitle}</p>
-        <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto">
+        <div className="mt-8 grid grid-cols-3 md:grid-cols-6 gap-4 max-w-4xl mx-auto">
             {partners.map(partner => (
-                <div key={partner.name} className="bg-white rounded-xl p-4 flex items-center justify-center aspect-square transition-all duration-300 hover:scale-110 hover:shadow-2xl">
+                <div key={partner.name} className="bg-white/80 backdrop-blur-sm rounded-xl p-4 flex items-center justify-center aspect-square transition-all duration-300 hover:scale-110 hover:shadow-2xl">
                     <Image
                         src={partnerType === 'airline' ? `https://images.kiwi.com/airlines/64/${partner.code}.png` : `https://logo.clearbit.com/${partner.domain}`}
                         alt={partner.name}
-                        width={100}
-                        height={60}
-                        className="object-contain w-auto"
+                        width={64}
+                        height={64}
+                        className="object-contain w-auto h-auto max-w-full max-h-full"
                         unoptimized={partnerType === 'airline'}
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
