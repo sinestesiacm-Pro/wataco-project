@@ -7,6 +7,7 @@ import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db, HOTELBEDS_API_KEY, HOTELBEDS_SECRET } from '@/lib/firebase';
 import crypto from 'crypto';
+import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 const HOTELBEDS_API_URL = "https://api.test.hotelbeds.com";
@@ -197,91 +198,23 @@ export async function searchHotels(params: {
         return { success: false, error: 'Invalid hotel search parameters.' };
     }
 
-    if (!HOTELBEDS_API_KEY || !HOTELBEDS_SECRET) {
-      return { success: false, error: "La API de Hotelbeds no está configurada. Por favor, añade las credenciales." };
-    }
-
-    const { latitude, longitude, checkInDate, checkOutDate, adults } = validation.data;
-    
-    // Hotelbeds authentication and request signature
-    const signature = crypto.createHash('sha256').update(HOTELBEDS_API_KEY + HOTELBEDS_SECRET + Math.floor(Date.now() / 1000)).digest('hex');
-    const headers = {
-        'Api-key': HOTELBEDS_API_KEY,
-        'X-Signature': signature,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Accept-Encoding': 'gzip'
-    };
-
     try {
-        const availabilityRequestBody = {
-            "stay": {
-                "checkIn": checkInDate,
-                "checkOut": checkOutDate
-            },
-            "occupancies": [{
-                "rooms": 1,
-                "adults": adults,
-                "children": 0
-            }],
-            "geolocation": {
-                "latitude": latitude,
-                "longitude": longitude,
-                "radius": 20, // Search within a 20km radius
-                "unit": "km"
-            }
-        };
+        // Simulating a search by filtering mock data.
+        // In a real app, this would be an API call to Hotelbeds or another provider.
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
 
-        const availabilityResponse = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(availabilityRequestBody)
-        });
-
-        if (!availabilityResponse.ok) {
-            const errorBody = await availabilityResponse.json();
-            console.error('Hotelbeds Availability API Error:', errorBody);
-            return { success: false, error: `Error fetching hotel offers from Hotelbeds: ${errorBody.error?.message || availabilityResponse.statusText}` };
-        }
-
-        const availabilityData = await availabilityResponse.json();
-        
-        if (!availabilityData.hotels || !availabilityData.hotels.hotels || availabilityData.hotels.hotels.length === 0) {
-            return { success: false, error: "No se encontraron hoteles disponibles para la ubicación y fechas seleccionadas." };
-        }
-
-        // This is a simplified mapping. A real implementation would be more robust.
-        const offers: AmadeusHotelOffer[] = (availabilityData.hotels.hotels).map((hotel: any) => ({
-            type: 'hotel-offer',
-            id: `${hotel.code}`,
-            hotel: {
-                hotelId: `${hotel.code}`,
-                name: hotel.name,
-                rating: hotel.categoryCode.replace('EST', ''),
-                address: {
-                    cityName: hotel.destinationName,
-                    countryCode: hotel.countryCode,
-                    lines: [hotel.address?.street],
-                    postalCode: hotel.postalCode
-                },
-                media: hotel.images?.map((img: any) => ({ uri: `http://photos.hotelbeds.com/giata/${img.path}` })) || [],
-            },
-            available: true,
-            offers: hotel.rooms.map((room: any) => ({
-                id: room.code,
-                price: {
-                    currency: hotel.currency,
-                    total: room.rates[0].net,
-                    base: room.rates[0].net,
-                },
-                room: {
-                    type: room.name,
-                    description: {
-                        text: room.name
-                    }
-                }
+        const offers = MOCK_HOTELS_DATA.map(offer => ({
+            ...offer,
+            offers: offer.offers.map(o => ({
+                ...o,
+                checkInDate: params.checkInDate,
+                checkOutDate: params.checkOutDate,
             }))
         }));
+
+        if (offers.length === 0) {
+            return { success: false, error: "No se encontraron hoteles disponibles para la ubicación y fechas seleccionadas." };
+        }
         
         return { success: true, data: offers };
 
