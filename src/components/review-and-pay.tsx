@@ -13,6 +13,9 @@ import { Label } from './ui/label';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
+import { cn } from '@/lib/utils';
+import React from 'react';
 
 interface ReviewAndPayProps {
     outboundFlight: FlightOffer;
@@ -28,13 +31,42 @@ const formatTime = (dateString: string) => new Date(dateString).toLocaleTimeStri
 const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('es-ES', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
 
 const getCityName = (iataCode: string, dictionaries: Dictionaries) => {
-    const locationInfo = dictionaries.locations[iataCode];
-    if (!locationInfo) return iataCode;
-    // The API might return a city code (e.g., 'YTO') which is a key in the locations dictionary,
-    // or an airport code ('YYZ') which has a city code associated.
-    const cityCode = locationInfo.cityCode;
-    return dictionaries.locations[cityCode]?.cityCode || cityCode || iataCode;
+    const location = dictionaries.locations[iataCode];
+    if (!location) return iataCode;
+    
+    const cityLocation = dictionaries.locations[location.cityCode];
+    return cityLocation?.cityCode || location.cityCode || iataCode;
 };
+
+const StopInfo = ({ itinerary, dictionaries }: { itinerary: Itinerary, dictionaries: Dictionaries }) => {
+    if (itinerary.segments.length <= 1) return null;
+
+    const getStopCityName = (iataCode: string) => {
+        const location = dictionaries.locations[iataCode];
+        if (!location) return iataCode;
+        return dictionaries.locations[location.cityCode]?.cityCode || location.cityCode || iataCode;
+    };
+
+    return (
+        <div className="space-y-4 px-2 mt-4">
+            {itinerary.segments.slice(0, -1).map((segment, index) => {
+                const nextSegment = itinerary.segments[index + 1];
+                const layoverDuration = new Date(nextSegment.departure.at).getTime() - new Date(segment.arrival.at).getTime();
+                const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
+                const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
+                
+                const cityName = getStopCityName(segment.arrival.iataCode);
+
+                return (
+                     <div key={`stop-${index}`} className="text-xs text-center text-gray-600">
+                        <p className="font-semibold">Escala en {cityName}</p>
+                        <p>Duración: {hours}h {minutes}m</p>
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
 
 
 const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { title: string, itinerary: Itinerary, dictionaries: Dictionaries, onChangeClick: () => void }) => {
@@ -44,8 +76,10 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
     const originCityName = getCityName(firstSegment.departure.iataCode, dictionaries);
     const destinationCityName = getCityName(lastSegment.arrival.iataCode, dictionaries);
     const airlineCode = firstSegment.carrierCode;
+    const stops = itinerary.segments.length - 1;
 
     return (
+      <Collapsible asChild>
         <Card className="bg-card text-card-foreground">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
                 <CardTitle className="text-xl font-headline text-card-foreground">{title}</CardTitle>
@@ -72,21 +106,29 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
                         <p className="font-semibold text-card-foreground">{firstSegment.departure.iataCode}</p>
                         <p className="text-xs text-muted-foreground truncate">{originCityName}</p>
                     </div>
-                    <div className="flex-grow flex flex-col items-center text-muted-foreground px-4">
-                        <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
-                        <div className="w-full h-px bg-border relative my-1">
-                           <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-card-foreground p-0.5 rounded-full"/>
-                        </div>
-                         <p className="text-xs">{itinerary.segments.length > 1 ? `${itinerary.segments.length - 1} escala(s)` : 'Directo'}</p>
-                    </div>
+
+                    <CollapsibleTrigger asChild>
+                        <button className={cn("flex-grow flex flex-col items-center text-muted-foreground px-4", stops === 0 && "pointer-events-none")}>
+                            <p className="text-xs font-semibold">{formatDuration(itinerary.duration)}</p>
+                            <div className="w-full h-px bg-border relative my-1">
+                               <Plane className="w-4 h-4 absolute right-1/2 translate-x-1/2 -translate-y-1/2 bg-card text-card-foreground p-0.5 rounded-full"/>
+                            </div>
+                             <p className="text-xs">{stops > 1 ? `${stops} escalas` : stops === 1 ? '1 escala' : 'Directo'}</p>
+                        </button>
+                    </CollapsibleTrigger>
+                    
                      <div className="text-right">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-card-foreground">{lastSegment.arrival.iataCode}</p>
                         <p className="text-xs text-muted-foreground truncate">{destinationCityName}</p>
                     </div>
                 </div>
+                <CollapsibleContent>
+                    <StopInfo itinerary={itinerary} dictionaries={dictionaries} />
+                </CollapsibleContent>
             </CardContent>
         </Card>
+     </Collapsible>
     );
 };
 
@@ -238,3 +280,5 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
         </div>
     );
 }
+
+    
