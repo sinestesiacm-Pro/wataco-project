@@ -199,15 +199,13 @@ export async function searchHotels(params: {
 
     try {
         const hotelsCollection = collection(db, 'hoteles');
-        const q = query(hotelsCollection, where("ubicacion", "array-contains", params.cityCode));
-
         const hotelSnapshot = await getDocs(hotelsCollection);
 
         if (hotelSnapshot.empty) {
             return { success: false, error: "No se encontraron hoteles para el destino seleccionado. Intenta con otro destino o asegúrate de que los datos de prueba han sido cargados." };
         }
 
-        const offers: AmadeusHotelOffer[] = hotelSnapshot.docs.map(doc => {
+        const allOffers: AmadeusHotelOffer[] = hotelSnapshot.docs.map(doc => {
             const data = doc.data();
             const hotelOffer: AmadeusHotelOffer = {
                 type: 'hotel-offer',
@@ -252,10 +250,13 @@ export async function searchHotels(params: {
             return hotelOffer;
         });
 
-        const filteredByCity = offers.filter(offer => 
+        // Correctly filter by cityCode
+        const filteredByCity = allOffers.filter(offer => 
             offer.hotel.address.cityName.toLowerCase().includes(params.cityCode.toLowerCase()) || 
-            offer.hotel.address.countryCode.toLowerCase().includes(params.cityCode.toLowerCase())
+            offer.hotel.address.countryCode.toLowerCase().includes(params.cityCode.toLowerCase()) ||
+            offer.hotel.address.lines[0].toLowerCase().includes(params.cityCode.toLowerCase())
         );
+        
 
         if (filteredByCity.length === 0) {
              return { success: false, error: "No se encontraron hoteles para el código de ciudad especificado. Prueba con un destino diferente." };
