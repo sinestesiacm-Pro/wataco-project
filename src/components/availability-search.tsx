@@ -61,7 +61,7 @@ const SuggestionsList = React.memo(function SuggestionsList({
 
 
 interface AvailabilitySearchProps {
-    onSearch: (data: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, geo: { lat: number, lon: number}, destinationName: string }) => void;
+    onSearch: (data: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode: string, destinationName: string }) => void;
     initialData: {
         checkInDate: Date;
         checkOutDate: Date;
@@ -120,13 +120,13 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
     }, []);
 
     const handleSearchClick = () => {
-        if (date?.from && date?.to && destination?.geoCode) {
+        if (date?.from && date?.to && destination?.iataCode) {
             onSearch({
                 checkInDate: date.from,
                 checkOutDate: date.to,
                 adults,
                 children,
-                geo: { lat: destination.geoCode.latitude, lon: destination.geoCode.longitude },
+                cityCode: destination.iataCode,
                 destinationName: destinationQuery
             });
         }

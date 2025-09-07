@@ -174,8 +174,7 @@ export async function searchHotelDestinations(keyword: string): Promise<{ succes
 }
 
 const hotelSearchSchema = z.object({
-  latitude: z.number(),
-  longitude: z.number(),
+  cityCode: z.string().min(3).max(3),
   checkInDate: z.string(),
   checkOutDate: z.string(),
   adults: z.number().int().min(1),
@@ -184,8 +183,7 @@ const hotelSearchSchema = z.object({
 });
 
 export async function searchHotels(params: {
-  latitude: number;
-  longitude: number;
+  cityCode: string;
   checkInDate: string;
   checkOutDate: string;
   adults: number;
@@ -202,9 +200,8 @@ export async function searchHotels(params: {
       return { success: false, error: "La API de Hotelbeds no está configurada. Por favor, añade las credenciales." };
     }
 
-    const { latitude, longitude, checkInDate, checkOutDate, adults } = validation.data;
+    const { cityCode, checkInDate, checkOutDate, adults } = validation.data;
     
-    // Hotelbeds authentication and request signature
     const signature = crypto.createHash('sha256').update(HOTELBEDS_API_KEY + HOTELBEDS_SECRET + Math.floor(Date.now() / 1000)).digest('hex');
     const headers = {
         'Api-key': HOTELBEDS_API_KEY,
@@ -225,11 +222,8 @@ export async function searchHotels(params: {
                 "adults": adults,
                 "children": 0
             }],
-            "geolocation": {
-                "latitude": latitude,
-                "longitude": longitude,
-                "radius": 20,
-                "unit": "km"
+            "destination": {
+                "code": cityCode
             }
         };
 

@@ -38,21 +38,19 @@ function HotelResultsPageContent() {
       amenities: [],
     });
 
-    const latitude = searchParams.get('latitude');
-    const longitude = searchParams.get('longitude');
+    const cityCode = searchParams.get('cityCode') || '';
     const checkInDate = searchParams.get('checkInDate') || '';
     const checkOutDate = searchParams.get('checkOutDate') || '';
     const adults = searchParams.get('adults') || '1';
     const destinationName = searchParams.get('destinationName') || 'tu destino';
     
     const runSearch = useCallback(async () => {
-        if (latitude && longitude && checkInDate && checkOutDate) {
+        if (cityCode && checkInDate && checkOutDate) {
             setLoading(true);
             setHotels(null);
             setError(null);
             const result = await searchHotels({
-                latitude: parseFloat(latitude),
-                longitude: parseFloat(longitude),
+                cityCode: cityCode,
                 checkInDate,
                 checkOutDate,
                 adults: parseInt(adults, 10),
@@ -67,7 +65,7 @@ function HotelResultsPageContent() {
             setError("Parámetros de búsqueda incompletos. Por favor, realiza una nueva búsqueda.");
             setLoading(false);
         }
-    }, [latitude, longitude, checkInDate, checkOutDate, adults]);
+    }, [cityCode, checkInDate, checkOutDate, adults]);
 
 
     useEffect(() => {
@@ -150,7 +148,7 @@ function HotelResultsPageContent() {
             </Collapsible>
         
         <div className="flex justify-end items-center mb-6">
-              <AITravelTips destination={destinationName} destinationName={destinationName} />
+              <AITravelTips destination={cityCode} destinationName={destinationName} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

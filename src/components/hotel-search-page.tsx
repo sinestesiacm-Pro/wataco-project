@@ -118,7 +118,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 
   const handleFormSubmit = useCallback((e: React.FormEvent) => {
       e.preventDefault();
-      if (!destination?.geoCode || !date?.from || !date?.to) {
+      if (!destination?.iataCode || !date?.from || !date?.to) {
         toast({
             title: 'Información Faltante',
             description: 'Por favor, selecciona un destino de la lista y las fechas.',
@@ -128,8 +128,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
       }
 
       const params = new URLSearchParams({
-        latitude: destination.geoCode.latitude.toString(),
-        longitude: destination.geoCode.longitude.toString(),
+        cityCode: destination.iataCode,
         checkInDate: format(date.from, 'yyyy-MM-dd'),
         checkOutDate: format(date.to, 'yyyy-MM-dd'),
         adults: adults.toString(),
