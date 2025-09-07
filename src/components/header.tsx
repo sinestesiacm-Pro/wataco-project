@@ -65,7 +65,12 @@ export function Header() {
   
   const textColor = isLight ? 'text-gray-800' : 'text-white';
   
-  const LogoComponent = tab === 'Hotels' ? Icons.hotels : Icons.logo;
+  let LogoComponent = Icons.logo;
+  if (tab === 'Hotels') {
+      LogoComponent = Icons.hotels;
+  } else if (tab === 'Flights') {
+      LogoComponent = Icons.flights;
+  }
 
 
   return (
