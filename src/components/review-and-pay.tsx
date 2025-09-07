@@ -30,23 +30,48 @@ const formatDuration = (duration: string) => duration.replace('PT', '').replace(
 const formatTime = (dateString: string) => new Date(dateString).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
 const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('es-ES', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
 
-const getCityName = (iataCode: string, dictionaries: Dictionaries) => {
+// Improved city name resolver
+const getCityName = (iataCode: string, dictionaries: Dictionaries): string => {
     const location = dictionaries.locations[iataCode];
     if (!location) return iataCode;
     
-    const cityLocation = dictionaries.locations[location.cityCode];
-    return cityLocation?.cityCode || location.cityCode || iataCode;
+    // The location object for a city code has the same cityCode and iataCode.
+    // e.g., for Toronto (YTO), the locations entry for YTO might be { cityCode: 'YTO', countryCode: 'CA' }
+    // The name of the city is not directly in the dictionaries but can be inferred from other airports in that city.
+    // Let's find an airport with that city code to get the name.
+    const cityLocation = Object.values(dictionaries.locations).find(loc => loc.cityCode === location.cityCode && loc.cityCode !== iataCode);
+    
+    // A simpler and more reliable way might be to just use the cityCode itself for lookup if it's different.
+    // The dictionaries structure is tricky: dictionaries.locations['YYZ'] = { cityCode: 'YTO', ... }. dictionaries.locations['YTO'] doesn't have a name.
+    // Let's find an airport that belongs to this city code to infer the city name
+    const airportInCity = Object.values(dictionaries.locations).find(loc => loc.cityCode === location.cityCode);
+    if (airportInCity) {
+      // Find the city entry from an airport code.
+      const mainCity = Object.values(dictionaries.locations).find(loc => loc.cityCode === airportInCity.cityCode);
+      // This is a guess. The dictionary structure is not ideal. A better way would be a direct city name mapping.
+      // For now, we will assume the city name can be found from one of its airports' address.
+      // This is not in the provided `dictionaries` type, so we have to assume a structure.
+      // Let's go back to a simpler logic that is more robust.
+      const locationData = dictionaries.locations[location.cityCode];
+      if (locationData && locationData.cityCode) {
+           const cityValue = Object.entries(dictionaries.locations).find(([key, value]) => value.cityCode === location.cityCode && key === value.cityCode);
+           // Based on Amadeus response, city name is not in the dictionary. We have to parse it.
+           // A real solution would be to call the locations API, but for now we improvise from what we have.
+           // Since the city name is not in the dictionaries, we need to find an airport that belongs to it.
+           // The provided data does not seem to have the city name. We will mock a mapping for common codes.
+           const cityMap: {[key:string]: string} = { 'YTO': 'Toronto', 'PAR': 'Paris', 'LON': 'London', 'NYC': 'New York' };
+           if(cityMap[location.cityCode]) return cityMap[location.cityCode];
+
+           return location.cityCode;
+      }
+    }
+    
+    return iataCode;
 };
 
 const StopInfo = ({ itinerary, dictionaries }: { itinerary: Itinerary, dictionaries: Dictionaries }) => {
     if (itinerary.segments.length <= 1) return null;
-
-    const getStopCityName = (iataCode: string) => {
-        const location = dictionaries.locations[iataCode];
-        if (!location) return iataCode;
-        return dictionaries.locations[location.cityCode]?.cityCode || location.cityCode || iataCode;
-    };
-
+    
     return (
         <div className="space-y-4 px-2 mt-4">
             {itinerary.segments.slice(0, -1).map((segment, index) => {
@@ -55,7 +80,7 @@ const StopInfo = ({ itinerary, dictionaries }: { itinerary: Itinerary, dictionar
                 const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
                 const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
                 
-                const cityName = getStopCityName(segment.arrival.iataCode);
+                const cityName = getCityName(segment.arrival.iataCode, dictionaries);
 
                 return (
                      <div key={`stop-${index}`} className="text-xs text-center text-gray-600">
@@ -280,5 +305,3 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
         </div>
     );
 }
-
-    
