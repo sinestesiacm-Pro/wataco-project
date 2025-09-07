@@ -36,7 +36,7 @@ export const recommendedCruises: CruisePackage[] = [
     ship: 'National Geographic Quest',
     duration: '8 Nights',
     region: 'ALASKA',
-    image: 'https://images.unsplash.com/photo-1527022206739-2c7edca55829?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YWxhc2thJTIwZ2xhY2llcnxlbnwwfHx8fDE3NTQ1NTY2MTF8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1527022206739-2c7edca55829?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YWxhc2thJTIwZ2xhY2llcnxlbnwwfHx8fDE3NTQ1NTY2MTF8MA&ixlib-rb-4.1.0&q=80&w=1080',
     hint: 'alaska glacier',
     videoUrl: 'https://videos.pexels.com/video-files/3209828/3209828-hd.mp4',
     carouselImages: [
@@ -65,7 +65,7 @@ export const recommendedCruises: CruisePackage[] = [
     ship: 'Celebrity Apex',
     duration: '7 Nights',
     region: 'CARIBBEAN',
-    image: 'https://images.unsplash.com/photo-1706105551132-b78c2483c267?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxDYXJpYmJlYW4lMjBDZWxlYnJhdGlvbnxlbnwwfHx8fDE3NTcyNzc1MDV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1654241935439-71fba502eff8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjYXJpYmUlMjB8ZW58MHx8fHwxNzU3Mjc3NTkwfDA&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'modern cruise ship',
     videoUrl: 'https://videos.pexels.com/video-files/857251/857251-hd.mp4',
     carouselImages: [
