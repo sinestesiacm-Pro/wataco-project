@@ -40,10 +40,11 @@ const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
                 const layoverDuration = new Date(nextSegment.departure.at).getTime() - new Date(segment.arrival.at).getTime();
                 const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
                 const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
-                
+                const cityName = dictionaries.locations[segment.arrival.iataCode]?.cityCode;
+
                 return (
                      <div key={`stop-${index}`} className="text-xs text-center text-gray-600">
-                        <p>Escala en {segment.arrival.iataCode} ({dictionaries.locations[segment.arrival.iataCode]?.cityCode})</p>
+                        <p>Escala en {cityName || segment.arrival.iataCode}</p>
                         <p>Duración: {hours}h {minutes}m</p>
                     </div>
                 )
