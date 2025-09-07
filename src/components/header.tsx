@@ -70,6 +70,8 @@ export function Header() {
       LogoComponent = Icons.hotels;
   } else if (tab === 'Flights') {
       LogoComponent = Icons.flights;
+  } else if (tab === 'Cruises') {
+      LogoComponent = Icons.cruises;
   }
 
 
