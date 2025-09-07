@@ -196,95 +196,71 @@ export async function searchHotels(params: {
         return { success: false, error: 'Invalid hotel search parameters.' };
     }
 
-    if (!HOTELBEDS_API_KEY || !HOTELBEDS_SECRET) {
-      return { success: false, error: "La API de Hotelbeds no está configurada. Por favor, añade las credenciales." };
-    }
-
-    const { cityCode, checkInDate, checkOutDate, adults } = validation.data;
-    
-    const signature = crypto.createHash('sha256').update(HOTELBEDS_API_KEY + HOTELBEDS_SECRET + Math.floor(Date.now() / 1000)).digest('hex');
-    const headers = {
-        'Api-key': HOTELBEDS_API_KEY,
-        'X-Signature': signature,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Accept-Encoding': 'gzip'
-    };
-
     try {
-        const availabilityRequestBody = {
-            "stay": {
-                "checkIn": checkInDate,
-                "checkOut": checkOutDate
-            },
-            "occupancies": [{
-                "rooms": 1,
-                "adults": adults,
-                "children": 0
-            }],
-            "destination": {
-                "code": cityCode
-            }
-        };
+        const hotelsCollection = collection(db, 'hoteles');
+        const q = query(hotelsCollection, where("ubicacion", "array-contains", params.cityCode));
 
-        const availabilityResponse = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(availabilityRequestBody)
+        const hotelSnapshot = await getDocs(hotelsCollection);
+
+        if (hotelSnapshot.empty) {
+            return { success: false, error: "No se encontraron hoteles para el destino seleccionado. Intenta con otro destino o asegúrate de que los datos de prueba han sido cargados." };
+        }
+
+        const offers: AmadeusHotelOffer[] = hotelSnapshot.docs.map(doc => {
+            const data = doc.data();
+            const hotelOffer: AmadeusHotelOffer = {
+                type: 'hotel-offer',
+                id: doc.id,
+                hotel: {
+                    hotelId: doc.id,
+                    name: data.nombre,
+                    rating: data.rating?.toString(),
+                    media: (data.media || []).map((url: string) => ({ uri: url, category: 'GENERAL' })),
+                    address: {
+                        cityName: data.ubicacion.split(',')[0],
+                        countryCode: data.ubicacion.split(',')[1]?.trim() || '',
+                        lines: [data.ubicacion],
+                        postalCode: '',
+                    },
+                    description: {
+                        lang: 'es',
+                        text: data.descripcion,
+                    },
+                    amenities: data.amenities || [],
+                },
+                available: true,
+                offers: [
+                    {
+                        id: `${doc.id}-offer`,
+                        checkInDate: params.checkInDate,
+                        checkOutDate: params.checkOutDate,
+                        price: {
+                            currency: 'USD',
+                            total: data.price ? data.price.toString() : '250.00',
+                            base: data.price ? (data.price * 0.9).toString() : '225.00'
+                        },
+                        room: {
+                            type: 'STANDARD_ROOM',
+                            description: {
+                                text: 'Habitación Estándar'
+                            }
+                        }
+                    }
+                ]
+            };
+            return hotelOffer;
         });
 
-        if (!availabilityResponse.ok) {
-            const errorBody = await availabilityResponse.json();
-            console.error('Hotelbeds Availability API Error:', errorBody);
-            return { success: false, error: `Error fetching hotel offers from Hotelbeds: ${errorBody.error?.message || availabilityResponse.statusText}` };
+        const filteredByCity = offers.filter(offer => 
+            offer.hotel.address.cityName.toLowerCase().includes(params.cityCode.toLowerCase()) || 
+            offer.hotel.address.countryCode.toLowerCase().includes(params.cityCode.toLowerCase())
+        );
+
+        if (filteredByCity.length === 0) {
+             return { success: false, error: "No se encontraron hoteles para el código de ciudad especificado. Prueba con un destino diferente." };
         }
 
-        const availabilityData = await availabilityResponse.json();
-        if (!availabilityData.hotels || !availabilityData.hotels.hotels) {
-            return { success: false, error: "No se encontraron ofertas de hotel para el destino y las fechas seleccionados." };
-        }
-
-
-        // This is a simplified mapping. A real implementation would be more robust.
-        const offers: AmadeusHotelOffer[] = availabilityData.hotels.hotels.map((hotel: any) => ({
-            type: 'hotel-offer',
-            id: hotel.code.toString(),
-            hotel: {
-                hotelId: hotel.code.toString(),
-                name: hotel.name,
-                rating: hotel.categoryCode.replace('EST', ''),
-                address: {
-                    cityName: hotel.destinationName,
-                    countryCode: hotel.countryCode,
-                    lines: [hotel.address],
-                    postalCode: hotel.postalCode
-                },
-                media: hotel.images?.map((img: any) => ({ uri: `http://photos.hotelbeds.com/giata/${img.path}` })) || [],
-            },
-            available: true,
-            offers: hotel.rooms.map((room: any) => ({
-                id: room.code,
-                checkInDate,
-                checkOutDate,
-                price: {
-                    currency: hotel.currency,
-                    total: room.rates[0].net,
-                    base: room.rates[0].net,
-                },
-                room: {
-                    type: room.name,
-                    description: {
-                        text: room.name
-                    }
-                }
-            }))
-        }));
-
-        if (offers.length === 0) {
-            return { success: false, error: "No hay ofertas de hotel disponibles para las fechas y el destino seleccionados." };
-        }
-        
-        return { success: true, data: offers };
+        return { success: true, data: filteredByCity };
 
     } catch (err: any) {
         console.error('Error in searchHotels action:', err);
@@ -422,3 +398,5 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
+
+    

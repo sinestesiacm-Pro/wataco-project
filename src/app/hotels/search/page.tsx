@@ -17,7 +17,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import HotelSearchPage from "@/components/hotel-search-page";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
 import { HotelLoadingAnimation } from "@/components/hotel-loading-animation";
 
 type HotelFiltersState = {
@@ -212,3 +211,5 @@ export default function HotelSearchPageWrapper() {
     </Suspense>
   )
 }
+
+    
