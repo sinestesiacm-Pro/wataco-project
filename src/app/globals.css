@@ -381,7 +381,7 @@
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1632668112111-047811413fcd?q=80&w=1548&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1682159316357-0b6edd7c8f6e?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -653,7 +653,7 @@
 
 .glitch-container:hover::after {
   animation: glitch 1.5s linear infinite;
-  clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+  clip-path: polygon(0 66%, 100% 100%, 0 100%);
   transform-origin: bottom;
 }
     
@@ -714,3 +714,6 @@
 
 
 
+
+
+    
