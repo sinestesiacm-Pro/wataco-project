@@ -36,7 +36,7 @@ export const recommendedCruises: CruisePackage[] = [
     ship: 'National Geographic Quest',
     duration: '8 Nights',
     region: 'ALASKA',
-    image: 'https://images.unsplash.com/photo-1527022206739-2c7edca55829?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YWxhc2thJTIwZ2xhY2llcnxlbnwwfHx8fDE3NTQ1NTY2MTF8MA&ixlib-rb-4.1.0&q=80&w=1080',
+    image: 'https://images.unsplash.com/photo-1527022206739-2c7edca55829?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YWxhc2thJTIwZ2xhY2llcnxlbnwwfHx8fDE3NTQ1NTY2MTF8MA&ixlib=rb-4.1.0&q=80&w=1080',
     hint: 'alaska glacier',
     videoUrl: 'https://videos.pexels.com/video-files/3209828/3209828-hd.mp4',
     carouselImages: [
@@ -92,7 +92,7 @@ export const recommendedCruises: CruisePackage[] = [
     ship: 'MSC Grandiosa',
     duration: '7 Nights',
     region: 'EUROPE',
-    image: 'https://images.unsplash.com/photo-1516496636080-14fb876e029d?w=500',
+    image: 'https://images.unsplash.com/photo-1516496636080-14fb876e029d',
     hint: 'cruise ship europe',
     videoUrl: 'https://videos.pexels.com/video-files/855389/855389-hd.mp4',
     carouselImages: [
