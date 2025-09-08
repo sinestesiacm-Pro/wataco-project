@@ -40,6 +40,7 @@ export function CruiseItinerary({ itinerary }: { itinerary: CruiseItineraryItem[
                         fill
                         sizes="(max-width: 640px) 100vw, 128px"
                         className="object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x300.png'; }}
                       />
                     </div>
                   )}
