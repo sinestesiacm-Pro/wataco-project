@@ -37,9 +37,9 @@ export function CruiseItinerary({ itinerary }: { itinerary: CruiseItineraryItem[
                       <Image
                         src={item.image}
                         alt={item.port}
-                        fill
-                        sizes="(max-width: 640px) 100vw, 128px"
-                        className="object-cover"
+                        width={400}
+                        height={300}
+                        className="object-cover w-full h-full"
                         onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x300.png'; }}
                       />
                     </div>
