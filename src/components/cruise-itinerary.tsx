@@ -33,7 +33,7 @@ export function CruiseItinerary({ itinerary }: { itinerary: CruiseItineraryItem[
             <div className="flex-grow pt-1 w-full">
               <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30 w-full flex flex-col sm:flex-row gap-4 items-center">
                   {!item.isAtSea && item.image && (
-                    <div className="relative w-full sm:w-32 aspect-[4/3] flex-shrink-0 rounded-md overflow-hidden">
+                    <div className="relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden">
                       <Image
                         src={item.image}
                         alt={item.port}
