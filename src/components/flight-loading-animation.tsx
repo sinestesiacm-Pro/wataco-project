@@ -25,8 +25,8 @@ const baseWords = [
 const generateWords = (count: number, isMobile: boolean) => {
     const generated = [];
     const sizeOptions = isMobile 
-        ? ['text-lg', 'text-xl', 'text-2xl'] 
-        : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
+        ? ['text-4xl', 'text-5xl', 'text-6xl'] 
+        : ['text-5xl', 'text-6xl', 'text-7xl', 'text-8xl'];
     const durationRange = { min: 25, max: 55 }; // Adjusted range for speed variation
 
     for (let i = 0; i < count; i++) {

@@ -25,8 +25,8 @@ const baseWords = [
 const generateWords = (count: number, isMobile: boolean) => {
     const generated = [];
     const sizeOptions = isMobile 
-        ? ['text-lg', 'text-xl', 'text-2xl'] 
-        : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
+        ? ['text-4xl', 'text-5xl', 'text-6xl'] 
+        : ['text-5xl', 'text-6xl', 'text-7xl', 'text-8xl'];
     const durationRange = { min: 25, max: 55 };
 
     for (let i = 0; i < count; i++) {
@@ -74,7 +74,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeCloud = React.memo(function WelcomeCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 200 : 350;
+    const wordCount = isMobile ? 240 : 400;
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 
