@@ -24,7 +24,7 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
             </div>
             
             {/* This div creates the soft blur effect */}
-            <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-2/3 soft-shadow-gradient pointer-events-none" />
 
             <div className="absolute bottom-0 left-0 right-0 p-4">
                 <h3 className="font-bold text-xl font-headline text-white drop-shadow-md">{cruise.name}</h3>
