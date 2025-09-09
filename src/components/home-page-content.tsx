@@ -174,7 +174,7 @@ export function HomePageContent() {
             case 'Flights': return 'bg-flights-background'; 
             case 'Hotels': return 'bg-hotels-background';
             case 'Packages': return 'bg-packages-background';
-            case 'Cruises': return 'bg-cruises-gradient background-pan-animation';
+            case 'Cruises': return 'bg-cruises-background';
             case 'Activities': return 'bg-activities-background';
             case 'Social': return 'bg-flights-background';
             default: return 'bg-flights-background';
