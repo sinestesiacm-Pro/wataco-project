@@ -1,9 +1,42 @@
-
 'use client';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import type { CruiseItineraryItem } from '@/lib/types';
 import { Anchor, Waves } from 'lucide-react';
+
+const ItineraryCard = ({ item }: { item: CruiseItineraryItem }) => {
+  return (
+    <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 transition-all hover:bg-black/30 w-full flex flex-col sm:flex-row gap-4 items-center">
+      {!item.isAtSea && item.image && (
+        <div className="relative w-full h-32 sm:h-20 sm:w-20 flex-shrink-0 rounded-md overflow-hidden">
+          <Image
+            src={item.image}
+            alt={item.port}
+            fill
+            className="object-cover"
+            onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x300.png'; }}
+          />
+        </div>
+      )}
+      <div className={cn("flex-grow text-center", !item.isAtSea && "sm:text-left")}>
+        <h3 className="font-bold text-lg text-white">{item.port}</h3>
+        <p className="text-sm text-white/70">
+          {item.isAtSea ? 'Disfruta de las comodidades del barco.' : `${item.arrival} - ${item.departure}`}
+        </p>
+        {!item.isAtSea && item.countryCode && (
+          <Image
+            src={`https://flagcdn.com/w40/${item.countryCode}.png`}
+            alt={`${item.port} flag`}
+            width={20}
+            height={15}
+            className="inline-block ml-2 mt-1"
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
 
 export function CruiseItinerary({ itinerary }: { itinerary: CruiseItineraryItem[] }) {
   return (
@@ -32,34 +65,7 @@ export function CruiseItinerary({ itinerary }: { itinerary: CruiseItineraryItem[
 
             {/* Itinerary Details Card */}
             <div className="flex-grow pt-1 w-full">
-              <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30 w-full flex flex-col sm:flex-row gap-4 items-center">
-                  {!item.isAtSea && item.image && (
-                    <div className="relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden">
-                      <Image
-                        src={item.image}
-                        alt={item.port}
-                        fill
-                        className="object-cover w-full h-full"
-                        onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x300.png'; }}
-                      />
-                    </div>
-                  )}
-                  <div className="flex-grow text-center sm:text-left">
-                    <h3 className="font-bold text-lg text-white">{item.port}</h3>
-                    <p className="text-sm text-white/70">
-                      {item.isAtSea ? 'Disfruta de las comodidades del barco.' : `${item.arrival} - ${item.departure}`}
-                    </p>
-                    {!item.isAtSea && item.countryCode && (
-                      <Image
-                        src={`https://flagcdn.com/w20/${item.countryCode}.png`}
-                        alt={`${item.port} flag`}
-                        width={20}
-                        height={15}
-                        className="inline-block ml-2"
-                      />
-                    )}
-                  </div>
-              </div>
+               <ItineraryCard item={item} />
             </div>
           </div>
         ))}
