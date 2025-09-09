@@ -18,12 +18,13 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
                 fill 
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute top-2 right-2 z-10">
                 <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white bg-black/30 hover:bg-black/50 hover:text-white rounded-full">
                     <Heart className="h-4 w-4" />
                 </Button>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-black/20 backdrop-blur-lg">
+            <div className="absolute bottom-0 left-0 right-0 p-4">
                 <h3 className="font-bold text-xl font-headline text-white drop-shadow-md">{cruise.name}</h3>
                 <p className="text-sm text-white/80 drop-shadow-md">{cruise.ship} - {cruise.duration}</p>
             </div>
