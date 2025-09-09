@@ -25,15 +25,15 @@ const baseWords = [
 const generateWords = (count: number, isMobile: boolean) => {
     const generated = [];
     const sizeOptions = isMobile 
-        ? ['text-4xl', 'text-5xl', 'text-6xl'] 
-        : ['text-5xl', 'text-6xl', 'text-7xl', 'text-8xl'];
+        ? ['text-2xl', 'text-3xl', 'text-4xl'] 
+        : ['text-3xl', 'text-4xl', 'text-5xl'];
     const durationRange = { min: 25, max: 80 };
 
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
         const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
         
-        const leftPos = Math.random() * 150 - 25;
+        const leftPos = Math.random() * 120 - 10;
         const topPos = Math.random() * 100;
 
         generated.push({
