@@ -93,7 +93,7 @@ const WelcomeCloud = React.memo(function WelcomeCloud() {
 export function HotelLoadingAnimation({ destinationName }: { destinationName: string }) {
 
     return (
-        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-hotels-loading-background">
+        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-hotels-background">
             <WelcomeCloud />
             <div className="relative z-30 bg-gray-800/40 backdrop-blur-md p-6 rounded-2xl font-body loading-route-box shadow-2xl border border-white/20 flex flex-col items-center">
               <Hotel className="h-10 w-10 text-white mb-4 drop-shadow-lg"/>
