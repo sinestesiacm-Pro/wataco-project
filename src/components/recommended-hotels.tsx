@@ -140,7 +140,9 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
   const handleViewHotel = useCallback((hotelId: string, destinationName: string) => {
     setLoadingHotelId(hotelId);
     setLoadingDestinationName(destinationName);
-    router.push(`/hotels/${hotelId}`);
+    setTimeout(() => {
+        router.push(`/hotels/${hotelId}`);
+    }, 5000); // 5 second delay
   }, [router]);
 
   useEffect(() => {
