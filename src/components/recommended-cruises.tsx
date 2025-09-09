@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
     <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl">
-        <div className="relative w-full h-56">
+        <div className="relative w-full h-56 overflow-hidden">
             <Image 
                 src={cruise.image} 
                 data-ai-hint={cruise.hint} 
@@ -23,7 +23,6 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
                 </Button>
             </div>
             
-            {/* This div creates the soft blur effect */}
             <div className="absolute bottom-0 left-0 right-0 h-2/3 soft-shadow-gradient pointer-events-none" />
 
             <div className="absolute bottom-0 left-0 right-0 p-4">
