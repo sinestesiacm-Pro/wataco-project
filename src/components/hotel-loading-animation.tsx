@@ -27,13 +27,13 @@ const generateWords = (count: number, isMobile: boolean) => {
     const sizeOptions = isMobile 
         ? ['text-4xl', 'text-5xl', 'text-6xl'] 
         : ['text-5xl', 'text-6xl', 'text-7xl', 'text-8xl'];
-    const durationRange = { min: 25, max: 55 };
+    const durationRange = { min: 25, max: 80 };
 
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
         const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
         
-        const leftPos = Math.random() * 200 - 50;
+        const leftPos = Math.random() * 150 - 25; // Range from -25vw to 125vw for better coverage
         const topPos = Math.random() * 100;
 
         generated.push({
@@ -74,7 +74,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeCloud = React.memo(function WelcomeCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 240 : 400;
+    const wordCount = isMobile ? 40 : 60; 
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 

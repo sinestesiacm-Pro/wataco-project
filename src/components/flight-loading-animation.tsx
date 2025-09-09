@@ -18,7 +18,7 @@ const baseWords = [
     { text: "Tervetuloa kyytiin", weight: 300 }, { text: "Hoş geldiniz", weight: 400 },
     { text: "Velkommen", weight: 300 }, { text: "Bun venit", weight: 300 },
     { text: "Siyakwamukela", weight: 300}, { text: "Maligayang pagdating", weight: 400},
-    { text: "Sugeng rawuh", weight: 400}, { text: "Tervetuloa", weight: 300},
+    { text: "Sugeng rawuh", weight: 400},
     { text: "aboard", weight: 300 }, { text: "welcome", weight: 300 },
 ];
 
@@ -27,14 +27,13 @@ const generateWords = (count: number, isMobile: boolean) => {
     const sizeOptions = isMobile 
         ? ['text-4xl', 'text-5xl', 'text-6xl'] 
         : ['text-5xl', 'text-6xl', 'text-7xl', 'text-8xl'];
-    const durationRange = { min: 25, max: 55 }; // Adjusted range for speed variation
+    const durationRange = { min: 25, max: 80 };
 
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
         const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
         
-        // This positioning ensures the screen is always full
-        const leftPos = Math.random() * 200 - 50; // Range from -50vw to 150vw
+        const leftPos = Math.random() * 150 - 25;
         const topPos = Math.random() * 100;
 
         generated.push({
@@ -43,7 +42,7 @@ const generateWords = (count: number, isMobile: boolean) => {
             top: `${topPos}%`,
             left: `${leftPos}%`,
             animationDuration: `${duration}s`,
-            animationDelay: `-${Math.random() * duration}s`, // Negative delay starts the animation mid-cycle
+            animationDelay: `-${Math.random() * duration}s`,
         });
     }
     return generated;
@@ -75,7 +74,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 240 : 400; // Increased count for density
+    const wordCount = isMobile ? 40 : 60;
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 
