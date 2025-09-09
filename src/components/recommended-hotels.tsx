@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -12,6 +11,8 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Skeleton } from './ui/skeleton';
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { HotelLoadingAnimation } from './hotel-loading-animation';
 
 // Simplified hotel type for Firestore data
 interface Hotel {
@@ -25,7 +26,7 @@ interface Hotel {
 }
 
 
-const HotelCard = React.memo(function HotelCard({ hotel }: { hotel: Hotel }) {
+const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotelId: string, destinationName: string) => void }) {
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-none hover:scale-105 overflow-hidden">
             <div className="relative w-full h-48 flex-shrink-0">
@@ -80,8 +81,8 @@ const HotelCard = React.memo(function HotelCard({ hotel }: { hotel: Hotel }) {
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">
                     <p className="font-semibold text-xl text-white drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
-                    <Button asChild className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
-                        <Link href={`/hotels/${hotel.id}`}>Ver Hotel</Link>
+                    <Button onClick={() => onViewHotel(hotel.id, hotel.ubicacion)} className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
+                        Ver Hotel
                     </Button>
                  </div>
             </CardContent>
@@ -119,11 +120,28 @@ const shuffleArray = <T,>(array: T[]): T[] => {
     return array;
 }
 
+const FullScreenHotelLoader = ({ destinationName }: { destinationName: string }) => (
+    <div className="fixed inset-0 z-[200] w-full h-full">
+        <HotelLoadingAnimation destinationName={destinationName} />
+    </div>
+);
+
+
 export const RecommendedHotels = React.memo(function RecommendedHotels() {
+  const router = useRouter();
   const [allHotels, setAllHotels] = useState<Hotel[]>([]);
   const [displayedHotels, setDisplayedHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [loadingHotelId, setLoadingHotelId] = useState<string | null>(null);
+  const [loadingDestinationName, setLoadingDestinationName] = useState<string>('');
+
+
+  const handleViewHotel = useCallback((hotelId: string, destinationName: string) => {
+    setLoadingHotelId(hotelId);
+    setLoadingDestinationName(destinationName);
+    router.push(`/hotels/${hotelId}`);
+  }, [router]);
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -160,7 +178,8 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
   }, [allHotels]);
 
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6">
+       {loadingHotelId && <FullScreenHotelLoader destinationName={loadingDestinationName} />}
       <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
       
       {loading ? (
@@ -177,7 +196,7 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {displayedHotels.map((hotel) => (
-            <HotelCard key={hotel.id} hotel={hotel} />
+            <HotelCard key={hotel.id} hotel={hotel} onViewHotel={handleViewHotel} />
           ))}
         </div>
       )}
