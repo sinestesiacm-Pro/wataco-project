@@ -3,41 +3,48 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Heart, Star, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
-import { Card } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { recommendedCruises } from '@/lib/mock-cruises';
 import type { CruisePackage } from '@/lib/types';
 import Link from 'next/link';
 
 const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
-    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex flex-col sm:flex-row gap-4 transition-all duration-300 hover:bg-white/20 text-white">
-        <div className="relative w-full sm:w-28 h-28 flex-shrink-0">
+    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl">
+        <div className="relative w-full h-48">
             <Image 
                 src={cruise.image} 
                 data-ai-hint={cruise.hint} 
                 alt={cruise.name} 
                 fill 
-                className="object-cover rounded-xl"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+            <div className="absolute top-2 right-2">
+                <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white bg-black/30 hover:bg-black/50 hover:text-white rounded-full">
+                    <Heart className="h-4 w-4" />
+                </Button>
+            </div>
+            <div className="absolute bottom-4 left-4 text-white">
+                <h3 className="font-bold text-xl font-headline drop-shadow-md">{cruise.name}</h3>
+                <p className="text-sm text-white/80 drop-shadow-md">{cruise.ship} - {cruise.duration}</p>
+            </div>
         </div>
-        <div className="flex flex-col flex-grow">
-            <div className="flex justify-between items-start">
-              <h3 className="font-bold text-lg text-white">{cruise.name}</h3>
-              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white hover:text-white">
-                  <Heart className="h-5 w-5" />
-              </Button>
-            </div>
-            <p className="text-sm text-white/70">{cruise.ship} - {cruise.duration}</p>
-            <p className="font-semibold text-white text-xl mt-1">${cruise.price}/person</p>
-            <div className="flex items-center gap-2 mt-auto text-sm">
-                <div className="flex items-center gap-1 text-amber-400">
-                    {[...Array(cruise.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                    {[...Array(5 - cruise.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-white/30" />)}
+        <div className="p-4 flex flex-col flex-grow text-white">
+            <div className="flex justify-between items-center">
+                <div>
+                    <p className="text-xs text-white/70">Desde</p>
+                    <p className="font-semibold text-2xl">${cruise.price}/persona</p>
                 </div>
-                <p className="text-white/70">({cruise.reviews} reviews)</p>
+                <div className="text-right">
+                    <div className="flex items-center gap-1 text-amber-400 justify-end">
+                        {[...Array(cruise.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                    </div>
+                    <p className="text-xs text-white/70">({cruise.reviews} reviews)</p>
+                </div>
             </div>
-             <Button asChild size="sm" className="mt-2 w-full sm:w-auto sm:ml-auto font-semibold">
-                <Link href={`/cruises/${cruise.id}`}>View Cruise</Link>
-             </Button>
+            <Button asChild size="sm" className="mt-4 w-full font-semibold">
+                <Link href={`/cruises/${cruise.id}`}>Ver Crucero</Link>
+            </Button>
         </div>
     </Card>
 );
@@ -46,8 +53,8 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
 export function RecommendedCruises({ cruises = recommendedCruises }: { cruises?: CruisePackage[] }) {
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-white">Recommended Cruises</h2>
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <h2 className="text-3xl font-bold font-headline text-white">Cruceros Recomendados</h2>
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {cruises.map((cruise, index) => (
           <CruiseCard key={index} cruise={cruise} />
         ))}
