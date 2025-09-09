@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useMemo } from 'react';
@@ -26,14 +25,14 @@ const generateWords = (count: number, isMobile: boolean) => {
     const generated = [];
     const sizeOptions = isMobile 
         ? ['text-2xl', 'text-3xl', 'text-4xl'] 
-        : ['text-3xl', 'text-4xl', 'text-5xl'];
+        : ['text-3xl', 'text-4xl', 'text-5xl', 'text-6xl'];
     const durationRange = { min: 25, max: 80 };
 
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
         const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
         
-        const leftPos = Math.random() * 120 - 10;
+        const leftPos = Math.random() * 120 - 10; // Allow words to start/end off-screen
         const topPos = Math.random() * 100;
 
         generated.push({
@@ -74,7 +73,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 40 : 60;
+    const wordCount = isMobile ? 50 : 80;
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 
