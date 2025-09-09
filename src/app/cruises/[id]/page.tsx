@@ -22,11 +22,11 @@ export default async function CruiseDetailPage({ params }: { params: { id: strin
 
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-cruises-gradient">
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-cruises-background">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
-        <div className="w-full min-h-screen pt-24 pb-24 bg-cruises-gradient background-pan-animation relative overflow-hidden">
+        <div className="w-full min-h-screen pt-24 pb-24 bg-cruises-background relative overflow-hidden">
              <UnderwaterScene />
              <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
                 <div className="flex justify-between items-center">
