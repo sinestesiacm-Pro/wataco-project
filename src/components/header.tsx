@@ -32,6 +32,7 @@ export function Header() {
     if (pathname.startsWith('/cruises')) return 'Cruises';
     if (pathname.startsWith('/activities')) return 'Activities';
     if (pathname.startsWith('/social')) return 'Social';
+    // If on checkout page for a package, the active tab should be 'Packages'
     if (pathname.startsWith('/flights/checkout') && searchParams.has('packageId')) return 'Packages';
     if (pathname.startsWith('/flights')) return 'Flights';
     return searchParams.get('tab') || 'Flights';
@@ -61,7 +62,9 @@ export function Header() {
 
   const currentTitle = getTitleFromPath(pathname);
   const isHomePage = pathname === '/';
-  const isLight = pathname.startsWith('/flights/checkout');
+  
+  // The checkout page should always have the dark, glassmorphism header
+  const isLight = false;
   
   const textColor = isLight ? 'text-gray-800' : 'text-white';
   

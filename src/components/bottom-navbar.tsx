@@ -48,9 +48,8 @@ export function BottomNavbar() {
   const activeTab = searchParams.get('tab') || 'Flights';
   const isOnHomePage = pathname === '/';
 
-  const isLight = useMemo(() => 
-    pathname.startsWith('/flights/checkout')
-  , [pathname]);
+  // The checkout page should always have the dark, glassmorphism navbar
+  const isLight = false;
 
   const handleTabClick = (tab: string) => {
     const params = new URLSearchParams(window.location.search);
