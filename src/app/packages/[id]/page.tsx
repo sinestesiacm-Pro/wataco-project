@@ -20,7 +20,7 @@ function PackageDetailPageContent({ id }: { id: string }) {
   }
 
   return (
-    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-packages-gradient background-pan-animation')}>
+    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-packages-background')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
             <Button asChild variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
@@ -88,7 +88,7 @@ export default function PackageDetailPage({ params }: { params: Promise<{ id: st
   
   return (
      <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-packages-gradient">
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-packages-background">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     }>
