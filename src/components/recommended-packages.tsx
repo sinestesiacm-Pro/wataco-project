@@ -13,7 +13,7 @@ import React from 'react';
 const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer }) {
     return (
         <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-primary/50">
-            <div className="relative h-56 w-full">
+            <div className="relative h-56 w-full overflow-hidden">
                 <Image 
                     src={pkg.image} 
                     data-ai-hint={pkg.hint} 
