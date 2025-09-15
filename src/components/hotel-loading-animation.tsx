@@ -74,7 +74,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeCloud = React.memo(function WelcomeCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 120 : 180;
+    const wordCount = isMobile ? 250 : 400;
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 

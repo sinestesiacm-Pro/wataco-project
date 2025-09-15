@@ -61,16 +61,17 @@ const SuggestionsList = React.memo(function SuggestionsList({
 
 
 interface AvailabilitySearchProps {
-    onSearch: (data: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode: string, destinationName: string }) => void;
+    onSearch: (data: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode?: string, destinationName?: string }) => void;
     initialData: {
         checkInDate: Date;
         checkOutDate: Date;
         adults: number;
         children: number;
-    }
+    };
+    showDestination?: boolean;
 }
 
-export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearchProps) {
+export function AvailabilitySearch({ onSearch, initialData, showDestination = false }: AvailabilitySearchProps) {
     const [date, setDate] = useState<DateRange | undefined>({
         from: initialData.checkInDate,
         to: initialData.checkOutDate,
@@ -105,10 +106,10 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
       }, []);
 
     React.useEffect(() => {
-        if (isDestinationPopoverOpen) {
+        if (showDestination && isDestinationPopoverOpen) {
           fetchSuggestions(debouncedDestinationQuery);
         }
-    }, [debouncedDestinationQuery, isDestinationPopoverOpen, fetchSuggestions]);
+    }, [debouncedDestinationQuery, isDestinationPopoverOpen, fetchSuggestions, showDestination]);
 
 
     const handleSelectSuggestion = React.useCallback((airport: Airport) => {
@@ -120,13 +121,13 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
     }, []);
 
     const handleSearchClick = () => {
-        if (date?.from && date?.to && destination?.iataCode) {
+        if (date?.from && date?.to && (destination?.iataCode || !showDestination)) {
             onSearch({
                 checkInDate: date.from,
                 checkOutDate: date.to,
                 adults,
                 children,
-                cityCode: destination.iataCode,
+                cityCode: destination?.iataCode,
                 destinationName: destinationQuery
             });
         }
@@ -146,7 +147,7 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
             <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                     
-                    {/* Destination Search */}
+                    {showDestination && (
                      <div className="lg:col-span-1 relative">
                         <label className="text-white/80 text-sm font-semibold mb-2 block">Destino</label>
                         <Popover open={isDestinationPopoverOpen && destinationQuery.length > 1} onOpenChange={setIsDestinationPopoverOpen}>
@@ -172,6 +173,7 @@ export function AvailabilitySearch({ onSearch, initialData }: AvailabilitySearch
                             </PopoverContent>
                         </Popover>
                     </div>
+                    )}
 
                     {/* Date Picker */}
                     <div className="lg:col-span-1">

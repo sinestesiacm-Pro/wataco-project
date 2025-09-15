@@ -38,10 +38,12 @@ function HotelDetailPageContent({ id }: { id: string }) {
         fetchDetails();
     }, [id]);
 
-    const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode: string, destinationName: string }) => {
+    const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode?: string, destinationName?: string }) => {
+        if (!hotel) return;
+
         const params = new URLSearchParams({
-            cityCode: searchData.cityCode,
-            destinationName: searchData.destinationName,
+            cityCode: searchData.cityCode || hotel.address.countryCode,
+            destinationName: searchData.destinationName || hotel.address.cityName,
             checkInDate: format(searchData.checkInDate, 'yyyy-MM-dd'),
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
