@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Heart, Star } from 'lucide-react';
 import ActivitySearchPage from './activity-search-page';
+import Link from 'next/link';
 
 const activities = [
   { id: 'guatape-tour-1', name: 'Excursion to Guatapé & El Peñol', description: 'A full day to explore the iconic stone and the colorful town.', image: 'https://images.unsplash.com/photo-1639534448069-a47cf42d7cb9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z3VhdGFwZSUyMGNvbG9tYmlhfGVufDB8fHx8MTc1NDEzOTEzOXww&ixlib=rb-4.1.0&q=80&w=1080', hint: 'guatape colombia', rating: 5, reviews: 1532, price: '65' },
@@ -18,34 +19,36 @@ const activities = [
 ];
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
-    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-white/20 shadow-lg">
-        <div className="relative w-28 h-28 flex-shrink-0">
-            <Image 
-                src={activity.image} 
-                data-ai-hint={activity.hint} 
-                alt={activity.name} 
-                fill 
-                className="object-cover rounded-xl"
-            />
-        </div>
-        <div className="flex flex-col flex-grow text-white">
-            <div className="flex justify-between items-start">
-              <h3 className="font-bold text-lg">{activity.name}</h3>
-              <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white/70 hover:text-white">
-                  <Heart className="h-5 w-5" />
-              </Button>
+    <Link href={`/activities/${activity.id}`}>
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-white/20 shadow-lg h-full">
+            <div className="relative w-28 h-28 flex-shrink-0">
+                <Image 
+                    src={activity.image} 
+                    data-ai-hint={activity.hint} 
+                    alt={activity.name} 
+                    fill 
+                    className="object-cover rounded-xl"
+                />
             </div>
-            <p className="text-sm text-white/80">{activity.description}</p>
-            <p className="font-semibold text-accent text-xl mt-1">${activity.price}/person</p>
-            <div className="flex items-center gap-2 mt-auto text-sm">
-                <div className="flex items-center gap-1 text-amber-400">
-                    {[...Array(activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                    {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-white/30" />)}
+            <div className="flex flex-col flex-grow text-white">
+                <div className="flex justify-between items-start">
+                  <h3 className="font-bold text-lg">{activity.name}</h3>
+                  <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white/70 hover:text-white">
+                      <Heart className="h-5 w-5" />
+                  </Button>
                 </div>
-                <p className="text-white/70">({activity.reviews} reviews)</p>
+                <p className="text-sm text-white/80">{activity.description}</p>
+                <p className="font-semibold text-accent text-xl mt-1">${activity.price}/person</p>
+                <div className="flex items-center gap-2 mt-auto text-sm">
+                    <div className="flex items-center gap-1 text-amber-400">
+                        {[...Array(activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                        {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-white/30" />)}
+                    </div>
+                    <p className="text-white/70">({activity.reviews} reviews)</p>
+                </div>
             </div>
-        </div>
-    </Card>
+        </Card>
+    </Link>
 );
 
 export function ActivitiesSection() {
