@@ -31,7 +31,7 @@ export const BookingProgressHeader = React.memo(function BookingProgressHeader({
   return (
     <div className="bg-black/20 backdrop-blur-lg border border-white/20 p-4 rounded-2xl shadow-md text-white mb-8">
         <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold font-headline flex items-center gap-3 drop-shadow-lg">
+            <h2 className="text-2xl font-semibold font-headline flex items-center gap-3 drop-shadow-lg">
                 <Plane className="h-6 w-6" />
                 <span>{origin} a {destination}</span>
             </h2>
