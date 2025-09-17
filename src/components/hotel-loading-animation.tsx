@@ -33,7 +33,11 @@ const generateWords = (count: number, isMobile: boolean) => {
         const base = baseWords[i % baseWords.length];
         const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
         
-        const leftPos = Math.random() * 140 - 20;
+        // Adjust horizontal positioning based on screen orientation
+        const horizontalRange = isMobile ? 100 : 140; // Narrower range for mobile
+        const horizontalOffset = isMobile ? 10 : 20; // Smaller negative offset for mobile
+        const leftPos = Math.random() * horizontalRange - horizontalOffset;
+
         const topPos = Math.random() * 100;
 
         generated.push({
