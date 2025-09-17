@@ -38,16 +38,17 @@ function HotelDetailPageContent({ id }: { id: string }) {
         fetchDetails();
     }, [id]);
 
-    const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode?: string, destinationName?: string }) => {
+    const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number }) => {
         if (!hotel) return;
 
         const params = new URLSearchParams({
-            cityCode: searchData.cityCode || hotel.address.countryCode,
-            destinationName: searchData.destinationName || hotel.address.cityName,
+            hotelId: id,
             checkInDate: format(searchData.checkInDate, 'yyyy-MM-dd'),
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
+            cityCode: hotel?.address.countryCode || '',
+            destinationName: hotel?.address.cityName || '',
         });
         router.push(`/hotels/search?${params.toString()}`);
     };
