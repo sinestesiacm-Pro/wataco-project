@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 
 const flightRoutes = [
-  { origin: 'JFK', originCity: 'New York', destination: 'CDG', destinationCity: 'Paris', hint: 'eiffel tower night', image: 'https://images.unsplash.com/photo-1543349689-9a4d426bee8e?w=500', simulatedPrice: '750' },
+  { origin: 'JFK', originCity: 'New York', destination: 'CDG', destinationCity: 'Paris', hint: 'eiffel tower night', image: 'https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwYXJpc3xlbnwwfHx8fDE3NTgxMzY1MDd8MA&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '750' },
   { origin: 'LHR', originCity: 'London', destination: 'NRT', destinationCity: 'Tokyo', hint: 'shibuya crossing tokyo', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=500', simulatedPrice: '1100' },
   { origin: 'LAX', originCity: 'Los Angeles', destination: 'BKK', destinationCity: 'Bangkok', hint: 'bangkok temple night', image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?w=500', simulatedPrice: '980' },
   { origin: 'BOG', originCity: 'Bogotá', destination: 'MIA', destinationCity: 'Miami', hint: 'miami beach aerial', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500', simulatedPrice: '350' },
