@@ -15,7 +15,7 @@ const flightRoutes = [
   { origin: 'LHR', originCity: 'London', destination: 'NRT', destinationCity: 'Tokyo', hint: 'shibuya crossing tokyo', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=500', simulatedPrice: '1100' },
   { origin: 'LAX', originCity: 'Los Angeles', destination: 'BKK', destinationCity: 'Bangkok', hint: 'bangkok temple night', image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?w=500', simulatedPrice: '980' },
   { origin: 'BOG', originCity: 'Bogotá', destination: 'MIA', destinationCity: 'Miami', hint: 'miami beach aerial', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500', simulatedPrice: '350' },
-  { origin: 'SYD', originCity: 'Sydney', destination: 'LAX', destinationCity: 'Los Angeles', hint: 'los angeles downtown', image: 'https://images.unsplash.com/photo-1549834125-72d362a3c0c3?w=500', simulatedPrice: '1300' },
+  { origin: 'SYD', originCity: 'Sydney', destination: 'LAX', destinationCity: 'Los Angeles', hint: 'los angeles downtown', image: 'https://images.unsplash.com/photo-1503891450247-ee5f8ec46dc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxsb3MlMjBhbmdlbGVzfGVufDB8fHx8MTc1ODMxMjIzMXww&ixlib=rb-4.1.0&q=80&w=1080', simulatedPrice: '1300' },
 ];
 
 const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
