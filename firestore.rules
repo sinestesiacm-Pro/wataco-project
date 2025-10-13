@@ -1,15 +1,26 @@
-
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read access to all collections for the demo app
+    // Allow public read access to hotels, as they are public information.
+    match /hoteles/{hotelId} {
+      allow read;
+    }
+
+    // Allow users to read their own data and for VIP membership activation to work.
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow reading and updating VIP membership codes.
+    match /vip_memberships/{membershipId} {
+      allow read;
+      allow update: if request.auth != null;
+    }
+
+    // Default deny all other access
     match /{document=**} {
-      allow read: if true;
-      
-      // For write operations, only authenticated users should be allowed.
-      // This is a basic rule; for a real app, you'd have more specific
-      // rules per collection (e.g., a user can only write to their own documents).
-      allow write: if request.auth != null;
+      allow read, write: if false;
     }
   }
 }
