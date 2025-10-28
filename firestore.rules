@@ -1,21 +1,25 @@
+
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read access to hotels
+
+    // Allow public read access to hotels.
     match /hoteles/{hotelId} {
-      allow get, list: if true;
+      allow read: if true;
     }
 
-    // Allow public read access to vip codes for validation
-    match /vip_memberships/{codeId} {
-      allow get, list: if true;
+    // Allow public read for code validation, but only authenticated users can "use" a code.
+    match /vip_memberships/{vipId} {
+      allow read: if true;
+      allow update: if request.auth != null;
     }
-    
-    // Users can only read their own data
+
+    // Users can read/update their own document.
+    // A user document can be created by an authenticated user (e.g. during VIP activation).
     match /users/{userId} {
-      allow get: if request.auth != null && request.auth.uid == userId;
-      allow create, update: if request.auth != null && request.auth.uid == userId;
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
     }
   }
 }
