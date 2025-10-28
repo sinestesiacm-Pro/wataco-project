@@ -202,7 +202,7 @@ function HotelResultsPageContent() {
 export default function HotelSearchPageWrapper() {
   return (
     <Suspense fallback={
-        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] bg-hotels-gradient">
+        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] bg-hotels-background">
             <Loader2 className="h-12 w-12 animate-spin text-white" />
         </div>
     }>
