@@ -18,7 +18,7 @@ const UatacoLogo = ({ width, height, className }: { width: number; height: numbe
         fontWeight="600" 
         letterSpacing="0.05em"
       >
-        UATACO
+        Uataco
       </text>
     </svg>
 );
