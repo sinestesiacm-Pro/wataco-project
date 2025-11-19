@@ -2,59 +2,25 @@
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-const BOnTravelLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
-  <Image
-    src="https://i.ibb.co/B2PBkQWX/c3f35c75-5e74-41f9-8a9c-718e637b5eb4-removebg-preview.png"
-    alt="B on travel Logo"
-    width={width}
-    height={height}
-    className={cn(className)}
-    priority
-  />
-);
-
-const HotelsLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
-    <Image
-      src="https://i.ibb.co/S73BjP4M/Generated-Image-September-07-2025-1-53-PM-removebg-preview.png"
-      alt="B on travel Hotels Logo"
-      width={width}
-      height={height}
-      className={cn(className)}
-      priority
-    />
-);
-
-const FlightsLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
-    <Image
-      src="https://i.ibb.co/cSZJSyx7/Generated-Image-September-07-2025-1-44-PM-removebg-preview.png"
-      alt="B on travel Flights Logo"
-      width={width}
-      height={height}
-      className={cn(className)}
-      priority
-    />
-);
-
-const CruisesLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
-    <Image
-      src="https://i.ibb.co/Cs0b1WJq/Generated-Image-September-07-2025-1-58-PM-removebg-preview.png"
-      alt="B on travel Cruises Logo"
-      width={width}
-      height={height}
-      className={cn(className)}
-      priority
-    />
-);
-
-const PackagesLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
-    <Image
-      src="https://i.ibb.co/39T4qvSX/Generated-Image-September-07-2025-2-27-PM-removebg-preview.png"
-      alt="B on travel Packages Logo"
-      width={width}
-      height={height}
-      className={cn(className)}
-      priority
-    />
+const UatacoLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
+    <svg 
+      width={width} 
+      height={height} 
+      viewBox="0 0 120 30" 
+      className={cn("fill-current", className)}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <text 
+        x="0" 
+        y="22" 
+        fontFamily="Poppins, sans-serif" 
+        fontSize="24" 
+        fontWeight="600" 
+        letterSpacing="0.05em"
+      >
+        UATACO
+      </text>
+    </svg>
 );
 
 
@@ -69,11 +35,11 @@ const GoogleLogo = (props: React.ComponentProps<'svg'>) => (
 
 
 export const Icons = {
-  logo: BOnTravelLogo,
-  hotels: HotelsLogo,
-  flights: FlightsLogo,
-  cruises: CruisesLogo,
-  packages: PackagesLogo,
-  icon: BOnTravelLogo,
+  logo: UatacoLogo,
+  hotels: UatacoLogo,
+  flights: UatacoLogo,
+  cruises: UatacoLogo,
+  packages: UatacoLogo,
+  icon: UatacoLogo,
   google: GoogleLogo,
 };

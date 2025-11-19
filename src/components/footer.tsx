@@ -9,32 +9,17 @@ import { cn } from '@/lib/utils';
 import React from 'react';
 
 export function Footer() {
-  const searchParams = useSearchParams();
-  const tab = searchParams.get('tab') || 'Flights';
-
-  const getLogoForTab = () => {
-    switch(tab) {
-      case 'Hotels': return Icons.hotels;
-      case 'Flights': return Icons.flights;
-      case 'Cruises': return Icons.cruises;
-      case 'Packages': return Icons.packages;
-      case 'Activities': return Icons.logo; 
-      case 'Social': return Icons.logo;
-      default: return Icons.logo;
-    }
-  };
-
-  const LogoComponent = getLogoForTab();
+  const LogoComponent = Icons.logo;
 
   return (
     <footer className="bg-white/10 backdrop-blur-sm border-t border-white/10 mt-16 shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)]">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          <div className="flex items-center justify-center md:justify-start">
+          <div className="flex items-center justify-center md:justify-start text-white">
             <LogoComponent width={100} height={40} />
           </div>
           <div className="text-center text-sm text-white">
-            © {new Date().getFullYear()} B on travel. All rights reserved.
+            © {new Date().getFullYear()} Uataco. All rights reserved.
           </div>
           <div className="flex items-center justify-center md:justify-end space-x-6">
             <Link href="#" className="text-white hover:text-primary transition-colors">

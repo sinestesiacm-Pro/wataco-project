@@ -57,7 +57,7 @@ export function Header() {
     if (path.startsWith('/flights/checkout')) return 'Finalize Purchase';
     if (/^\/hotels\/.*\/offers/.test(pathname)) return 'Select Room';
     
-    return 'B on travel';
+    return 'Uataco';
   }
 
   const currentTitle = getTitleFromPath(pathname);
@@ -68,17 +68,7 @@ export function Header() {
   
   const textColor = isLight ? 'text-gray-800' : 'text-white';
   
-  let LogoComponent = Icons.logo;
-  if (tab === 'Hotels') {
-      LogoComponent = Icons.hotels;
-  } else if (tab === 'Flights') {
-      LogoComponent = Icons.flights;
-  } else if (tab === 'Cruises') {
-      LogoComponent = Icons.cruises;
-  } else if (tab === 'Packages') {
-      LogoComponent = Icons.packages;
-  }
-
+  const LogoComponent = Icons.logo;
 
   return (
     <header 
@@ -95,7 +85,7 @@ export function Header() {
           
           <div className="flex-1 flex justify-start">
              <Link href="/">
-                <LogoComponent width={100} height={40} className={cn(isLight && "invert-[60%]")} />
+                <LogoComponent width={100} height={40} className={cn(textColor)} />
              </Link>
           </div>
           
