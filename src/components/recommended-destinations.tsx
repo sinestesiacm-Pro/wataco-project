@@ -53,7 +53,7 @@ const DestinationCard = ({ route }: { route: typeof flightRoutes[0] }) => {
             <div className="content-container">
                 <h3 className="font-bold font-headline text-lg text-gray-900">{route.destinationCity}</h3>
                 <p className="text-xs text-gray-700">From {route.originCity}</p>
-                <p className="font-bold text-2xl text-white my-1 drop-shadow-lg">${route.simulatedPrice}</p>
+                <p className="font-bold text-2xl text-primary my-1 drop-shadow-lg">${route.simulatedPrice}</p>
             </div>
             <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Button onClick={handleClick} size="default" className="central-flight-button rounded-full font-semibold text-sm py-5 px-6 bg-accent/40 backdrop-blur-md text-white hover:bg-accent/80 shadow-2xl border border-white/20">

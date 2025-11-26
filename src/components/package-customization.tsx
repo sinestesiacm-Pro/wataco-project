@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -77,12 +78,12 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
 
     if (!availableHotels || availableHotels.length === 0 || !selectedHotel) {
         return (
-            <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
+            <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl">
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold font-headline">Personaliza tu Paquete</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-white/80">Actualmente no hay hoteles sugeridos para este destino. Por favor, busca vuelos y hoteles por separado.</p>
+                    <p className="text-muted-foreground">Actualmente no hay hoteles sugeridos para este destino. Por favor, busca vuelos y hoteles por separado.</p>
                 </CardContent>
             </Card>
         );
@@ -119,18 +120,18 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
 
 
     return (
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
+        <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold font-headline">Personaliza tu Paquete</CardTitle>
-                <CardDescription className="text-white/80">Ajusta tu hotel, vuelo y número de viajeros para crear el viaje perfecto. El precio se actualizará automáticamente.</CardDescription>
+                <CardDescription className="text-muted-foreground">Ajusta tu hotel, vuelo y número de viajeros para crear el viaje perfecto. El precio se actualizará automáticamente.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
                 {/* Passenger Selection */}
                  <div className="space-y-4">
-                    <h3 className="text-xl font-semibold flex items-center gap-2"><Users /> ¿Quiénes viajan?</h3>
+                    <h3 className="text-xl font-semibold flex items-center gap-2 text-foreground"><Users /> ¿Quiénes viajan?</h3>
                      <Popover>
                         <PopoverTrigger asChild>
-                            <Button variant="outline" className="w-full md:w-auto justify-start text-left font-normal bg-black/20 text-white border-white/30 hover:bg-black/30 hover:text-white">
+                            <Button variant="outline" className="w-full md:w-auto justify-start text-left font-normal">
                                 <Users className="mr-2 h-4 w-4" />
                                 {travelerText}
                             </Button>
@@ -167,7 +168,7 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
 
                 {/* Hotel Selection */}
                 <div className="space-y-4">
-                    <h3 className="text-xl font-semibold flex items-center gap-2"><Hotel /> Elige tu Hotel</h3>
+                    <h3 className="text-xl font-semibold flex items-center gap-2 text-foreground"><Hotel /> Elige tu Hotel</h3>
                      <RadioGroup value={selectedHotel.id} onValueChange={handleHotelSelection}>
                         {availableHotels.map(hotelOffer => {
                             const hotel = hotelOffer.hotel;
@@ -175,7 +176,7 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
                             return (
                                <Collapsible key={hotel.hotelId} open={expandedHotel === hotelOffer.id} onOpenChange={(isOpen) => setExpandedHotel(isOpen ? hotelOffer.id : null)}>
                                  <CollapsibleTrigger asChild>
-                                     <Label htmlFor={hotelOffer.id} className="flex items-center p-4 border border-white/20 rounded-lg cursor-pointer hover:bg-white/10 has-[:checked]:bg-primary/20 has-[:checked]:border-primary transition-all">
+                                     <Label htmlFor={hotelOffer.id} className="flex items-center p-4 border border-border rounded-lg cursor-pointer hover:bg-muted has-[:checked]:bg-primary/10 has-[:checked]:border-primary transition-all">
                                         <RadioGroupItem value={hotelOffer.id} id={hotelOffer.id} className="mr-4"/>
                                         <div className="flex-grow">
                                             <p className="font-semibold">{hotel.name}</p>
@@ -187,12 +188,12 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
                                     </Label>
                                  </CollapsibleTrigger>
                                  <CollapsibleContent>
-                                    <div className="p-4 grid md:grid-cols-2 gap-6 bg-black/20 rounded-b-lg">
+                                    <div className="p-4 grid md:grid-cols-2 gap-6 bg-muted/50 rounded-b-lg">
                                         <div className="space-y-4">
-                                            <p className="text-sm text-white/80">{hotel.description?.text}</p>
+                                            <p className="text-sm text-muted-foreground">{hotel.description?.text}</p>
                                             <div className="flex flex-wrap gap-2">
                                                 {(hotel.amenities || []).slice(0,3).map((amenity, i) => (
-                                                    <Badge key={i} variant="secondary" className="gap-2 bg-white/20 text-white border-none">
+                                                    <Badge key={i} variant="secondary" className="gap-2">
                                                         <Sparkles className="h-4 w-4" />
                                                         {amenity}
                                                     </Badge>
@@ -222,9 +223,9 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
 
                  {/* Flight Selection */}
                 <div className="space-y-4">
-                    <h3 className="text-xl font-semibold flex items-center gap-2"><Plane /> Elige tu Vuelo</h3>
+                    <h3 className="text-xl font-semibold flex items-center gap-2 text-foreground"><Plane /> Elige tu Vuelo</h3>
                      <Select value={selectedFlight.time} onValueChange={(val) => setSelectedFlight(mockFlights.find(f => f.time === val)!)}>
-                        <SelectTrigger className="w-full bg-black/20 border-white/30">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Selecciona un horario de vuelo" />
                         </SelectTrigger>
                         <SelectContent>
@@ -241,10 +242,10 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
                 </div>
 
                 {/* Final Price and Booking */}
-                <div className="pt-6 border-t border-white/20 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div className="pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div>
-                        <p className="text-sm text-white/80">Precio total para {travelerText}</p>
-                        <p className="text-4xl font-bold text-white">${finalTotalPrice.toFixed(2)}</p>
+                        <p className="text-sm text-muted-foreground">Precio total para {travelerText}</p>
+                        <p className="text-4xl font-bold text-foreground">${finalTotalPrice.toFixed(2)}</p>
                     </div>
                     <Button size="lg" className="w-full sm:w-auto bg-success hover:bg-success/90" onClick={handleBooking}>
                         <CheckCircle className="mr-2 h-5 w-5"/>
