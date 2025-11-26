@@ -378,7 +378,7 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
           <Button
               type="submit"
               size="lg"
-              className="text-lg font-bold bg-gradient-to-r from-blue-400 to-blue-600 h-14 text-white rounded-full shadow-lg hover:shadow-xl transition-all px-10"
+              className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-sky-600 h-14 text-white rounded-full shadow-lg hover:shadow-xl transition-all px-10"
           >
              Buscar Vuelos
           </Button>
