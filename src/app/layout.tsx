@@ -6,7 +6,8 @@ import { Header } from '@/components/header';
 import { AuthProvider } from '@/contexts/auth-context';
 import { ChatWidget } from '@/components/chat-widget';
 import { BottomNavbar } from '@/components/bottom-navbar';
-import { ThemeProvider, ThemeWrapper } from '@/contexts/theme-context';
+import { ThemeProvider } from '@/contexts/theme-context';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Uataco',
@@ -31,7 +32,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <ThemeProvider>
           <AuthProvider>
-            <ThemeWrapper>
+            <div className={cn('flex flex-col min-h-dvh')}>
                 <Header />
                 <main className="flex-grow flex flex-col">
                     {children}
@@ -39,12 +40,10 @@ export default function RootLayout({
                 <Toaster />
                 <ChatWidget />
                 <BottomNavbar />
-            </ThemeWrapper>
+            </div>
           </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
-
-    
