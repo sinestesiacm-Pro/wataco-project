@@ -89,11 +89,11 @@ export default function CruiseSearchPage() {
 
   return (
     <>
-    <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
+    <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
         <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Select onValueChange={setDestinationRegion} value={destinationRegion}>
-                    <SelectTrigger className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl text-lg">
+                    <SelectTrigger className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl text-lg">
                          <div className="flex items-center w-full">
                             <Sailboat className="h-6 w-6 mr-4 text-gray-800" />
                             <div>
@@ -110,7 +110,7 @@ export default function CruiseSearchPage() {
                 </Select>
                  <Popover>
                     <PopoverTrigger asChild>
-                      <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
+                      <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
                           <div className="flex items-center w-full">
                               <Users className="h-6 w-6 mr-4 text-gray-800" />
                               <div>
@@ -151,7 +151,7 @@ export default function CruiseSearchPage() {
             </div>
              <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
-                  <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
+                  <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
                       <div className="flex items-center w-full">
                           <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
                           <div className="truncate">

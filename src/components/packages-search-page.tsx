@@ -191,7 +191,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
             <div className='relative'>
                 <Popover open={isOriginPopoverOpen && originQuery.length > 1} onOpenChange={setIsOriginPopoverOpen}>
                     <PopoverTrigger asChild>
-                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
+                        <div className="flex items-center w-full p-4 bg-white/70 hover:bg-white/90 rounded-2xl cursor-text">
                             <PlaneTakeoff className="h-6 w-6 mr-4 text-primary" />
                             <div>
                                 <p className="text-xs text-gray-700">Desde</p>
@@ -217,7 +217,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
             <div className='relative'>
                 <Popover open={isDestinationPopoverOpen && destinationQuery.length > 1} onOpenChange={setIsDestinationPopoverOpen}>
                     <PopoverTrigger asChild>
-                        <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
+                        <div className="flex items-center w-full p-4 bg-white/70 hover:bg-white/90 rounded-2xl cursor-text">
                             <PlaneLanding className="h-6 w-6 mr-4 text-primary" />
                             <div>
                                 <p className="text-xs text-gray-700">Hasta</p>
@@ -245,7 +245,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
             <div>
                 <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
-                    <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
+                    <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
                         <div className="flex items-center w-full">
                             <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
                             <div>
@@ -276,7 +276,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
             <div>
                 <Popover>
                 <PopoverTrigger asChild>
-                    <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
+                    <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
                         <div className="flex items-center w-full">
                             <Users className="h-6 w-6 mr-4 text-gray-800" />
                             <div>

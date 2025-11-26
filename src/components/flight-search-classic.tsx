@@ -208,7 +208,7 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
                 <div className="space-y-4">
                   <Popover open={isOriginPopoverOpen && originQuery.length > 1} onOpenChange={setIsOriginPopoverOpen}>
                     <PopoverTrigger asChild>
-                      <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
+                      <div className="flex items-center w-full p-4 bg-white/70 hover:bg-white/90 rounded-2xl cursor-text">
                           <PlaneTakeoff className="h-6 w-6 mr-4 text-tertiary" />
                           <div>
                               <p className="text-xs text-gray-700">From</p>
@@ -237,7 +237,7 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
                   
                   <Popover open={isDestinationPopoverOpen && destinationQuery.length > 1} onOpenChange={setIsDestinationPopoverOpen}>
                     <PopoverTrigger asChild>
-                      <div className="flex items-center w-full p-4 bg-white/50 hover:bg-white/70 rounded-2xl cursor-text">
+                      <div className="flex items-center w-full p-4 bg-white/70 hover:bg-white/90 rounded-2xl cursor-text">
                           <MapPin className="h-6 w-6 mr-4 text-tertiary" />
                           <div>
                               <p className="text-xs text-gray-700">To</p>
@@ -275,7 +275,7 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
           <div className="grid grid-cols-2 gap-4">
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
-                  <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
+                  <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
                       <div className="flex items-center w-full">
                           <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
                           <div className="truncate">
@@ -305,7 +305,7 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
 
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/50 hover:bg-white/70 rounded-2xl">
+                  <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
                       <div className="flex items-center w-full">
                           <Users className="h-6 w-6 mr-4 text-gray-800" />
                           <div>
