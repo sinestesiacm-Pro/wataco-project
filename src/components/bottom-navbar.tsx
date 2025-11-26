@@ -29,7 +29,7 @@ const TabButton = React.memo(function TabButton({ id, label, icon: Icon, isActiv
             className={cn(
               "flex flex-col items-center justify-center gap-1 w-full h-full transition-colors",
               isActive 
-                ? "text-primary scale-110" 
+                ? "text-primary" 
                 : isLight ? "text-muted-foreground" : "text-white/70"
             )}
           >

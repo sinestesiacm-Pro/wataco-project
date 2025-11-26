@@ -14,26 +14,9 @@ import { SocialFeedSection } from './social-feed-section';
 import { Footer } from './footer';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { AnimatedClouds } from '@/components/animated-clouds';
-import { UnderwaterScene } from './underwater-scene';
 import { RecommendedDestinations } from './recommended-destinations';
 import { FlightSearchClassic } from './flight-search-classic';
-import { List, Map } from 'lucide-react';
-import { Button } from './ui/button';
-import { useLocalStorage } from '@/hooks/use-local-storage';
-import dynamic from 'next/dynamic';
-import { Loader2 } from 'lucide-react';
 import ActivitySearchPage from './activity-search-page';
-
-type SearchMode = 'list' | 'map';
-
-const DynamicFlightSearchMap = dynamic(
-    () => import('./flight-search-map').then(mod => mod.FlightSearchMap),
-    { 
-        ssr: false,
-        loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted/20 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
-    }
-);
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -138,27 +121,9 @@ function RecommendedContent({ tab }: { tab?: string }) {
 export function HomePageContent() {
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'Flights';
-    
-    const getBackgroundClass = () => {
-        switch(tab) {
-            case 'Flights': return 'bg-flights-background'; 
-            case 'Hotels': return 'bg-hotels-background';
-            case 'Packages': return 'bg-packages-background';
-            case 'Cruises': return 'bg-cruises-background';
-            case 'Activities': return 'bg-activities-background';
-            case 'Social': return 'bg-flights-background';
-            default: return 'bg-flights-background';
-        }
-    }
-
 
     return (
-        <div className={cn("w-full flex-grow flex flex-col relative", getBackgroundClass())}>
-            <div className="absolute inset-0 z-0">
-                {(tab === 'Flights' || tab === 'Social') && <AnimatedClouds />}
-                {tab === 'Cruises' && <UnderwaterScene />}
-            </div>
-            
+        <div className={cn("w-full flex-grow flex flex-col relative")}>
             <div className="relative z-10 flex flex-col flex-grow">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="pt-24">
@@ -180,5 +145,3 @@ export function HomePageContent() {
         </div>
     )
 }
-
-    

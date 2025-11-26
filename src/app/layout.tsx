@@ -9,8 +9,8 @@ import { BottomNavbar } from '@/components/bottom-navbar';
 import { ThemeProvider, ThemeWrapper } from '@/contexts/theme-context';
 
 export const metadata: Metadata = {
-  title: 'Wataco',
-  description: 'Wataco - Your global travel platform to discover the world.',
+  title: 'Uataco',
+  description: 'Uataco - Your global travel platform to discover the world.',
 };
 
 export default function RootLayout({
