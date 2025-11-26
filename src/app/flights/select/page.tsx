@@ -243,11 +243,10 @@ function FlightSelectionPage() {
   }
 
   return (
-    <div className={cn('min-h-screen w-full pt-24 pb-24 md:pb-8 relative overflow-hidden bg-flights-gradient background-pan-animation')}>
-      <AnimatedClouds />
-      <div className="relative z-10 min-h-full bg-transparent">
+    <div className='min-h-screen w-full pt-24 pb-24 md:pb-8 relative overflow-hidden'>
+      <div className="relative z-10 min-h-full">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
+            <Button asChild variant="outline" className="mb-6">
                 <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Volver a la Búsqueda
@@ -264,7 +263,7 @@ function FlightSelectionPage() {
               {step !== 'review' && (
                 <>
                   <aside className="hidden lg:block lg:col-span-3 sticky top-24 self-start">
-                      <div className="bg-black/20 backdrop-blur-2xl border border-white/20 rounded-2xl p-4">
+                      <div className="bg-card/80 backdrop-blur-2xl border p-4 rounded-2xl">
                         <FlightFilters 
                             availableAirlines={availableAirlines}
                             onFilterChange={handleFilterChange}
@@ -274,15 +273,15 @@ function FlightSelectionPage() {
                   <div className="lg:hidden fixed bottom-24 right-6 z-50">
                     <Dialog>
                       <DialogTrigger asChild>
-                         <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4 bg-white/40 backdrop-blur-xl border border-white/20 text-white hover:bg-white/60">
+                         <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4">
                            <Filter className="mr-2 h-5 w-5"/>
                            Filtros
                          </Button>
                       </DialogTrigger>
-                      <DialogContent className="w-[90vw] max-w-md bg-black/30 backdrop-blur-2xl border-white/20 rounded-2xl text-white shadow-2xl p-0">
+                      <DialogContent className="w-[90vw] max-w-md p-0">
                         <DialogHeader className="p-6 pb-4 text-left">
                            <DialogTitle className="font-headline text-2xl">Filtros de Vuelo</DialogTitle>
-                           <DialogDescription className="text-white/80">Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</DialogDescription>
+                           <DialogDescription>Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</DialogDescription>
                         </DialogHeader>
                         <div className="p-6 pt-0">
                             <FlightFilters 
@@ -311,7 +310,7 @@ export default function FlightSelectPageWrapper() {
   return (
     <Suspense fallback={
         <div className="flex items-center justify-center min-h-screen">
-            <Loader2 className="h-12 w-12 animate-spin text-white" />
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
     }>
         <FlightSelectionPage />

@@ -83,7 +83,7 @@ const StopInfo = ({ itinerary, dictionaries }: { itinerary: Itinerary, dictionar
                 const cityName = getCityName(segment.arrival.iataCode, dictionaries);
 
                 return (
-                     <div key={`stop-${index}`} className="text-xs text-center text-gray-600">
+                     <div key={`stop-${index}`} className="text-xs text-center text-muted-foreground">
                         <p className="font-semibold">Escala en {cityName}</p>
                         <p>Duración: {hours}h {minutes}m</p>
                     </div>
@@ -270,7 +270,7 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
     return (
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-8 space-y-6">
-                <h2 className="text-3xl font-headline font-bold text-white">Revisa y completa tu reserva</h2>
+                <h2 className="text-3xl font-headline font-bold">Revisa y completa tu reserva</h2>
                 
                 <FlightSummaryCard title="Vuelo de Ida" itinerary={outboundFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onOutboundChange} />
                 
@@ -278,7 +278,7 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
                     <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnItinerary} dictionaries={dictionaries} onChangeClick={onReturnChange} />
                 )}
 
-                <Separator className="bg-white/20"/>
+                <Separator/>
                 
                 <AdditionalServicesCard onPriceChange={(price) => setExtraServicesPrice(prev => prev + price)} />
 
@@ -291,7 +291,7 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
                             <span className="font-semibold text-card-foreground">Tu vuelo incluye:</span>
                             <FlightBaggageInfo flight={outboundFlight} />
                         </div>
-                        <Button variant="outline" disabled className="bg-transparent border-border hover:bg-accent text-muted-foreground">Añadir más equipaje (Próximamente)</Button>
+                        <Button variant="outline" disabled>Añadir más equipaje (Próximamente)</Button>
                     </CardContent>
                 </Card>
             </div>

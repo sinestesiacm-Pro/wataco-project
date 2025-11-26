@@ -113,10 +113,10 @@ function HotelResultsPageContent() {
     if(error) {
         return (
             <div className="max-w-4xl mx-auto py-8 px-4">
-                <Card className="bg-black/10 backdrop-blur-xl border border-white/20">
-                    <CardContent className="pt-6 text-center text-white/90">
+                <Card>
+                    <CardContent className="pt-6 text-center">
                         <h2 className="text-xl font-bold text-destructive">Error de Búsqueda</h2>
-                        <p className=" mt-2">{error}</p>
+                        <p className="text-muted-foreground mt-2">{error}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -125,23 +125,23 @@ function HotelResultsPageContent() {
     
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Collapsible className="mb-6 bg-black/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl">
+            <Collapsible className="mb-6 bg-card/80 backdrop-blur-xl border p-4 rounded-2xl">
                 <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl sm:text-4xl font-bold font-headline text-white">Hoteles en {destinationName}</h1>
-                    <p className="text-white/80 mt-1">
+                    <h1 className="text-3xl sm:text-4xl font-bold font-headline">Hoteles en {destinationName}</h1>
+                    <p className="text-muted-foreground mt-1">
                         {filteredHotels ? `${filteredHotels.length} resultados encontrados` : ''}
                     </p>
                 </div>
                 <CollapsibleTrigger asChild>
-                    <Button variant="outline" className="text-white bg-transparent border-white/20 hover:bg-white/10 hover:text-white">
+                    <Button variant="outline">
                     <Settings2 className="mr-2 h-4 w-4" />
                     Modificar Búsqueda
                     </Button>
                 </CollapsibleTrigger>
                 </div>
             <CollapsibleContent>
-                <div className="mt-6 pt-6 border-t border-white/20">
+                <div className="mt-6 pt-6 border-t">
                 <HotelSearchPage />
                 </div>
             </CollapsibleContent>
@@ -153,7 +153,7 @@ function HotelResultsPageContent() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <aside className="hidden lg:block lg:col-span-3 sticky top-24 self-start">
-                <div className="bg-black/20 backdrop-blur-2xl border border-white/20 rounded-2xl p-4">
+                <div className="bg-card/80 backdrop-blur-2xl border rounded-2xl p-4">
                 <HotelFilters 
                     filters={filters}
                     onFiltersChange={setFilters}
@@ -163,15 +163,15 @@ function HotelResultsPageContent() {
             <div className="lg:hidden fixed bottom-24 right-6 z-50">
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4 bg-white/40 backdrop-blur-xl border border-white/20 text-white hover:bg-white/60">
+                        <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4">
                         <Filter className="mr-2 h-5 w-5"/>
                         Filtros
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="w-[90vw] max-w-md bg-black/30 backdrop-blur-2xl border-white/20 rounded-2xl text-white shadow-2xl p-0">
+                    <DialogContent className="w-[90vw] max-w-md p-0">
                     <DialogHeader className="p-6 pb-4 text-left">
                         <DialogTitle className="font-headline text-2xl">Filtros de Hotel</DialogTitle>
-                        <DialogDescription className="text-white/80">Aplica filtros para refinar los resultados de tu búsqueda de hoteles.</DialogDescription>
+                        <DialogDescription>Aplica filtros para refinar los resultados de tu búsqueda de hoteles.</DialogDescription>
                     </DialogHeader>
                         <ScrollArea className="h-full pr-4 py-4 pl-6">
                         <HotelFilters 
@@ -186,8 +186,8 @@ function HotelResultsPageContent() {
             {filteredHotels && filteredHotels.length > 0 ? (
                 <HotelResults hotels={filteredHotels} searchParams={searchParams} />
             ) : (
-                <Card className="bg-black/10 backdrop-blur-xl border border-white/20">
-                    <CardContent className="pt-6 text-center text-white/70">
+                <Card>
+                    <CardContent className="pt-6 text-center text-muted-foreground">
                         <p>No se encontraron hoteles que coincidan con tus filtros.</p>
                         <p>Intenta ajustar o eliminar algunos filtros para ver más resultados.</p>
                     </CardContent>
@@ -202,11 +202,11 @@ function HotelResultsPageContent() {
 export default function HotelSearchPageWrapper() {
   return (
     <Suspense fallback={
-        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] bg-hotels-background">
-            <Loader2 className="h-12 w-12 animate-spin text-white" />
+        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
     }>
-      <div className={cn('w-full min-h-screen pt-24 pb-24 md:pb-8', 'bg-hotels-background')}>
+      <div className='w-full min-h-screen pt-24 pb-24 md:pb-8'>
         <HotelResultsPageContent />
       </div>
     </Suspense>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { AmadeusHotelOffer, Room } from '@/lib/types';
@@ -43,7 +44,7 @@ const RoomOption = React.memo(function RoomOption({ roomOffer, onAdd, onRemove, 
     const roomTypeName = roomOffer.room.description.text;
 
     return (
-        <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col md:flex-row bg-card text-card-foreground rounded-2xl">
+        <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col md:flex-row bg-card rounded-2xl">
             <div className="md:col-span-5 p-6 flex flex-col justify-between md:w-1/2">
                 <div>
                    <div className="relative h-48 w-full mb-4 rounded-lg overflow-hidden">
@@ -91,7 +92,7 @@ const RoomOption = React.memo(function RoomOption({ roomOffer, onAdd, onRemove, 
             <div className="md:col-span-7 flex flex-col bg-muted/20 md:w-1/2 p-6 justify-between">
                 <div className="text-right text-card-foreground">
                     <p className="text-xs text-muted-foreground">Precio por noche</p>
-                    <p className="text-3xl font-bold text-card-foreground">${parseFloat(roomOffer.price.total).toFixed(2)}</p>
+                    <p className="text-3xl font-bold">${parseFloat(roomOffer.price.total).toFixed(2)}</p>
                     <p className="text-xs text-muted-foreground">Impuestos incluidos</p>
                 </div>
                  <div className="flex flex-col items-center gap-4 mt-auto pt-4">
@@ -178,9 +179,9 @@ export function RoomSelectionView({ hotelOffer, onRoomsSelected, adults, childre
   return (
     <div className="space-y-6 pb-32"> {/* Padding at bottom for summary bar */}
        <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold font-headline text-white">{hotelOffer.hotel.name} - Elige tu habitación</h2>
+            <h2 className="text-2xl font-bold font-headline">{hotelOffer.hotel.name} - Elige tu habitación</h2>
        </div>
-       <p className="text-white/80 -mt-6">Has buscado para <span className="font-bold">{guestsText}</span>. Selecciona una o más habitaciones para alojar a todo tu grupo.</p>
+       <p className="text-muted-foreground -mt-6">Has buscado para <span className="font-bold">{guestsText}</span>. Selecciona una o más habitaciones para alojar a todo tu grupo.</p>
 
       {rooms.map((roomOffer, index) => {
          const roomCapacity = parseInt(roomOffer.room.type.split('_')[0] || '2');

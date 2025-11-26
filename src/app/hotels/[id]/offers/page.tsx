@@ -23,15 +23,15 @@ function HotelOffersPageContent() {
   const backLinkHref = `/hotels/search?${searchParams.toString()}`;
 
   if (!hotelId || !checkInDate || !checkOutDate) {
-    return <div className="text-center text-white">Parámetros de búsqueda no válidos.</div>;
+    return <div className="text-center">Parámetros de búsqueda no válidos.</div>;
   }
 
   return (
-    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-background')}>
+    <div className='w-full min-h-screen pt-24 pb-24'>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-12">
             <div>
-                <Button asChild variant="outline" className="mb-6 bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
+                <Button asChild variant="outline" className="mb-6">
                   <Link href={backLinkHref}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Volver a los resultados
@@ -54,8 +54,8 @@ function HotelOffersPageContent() {
 export default function HotelOffersPage() {
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-hotels-background">
-        <Loader2 className="h-12 w-12 animate-spin text-white" />
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     }>
       <HotelOffersPageContent />

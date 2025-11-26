@@ -1,3 +1,4 @@
+
 'use client';
 
 import { cn } from "@/lib/utils";
@@ -16,9 +17,9 @@ const Step = ({ title, isActive, isCompleted }: { title: string; isActive: boole
         {isCompleted ? (
             <CheckCircle className="h-6 w-6 text-success" />
         ) : (
-            <Circle className={cn("h-6 w-6 transition-colors", isActive ? "text-primary fill-primary/20" : "text-white/50")} />
+            <Circle className={cn("h-6 w-6 transition-colors", isActive ? "text-primary fill-primary/20" : "text-muted-foreground")} />
         )}
-        <span className={cn("font-semibold drop-shadow-lg transition-colors", isActive ? "text-primary" : isCompleted ? "text-white" : "text-white/70")}>
+        <span className={cn("font-semibold drop-shadow-lg transition-colors", isActive ? "text-primary" : isCompleted ? "" : "text-muted-foreground")}>
             {title}
         </span>
     </div>
@@ -29,7 +30,7 @@ export const BookingProgressHeader = React.memo(function BookingProgressHeader({
   const returnCompleted = step === 'review' && isRoundTrip;
 
   return (
-    <div className="bg-black/20 backdrop-blur-lg border border-white/20 p-4 rounded-2xl shadow-md text-white mb-8">
+    <div className="bg-card/80 backdrop-blur-lg border p-4 rounded-2xl shadow-md mb-8">
         <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-semibold font-headline flex items-center gap-3 drop-shadow-lg">
                 <Plane className="h-6 w-6" />
@@ -47,7 +48,7 @@ export const BookingProgressHeader = React.memo(function BookingProgressHeader({
         />
         {isRoundTrip && (
             <>
-             <div className="flex-grow h-px bg-white/20 mx-4"></div>
+             <div className="flex-grow h-px bg-border mx-4"></div>
              <Step 
                 title="2. Elige vuelo de vuelta" 
                 isActive={step === 'return'}
@@ -55,7 +56,7 @@ export const BookingProgressHeader = React.memo(function BookingProgressHeader({
             />
             </>
         )}
-        <div className="flex-grow h-px bg-white/20 mx-4"></div>
+        <div className="flex-grow h-px bg-border mx-4"></div>
         <Step 
             title={isRoundTrip ? "3. Revisa tu viaje" : "2. Revisa tu viaje"}
             isActive={step === 'review'}

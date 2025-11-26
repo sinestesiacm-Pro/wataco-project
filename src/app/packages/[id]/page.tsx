@@ -20,10 +20,10 @@ function PackageDetailPageContent({ id }: { id: string }) {
   }
 
   return (
-    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-packages-background')}>
+    <div className='w-full min-h-screen pt-24 pb-24'>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
-            <Button asChild variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
+            <Button asChild variant="outline">
                <Link href="/?tab=Packages">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Volver a Paquetes
@@ -32,7 +32,7 @@ function PackageDetailPageContent({ id }: { id: string }) {
              {pkg.special_offer && <p className="text-2xl font-bold text-accent animate-pulse">{pkg.special_offer}</p>}
         </div>
 
-        <Card className="overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
+        <Card className="overflow-hidden bg-card/80 backdrop-blur-xl border rounded-2xl">
           <div className="relative h-64 md:h-80 w-full">
               <Image 
                 src={pkg.image} 
@@ -43,32 +43,32 @@ function PackageDetailPageContent({ id }: { id: string }) {
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-6 left-6">
+              <div className="absolute bottom-6 left-6 text-white">
                 <h1 className="text-4xl md:text-5xl font-bold font-headline drop-shadow-lg">{pkg.title}</h1>
-                <p className="text-xl text-white/90 drop-shadow-md">{pkg.destination}</p>
+                <p className="text-xl drop-shadow-md">{pkg.destination}</p>
               </div>
           </div>
           <CardContent className="p-6 grid md:grid-cols-2 gap-8">
             <div>
               <h2 className="text-2xl font-bold font-headline mb-4">Detalles del Paquete</h2>
-              <p className="text-white/80 mb-6">{pkg.description}</p>
+              <p className="text-muted-foreground mb-6">{pkg.description}</p>
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div>
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                    <Check className="text-green-400"/>
+                    <Check className="text-green-500"/>
                     ¿Qué incluye?
                   </h3>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-white/80">
+                  <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                       {pkg.includes.map((item, i) => <li key={i}>{item}</li>)}
                   </ul>
               </div>
                <div>
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                    <X className="text-red-400"/>
+                    <X className="text-red-500"/>
                     ¿Qué no incluye?
                   </h3>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-white/80">
+                  <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                       {pkg.not_included.map((item, i) => <li key={i}>{item}</li>)}
                   </ul>
               </div>
@@ -88,8 +88,8 @@ export default function PackageDetailPage({ params }: { params: Promise<{ id: st
   
   return (
      <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-packages-background">
-        <Loader2 className="h-12 w-12 animate-spin text-white" />
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     }>
       <PackageDetailPageContent id={id} />

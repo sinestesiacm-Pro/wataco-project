@@ -56,7 +56,7 @@ const generateWords = (count: number, isMobile: boolean) => {
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
-            className={cn("whitespace-nowrap absolute text-white", word.size)}
+            className={cn("whitespace-nowrap absolute text-foreground", word.size)}
             style={
                 {
                     top: word.top,
@@ -84,7 +84,7 @@ const WelcomeCloud = React.memo(function WelcomeCloud() {
 
     return (
         <>
-            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10" />
+            <div className="absolute inset-0 bg-background/20 backdrop-blur-sm z-10" />
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
                 {words.map((word, index) => (
                     <Word key={`word-${index}`} word={word} />
@@ -97,12 +97,12 @@ const WelcomeCloud = React.memo(function WelcomeCloud() {
 export function HotelLoadingAnimation({ destinationName }: { destinationName: string }) {
 
     return (
-        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-hotels-background">
+        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-background">
             <WelcomeCloud />
-            <div className="relative z-30 bg-gray-800/40 backdrop-blur-md p-6 rounded-2xl font-body loading-route-box shadow-2xl border border-white/20 flex flex-col items-center">
-              <Hotel className="h-10 w-10 text-white mb-4 drop-shadow-lg"/>
-              <h2 className="text-2xl font-bold text-white drop-shadow-lg">Buscando los mejores hoteles en {destinationName}</h2>
-              <p className="text-gray-300 mt-1 drop-shadow-lg font-medium">Esto puede tardar un momento...</p>
+            <div className="relative z-30 bg-card/40 backdrop-blur-md p-6 rounded-2xl font-body loading-route-box shadow-2xl border border-border flex flex-col items-center">
+              <Hotel className="h-10 w-10 text-card-foreground mb-4 drop-shadow-lg"/>
+              <h2 className="text-2xl font-bold text-card-foreground drop-shadow-lg">Buscando los mejores hoteles en {destinationName}</h2>
+              <p className="text-muted-foreground mt-1 drop-shadow-lg font-medium">Esto puede tardar un momento...</p>
             </div>
         </div>
     );

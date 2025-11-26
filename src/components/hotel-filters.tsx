@@ -48,7 +48,7 @@ const accommodationTypes: { id: string; label: string; }[] = [
 
 const FilterSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div>
-        <h3 className="text-lg font-semibold mb-3 font-headline text-white">{title}</h3>
+        <h3 className="text-lg font-semibold mb-3 font-headline">{title}</h3>
         <div className="space-y-3 pl-1">
             {children}
         </div>
@@ -78,9 +78,9 @@ export function HotelFilters({ filters, onFiltersChange }: HotelFiltersProps) {
   }
 
   return (
-    <Card className="sticky top-24 shadow-none bg-transparent border-none text-white">
+    <Card className="sticky top-24 shadow-none bg-transparent border-none">
       <CardHeader className="p-0 mb-4">
-        <CardTitle className="text-xl font-bold font-headline text-white">Filtrar por</CardTitle>
+        <CardTitle className="text-xl font-bold font-headline">Filtrar por</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6 p-0">
       
@@ -93,13 +93,13 @@ export function HotelFilters({ filters, onFiltersChange }: HotelFiltersProps) {
               step={10}
               className="w-full"
           />
-          <div className="flex justify-between text-sm text-white/70 mt-2">
+          <div className="flex justify-between text-sm text-muted-foreground mt-2">
               <span>${localPriceRange[0]}</span>
               <span>${localPriceRange[1] === 1000 ? '1000+' : localPriceRange[1]}</span>
           </div>
       </FilterSection>
       
-      <Separator className="bg-white/20" />
+      <Separator />
 
       <FilterSection title="Clasificación por Estrellas">
         <div className="space-y-2">
@@ -109,18 +109,17 @@ export function HotelFilters({ filters, onFiltersChange }: HotelFiltersProps) {
                 id={`star-${star}`}
                 onCheckedChange={() => handleCheckboxChange(star, 'stars')}
                 checked={filters.stars.includes(star)}
-                className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
               <Label htmlFor={`star-${star}`} className="flex items-center cursor-pointer gap-1">
                 {[...Array(star)].map((_, i) => ( <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" /> ))}
-                {[...Array(5 - star)].map((_, i) => ( <Star key={i} className="w-4 h-4 text-white/30" /> ))}
+                {[...Array(5 - star)].map((_, i) => ( <Star key={i} className="w-4 h-4 text-muted-foreground/30" /> ))}
               </Label>
             </div>
           ))}
         </div>
       </FilterSection>
       
-      <Separator className="bg-white/20" />
+      <Separator />
       
       <FilterSection title="Servicios">
         <div className="space-y-2">
@@ -130,10 +129,9 @@ export function HotelFilters({ filters, onFiltersChange }: HotelFiltersProps) {
                 id={`amenity-${amenity.id}`}
                 onCheckedChange={() => handleCheckboxChange(amenity.id, 'amenities')}
                 checked={filters.amenities.includes(amenity.id)}
-                 className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
               <Label htmlFor={`amenity-${amenity.id}`} className="flex items-center cursor-pointer gap-2 text-sm">
-                <amenity.icon className="w-4 h-4 text-white/70" />
+                <amenity.icon className="w-4 h-4 text-muted-foreground" />
                 {amenity.label}
               </Label>
             </div>

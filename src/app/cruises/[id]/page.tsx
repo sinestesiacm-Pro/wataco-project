@@ -23,15 +23,14 @@ export default async function CruiseDetailPage({ params }: { params: { id: strin
 
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-cruises-background">
-        <Loader2 className="h-12 w-12 animate-spin text-white" />
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     }>
-        <div className={cn("w-full min-h-screen pt-24 pb-24 relative overflow-hidden", "bg-cruises-background")}>
-             <UnderwaterScene />
+        <div className="w-full min-h-screen pt-24 pb-24 relative overflow-hidden">
              <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
                 <div className="flex justify-between items-center">
-                    <Button asChild variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
+                    <Button asChild variant="outline">
                        <Link href="/?tab=Cruises">
                           <ArrowLeft className="mr-2 h-4 w-4" />
                           Volver a Cruceros

@@ -1,3 +1,4 @@
+
 'use client';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -45,7 +46,7 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
     const guestsText = `${adults} adulto${adults > 1 ? 's' : ''}` + (children > 0 ? `, ${children} niño${children > 1 ? 's' : ''}` : '');
 
     return (
-        <Card className="shadow-lg bg-white text-gray-800">
+        <Card className="shadow-lg">
             <CardHeader>
                 <div className="relative h-40 w-full mb-4 rounded-lg overflow-hidden">
                     <Image
@@ -69,11 +70,11 @@ const BookingSummary = ({ hotelOffer, selectedRoom, adults, children, numberOfRo
                 </div>
                 <Separator/>
                 <div className="space-y-2">
-                     <div className="flex justify-between text-gray-500">
+                     <div className="flex justify-between text-muted-foreground">
                         <span>Alojamiento ({numberOfRooms} hab. x {nights} noches)</span>
                         <span>${accommodationPrice.toFixed(2)}</span>
                     </div>
-                     <div className="flex justify-between text-gray-500">
+                     <div className="flex justify-between text-muted-foreground">
                         <span>Impuestos y tasas</span>
                         <span>${taxes.toFixed(2)}</span>
                     </div>
@@ -129,11 +130,11 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
   return (
     <>
         <div className="flex items-center justify-between mb-8">
-            <Button variant="outline" onClick={onBack} className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
+            <Button variant="outline" onClick={onBack}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Volver a la selección de habitación
             </Button>
-            <h2 className="hidden md:block text-2xl font-bold font-headline text-center text-white">Revisa y Paga</h2>
+            <h2 className="hidden md:block text-2xl font-bold font-headline text-center">Revisa y Paga</h2>
             <div className="w-32"></div>
         </div>
 
@@ -142,7 +143,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
         <BookingSummary hotelOffer={hotelOffer} selectedRoom={selectedRoom} adults={adults} children={children} numberOfRooms={numberOfRooms} />
 
         {/* Guest Details */}
-        <Card className="bg-white text-gray-800">
+        <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><CheckCircle className="text-primary"/> ¿Quién se hospeda?</CardTitle>
                 <CardDescription>Ingresa los datos del huésped principal.</CardDescription>
@@ -200,7 +201,7 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
         </Card>
         
         {/* Payment Method */}
-        <Card className="bg-white text-gray-800">
+        <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><CreditCard className="text-primary"/> Método de Pago</CardTitle>
                 <CardDescription>Esta es una demostración. No se procesarán pagos reales.</CardDescription>
@@ -215,12 +216,12 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                             defaultValue={field.value} 
                             className="mb-6 grid grid-cols-2 gap-4"
                         >
-                            <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer", paymentMethod === 'credit-card' && 'bg-blue-50 border-primary')}>
+                            <Label htmlFor="credit-card" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-muted cursor-pointer", paymentMethod === 'credit-card' && 'bg-primary/10 border-primary')}>
                                 <RadioGroupItem value="credit-card" id="credit-card"/>
                                 <CreditCard />
                                 <span>Tarjeta de crédito</span>
                             </Label>
-                             <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-gray-100 cursor-pointer", paymentMethod === 'paypal' && 'bg-blue-50 border-primary')}>
+                             <Label htmlFor="paypal" className={cn("flex items-center gap-2 border rounded-md p-3 hover:bg-muted cursor-pointer", paymentMethod === 'paypal' && 'bg-primary/10 border-primary')}>
                                 <RadioGroupItem value="paypal" id="paypal"/>
                                 <Landmark />
                                 <span>PayPal</span>
@@ -273,9 +274,9 @@ export function CheckoutView({ hotelOffer, selectedRoom, adults, children, numbe
                )}
             </CardContent>
              <CardFooter className="flex-col items-start gap-4">
-                <div className="text-xs text-white flex items-center gap-2">
-                   <AlertCircle className="h-4 w-4 text-gray-500" />
-                   <span className="text-gray-500">Revisa los detalles antes de confirmar.</span>
+                <div className="text-xs text-muted-foreground flex items-center gap-2">
+                   <AlertCircle className="h-4 w-4" />
+                   <span>Revisa los detalles antes de confirmar.</span>
                </div>
                <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90">
                    <Lock className="mr-2 h-4 w-4" />

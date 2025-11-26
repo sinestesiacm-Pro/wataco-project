@@ -64,7 +64,7 @@ const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
                 const cityName = getCityName(segment.arrival.iataCode);
 
                 return (
-                     <div key={`stop-${index}`} className="text-xs text-center text-gray-600">
+                     <div key={`stop-${index}`} className="text-xs text-center text-muted-foreground">
                         <p>Escala en {cityName}</p>
                         <p>Duración: {hours}h {minutes}m</p>
                     </div>
@@ -94,7 +94,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
 
     return (
         <Collapsible asChild>
-          <Card className="bg-white/60 backdrop-blur-lg border border-white/20 text-gray-800 rounded-2xl shadow-lg">
+          <Card className="bg-card/80 backdrop-blur-lg border text-card-foreground rounded-2xl shadow-lg">
             <CardContent className="p-4 space-y-4">
                 <div className="flex justify-between items-center px-2 text-sm">
                     <div className="flex items-center gap-2">
@@ -108,21 +108,21 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                         />
                         <p className="font-semibold">{airlineName}</p>
                     </div>
-                    <p className="text-gray-600 font-mono">{firstSegment.carrierCode} {firstSegment.number}</p>
+                    <p className="text-muted-foreground font-mono">{firstSegment.carrierCode} {firstSegment.number}</p>
                 </div>
                 
                 <div className="flex items-center justify-around">
                     <div className="text-center flex-grow flex-shrink-0 basis-0">
                         <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
-                        <p className="font-semibold text-gray-600">{firstSegment.departure.iataCode}</p>
+                        <p className="font-semibold text-muted-foreground">{firstSegment.departure.iataCode}</p>
                     </div>
                     
                      <CollapsibleTrigger asChild>
                          <button className={cn("flex w-auto flex-col items-center cursor-pointer text-center px-2", stops === 0 && "pointer-events-none")}>
                             <div className="w-full relative h-6 flex items-center justify-center">
-                                <div className="absolute w-full h-px bg-gray-400/50"></div>
-                                <div className="relative bg-white/60 p-1 rounded-full border border-gray-300">
-                                   <Plane className="w-5 h-5 text-gray-800"/>
+                                <div className="absolute w-full h-px bg-border"></div>
+                                <div className="relative bg-card p-1 rounded-full border">
+                                   <Plane className="w-5 h-5"/>
                                 </div>
                             </div>
                         </button>
@@ -130,7 +130,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     
                     <div className="text-center flex-grow flex-shrink-0 basis-0">
                         <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
-                        <p className="font-semibold text-gray-600">{lastSegment.arrival.iataCode}</p>
+                        <p className="font-semibold text-muted-foreground">{lastSegment.arrival.iataCode}</p>
                     </div>
                 </div>
                 
@@ -138,13 +138,13 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     <StopInfo itinerary={itinerary} dictionaries={dictionaries} />
                 </CollapsibleContent>
                 
-                <div className="flex justify-between items-center text-sm px-2 text-gray-600">
+                <div className="flex justify-between items-center text-sm px-2 text-muted-foreground">
                     <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3"/>
                         <span>{formatDuration(itinerary.duration)}</span>
                     </div>
                     <span>{stopInfoText}</span>
-                    <p className="text-xl font-bold text-gray-800">${flight.price.total}</p>
+                    <p className="text-xl font-bold text-card-foreground">${flight.price.total}</p>
                 </div>
 
                 <div className="pt-2">
@@ -173,7 +173,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
   return (
     <div className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">
+            <h2 className="text-3xl font-headline font-bold">
                 {title}
             </h2>
         </div>
@@ -199,8 +199,8 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
                 ))}
             </div>
         ) : (
-            <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
-                <CardContent className="pt-6 text-center text-white/70">
+            <Card>
+                <CardContent className="pt-6 text-center text-muted-foreground">
                     <p>No hay vuelos que coincidan con tus filtros.</p>
                     <p>Intenta ajustar o eliminar algunos filtros para ver más resultados.</p>
                 </CardContent>

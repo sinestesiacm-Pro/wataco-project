@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useMemo } from 'react';
@@ -55,7 +56,7 @@ const generateWords = (count: number, isMobile: boolean) => {
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
-            className={cn("whitespace-nowrap absolute text-white", word.size)}
+            className={cn("whitespace-nowrap absolute text-foreground", word.size)}
             style={
                 {
                     top: word.top,
@@ -83,7 +84,7 @@ const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
 
     return (
         <>
-            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10" />
+            <div className="absolute inset-0 bg-background/20 backdrop-blur-sm z-10" />
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
                 {words.map((word, index) => (
                     <Word key={`word-${index}`} word={word} />
@@ -98,11 +99,11 @@ export function FlightLoadingAnimation({ originName, destinationName }: { origin
     const to = destinationName.split(',')[0] || "Destino";
 
     return (
-        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-flights-background">
+        <div className="relative flex flex-col items-center justify-center text-center w-full h-full overflow-hidden bg-background">
             <WelcomeAboardCloud />
-            <div className="relative z-30 bg-gray-800/40 backdrop-blur-md p-6 rounded-2xl font-body loading-route-box shadow-2xl border border-white/20">
-              <h2 className="text-2xl font-bold text-white drop-shadow-lg">De {from} a {to}</h2>
-              <p className="text-gray-300 mt-1 drop-shadow-lg font-medium">Buscando entre más de 400 aerolíneas...</p>
+            <div className="relative z-30 bg-card/40 backdrop-blur-md p-6 rounded-2xl font-body loading-route-box shadow-2xl border border-border">
+              <h2 className="text-2xl font-bold text-card-foreground drop-shadow-lg">De {from} a {to}</h2>
+              <p className="text-muted-foreground mt-1 drop-shadow-lg font-medium">Buscando entre más de 400 aerolíneas...</p>
             </div>
         </div>
     );
