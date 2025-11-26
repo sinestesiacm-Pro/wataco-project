@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -28,7 +29,7 @@ interface Hotel {
 
 const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotelId: string, destinationName: string) => void }) {
     return (
-        <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-white/40 backdrop-blur-xl border-none hover:scale-105 overflow-hidden">
+        <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
             <div className="relative w-full h-48 flex-shrink-0">
                  <Carousel className="w-full h-full">
                     <CarouselContent>
@@ -69,9 +70,9 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
                     </Button>
                 </div>
             </div>
-            <CardContent className="p-4 flex flex-col flex-grow text-white">
-                 <h3 className="font-bold font-headline text-lg text-white">{hotel.nombre}</h3>
-                 <div className="flex items-center gap-2 text-sm text-white/90">
+            <CardContent className="p-4 flex flex-col flex-grow text-card-foreground">
+                 <h3 className="font-bold font-headline text-lg text-foreground">{hotel.nombre}</h3>
+                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                    <MapPin className="h-4 w-4" />
                    {hotel.ubicacion}
                  </div>
@@ -80,7 +81,7 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
                  </div>
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">
-                    <p className="font-semibold text-xl text-white drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
+                    <p className="font-semibold text-xl text-foreground drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
                     <Button onClick={() => onViewHotel(hotel.id, hotel.ubicacion)} className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
                         Ver Hotel
                     </Button>
@@ -91,7 +92,7 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
 });
 
 const HotelSkeleton = () => (
-    <div className="rounded-2xl p-0 flex flex-col bg-white/40 backdrop-blur-xl border-none">
+    <div className="rounded-2xl p-0 flex flex-col bg-card/80 backdrop-blur-xl border">
         <Skeleton className="w-full h-48 rounded-t-2xl" />
         <div className="p-4">
             <Skeleton className="h-6 w-3/4 mb-2" />
@@ -182,7 +183,7 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
   return (
     <div className="relative space-y-6">
        {loadingHotelId && <FullScreenHotelLoader destinationName={loadingDestinationName} />}
-      <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
+      <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
       
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

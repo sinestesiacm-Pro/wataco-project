@@ -30,7 +30,7 @@ const TabButton = React.memo(function TabButton({ id, label, icon: Icon, isActiv
               "flex flex-col items-center justify-center gap-1 w-full h-full transition-colors",
               isActive 
                 ? "text-primary" 
-                : isLight ? "text-muted-foreground" : "text-white/70"
+                : isLight ? "text-muted-foreground" : "text-gray-800/70"
             )}
           >
             <Icon className="h-5 w-5" />
@@ -48,8 +48,7 @@ export function BottomNavbar() {
   const activeTab = searchParams.get('tab') || 'Flights';
   const isOnHomePage = pathname === '/';
 
-  // The checkout page should always have the dark, glassmorphism navbar
-  const isLight = false;
+  const isLight = true;
 
   const handleTabClick = (tab: string) => {
     const params = new URLSearchParams(window.location.search);
@@ -60,8 +59,8 @@ export function BottomNavbar() {
   return (
     <div 
       className={cn(
-        "fixed bottom-0 left-0 right-0 z-50 shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.5)] md:hidden",
-        isLight ? "bg-white/80 backdrop-blur-xl" : "bg-black/20 backdrop-blur-xl"
+        "fixed bottom-0 left-0 right-0 z-50 shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.1)] md:hidden",
+        isLight ? "bg-background/80 backdrop-blur-xl border-t" : "bg-black/20 backdrop-blur-xl"
       )}
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >

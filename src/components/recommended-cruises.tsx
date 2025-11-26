@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,7 @@ import type { CruisePackage } from '@/lib/types';
 import Link from 'next/link';
 
 const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
-    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl">
+    <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl">
         <div className="relative w-full h-56 overflow-hidden">
             <Image 
                 src={cruise.image} 
@@ -30,17 +31,17 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
                 <p className="text-sm text-white/80 drop-shadow-md">{cruise.ship} - {cruise.duration}</p>
             </div>
         </div>
-        <div className="p-4 flex flex-col flex-grow text-white">
+        <div className="p-4 flex flex-col flex-grow text-card-foreground">
             <div className="flex justify-between items-center">
                 <div>
-                    <p className="text-xs text-white/70">Desde</p>
+                    <p className="text-xs text-muted-foreground">Desde</p>
                     <p className="font-semibold text-2xl">${cruise.price}/persona</p>
                 </div>
                 <div className="text-right">
                     <div className="flex items-center gap-1 text-amber-400 justify-end">
                         {[...Array(cruise.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                     </div>
-                    <p className="text-xs text-white/70">({cruise.reviews} reviews)</p>
+                    <p className="text-xs text-muted-foreground">({cruise.reviews} reviews)</p>
                 </div>
             </div>
             <Button asChild size="sm" className="mt-4 w-full font-semibold">
@@ -54,7 +55,7 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
 export function RecommendedCruises({ cruises = recommendedCruises }: { cruises?: CruisePackage[] }) {
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-white">Cruceros Recomendados</h2>
+      <h2 className="text-3xl font-bold font-headline text-foreground">Cruceros Recomendados</h2>
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {cruises.map((cruise, index) => (
           <CruiseCard key={index} cruise={cruise} />

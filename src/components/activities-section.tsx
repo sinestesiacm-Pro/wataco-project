@@ -20,7 +20,7 @@ const activities = [
 
 const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
     <Link href={`/activities/${activity.id}`}>
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-white/20 shadow-lg h-full">
+        <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl p-3 flex gap-4 transition-all duration-300 hover:bg-card/90 shadow-lg h-full">
             <div className="relative w-28 h-28 flex-shrink-0">
                 <Image 
                     src={activity.image} 
@@ -30,21 +30,21 @@ const ActivityCard = ({ activity }: { activity: typeof activities[0] }) => (
                     className="object-cover rounded-xl"
                 />
             </div>
-            <div className="flex flex-col flex-grow text-white">
+            <div className="flex flex-col flex-grow text-card-foreground">
                 <div className="flex justify-between items-start">
                   <h3 className="font-bold text-lg">{activity.name}</h3>
-                  <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white/70 hover:text-white">
+                  <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-muted-foreground hover:text-foreground">
                       <Heart className="h-5 w-5" />
                   </Button>
                 </div>
-                <p className="text-sm text-white/80">{activity.description}</p>
+                <p className="text-sm text-muted-foreground">{activity.description}</p>
                 <p className="font-semibold text-accent text-xl mt-1">${activity.price}/person</p>
                 <div className="flex items-center gap-2 mt-auto text-sm">
                     <div className="flex items-center gap-1 text-amber-400">
                         {[...Array(activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                        {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-white/30" />)}
+                        {[...Array(5 - activity.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-muted-foreground/30" />)}
                     </div>
-                    <p className="text-white/70">({activity.reviews} reviews)</p>
+                    <p className="text-muted-foreground">({activity.reviews} reviews)</p>
                 </div>
             </div>
         </Card>
@@ -55,8 +55,8 @@ export function ActivitiesSection() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-3xl font-bold font-headline text-white">Actividades y Experiencias</h2>
-        <p className="text-white/80 mt-2">Descubre aventuras inolvidables en tu próximo destino.</p>
+        <h2 className="text-3xl font-bold font-headline text-foreground">Actividades y Experiencias</h2>
+        <p className="text-muted-foreground mt-2">Descubre aventuras inolvidables en tu próximo destino.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {activities.map((activity, index) => (

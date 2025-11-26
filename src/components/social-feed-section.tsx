@@ -138,12 +138,12 @@ export function SocialFeedSection() {
     <div className="relative">
       <div className="max-w-xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-headline text-white">Comunidad de Viajeros</h2>
-            <p className="text-white/80 mt-2">Conecta, comparte y descubre con otros aventureros.</p>
+            <h2 className="text-3xl font-bold font-headline text-foreground">Comunidad de Viajeros</h2>
+            <p className="text-muted-foreground mt-2">Conecta, comparte y descubre con otros aventureros.</p>
         </div>
         <div className="space-y-8">
           {feed.map((item) => (
-            <Card key={item.id} className="rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-lg">
+            <Card key={item.id} className="rounded-3xl bg-card/80 backdrop-blur-xl border shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3 mb-4">
                   <Avatar>
@@ -156,16 +156,16 @@ export function SocialFeedSection() {
                   <Image src={item.image} alt={item.hint} data-ai-hint={item.hint} fill className="object-cover" />
                 </div>
                 <p className="text-sm mb-4 px-2">{item.caption}</p>
-                <div className="flex justify-around items-center text-sm text-white/70">
-                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-primary" onClick={() => handleLike(item.id)}>
+                <div className="flex justify-around items-center text-sm text-muted-foreground">
+                  <Button variant="ghost" className="flex items-center gap-2 text-foreground hover:text-primary" onClick={() => handleLike(item.id)}>
                     <Heart className="h-5 w-5" fill={item.isLiked ? 'currentColor' : 'none'} />
                     <span>{item.likes}</span>
                   </Button>
-                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-primary" onClick={() => handleOpenComments(item)}>
+                  <Button variant="ghost" className="flex items-center gap-2 text-foreground hover:text-primary" onClick={() => handleOpenComments(item)}>
                     <MessageSquare className="h-5 w-5" />
                     <span>{item.comments.length}</span>
                   </Button>
-                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-primary">
+                  <Button variant="ghost" className="flex items-center gap-2 text-foreground hover:text-primary">
                     <Share2 className="h-5 w-5" />
                     <span>Compartir</span>
                   </Button>
@@ -181,9 +181,9 @@ export function SocialFeedSection() {
             </Button>
         </div>
         <Sheet open={isCommentsOpen} onOpenChange={setIsCommentsOpen}>
-            <SheetContent side="bottom" className="h-[80vh] bg-background/50 backdrop-blur-2xl border-t border-white/20 flex flex-col rounded-t-3xl">
+            <SheetContent side="bottom" className="h-[80vh] bg-background/80 backdrop-blur-2xl border-t flex flex-col rounded-t-3xl">
                 <SheetHeader className="text-left p-4">
-                    <SheetTitle className="text-white font-headline text-2xl">Comentarios</SheetTitle>
+                    <SheetTitle className="font-headline text-2xl">Comentarios</SheetTitle>
                 </SheetHeader>
                 <ScrollArea className="flex-grow px-4">
                      <div className="space-y-4">
@@ -193,22 +193,22 @@ export function SocialFeedSection() {
                                     <AvatarImage src={comment.user.avatar} />
                                     <AvatarFallback>{comment.user.name.charAt(0)}</AvatarFallback>
                                 </Avatar>
-                                <div className="bg-black/20 p-3 rounded-lg flex-grow">
-                                    <p className="font-semibold text-white text-sm">{comment.user.name}</p>
-                                    <p className="text-white/80 text-sm">{comment.text}</p>
+                                <div className="bg-muted/50 p-3 rounded-lg flex-grow">
+                                    <p className="font-semibold text-sm">{comment.user.name}</p>
+                                    <p className="text-sm">{comment.text}</p>
                                 </div>
                             </div>
                         ))}
                          {activePost?.comments.length === 0 && (
-                            <p className="text-center text-white/60 py-8">No hay comentarios aún. ¡Sé el primero!</p>
+                            <p className="text-center text-muted-foreground py-8">No hay comentarios aún. ¡Sé el primero!</p>
                          )}
                     </div>
                 </ScrollArea>
-                 <div className="p-4 border-t border-white/20 mt-auto">
+                 <div className="p-4 border-t mt-auto">
                     <div className="flex items-center gap-2">
                         <Input 
                             placeholder="Añade un comentario..." 
-                            className="bg-black/20 border-white/30 text-white placeholder:text-white/60"
+                            className="bg-muted/50 border-border"
                             value={commentText}
                             onChange={(e) => setCommentText(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}

@@ -12,7 +12,7 @@ import React from 'react';
 
 const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer }) {
     return (
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-primary/50">
+        <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-primary/50">
             <div className="relative h-56 w-full overflow-hidden">
                 <Image 
                     src={pkg.image} 
@@ -30,8 +30,8 @@ const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer
                     <p className="text-white/90 drop-shadow-md">{pkg.destination}</p>
                 </div>
             </div>
-            <CardContent className="p-4 flex flex-col flex-grow text-white">
-                <div className="flex justify-between items-center text-sm text-white/80 mb-3">
+            <CardContent className="p-4 flex flex-col flex-grow text-card-foreground">
+                <div className="flex justify-between items-center text-sm text-muted-foreground mb-3">
                     <div className="flex items-center gap-2">
                         <PlaneTakeoff className="h-4 w-4" />
                         <span>Departs from {pkg.origin}</span>
@@ -42,7 +42,7 @@ const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer
                     </div>
                 </div>
 
-                <ul className="text-xs text-white/70 space-y-1 mb-4 list-disc list-inside">
+                <ul className="text-xs text-muted-foreground space-y-1 mb-4 list-disc list-inside">
                     {pkg.includes.slice(0, 2).map((item, index) => <li key={index}>{item}</li>)}
                 </ul>
                 
@@ -54,10 +54,10 @@ const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer
                             <div className="flex items-center gap-1 text-amber-400">
                                 {[...Array(pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                             </div>
-                            <p className="text-white/70">({pkg.reviews} reviews)</p>
+                            <p className="text-muted-foreground">({pkg.reviews} reviews)</p>
                         </div>
-                        <p className="text-xs text-white/80 mt-1">Price per person from</p>
-                        <p className="font-bold text-2xl text-white">${pkg.price}</p>
+                        <p className="text-xs text-muted-foreground mt-1">Price per person from</p>
+                        <p className="font-bold text-2xl text-foreground">${pkg.price}</p>
                     </div>
                     <Button asChild className="font-semibold bg-success hover:bg-success/90" size="sm">
                     <Link href={`/packages/${pkg.id}`}>
@@ -75,8 +75,8 @@ export function RecommendedPackages() {
   return (
      <div className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Unforgettable Packages</h2>
-        <p className="text-white mt-2 drop-shadow-lg">Complete experiences at the best price, ready for you to discover.</p>
+        <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Unforgettable Packages</h2>
+        <p className="text-muted-foreground mt-2 drop-shadow-lg">Complete experiences at the best price, ready for you to discover.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {recommendedPackages.map((pkg) => (

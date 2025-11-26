@@ -50,7 +50,7 @@ const renderStars = (rating: number) => {
 
 const TestimonialCard = memo(function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
     return (
-        <Card className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white/40 backdrop-blur-xl border-none text-gray-800">
+        <Card className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-card/80 backdrop-blur-xl border text-card-foreground">
             <CardContent className="p-6 flex flex-col flex-grow text-left">
             <div className="flex items-center mb-4">
                 <Avatar className="h-14 w-14 mr-4 border-2 border-primary">
@@ -58,11 +58,11 @@ const TestimonialCard = memo(function TestimonialCard({ testimonial }: { testimo
                 <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
-                <h3 className="font-bold font-headline text-lg text-gray-900">{testimonial.name}</h3>
-                <p className="text-sm text-gray-700">{testimonial.location}</p>
+                <h3 className="font-bold font-headline text-lg text-foreground">{testimonial.name}</h3>
+                <p className="text-sm text-muted-foreground">{testimonial.location}</p>
                 </div>
             </div>
-            <blockquote className="text-gray-800 italic flex-grow mb-4">"{testimonial.text}"</blockquote>
+            <blockquote className="text-foreground italic flex-grow mb-4">"{testimonial.text}"</blockquote>
             {renderStars(testimonial.rating)}
             </CardContent>
         </Card>
@@ -75,8 +75,8 @@ export function TestimonialsSection() {
     <section className="py-16 text-center flex-grow flex flex-col justify-end pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-                <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">What Our Travelers Say</h2>
-                <p className="text-white mt-2 drop-shadow-lg">Real stories from unforgettable adventures.</p>
+                <h2 className="text-3xl font-headline font-bold text-foreground drop-shadow-lg">What Our Travelers Say</h2>
+                <p className="text-muted-foreground mt-2 drop-shadow-lg">Real stories from unforgettable adventures.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (

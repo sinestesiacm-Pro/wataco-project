@@ -69,8 +69,8 @@ export function RecommendedDestinations() {
   return (
     <div className="space-y-4 pt-16 pb-8">
       <div className="text-center">
-        <h2 className="text-4xl font-headline font-bold text-white drop-shadow-lg">Explora Nuestros Destinos Más Populares</h2>
-        <p className="text-lg text-white/80 mt-2 drop-shadow-lg">Descubre a dónde viajan nuestros exploradores.</p>
+        <h2 className="text-4xl font-headline font-bold text-foreground drop-shadow-lg">Explora Nuestros Destinos Más Populares</h2>
+        <p className="text-lg text-muted-foreground mt-2 drop-shadow-lg">Descubre a dónde viajan nuestros exploradores.</p>
       </div>
       
       <div className="relative flex justify-center items-center h-[400px]">
