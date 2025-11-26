@@ -9,8 +9,8 @@ import { BottomNavbar } from '@/components/bottom-navbar';
 import { ThemeProvider, ThemeWrapper } from '@/contexts/theme-context';
 
 export const metadata: Metadata = {
-  title: 'Uataco',
-  description: 'Uataco - Your global travel platform to discover the world.',
+  title: 'Wataco',
+  description: 'Wataco - Your global travel platform to discover the world.',
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="icon" href="https://i.ibb.co/cSZJSyx7/Generated-Image-September-07-2025-1-44-PM-removebg-preview.png" type="image/png" />
+        <link rel="icon" href="https://i.ibb.co/L60z0hY/wataco-logo-favicon.png" type="image/png" />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
@@ -46,3 +46,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    

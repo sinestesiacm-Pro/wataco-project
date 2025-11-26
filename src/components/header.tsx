@@ -57,14 +57,12 @@ export function Header() {
     if (path.startsWith('/flights/checkout')) return 'Finalize Purchase';
     if (/^\/hotels\/.*\/offers/.test(pathname)) return 'Select Room';
     
-    return 'Uataco';
+    return 'Wataco';
   }
 
   const currentTitle = getTitleFromPath(pathname);
-  const isHomePage = pathname === '/';
   
-  // The checkout page should always have the dark, glassmorphism header
-  const isLight = false;
+  const isLight = true;
   
   const textColor = isLight ? 'text-gray-800' : 'text-white';
   
@@ -74,9 +72,7 @@ export function Header() {
     <header 
       className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-colors duration-300",
-        isLight 
-            ? "bg-white/80 backdrop-blur-xl shadow-lg" 
-            : "bg-black/20 backdrop-blur-xl shadow-lg"
+        "bg-background/80 backdrop-blur-xl shadow-sm"
       )}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
@@ -85,16 +81,16 @@ export function Header() {
           
           <div className="flex-1 flex justify-start">
              <Link href="/">
-                <LogoComponent width={100} height={40} className={cn(textColor)} />
+                <LogoComponent width={120} height={40} className={cn(textColor)} />
              </Link>
           </div>
           
           <div className="flex-1 text-center">
              <div className="hidden md:flex justify-center">
                 <Tabs value={tab} onValueChange={handleTabChange} className="w-auto">
-                  <TabsList className={cn("bg-white/20 backdrop-blur-lg", isLight ? "bg-gray-200" : "bg-black/20")}>
+                  <TabsList className={cn("bg-muted/80 backdrop-blur-lg")}>
                     {TABS.map((item) => (
-                      <TabsTrigger key={item.id} value={item.id} className={cn("gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground", textColor)}>
+                      <TabsTrigger key={item.id} value={item.id} className={cn("gap-2 data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-md", textColor)}>
                         <item.icon className="h-4 w-4" />
                         {item.label}
                       </TabsTrigger>
@@ -109,7 +105,7 @@ export function Header() {
             {user ? (
               <UserNav />
             ) : (
-              <Button asChild className={cn("bg-white/20 hover:bg-white/30", textColor, isLight && "bg-gray-200 hover:bg-gray-300")}>
+              <Button asChild>
                 <Link href="/login">
                   <LogIn className="mr-0 sm:mr-2 h-4 w-4"/>
                   <span className="hidden sm:inline">Sign In</span>
@@ -122,3 +118,5 @@ export function Header() {
     </header>
   );
 }
+
+    

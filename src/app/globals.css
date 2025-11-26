@@ -7,7 +7,7 @@
 
 @layer base {
   :root, .light {
-    --background: 216 33% 90%; /* #E4EEF6 */
+    --background: 45 33% 97%; /* #F9F8F7 - Light Cream */
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -16,16 +16,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 208 100% 50%; /* #1C88FF */
+    --primary: 195 100% 45%; /* #00A3D4 - Tropical Cyan */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 200 30% 25%; /* #2D4A59 */
+    --secondary: 160 50% 40%; /* #2D8C6E - Tropical Green */
     --secondary-foreground: 210 40% 98%;
 
     --muted: 240 5% 96%;
     --muted-foreground: 240 4% 46%;
 
-    --accent: 35 100% 60%; /* Orange */
+    --accent: 5 80% 65%; /* #F28C85 - Coral Red */
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -33,12 +33,12 @@
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 200 90% 55%;
+    --ring: 195 90% 55%;
 
     --radius: 1.25rem;
-    --success: 48 95% 58%; /* #9BFA47 */
-    --success-foreground: 0 0% 0%;
-    --tertiary: 35 100% 60%; /* Naranja #FF9800 */
+    --success: 140 67% 43%; /* A compatible green */
+    --success-foreground: 0 0% 100%;
+    --tertiary: 35 70% 65%; /* #E6B47C - Sandy Gold */
     --tertiary-foreground: 0 0% 100%;
   }
 
@@ -72,9 +72,9 @@
     --ring: 212.7 26.8% 83.9%;
     
     --radius: 1.25rem;
-    --success: 147 67% 43%;
+    --success: 140 67% 43%;
     --success-foreground: 0 0% 100%;
-    --tertiary: 35 100% 60%;
+    --tertiary: 35 70% 65%;
     --tertiary-foreground: 0 0% 100%;
   }
 }
@@ -90,7 +90,7 @@
     @apply bg-background text-foreground min-h-screen;
   }
   h2.font-headline, h3.font-headline, p.font-headline {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
   }
 }
 
@@ -155,7 +155,7 @@
 
 
 .bg-flights-gradient {
-   background: linear-gradient(135deg, hsl(205, 70%, 40%), hsl(220, 70%, 60%));
+   background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
 }
 .bg-cruises-background {
   position: relative;
@@ -493,7 +493,7 @@
 
 @keyframes rotating-backgrounds-packages {
   0%, 49.99% {
-    background-image: linear-gradient(to bottom, rgba(10,40,60,0.4), rgba(0,10,20,0.8)), url('https://images.unsplash.com/photo-15186840790-3c830dcef090?w=2070');
+    background-image: linear-gradient(to bottom, rgba(10,40,60,0.4), rgba(0,10,20,0.8)), url('https://images.unsplash.com/photo-1518684079-3c830dcef090?w=2070');
   }
   50%, 100% {
     background-image: linear-gradient(to bottom, rgba(10,20,40,0.4), rgba(0,5,10,0.8)), url('https://images.unsplash.com/photo-1517732306149-e8f829eb588a?w=2070');
@@ -654,35 +654,5 @@
   transform-origin: bottom;
 }
     
-    
-
-
-
-
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-    
-
-    
-
-
-
-
-
-
-
-
-
 
     

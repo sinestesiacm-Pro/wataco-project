@@ -65,11 +65,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={cn("flex items-center justify-center min-h-screen py-12 px-4", "color-change-animation")}>
-      <Card className="w-full max-w-md bg-black/20 backdrop-blur-xl border-none text-white">
+    <div className={cn("flex items-center justify-center min-h-screen py-12 px-4")}>
+      <Card className="w-full max-w-md bg-card/80 backdrop-blur-xl border-border text-card-foreground">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold font-headline">Bienvenido de Nuevo</CardTitle>
-          <CardDescription className="text-white/80">Inicia sesión en tu cuenta para continuar</CardDescription>
+          <CardDescription>Inicia sesión en tu cuenta para continuar</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -82,7 +82,6 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-black/20 border-white/30 placeholder:text-white/60"
               />
             </div>
             <div className="space-y-2">
@@ -93,7 +92,6 @@ export default function LoginPage() {
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-black/20 border-white/30 placeholder:text-white/60"
               />
             </div>
             <Button type="submit" className="w-full font-semibold" disabled={loading}>
@@ -103,19 +101,19 @@ export default function LoginPage() {
           </form>
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-white/30" />
+              <span className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-black/20 px-2 text-white/80 backdrop-blur-sm">O continúa con</span>
+              <span className="bg-card px-2 text-muted-foreground">O continúa con</span>
             </div>
           </div>
-          <Button variant="outline" className="w-full bg-white/90 text-gray-800 hover:bg-white" onClick={handleGoogleSignIn} disabled={googleLoading}>
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
             {googleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Icons.google className="mr-2 h-4 w-4" />}
             Google
           </Button>
           <div className="mt-4 text-center text-sm">
-            <span className="text-white/80">¿No tienes una cuenta?{' '}</span>
-            <Link href="/signup" className="underline text-success font-semibold">
+            <span className="text-muted-foreground">¿No tienes una cuenta?{' '}</span>
+            <Link href="/signup" className="underline text-primary font-semibold">
               Regístrate
             </Link>
           </div>
@@ -124,3 +122,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    

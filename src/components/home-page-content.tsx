@@ -31,49 +31,19 @@ const DynamicFlightSearchMap = dynamic(
     () => import('./flight-search-map').then(mod => mod.FlightSearchMap),
     { 
         ssr: false,
-        loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted/20 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-white" /></div>
+        loading: () => <div className="h-[60vh] md:h-[70vh] w-full rounded-2xl bg-muted/20 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
     }
 );
 
 
 function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
-  const [mode, setMode] = useLocalStorage<SearchMode>('list', 'list');
 
   const renderSearch = () => {
     switch(activeTab) {
       case 'Flights': return (
-         <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
-            <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-white">
-                    </div>
-                    <div className="flex items-center gap-2 rounded-full p-1 bg-black/20 backdrop-blur-sm">
-                    <Button
-                        size="sm"
-                        variant={mode === 'list' ? 'secondary' : 'ghost'}
-                        onClick={() => setMode('list')}
-                        className="rounded-full"
-                    >
-                        <List className="h-4 w-4 mr-2" />
-                        Clásico
-                    </Button>
-                    <Button
-                        size="sm"
-                        variant={mode === 'map' ? 'secondary' : 'ghost'}
-                        onClick={() => setMode('map')}
-                        className="rounded-full"
-                    >
-                        <Map className="h-4 w-4 mr-2" />
-                        Mapa
-                    </Button>
-                    </div>
-                </div>
-                
-                <div>
-                    {mode === 'list' ? <FlightSearchClassic /> : <DynamicFlightSearchMap />}
-                </div>
-            </div>
+        <div className="bg-white/10 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
+          <FlightSearchClassic />
         </div>
       );
       case 'Hotels': return <HotelSearchPage />;
@@ -111,8 +81,8 @@ const hotelPartners = [
 
 const PartnersGrid = ({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, domain?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) => (
     <div className="py-16 text-center">
-        <h2 className="text-3xl font-headline font-bold text-white drop-shadow-lg">{title}</h2>
-        <p className="text-lg text-white/80 mt-2 drop-shadow-lg">{subtitle}</p>
+        <h2 className="text-3xl font-headline font-bold text-foreground drop-shadow-lg">{title}</h2>
+        <p className="text-lg text-muted-foreground mt-2 drop-shadow-lg">{subtitle}</p>
         <div className="mt-8 grid grid-cols-3 md:grid-cols-6 gap-4 max-w-4xl mx-auto">
             {partners.map(partner => (
                 <div key={partner.name} className="bg-white/80 backdrop-blur-sm rounded-xl p-4 flex items-center justify-center aspect-square transition-all duration-300 hover:scale-110 hover:shadow-2xl">
@@ -210,3 +180,5 @@ export function HomePageContent() {
         </div>
     )
 }
+
+    

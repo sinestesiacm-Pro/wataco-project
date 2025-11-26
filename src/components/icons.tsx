@@ -2,27 +2,47 @@
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-const UatacoLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
-    <svg 
-      width={width} 
-      height={height} 
-      viewBox="0 0 120 30" 
-      className={cn("fill-current", className)}
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <text 
-        x="0" 
-        y="22" 
-        fontFamily="Poppins, sans-serif" 
-        fontSize="24" 
-        fontWeight="600" 
-        letterSpacing="0.05em"
+const WatacoLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
+    <div style={{ width, height }} className="flex flex-col items-start justify-center">
+      <svg 
+        viewBox="0 0 250 40" 
+        className={cn("fill-current", className)}
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ height: 'auto', width: '100%' }}
       >
-        Uataco
-      </text>
-    </svg>
+        <defs>
+          <linearGradient id="wataco-gradient-w" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{stopColor: 'hsl(var(--secondary))'}} />
+            <stop offset="100%" style={{stopColor: 'hsl(170, 50%, 50%)'}} />
+          </linearGradient>
+          <linearGradient id="wataco-gradient-a" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{stopColor: 'hsl(var(--accent))'}} />
+             <stop offset="100%" style={{stopColor: 'hsl(15, 85%, 70%)'}} />
+          </linearGradient>
+           <linearGradient id="wataco-gradient-t" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{stopColor: 'hsl(var(--accent))'}} />
+            <stop offset="100%" style={{stopColor: 'hsl(35, 70%, 65%)'}} />
+          </linearGradient>
+          <linearGradient id="wataco-gradient-c" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{stopColor: 'hsl(var(--tertiary))'}} />
+            <stop offset="100%" style={{stopColor: 'hsl(195, 100%, 45%)'}} />
+          </linearGradient>
+          <linearGradient id="wataco-gradient-o" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{stopColor: 'hsl(195, 100%, 45%)'}} />
+             <stop offset="100%" style={{stopColor: 'hsl(205, 100%, 55%)'}} />
+          </linearGradient>
+        </defs>
+        <text y="30" fontFamily="Poppins, sans-serif" fontSize="32" fontWeight="700">
+          <tspan fill="url(#wataco-gradient-w)">W</tspan>
+          <tspan fill="url(#wataco-gradient-a)">A</tspan>
+          <tspan fill="url(#wataco-gradient-t)">T</tspan>
+          <tspan fill="url(#wataco-gradient-c)">AC</tspan>
+          <tspan fill="url(#wataco-gradient-o)">O</tspan>
+        </text>
+      </svg>
+       <p className="font-semibold text-xs tracking-widest -mt-2 ml-1" style={{ color: 'hsl(var(--secondary))' }}>Travel Agency</p>
+    </div>
 );
-
 
 const GoogleLogo = (props: React.ComponentProps<'svg'>) => (
     <svg viewBox="0 0 48 48" {...props}>
@@ -35,11 +55,13 @@ const GoogleLogo = (props: React.ComponentProps<'svg'>) => (
 
 
 export const Icons = {
-  logo: UatacoLogo,
-  hotels: UatacoLogo,
-  flights: UatacoLogo,
-  cruises: UatacoLogo,
-  packages: UatacoLogo,
-  icon: UatacoLogo,
+  logo: WatacoLogo,
+  hotels: WatacoLogo,
+  flights: WatacoLogo,
+  cruises: WatacoLogo,
+  packages: WatacoLogo,
+  icon: WatacoLogo,
   google: GoogleLogo,
 };
+
+    
