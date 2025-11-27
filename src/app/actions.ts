@@ -192,133 +192,90 @@ export async function searchHotels(params: {
   adults: number;
   ratings?: number[];
   amenities?: string[];
-}): Promise<{ success: boolean; data?: any; error?: string }> {
+}): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
     const validation = hotelSearchSchema.safeParse(params);
     if (!validation.success) {
         return { success: false, error: 'Invalid hotel search parameters.' };
     }
-
-    if (!HOTELBEDS_API_KEY || !HOTELBEDS_SECRET) {
-      return { success: false, error: "La API de Hotelbeds no está configurada. Por favor, añade las credenciales." };
-    }
-
-    const { cityCode, checkInDate, checkOutDate, adults } = validation.data;
     
-    // Hotelbeds authentication and request signature
-    const signature = crypto.createHash('sha256').update(HOTELBEDS_API_KEY + HOTELBEDS_SECRET + Math.floor(Date.now() / 1000)).digest('hex');
-    const headers = {
-        'Api-key': HOTELBEDS_API_KEY,
-        'X-Signature': signature,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
-        'Accept-Encoding': 'gzip'
-    };
-
+    const { cityCode, checkInDate, checkOutDate, adults, ratings, amenities } = validation.data;
+    
     try {
-        // Step 1: Get hotel codes for the destination
-        // Note: Hotelbeds uses its own destination codes. We'll use Amadeus' cityCode as a mock for now.
-        // In a real app, you'd map IATA codes to Hotelbeds destination codes.
-        const hotelsRequestBody = {
-            "fields": "all",
-            "language": "CAS",
-            "destinationCode": cityCode, // This is a simplification
-            "from": 1,
-            "to": 50,
-        };
+        const token = await getAmadeusToken();
 
-        const hotelsResponse = await fetch(`${HOTELBEDS_API_URL}/hotel-content-api/1.0/hotels`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(hotelsRequestBody)
+        // 1. Get Hotel List for the city
+        const hotelListParams = new URLSearchParams({ cityCode });
+        const hotelListResponse = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city?${hotelListParams.toString()}`, {
+            headers: { Authorization: `Bearer ${token}` }
         });
 
-        if (!hotelsResponse.ok) {
-            const errorBody = await hotelsResponse.json().catch(() => ({}));
-            return { success: false, error: `Error fetching hotel list from Hotelbeds: ${errorBody.error?.message || hotelsResponse.statusText}` };
+        if (!hotelListResponse.ok) {
+            const errorText = await hotelListResponse.text();
+            console.error('Amadeus Hotel List API Error:', errorText);
+            return { success: false, error: 'Could not fetch hotel list from Amadeus.' };
+        }
+
+        const hotelListData = await hotelListResponse.json();
+        const hotelIds = hotelListData.data.map((hotel: any) => hotel.hotelId).slice(0, 30); // Limit to 30 for performance
+
+        if (hotelIds.length === 0) {
+            return { success: false, error: 'No hotels found in the specified city.' };
+        }
+
+        // 2. Get Hotel Offers
+        const offerParams = new URLSearchParams({
+            hotelIds: hotelIds.join(','),
+            adults: adults.toString(),
+            checkInDate: checkInDate,
+            checkOutDate: checkOutDate,
+            currency: 'USD',
+            paymentPolicy: 'NONE',
+            'bestRateOnly': 'true'
+        });
+
+        if(ratings && ratings.length > 0) {
+            offerParams.append('ratings', ratings.join(','));
+        }
+        if(amenities && amenities.length > 0) {
+            offerParams.append('amenities', amenities.join(','));
+        }
+
+        const offerResponse = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${offerParams.toString()}`, {
+             headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!offerResponse.ok) {
+             const errorBody = await offerResponse.json().catch(() => ({}));
+             console.error('Amadeus Hotel Offers API Error:', errorBody);
+             const errorMessage = errorBody.errors?.[0]?.detail || 'Error searching for hotel offers.';
+             return { success: false, error: errorMessage };
         }
         
-        const hotelsData = await hotelsResponse.json();
-        if (!hotelsData.hotels || hotelsData.hotels.length === 0) {
-             return { success: false, error: "No se encontraron hoteles para el destino especificado en Hotelbeds." };
-        }
-        const hotelCodes = hotelsData.hotels.map((hotel: any) => hotel.code);
-
-
-        // Step 2: Get availability for those hotels
-        const availabilityRequestBody = {
-            "stay": {
-                "checkIn": checkInDate,
-                "checkOut": checkOutDate
-            },
-            "occupancies": [{
-                "rooms": 1,
-                "adults": adults,
-                "children": 0
-            }],
-            "hotels": {
-                "hotel": hotelCodes.slice(0, 30) // Limit to 30 hotels for performance
-            }
-        };
-
-        const availabilityResponse = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(availabilityRequestBody)
-        });
-
-        if (!availabilityResponse.ok) {
-            const errorBody = await availabilityResponse.json().catch(() => ({}));
-            console.error('Hotelbeds Availability API Error:', errorBody);
-            return { success: false, error: `Error fetching hotel offers from Hotelbeds: ${errorBody.error?.message || availabilityResponse.statusText}` };
-        }
-
-        const availabilityData = await availabilityResponse.json();
-
+        const offerData = await offerResponse.json();
+        
         // This is a simplified mapping. A real implementation would be more robust.
-        const offers: AmadeusHotelOffer[] = (availabilityData.hotels?.hotels || []).map((hotel: any) => {
-            const hotelContent = hotelsData.hotels.find((h:any) => h.code === hotel.code);
-            return {
-                type: 'hotel-offer',
-                id: hotel.code.toString(),
-                hotel: {
-                    hotelId: hotel.code.toString(),
-                    name: hotel.name,
-                    rating: hotel.categoryCode.replace('EST', ''),
-                    address: {
-                        cityName: hotel.destinationName,
-                        countryCode: hotel.countryCode,
-                        lines: hotelContent?.address?.street ? [hotelContent.address.street] : [],
-                        postalCode: hotelContent?.postalCode || ''
-                    },
-                    description: {
-                        lang: 'es',
-                        text: hotelContent?.description || 'No description available.',
-                    },
-                    amenities: hotelContent?.amenityCodes || [],
-                    media: hotelContent?.images?.map((img: any) => ({ uri: `http://photos.hotelbeds.com/giata/${img.path}` })) || [],
+        const offers: AmadeusHotelOffer[] = offerData.data.map((offer: any) => ({
+            ...offer,
+            hotel: { // Make sure the hotel object has the fields our app expects
+                hotelId: offer.hotel.hotelId,
+                name: offer.hotel.name,
+                rating: offer.hotel.rating,
+                address: {
+                    cityName: offer.hotel.address.cityName,
+                    countryCode: offer.hotel.address.countryCode,
+                    lines: offer.hotel.address.lines || [],
+                    postalCode: offer.hotel.address.postalCode || ''
                 },
-                available: true,
-                offers: hotel.rooms.map((room: any) => ({
-                    id: room.code,
-                    price: {
-                        currency: hotel.currency,
-                        total: room.rates[0].net,
-                        base: room.rates[0].net,
-                    },
-                    room: {
-                        type: room.name,
-                        description: {
-                            text: room.name
-                        }
-                    }
-                }))
-            }
-        }).filter((offer: AmadeusHotelOffer) => offer.offers && offer.offers.length > 0);
+                description: offer.hotel.description,
+                amenities: offer.hotel.amenities,
+                media: offer.hotel.media,
+            },
+        }));
 
         if (offers.length === 0) {
-            return { success: false, error: "No hay ofertas de hotel disponibles para las fechas y el destino seleccionados." };
+            return { success: false, error: "No hotel offers available for the selected dates and destination." };
         }
-        
+
         return { success: true, data: offers };
 
     } catch (err: any) {
