@@ -32,37 +32,36 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
     const fetchHotelData = async () => {
       setLoading(true);
       setError(null);
-      // Check if hotel offer data is passed via history state
+      
       if (typeof window !== "undefined" && window.history.state?.offer) {
           setHotelOffer(window.history.state.offer);
           setLoading(false);
-      } else {
-        // Fallback to fetching if no state is present (direct navigation)
-        // This is not ideal as we don't have the offer ID. We'll use mock data.
-        console.warn("No offer data found in state, falling back to mock data.");
-        try {
-            const detailsResult = await getFirestoreHotelDetails(hotelId);
-            if (!detailsResult.success || !detailsResult.data) {
-              throw new Error(detailsResult.error || 'Could not load hotel details for mock offer.');
-            }
+          return;
+      }
 
-            const mockOffer: AmadeusHotelOffer = {
-                type: 'hotel-offer',
-                id: hotelId,
-                hotel: detailsResult.data,
-                available: true,
-                offers: MOCK_ROOMS_DATA.map(r => ({
-                    ...r,
-                    checkInDate: checkInDate,
-                    checkOutDate: checkOutDate
-                }))
-            };
-            setHotelOffer(mockOffer);
-        } catch(e: any) {
-            setError(e.message || 'An unexpected error occurred.');
-        } finally {
-            setLoading(false);
-        }
+      console.warn("No offer data found in state, falling back to mock data for room selection.");
+      try {
+          const detailsResult = await getFirestoreHotelDetails(hotelId);
+          if (!detailsResult.success || !detailsResult.data) {
+            throw new Error(detailsResult.error || 'Could not load hotel details for mock offer.');
+          }
+          
+          const mockOffer: AmadeusHotelOffer = {
+              type: 'hotel-offer',
+              id: hotelId,
+              hotel: detailsResult.data,
+              available: true,
+              offers: MOCK_ROOMS_DATA.map(r => ({
+                  ...r,
+                  checkInDate: checkInDate,
+                  checkOutDate: checkOutDate
+              }))
+          };
+          setHotelOffer(mockOffer);
+      } catch(e: any) {
+          setError(e.message || 'An unexpected error occurred.');
+      } finally {
+          setLoading(false);
       }
     };
     
@@ -83,7 +82,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <Loader2 className="h-10 w-10 animate-spin text-white" />
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
       </div>
     );
   }
@@ -116,5 +115,3 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
 
   return <div>{renderStep()}</div>;
 }
-
-    

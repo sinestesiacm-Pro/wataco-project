@@ -25,18 +25,24 @@ function HotelDetailPageContent({ id }: { id: string }) {
     const cameFromSearch = searchParams.has('checkInDate');
 
     useEffect(() => {
-        const fetchDetails = async () => {
-            setLoading(true);
-            const result = await getFirestoreHotelDetails(id);
-            if (result.success && result.data) {
-                setHotel(result.data);
-            } else {
-                setError(result.error || 'No se pudieron cargar los detalles del hotel.');
-            }
-            setLoading(false);
-        };
-        fetchDetails();
-    }, [id]);
+        // If we came from search results, go directly to offers page
+        if (cameFromSearch) {
+            const params = new URLSearchParams(searchParams.toString());
+            router.replace(`/hotels/${id}/offers?${params.toString()}`);
+        } else {
+            const fetchDetails = async () => {
+                setLoading(true);
+                const result = await getFirestoreHotelDetails(id);
+                if (result.success && result.data) {
+                    setHotel(result.data);
+                } else {
+                    setError(result.error || 'No se pudieron cargar los detalles del hotel.');
+                }
+                setLoading(false);
+            };
+            fetchDetails();
+        }
+    }, [id, cameFromSearch, searchParams, router]);
 
     const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode?: string, destinationName?: string }) => {
         if (!hotel) return;
@@ -53,7 +59,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
         router.push(`/hotels/search?${params.toString()}`);
     };
 
-    if (loading) { // Show loader if loading
+    if (loading || cameFromSearch) { // Show loader if loading or during the brief redirect
         return (
             <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
