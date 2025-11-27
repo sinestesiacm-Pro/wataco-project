@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,7 @@ interface Hotel {
 }
 
 
-const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotelId: string, destinationName: string) => void }) {
+const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotelId: string) => void }) {
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
             <div className="relative w-full h-56 flex-shrink-0">
@@ -81,7 +82,7 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">
                     <p className="font-semibold text-xl text-foreground drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
-                    <Button onClick={() => onViewHotel(hotel.id, hotel.ubicacion)} className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
+                    <Button onClick={() => onViewHotel(hotel.id)} className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
                         Ver Hotel
                     </Button>
                  </div>
@@ -120,29 +121,15 @@ const shuffleArray = <T,>(array: T[]): T[] => {
     return array;
 }
 
-const FullScreenHotelLoader = ({ destinationName }: { destinationName: string }) => (
-    <div className="fixed inset-0 z-[200] w-full h-full">
-        <HotelLoadingAnimation destinationName={destinationName} />
-    </div>
-);
-
-
 export const RecommendedHotels = React.memo(function RecommendedHotels() {
   const router = useRouter();
   const [allHotels, setAllHotels] = useState<Hotel[]>([]);
   const [displayedHotels, setDisplayedHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [loadingHotelId, setLoadingHotelId] = useState<string | null>(null);
-  const [loadingDestinationName, setLoadingDestinationName] = useState<string>('');
 
-
-  const handleViewHotel = useCallback((hotelId: string, destinationName: string) => {
-    setLoadingHotelId(hotelId);
-    setLoadingDestinationName(destinationName);
-    setTimeout(() => {
-        router.push(`/hotels/${hotelId}`);
-    }, 5000); // 5 second delay
+  const handleViewHotel = useCallback((hotelId: string) => {
+    router.push(`/hotels/${hotelId}`);
   }, [router]);
 
   useEffect(() => {
@@ -181,7 +168,6 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
 
   return (
     <div className="relative space-y-6">
-       {loadingHotelId && <FullScreenHotelLoader destinationName={loadingDestinationName} />}
       <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
       
       {loading ? (
