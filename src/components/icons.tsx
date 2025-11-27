@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 const WatacoLogo = ({ width, height, className }: { width: number; height: number; className?: string }) => (
     <Image 
-        src="https://i.postimg.cc/pV8gL8dZ/generated-image-(513)-(1).png"
+        src="https://i.postimg.cc/jdYzfvpY/Geminpsg8-upscaled-(1).png"
         alt="Uataco Logo"
         width={width}
         height={height}
