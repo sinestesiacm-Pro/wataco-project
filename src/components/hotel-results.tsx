@@ -42,9 +42,6 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
       // The hotelId from Hotelbeds is a number, so we convert it.
       params.set('hotelId', String(offer.hotel.hotelId));
 
-      // Pass the entire offer object via history state to avoid another API call
-      // This is a client-side navigation optimization
-      window.history.pushState({ offer }, '', `/hotels/${offer.hotel.hotelId}/offers?${params.toString()}`);
       router.push(`/hotels/${offer.hotel.hotelId}/offers?${params.toString()}`);
   }
 
