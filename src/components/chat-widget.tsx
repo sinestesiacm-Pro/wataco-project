@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -17,7 +18,7 @@ type Message = {
   sender: 'user' | 'ai';
 };
 
-export function ChatWidget() {
+export function ChatWidget({ isFab = false }: { isFab?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -79,7 +80,99 @@ export function ChatWidget() {
       setLoading(false);
     }
   };
+  
+  if (isFab) {
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger asChild>
+              <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4">
+                 <MessageSquare className="mr-2 h-5 w-5"/>
+                 Chat
+              </Button>
+          </DialogTrigger>
+          {/* We keep the original dialog content logic */}
+          <DialogContent
+            className={cn(
+              "fixed bottom-0 left-0 right-0 z-[100] w-full max-w-full h-[80vh] transition-all duration-300 ease-in-out transform-none rounded-t-3xl",
+              "md:max-w-sm md:h-[60vh] md:bottom-6 md:left-6 md:right-auto md:rounded-2xl",
+              "p-0 flex flex-col"
+            )}
+          >
+            <Card className="flex flex-col h-full shadow-2xl rounded-2xl bg-background/80 backdrop-blur-xl border-none">
+              <CardHeader className="flex flex-row items-center justify-between border-b">
+                <div className="flex items-center gap-3">
+                   <Avatar className="h-8 w-8 border-2 border-primary/50">
+                      <AvatarFallback className="bg-primary/20"><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
+                   </Avatar>
+                   <CardTitle className="font-headline text-lg">TripGenius</CardTitle>
+                </div>
+                <DialogClose asChild>
+                  <Button variant="ghost" size="icon">
+                    <X className="h-4 w-4" />
+                  </Button>
+                </DialogClose>
+              </CardHeader>
+              <CardContent className="flex-grow p-4 overflow-hidden">
+                <ScrollArea className="h-full" viewportRef={viewportRef}>
+                  <div className="space-y-4 pr-4">
+                    {messages.map((message) => (
+                      <div key={message.id} className={cn("flex items-start gap-3", message.sender === 'user' && 'justify-end')}>
+                        {message.sender === 'ai' && (
+                           <Avatar className="h-8 w-8 border-2 border-primary/50">
+                                <AvatarFallback className="bg-primary/20"><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
+                           </Avatar>
+                        )}
+                        <div
+                          className={cn(
+                            'rounded-xl px-4 py-2 max-w-xs text-sm shadow-md',
+                            message.sender === 'ai' ? 'bg-card' : 'bg-primary text-primary-foreground'
+                          )}
+                        >
+                          {message.text}
+                        </div>
+                         {message.sender === 'user' && (
+                           <Avatar className="h-8 w-8">
+                                <AvatarImage src={user?.photoURL || ''} />
+                                <AvatarFallback>{user?.displayName?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
+                           </Avatar>
+                        )}
+                      </div>
+                    ))}
+                    {loading && (
+                        <div className="flex items-start gap-3">
+                            <Avatar className="h-8 w-8 border-2 border-primary/50">
+                                <AvatarFallback className="bg-primary/20"><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
+                            </Avatar>
+                            <div className="rounded-xl px-4 py-2 max-w-xs text-sm bg-card flex items-center shadow-md">
+                                <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                            </div>
+                        </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+              <CardFooter className="border-t p-4 bg-card/50">
+                <div className="flex w-full items-center space-x-2">
+                  <Input
+                    placeholder="Escribe tu pregunta..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                    disabled={loading}
+                    className="bg-background"
+                  />
+                  <Button onClick={handleSend} disabled={loading}>
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardFooter>
+            </Card>
+          </DialogContent>
+        </Dialog>
+    );
+  }
 
+  // Original widget logic for other pages
   return (
     <>
       <div className={cn("fixed bottom-24 md:bottom-6 left-6 z-[60] transition-all duration-300", isOpen ? 'opacity-0 scale-90' : 'opacity-100 scale-100')}>
@@ -91,8 +184,8 @@ export function ChatWidget() {
           <MessageSquare className="h-8 w-8" />
         </Button>
       </div>
-
-      <div
+      
+       <div
         className={cn(
           "fixed bottom-6 right-6 md:left-6 md:right-auto z-[100] w-[calc(100%-3rem)] max-w-sm transition-all duration-300 ease-in-out",
           isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'

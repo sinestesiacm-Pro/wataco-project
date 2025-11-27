@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import { AnimatedClouds } from '@/components/animated-clouds';
+import { FloatingActionButtons } from '@/components/floating-action-buttons';
 
 type BookingStep = 'outbound' | 'return' | 'review';
 export type FiltersState = {
@@ -270,28 +271,28 @@ function FlightSelectionPage() {
                         />
                       </div>
                   </aside>
-                  <div className="lg:hidden fixed bottom-24 right-6 z-50">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                         <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4">
-                           <Filter className="mr-2 h-5 w-5"/>
-                           Filtros
-                         </Button>
-                      </DialogTrigger>
-                      <DialogContent className="w-[90vw] max-w-md p-0">
-                        <DialogHeader className="p-6 pb-4 text-left">
-                           <DialogTitle className="font-headline text-2xl">Filtros de Vuelo</DialogTitle>
-                           <DialogDescription>Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</DialogDescription>
-                        </DialogHeader>
-                        <div className="p-6 pt-0">
-                            <FlightFilters 
-                                availableAirlines={availableAirlines}
-                                onFilterChange={handleFilterChange}
-                            />
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
+                  <FloatingActionButtons>
+                     <Dialog>
+                        <DialogTrigger asChild>
+                           <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4">
+                             <Filter className="mr-2 h-5 w-5"/>
+                             Filtros
+                           </Button>
+                        </DialogTrigger>
+                        <DialogContent className="w-[90vw] max-w-md p-0">
+                          <DialogHeader className="p-6 pb-4 text-left">
+                             <DialogTitle className="font-headline text-2xl">Filtros de Vuelo</DialogTitle>
+                             <DialogDescription>Aplica filtros para refinar los resultados de tu búsqueda de vuelos.</DialogDescription>
+                          </DialogHeader>
+                          <div className="p-6 pt-0">
+                              <FlightFilters 
+                                  availableAirlines={availableAirlines}
+                                  onFilterChange={handleFilterChange}
+                              />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                  </FloatingActionButtons>
                 </>
               )}
               <main className={step !== 'review' ? 'lg:col-span-9' : 'lg:col-span-12'}>

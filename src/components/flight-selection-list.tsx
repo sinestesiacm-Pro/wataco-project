@@ -95,7 +95,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                             className="rounded-sm bg-white/50"
                             unoptimized
                         />
-                        <p className="font-semibold" style={{color: '#323a48'}}>{airlineName}</p>
+                        <p className="font-semibold">{airlineName}</p>
                     </div>
                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
                         <Clock className="w-3 h-3"/>
@@ -105,7 +105,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                 
                 <div className="flex items-center justify-around">
                     <div className="text-center flex-grow flex-shrink-0 basis-0">
-                        <p className="text-2xl font-bold" style={{color: '#323a48'}}>{formatTime(firstSegment.departure.at)}</p>
+                        <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-muted-foreground">{firstSegment.departure.iataCode}</p>
                     </div>
                     
@@ -123,7 +123,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     </CollapsibleTrigger>
                     
                     <div className="text-center flex-grow flex-shrink-0 basis-0">
-                        <p className="text-2xl font-bold" style={{color: '#323a48'}}>{formatTime(lastSegment.arrival.at)}</p>
+                        <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-muted-foreground">{lastSegment.arrival.iataCode}</p>
                     </div>
                 </div>
@@ -158,7 +158,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
   return (
     <div className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h2 className="text-3xl font-headline font-semibold" style={{color: '#323a48'}}>
+            <h2 className="text-3xl font-headline font-semibold">
                 {title}
             </h2>
         </div>
