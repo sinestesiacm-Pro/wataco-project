@@ -6,8 +6,8 @@ import { getFirestore, doc } from "firebase/firestore";
 // These are public keys and are safe to be exposed in the client-side code
 export const AMADEUS_API_KEY = "8KbSUTGXfLXXnZhk3dvVJcAyhdL6uGKG";
 export const AMADEUS_API_SECRET = "uLzV2uC2xTA9SGar";
-export const HOTELBEDS_API_KEY = "YOUR_HOTELBEDS_API_KEY";
-export const HOTELBEDS_SECRET = "YOUR_HOTELBEDS_SECRET";
+export const HOTELBEDS_API_KEY = "0ecd9c27847f29ca3db2c0375b53d1e0";
+export const HOTELBEDS_SECRET = "0b5853e05a";
 
 
 const firebaseConfig = {
