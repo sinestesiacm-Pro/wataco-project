@@ -21,7 +21,7 @@ export function HotelMapDialog({ hotelName }: HotelMapDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="bg-background/20 text-foreground border-border hover:bg-background/30 hover:text-foreground">
+        <Button variant="outline" size="sm" className="bg-success/50 text-success-foreground border-white/20 backdrop-blur-sm hover:bg-success/70 hover:text-success-foreground">
           <MapPin className="mr-2 h-4 w-4" />
           Ver en Mapa
         </Button>
