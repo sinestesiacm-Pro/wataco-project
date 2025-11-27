@@ -222,7 +222,7 @@ export default function ActivitySearchPage() {
                 </div>
 
                 <div className="w-full lg:col-span-2">
-                    <Button type="submit" size="lg" className="w-full h-14 font-bold rounded-2xl shadow-md hover:shadow-lg transition-all bg-primary hover:bg-primary/90 text-primary-foreground">
+                    <Button type="submit" size="lg" className="h-14 font-bold rounded-2xl shadow-md hover:shadow-lg transition-all bg-primary hover:bg-primary/90 text-primary-foreground">
                         <Zap className="mr-2 h-5 w-5" />
                         Buscar
                     </Button>
