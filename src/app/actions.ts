@@ -253,22 +253,26 @@ export async function searchHotels(params: {
         
         const offerData = await offerResponse.json();
         
-        // This is a simplified mapping. A real implementation would be more robust.
         const offers: AmadeusHotelOffer[] = offerData.data.map((offer: any) => ({
             ...offer,
-            hotel: { // Make sure the hotel object has the fields our app expects
+            hotel: {
                 hotelId: offer.hotel.hotelId,
                 name: offer.hotel.name,
                 rating: offer.hotel.rating,
-                address: {
-                    cityName: offer.hotel.address.cityName,
-                    countryCode: offer.hotel.address.countryCode,
+                address: offer.hotel.address ? {
+                    cityName: offer.hotel.address.cityName || '',
+                    countryCode: offer.hotel.address.countryCode || '',
                     lines: offer.hotel.address.lines || [],
                     postalCode: offer.hotel.address.postalCode || ''
+                } : {
+                    cityName: '',
+                    countryCode: '',
+                    lines: [],
+                    postalCode: ''
                 },
                 description: offer.hotel.description,
                 amenities: offer.hotel.amenities,
-                media: offer.hotel.media || [], // Ensure media is always an array
+                media: offer.hotel.media || [],
             },
         }));
 
