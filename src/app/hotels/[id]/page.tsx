@@ -85,10 +85,10 @@ function HotelDetailPageContent({ id }: { id: string }) {
     };
 
   return (
-    <div className='w-full min-h-screen pt-24 pb-24'>
+    <div className={cn('w-full min-h-screen pt-24 pb-24', 'bg-hotels-gradient background-pan-animation')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
             <Link href="/?tab=Hotels">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Volver a Hoteles
@@ -110,7 +110,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
   
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] bg-hotels-gradient">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     }>

@@ -42,12 +42,12 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
 
   return (
     <div className="space-y-8">
-      <Card className="overflow-hidden bg-card/80 backdrop-blur-xl border rounded-2xl shadow-lg">
+      <Card className="overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl shadow-lg">
         <div className="flex flex-col">
             <div className="p-6">
                 <CardHeader className="p-0 mb-4">
                     <CardTitle className="text-3xl font-headline">{hotel.name}</CardTitle>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-white/80">
                         {hotel.rating && <div className="flex items-center">{renderStars(hotel.rating)}</div>}
                         <div className="flex items-center gap-1"><MapPin className="h-4 w-4" />{hotel.address.cityName}, {hotel.address.countryCode}</div>
                     </div>
@@ -57,7 +57,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
                         {hotel.description && (
                             <div>
                                 <h3 className="font-semibold text-lg mb-2">Sobre esta propiedad</h3>
-                                <p className="text-muted-foreground">{hotel.description.text}</p>
+                                <p className="text-white/80">{hotel.description.text}</p>
                             </div>
                         )}
                         {hotel.amenities && hotel.amenities.length > 0 && (
@@ -67,7 +67,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
                                     {hotel.amenities.slice(0, 6).map(amenity => {
                                         const Icon = amenityIcons[amenity] || CheckCircle2;
                                         return (
-                                            <Badge key={amenity} variant="secondary" className="gap-2">
+                                            <Badge key={amenity} variant="secondary" className="gap-2 bg-white/10 text-white border-white/20">
                                                 <Icon className="h-4 w-4" />
                                                 {formatAmenity(amenity)}
                                             </Badge>
@@ -87,29 +87,33 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
                   <CarouselContent>
                     {hotel.media && hotel.media.length > 0 ? (
                       hotel.media.map((photo, index) => (
-                        <CarouselItem key={index} className="relative">
-                          <Image
-                              src={photo.uri}
-                              alt={`${hotel.name} - ${index + 1}`}
-                              fill
-                              className="object-cover"
-                              sizes="(max-width: 1024px) 100vw, 50vw"
-                          />
+                        <CarouselItem key={index}>
+                           <div className="relative h-80 md:h-96 w-full">
+                            <Image
+                                src={photo.uri}
+                                alt={`${hotel.name} - ${index + 1}`}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                            />
+                           </div>
                         </CarouselItem>
                       ))
                     ) : (
-                       <CarouselItem className="relative aspect-video">
-                          <Image
-                              src="https://placehold.co/800x600.png"
-                              alt="Placeholder hotel image"
-                              fill
-                              className="object-cover"
-                          />
+                       <CarouselItem>
+                          <div className="relative h-80 md:h-96 w-full bg-muted/20">
+                            <Image
+                                src="https://placehold.co/800x600.png"
+                                alt="Placeholder hotel image"
+                                fill
+                                className="object-cover"
+                            />
+                          </div>
                         </CarouselItem>
                     )}
                   </CarouselContent>
-                  <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
-                  <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
+                  <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
+                  <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
                 </Carousel>
             </div>
         </div>
