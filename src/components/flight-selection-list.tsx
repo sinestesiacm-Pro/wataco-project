@@ -33,23 +33,12 @@ interface StopInfoProps {
 const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
     if (itinerary.segments.length <= 1) return null;
 
-    const getCityName = (iataCode: string) => {
-      const location = dictionaries.locations[iataCode];
-      if (!location) return iataCode;
-      
-      // If the location itself is a city, return its name (e.g., YTO is Toronto)
-      if (location.cityCode === iataCode) {
-          const cityEntry = Object.values(dictionaries.locations).find(loc => loc.cityCode === iataCode);
-           // This logic is a bit tricky. We find the first airport in that city and get its city name.
-          const matchingAirport = Object.entries(dictionaries.locations).find(([key, value]) => value.cityCode === iataCode);
-          if (matchingAirport) {
-              const airportLocation = dictionaries.locations[matchingAirport[0]];
-              return airportLocation?.cityCode ? dictionaries.locations[airportLocation.cityCode]?.cityCode || airportLocation.cityCode : iataCode;
-          }
-      }
-      
-      // If the location is an airport, return its city name
-      return dictionaries.locations[location.cityCode]?.cityCode || location.cityCode || iataCode;
+    const getCityName = (iataCode: string, dictionaries: Dictionaries) => {
+        const location = dictionaries.locations[iataCode];
+        if (!location) return iataCode;
+        // This is a simplified logic, a real app would have a more robust city name mapping
+        const cityLocation = dictionaries.locations[location.cityCode];
+        return cityLocation?.cityCode || location.cityCode;
     };
 
 
@@ -108,7 +97,10 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                         />
                         <p className="font-semibold" style={{color: '#323a48'}}>{airlineName}</p>
                     </div>
-                    <p className="text-muted-foreground font-mono">{firstSegment.carrierCode} {firstSegment.number}</p>
+                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Clock className="w-3 h-3"/>
+                        <span>{formatDuration(itinerary.duration)}</span>
+                    </div>
                 </div>
                 
                 <div className="flex items-center justify-around">
@@ -118,14 +110,16 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     </div>
                     
                      <CollapsibleTrigger asChild>
-                         <button className={cn("flex w-auto flex-col items-center cursor-pointer text-center px-2", stops === 0 && "pointer-events-none")}>
+                         <div className={cn("relative flex flex-col items-center justify-center text-center w-full max-w-[120px] px-2", stops > 0 ? "cursor-pointer" : "cursor-default")}>
                             <div className="w-full relative h-6 flex items-center justify-center">
                                 <div className="absolute w-full h-px bg-border"></div>
                                 <div className="relative bg-card p-1 rounded-full border">
                                    <Plane className="w-5 h-5"/>
                                 </div>
                             </div>
-                        </button>
+                             <p className="text-xs text-muted-foreground mt-1">{stopInfoText}</p>
+                             <p className="text-3xl font-bold text-primary">${flight.price.total}</p>
+                        </div>
                     </CollapsibleTrigger>
                     
                     <div className="text-center flex-grow flex-shrink-0 basis-0">
@@ -138,15 +132,6 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     <StopInfo itinerary={itinerary} dictionaries={dictionaries} />
                 </CollapsibleContent>
                 
-                <div className="flex justify-between items-center text-sm px-2 text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                        <Clock className="w-3 h-3"/>
-                        <span>{formatDuration(itinerary.duration)}</span>
-                    </div>
-                    <span>{stopInfoText}</span>
-                    <p className="text-3xl font-bold text-primary">${flight.price.total}</p>
-                </div>
-
                 <div className="pt-2">
                   <FlightDetailsDialog
                       flight={flight}
