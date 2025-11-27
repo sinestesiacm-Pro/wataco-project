@@ -268,7 +268,7 @@ export async function searchHotels(params: {
                 },
                 description: offer.hotel.description,
                 amenities: offer.hotel.amenities,
-                media: offer.hotel.media,
+                media: offer.hotel.media || [], // Ensure media is always an array
             },
         }));
 
