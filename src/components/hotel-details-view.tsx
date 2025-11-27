@@ -9,6 +9,8 @@ import { Star, MapPin, Wifi, Car, Waves, Utensils, GlassWater, Wind, Dumbbell, S
 import type { LucideIcon } from 'lucide-react';
 import { HotelMapDialog } from './hotel-map-dialog';
 import { Badge } from './ui/badge';
+import Autoplay from "embla-carousel-autoplay"
+
 
 const amenityIcons: { [key: string]: LucideIcon } = {
   SWIMMING_POOL: Waves,
@@ -42,10 +44,13 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
 
   return (
     <div className="space-y-8">
-      <Card className="relative overflow-hidden bg-black border-none text-white rounded-2xl shadow-lg h-[60vh] md:h-[70vh]">
+      <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border rounded-2xl shadow-lg h-[60vh] md:h-[70vh]">
         
         {/* Background Image Carousel */}
-        <Carousel className="absolute inset-0 w-full h-full">
+        <Carousel 
+          className="absolute inset-0 w-full h-full"
+          plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
+        >
           <CarouselContent>
             {hotel.media && hotel.media.length > 0 ? (
               hotel.media.map((photo, index) => (
@@ -85,7 +90,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
         {/* Content Overlay */}
         <div className="relative h-full flex flex-col justify-end p-6 md:p-8">
             <CardHeader className="p-0 mb-4">
-                <CardTitle className="text-3xl md:text-4xl font-headline drop-shadow-lg">{hotel.name}</CardTitle>
+                <CardTitle className="text-3xl md:text-4xl font-headline text-white drop-shadow-lg">{hotel.name}</CardTitle>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-white/90">
                     {hotel.rating && <div className="flex items-center">{renderStars(hotel.rating)}</div>}
                     <div className="flex items-center gap-1"><MapPin className="h-4 w-4" />{hotel.address.cityName}, {hotel.address.countryCode}</div>
@@ -95,13 +100,13 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
                 <div className="space-y-6">
                     {hotel.description && (
                         <div>
-                            <h3 className="font-semibold text-lg mb-2">Sobre esta propiedad</h3>
+                            <h3 className="font-semibold text-lg mb-2 text-white">Sobre esta propiedad</h3>
                             <p className="text-white/80 line-clamp-3">{hotel.description.text}</p>
                         </div>
                     )}
                     {hotel.amenities && hotel.amenities.length > 0 && (
                         <div>
-                            <h3 className="font-semibold text-lg mb-3">Servicios Populares</h3>
+                            <h3 className="font-semibold text-lg mb-3 text-white">Servicios Populares</h3>
                             <div className="flex flex-wrap gap-2">
                                 {hotel.amenities.slice(0, 6).map(amenity => {
                                     const Icon = amenityIcons[amenity] || CheckCircle2;

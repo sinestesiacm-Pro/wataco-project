@@ -195,5 +195,108 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         price: { currency: 'USD', total: '780.00', base: '700.00' },
         room: { type: 'OCEAN_VIEW_SUITE', description: { text: 'Bungalow privado con piscina.' }, amenities: ['WIFI'] }
       }]
+    },
+     {
+      type: 'hotel-offer',
+      id: 'tsWNvOVuIHm1dAUjw0QA',
+      hotel: {
+        hotelId: 'BHR00002', // Fictional ID for Burj Al Arab
+        name: 'Burj Al Arab Jumeirah',
+        rating: '5',
+        media: [
+          { uri: 'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
+          { uri: 'https://images.pexels.com/photos/1580112/pexels-photo-1580112.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
+          { uri: 'https://images.pexels.com/photos/2082949/pexels-photo-2082949.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
+          { uri: 'https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
+          { uri: 'https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
+          { uri: 'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
+        ],
+        address: { lines: ['Umm Suqeim 3'], postalCode: '3414', cityName: 'Dubai', countryCode: 'AE' },
+        description: { lang: 'es', text: 'Lujo icónico en el hotel más famoso de Dubái.' },
+        amenities: ['SWIMMING_POOL', 'SPA', 'RESTAURANT', 'BAR', 'FITNESS_CENTER', 'AIRPORT_SHUTTLE']
+      },
+      available: true,
+      offers: [{
+        id: 'offer-burj',
+        checkInDate: '2024-12-01',
+        checkOutDate: '2024-12-07',
+        price: { currency: 'USD', total: '2500.00', base: '2200.00' },
+        room: { type: 'ROYAL_SUITE', description: { text: 'Suite Real con vistas panorámicas.' }, amenities: ['WIFI', 'SAFE', 'MINIBAR'] }
+      }]
+    },
+    {
+        nombre: 'Santorini Grace',
+        ubicacion: 'Santorini, Greece',
+        descripcion: 'Vistas icónicas de la caldera y suites de lujo encaladas.',
+        media: [
+            "https://images.unsplash.com/photo-1533104816931-20fa69146ca2?w=800",
+            "https://images.unsplash.com/photo-1590390161421-23606973344a?w=800",
+            "https://images.unsplash.com/photo-1589370143376-417163259b92?w=800",
+            "https://images.unsplash.com/photo-1570204568545-5ac835332a6f?w=800",
+            "https://images.unsplash.com/photo-1613482221894-4752b95c994a?w=800",
+            "https://images.unsplash.com/photo-1563823434121-b85de130e0a4?w=800"
+        ],
+        rating: 5,
+        price: 950
+    },
+    {
+        nombre: 'Riad Yasmine',
+        ubicacion: 'Marrakech, Morocco',
+        descripcion: 'Un oasis de paz con un patio de piscina icónico en la Medina.',
+        media: [
+            "https://images.unsplash.com/photo-1569431597028-9f15037746b9?w=800",
+            "https://images.unsplash.com/photo-1594917407351-403444062445?w=800",
+            "https://images.unsplash.com/photo-1628169493923-94E56a2f4761?w=800",
+            "https://images.unsplash.com/photo-1549973843-943e6a45e7b5?w=800",
+            "https://images.unsplash.com/photo-1559941948-2b5a6c38b293?w=800",
+            "https://images.unsplash.com/photo-1518423985043-43575f154344?w=800"
+        ],
+        rating: 4,
+        price: 220
+    },
+    {
+        nombre: 'Amangiri',
+        ubicacion: 'Canyon Point, USA',
+        descripcion: 'Lujo minimalista y aislamiento en el desierto de Utah.',
+        media: [
+            "https://images.unsplash.com/photo-1572488949834-585429355b25?w=800",
+            "https://images.unsplash.com/photo-1615247001936-9a23108c353a?w=800",
+            "https://images.unsplash.com/photo-1598328229976-92a54e52252b?w=800",
+            "https://images.unsplash.com/photo-1566649774356-9ddd4765713b?w=800",
+            "https://images.unsplash.com/photo-1542444599-4172b5363162?w=800",
+            "https://images.unsplash.com/photo-1598462699734-655293246757?w=800"
+        ],
+        rating: 5,
+        price: 2500
+    },
+    {
+        nombre: 'The Ritz-Carlton',
+        ubicacion: 'Kyoto, Japan',
+        descripcion: 'Elegancia japonesa y vistas al río Kamogawa.',
+        media: [
+            "https://images.unsplash.com/photo-1559624978-7013c74de359?w=800",
+            "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800",
+            "https://images.unsplash.com/photo-1584949093418-659a8ae62649?w=800",
+            "https://images.unsplash.com/photo-1503792444264-92b465759349?w=800",
+            "https://images.unsplash.com/photo-1594914753556-45a7b8064132?w=800",
+            "https://images.unsplash.com/photo-1583796069502-a791d1e479a4?w=800"
+        ],
+        rating: 5,
+        price: 1100
+    },
+    {
+        nombre: 'Hotel du Cap-Eden-Roc',
+        ubicacion: 'Antibes, France',
+        descripcion: 'Glamour de la Riviera Francesa y lujo atemporal.',
+        media: [
+            "https://images.unsplash.com/photo-1601648439969-dd6247d4665d?w=800",
+            "https://images.unsplash.com/photo-1606526131698-975916183424?w=800",
+            "https://images.unsplash.com/photo-1622322528229-373c353a4789?w=800",
+            "https://images.unsplash.com/photo-1599896541042-490395431671?w=800",
+            "https://images.unsplash.com/photo-1504109586057-7a2ae83d1338?w=800",
+            "https://images.unsplash.com/photo-1589923188900-85da5548644f?w=800"
+        ],
+        rating: 5,
+        price: 1500
     }
   ];
