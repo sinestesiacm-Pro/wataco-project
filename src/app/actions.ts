@@ -240,6 +240,13 @@ export async function searchHotels(params: {
             const errorBody = await availabilityResponse.json().catch(() => ({}));
             console.error('Hotelbeds Availability API Error:', errorBody);
             const errorMessage = errorBody.error?.message || `Error: ${availabilityResponse.statusText}`;
+            if (params.destinationName) {
+                const mockOffers = MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase().includes(params.destinationName!.toLowerCase() || ''));
+                 if (mockOffers.length > 0) {
+                    console.warn(`Hotelbeds call failed (${errorMessage}), returning mock data as fallback.`);
+                    return { success: true, data: mockOffers };
+                }
+            }
             return { success: false, error: `Error fetching hotel offers from Hotelbeds: ${errorMessage}` };
         }
 
