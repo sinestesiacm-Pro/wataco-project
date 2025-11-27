@@ -13,9 +13,9 @@ import { db } from '@/lib/firebase';
 import { Skeleton } from './ui/skeleton';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { HotelLoadingAnimation } from './hotel-loading-animation';
+import { MOCK_ROOMS_DATA } from '@/lib/mock-data';
+import { format, addDays } from 'date-fns';
 
-// Simplified hotel type for Firestore data
 interface Hotel {
     id: string;
     nombre: string;
@@ -24,10 +24,11 @@ interface Hotel {
     media: string[];
     rating: number; 
     price: number; 
+    amenities?: string[];
 }
 
 
-const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotelId: string) => void }) {
+const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotel: Hotel) => void }) {
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
             <div className="relative w-full h-56 flex-shrink-0">
@@ -82,7 +83,7 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">
                     <p className="font-semibold text-xl text-foreground drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
-                    <Button onClick={() => onViewHotel(hotel.id)} className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
+                    <Button onClick={() => onViewHotel(hotel)} className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
                         Ver Hotel
                     </Button>
                  </div>
@@ -128,8 +129,53 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const handleViewHotel = useCallback((hotelId: string) => {
-    router.push(`/hotels/${hotelId}`);
+  const handleViewHotel = useCallback((hotel: Hotel) => {
+      const cityDetails = hotel.ubicacion.split(', ');
+      const checkInDate = addDays(new Date(), 7);
+      const checkOutDate = addDays(new Date(), 14);
+
+      const params = new URLSearchParams({
+        hotelId: hotel.id,
+        checkInDate: format(checkInDate, 'yyyy-MM-dd'),
+        checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
+        adults: '2',
+        children: '0',
+        cityCode: cityDetails[1] || 'CO',
+        destinationName: cityDetails[0] || hotel.nombre,
+      });
+
+      const offer: AmadeusHotelOffer = {
+        type: 'hotel-offer',
+        id: hotel.id,
+        hotel: {
+            hotelId: hotel.id,
+            name: hotel.nombre,
+            rating: hotel.rating.toString(),
+            media: hotel.media.map(uri => ({ uri, category: 'PHOTO' })),
+            address: {
+                cityName: cityDetails[0] || hotel.nombre,
+                countryCode: cityDetails[1] || 'CO',
+                lines: [hotel.ubicacion],
+                postalCode: ''
+            },
+            description: {
+                lang: 'es',
+                text: hotel.descripcion,
+            },
+            amenities: hotel.amenities || []
+        },
+        available: true,
+        offers: MOCK_ROOMS_DATA.map(room => ({
+            ...room,
+            price: { ...room.price, total: hotel.price.toString() },
+            checkInDate: format(checkInDate, 'yyyy-MM-dd'),
+            checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
+        }))
+    };
+
+    const url = `/hotels/${hotel.id}/offers?${params.toString()}`;
+    window.history.pushState({ ...window.history.state, offer }, '', url);
+    router.push(url);
   }, [router]);
 
   useEffect(() => {
