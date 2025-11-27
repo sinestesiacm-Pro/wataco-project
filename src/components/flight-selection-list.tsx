@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Image from 'next/image';
@@ -79,7 +80,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                 <div className="flex justify-between items-center pt-4 border-t">
                     <div>
                         <p className="text-sm font-medium" style={{color: '#546377'}}>Precio total</p>
-                        <p className="text-3xl font-bold text-primary">{flight.price.total} <span className="text-base font-medium">{flight.price.currency}</span></p>
+                        <p className="text-3xl font-bold text-[#15c5dc]">{flight.price.total} <span className="text-base font-medium">{flight.price.currency}</span></p>
                     </div>
                     <div className="w-32">
                       <FlightDetailsDialog flight={flight} dictionaries={dictionaries} onSelectFlight={onSelectFlight} dialogTitle={title} />

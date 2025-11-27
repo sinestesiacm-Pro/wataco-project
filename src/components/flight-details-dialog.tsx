@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import {
@@ -184,7 +185,7 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
     <Dialog>
       <DialogTrigger asChild>
         <Button 
-            className="w-full font-bold text-base py-3 rounded-lg bg-primary hover:bg-primary/90"
+            className="w-full font-bold text-base py-3 rounded-lg bg-[#15c5dc] hover:bg-[#15c5dc]/90"
          >
             Ver Oferta
          </Button>
