@@ -146,7 +146,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
   };
 
   return (
-    <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
+    <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-card-3d">
         <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
             <div className="w-full lg:col-span-5 relative">

@@ -25,7 +25,7 @@ function SearchSection({ tab }: { tab?: string }) {
   const renderSearch = () => {
     switch(activeTab) {
       case 'Flights': return (
-        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/20">
+        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl border border-white/20 shadow-card-3d">
           <FlightSearchClassic />
         </div>
       );

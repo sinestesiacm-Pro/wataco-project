@@ -185,7 +185,7 @@ const PackagesSearchPage = React.memo(function PackagesSearchPage() {
   };
 
   return (
-    <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/20">
+    <div className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-card-3d">
         <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className='relative'>

@@ -29,7 +29,7 @@ interface Hotel {
 
 const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotelId: string, destinationName: string) => void }) {
     return (
-        <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-2xl bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
+        <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
             <div className="relative w-full h-48 flex-shrink-0">
                  <Carousel className="w-full h-full">
                     <CarouselContent>

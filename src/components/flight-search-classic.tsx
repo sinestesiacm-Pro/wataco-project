@@ -385,3 +385,4 @@ export const FlightSearchClassic = React.memo(function FlightSearchClassic() {
         </form>
   );
 });
+

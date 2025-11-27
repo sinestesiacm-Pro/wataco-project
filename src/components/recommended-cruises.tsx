@@ -9,7 +9,7 @@ import type { CruisePackage } from '@/lib/types';
 import Link from 'next/link';
 
 const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
-    <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl">
+    <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d">
         <div className="relative w-full h-56 overflow-hidden">
             <Image 
                 src={cruise.image} 

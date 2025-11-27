@@ -12,7 +12,7 @@ import React from 'react';
 
 const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer }) {
     return (
-        <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:border-primary/50">
+        <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d hover:scale-105">
             <div className="relative h-56 w-full overflow-hidden">
                 <Image 
                     src={pkg.image} 
