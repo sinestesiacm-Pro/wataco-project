@@ -8,29 +8,14 @@ import { Button } from '@/components/ui/button';
 import { AmadeusHotelOffer } from '@/lib/types';
 import { Separator } from './ui/separator';
 import { BedDouble, NotebookPen } from 'lucide-react';
-import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import { HotelDetailsDialog } from './hotel-details-dialog';
+import Image from 'next/image';
 
 interface HotelResultPopoverProps {
   offer: AmadeusHotelOffer;
 }
 
-const getCoordinates = (hotelName: string | undefined) => {
-  if (!hotelName) return { lat: 0, lng: 0 };
-  let hash = 0;
-  for (let i = 0; i < hotelName.length; i++) {
-    const char = hotelName.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash |= 0;
-  }
-  const lat = 40.7128 + (hash % 1000) / 10000;
-  const lng = -74.0060 + (hash % 2000) / 10000;
-  return { lat, lng };
-};
-
 export function HotelResultPopover({ offer }: HotelResultPopoverProps) {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-  const position = getCoordinates(offer.hotel.name);
 
   return (
     <Popover>
@@ -42,24 +27,14 @@ export function HotelResultPopover({ offer }: HotelResultPopoverProps) {
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
         <div className="grid gap-4">
-          <div className="h-40 w-full rounded-t-md overflow-hidden">
-            {apiKey ? (
-              <APIProvider apiKey={apiKey}>
-                <Map
-                  defaultCenter={position}
-                  defaultZoom={14}
-                  mapId="popover-map"
-                  gestureHandling={'none'}
-                  disableDefaultUI={true}
-                >
-                  <AdvancedMarker position={position} />
-                </Map>
-              </APIProvider>
-            ) : (
-              <div className="h-full w-full bg-muted flex items-center justify-center text-xs text-muted-foreground">
-                Mapa no disponible
-              </div>
-            )}
+          <div className="h-40 w-full rounded-t-md overflow-hidden bg-muted">
+             <Image 
+                src="https://i.postimg.cc/P5QfVfRj/map-placeholder.png"
+                alt="Mapa de marcador de posición"
+                width={320}
+                height={160}
+                className="object-cover h-full w-full"
+            />
           </div>
           <div className="p-4 pt-0 space-y-4">
             <div>
