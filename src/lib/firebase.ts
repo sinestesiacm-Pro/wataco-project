@@ -6,8 +6,14 @@ import { getFirestore, doc } from "firebase/firestore";
 // These are public keys and are safe to be exposed in the client-side code
 export const AMADEUS_API_KEY = "8KbSUTGXfLXXnZhk3dvVJcAyhdL6uGKG";
 export const AMADEUS_API_SECRET = "uLzV2uC2xTA9SGar";
-export const HOTELBEDS_API_KEY = "0ecd9c27847f29ca3db2c0375b53d1e0";
-export const HOTELBEDS_SECRET = "a831c2be29";
+
+// Hotelbeds Hotels API Credentials
+export const HOTELBEDS_API_KEY = "7b693caa6d94519ce17374929121537f";
+export const HOTELBEDS_SECRET = "8ecd58d026";
+
+// Hotelbeds Activities API Credentials (for future use)
+export const HOTELBEDS_ACTIVITIES_API_KEY = "0ecd9c27847f29ca3db2c0375b53d1e0";
+export const HOTELBEDS_ACTIVITIES_SECRET = "a831c2be29";
 
 
 const firebaseConfig = {
