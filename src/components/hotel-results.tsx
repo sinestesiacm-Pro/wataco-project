@@ -49,9 +49,9 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
 
   return (
     <div className="space-y-4">
-      {hotels.map((offer) => {
+      {hotels.map((offer, index) => {
         return (
-            <Card key={offer.id} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-card/80 backdrop-blur-xl border flex flex-col md:flex-row">
+            <Card key={`${offer.id}-${index}`} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-card/80 backdrop-blur-xl border flex flex-col md:flex-row">
                 <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4 flex-shrink-0">
                     <Image 
                         src={offer.hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
