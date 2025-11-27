@@ -179,7 +179,7 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
                         <label className="text-foreground/80 text-sm font-semibold mb-2 block">Fechas</label>
                         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                             <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full justify-start text-left font-normal bg-background/20 text-foreground border-foreground/30 hover:bg-background/30 hover:text-foreground">
+                                <Button variant="outline" className="w-full justify-start text-left font-normal bg-background/20 text-foreground border-foreground/30 hover:bg-background/30 hover:text-foreground shadow-lg">
                                     <CalendarIcon className="mr-2 h-4 w-4" />
                                     {date?.from ? (
                                         date.to ? (
@@ -217,7 +217,7 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
                          <label className="text-foreground/80 text-sm font-semibold mb-2 block">Huéspedes</label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full justify-start text-left font-normal bg-background/20 text-foreground border-foreground/30 hover:bg-background/30 hover:text-foreground">
+                                <Button variant="outline" className="w-full justify-start text-left font-normal bg-background/20 text-foreground border-foreground/30 hover:bg-background/30 hover:text-foreground shadow-lg">
                                     <Users className="mr-2 h-4 w-4" />
                                     {travelerText}
                                 </Button>
