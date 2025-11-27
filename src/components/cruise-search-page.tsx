@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useRef } from 'react';
 import { format } from 'date-fns';
@@ -89,100 +88,98 @@ export default function CruiseSearchPage() {
 
   return (
     <>
-    <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl border border-white/20 shadow-card-3d">
-        <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Select onValueChange={setDestinationRegion} value={destinationRegion}>
-                    <SelectTrigger className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl text-lg">
-                         <div className="flex items-center w-full">
-                            <Sailboat className="h-6 w-6 mr-4 text-gray-800" />
-                            <div>
-                                <p className="text-xs text-gray-700">Destination</p>
-                                <SelectValue placeholder="Select a destination" className="font-semibold text-gray-800"/>
-                            </div>
+    <form onSubmit={handleSearch} className="flex flex-col gap-4 text-gray-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Select onValueChange={setDestinationRegion} value={destinationRegion}>
+                <SelectTrigger className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl text-lg">
+                     <div className="flex items-center w-full">
+                        <Sailboat className="h-6 w-6 mr-4 text-gray-800" />
+                        <div>
+                            <p className="text-xs text-gray-700">Destination</p>
+                            <SelectValue placeholder="Select a destination" className="font-semibold text-gray-800"/>
                         </div>
-                    </SelectTrigger>
-                    <SelectContent>
-                        {cruiseRegions.map(region => (
-                        <SelectItem key={region.value} value={region.value}>{region.label}</SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-                 <Popover>
-                    <PopoverTrigger asChild>
-                      <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
-                          <div className="flex items-center w-full">
-                              <Users className="h-6 w-6 mr-4 text-gray-800" />
-                              <div>
-                                  <p className="text-xs text-gray-700">Travelers</p>
-                                  <p className="text-base md:text-lg font-semibold text-gray-800">{travelerText}</p>
-                              </div>
-                          </div>
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[var(--radix-popover-trigger-width)]" align="start">
-                        <div className="grid gap-4">
-                        <div className="space-y-2">
-                            <h4 className="font-medium leading-none">Pasajeros</h4>
-                            <p className="text-sm text-muted-foreground">
-                            Selecciona el número de pasajeros.
-                            </p>
-                        </div>
-                        <div className="grid gap-4">
-                            <div className="flex items-center justify-between">
-                            <div>
-                                <p className="font-medium">Adultos</p>
-                                <p className="text-xs text-muted-foreground">Mayores de 12 años</p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
-                                <Minus className="h-4 w-4" />
-                                </Button>
-                                <span className="font-bold text-lg w-4 text-center">{adults}</span>
-                                <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)} disabled={adults >= 8}>
-                                <Plus className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </PopoverContent>
-                  </Popover>
-            </div>
-             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                    </div>
+                </SelectTrigger>
+                <SelectContent>
+                    {cruiseRegions.map(region => (
+                    <SelectItem key={region.value} value={region.value}>{region.label}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+             <Popover>
                 <PopoverTrigger asChild>
                   <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
                       <div className="flex items-center w-full">
-                          <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
-                          <div className="truncate">
-                              <p className="text-xs text-gray-700">Sailing After</p>
-                              <p className="text-base md:text-lg font-semibold text-gray-800 truncate">
-                                {departureDate ? format(departureDate, "MMMM yyyy") : "Choose a month"}
-                              </p>
+                          <Users className="h-6 w-6 mr-4 text-gray-800" />
+                          <div>
+                              <p className="text-xs text-gray-700">Travelers</p>
+                              <p className="text-base md:text-lg font-semibold text-gray-800">{travelerText}</p>
                           </div>
                       </div>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar 
-                        mode="single" 
-                        selected={departureDate} 
-                        onSelect={setDepartureDate} 
-                        initialFocus
-                        disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))} 
-                    />
-                    <div className="p-2 border-t md:hidden">
-                        <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Done</Button>
+                <PopoverContent className="w-[var(--radix-popover-trigger-width)]" align="start">
+                    <div className="grid gap-4">
+                    <div className="space-y-2">
+                        <h4 className="font-medium leading-none">Pasajeros</h4>
+                        <p className="text-sm text-muted-foreground">
+                        Selecciona el número de pasajeros.
+                        </p>
+                    </div>
+                    <div className="grid gap-4">
+                        <div className="flex items-center justify-between">
+                        <div>
+                            <p className="font-medium">Adultos</p>
+                            <p className="text-xs text-muted-foreground">Mayores de 12 años</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => Math.max(1, v - 1))} disabled={adults <= 1}>
+                            <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="font-bold text-lg w-4 text-center">{adults}</span>
+                            <Button type="button" variant="outline" size="icon" className="h-8 w-8" onClick={() => setAdults(v => v + 1)} disabled={adults >= 8}>
+                            <Plus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        </div>
+                    </div>
                     </div>
                 </PopoverContent>
               </Popover>
+        </div>
+         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <PopoverTrigger asChild>
+              <Button type="button" variant="ghost" className="w-full h-auto p-4 justify-start text-left bg-white/70 hover:bg-white/90 rounded-2xl">
+                  <div className="flex items-center w-full">
+                      <CalendarIcon className="h-6 w-6 mr-4 text-gray-800" />
+                      <div className="truncate">
+                          <p className="text-xs text-gray-700">Sailing After</p>
+                          <p className="text-base md:text-lg font-semibold text-gray-800 truncate">
+                            {departureDate ? format(departureDate, "MMMM yyyy") : "Choose a month"}
+                          </p>
+                      </div>
+                  </div>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+                <Calendar 
+                    mode="single" 
+                    selected={departureDate} 
+                    onSelect={setDepartureDate} 
+                    initialFocus
+                    disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))} 
+                />
+                <div className="p-2 border-t md:hidden">
+                    <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Done</Button>
+                </div>
+            </PopoverContent>
+          </Popover>
 
-            <Button type="submit" size="lg" className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-sky-600 h-14 text-white rounded-full shadow-lg hover:shadow-xl transition-all px-10">
-                 {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Ship className="mr-2 h-5 w-5" />}
-                 Buscar Cruceros
-            </Button>
-        </form>
-    </div>
+        <Button type="submit" size="lg" className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-sky-600 h-14 text-white rounded-full shadow-lg hover:shadow-xl transition-all px-10">
+             {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Ship className="mr-2 h-5 w-5" />}
+             Buscar Cruceros
+        </Button>
+    </form>
     <div className="mt-8">
         <AnimatePresence>
           {loading && (

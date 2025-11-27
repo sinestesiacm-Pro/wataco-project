@@ -1,4 +1,3 @@
-
 'use client';
 
 import HotelSearchPage from '@/components/hotel-search-page';
@@ -26,39 +25,19 @@ function SearchSection({ tab }: { tab?: string }) {
 
   const renderSearch = () => {
     switch(activeTab) {
-      case 'Flights': return (
-        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
-          <FlightSearchClassic />
-        </div>
-      );
-      case 'Hotels': return (
-        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
-          <HotelSearchPage />
-        </div>
-      );
-      case 'Packages': return (
-        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
-          <PackagesSearchPage />
-        </div>
-      );
-      case 'Cruises': return (
-        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
-          <CruiseSearchPage />
-        </div>
-      );
-      case 'Activities': return (
-        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
-          <ActivitySearchPage />
-        </div>
-      );
+      case 'Flights': return <FlightSearchClassic />;
+      case 'Hotels': return <HotelSearchPage />;
+      case 'Packages': return <PackagesSearchPage />;
+      case 'Cruises': return <CruiseSearchPage />;
+      case 'Activities': return <ActivitySearchPage />;
       default: return null;
     }
   }
 
   return (
-    <>
-      {renderSearch()}
-    </>
+    <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
+        {renderSearch()}
+    </div>
   );
 }
 
