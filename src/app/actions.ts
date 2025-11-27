@@ -210,7 +210,7 @@ export async function searchHotels(params: {
         'Api-key': HOTELBEDS_API_KEY,
         'X-Signature': signature,
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
         'Accept-Encoding': 'gzip'
     };
 
@@ -477,5 +477,3 @@ export async function activateVipMembership(params: { userId: string, membership
         return { success: false, error: err.message || "An unexpected error occurred while activating membership." };
     }
 }
-
-    
