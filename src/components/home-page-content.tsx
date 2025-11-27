@@ -17,6 +17,8 @@ import Image from 'next/image';
 import { RecommendedDestinations } from './recommended-destinations';
 import { FlightSearchClassic } from './flight-search-classic';
 import ActivitySearchPage from './activity-search-page';
+import { useSearch } from '@/contexts/search-context';
+import { AnimatePresence, motion } from 'framer-motion';
 
 
 function SearchSection({ tab }: { tab?: string }) {
@@ -25,14 +27,30 @@ function SearchSection({ tab }: { tab?: string }) {
   const renderSearch = () => {
     switch(activeTab) {
       case 'Flights': return (
-        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl border border-white/20 shadow-card-3d">
+        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
           <FlightSearchClassic />
         </div>
       );
-      case 'Hotels': return <HotelSearchPage />;
-      case 'Packages': return <PackagesSearchPage />;
-      case 'Cruises': return <CruiseSearchPage />;
-      case 'Activities': return <ActivitySearchPage />;
+      case 'Hotels': return (
+        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
+          <HotelSearchPage />
+        </div>
+      );
+      case 'Packages': return (
+        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
+          <PackagesSearchPage />
+        </div>
+      );
+      case 'Cruises': return (
+        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
+          <CruiseSearchPage />
+        </div>
+      );
+      case 'Activities': return (
+        <div className="bg-white/40 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-card-3d">
+          <ActivitySearchPage />
+        </div>
+      );
       default: return null;
     }
   }
@@ -121,17 +139,29 @@ function RecommendedContent({ tab }: { tab?: string }) {
 export function HomePageContent() {
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'Flights';
+    const { isSearchOpen } = useSearch();
 
     return (
         <div className={cn("w-full flex-grow flex flex-col relative")}>
+            <AnimatePresence>
+                {isSearchOpen && (
+                    <motion.div
+                        key="search-panel"
+                        initial={{ y: "-100%", opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: "-100%", opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className="sticky top-20 z-30 pt-4" // top-20 to be below the header
+                    >
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                            {tab !== 'Social' && <SearchSection tab={tab} />}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="relative z-10 flex flex-col flex-grow">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div className="pt-24">
-                         {tab !== 'Social' && <SearchSection tab={tab} />}
-                    </div>
-                </div>
-          
-                <div className="py-8">
+                 <div className="py-8 pt-24">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                          <RecommendedContent tab={tab} />
                     </div>

@@ -8,6 +8,7 @@ import { ChatWidget } from '@/components/chat-widget';
 import { BottomNavbar } from '@/components/bottom-navbar';
 import { ThemeProvider } from '@/contexts/theme-context';
 import { cn } from '@/lib/utils';
+import { SearchProvider } from '@/contexts/search-context';
 
 export const metadata: Metadata = {
   title: 'Uataco',
@@ -32,15 +33,17 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <ThemeProvider>
           <AuthProvider>
-            <div className={cn('flex flex-col min-h-dvh')}>
-                <Header />
-                <main className="flex-grow flex flex-col">
-                    {children}
-                </main>
-                <Toaster />
-                <ChatWidget />
-                <BottomNavbar />
-            </div>
+            <SearchProvider>
+                <div className={cn('flex flex-col min-h-dvh')}>
+                    <Header />
+                    <main className="flex-grow flex flex-col">
+                        {children}
+                    </main>
+                    <Toaster />
+                    <ChatWidget />
+                    <BottomNavbar />
+                </div>
+            </SearchProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

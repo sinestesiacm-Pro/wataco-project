@@ -3,13 +3,14 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { LogIn, Settings, MapPin, Plane, BedDouble, Luggage, Ship, Zap, Users } from 'lucide-react';
+import { LogIn, Settings, MapPin, Plane, BedDouble, Luggage, Ship, Zap, Users, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/auth-context';
 import { UserNav } from './user-nav';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { cn } from '@/lib/utils';
 import { Icons } from './icons';
+import { useSearch } from '@/contexts/search-context';
 
 const TABS = [
   { id: 'Flights', label: 'Flights', icon: Plane },
@@ -25,6 +26,7 @@ export function Header() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { user } = useAuth();
+  const { toggleSearch, isSearchOpen } = useSearch();
   
   const getTabFromPath = () => {
     if (pathname.startsWith('/hotels')) return 'Hotels';
@@ -32,7 +34,6 @@ export function Header() {
     if (pathname.startsWith('/cruises')) return 'Cruises';
     if (pathname.startsWith('/activities')) return 'Activities';
     if (pathname.startsWith('/social')) return 'Social';
-    // If on checkout page for a package, the active tab should be 'Packages'
     if (pathname.startsWith('/flights/checkout') && searchParams.has('packageId')) return 'Packages';
     if (pathname.startsWith('/flights')) return 'Flights';
     return searchParams.get('tab') || 'Flights';
@@ -57,7 +58,7 @@ export function Header() {
     if (path.startsWith('/flights/checkout')) return 'Finalize Purchase';
     if (/^\/hotels\/.*\/offers/.test(pathname)) return 'Select Room';
     
-    return 'Wataco';
+    return 'Uataco';
   }
 
   const currentTitle = getTitleFromPath(pathname);
@@ -102,6 +103,10 @@ export function Header() {
           </div>
           
           <div className="flex-1 flex items-center justify-end gap-2">
+            <Button onClick={toggleSearch} variant={isSearchOpen ? "secondary" : "outline"}>
+              <Search className="mr-0 sm:mr-2 h-4 w-4"/>
+              <span className="hidden sm:inline">Search</span>
+            </Button>
             {user ? (
               <UserNav />
             ) : (
@@ -118,5 +123,3 @@ export function Header() {
     </header>
   );
 }
-
-    
