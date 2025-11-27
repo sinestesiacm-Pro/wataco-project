@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { AmadeusHotel } from '@/lib/types';
@@ -9,8 +8,6 @@ import { Star, MapPin, Wifi, Car, Waves, Utensils, GlassWater, Wind, Dumbbell, S
 import type { LucideIcon } from 'lucide-react';
 import { HotelMapDialog } from './hotel-map-dialog';
 import { Badge } from './ui/badge';
-import Autoplay from "embla-carousel-autoplay"
-
 
 const amenityIcons: { [key: string]: LucideIcon } = {
   SWIMMING_POOL: Waves,
@@ -49,7 +46,6 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
         {/* Background Image Carousel */}
         <Carousel 
           className="absolute inset-0 w-full h-full"
-          plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
         >
           <CarouselContent>
             {hotel.media && hotel.media.length > 0 ? (
