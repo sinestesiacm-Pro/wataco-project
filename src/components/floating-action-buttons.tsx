@@ -11,9 +11,23 @@ import { cn } from '@/lib/utils';
 export function FloatingActionButtons({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
 
-    const filterButton = Children.toArray(children).find(
-        (child) => isValidElement(child) && child.props.children.props.children.includes('Filtros')
-    );
+    // This logic is fragile. It assumes a specific structure.
+    // Let's make it more robust.
+    const filterButton = Children.toArray(children).find(child => {
+        if (!isValidElement(child)) return false;
+        // The child is the <Dialog> component. We need to find the trigger inside.
+        const dialogTrigger = (child.props.children as React.ReactElement[])?.find(
+            (c: React.ReactElement) => isValidElement(c) && c.type.displayName === 'DialogTrigger'
+        );
+        if (!dialogTrigger) return false;
+        // The trigger's child is the <Button>.
+        const button = dialogTrigger.props.children;
+        if (!isValidElement(button)) return false;
+        // The button's children contain the text.
+        const buttonChildren = Children.toArray(button.props.children);
+        return buttonChildren.some(c => typeof c === 'string' && c.trim() === 'Filtros');
+    });
+
 
     return (
         <div className="lg:hidden fixed bottom-6 right-6 z-50 flex flex-col items-center gap-4">
