@@ -88,7 +88,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
     <div className={cn('w-full min-h-screen pt-24 pb-24')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
-            <Button asChild variant="outline">
+            <Button asChild className="bg-card/80 backdrop-blur-xl border text-foreground hover:bg-accent shadow-lg">
             <Link href="/?tab=Hotels">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Volver a Hoteles
