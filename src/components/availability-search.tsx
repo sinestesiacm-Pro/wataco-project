@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -140,16 +139,16 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
     };
 
     return (
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+        <Card className="bg-card/40 backdrop-blur-xl border border-white/20 shadow-2xl">
             <CardHeader>
-                <CardTitle className="text-white font-headline text-2xl">Consultar Disponibilidad y Precios</CardTitle>
+                <CardTitle className="text-foreground font-headline text-2xl">Consultar Disponibilidad y Precios</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                     
                     {showDestination && (
                      <div className="lg:col-span-1 relative">
-                        <label className="text-white/80 text-sm font-semibold mb-2 block">Destino</label>
+                        <label className="text-foreground/80 text-sm font-semibold mb-2 block">Destino</label>
                         <Popover open={isDestinationPopoverOpen && destinationQuery.length > 1} onOpenChange={setIsDestinationPopoverOpen}>
                             <PopoverTrigger asChild>
                                  <Input 
@@ -160,7 +159,7 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
                                     onFocus={() => setIsDestinationPopoverOpen(true)}
                                     onClick={handleInputClick}
                                     placeholder="Ej. Nueva York" 
-                                    className="bg-black/20 text-white border-white/30 h-10" 
+                                    className="bg-background/20 text-foreground border-foreground/30 h-10" 
                                     autoComplete="off"
                                 />
                             </PopoverTrigger>
@@ -177,10 +176,10 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
 
                     {/* Date Picker */}
                     <div className="lg:col-span-1">
-                        <label className="text-white/80 text-sm font-semibold mb-2 block">Fechas</label>
+                        <label className="text-foreground/80 text-sm font-semibold mb-2 block">Fechas</label>
                         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                             <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full justify-start text-left font-normal bg-black/20 text-white border-white/30 hover:bg-black/30 hover:text-white">
+                                <Button variant="outline" className="w-full justify-start text-left font-normal bg-background/20 text-foreground border-foreground/30 hover:bg-background/30 hover:text-foreground">
                                     <CalendarIcon className="mr-2 h-4 w-4" />
                                     {date?.from ? (
                                         date.to ? (
@@ -215,10 +214,10 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
 
                     {/* Guest Picker */}
                     <div className="lg:col-span-1">
-                         <label className="text-white/80 text-sm font-semibold mb-2 block">Huéspedes</label>
+                         <label className="text-foreground/80 text-sm font-semibold mb-2 block">Huéspedes</label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full justify-start text-left font-normal bg-black/20 text-white border-white/30 hover:bg-black/30 hover:text-white">
+                                <Button variant="outline" className="w-full justify-start text-left font-normal bg-background/20 text-foreground border-foreground/30 hover:bg-background/30 hover:text-foreground">
                                     <Users className="mr-2 h-4 w-4" />
                                     {travelerText}
                                 </Button>

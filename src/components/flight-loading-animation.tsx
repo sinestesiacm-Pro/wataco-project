@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useMemo } from 'react';
@@ -27,15 +26,14 @@ const generateWords = (count: number, isMobile: boolean) => {
     const sizeOptions = isMobile 
         ? ['text-2xl', 'text-3xl', 'text-4xl'] 
         : ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'];
-    const durationRange = { min: 40, max: 120 };
+    const durationRange = { min: 80, max: 150 }; // Slower animation
 
     for (let i = 0; i < count; i++) {
         const base = baseWords[i % baseWords.length];
         const duration = Math.random() * (durationRange.max - durationRange.min) + durationRange.min;
         
-        // Adjust horizontal positioning based on screen orientation
-        const horizontalRange = isMobile ? 100 : 140; // Narrower range for mobile
-        const horizontalOffset = isMobile ? 10 : 20; // Smaller negative offset for mobile
+        const horizontalRange = isMobile ? 120 : 140;
+        const horizontalOffset = isMobile ? 20 : 40;
         const leftPos = Math.random() * horizontalRange - horizontalOffset;
         
         const topPos = Math.random() * 100;
@@ -56,7 +54,7 @@ const generateWords = (count: number, isMobile: boolean) => {
 const Word = React.memo(function Word({ word }: { word: any }) {
     return (
         <span
-            className={cn("whitespace-nowrap absolute text-foreground", word.size)}
+            className={cn("whitespace-nowrap absolute text-foreground/70", word.size)}
             style={
                 {
                     top: word.top,
@@ -78,7 +76,7 @@ const Word = React.memo(function Word({ word }: { word: any }) {
 
 const WelcomeAboardCloud = React.memo(function WelcomeAboardCloud() {
     const isMobile = useIsMobile();
-    const wordCount = isMobile ? 150 : 240;
+    const wordCount = isMobile ? 100 : 150; // Reduced word count
     
     const words = useMemo(() => generateWords(wordCount, isMobile), [wordCount, isMobile]);
 
