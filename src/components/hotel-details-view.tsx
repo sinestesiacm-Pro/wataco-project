@@ -42,7 +42,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
 
   return (
     <div className="space-y-8">
-      <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border rounded-2xl shadow-lg h-[60vh] md:h-[70vh]">
+      <Card className="relative overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg h-[60vh] md:h-[70vh]">
         
         {/* Background Image Carousel */}
         <Carousel 
@@ -85,7 +85,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
 
         {/* Content Overlay */}
-        <div className="relative h-full flex flex-col justify-end p-6 md:p-8">
+        <div className="relative h-full flex flex-col justify-end p-6 md:p-8 pointer-events-none">
             <CardHeader className="p-0 mb-4">
                 <CardTitle className="text-3xl md:text-4xl font-headline text-white drop-shadow-lg">{hotel.name}</CardTitle>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-white/90">
@@ -117,7 +117,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
                             </div>
                         </div>
                     )}
-                     <div>
+                     <div className="pointer-events-auto">
                         <HotelMapDialog hotelName={hotel.name || 'Ubicación'} />
                     </div>
                 </div>
