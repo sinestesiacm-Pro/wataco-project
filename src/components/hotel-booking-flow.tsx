@@ -92,7 +92,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
         <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
             <CardContent className="pt-6 text-center">
                 <h3 className="font-bold">Error al Cargar Ofertas</h3>
-                <p className="text-sm mt-2">{error || 'Hotel no encontrado.'}</p>
+                <p className="text-sm mt-2">{error || 'Hotel no encontrado en la base de datos.'}</p>
             </CardContent>
         </Card>
     )
