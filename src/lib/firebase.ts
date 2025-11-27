@@ -7,7 +7,7 @@ import { getFirestore, doc } from "firebase/firestore";
 export const AMADEUS_API_KEY = "8KbSUTGXfLXXnZhk3dvVJcAyhdL6uGKG";
 export const AMADEUS_API_SECRET = "uLzV2uC2xTA9SGar";
 export const HOTELBEDS_API_KEY = "0ecd9c27847f29ca3db2c0375b53d1e0";
-export const HOTELBEDS_SECRET = "0b5853e05a";
+export const HOTELBEDS_SECRET = "a831c2be29";
 
 
 const firebaseConfig = {
