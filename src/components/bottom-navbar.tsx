@@ -46,17 +46,6 @@ export function BottomNavbar() {
   
   const activeTab = searchParams.get('tab') || 'Flights';
   const isOnHomePage = pathname === '/';
-  
-  // This logic is important to hide the navbar during flight/hotel search loading
-  const isSearchLoading = pathname.includes('/flights/select') || pathname.includes('/hotels/search');
-  if (isSearchLoading && !searchParams.has('from')) {
-    // A bit of a hack: if 'from' is not in params, it means it's the loading page
-    const urlSearchParams = new URLSearchParams(searchParams.toString());
-    if(!urlSearchParams.get('cityCode')) { // if it is not hotel search
-      return null;
-    }
-  }
-
 
   const isLight = true;
 
