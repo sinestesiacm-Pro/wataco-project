@@ -5,7 +5,7 @@ import Image from 'next/image';
 import type { FlightOffer, Itinerary, Dictionaries, Segment } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plane, Clock, ChevronDown } from 'lucide-react';
+import { Plane, Clock, ChevronDown, ArrowRight } from 'lucide-react';
 import { FlightBaggageInfo } from './flight-baggage-info';
 import { FlightDetailsDialog } from './flight-details-dialog';
 import { cn } from '@/lib/utils';
@@ -21,48 +21,6 @@ const formatTime = (dateString: string) => {
   return new Date(dateString).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
 };
 
-const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-}
-
-interface StopInfoProps {
-    itinerary: Itinerary;
-    dictionaries: Dictionaries;
-}
-
-const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
-    if (itinerary.segments.length <= 1) return null;
-
-    const getCityName = (iataCode: string, dictionaries: Dictionaries) => {
-        const location = dictionaries.locations[iataCode];
-        if (!location) return iataCode;
-        // This is a simplified logic, a real app would have a more robust city name mapping
-        const cityLocation = dictionaries.locations[location.cityCode];
-        return cityLocation?.cityCode || location.cityCode;
-    };
-
-
-    return (
-        <div className="space-y-4 px-2">
-            {itinerary.segments.slice(0, -1).map((segment, index) => {
-                const nextSegment = itinerary.segments[index + 1];
-                const layoverDuration = new Date(nextSegment.departure.at).getTime() - new Date(segment.arrival.at).getTime();
-                const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
-                const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
-                
-                const cityName = getCityName(segment.arrival.iataCode, dictionaries);
-
-                return (
-                     <div key={`stop-${index}`} className="text-xs text-center text-muted-foreground">
-                        <p>Escala en {cityName}</p>
-                        <p>Duración: {hours}h {minutes}m</p>
-                    </div>
-                )
-            })}
-        </div>
-    )
-}
-
 interface FlightCardProps {
   flight: FlightOffer;
   dictionaries: Dictionaries;
@@ -77,90 +35,86 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
     const airlineCode = firstSegment.carrierCode;
+    const flightNumber = `${firstSegment.carrierCode}${firstSegment.number}`;
 
     const stops = itinerary.segments.length - 1;
-    const stopInfoText = stops > 1 ? `${stops} escalas` : stops === 1 ? '1 escala' : 'Directo';
+    const stopInfoText = stops > 0 ? `${stops} escala(s)` : 'Directo';
 
     return (
-        <Collapsible asChild>
-          <Card className="bg-card/80 backdrop-blur-lg border text-card-foreground rounded-2xl shadow-lg">
-            <CardContent className="p-4 space-y-4">
-                <div className="flex justify-between items-center px-2 text-sm">
-                    <div className="flex items-center gap-2">
-                        <Image
-                            src={`https://images.kiwi.com/airlines/32/${airlineCode}.png`}
-                            alt={airlineName}
-                            width={24}
-                            height={24}
-                            className="rounded-sm bg-white/50"
-                            unoptimized
-                        />
-                        <p className="font-semibold">{airlineName}</p>
+        <Card className="bg-card/80 backdrop-blur-lg border text-card-foreground rounded-2xl shadow-lg">
+            <CardContent className="p-6 space-y-4">
+                <div className="flex justify-between items-start text-sm">
+                    <div className="flex items-center gap-2 font-semibold" style={{color: '#546377'}}>
+                        <Plane className="h-4 w-4" />
+                        <span>{airlineName}</span>
                     </div>
-                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Clock className="w-3 h-3"/>
-                        <span>{formatDuration(itinerary.duration)}</span>
+                    <span className="font-mono text-xs" style={{color: '#546377'}}>{flightNumber}</span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                    <div className="text-left">
+                        <p className="text-2xl font-semibold" style={{color: '#323a48'}}>{formatTime(firstSegment.departure.at)}</p>
+                        <p className="font-medium text-base" style={{color: '#546377'}}>{firstSegment.departure.iataCode}</p>
+                    </div>
+
+                    <div className="text-center flex-grow mx-4">
+                        <p className="text-xs font-medium" style={{color: '#546377'}}>{formatDuration(itinerary.duration)}</p>
+                        <div className="w-full h-px bg-success my-1"></div>
+                        <p className="text-xs font-semibold text-success">{stopInfoText}</p>
+                    </div>
+
+                    <div className="text-right">
+                        <p className="text-2xl font-semibold" style={{color: '#323a48'}}>{formatTime(lastSegment.arrival.at)}</p>
+                        <p className="font-medium text-base" style={{color: '#546377'}}>{lastSegment.arrival.iataCode}</p>
                     </div>
                 </div>
-                
-                <div className="flex items-center justify-around">
-                    <div className="text-center flex-grow flex-shrink-0 basis-0">
-                        <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
-                        <p className="font-semibold text-muted-foreground">{firstSegment.departure.iataCode}</p>
+
+                <Separator />
+
+                <div className="flex justify-between items-center">
+                    <div>
+                        <p className="text-sm font-medium" style={{color: '#546377'}}>Precio total</p>
+                        <p className="text-2xl font-bold text-primary">{flight.price.total} <span className="text-base font-medium">{flight.price.currency}</span></p>
                     </div>
-                    
-                     <CollapsibleTrigger asChild>
-                         <div className={cn("relative flex flex-col items-center justify-center text-center w-full max-w-[120px] px-2", stops > 0 ? "cursor-pointer" : "cursor-default")}>
-                            <div className="w-full relative h-6 flex items-center justify-center">
-                                <div className="absolute w-full h-px bg-border"></div>
-                                <div className="relative bg-card p-1 rounded-full border">
-                                   <Plane className="w-5 h-5"/>
-                                </div>
-                            </div>
-                             <p className="text-xs text-muted-foreground mt-1">{stopInfoText}</p>
-                             <p className="text-3xl font-bold text-primary">${flight.price.total}</p>
-                        </div>
-                    </CollapsibleTrigger>
-                    
-                    <div className="text-center flex-grow flex-shrink-0 basis-0">
-                        <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
-                        <p className="font-semibold text-muted-foreground">{lastSegment.arrival.iataCode}</p>
-                    </div>
-                </div>
-                
-                <CollapsibleContent>
-                    <StopInfo itinerary={itinerary} dictionaries={dictionaries} />
-                </CollapsibleContent>
-                
-                <div className="pt-2">
-                  <FlightDetailsDialog
-                      flight={flight}
-                      dictionaries={dictionaries}
-                      onSelectFlight={onSelectFlight}
-                      dialogTitle={title.includes('ida') ? 'Vuelo de Ida' : 'Vuelo de Vuelta'}
-                  />
+                    <Button 
+                        onClick={() => onSelectFlight(flight, 0)} 
+                        className="bg-primary hover:bg-primary/90 rounded-lg font-semibold"
+                    >
+                        Seleccionar <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                 </div>
             </CardContent>
-          </Card>
-        </Collapsible>
+        </Card>
     );
 });
 
+interface FlightInfoProps {
+    origin: string;
+    destination: string;
+    departureDate: string;
+    returnDate: string;
+    totalResults: number;
+}
 
-export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight }: {
+export function FlightSelectionList({ flights, dictionaries, onSelectFlight, title, selectedOutboundFlight, flightInfo }: {
     flights: FlightOffer[];
     dictionaries: Dictionaries;
     onSelectFlight: (flight: FlightOffer, addons: number) => void;
     title: string;
     selectedOutboundFlight?: FlightOffer | null;
+    flightInfo: FlightInfoProps;
 }) {
   
   return (
     <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h2 className="text-3xl font-headline font-semibold">
-                {title}
+        <div className="mb-6">
+            <h2 className="text-lg font-semibold" style={{color: '#323a48'}}>
+                {flightInfo.origin} → {flightInfo.destination}
             </h2>
+            <p className="text-sm" style={{color: '#546377'}}>
+                {flightInfo.departureDate} {flightInfo.returnDate && `- ${flightInfo.returnDate}`}
+            </p>
+            <p className="mt-4 font-semibold" style={{color: '#323a48'}}>{flightInfo.totalResults} vuelos encontrados</p>
         </div>
 
         {selectedOutboundFlight && (

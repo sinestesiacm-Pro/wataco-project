@@ -203,6 +203,14 @@ function FlightSelectionPage() {
   }
   
   const renderStepContent = () => {
+    const flightInfoProps = {
+      origin: originQuery || '',
+      destination: destinationQuery || '',
+      departureDate: departureDate || '',
+      returnDate: returnDate || '',
+      totalResults: outboundFlights.length,
+    };
+
     switch (step) {
       case 'outbound':
         return (
@@ -211,6 +219,7 @@ function FlightSelectionPage() {
             dictionaries={flightData.dictionaries}
             onSelectFlight={handleOutboundSelect}
             title={`Vuelos de ida a ${destinationQuery}`}
+            flightInfo={flightInfoProps}
           />
         );
       case 'return':
@@ -221,6 +230,7 @@ function FlightSelectionPage() {
             onSelectFlight={handleReturnSelect}
             title={`Vuelos de vuelta a ${originQuery}`}
             selectedOutboundFlight={selectedOutbound}
+            flightInfo={flightInfoProps}
           />
         );
       case 'review':
@@ -253,12 +263,6 @@ function FlightSelectionPage() {
                     Volver a la Búsqueda
                 </Link>
             </Button>
-          <BookingProgressHeader 
-              step={step} 
-              isRoundTrip={!!returnDate}
-              origin={originQuery || ''}
-              destination={destinationQuery || ''}
-          />
           
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 mt-8">
               {step !== 'review' && (
