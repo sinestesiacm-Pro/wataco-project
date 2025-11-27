@@ -43,7 +43,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
   return (
     <div className="space-y-8">
       <Card className="overflow-hidden bg-card/80 backdrop-blur-xl border rounded-2xl shadow-lg">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="flex flex-col">
             <div className="p-6">
                 <CardHeader className="p-0 mb-4">
                     <CardTitle className="text-3xl font-headline">{hotel.name}</CardTitle>
@@ -82,7 +82,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
                     </div>
                 </CardContent>
             </div>
-             <div className="relative">
+             <div className="relative h-80 md:h-96 w-full">
                 <Carousel className="w-full h-full">
                   <CarouselContent>
                     {hotel.media && hotel.media.length > 0 ? (
