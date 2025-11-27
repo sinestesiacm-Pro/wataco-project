@@ -61,7 +61,7 @@ const StopInfo = ({ itinerary, dictionaries }: StopInfoProps) => {
                 const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
                 const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
                 
-                const cityName = getCityName(segment.arrival.iataCode);
+                const cityName = getCityName(segment.arrival.iataCode, dictionaries);
 
                 return (
                      <div key={`stop-${index}`} className="text-xs text-center text-muted-foreground">
@@ -106,14 +106,14 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                             className="rounded-sm bg-white/50"
                             unoptimized
                         />
-                        <p className="font-semibold">{airlineName}</p>
+                        <p className="font-semibold" style={{color: '#323a48'}}>{airlineName}</p>
                     </div>
                     <p className="text-muted-foreground font-mono">{firstSegment.carrierCode} {firstSegment.number}</p>
                 </div>
                 
                 <div className="flex items-center justify-around">
                     <div className="text-center flex-grow flex-shrink-0 basis-0">
-                        <p className="text-2xl font-bold">{formatTime(firstSegment.departure.at)}</p>
+                        <p className="text-2xl font-bold" style={{color: '#323a48'}}>{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-semibold text-muted-foreground">{firstSegment.departure.iataCode}</p>
                     </div>
                     
@@ -129,7 +129,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     </CollapsibleTrigger>
                     
                     <div className="text-center flex-grow flex-shrink-0 basis-0">
-                        <p className="text-2xl font-bold">{formatTime(lastSegment.arrival.at)}</p>
+                        <p className="text-2xl font-bold" style={{color: '#323a48'}}>{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-semibold text-muted-foreground">{lastSegment.arrival.iataCode}</p>
                     </div>
                 </div>
@@ -144,7 +144,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                         <span>{formatDuration(itinerary.duration)}</span>
                     </div>
                     <span>{stopInfoText}</span>
-                    <p className="text-xl font-bold text-card-foreground">${flight.price.total}</p>
+                    <p className="text-3xl font-bold text-primary">${flight.price.total}</p>
                 </div>
 
                 <div className="pt-2">
@@ -173,7 +173,7 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
   return (
     <div className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h2 className="text-3xl font-headline font-bold">
+            <h2 className="text-3xl font-headline font-semibold" style={{color: '#323a48'}}>
                 {title}
             </h2>
         </div>

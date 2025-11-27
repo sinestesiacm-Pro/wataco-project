@@ -19,7 +19,7 @@ const Step = ({ title, isActive, isCompleted }: { title: string; isActive: boole
         ) : (
             <Circle className={cn("h-6 w-6 transition-colors", isActive ? "text-primary fill-primary/20" : "text-muted-foreground")} />
         )}
-        <span className={cn("font-semibold drop-shadow-lg transition-colors", isActive ? "text-primary" : isCompleted ? "" : "text-muted-foreground")}>
+        <span className={cn("font-medium drop-shadow-lg transition-colors", isActive ? "text-primary" : isCompleted ? "" : "text-muted-foreground")} style={{ color: isActive ? '' : (isCompleted ? '' : '#546377') }}>
             {title}
         </span>
     </div>
@@ -32,11 +32,11 @@ export const BookingProgressHeader = React.memo(function BookingProgressHeader({
   return (
     <div className="bg-card/80 backdrop-blur-lg border p-4 rounded-2xl shadow-md mb-8">
         <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold font-headline flex items-center gap-3 drop-shadow-lg">
+            <h2 className="text-2xl font-medium font-headline flex items-center gap-3 drop-shadow-lg" style={{color: '#323a48'}}>
                 <Plane className="h-6 w-6" />
                 <span>{origin} a {destination}</span>
             </h2>
-             <p className="text-sm font-semibold drop-shadow-lg">
+             <p className="text-sm font-medium drop-shadow-lg" style={{color: '#546377'}}>
                 {isRoundTrip ? 'Ida y Vuelta' : 'Solo Ida'}
             </p>
         </div>

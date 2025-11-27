@@ -246,7 +246,7 @@ function FlightSelectionPage() {
     <div className='min-h-screen w-full pt-24 pb-24 md:pb-8 relative overflow-hidden'>
       <div className="relative z-10 min-h-full">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <Button asChild variant="outline" className="mb-6">
+            <Button asChild variant="outline" className="mb-6 bg-card/80 backdrop-blur-lg shadow-md">
                 <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Volver a la Búsqueda
