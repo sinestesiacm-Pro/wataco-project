@@ -42,10 +42,17 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
 
     return (
         <Card className="bg-card/80 backdrop-blur-lg border text-card-foreground rounded-2xl shadow-lg">
-            <CardContent className="p-6 space-y-4">
+            <CardContent className="p-4 sm:p-6 space-y-4">
                 <div className="flex justify-between items-start text-sm">
                     <div className="flex items-center gap-2 font-semibold" style={{color: '#546377'}}>
-                        <Plane className="h-4 w-4" />
+                        <Image
+                            src={`https://images.kiwi.com/airlines/64/${airlineCode}.png`}
+                            alt={airlineName}
+                            width={24}
+                            height={24}
+                            className="rounded-full bg-white p-0.5 shadow-md"
+                            unoptimized
+                        />
                         <span>{airlineName}</span>
                     </div>
                     <span className="font-mono text-xs" style={{color: '#546377'}}>{flightNumber}</span>
@@ -53,7 +60,7 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
 
                 <div className="flex items-center justify-between">
                     <div className="text-left">
-                        <p className="text-2xl font-semibold" style={{color: '#323a48'}}>{formatTime(firstSegment.departure.at)}</p>
+                        <p className="text-2xl font-bold" style={{color: '#323a48'}}>{formatTime(firstSegment.departure.at)}</p>
                         <p className="font-medium text-base" style={{color: '#546377'}}>{firstSegment.departure.iataCode}</p>
                     </div>
 
@@ -64,24 +71,19 @@ const FlightCard = React.memo(function FlightCard({ flight, dictionaries, onSele
                     </div>
 
                     <div className="text-right">
-                        <p className="text-2xl font-semibold" style={{color: '#323a48'}}>{formatTime(lastSegment.arrival.at)}</p>
+                        <p className="text-2xl font-bold" style={{color: '#323a48'}}>{formatTime(lastSegment.arrival.at)}</p>
                         <p className="font-medium text-base" style={{color: '#546377'}}>{lastSegment.arrival.iataCode}</p>
                     </div>
                 </div>
 
-                <Separator />
-
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center pt-4 border-t">
                     <div>
                         <p className="text-sm font-medium" style={{color: '#546377'}}>Precio total</p>
-                        <p className="text-2xl font-bold text-primary">{flight.price.total} <span className="text-base font-medium">{flight.price.currency}</span></p>
+                        <p className="text-3xl font-bold text-primary">{flight.price.total} <span className="text-base font-medium">{flight.price.currency}</span></p>
                     </div>
-                    <Button 
-                        onClick={() => onSelectFlight(flight, 0)} 
-                        className="bg-primary hover:bg-primary/90 rounded-lg font-semibold"
-                    >
-                        Seleccionar <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    <div className="w-32">
+                      <FlightDetailsDialog flight={flight} dictionaries={dictionaries} onSelectFlight={onSelectFlight} dialogTitle={title} />
+                    </div>
                 </div>
             </CardContent>
         </Card>
@@ -108,25 +110,25 @@ export function FlightSelectionList({ flights, dictionaries, onSelectFlight, tit
   return (
     <div className="space-y-6">
         <div className="mb-6">
-            <h2 className="text-lg font-semibold" style={{color: '#323a48'}}>
+            <h2 className="text-lg font-medium" style={{color: '#323a48'}}>
                 {flightInfo.origin} → {flightInfo.destination}
             </h2>
             <p className="text-sm" style={{color: '#546377'}}>
                 {flightInfo.departureDate} {flightInfo.returnDate && `- ${flightInfo.returnDate}`}
             </p>
-            <p className="mt-4 font-semibold" style={{color: '#323a48'}}>{flightInfo.totalResults} vuelos encontrados</p>
+            <p className="mt-4 font-medium" style={{color: '#546377'}}>{flightInfo.totalResults} vuelos encontrados</p>
         </div>
 
         {selectedOutboundFlight && (
-            <Card className="bg-gradient-to-r from-yellow-400 to-amber-500 border-none shadow-lg mb-4">
-                <CardContent className="p-4 flex items-center justify-between gap-4 text-gray-800">
+            <Card className="bg-success/20 border-success/50 shadow-lg mb-4">
+                <CardContent className="p-4 flex items-center justify-between gap-4 text-success-foreground">
                     <div className="flex items-center gap-3">
                         <Plane className="h-5 w-5"/>
-                        <p className="font-semibold">
+                        <p className="font-semibold text-card-foreground">
                             Vuelo de ida seleccionado: {selectedOutboundFlight.itineraries[0].segments[0].departure.iataCode} - {selectedOutboundFlight.itineraries[0].segments.slice(-1)[0].arrival.iataCode}
                         </p>
                     </div>
-                    <p className="font-bold text-lg">${selectedOutboundFlight.price.total}</p>
+                    <p className="font-bold text-lg text-card-foreground">${selectedOutboundFlight.price.total}</p>
                 </CardContent>
             </Card>
         )}

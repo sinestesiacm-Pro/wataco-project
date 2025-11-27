@@ -183,13 +183,11 @@ export function FlightDetailsDialog({ flight, dictionaries, onSelectFlight, dial
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex justify-center">
-         <Button 
-            className="w-4/5 font-bold text-base py-3 rounded-full bg-primary/80 text-primary-foreground shadow-lg hover:bg-primary"
+        <Button 
+            className="w-full font-bold text-base py-3 rounded-lg bg-primary hover:bg-primary/90"
          >
             Ver Oferta
          </Button>
-        </div>
       </DialogTrigger>
       <DialogContent className="max-w-4xl w-[95%] max-h-[90vh] flex flex-col bg-card/80 backdrop-blur-xl p-0 border shadow-2xl rounded-3xl">
           <DialogHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-shrink-0">

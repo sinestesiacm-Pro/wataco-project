@@ -16,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 178 80% 45%; /* #15C5DC - Aquamarine */
+    --primary: 204 90% 54%; /* #42a5f5 - Sky Blue */
     --primary-foreground: 210 40% 98%;
 
     --secondary: 160 50% 40%; /* #2D8C6E - Tropical Green */
@@ -25,7 +25,7 @@
     --muted: 240 5% 96%;
     --muted-foreground: 240 4% 46%;
 
-    --accent: 5 80% 65%; /* #F28C85 - Coral Red */
+    --accent: 33 94% 50%; /* #ff9800 - Orange */
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -33,7 +33,7 @@
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 178 90% 55%;
+    --ring: 204 90% 54%;
 
     --radius: 1.25rem;
     --success: 140 67% 43%; /* A compatible green */
