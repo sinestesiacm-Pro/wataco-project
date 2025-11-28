@@ -228,6 +228,45 @@ export async function getHotelDetailsHybrid(hotelId: string, checkInDate: string
     return { success: false, error: "getHotelDetailsHybrid no está implementado." };
 }
 
+export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Promise<string[]> {
+  if (!GOOGLE_PLACES_API_KEY) {
+    console.warn("Google Places API Key is not configured.");
+    return [];
+  }
+
+  const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(placeName)}&inputtype=textquery&fields=place_id&key=${GOOGLE_PLACES_API_KEY}`;
+
+  try {
+    const findPlaceResponse = await fetch(findPlaceUrl);
+    const findPlaceData = await findPlaceResponse.json();
+
+    if (findPlaceData.status !== 'OK' || !findPlaceData.candidates || findPlaceData.candidates.length === 0) {
+      console.log(`No Google Place ID found for "${placeName}"`);
+      return [];
+    }
+
+    const placeId = findPlaceData.candidates[0].place_id;
+
+    const placeDetailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${GOOGLE_PLACES_API_KEY}`;
+    const placeDetailsResponse = await fetch(placeDetailsUrl);
+    const placeDetailsData = await placeDetailsResponse.json();
+
+    if (placeDetailsData.status !== 'OK' || !placeDetailsData.result.photos) {
+      console.log(`No photos found for place ID "${placeId}"`);
+      return [];
+    }
+
+    const photos = placeDetailsData.result.photos.slice(0, maxPhotos);
+    return photos.map((photo: any) =>
+      `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${photo.photo_reference}&key=${GOOGLE_PLACES_API_KEY}`
+    );
+
+  } catch (error) {
+    console.error(`Error fetching photos from Google Places for "${placeName}":`, error);
+    return [];
+  }
+}
+
 
 export async function getFirestoreHotelDetails(id: string): Promise<{ success: boolean; data?: AmadeusHotel; error?: string }> {
     try {
@@ -240,11 +279,17 @@ export async function getFirestoreHotelDetails(id: string): Promise<{ success: b
 
         const data = hotelDoc.data();
         
+        let mediaUrls = data.media || [];
+        if (mediaUrls.length === 0) {
+            console.log(`Fetching Google Photos for ${data.nombre}, ${data.ubicacion}`);
+            mediaUrls = await getGooglePlacePhotos(`${data.nombre}, ${data.ubicacion}`);
+        }
+
         const hotelData: AmadeusHotel = {
             hotelId: hotelDoc.id,
             name: data.nombre,
             rating: data.rating?.toString(),
-            media: (data.media || []).map((url: string) => ({ uri: url, category: 'GENERAL' })),
+            media: mediaUrls.map((url: string) => ({ uri: url, category: 'GENERAL' })),
             address: {
                 cityName: data.ubicacion.split(',')[0],
                 countryCode: data.ubicacion.split(',')[1]?.trim() || '',
