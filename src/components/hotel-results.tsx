@@ -43,12 +43,10 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
             
             const staticPhotos = (offer.hotel.media || [])
                 .map(p => p.uri)
-                .filter(uri => uri && uri.trim() !== '');
+                .filter(uri => !!uri);
 
-            // Combine and deduplicate, prioritizing Google Photos
+            // Combine and deduplicate, prioritizing Google Photos, and filter out empty strings
             const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
-            
-            // Filter out empty strings from the combined array
             const validPhotos = combinedPhotos.filter(p => p && p.trim() !== '');
 
             setPhotos(validPhotos);
@@ -67,7 +65,6 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         
         // Pass the offer data through router state to avoid re-fetching
-        // This is a "hidden" feature of Next.js App Router's router.push
         router.push(url, { state: { offer } } as any);
     }
 
