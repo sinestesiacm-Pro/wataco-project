@@ -30,12 +30,15 @@ interface Hotel {
 
 
 const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotel: Hotel) => void }) {
+    
+    const validMedia = hotel.media?.filter(url => url) || [];
+    
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
             <div className="relative w-full h-56 flex-shrink-0">
                  <Carousel className="w-full h-full">
                     <CarouselContent>
-                        {(hotel.media && hotel.media.length > 0) ? hotel.media.map((photo, index) => (
+                        {validMedia.length > 0 ? validMedia.map((photo, index) => (
                             <CarouselItem key={index}>
                                  <div className="relative h-56 w-full">
                                     <Image 
