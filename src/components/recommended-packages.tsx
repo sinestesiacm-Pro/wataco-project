@@ -1,8 +1,7 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Star, Clock, PlaneTakeoff } from 'lucide-react';
+import { Star, Clock, PlaneTakeoff, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { recommendedPackages } from '@/lib/mock-packages';
@@ -12,61 +11,56 @@ import React from 'react';
 
 const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer }) {
     return (
-        <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d hover:scale-105">
-            <div className="relative h-56 w-full overflow-hidden">
+        <Link href={`/packages/${pkg.id}`} className="block group">
+            <Card className="relative rounded-2xl overflow-hidden aspect-[4/5] transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105">
+                {/* 1. Imagen de Fondo */}
                 <Image 
                     src={pkg.image} 
                     data-ai-hint={pkg.hint} 
                     alt={pkg.title} 
                     fill 
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 />
-                {pkg.special_offer && (
-                    <Badge className="absolute top-3 right-3 text-sm" variant="destructive">{pkg.special_offer}</Badge>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="font-bold text-2xl font-headline drop-shadow-lg">{pkg.title}</h3>
-                    <p className="text-white/90 drop-shadow-md">{pkg.destination}</p>
-                </div>
-            </div>
-            <CardContent className="p-4 flex flex-col flex-grow text-card-foreground">
-                <div className="flex justify-between items-center text-sm text-muted-foreground mb-3">
-                    <div className="flex items-center gap-2">
-                        <PlaneTakeoff className="h-4 w-4" />
-                        <span>Departs from {pkg.origin}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4" />
-                        <span>{pkg.duration} Nights</span>
-                    </div>
-                </div>
 
-                <ul className="text-xs text-muted-foreground space-y-1 mb-4 list-disc list-inside">
-                    {pkg.includes.slice(0, 2).map((item, index) => <li key={index}>{item}</li>)}
-                </ul>
+                {/* 2. Gradiente Oscuro Superpuesto */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
                 
-                <div className="flex-grow"></div>
+                {pkg.special_offer && (
+                    <Badge className="absolute top-4 right-4 z-10" variant="destructive">{pkg.special_offer}</Badge>
+                )}
 
-                <div className="flex justify-between items-end">
+                {/* 3. Contenido Superpuesto */}
+                <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white">
                     <div>
-                        <div className="flex items-center gap-2 text-sm">
-                            <div className="flex items-center gap-1 text-amber-400">
-                                {[...Array(pkg.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                            </div>
-                            <p className="text-muted-foreground">({pkg.reviews} reviews)</p>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-1">Price per person from</p>
-                        <p className="font-bold text-2xl text-foreground">${pkg.price}</p>
+                        <h3 className="font-bold text-3xl font-headline drop-shadow-lg">{pkg.title}</h3>
+                        <p className="text-white/90 drop-shadow-md">{pkg.destination}</p>
                     </div>
-                    <Button asChild className="font-semibold bg-success hover:bg-success/90" size="sm">
-                    <Link href={`/packages/${pkg.id}`}>
-                        View Package
-                    </Link>
-                    </Button>
+
+                    <div className="flex justify-between items-center text-sm mt-4">
+                        <div className="flex items-center gap-2">
+                            <PlaneTakeoff className="h-4 w-4" />
+                            <span>Vuelo incluido</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4" />
+                            <span>{pkg.duration} Noches</span>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-between items-end mt-6">
+                        <div>
+                            <p className="text-xs">Desde</p>
+                            <p className="font-bold text-4xl drop-shadow-xl">${pkg.price}</p>
+                        </div>
+                        <Button className="bg-success hover:bg-success/90 font-semibold" size="lg">
+                            Ver Paquete
+                            <ArrowRight className="ml-2 h-4 w-4"/>
+                        </Button>
+                    </div>
                 </div>
-            </CardContent>
-        </Card>
+            </Card>
+        </Link>
     );
 });
 
@@ -75,10 +69,10 @@ export function RecommendedPackages() {
   return (
      <div className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Unforgettable Packages</h2>
-        <p className="text-muted-foreground mt-2 drop-shadow-lg">Complete experiences at the best price, ready for you to discover.</p>
+        <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Paquetes Inolvidables</h2>
+        <p className="text-muted-foreground mt-2 drop-shadow-lg">Experiencias completas al mejor precio, listas para que las descubras.</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {recommendedPackages.map((pkg) => (
           <PackageCard key={pkg.id} pkg={pkg} />
         ))}
