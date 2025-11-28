@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { addDays, format } from 'date-fns';
@@ -70,7 +71,7 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
     to: addDays(new Date(), 14),
   });
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [adults, setAdults] = useState(1);
+  const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   
   const { toast } = useToast();
@@ -117,18 +118,17 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 
   const handleFormSubmit = useCallback((e: React.FormEvent) => {
       e.preventDefault();
-      if (!destination?.iataCode || !date?.from || !date?.to) {
+      if (!destinationQuery || !date?.from || !date?.to) {
         toast({
             title: 'Información Faltante',
-            description: 'Por favor, selecciona un destino de la lista y las fechas.',
+            description: 'Por favor, selecciona un destino y las fechas.',
             variant: 'destructive',
         });
         return;
       }
 
       const params = new URLSearchParams({
-        cityCode: destination.iataCode,
-        destinationName: destinationQuery || destination.name,
+        destinationName: destinationQuery,
         checkInDate: format(date.from, 'yyyy-MM-dd'),
         checkOutDate: format(date.to, 'yyyy-MM-dd'),
         adults: adults.toString(),
@@ -275,3 +275,5 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 });
 
 export default HotelSearchPage;
+
+    

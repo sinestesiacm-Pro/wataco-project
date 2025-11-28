@@ -111,7 +111,7 @@ function HotelResultsPageContent() {
 
     if(loading) {
         return (
-            <div className="w-full h-screen relative overflow-hidden">
+            <div className="w-full h-screen relative overflow-hidden bg-hotels-background">
                 <HotelLoadingAnimation destinationName={destinationName} />
             </div>
         );
@@ -119,18 +119,21 @@ function HotelResultsPageContent() {
 
     if(error) {
         return (
-            <div className="max-w-4xl mx-auto py-8 px-4">
-                <Card>
-                    <CardContent className="pt-6 text-center">
-                        <h2 className="text-xl font-bold text-destructive">Error de Búsqueda</h2>
-                        <p className="text-muted-foreground mt-2">{error}</p>
-                    </CardContent>
-                </Card>
+             <div className="w-full min-h-screen pt-24 pb-24 md:pb-8 bg-hotels-background">
+                <div className="max-w-4xl mx-auto py-8 px-4">
+                    <Card>
+                        <CardContent className="pt-6 text-center">
+                            <h2 className="text-xl font-bold text-destructive">Error de Búsqueda</h2>
+                            <p className="text-muted-foreground mt-2">{error}</p>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         );
     }
     
     return (
+        <div className="w-full min-h-screen pt-24 pb-24 md:pb-8 bg-hotels-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Collapsible className="mb-6 bg-card/80 backdrop-blur-xl border p-4 rounded-2xl">
                 <div className="flex justify-between items-center">
@@ -213,19 +216,20 @@ function HotelResultsPageContent() {
             </main>
         </div>
         </div>
+        </div>
     )
 }
 
 export default function HotelSearchPageWrapper() {
   return (
     <Suspense fallback={
-        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
+        <div className="flex items-center justify-center min-h-screen bg-hotels-background">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
     }>
-      <div className='w-full min-h-screen pt-24 pb-24 md:pb-8'>
         <HotelResultsPageContent />
-      </div>
     </Suspense>
   )
 }
+
+    

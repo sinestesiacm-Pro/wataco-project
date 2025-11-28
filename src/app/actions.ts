@@ -14,7 +14,7 @@ import { FirestorePermissionError } from '@/firebase/errors';
 import { RAPIDAPI_KEY, GOOGLE_PLACES_API_KEY } from '@/lib/firebase';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
-const BOOKING_API_URL = 'https://booking-com15.p.rapidapi.com/api/v1';
+const BOOKING_API_URL = 'https://booking-com15.p.rapidapi.com/api/v1/hotels';
 
 const searchSchema = z.object({
   origin: z.string().min(3).max(3),
@@ -195,7 +195,7 @@ const handleFallback = (destinationName: string, errorMessage: string) => {
         return { 
             success: true, 
             data: filteredMockData,
-            error: `La API de Booking.com falló, usando datos de muestra. Error: ${errorMessage}`
+            error: `API Booking.com limitada, mostrando datos simulados. Error: ${errorMessage}`
         };
     } else {
         return { 
@@ -230,10 +230,12 @@ export async function searchHotels(params: {
 
   try {
     // Step 1: Get destination ID from Booking.com API
-    const destResponse = await fetch(`${BOOKING_API_URL}/searchDestination?query=${destinationName}`, { headers: rapidApiHeaders });
+    const destUrl = `${BOOKING_API_URL}/searchDestination?query=${encodeURIComponent(destinationName)}`;
+    const destResponse = await fetch(destUrl, { headers: rapidApiHeaders });
     
     if (!destResponse.ok) {
-        return handleFallback(destinationName, `Failed to fetch destination ID from Booking.com API. Status: ${destResponse.status}`);
+        const errorBody = await destResponse.text();
+        return handleFallback(destinationName, `Failed to fetch destination ID from Booking.com API. Status: ${destResponse.status}. Body: ${errorBody}`);
     }
 
     const destData = await destResponse.json();
@@ -247,12 +249,16 @@ export async function searchHotels(params: {
         dest_id: destinationId,
         arrival_date: checkInDate,
         departure_date: checkOutDate,
-        adults: adults.toString(),
+        adults_number: adults.toString(),
         currency_code: currency || 'USD',
         page_number: '1',
+        language_code: 'es'
     });
 
-    const hotelsResponse = await fetch(`${BOOKING_API_URL}/searchHotels?${searchHotelsParams.toString()}`, { headers: rapidApiHeaders });
+    const hotelsResponse = await fetch(`${BOOKING_API_URL}/searchHotels?${searchHotelsParams.toString()}`, { 
+        method: 'GET', // searchHotels is a GET request
+        headers: rapidApiHeaders 
+    });
 
     if (!hotelsResponse.ok) {
         const errorBody = await hotelsResponse.json().catch(() => ({}));
@@ -495,3 +501,5 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }
+
+    
