@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { Skeleton } from './ui/skeleton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
+import { format, addDays } from 'date-fns';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
@@ -41,19 +42,21 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
             
             if (offer.hotel.name && offer.hotel.address.cityName) {
                 const googlePhotos = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
-                finalPhotos.push(...googlePhotos);
+                 if (googlePhotos.length > 0) {
+                    finalPhotos.push(...googlePhotos);
+                }
             }
     
-            const staticPhotos = (offer.hotel.media || []).map(p => p.uri).filter(uri => !!uri);
-            finalPhotos.push(...staticPhotos);
-    
-            let uniquePhotos = [...new Set(finalPhotos)];
-    
-            if (uniquePhotos.length === 0) {
-                 uniquePhotos.push('https://placehold.co/800x600.png?text=Image+not+found');
+            if (finalPhotos.length === 0) {
+                const staticPhotos = (offer.hotel.media || []).map(p => p.uri).filter(uri => !!uri);
+                finalPhotos.push(...staticPhotos);
+            }
+            
+            if (finalPhotos.length === 0) {
+                 finalPhotos.push('https://placehold.co/800x600.png?text=Image+Not+Available');
             }
     
-            setPhotos(uniquePhotos);
+            setPhotos(finalPhotos);
             setLoadingPhotos(false);
         };
     
@@ -63,12 +66,10 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
 
     const handleViewHotel = () => {
         const params = new URLSearchParams(searchParams.toString());
-        // Use hotelId from the main hotel object, fallback to offer id
         const hotelId = offer.hotel.hotelId || offer.id;
-        
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         
-        // Pass the offer data through router state to avoid re-fetching on the next page
+        // Pass the offer data through router state to avoid re-fetching
         router.push(url, { state: { offer } } as any);
     };
 
@@ -146,3 +147,5 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
+
+    

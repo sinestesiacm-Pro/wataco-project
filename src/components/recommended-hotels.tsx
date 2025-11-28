@@ -22,25 +22,29 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
         const fetchPhotos = async () => {
             setLoadingPhotos(true);
             let finalPhotos: string[] = [];
-
+            
             if (hotel.name && hotel.address.cityName) {
                 const googlePhotos = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
-                finalPhotos.push(...googlePhotos);
+                if (googlePhotos.length > 0) {
+                    finalPhotos.push(...googlePhotos);
+                }
             }
-
-            const staticPhotos = (hotel.media || []).map(p => p.uri).filter(uri => !!uri);
-            finalPhotos.push(...staticPhotos);
-
-            let uniquePhotos = [...new Set(finalPhotos)];
-
-            if (uniquePhotos.length === 0) {
-                 uniquePhotos.push('https://placehold.co/400x300.png?text=Image+not+found');
+    
+            // Fallback to static photos if Google Places fails or returns no images
+            if (finalPhotos.length === 0) {
+                const staticPhotos = (hotel.media || []).map(p => p.uri).filter(uri => !!uri);
+                finalPhotos.push(...staticPhotos);
             }
-
-            setPhotos(uniquePhotos);
+    
+            // Ultimate fallback
+            if (finalPhotos.length === 0) {
+                 finalPhotos.push('https://placehold.co/800x600.png?text=Image+Not+Available');
+            }
+    
+            setPhotos(finalPhotos);
             setLoadingPhotos(false);
         };
-
+    
         fetchPhotos();
     }, [hotel.name, hotel.address.cityName, hotel.media]);
 
@@ -64,6 +68,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                                             className="object-cover"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
                                             draggable={false}
+                                            unoptimized={photo.includes('placehold.co')}
                                             onError={(e) => { e.currentTarget.src = 'https://placehold.co/800x600.png?text=Error'; }}
                                         />
                                     </div>
@@ -118,13 +123,15 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
         adults: '2',
         children: '0',
         destinationName: offer.hotel.address.cityName,
-        cityCode: offer.hotel.hotelId.substring(0,3),
       });
+       if (offer.hotel.hotelId) {
+        params.set('hotelId', offer.hotel.hotelId);
+      }
       
       const hotelId = offer.hotel.hotelId || offer.id;
-      const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+      const url = `/hotels/search?${params.toString()}`;
       
-      router.push(url, { state: { offer } } as any);
+      router.push(url);
   }, [router]);
 
   return (
@@ -139,3 +146,5 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
+
+    
