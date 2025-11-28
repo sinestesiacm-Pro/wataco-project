@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { getGooglePlacePhotos } from '@/app/actions';
 import { useEffect, useState } from 'react';
 import { Skeleton } from './ui/skeleton';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
@@ -45,6 +46,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
             setLoadingPhotos(true);
             const photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
             
+            // Prioritize Google Photos, but use static media as a fallback
             const staticPhotos = (offer.hotel.media || [])
                 .map(p => p.uri)
                 .filter(uri => uri && uri.trim() !== '');
@@ -58,13 +60,15 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         fetchPhotos();
     }, [offer.hotel.name, offer.hotel.address.cityName, offer.hotel.media]);
 
-    const imageUrl = photos.length > 0 ? photos[0] : 'https://placehold.co/400x300.png';
+    const displayPhotos = photos.length > 0 ? photos : ['https://placehold.co/400x300.png'];
 
-
-    const handleViewHotel = (offer: AmadeusHotelOffer) => {
+    const handleViewHotel = () => {
         const params = new URLSearchParams(searchParams.toString());
+        // We use hotelId from the hotel object, which should be the Hotelbeds code or similar.
         const hotelId = offer.hotel.hotelId || offer.id;
         
+        // Pass the offer via state to avoid fetching again on the details page.
+        // This is a client-side navigation feature.
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         router.push(url, { state: { offer } } as any);
     }
@@ -75,14 +79,26 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                 {loadingPhotos ? (
                     <Skeleton className="h-full w-full" />
                 ) : (
-                    <Image 
-                        src={imageUrl}
-                        data-ai-hint="hotel exterior" 
-                        alt={offer.hotel.name || 'Hotel image'} 
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
-                    />
+                    <Carousel className="w-full h-full">
+                        <CarouselContent>
+                            {displayPhotos.map((photo, index) => (
+                                <CarouselItem key={index}>
+                                    <div className="relative h-48 md:h-full w-full">
+                                        <Image
+                                            src={photo}
+                                            data-ai-hint="hotel exterior"
+                                            alt={`${offer.hotel.name || 'Hotel image'} ${index + 1}`}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
+                                        />
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                    </Carousel>
                 )}
             </div>
             
@@ -127,7 +143,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                       ${offer.offers?.[0]?.price?.total}
                     </p>
                 </div>
-                 <Button onClick={() => handleViewHotel(offer)} size="lg" className="font-semibold w-full sm:w-auto">
+                 <Button onClick={handleViewHotel} size="lg" className="font-semibold w-full sm:w-auto">
                     Ver Habitaciones
                  </Button>
               </div>
@@ -139,8 +155,8 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
 export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
     <div className="space-y-4">
-      {hotels.map((offer, index) => (
-        <HotelCard key={`${offer.id}-${index}`} offer={offer} searchParams={searchParams} />
+      {hotels.map((offer) => (
+        <HotelCard key={`${offer.id}`} offer={offer} searchParams={searchParams} />
       ))}
     </div>
   );
