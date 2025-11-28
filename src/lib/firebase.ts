@@ -4,12 +4,11 @@ import { getFirestore, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { firebaseConfig } from "@/firebase/config";
 
-// This file provides a simple, shared instance of Firebase services.
-// It relies on the client-side initialization to have already occurred.
+// This file is simplified to only initialize and export Firebase services
+// for use across the application, ensuring a single source of truth.
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// API keys should be handled by server-side actions, not exported globally.
 export { app, auth, db, doc };
