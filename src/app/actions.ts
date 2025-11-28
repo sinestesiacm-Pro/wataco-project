@@ -11,7 +11,6 @@ import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import { recommendedCruises } from '@/lib/mock-cruises';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
-import { RAPIDAPI_KEY, GOOGLE_PLACES_API_KEY } from '@/lib/firebase';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 
@@ -229,42 +228,10 @@ export async function getHotelDetailsHybrid(hotelId: string, checkInDate: string
 }
 
 export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Promise<string[]> {
-  if (!GOOGLE_PLACES_API_KEY) {
-    console.warn("Google Places API Key is not configured.");
+    // This function is disabled as there is no API key provided.
+    // It will return an empty array to prevent errors.
+    console.warn("Google Places API Key is not configured. Photo search is disabled.");
     return [];
-  }
-
-  const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(placeName)}&inputtype=textquery&fields=place_id&key=${GOOGLE_PLACES_API_KEY}`;
-
-  try {
-    const findPlaceResponse = await fetch(findPlaceUrl);
-    const findPlaceData = await findPlaceResponse.json();
-
-    if (findPlaceData.status !== 'OK' || !findPlaceData.candidates || findPlaceData.candidates.length === 0) {
-      console.log(`No Google Place ID found for "${placeName}"`);
-      return [];
-    }
-
-    const placeId = findPlaceData.candidates[0].place_id;
-
-    const placeDetailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${GOOGLE_PLACES_API_KEY}`;
-    const placeDetailsResponse = await fetch(placeDetailsUrl);
-    const placeDetailsData = await placeDetailsResponse.json();
-
-    if (placeDetailsData.status !== 'OK' || !placeDetailsData.result.photos) {
-      console.log(`No photos found for place ID "${placeId}"`);
-      return [];
-    }
-
-    const photos = placeDetailsData.result.photos.slice(0, maxPhotos);
-    return photos.map((photo: any) =>
-      `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${photo.photo_reference}&key=${GOOGLE_PLACES_API_KEY}`
-    );
-
-  } catch (error) {
-    console.error(`Error fetching photos from Google Places for "${placeName}":`, error);
-    return [];
-  }
 }
 
 

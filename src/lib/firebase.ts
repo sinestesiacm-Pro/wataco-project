@@ -10,7 +10,6 @@ import { firebaseConfig } from "@/firebase/config";
 // API Keys should be managed via environment variables.
 // These are placeholders and should be set in your .env.local file.
 export const RAPIDAPI_KEY = process.env.NEXT_PUBLIC_RAPIDAPI_KEY || 'd985a2bbbamsh1fc9f1cb973c8a9p16f799jsna8ded40163d7';
-export const GOOGLE_PLACES_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || '';
 
 let app: FirebaseApp;
 if (!getApps().length) {
