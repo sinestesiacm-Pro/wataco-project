@@ -18,6 +18,9 @@ import HotelSearchPage from "@/components/hotel-search-page";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { HotelLoadingAnimation } from "@/components/hotel-loading-animation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
+
 
 type HotelFiltersState = {
   priceRange: number[];
@@ -31,25 +34,26 @@ function HotelResultsPageContent() {
     const [hotels, setHotels] = useState<AmadeusHotelOffer[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [apiMessage, setApiMessage] = useState<string | null>(null);
+
     const [filters, setFilters] = useState<HotelFiltersState>({
       priceRange: [0, 1000],
       stars: [],
       amenities: [],
     });
 
-    const cityCode = searchParams.get('cityCode') || '';
     const destinationName = searchParams.get('destinationName') || 'tu destino';
     const checkInDate = searchParams.get('checkInDate') || '';
     const checkOutDate = searchParams.get('checkOutDate') || '';
     const adults = searchParams.get('adults') || '1';
     
     const runSearch = useCallback(async () => {
-        if (cityCode && checkInDate && checkOutDate) {
+        if (destinationName && checkInDate && checkOutDate) {
             setLoading(true);
             setHotels(null);
             setError(null);
+            setApiMessage(null);
             const result = await searchHotels({
-                cityCode: cityCode,
                 destinationName: destinationName,
                 checkInDate,
                 checkOutDate,
@@ -57,6 +61,9 @@ function HotelResultsPageContent() {
             });
             if(result.success && result.data) {
                 setHotels(result.data);
+                if (result.error) {
+                    setApiMessage(result.error);
+                }
             } else {
                 setError(result.error || 'No se encontraron hoteles para tu búsqueda.');
             }
@@ -65,7 +72,7 @@ function HotelResultsPageContent() {
             setError("Parámetros de búsqueda incompletos. Por favor, realiza una nueva búsqueda.");
             setLoading(false);
         }
-    }, [cityCode, checkInDate, checkOutDate, adults, destinationName]);
+    }, [destinationName, checkInDate, checkOutDate, adults]);
 
 
     useEffect(() => {
@@ -147,8 +154,18 @@ function HotelResultsPageContent() {
             </CollapsibleContent>
             </Collapsible>
         
+        {apiMessage && (
+            <Alert className="mb-6 bg-yellow-100/80 border-yellow-300 text-yellow-900">
+                <Terminal className="h-4 w-4" />
+                <AlertTitle>Nota de Diagnóstico</AlertTitle>
+                <AlertDescription>
+                    {apiMessage}
+                </AlertDescription>
+            </Alert>
+        )}
+
         <div className="flex justify-end items-center mb-6">
-              <AITravelTips destination={cityCode} destinationName={destinationName} />
+              <AITravelTips destination={destinationName} destinationName={destinationName} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

@@ -14,6 +14,7 @@ import { FirestorePermissionError } from '@/firebase/errors';
 import { RAPIDAPI_KEY, GOOGLE_PLACES_API_KEY } from '@/lib/firebase';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
+const BOOKING_API_URL = 'https://booking-com15.p.rapidapi.com/api/v1/search';
 
 const searchSchema = z.object({
   origin: z.string().min(3).max(3),
@@ -176,7 +177,7 @@ export async function searchHotelDestinations(keyword: string): Promise<{ succes
 }
 
 const hotelSearchSchema = z.object({
-  cityCode: z.string().min(2),
+  destinationName: z.string().min(2, "Destination city is required."),
   checkInDate: z.string(),
   checkOutDate: z.string(),
   adults: z.number().int().min(1),
@@ -184,7 +185,7 @@ const hotelSearchSchema = z.object({
 });
 
 export async function searchHotels(params: {
-  cityCode: string;
+  destinationName: string;
   checkInDate: string;
   checkOutDate: string;
   adults: number;
@@ -196,101 +197,109 @@ export async function searchHotels(params: {
   }
 
   if (!RAPIDAPI_KEY || RAPIDAPI_KEY === 'YOUR_RAPIDAPI_KEY') {
-    console.warn("DIAGNÓSTICO: La API de RapidAPI (Sky Scrapper) no está configurada. Usando datos de muestra como respaldo.");
+    console.warn("DIAGNÓSTICO: La API de RapidAPI (Booking.com) no está configurada. Usando datos de muestra como respaldo.");
     return { 
         success: true, 
         data: MOCK_HOTELS_DATA,
-        error: "La API de RapidAPI (Sky Scrapper) no está configurada. Usando datos de muestra."
+        error: "API Booking.com no configurada. Mostrando datos simulados."
     };
   }
 
-  const { cityCode, checkInDate, checkOutDate, adults, currency } = validation.data;
-
-  const options = {
-    method: 'POST',
-    headers: {
-      'X-RapidAPI-Key': RAPIDAPI_KEY,
-      'X-RapidAPI-Host': 'sky-scrapper.p.rapidapi.com',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      checkInDate,
-      checkOutDate,
-      cityCode,
-      adults,
-      currency
-    })
+  const { destinationName, checkInDate, checkOutDate, adults, currency } = validation.data;
+  const rapidApiHeaders = {
+    'X-RapidAPI-Key': RAPIDAPI_KEY,
+    'X-RapidAPI-Host': 'booking-com15.p.rapidapi.com'
   };
 
   try {
-    const response = await fetch('https://sky-scrapper.p.rapidapi.com/api/v1/hotels/searchHotels', options);
+    // Step 1: Get destination ID from Booking.com API
+    const destResponse = await fetch(`${BOOKING_API_URL}/searchDestination?query=${destinationName}`, { headers: rapidApiHeaders });
     
-    if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({ message: 'HTTP error with no JSON body' }));
-        const errorMessage = `Sky Scrapper API request failed: ${errorBody.message || response.statusText}`;
-        console.error('Sky Scrapper API Error:', errorBody);
-        
-        // Universal fallback to mock data if the API fails for any reason (not just 429)
-        return { 
-            success: true, 
-            data: MOCK_HOTELS_DATA,
-            error: `API falló, usando datos de muestra. Error: ${errorMessage}`
-        };
+    if (!destResponse.ok) {
+        throw new Error(`Failed to fetch destination ID from Booking.com API. Status: ${destResponse.status}`);
     }
 
-    const skyScrapperData = await response.json();
-    const hotelsFromSkyScrapper = skyScrapperData.data.hotels || [];
+    const destData = await destResponse.json();
+    const destinationId = destData.data?.[0]?.dest_id;
+    if (!destinationId) {
+        return { success: false, error: `Could not find a destination ID for "${destinationName}".` };
+    }
 
-    const enrichedHotels = await Promise.all(hotelsFromSkyScrapper.map(async (hotel: any) => {
-        const mappedOffer: AmadeusHotelOffer = {
+    // Step 2: Search for hotels using the destination ID
+    const searchHotelsParams = new URLSearchParams({
+        dest_id: destinationId,
+        arrival_date: checkInDate,
+        departure_date: checkOutDate,
+        adults: adults.toString(),
+        currency_code: currency || 'USD',
+        page_number: '1',
+    });
+
+    const hotelsResponse = await fetch(`${BOOKING_API_URL}/searchHotels?${searchHotelsParams.toString()}`, { headers: rapidApiHeaders });
+
+    if (!hotelsResponse.ok) {
+      const errorBody = await hotelsResponse.json().catch(() => ({}));
+      const errorMessage = errorBody.message || hotelsResponse.statusText;
+      console.error("Booking.com Search API Error:", errorMessage);
+      if (hotelsResponse.status === 429) {
+          return { success: true, data: MOCK_HOTELS_DATA, error: "API Booking.com limitada, mostrando datos simulados." };
+      }
+      return { success: true, data: MOCK_HOTELS_DATA, error: `API falló, usando datos de muestra. Error: ${errorMessage}` };
+    }
+    
+    const hotelsData = await hotelsResponse.json();
+    const hotelsFromApi = hotelsData.data?.hotels || [];
+
+    // Map the API response to our AmadeusHotelOffer structure
+    const mappedOffers: AmadeusHotelOffer[] = hotelsFromApi.map((hotel: any) => {
+        return {
             type: 'hotel-offer',
-            id: hotel.hotelId,
+            id: hotel.hotel_id,
             hotel: {
-                hotelId: hotel.hotelId,
-                name: hotel.name,
-                rating: hotel.rating?.value?.toString() || '0',
+                hotelId: hotel.hotel_id,
+                name: hotel.hotel_name,
+                rating: hotel.review_score ? (parseFloat(hotel.review_score) / 2).toFixed(0) : '3', // Convert 10-point to 5-point scale
                 address: {
                     cityName: hotel.city,
-                    countryCode: cityCode,
-                    lines: [hotel.relevantPoiDistance || ''],
+                    countryCode: hotel.country_trans,
+                    lines: [hotel.address],
                     postalCode: '',
                 },
-                media: hotel.images?.map((url: string) => ({ uri: url, category: 'PHOTO' })) || [],
-                amenities: hotel.amenities || [],
+                media: hotel.property_image_url ? [{ uri: hotel.property_image_url, category: 'PHOTO' }] : [],
+                amenities: hotel.facilities_block?.facilities?.map((f: any) => f.name.toUpperCase().replace(/\s/g, '_')) || [],
             },
             available: true,
             offers: [
                 {
-                    id: `${hotel.hotelId}-offer`,
+                    id: `${hotel.hotel_id}-offer`,
                     price: {
-                        currency: currency || 'USD',
-                        total: hotel.price ? hotel.price.replace('$', '') : '0.00',
-                        base: hotel.price ? hotel.price.replace('$', '') : '0.00',
+                        currency: hotel.price_breakdown?.currency || 'USD',
+                        total: hotel.price_breakdown?.gross_price?.toString() || '0.00',
+                        base: hotel.price_breakdown?.gross_price?.toString() || '0.00',
                     },
                     room: {
                         type: 'STANDARD_ROOM',
-                        description: { text: 'Detalles de la habitación no disponibles en Sky Scrapper' }
+                        description: { text: 'Habitación Estándar' } // Default as API doesn't provide this in the search list
                     },
-                    checkInDate: checkInDate,
-                    checkOutDate: checkOutDate
+                    checkInDate,
+                    checkOutDate
                 }
             ]
         };
-        return mappedOffer;
-    }));
+    });
 
-    if (enrichedHotels.length === 0) {
+    if (mappedOffers.length === 0) {
         return { success: false, error: 'No hotels found for the selected criteria.' };
     }
-    
-    return { success: true, data: enrichedHotels.slice(0, 30) };
+
+    return { success: true, data: mappedOffers.slice(0, 30) };
 
   } catch (err: any) {
     console.error('Error in searchHotels action:', err);
     return { 
         success: true, 
         data: MOCK_HOTELS_DATA, 
-        error: `API falló, usando datos de muestra. Error: ${err.message}` 
+        error: `La API de Booking.com falló, usando datos de muestra. Error: ${err.message}` 
     };
   }
 }
