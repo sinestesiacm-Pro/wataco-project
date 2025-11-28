@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -71,7 +70,7 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
                     </Button>
                 </div>
             </div>
-            <CardContent className="p-4 flex flex-col flex-grow text-card-foreground">
+            <CardContent className="p-4 flex flex-col flex-grow">
                  <h3 className="font-bold font-headline text-lg text-foreground">{hotel.nombre}</h3>
                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                    <MapPin className="h-4 w-4" />
@@ -83,7 +82,7 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">
                     <p className="font-semibold text-xl text-foreground drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
-                    <Button onClick={() => onViewHotel(hotel)} className="font-semibold bg-primary/80 backdrop-blur-sm border border-white/20 hover:bg-primary">
+                    <Button onClick={() => onViewHotel(hotel)} className="font-semibold">
                         Ver Hotel
                     </Button>
                  </div>
@@ -150,6 +149,7 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
   useEffect(() => {
     const fetchHotels = async () => {
       setLoading(true);
+      setError(null);
       try {
         const hotelsCollection = collection(db, 'hoteles');
         const hotelSnapshot = await getDocs(hotelsCollection);
@@ -160,7 +160,7 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
             setAllHotels(hotelsList);
             setDisplayedHotels(shuffleArray([...hotelsList]).slice(0, 4));
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error fetching hotels from Firestore:", err);
         setError("Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore.");
       } finally {

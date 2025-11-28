@@ -56,7 +56,7 @@ const hotelPartners = [
     { name: 'Hyatt', domain: 'hyatt.com' },
     { name: 'Accor', domain: 'accor.com' },
     { name: 'Choice Hotels', domain: 'choicehotels.com' },
-    { name: 'Sheraton', domain: 'sheraton.com' }, // Part of Marriott, good logo
+    { name: 'Sheraton', domain: 'sheraton.com' },
 ];
 
 const PartnersGrid = ({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, domain?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) => (

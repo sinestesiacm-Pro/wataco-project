@@ -155,11 +155,8 @@ service cloud.firestore {
      * @principle Allows public consumption of shared data while preventing client-side modification.
      */
     match /destination_recommendations/{destinationRecommendationId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow get, list: if true;
+      allow write: if false;
     }
 
     /**
@@ -170,11 +167,8 @@ service cloud.firestore {
      * @principle Allows public consumption of shared data while preventing client-side modification.
      */
     match /airlines/{airlineId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow get, list: if true;
+      allow write: if false;
     }
 
     /**
@@ -185,11 +179,20 @@ service cloud.firestore {
      * @principle Allows public consumption of shared data while preventing client-side modification.
      */
     match /travel_tips/{travelTipId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    /**
+     * @description Provides public read access to hotel data.
+     * @path /hoteles/{hotelId}
+     * @allow (get, list) Any user, including unauthenticated ones, to read hotel data for display.
+     * @deny (write) Any client attempting to modify hotel data.
+     * @principle Allows public consumption of shared data for core functionality.
+     */
+    match /hoteles/{hotelId} {
+      allow get, list: if true;
+      allow write: if false;
     }
 
   }
