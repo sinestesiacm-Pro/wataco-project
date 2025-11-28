@@ -126,7 +126,7 @@ function HotelResultsPageContent() {
     return (
         <div className="w-full min-h-screen pt-24 pb-24 md:pb-8 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Collapsible className="mb-6 bg-card/80 backdrop-blur-xl border p-4 rounded-2xl">
+            <Collapsible className="mb-6 bg-card/80 backdrop-blur-xl border p-4 rounded-2xl shadow-card-3d">
                 <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl sm:text-4xl font-bold font-headline">Hoteles en {destinationName}</h1>

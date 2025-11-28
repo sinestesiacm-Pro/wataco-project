@@ -64,6 +64,9 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const hotelId = offer.hotel.hotelId || offer.id;
         
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+        
+        // Pass the offer data through router state to avoid re-fetching
+        // This is a "hidden" feature of Next.js App Router's router.push
         router.push(url, { state: { offer } } as any);
     }
 
