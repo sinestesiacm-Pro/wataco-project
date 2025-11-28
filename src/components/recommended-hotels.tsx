@@ -135,7 +135,6 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
       const checkOutDate = addDays(new Date(), 14);
 
       const params = new URLSearchParams({
-        hotelId: hotel.id,
         checkInDate: format(checkInDate, 'yyyy-MM-dd'),
         checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
         adults: '2',
@@ -144,38 +143,8 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
         destinationName: cityDetails[0] || hotel.nombre,
       });
 
-      const offer: AmadeusHotelOffer = {
-        type: 'hotel-offer',
-        id: hotel.id,
-        hotel: {
-            hotelId: hotel.id,
-            name: hotel.nombre,
-            rating: hotel.rating.toString(),
-            media: hotel.media.map(uri => ({ uri, category: 'PHOTO' })),
-            address: {
-                cityName: cityDetails[0] || hotel.nombre,
-                countryCode: cityDetails[1] || 'CO',
-                lines: [hotel.ubicacion],
-                postalCode: ''
-            },
-            description: {
-                lang: 'es',
-                text: hotel.descripcion,
-            },
-            amenities: hotel.amenities || []
-        },
-        available: true,
-        offers: MOCK_ROOMS_DATA.map(room => ({
-            ...room,
-            price: { ...room.price, total: hotel.price.toString() },
-            checkInDate: format(checkInDate, 'yyyy-MM-dd'),
-            checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
-        }))
-    };
-
-    const url = `/hotels/${hotel.id}/offers?${params.toString()}`;
-    window.history.pushState({ ...window.history.state, offer }, '', url);
-    router.push(url);
+      const url = `/hotels/${hotel.id}?${params.toString()}`;
+      router.push(url);
   }, [router]);
 
   useEffect(() => {
@@ -237,3 +206,5 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
+
+    

@@ -127,3 +127,5 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
 
   return <div>{renderStep()}</div>;
 }
+
+    

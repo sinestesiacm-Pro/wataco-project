@@ -49,16 +49,18 @@ function HotelDetailPageContent({ id }: { id: string }) {
     }, [id, cameFromSearch]);
 
     const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode?: string, destinationName?: string }) => {
-        if (!hotel) return;
-
+        if (!searchData.cityCode || !searchData.destinationName) {
+            console.error("City code and destination name are required for hotel search.");
+            // Optionally, show a toast to the user
+            return;
+        }
         const params = new URLSearchParams({
-            hotelId: id,
+            cityCode: searchData.cityCode,
+            destinationName: searchData.destinationName,
             checkInDate: format(searchData.checkInDate, 'yyyy-MM-dd'),
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
-            cityCode: hotel?.address.countryCode || '',
-            destinationName: hotel?.address.cityName || '',
         });
         router.push(`/hotels/search?${params.toString()}`);
     };
@@ -111,6 +113,8 @@ function HotelDetailPageContent({ id }: { id: string }) {
                     checkOutDate: addDays(new Date(), 14),
                     adults: 2,
                     children: 0,
+                    cityCode: hotel.address.countryCode,
+                    destinationName: hotel.address.cityName,
                 }} 
             />}
           </>
@@ -133,3 +137,5 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
     </Suspense>
   );
 }
+
+    

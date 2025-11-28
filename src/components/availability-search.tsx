@@ -67,6 +67,8 @@ interface AvailabilitySearchProps {
         checkOutDate: Date;
         adults: number;
         children: number;
+        cityCode?: string;
+        destinationName?: string;
     };
     showDestination?: boolean;
 }
@@ -82,8 +84,8 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
     const isMobile = useIsMobile();
     
     // New state for destination search
-    const [destination, setDestination] = useState<Airport | null>(null);
-    const [destinationQuery, setDestinationQuery] = useState('');
+    const [destination, setDestination] = useState<Airport | null>(initialData.cityCode ? { iataCode: initialData.cityCode, name: initialData.destinationName || '', subType: 'CITY' } : null);
+    const [destinationQuery, setDestinationQuery] = useState(initialData.destinationName || '');
     const [suggestions, setSuggestions] = useState<Airport[]>([]);
     const [suggestionsLoading, setSuggestionsLoading] = useState(false);
     const [isDestinationPopoverOpen, setIsDestinationPopoverOpen] = useState(false);
@@ -207,7 +209,7 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
                                     locale={es}
                                 />
                                 <div className="p-2 border-t md:hidden">
-                                    <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
+                                    <Button className="w-full" onClick={()={() => setIsCalendarOpen(false)}}>Listo</Button>
                                 </div>
                             </PopoverContent>
                         </Popover>
@@ -264,3 +266,5 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
         </Card>
     );
 }
+
+    

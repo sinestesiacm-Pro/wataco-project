@@ -38,7 +38,8 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   const handleViewHotel = (offer: AmadeusHotelOffer) => {
       const params = new URLSearchParams(searchParams.toString());
       const hotelId = offer.hotel.hotelId || offer.id;
-      const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+      // We navigate to the hotel detail page, which will then handle room fetching
+      const url = `/hotels/${hotelId}?${params.toString()}`;
       router.push(url);
   }
 
@@ -108,3 +109,5 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
+
+    
