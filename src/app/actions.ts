@@ -217,7 +217,10 @@ export async function searchHotels(params: {
     return { success: false, error: 'Invalid hotel search parameters.' };
   }
   
-  const { destinationName, checkInDate, checkOutDate, adults, currency } = validation.data;
+  const { destinationName, adults, currency } = validation.data;
+  // Format dates correctly before sending to the API
+  const checkInDate = new Date(params.checkInDate).toISOString().split('T')[0];
+  const checkOutDate = new Date(params.checkOutDate).toISOString().split('T')[0];
 
   if (!RAPIDAPI_KEY || RAPIDAPI_KEY === 'YOUR_RAPIDAPI_KEY') {
     return handleFallback(destinationName, "La API de RapidAPI (Booking.com) no está configurada.");
