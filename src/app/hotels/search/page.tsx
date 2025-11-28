@@ -69,6 +69,16 @@ function HotelResultsPageContent() {
 
         runSearch();
     }, [destinationName, checkInDate, checkOutDate, adults]);
+
+    const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
+        const params = new URLSearchParams(searchParams.toString());
+        const hotelId = offer.hotel.hotelId || offer.id;
+        
+        const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+        
+        // Pass the offer data through router state to avoid re-fetching on the next page
+        router.push(url, { state: { offer } } as any);
+    }, [router, searchParams]);
     
     const filteredHotels = useMemo(() => {
       if (!hotels) return null;
@@ -185,7 +195,7 @@ function HotelResultsPageContent() {
             </FloatingActionButtons>
             <main className="lg:col-span-9">
             {filteredHotels && filteredHotels.length > 0 ? (
-                <HotelResults hotels={filteredHotels} searchParams={searchParams} />
+                <HotelResults hotels={filteredHotels} onViewHotel={handleViewHotel} />
             ) : (
                 <Card>
                     <CardContent className="pt-6 text-center text-muted-foreground">

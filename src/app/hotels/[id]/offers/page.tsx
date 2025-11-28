@@ -1,16 +1,33 @@
 
 'use client';
-import React, { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { Suspense, useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Loader2 } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { HotelBookingFlow } from '@/components/hotel-booking-flow';
+import { AmadeusHotelOffer } from '@/lib/types';
+import { Card, CardContent } from '@/components/ui/card';
 
 function HotelOffersPageContent({ id }: { id: string }) {
+    const router = useRouter();
     const searchParams = useSearchParams();
+    const [offer, setOffer] = useState<AmadeusHotelOffer | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // The offer object is passed via router state
+        if (typeof window !== "undefined" && window.history.state?.offer) {
+            setOffer(window.history.state.offer);
+        } else {
+            // Handle direct navigation case if needed, maybe redirect or show error
+            console.error("No hotel offer data found in state. Please start from search.");
+        }
+        setLoading(false);
+    }, [id]);
+
 
     // Reconstruct the search query string for the back button
     const backLinkHref = `/hotels/search?${searchParams.toString()}`;
@@ -19,13 +36,40 @@ function HotelOffersPageContent({ id }: { id: string }) {
     const checkInDate = searchParams.get('checkInDate');
     const checkOutDate = searchParams.get('checkOutDate');
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
+    }
+
      if (!checkInDate || !checkOutDate) {
         return (
-             <div className="text-center">
-                <p>Fechas de check-in o check-out no especificadas.</p>
-                 <Button asChild variant="link">
-                    <Link href="/?tab=Hotels">Volver a la búsqueda</Link>
-                </Button>
+            <div className="max-w-7xl mx-auto py-8 px-4">
+                <Card>
+                    <CardContent className="pt-6 text-center">
+                        <p>Fechas de check-in o check-out no especificadas.</p>
+                        <Button asChild variant="link">
+                            <Link href="/?tab=Hotels">Volver a la búsqueda</Link>
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        )
+    }
+
+    if (!offer) {
+         return (
+            <div className="max-w-7xl mx-auto py-8 px-4">
+                <Card>
+                    <CardContent className="pt-6 text-center">
+                        <p>No se encontró la información de la oferta del hotel. Por favor, vuelve a la página de búsqueda.</p>
+                        <Button asChild variant="link">
+                            <Link href="/?tab=Hotels">Volver a la búsqueda</Link>
+                        </Button>
+                    </CardContent>
+                </Card>
             </div>
         )
     }
@@ -43,11 +87,9 @@ function HotelOffersPageContent({ id }: { id: string }) {
         </div>
         
          <HotelBookingFlow 
-            hotelId={id} 
+            hotelOffer={offer}
             adults={parseInt(adults, 10)} 
             children={parseInt(children, 10)}
-            checkInDate={checkInDate}
-            checkOutDate={checkOutDate}
         />
       </div>
     </div>
