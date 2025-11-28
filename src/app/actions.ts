@@ -390,7 +390,16 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         const hotelsCollection = collection(db, 'hoteles');
         const hotelSnapshot = await getDocs(hotelsCollection);
         if (hotelSnapshot.empty) {
-            return { success: false, error: "No se encontraron hoteles. Asegúrate de ejecutar el script de siembra: npx tsx src/lib/seed-hotels.ts" };
+            console.warn("Firestore 'hoteles' collection is empty. Falling back to MOCK_HOTELS_DATA.");
+            const hotelsList = MOCK_HOTELS_DATA.map(offer => ({
+                ...offer.hotel,
+                id: offer.hotel.hotelId,
+                nombre: offer.hotel.name,
+                ubicacion: `${offer.hotel.address.cityName}, ${offer.hotel.address.countryCode}`,
+                descripcion: offer.hotel.description?.text,
+                price: parseFloat(offer.offers[0]?.price.total || '0')
+            }));
+            return { success: true, data: hotelsList };
         }
         const hotelsList = hotelSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         return { success: true, data: hotelsList };
@@ -407,3 +416,5 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }
+
+    
