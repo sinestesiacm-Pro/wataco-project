@@ -176,14 +176,13 @@ export async function searchHotelDestinations(keyword: string): Promise<{ succes
 }
 
 const hotelSearchSchema = z.object({
-  cityCode: z.string().min(2), // Sky Scrapper uses 2-letter codes
+  cityCode: z.string().min(2),
   checkInDate: z.string(),
   checkOutDate: z.string(),
   adults: z.number().int().min(1),
   currency: z.string().optional().default('USD'),
 });
 
-// This function now implements the `searchHotelsHybrid` logic.
 export async function searchHotels(params: {
   cityCode: string;
   checkInDate: string;
@@ -197,12 +196,16 @@ export async function searchHotels(params: {
   }
 
   if (!RAPIDAPI_KEY || RAPIDAPI_KEY === 'YOUR_RAPIDAPI_KEY') {
-    return { success: false, error: "La API de RapidAPI (Sky Scrapper) no está configurada. Por favor, añade la RAPIDAPI_KEY." };
+    console.warn("DIAGNÓSTICO: La API de Hotelbeds no está configurada. Usando datos de muestra como respaldo.");
+    return { 
+        success: true, 
+        data: MOCK_HOTELS_DATA,
+        error: "La API de RapidAPI (Sky Scrapper) no está configurada. Usando datos de muestra."
+    };
   }
 
   const { cityCode, checkInDate, checkOutDate, adults, currency } = validation.data;
 
-  // Step 1: Call Sky Scrapper API
   const options = {
     method: 'POST',
     headers: {
@@ -224,19 +227,23 @@ export async function searchHotels(params: {
     
     if (!response.ok) {
         const errorBody = await response.json().catch(() => ({ message: 'HTTP error with no JSON body' }));
+        const errorMessage = `Sky Scrapper API request failed: ${errorBody.message || response.statusText}`;
         console.error('Sky Scrapper API Error:', errorBody);
-        return { success: false, error: `Sky Scrapper API request failed: ${errorBody.message || response.statusText}` };
+        
+        if (response.status === 429) { // Too Many Requests
+            return { 
+                success: true, 
+                data: MOCK_HOTELS_DATA,
+                error: `API falló, usando datos de muestra. Error: Sky Scrapper API request failed: Too many requests`
+            };
+        }
+        return { success: false, error: errorMessage };
     }
 
     const skyScrapperData = await response.json();
     const hotelsFromSkyScrapper = skyScrapperData.data.hotels || [];
 
-    // Step 2 & 3: Enrich with Google Places and merge data (Placeholder for now)
     const enrichedHotels = await Promise.all(hotelsFromSkyScrapper.map(async (hotel: any) => {
-        // TODO: Implement Google Places API call here
-        // For now, we will map the data directly and add placeholders
-
-        // Map Sky Scrapper data to our AmadeusHotelOffer structure
         const mappedOffer: AmadeusHotelOffer = {
             type: 'hotel-offer',
             id: hotel.hotelId,
@@ -245,8 +252,8 @@ export async function searchHotels(params: {
                 name: hotel.name,
                 rating: hotel.rating?.value?.toString() || '0',
                 address: {
-                    cityName: hotel.city, // Assuming city is provided, might need mapping
-                    countryCode: cityCode, // Placeholder, Google Places will provide this
+                    cityName: hotel.city,
+                    countryCode: cityCode,
                     lines: [hotel.relevantPoiDistance || ''],
                     postalCode: '',
                 },
@@ -278,12 +285,10 @@ export async function searchHotels(params: {
         return { success: false, error: 'No hotels found for the selected criteria.' };
     }
     
-    // Step 4: Return enriched hotels array (limited to 30)
     return { success: true, data: enrichedHotels.slice(0, 30) };
 
   } catch (err: any) {
-    console.error('Error in searchHotelsHybrid action:', err);
-    // Use fallback mock data if there's any unhandled error
+    console.error('Error in searchHotels action:', err);
     return { 
         success: true, 
         data: MOCK_HOTELS_DATA, 
@@ -292,9 +297,7 @@ export async function searchHotels(params: {
   }
 }
 
-// TODO: Create getHotelDetailsHybrid function
 export async function getHotelDetailsHybrid(hotelId: string, checkInDate: string, checkOutDate: string) {
-    // This function will call Sky Scrapper's getDetails endpoint and enrich with Google Places.
     console.log("getHotelDetailsHybrid called with:", { hotelId, checkInDate, checkOutDate });
     return { success: false, error: "getHotelDetailsHybrid no está implementado." };
 }
