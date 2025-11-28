@@ -341,8 +341,7 @@ export async function getFirestoreHotelDetails(id: string): Promise<{ success: b
 
         return { success: true, data: hotelData };
     } catch (err: any) {
-        console.error('Error fetching hotel from Firestore:', err);
-        if (err.code === 'permission-denied') {
+        if ((err as any).code === 'permission-denied') {
             const permissionError = new FirestorePermissionError({
                 path: `hoteles/${id}`,
                 operation: 'get',
@@ -478,8 +477,7 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         const hotelsList = hotelSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         return { success: true, data: hotelsList };
     } catch (err: any) {
-        console.error("Error fetching hotels from Firestore:", err);
-        if (err.code === 'permission-denied') {
+        if ((err as any).code === 'permission-denied') {
             const permissionError = new FirestorePermissionError({
                 path: 'hoteles',
                 operation: 'list',
