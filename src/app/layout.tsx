@@ -12,8 +12,8 @@ import { SearchProvider } from '@/contexts/search-context';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
-  title: 'Uataco',
-  description: 'Uataco - Your global travel platform to discover the world.',
+  title: 'Wataco',
+  description: 'Wataco - Your global travel platform to discover the world.',
 };
 
 export default function RootLayout({
