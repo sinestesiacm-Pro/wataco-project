@@ -38,9 +38,10 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   const handleViewHotel = (offer: AmadeusHotelOffer) => {
       const params = new URLSearchParams(searchParams.toString());
       const hotelId = offer.hotel.hotelId || offer.id;
-      // We navigate to the hotel detail page, which will then handle room fetching
-      const url = `/hotels/${hotelId}?${params.toString()}`;
-      router.push(url);
+      
+      // The key change: Pass the offer data through history state
+      const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+      router.push(url, { state: { offer } } as any);
   }
 
   return (
@@ -109,5 +110,3 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
-
-    

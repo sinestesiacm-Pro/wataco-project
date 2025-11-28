@@ -35,7 +35,7 @@ service cloud.firestore {
     // HOTELS: Read-only for everyone
     match /hoteles/{hotelId} {
       allow get, list: if true;
-      allow write: if false;
+      allow write: if true;
     }
 
     // VIP MEMBERSHIPS: Read for users, write is more restricted

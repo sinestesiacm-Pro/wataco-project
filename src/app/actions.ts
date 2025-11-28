@@ -201,7 +201,9 @@ export async function searchHotels(params: {
     }
 
     if (!HOTELBEDS_API_KEY || !HOTELBEDS_SECRET) {
-      return { success: false, error: "La API de Hotelbeds no está configurada. Por favor, añade las credenciales." };
+      console.warn("Hotelbeds API key not found. Using mock data.");
+      const mockOffers = MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase().includes(params.destinationName?.toLowerCase() || ''));
+      return { success: true, data: mockOffers };
     }
     
     const { cityCode, checkInDate, checkOutDate, adults } = validation.data;
@@ -242,26 +244,13 @@ export async function searchHotels(params: {
             const errorBody = await availabilityResponse.json().catch(() => ({}));
             console.error('Hotelbeds Availability API Error:', errorBody);
             const errorMessage = errorBody.error?.message || `Error: ${availabilityResponse.statusText}`;
-            if (params.destinationName) {
-                const mockOffers = MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase().includes(params.destinationName!.toLowerCase() || ''));
-                 if (mockOffers.length > 0) {
-                    console.warn(`Hotelbeds call failed (${errorMessage}), returning mock data as fallback.`);
-                    return { success: true, data: mockOffers };
-                }
-            }
-            return { success: false, error: `Error fetching hotel offers from Hotelbeds: ${errorMessage}` };
+            throw new Error(`Error fetching hotel offers from Hotelbeds: ${errorMessage}`);
         }
 
         const availabilityData = await availabilityResponse.json();
 
         if (!availabilityData.hotels || availabilityData.hotels.hotels.length === 0) {
-            // If no results, try with a fallback using mock data to not block the user
-            console.warn(`No hotels found for destination ${cityCode} in Hotelbeds. Falling back to mock data.`);
-            const mockOffers = MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase().includes(params.destinationName?.toLowerCase() || ''));
-            if (mockOffers.length > 0) {
-              return { success: true, data: mockOffers };
-            }
-            return { success: false, error: "No se encontraron hoteles para el destino especificado." };
+            throw new Error("No hotels found for the specified destination in Hotelbeds.");
         }
         
         const offers: AmadeusHotelOffer[] = availabilityData.hotels.hotels.map((hotel: any): AmadeusHotelOffer => ({
@@ -490,6 +479,14 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: true, data: hotelsList };
     } catch (err: any) {
         console.error("Error fetching hotels from Firestore:", err);
+        if (err.code === 'permission-denied') {
+            const permissionError = new FirestorePermissionError({
+                path: 'hoteles',
+                operation: 'list',
+            });
+            errorEmitter.emit('permission-error', permissionError);
+            return { success: false, error: "Error de permisos al cargar hoteles recomendados." };
+        }
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }

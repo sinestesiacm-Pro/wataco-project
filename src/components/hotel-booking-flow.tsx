@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -32,64 +33,44 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
       setLoading(true);
       setError(null);
       
+      // The offer is now passed via history state, so we read it from there.
+      if (typeof window !== "undefined" && window.history.state?.offer) {
+          setHotelOffer(window.history.state.offer);
+          setLoading(false);
+          return;
+      }
+      
+      // Fallback logic if the user navigated to this page directly (no state)
+      console.warn("No offer data found in router state. Falling back to a manual fetch and mock rooms.");
       try {
-        const hotelDetailsResult = await getFirestoreHotelDetails(hotelId);
-        
-        if (!hotelDetailsResult.success || !hotelDetailsResult.data) {
-          throw new Error("No se pudieron cargar los detalles del hotel desde la base de datos.");
+        const detailsResult = await getFirestoreHotelDetails(hotelId);
+        if (!detailsResult.success || !detailsResult.data) {
+          throw new Error(detailsResult.error || 'Could not load hotel details for mock offer.');
         }
         
-        const hotelData = hotelDetailsResult.data;
-        const cityCode = hotelData.address.cityName.substring(0, 3).toUpperCase();
-
-        // Always search for live offers first
-        const searchResult = await searchHotels({
-          cityCode: cityCode,
-          destinationName: hotelData.address.cityName,
-          checkInDate,
-          checkOutDate,
-          adults: adults,
-        });
-
-        if (searchResult.success && searchResult.data) {
-           const specificOffer = searchResult.data.find((o: AmadeusHotelOffer) => o.hotel.hotelId === hotelId);
-            if (specificOffer) {
-                // Live offer found, use it
-                setHotelOffer(specificOffer);
-            } else {
-                 // Live search worked but this specific hotel had no offers, create a mock offer as a fallback
-                 console.warn("Offer not found in live search, creating a mock offer from details.");
-                 const mockOffer: AmadeusHotelOffer = {
-                    type: 'hotel-offer',
-                    id: hotelId,
-                    hotel: hotelData,
-                    available: true,
-                    offers: MOCK_ROOMS_DATA,
-                 };
-                 setHotelOffer(mockOffer);
-            }
-        } else {
-          // Live search failed entirely, use fallback
-          console.warn("Hotelbeds search failed, creating a mock offer as fallback.", searchResult.error);
-          const mockOffer: AmadeusHotelOffer = {
+        // Construct a mock offer using details from Firestore and rooms from mock data
+        const mockOffer: AmadeusHotelOffer = {
             type: 'hotel-offer',
             id: hotelId,
-            hotel: hotelData,
+            hotel: detailsResult.data,
             available: true,
-            offers: MOCK_ROOMS_DATA,
-          };
-          setHotelOffer(mockOffer);
-        }
+            offers: MOCK_ROOMS_DATA.map(r => ({
+                ...r,
+                checkInDate: checkInDate,
+                checkOutDate: checkOutDate
+            }))
+        };
+        setHotelOffer(mockOffer);
 
       } catch (e: any) {
-        setError(e.message || "No se pudieron cargar los detalles de la oferta. Por favor, vuelve a la página de resultados e inténtalo de nuevo.");
+        setError(e.message || "An unexpected error occurred while fetching hotel fallback data.");
       } finally {
         setLoading(false);
       }
     };
     
     fetchHotelData();
-  }, [hotelId, adults, children, checkInDate, checkOutDate]);
+  }, [hotelId, checkInDate, checkOutDate]);
 
   const handleRoomsSelected = (rooms: SelectedRoom[]) => {
     setSelectedRooms(rooms);
