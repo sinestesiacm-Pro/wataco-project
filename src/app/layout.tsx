@@ -9,6 +9,7 @@ import { BottomNavbar } from '@/components/bottom-navbar';
 import { ThemeProvider } from '@/contexts/theme-context';
 import { cn } from '@/lib/utils';
 import { SearchProvider } from '@/contexts/search-context';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'Uataco',
@@ -32,19 +33,21 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
-          <AuthProvider>
-            <SearchProvider>
-                <div className={cn('flex flex-col min-h-dvh')}>
-                    <Header />
-                    <main className="flex-grow flex flex-col">
-                        {children}
-                    </main>
-                    <Toaster />
-                    <ChatWidget />
-                    <BottomNavbar />
-                </div>
-            </SearchProvider>
-          </AuthProvider>
+          <FirebaseClientProvider>
+            <AuthProvider>
+              <SearchProvider>
+                  <div className={cn('flex flex-col min-h-dvh')}>
+                      <Header />
+                      <main className="flex-grow flex flex-col">
+                          {children}
+                      </main>
+                      <Toaster />
+                      <ChatWidget />
+                      <BottomNavbar />
+                  </div>
+              </SearchProvider>
+            </AuthProvider>
+          </FirebaseClientProvider>
         </ThemeProvider>
       </body>
     </html>
