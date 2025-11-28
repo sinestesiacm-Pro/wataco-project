@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -34,6 +35,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
       
       try {
         const hotelDetailsResult = await getFirestoreHotelDetails(hotelId);
+        
         if (!hotelDetailsResult.success || !hotelDetailsResult.data) {
           throw new Error("No se pudieron cargar los detalles del hotel desde la base de datos.");
         }
@@ -41,6 +43,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
         const hotelData = hotelDetailsResult.data;
         const cityCode = hotelData.address.cityName.substring(0, 3).toUpperCase();
 
+        // Always search for live offers first
         const searchResult = await searchHotels({
           cityCode: cityCode,
           destinationName: hotelData.address.cityName,
@@ -52,9 +55,10 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
         if (searchResult.success && searchResult.data) {
            const specificOffer = searchResult.data.find((o: AmadeusHotelOffer) => o.hotel.hotelId === hotelId);
             if (specificOffer) {
+                // Live offer found, use it
                 setHotelOffer(specificOffer);
             } else {
-                 // Fallback to creating a mock offer if not found in live search
+                 // Live search worked but this specific hotel had no offers, create a mock offer as a fallback
                  console.warn("Offer not found in live search, creating a mock offer from details.");
                  const mockOffer: AmadeusHotelOffer = {
                     type: 'hotel-offer',
@@ -66,7 +70,16 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
                  setHotelOffer(mockOffer);
             }
         } else {
-          throw new Error(searchResult.error || "No se encontraron habitaciones para este hotel y fecha. Prueba otra fecha o destino.");
+          // Live search failed entirely, use fallback
+          console.warn("Hotelbeds search failed, creating a mock offer as fallback.", searchResult.error);
+          const mockOffer: AmadeusHotelOffer = {
+            type: 'hotel-offer',
+            id: hotelId,
+            hotel: hotelData,
+            available: true,
+            offers: MOCK_ROOMS_DATA,
+          };
+          setHotelOffer(mockOffer);
         }
 
       } catch (e: any) {
