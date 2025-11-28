@@ -39,30 +39,11 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
           return;
       }
 
-      console.warn("No offer data found in state, falling back to mock data for room selection.");
-      try {
-          const detailsResult = await getFirestoreHotelDetails(hotelId);
-          if (!detailsResult.success || !detailsResult.data) {
-            throw new Error(detailsResult.error || 'Could not load hotel details for mock offer.');
-          }
-          
-          const mockOffer: AmadeusHotelOffer = {
-              type: 'hotel-offer',
-              id: hotelId,
-              hotel: detailsResult.data,
-              available: true,
-              offers: MOCK_ROOMS_DATA.map(r => ({
-                  ...r,
-                  checkInDate: checkInDate,
-                  checkOutDate: checkOutDate
-              }))
-          };
-          setHotelOffer(mockOffer);
-      } catch(e: any) {
-          setError(e.message || 'An unexpected error occurred.');
-      } finally {
-          setLoading(false);
-      }
+      // If no offer is in history state, it means the user likely refreshed the page.
+      // We can't reliably refetch the exact offer, so we show an error.
+      console.warn("No offer data found in state. The user may have refreshed the page.");
+      setError("No se pudieron cargar los detalles de la oferta. Por favor, vuelve a la página de resultados e inténtalo de nuevo.");
+      setLoading(false);
     };
     
     fetchHotelData();
