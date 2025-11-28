@@ -5,70 +5,28 @@ import { Button } from '@/components/ui/button';
 import { Heart, Star, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import Link from 'next/link';
+import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import type { AmadeusHotelOffer } from '@/lib/types';
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { Skeleton } from './ui/skeleton';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { MOCK_ROOMS_DATA } from '@/lib/mock-data';
 import { format, addDays } from 'date-fns';
-import { getRecommendedHotels } from '@/app/actions';
 
-interface Hotel {
-    id: string;
-    nombre: string;
-    ubicacion: string;
-    descripcion: string;
-    media: string[];
-    rating: number; 
-    price: number; 
-    amenities?: string[];
-}
+const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOffer: AmadeusHotelOffer, onViewHotel: (offer: AmadeusHotelOffer) => void }) {
+    const hotel = hotelOffer.hotel;
+    const validMedia = hotel.media?.filter(item => item && item.uri) || [];
+    const imageUrl = validMedia.length > 0 ? validMedia[0].uri : "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800";
 
-
-const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel: Hotel, onViewHotel: (hotel: Hotel) => void }) {
-    
-    const validMedia = hotel.media?.filter(url => url) || [];
-    
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
             <div className="relative w-full h-56 flex-shrink-0">
-                 <Carousel className="w-full h-full">
-                    <CarouselContent>
-                        {validMedia.length > 0 ? validMedia.map((photo, index) => (
-                            <CarouselItem key={index}>
-                                 <div className="relative h-56 w-full">
-                                    <Image 
-                                        src={photo}
-                                        data-ai-hint="hotel photo" 
-                                        alt={`${hotel.nombre} image ${index + 1}`}
-                                        fill 
-                                        className="object-cover"
-                                        draggable={false}
-                                    />
-                                 </div>
-                            </CarouselItem>
-                        )) : (
-                           <CarouselItem>
-                                <div className="relative h-56 w-full bg-muted">
-                                    <Image 
-                                        src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800"
-                                        data-ai-hint="hotel placeholder" 
-                                        alt="Placeholder hotel image"
-                                        fill 
-                                        className="object-cover"
-                                        draggable={false}
-                                    />
-                                </div>
-                           </CarouselItem>
-                        )}
-                    </CarouselContent>
-                     <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                     <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Carousel>
+                <Image 
+                    src={imageUrl}
+                    data-ai-hint="hotel photo" 
+                    alt={hotel.name || 'Hotel'}
+                    fill 
+                    className="object-cover"
+                    draggable={false}
+                />
                 <div className="absolute top-0 right-0 p-3 z-10">
                     <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white bg-black/30 hover:bg-black/50 hover:text-white rounded-full">
                         <Heart className="h-5 w-5" />
@@ -76,18 +34,18 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
                 </div>
             </div>
             <CardContent className="p-4 flex flex-col flex-grow">
-                 <h3 className="font-bold font-headline text-lg text-foreground">{hotel.nombre}</h3>
+                 <h3 className="font-bold font-headline text-lg text-foreground">{hotel.name}</h3>
                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                    <MapPin className="h-4 w-4" />
-                   {hotel.ubicacion}
+                   {hotel.address.cityName}, {hotel.address.countryCode}
                  </div>
                  <div className="flex items-center gap-1 text-amber-400 mt-1">
-                    {[...Array(hotel.rating || 0)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                    {[...Array(parseInt(hotel.rating || '0'))].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                  </div>
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">
-                    <p className="font-semibold text-xl text-foreground drop-shadow-md">${hotel.price}<span className="text-sm font-normal">/noche</span></p>
-                    <Button onClick={() => onViewHotel(hotel)} className="font-semibold">
+                    <p className="font-semibold text-xl text-foreground drop-shadow-md">${hotelOffer.offers[0].price.total}<span className="text-sm font-normal">/noche</span></p>
+                    <Button onClick={() => onViewHotel(hotelOffer)} className="font-semibold">
                         Ver Hotel
                     </Button>
                  </div>
@@ -96,45 +54,10 @@ const HotelCard = React.memo(function HotelCard({ hotel, onViewHotel }: { hotel:
     );
 });
 
-const HotelSkeleton = () => (
-    <div className="rounded-2xl p-0 flex flex-col bg-card/80 backdrop-blur-xl border">
-        <Skeleton className="w-full h-48 rounded-t-2xl" />
-        <div className="p-4">
-            <Skeleton className="h-6 w-3/4 mb-2" />
-            <Skeleton className="h-4 w-1/2 mb-4" />
-            <Skeleton className="h-4 w-1/4" />
-            <div className="flex justify-between items-end mt-4">
-                <div className="space-y-1">
-                    <Skeleton className="h-3 w-12" />
-                    <Skeleton className="h-8 w-24" />
-                </div>
-                <Skeleton className="h-10 w-28" />
-            </div>
-        </div>
-    </div>
-)
-
-const shuffleArray = <T,>(array: T[]): T[] => {
-    let currentIndex = array.length, randomIndex;
-
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-    }
-
-    return array;
-}
-
 export const RecommendedHotels = React.memo(function RecommendedHotels() {
   const router = useRouter();
-  const [allHotels, setAllHotels] = useState<Hotel[]>([]);
-  const [displayedHotels, setDisplayedHotels] = useState<Hotel[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleViewHotel = useCallback((hotel: Hotel) => {
-      const cityDetails = hotel.ubicacion.split(', ');
+  const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
       const checkInDate = addDays(new Date(), 7);
       const checkOutDate = addDays(new Date(), 14);
 
@@ -143,70 +66,26 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
         checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
         adults: '2',
         children: '0',
-        cityCode: cityDetails[1] || 'CO',
-        destinationName: cityDetails[0] || hotel.nombre,
       });
-
-      const url = `/hotels/${hotel.id}?${params.toString()}`;
-      router.push(url);
+      
+      const hotelId = offer.hotel.hotelId || offer.id;
+      const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+      
+      // Use router.push with state to pass the complex object
+      router.push(url, { state: { offer } } as any);
   }, [router]);
-
-  useEffect(() => {
-    const fetchHotels = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const result = await getRecommendedHotels();
-        if (result.success && result.data) {
-          const hotelsList = result.data as Hotel[];
-          setAllHotels(hotelsList);
-          setDisplayedHotels(shuffleArray([...hotelsList]).slice(0, 4));
-        } else {
-          setError(result.error || "No se pudieron cargar los hoteles recomendados.");
-        }
-      } catch (e: any) {
-         setError("Ocurrió un error inesperado al cargar los hoteles.");
-         console.error("Error in RecommendedHotels component:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHotels();
-  }, []);
-
-  useEffect(() => {
-    if(allHotels.length === 0) return;
-
-    const intervalId = setInterval(() => {
-      setDisplayedHotels(shuffleArray([...allHotels]).slice(0, 4));
-    }, 40000); // Rotate hotels every 40 seconds
-
-    return () => clearInterval(intervalId);
-  }, [allHotels]);
 
   return (
     <div className="relative space-y-6">
       <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
       
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => <HotelSkeleton key={i} />)}
-        </div>
-      ) : error ? (
-        <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
-            <CardContent className="pt-6 text-center">
-                <h3 className="font-bold">Error al Cargar Hoteles</h3>
-                <p className="text-sm mt-2">{error}</p>
-            </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {displayedHotels.map((hotel) => (
-            <HotelCard key={hotel.id} hotel={hotel} onViewHotel={handleViewHotel} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {MOCK_HOTELS_DATA.slice(0, 4).map((hotelOffer) => (
+            <HotelCard key={hotelOffer.id} hotelOffer={hotelOffer} onViewHotel={handleViewHotel} />
           ))}
-        </div>
-      )}
+      </div>
     </div>
   );
 });
+
+    

@@ -47,9 +47,8 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
     <div className="space-y-4">
       {hotels.map((offer, index) => {
-        const imageUrl = (offer.hotel.media && offer.hotel.media.length > 0 && offer.hotel.media[0].uri)
-          ? offer.hotel.media[0].uri
-          : 'https://placehold.co/400x300.png';
+        const hasMedia = offer.hotel.media && offer.hotel.media.length > 0 && offer.hotel.media[0].uri;
+        const imageUrl = hasMedia ? offer.hotel.media[0].uri : 'https://placehold.co/400x300.png';
 
         return (
             <Card key={`${offer.id}-${index}`} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-card/80 backdrop-blur-xl border flex flex-col md:flex-row">
@@ -116,3 +115,5 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
+
+    

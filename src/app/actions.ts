@@ -270,49 +270,15 @@ export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Pr
 
 export async function getFirestoreHotelDetails(id: string): Promise<{ success: boolean; data?: AmadeusHotel; error?: string }> {
     try {
-        const hotelDocRef = doc(db, 'hoteles', id);
-        const hotelDoc = await getDoc(hotelDocRef);
+        const hotelFromMock = MOCK_HOTELS_DATA.find(h => h.hotel.hotelId === id);
 
-        if (!hotelDoc.exists()) {
-            return { success: false, error: 'Hotel no encontrado en la base de datos.' };
+        if (!hotelFromMock) {
+            return { success: false, error: 'Hotel no encontrado en los datos de muestra.' };
         }
 
-        const data = hotelDoc.data();
-        
-        let mediaUrls = data.media || [];
-        if (mediaUrls.length === 0) {
-            console.log(`Fetching Google Photos for ${data.nombre}, ${data.ubicacion}`);
-            mediaUrls = await getGooglePlacePhotos(`${data.nombre}, ${data.ubicacion}`);
-        }
-
-        const hotelData: AmadeusHotel = {
-            hotelId: hotelDoc.id,
-            name: data.nombre,
-            rating: data.rating?.toString(),
-            media: mediaUrls.map((url: string) => ({ uri: url, category: 'GENERAL' })),
-            address: {
-                cityName: data.ubicacion.split(',')[0],
-                countryCode: data.ubicacion.split(',')[1]?.trim() || '',
-                lines: [data.ubicacion],
-                postalCode: '',
-            },
-            description: {
-                lang: 'es',
-                text: data.descripcion,
-            },
-            amenities: data.amenities || [],
-        };
-
-        return { success: true, data: hotelData };
+        return { success: true, data: hotelFromMock.hotel };
     } catch (err: any) {
-        if ((err as any).code === 'permission-denied') {
-            const permissionError = new FirestorePermissionError({
-                path: `hoteles/${id}`,
-                operation: 'get',
-            });
-            errorEmitter.emit('permission-error', permissionError);
-            return { success: false, error: permissionError.message };
-        }
+        console.error('Error fetching hotel from mock data:', err);
         return { success: false, error: err.message || 'Ocurrió un error inesperado al buscar el hotel.' };
     }
 }
@@ -431,32 +397,20 @@ export async function activateVipMembership(params: { userId: string, membership
 
 export async function getRecommendedHotels(): Promise<{ success: boolean; data?: any[]; error?: string }> {
     try {
-        const hotelsCollection = collection(db, 'hoteles');
-        const hotelSnapshot = await getDocs(hotelsCollection);
-        if (hotelSnapshot.empty) {
-            console.warn("Firestore 'hoteles' collection is empty. Falling back to MOCK_HOTELS_DATA.");
-            const hotelsList = MOCK_HOTELS_DATA.map(offer => ({
-                ...offer.hotel,
-                id: offer.hotel.hotelId,
-                nombre: offer.hotel.name,
-                ubicacion: `${offer.hotel.address.cityName}, ${offer.hotel.address.countryCode}`,
-                descripcion: offer.hotel.description?.text,
-                price: parseFloat(offer.offers[0]?.price.total || '0')
-            }));
-            return { success: true, data: hotelsList };
-        }
-        const hotelsList = hotelSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+        // Now, this function will always return the mock data for stability.
+        const hotelsList = MOCK_HOTELS_DATA.map(offer => ({
+            ...offer.hotel,
+            id: offer.hotel.hotelId, // Ensure the top-level ID is set
+            nombre: offer.hotel.name,
+            ubicacion: `${offer.hotel.address.cityName}, ${offer.hotel.address.countryCode}`,
+            descripcion: offer.hotel.description?.text,
+            price: parseFloat(offer.offers[0]?.price.total || '0'),
+        }));
         return { success: true, data: hotelsList };
     } catch (err: any) {
-        if ((err as any).code === 'permission-denied' || err instanceof FirestorePermissionError) {
-            const permissionError = new FirestorePermissionError({
-                path: 'hoteles',
-                operation: 'list',
-            });
-            errorEmitter.emit('permission-error', permissionError);
-            return { success: false, error: "Error de permisos al cargar hoteles recomendados." };
-        }
-        console.error("Error fetching recommended hotels:", err);
-        return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
+        console.error("Error processing recommended hotels from mock data:", err);
+        return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
+
+    

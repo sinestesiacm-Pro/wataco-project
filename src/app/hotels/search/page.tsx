@@ -4,7 +4,7 @@
 import { Suspense, useEffect, useState, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Loader2, Filter, Settings2 } from "lucide-react";
-import { getRecommendedHotels, searchHotels } from "@/app/actions";
+import { searchHotels } from "@/app/actions";
 import type { AmadeusHotelOffer } from "@/lib/types";
 import { HotelResults } from "@/components/hotel-results";
 import { HotelFilters } from "@/components/hotel-filters";
@@ -41,44 +41,25 @@ function HotelResultsPageContent() {
     const checkOutDate = searchParams.get('checkOutDate') || '';
     const adults = searchParams.get('adults') || '1';
     
-    // This effect now fetches local data by default, making it stable.
     useEffect(() => {
         const runSearch = async () => {
+            if (!destinationName || !checkInDate || !checkOutDate) {
+                setError("Parámetros de búsqueda incompletos.");
+                setLoading(false);
+                return;
+            }
             setLoading(true);
             setError(null);
             
-            // Prioritize local Firestore data for stability
-            const result = await getRecommendedHotels();
+            const result = await searchHotels({
+                destinationName,
+                checkInDate,
+                checkOutDate,
+                adults: parseInt(adults, 10),
+            });
 
             if (result.success && result.data) {
-                // We need to map the Firestore data to the AmadeusHotelOffer structure
-                const mappedData: AmadeusHotelOffer[] = result.data.map((hotel: any) => ({
-                    type: 'hotel-offer',
-                    id: hotel.id,
-                    hotel: {
-                        hotelId: hotel.id,
-                        name: hotel.nombre,
-                        rating: hotel.rating?.toString(),
-                        address: {
-                            cityName: hotel.ubicacion.split(', ')[0],
-                            countryCode: hotel.ubicacion.split(', ')[1] || '',
-                            lines: [hotel.ubicacion],
-                            postalCode: ''
-                        },
-                        description: { lang: 'es', text: hotel.descripcion },
-                        media: (hotel.media || []).map((uri: string) => ({ uri, category: 'PHOTO' })),
-                        amenities: hotel.amenities || []
-                    },
-                    available: true,
-                    offers: [{
-                        id: `${hotel.id}-offer`,
-                        price: { currency: 'USD', total: hotel.price?.toString() || '0', base: hotel.price?.toString() || '0' },
-                        room: { type: 'STANDARD', description: { text: 'Habitación Estándar' } },
-                        checkInDate: checkInDate,
-                        checkOutDate: checkOutDate,
-                    }]
-                }));
-                setHotels(mappedData);
+                setHotels(result.data);
             } else {
                 setError(result.error || 'No se encontraron hoteles.');
             }
@@ -86,7 +67,7 @@ function HotelResultsPageContent() {
         };
 
         runSearch();
-    }, [checkInDate, checkOutDate]); // Only re-run if dates change, for example
+    }, [destinationName, checkInDate, checkOutDate, adults]);
     
     const filteredHotels = useMemo(() => {
       if (!hotels) return null;
@@ -147,7 +128,7 @@ function HotelResultsPageContent() {
             <Collapsible className="mb-6 bg-card/80 backdrop-blur-xl border p-4 rounded-2xl">
                 <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl sm:text-4xl font-bold font-headline">Hoteles Recomendados</h1>
+                    <h1 className="text-3xl sm:text-4xl font-bold font-headline">Hoteles en {destinationName}</h1>
                     <p className="text-muted-foreground mt-1">
                         {filteredHotels ? `${filteredHotels.length} resultados encontrados` : ''}
                     </p>
@@ -230,3 +211,5 @@ export default function HotelSearchPageWrapper() {
     </Suspense>
   )
 }
+
+    
