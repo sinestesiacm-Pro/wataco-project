@@ -14,7 +14,6 @@ import { FirestorePermissionError } from '@/firebase/errors';
 import { RAPIDAPI_KEY, GOOGLE_PLACES_API_KEY } from '@/lib/firebase';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
-const BOOKING_API_URL = 'https://booking-com15.p.rapidapi.com/api/v1/hotels';
 
 const searchSchema = z.object({
   origin: z.string().min(3).max(3),
@@ -416,5 +415,3 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }
-
-    

@@ -47,10 +47,8 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
     <div className="space-y-4">
       {hotels.map((offer, index) => {
-        // Robust image URL validation
-        const potentialUri = offer.hotel.media?.[0]?.uri;
-        const imageUrl = (typeof potentialUri === 'string' && potentialUri) 
-          ? potentialUri 
+        const imageUrl = (offer.hotel.media && offer.hotel.media.length > 0 && offer.hotel.media[0].uri)
+          ? offer.hotel.media[0].uri
           : 'https://placehold.co/400x300.png';
 
         return (

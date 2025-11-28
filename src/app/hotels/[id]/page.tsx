@@ -137,5 +137,3 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
     </Suspense>
   );
 }
-
-    
