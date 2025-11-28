@@ -480,6 +480,10 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
             errorEmitter.emit('permission-error', permissionError);
             return { success: false, error: "Error de permisos al cargar hoteles recomendados." };
         }
+        console.error("Error fetching recommended hotels:", err);
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }
+
+
+    
