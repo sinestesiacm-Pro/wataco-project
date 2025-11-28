@@ -41,7 +41,7 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
       const params = new URLSearchParams(searchParams.toString());
       // The hotelId from Firestore is in offer.id when seeded, but from API it's in hotel.hotelId
       const hotelId = offer.hotel.hotelId || offer.id;
-      const url = `/hotels/${hotelId}?${params.toString()}`;
+      const url = `/hotels/${hotelId}/offers?${params.toString()}`;
       router.push(url);
   }
 
