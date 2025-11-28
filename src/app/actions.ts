@@ -206,7 +206,7 @@ export async function searchHotels(params: {
     }
 
     if (!HOTELBEDS_API_KEY || !HOTELBEDS_SECRET) {
-      console.warn("Hotelbeds API key not found. Using mock data.");
+      console.warn("DIAGNÓSTICO: La API de Hotelbeds no está configurada. Usando datos de muestra como respaldo.");
       const mockOffers = MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase().includes(params.destinationName?.toLowerCase() || ''));
       return { success: true, data: mockOffers };
     }
@@ -472,7 +472,7 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         const hotelsList = hotelSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         return { success: true, data: hotelsList };
     } catch (err: any) {
-        if ((err as any).code === 'permission-denied') {
+        if ((err as any).code === 'permission-denied' || err instanceof FirestorePermissionError) {
             const permissionError = new FirestorePermissionError({
                 path: 'hoteles',
                 operation: 'list',
@@ -483,5 +483,3 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }
-
-    

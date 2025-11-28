@@ -5,7 +5,7 @@ import { getAuth, Auth } from "firebase/auth";
 import { firebaseConfig } from "@/firebase/config";
 
 // This file provides a single, unified way to get Firebase services,
-// ensuring the app is initialized only once.
+// ensuring the app is initialized only once, safe for both server and client.
 
 let app: FirebaseApp;
 if (!getApps().length) {

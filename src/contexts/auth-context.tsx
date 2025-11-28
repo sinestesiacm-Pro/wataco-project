@@ -41,26 +41,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const checkUserStatus = useCallback(async (firebaseUser: User | null) => {
     setLoading(true);
+
+    let currentUser = firebaseUser;
     if (isDevelopment) {
-        setUser(mockUser);
-        // Simulate checking VIP status for mock user
-        const userDocRef = doc(db, 'users', mockUser.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists() && userDoc.data().vipTier) {
-            setVipTier(userDoc.data().vipTier);
-        } else {
-            setVipTier(null);
-        }
-        setLoading(false);
-        return;
+        currentUser = mockUser;
     }
 
-    if (firebaseUser) {
-        setUser(firebaseUser);
+    if (currentUser) {
+        setUser(currentUser);
         // Check for VIP status in Firestore
-        const userDocRef = doc(db, 'users', firebaseUser.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists() && userDoc.data().vipTier) {
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        const userDoc = await getDoc(userDocRef).catch(err => {
+            console.error("Firestore read error in auth context:", err);
+            return null; // Handle potential Firestore read errors
+        });
+
+        if (userDoc && userDoc.exists() && userDoc.data().vipTier) {
             setVipTier(userDoc.data().vipTier);
         } else {
             setVipTier(null);
@@ -73,8 +69,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
+    // onAuthStateChanged is the correct way to get the current user on app load.
     const unsubscribe = onAuthStateChanged(auth, checkUserStatus);
-    return () => unsubscribe();
+    return () => unsubscribe(); // Cleanup subscription on unmount
   }, [checkUserStatus]);
   
   const refreshAuthStatus = async () => {
@@ -83,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signInWithGoogle = () => {
     if (isDevelopment) {
-      setUser(mockUser);
+      checkUserStatus(mockUser);
       return Promise.resolve();
     }
     const provider = new GoogleAuthProvider();
@@ -92,7 +89,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signUpWithEmail = (email: string, password: string) => {
       if (isDevelopment) {
-        setUser(mockUser);
+        checkUserStatus(mockUser);
         return Promise.resolve();
       }
       return createUserWithEmailAndPassword(auth, email, password);
@@ -100,7 +97,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signInWithEmail = (email: string, password: string) => {
       if (isDevelopment) {
-        setUser(mockUser);
+        checkUserStatus(mockUser);
         return Promise.resolve();
       }
       return signInWithEmailAndPassword(auth, email, password);
@@ -115,7 +112,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return signOut(auth);
   };
 
-  if (loading && user === null) { // Show loader only on initial page load
+  if (loading) {
     return (
         <div className="flex items-center justify-center h-screen bg-background">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />

@@ -12,8 +12,6 @@ interface FirebaseClientProviderProps {
 export function FirebaseClientProvider({ children }: FirebaseClientProviderProps) {
   // The instances are already initialized in @/lib/firebase,
   // so we just pass them to the provider.
-  // useMemo is used here as a good practice to ensure the object reference is stable,
-  // though in this specific case, it's not strictly necessary as app, auth, and db are singletons.
   const firebaseServices = useMemo(() => {
     return {
       firebaseApp: app,
