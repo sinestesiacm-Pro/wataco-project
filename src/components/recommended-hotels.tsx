@@ -44,6 +44,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
         fetchPhotos();
     }, [hotel.name, hotel.address.cityName, hotel.media]);
 
+
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
             <div className="relative w-full h-56 flex-shrink-0">
