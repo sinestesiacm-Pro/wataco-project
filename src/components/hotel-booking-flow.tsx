@@ -78,7 +78,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
     };
     
     fetchHotelData();
-  }, [hotelId, adults, checkInDate, checkOutDate]);
+  }, [hotelId, adults, children, checkInDate, checkOutDate]);
 
   const handleRoomsSelected = (rooms: SelectedRoom[]) => {
     setSelectedRooms(rooms);
@@ -104,7 +104,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
         <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
             <CardContent className="pt-6 text-center">
                 <h3 className="font-bold">Error al Cargar Ofertas</h3>
-                <p className="text-sm mt-2">{error || 'No se pudieron cargar los detalles de la oferta. Por favor, vuelve a la página de resultados e inténtalo de nuevo.'}</p>
+                <p className="text-sm mt-2">{error || 'No se encontraron habitaciones disponibles para este hotel en las fechas seleccionadas. Por favor, intenta con otra búsqueda.'}</p>
             </CardContent>
         </Card>
     )

@@ -21,7 +21,7 @@ function HotelOffersPageContent({ id }: { id: string }) {
 
      if (!checkInDate || !checkOutDate) {
         return (
-             <div className="text-center text-white">
+             <div className="text-center">
                 <p>Fechas de check-in o check-out no especificadas.</p>
                  <Button asChild variant="link">
                     <Link href="/?tab=Hotels">Volver a la búsqueda</Link>
@@ -54,7 +54,7 @@ function HotelOffersPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelOffersPage({ params }: { params: Promise<{ id: string }> }) {
+export default function HotelOffersPage({ params }: { params: { id: string } }) {
   const { id } = React.use(params);
   
   return (

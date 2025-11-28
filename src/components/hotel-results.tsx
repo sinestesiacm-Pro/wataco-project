@@ -6,9 +6,7 @@ import { Star, MapPin } from 'lucide-react';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
-import { HotelDetailsDialog } from './hotel-details-dialog';
 import { Button } from './ui/button';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface HotelResultsProps {
@@ -39,7 +37,6 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
 
   const handleViewHotel = (offer: AmadeusHotelOffer) => {
       const params = new URLSearchParams(searchParams.toString());
-      // The hotelId from Firestore is in offer.id when seeded, but from API it's in hotel.hotelId
       const hotelId = offer.hotel.hotelId || offer.id;
       const url = `/hotels/${hotelId}/offers?${params.toString()}`;
       router.push(url);
