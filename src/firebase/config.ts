@@ -1,3 +1,4 @@
+
 export const firebaseConfig = {
   projectId: "wataco",
   appId: "1:952475896153:web:0ff3bee2a694926621a448",

@@ -1,14 +1,20 @@
 
-import { initializeApp, getApp, getApps } from "firebase/app";
+import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
 import { getFirestore, doc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, Auth } from "firebase/auth";
 import { firebaseConfig } from "@/firebase/config";
 
-// This file is simplified to only initialize and export Firebase services
-// for use across the application, ensuring a single source of truth.
+// This file provides a single, unified way to get Firebase services,
+// ensuring the app is initialized only once.
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
+let app: FirebaseApp;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
+
+const auth: Auth = getAuth(app);
 const db = getFirestore(app);
 
 export { app, auth, db, doc };
