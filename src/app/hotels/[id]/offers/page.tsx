@@ -55,6 +55,7 @@ function HotelOffersPageContent({ id }: { id: string }) {
 }
 
 export default function HotelOffersPage({ params }: { params: Promise<{ id: string }> }) {
+  console.log("Parámetros recibidos:", params);
   // Correctly unwrap the Promise-like params object with React.use()
   const resolvedParams = React.use(params);
   const { id } = resolvedParams;
