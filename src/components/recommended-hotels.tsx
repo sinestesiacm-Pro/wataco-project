@@ -152,15 +152,21 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     const fetchHotels = async () => {
       setLoading(true);
       setError(null);
-      const result = await getRecommendedHotels();
-      if (result.success && result.data) {
-        const hotelsList = result.data as Hotel[];
-        setAllHotels(hotelsList);
-        setDisplayedHotels(shuffleArray([...hotelsList]).slice(0, 4));
-      } else {
-        setError(result.error || "No se pudieron cargar los hoteles recomendados.");
+      try {
+        const result = await getRecommendedHotels();
+        if (result.success && result.data) {
+          const hotelsList = result.data as Hotel[];
+          setAllHotels(hotelsList);
+          setDisplayedHotels(shuffleArray([...hotelsList]).slice(0, 4));
+        } else {
+          setError(result.error || "No se pudieron cargar los hoteles recomendados.");
+        }
+      } catch (e: any) {
+         setError("Ocurrió un error inesperado al cargar los hoteles.");
+         console.error("Error in RecommendedHotels component:", e);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchHotels();
