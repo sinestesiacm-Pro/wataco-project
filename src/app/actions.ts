@@ -4,15 +4,14 @@
 import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData, AmadeusHotel, Room } from '@/lib/types';
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
-import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import crypto from 'crypto';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
-import { recommendedCruises } from '@/lib/mock-cruises';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
+import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
+import { db, AMADEUS_API_KEY, AMADEUS_API_SECRET, HOTELBEDS_API_KEY, HOTELBEDS_SECRET, GOOGLE_PLACES_API_KEY } from '@/lib/firebase';
+import crypto from 'crypto';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
+const HOTELBEDS_API_URL = "https://api.test.hotelbeds.com";
+
 
 const searchSchema = z.object({
   origin: z.string().min(3).max(3),
@@ -221,8 +220,8 @@ export async function searchHotels(params: {
 }
 
 export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Promise<string[]> {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
-    if (!apiKey) {
+    const apiKey = GOOGLE_PLACES_API_KEY;
+    if (!apiKey || apiKey === 'YOUR_GOOGLE_PLACES_API_KEY') {
         console.warn("Google Places API Key is not configured. Photo search is disabled.");
         return [];
     }
@@ -404,3 +403,4 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
+

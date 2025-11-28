@@ -30,7 +30,7 @@ export function FloatingActionButtons({ children }: { children: React.ReactNode 
 
 
     return (
-        <div className="lg:hidden fixed bottom-6 right-6 z-50 flex flex-col items-center gap-4">
+        <div className="lg:hidden fixed bottom-24 right-6 z-50 flex flex-col items-center gap-4">
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -60,3 +60,4 @@ export function FloatingActionButtons({ children }: { children: React.ReactNode 
         </div>
     );
 }
+
