@@ -209,7 +209,7 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
                                     locale={es}
                                 />
                                 <div className="p-2 border-t md:hidden">
-                                    <Button className="w-full" onClick={()={() => setIsCalendarOpen(false)}}>Listo</Button>
+                                    <Button className="w-full" onClick={() => setIsCalendarOpen(false)}>Listo</Button>
                                 </div>
                             </PopoverContent>
                         </Popover>
@@ -266,5 +266,3 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
         </Card>
     );
 }
-
-    
