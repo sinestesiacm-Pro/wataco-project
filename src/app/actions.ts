@@ -5,7 +5,7 @@ import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageD
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
-import { db, HOTELBEDS_API_KEY, HOTELBEDS_SECRET } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import crypto from 'crypto';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import { recommendedCruises } from '@/lib/mock-cruises';
@@ -14,6 +14,11 @@ import { FirestorePermissionError } from '@/firebase/errors';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 const HOTELBEDS_API_URL = "https://api.test.hotelbeds.com";
+
+const AMADEUS_API_KEY = process.env.NEXT_PUBLIC_AMADEUS_API_KEY;
+const AMADEUS_API_SECRET = process.env.NEXT_PUBLIC_AMADEUS_API_SECRET;
+const HOTELBEDS_API_KEY = process.env.NEXT_PUBLIC_HOTELBEDS_API_KEY;
+const HOTELBEDS_SECRET = process.env.NEXT_PUBLIC_HOTELBEDS_SECRET;
 
 
 const searchSchema = z.object({

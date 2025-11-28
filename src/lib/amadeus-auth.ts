@@ -1,7 +1,5 @@
-
 // This file is designated to run on the server only.
 // Do not import it in client-side components.
-import { AMADEUS_API_KEY, AMADEUS_API_SECRET } from './firebase';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 
@@ -21,6 +19,9 @@ export async function getAmadeusToken(): Promise<string> {
   }
 
   console.log("diagnose: Requesting new Amadeus token.");
+  const AMADEUS_API_KEY = process.env.NEXT_PUBLIC_AMADEUS_API_KEY;
+  const AMADEUS_API_SECRET = process.env.NEXT_PUBLIC_AMADEUS_API_SECRET;
+
   if (!AMADEUS_API_KEY || !AMADEUS_API_SECRET) {
     throw new Error('Las credenciales de la API de Amadeus no están configuradas en el archivo .env.');
   }
