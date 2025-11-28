@@ -39,15 +39,54 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
           return;
       }
 
-      // If no offer is in history state, it means the user likely refreshed the page.
-      // We can't reliably refetch the exact offer, so we show an error.
-      console.warn("No offer data found in state. The user may have refreshed the page.");
-      setError("No se pudieron cargar los detalles de la oferta. Por favor, vuelve a la página de resultados e inténtalo de nuevo.");
-      setLoading(false);
+      // If no offer is in history state, it means the user likely refreshed the page or navigated directly.
+      // We need to fetch the offer details.
+      try {
+        const hotelDetailsResult = await getFirestoreHotelDetails(hotelId);
+        if (!hotelDetailsResult.success || !hotelDetailsResult.data) {
+          throw new Error(hotelDetailsResult.error || "No se pudieron cargar los detalles del hotel desde la base de datos.");
+        }
+        
+        const hotelData = hotelDetailsResult.data;
+        const cityCode = hotelData.address.cityName.substring(0, 3).toUpperCase();
+
+        const searchResult = await searchHotels({
+          cityCode: cityCode,
+          destinationName: hotelData.address.cityName,
+          checkInDate,
+          checkOutDate,
+          adults: adults,
+        });
+
+        if (searchResult.success && searchResult.data) {
+           const specificOffer = searchResult.data.find((o: AmadeusHotelOffer) => o.hotel.hotelId === hotelId);
+            if (specificOffer) {
+                setHotelOffer(specificOffer);
+            } else {
+                 // Fallback to creating a mock offer if not found in live search
+                 console.warn("Offer not found in live search, creating a mock offer from details.");
+                 const mockOffer: AmadeusHotelOffer = {
+                    type: 'hotel-offer',
+                    id: hotelId,
+                    hotel: hotelData,
+                    available: true,
+                    offers: MOCK_ROOMS_DATA,
+                 };
+                 setHotelOffer(mockOffer);
+            }
+        } else {
+          throw new Error(searchResult.error || "La búsqueda de ofertas de hotel en vivo falló.");
+        }
+
+      } catch (e: any) {
+        setError("No se pudieron cargar los detalles de la oferta. Por favor, vuelve a la página de resultados e inténtalo de nuevo.");
+      } finally {
+        setLoading(false);
+      }
     };
     
     fetchHotelData();
-  }, [hotelId, checkInDate, checkOutDate]);
+  }, [hotelId, adults, checkInDate, checkOutDate]);
 
   const handleRoomsSelected = (rooms: SelectedRoom[]) => {
     setSelectedRooms(rooms);
@@ -73,7 +112,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
         <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
             <CardContent className="pt-6 text-center">
                 <h3 className="font-bold">Error al Cargar Ofertas</h3>
-                <p className="text-sm mt-2">{error || 'Hotel no encontrado en la base de datos.'}</p>
+                <p className="text-sm mt-2">{error || 'No se pudieron cargar los detalles de la oferta. Por favor, vuelve a la página de resultados e inténtalo de nuevo.'}</p>
             </CardContent>
         </Card>
     )

@@ -40,10 +40,8 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   const handleViewHotel = (offer: AmadeusHotelOffer) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set('hotelId', String(offer.hotel.hotelId));
+      // The destinationName and cityCode should already be on the searchParams from the search page
       const url = `/hotels/${offer.hotel.hotelId}/offers?${params.toString()}`;
-
-      // Pass the offer object via history state to avoid re-fetching
-      window.history.pushState({ ...window.history.state, offer }, '', url);
       router.push(url);
   }
 
