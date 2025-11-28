@@ -54,8 +54,8 @@ function HotelOffersPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelOffersPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function HotelOffersPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   
   return (
     <Suspense fallback={
