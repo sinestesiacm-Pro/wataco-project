@@ -45,6 +45,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                 .map(p => p.uri)
                 .filter(uri => uri && uri.trim() !== '');
 
+            // Combine and deduplicate, prioritizing Google Photos
             const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
             
             // Filter out empty strings from the combined array
