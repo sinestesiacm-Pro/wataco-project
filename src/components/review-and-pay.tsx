@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { FlightOffer, Dictionaries, Itinerary } from '@/lib/types';
@@ -16,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 import { cn } from '@/lib/utils';
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 
 interface ReviewAndPayProps {
     outboundFlight: FlightOffer;
@@ -30,76 +30,11 @@ const formatDuration = (duration: string) => duration.replace('PT', '').replace(
 const formatTime = (dateString: string) => new Date(dateString).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
 const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('es-ES', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
 
-// Improved city name resolver
-const getCityName = (iataCode: string, dictionaries: Dictionaries): string => {
-    const location = dictionaries.locations[iataCode];
-    if (!location) return iataCode;
-    
-    // The location object for a city code has the same cityCode and iataCode.
-    // e.g., for Toronto (YTO), the locations entry for YTO might be { cityCode: 'YTO', countryCode: 'CA' }
-    // The name of the city is not directly in the dictionaries but can be inferred from other airports in that city.
-    // Let's find an airport with that city code to get the name.
-    const cityLocation = Object.values(dictionaries.locations).find(loc => loc.cityCode === location.cityCode && loc.cityCode !== iataCode);
-    
-    // A simpler and more reliable way might be to just use the cityCode itself for lookup if it's different.
-    // The dictionaries structure is tricky: dictionaries.locations['YYZ'] = { cityCode: 'YTO', ... }. dictionaries.locations['YTO'] doesn't have a name.
-    // Let's find an airport that belongs to this city code to infer the city name
-    const airportInCity = Object.values(dictionaries.locations).find(loc => loc.cityCode === location.cityCode);
-    if (airportInCity) {
-      // Find the city entry from an airport code.
-      const mainCity = Object.values(dictionaries.locations).find(loc => loc.cityCode === airportInCity.cityCode);
-      // This is a guess. The dictionary structure is not ideal. A better way would be a direct city name mapping.
-      // For now, we will assume the city name can be found from one of its airports' address.
-      // This is not in the provided `dictionaries` type, so we have to assume a structure.
-      // Let's go back to a simpler logic that is more robust.
-      const locationData = dictionaries.locations[location.cityCode];
-      if (locationData && locationData.cityCode) {
-           const cityValue = Object.entries(dictionaries.locations).find(([key, value]) => value.cityCode === location.cityCode && key === value.cityCode);
-           // Based on Amadeus response, city name is not in the dictionary. We have to parse it.
-           // A real solution would be to call the locations API, but for now we improvise from what we have.
-           // Since the city name is not in the dictionaries, we need to find an airport that belongs to it.
-           // The provided data does not seem to have the city name. We will mock a mapping for common codes.
-           const cityMap: {[key:string]: string} = { 'YTO': 'Toronto', 'PAR': 'Paris', 'LON': 'London', 'NYC': 'New York' };
-           if(cityMap[location.cityCode]) return cityMap[location.cityCode];
 
-           return location.cityCode;
-      }
-    }
-    
-    return iataCode;
-};
-
-const StopInfo = ({ itinerary, dictionaries }: { itinerary: Itinerary, dictionaries: Dictionaries }) => {
-    if (itinerary.segments.length <= 1) return null;
-    
-    return (
-        <div className="space-y-4 px-2 mt-4">
-            {itinerary.segments.slice(0, -1).map((segment, index) => {
-                const nextSegment = itinerary.segments[index + 1];
-                const layoverDuration = new Date(nextSegment.departure.at).getTime() - new Date(segment.arrival.at).getTime();
-                const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
-                const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
-                
-                const cityName = getCityName(segment.arrival.iataCode, dictionaries);
-
-                return (
-                     <div key={`stop-${index}`} className="text-xs text-center text-muted-foreground">
-                        <p className="font-semibold">Escala en {cityName}</p>
-                        <p>Duración: {hours}h {minutes}m</p>
-                    </div>
-                )
-            })}
-        </div>
-    )
-}
-
-
-const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { title: string, itinerary: Itinerary, dictionaries: Dictionaries, onChangeClick: () => void }) => {
+const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick, originCityName, destinationCityName }: { title: string, itinerary: Itinerary, dictionaries: Dictionaries, onChangeClick: () => void, originCityName: string, destinationCityName: string }) => {
     const firstSegment = itinerary.segments[0];
     const lastSegment = itinerary.segments[itinerary.segments.length - 1];
     const airlineName = dictionaries.carriers[firstSegment.carrierCode] || firstSegment.carrierCode;
-    const originCityName = getCityName(firstSegment.departure.iataCode, dictionaries);
-    const destinationCityName = getCityName(lastSegment.arrival.iataCode, dictionaries);
     const airlineCode = firstSegment.carrierCode;
     const stops = itinerary.segments.length - 1;
 
@@ -156,6 +91,31 @@ const FlightSummaryCard = ({ title, itinerary, dictionaries, onChangeClick }: { 
      </Collapsible>
     );
 };
+
+const StopInfo = ({ itinerary, dictionaries }: { itinerary: Itinerary, dictionaries: Dictionaries }) => {
+    if (itinerary.segments.length <= 1) return null;
+    
+    return (
+        <div className="space-y-4 px-2 mt-4">
+            {itinerary.segments.slice(0, -1).map((segment, index) => {
+                const nextSegment = itinerary.segments[index + 1];
+                const layoverDuration = new Date(nextSegment.departure.at).getTime() - new Date(segment.arrival.at).getTime();
+                const hours = Math.floor(layoverDuration / (1000 * 60 * 60));
+                const minutes = Math.floor((layoverDuration % (1000 * 60 * 60)) / (1000 * 60));
+                
+                const cityCode = dictionaries.locations[segment.arrival.iataCode]?.cityCode;
+                const cityName = cityCode || segment.arrival.iataCode;
+
+                return (
+                     <div key={`stop-${index}`} className="text-xs text-center text-muted-foreground">
+                        <p className="font-semibold">Escala en {cityName}</p>
+                        <p>Duración: {hours}h {minutes}m</p>
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
 
 const additionalServices = [
     { id: 'insurance', name: 'Seguro de Viaje Completo', description: 'Cobertura médica, de equipaje y cancelación.', price: 45.50, icon: ShieldCheck },
@@ -265,6 +225,10 @@ const PriceSummaryCard = ({outboundFlight, returnFlight, addonsPrice }: {outboun
 
 export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addonsPrice, onOutboundChange, onReturnChange }: ReviewAndPayProps) {
     const [extraServicesPrice, setExtraServicesPrice] = useState(0);
+    const searchParams = useSearchParams();
+    const originQuery = searchParams.get('originQuery') || outboundFlight.itineraries[0].segments[0].departure.iataCode;
+    const destinationQuery = searchParams.get('destinationQuery') || outboundFlight.itineraries[0].segments.slice(-1)[0].arrival.iataCode;
+
     const returnItinerary = returnFlight ? (returnFlight.itineraries.length > 1 ? returnFlight.itineraries[1] : returnFlight.itineraries[0]) : null;
 
     return (
@@ -272,10 +236,24 @@ export function ReviewAndPay({ outboundFlight, returnFlight, dictionaries, addon
             <div className="lg:col-span-8 space-y-6">
                 <h2 className="text-3xl font-headline font-bold">Revisa y completa tu reserva</h2>
                 
-                <FlightSummaryCard title="Vuelo de Ida" itinerary={outboundFlight.itineraries[0]} dictionaries={dictionaries} onChangeClick={onOutboundChange} />
+                <FlightSummaryCard 
+                    title="Vuelo de Ida" 
+                    itinerary={outboundFlight.itineraries[0]} 
+                    dictionaries={dictionaries} 
+                    onChangeClick={onOutboundChange}
+                    originCityName={originQuery}
+                    destinationCityName={destinationQuery}
+                />
                 
                 {returnFlight && onReturnChange && returnItinerary && (
-                    <FlightSummaryCard title="Vuelo de Vuelta" itinerary={returnItinerary} dictionaries={dictionaries} onChangeClick={onReturnChange} />
+                    <FlightSummaryCard 
+                        title="Vuelo de Vuelta" 
+                        itinerary={returnItinerary} 
+                        dictionaries={dictionaries} 
+                        onChangeClick={onReturnChange}
+                        originCityName={destinationQuery}
+                        destinationCityName={originQuery}
+                    />
                 )}
 
                 <Separator/>
