@@ -36,7 +36,7 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
       try {
         const hotelDetailsResult = await getFirestoreHotelDetails(hotelId);
         if (!hotelDetailsResult.success || !hotelDetailsResult.data) {
-          throw new Error(hotelDetailsResult.error || "No se pudieron cargar los detalles del hotel desde la base de datos.");
+          throw new Error("No se pudieron cargar los detalles del hotel desde la base de datos.");
         }
         
         const hotelData = hotelDetailsResult.data;
@@ -67,11 +67,11 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
                  setHotelOffer(mockOffer);
             }
         } else {
-          throw new Error(searchResult.error || "La búsqueda de ofertas de hotel en vivo falló.");
+          throw new Error(searchResult.error || "No se encontraron habitaciones para este hotel y fecha. Prueba otra fecha o destino.");
         }
 
       } catch (e: any) {
-        setError("No se pudieron cargar los detalles de la oferta. Por favor, vuelve a la página de resultados e inténtalo de nuevo.");
+        setError(e.message || "No se pudieron cargar los detalles de la oferta. Por favor, vuelve a la página de resultados e inténtalo de nuevo.");
       } finally {
         setLoading(false);
       }
