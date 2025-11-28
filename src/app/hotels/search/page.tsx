@@ -16,6 +16,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import HotelSearchPage from "@/components/hotel-search-page";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { HotelLoadingAnimation } from "@/components/hotel-loading-animation";
+import { FloatingActionButtons } from "@/components/floating-action-buttons";
 
 
 type HotelFiltersState = {
@@ -160,7 +161,7 @@ function HotelResultsPageContent() {
                 />
                 </div>
             </aside>
-            <div className="lg:hidden fixed bottom-24 right-6 z-50">
+            <FloatingActionButtons>
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4">
@@ -181,7 +182,7 @@ function HotelResultsPageContent() {
                         </ScrollArea>
                     </DialogContent>
                 </Dialog>
-                </div>
+            </FloatingActionButtons>
             <main className="lg:col-span-9">
             {filteredHotels && filteredHotels.length > 0 ? (
                 <HotelResults hotels={filteredHotels} searchParams={searchParams} />
