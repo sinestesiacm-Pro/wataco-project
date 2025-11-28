@@ -270,7 +270,7 @@ export async function searchHotels(params: {
             hotel: {
                 hotelId: hotel.code.toString(),
                 name: hotel.name,
-                rating: hotel.categoryName.match(/\d/)?.[0] || '3', // Extract star number
+                rating: hotel.categoryName.match(/\\d/)?.[0] || '3', // Extract star number
                 address: {
                     cityName: hotel.destinationName,
                     countryCode: hotel.countryCode,
@@ -353,12 +353,16 @@ export async function getFirestoreHotelDetails(id: string): Promise<{ success: b
 
         return { success: true, data: hotelData };
     } catch (err: any) {
-        const permissionError = new FirestorePermissionError({
-          path: hotelDocRef.path,
-          operation: 'get',
-        });
-        errorEmitter.emit('permission-error', permissionError);
-        return { success: false, error: permissionError.message };
+        if (err.code === 'permission-denied') {
+            const permissionError = new FirestorePermissionError({
+                path: hotelDocRef.path,
+                operation: 'get',
+            });
+            errorEmitter.emit('permission-error', permissionError);
+            return { success: false, error: permissionError.message };
+        }
+        
+        return { success: false, error: err.message || 'Ocurrió un error inesperado al buscar el hotel.' };
     }
 }
 
