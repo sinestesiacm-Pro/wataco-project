@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -127,5 +126,3 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
 
   return <div>{renderStep()}</div>;
 }
-
-    
