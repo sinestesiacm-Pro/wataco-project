@@ -1,7 +1,7 @@
 
 'use server';
 
-import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData, AmadeusHotel, Room, AmadeusHotelSearchResponse } from '@/lib/types';
+import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageData, CruiseData, AmadeusHotel, Room } from '@/lib/types';
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
@@ -11,6 +11,7 @@ import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import { recommendedCruises } from '@/lib/mock-cruises';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { RAPIDAPI_KEY, GOOGLE_PLACES_API_KEY } from '@/lib/firebase';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 
@@ -175,75 +176,127 @@ export async function searchHotelDestinations(keyword: string): Promise<{ succes
 }
 
 const hotelSearchSchema = z.object({
-  cityCode: z.string().min(3).max(3),
-  destinationName: z.string().optional(),
+  cityCode: z.string().min(2), // Sky Scrapper uses 2-letter codes
   checkInDate: z.string(),
   checkOutDate: z.string(),
   adults: z.number().int().min(1),
-  ratings: z.array(z.number()).optional(),
-  amenities: z.array(z.string()).optional(),
+  currency: z.string().optional().default('USD'),
 });
 
+// This function now implements the `searchHotelsHybrid` logic.
 export async function searchHotels(params: {
   cityCode: string;
-  destinationName?: string;
   checkInDate: string;
   checkOutDate: string;
   adults: number;
-  ratings?: number[];
-  amenities?: string[];
+  currency?: string;
 }): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
-    const validation = hotelSearchSchema.safeParse(params);
-    if (!validation.success) {
-        return { success: false, error: 'Parámetros de búsqueda de hotel inválidos.' };
+  const validation = hotelSearchSchema.safeParse(params);
+  if (!validation.success) {
+    return { success: false, error: 'Invalid hotel search parameters.' };
+  }
+
+  if (!RAPIDAPI_KEY || RAPIDAPI_KEY === 'YOUR_RAPIDAPI_KEY') {
+    return { success: false, error: "La API de RapidAPI (Sky Scrapper) no está configurada. Por favor, añade la RAPIDAPI_KEY." };
+  }
+
+  const { cityCode, checkInDate, checkOutDate, adults, currency } = validation.data;
+
+  // Step 1: Call Sky Scrapper API
+  const options = {
+    method: 'POST',
+    headers: {
+      'X-RapidAPI-Key': RAPIDAPI_KEY,
+      'X-RapidAPI-Host': 'sky-scrapper.p.rapidapi.com',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      checkInDate,
+      checkOutDate,
+      cityCode,
+      adults,
+      currency
+    })
+  };
+
+  try {
+    const response = await fetch('https://sky-scrapper.p.rapidapi.com/api/v1/hotels/searchHotels', options);
+    
+    if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({ message: 'HTTP error with no JSON body' }));
+        console.error('Sky Scrapper API Error:', errorBody);
+        return { success: false, error: `Sky Scrapper API request failed: ${errorBody.message || response.statusText}` };
+    }
+
+    const skyScrapperData = await response.json();
+    const hotelsFromSkyScrapper = skyScrapperData.data.hotels || [];
+
+    // Step 2 & 3: Enrich with Google Places and merge data (Placeholder for now)
+    const enrichedHotels = await Promise.all(hotelsFromSkyScrapper.map(async (hotel: any) => {
+        // TODO: Implement Google Places API call here
+        // For now, we will map the data directly and add placeholders
+
+        // Map Sky Scrapper data to our AmadeusHotelOffer structure
+        const mappedOffer: AmadeusHotelOffer = {
+            type: 'hotel-offer',
+            id: hotel.hotelId,
+            hotel: {
+                hotelId: hotel.hotelId,
+                name: hotel.name,
+                rating: hotel.rating?.value?.toString() || '0',
+                address: {
+                    cityName: hotel.city, // Assuming city is provided, might need mapping
+                    countryCode: cityCode, // Placeholder, Google Places will provide this
+                    lines: [hotel.relevantPoiDistance || ''],
+                    postalCode: '',
+                },
+                media: hotel.images?.map((url: string) => ({ uri: url, category: 'PHOTO' })) || [],
+                amenities: hotel.amenities || [],
+            },
+            available: true,
+            offers: [
+                {
+                    id: `${hotel.hotelId}-offer`,
+                    price: {
+                        currency: currency || 'USD',
+                        total: hotel.price ? hotel.price.replace('$', '') : '0.00',
+                        base: hotel.price ? hotel.price.replace('$', '') : '0.00',
+                    },
+                    room: {
+                        type: 'STANDARD_ROOM',
+                        description: { text: 'Detalles de la habitación no disponibles en Sky Scrapper' }
+                    },
+                    checkInDate: checkInDate,
+                    checkOutDate: checkOutDate
+                }
+            ]
+        };
+        return mappedOffer;
+    }));
+
+    if (enrichedHotels.length === 0) {
+        return { success: false, error: 'No hotels found for the selected criteria.' };
     }
     
-    const { cityCode, checkInDate, checkOutDate, adults, ratings, amenities } = validation.data;
-    
-    try {
-        const token = await getAmadeusToken();
+    // Step 4: Return enriched hotels array (limited to 30)
+    return { success: true, data: enrichedHotels.slice(0, 30) };
 
-        const hotelListParams = new URLSearchParams({ cityCode });
-        const hotelListResponse = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations/hotels/by-city?${hotelListParams.toString()}`, {
-             headers: { Authorization: `Bearer ${token}` },
-        });
+  } catch (err: any) {
+    console.error('Error in searchHotelsHybrid action:', err);
+    // Use fallback mock data if there's any unhandled error
+    return { 
+        success: true, 
+        data: MOCK_HOTELS_DATA, 
+        error: `API falló, usando datos de muestra. Error: ${err.message}` 
+    };
+  }
+}
 
-        if (!hotelListResponse.ok) throw new Error('No se pudieron obtener los hoteles para la ciudad seleccionada.');
-        const hotelListData = await hotelListResponse.json();
-        const hotelIds = hotelListData.data.map((hotel: any) => hotel.hotelId).slice(0, 30); // Limit to 30 hotels for performance
-
-        const offerParams = new URLSearchParams({
-            hotelIds: hotelIds.join(','),
-            adults: adults.toString(),
-            checkInDate: checkInDate,
-            checkOutDate: checkOutDate,
-            currency: 'USD',
-            paymentPolicy: 'NONE',
-            bestRateOnly: 'true',
-        });
-
-        const offersResponse = await fetch(`${AMADEUS_BASE_URL}/v3/shopping/hotel-offers?${offerParams.toString()}`, {
-             headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!offersResponse.ok) {
-            const errorBody = await offersResponse.json();
-            console.error('Amadeus Hotel Offers API Error:', errorBody);
-            throw new Error(errorBody.errors?.[0]?.detail || 'No se pudieron obtener ofertas de hotel.');
-        }
-
-        const offersData: AmadeusHotelSearchResponse = await offersResponse.json();
-        
-        if (offersData.data.length === 0) {
-            return { success: false, error: "No se encontraron ofertas de hotel para las fechas y destino seleccionados." };
-        }
-
-        return { success: true, data: offersData.data };
-
-    } catch (err: any) {
-        console.error('Error in searchHotels action (Amadeus):', err);
-        return { success: false, error: err.message || 'Ocurrió un error inesperado al buscar hoteles.' };
-    }
+// TODO: Create getHotelDetailsHybrid function
+export async function getHotelDetailsHybrid(hotelId: string, checkInDate: string, checkOutDate: string) {
+    // This function will call Sky Scrapper's getDetails endpoint and enrich with Google Places.
+    console.log("getHotelDetailsHybrid called with:", { hotelId, checkInDate, checkOutDate });
+    return { success: false, error: "getHotelDetailsHybrid no está implementado." };
 }
 
 
@@ -329,8 +382,6 @@ export async function searchCruises(params: {
   if (!validation.success) {
     return { success: false, error: 'Invalid cruise search parameters.' };
   }
-
-  const { destinationRegion } = validation.data;
 
   // Simulate API call and filtering based on mock data
   try {
@@ -426,3 +477,5 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }
+
+    
