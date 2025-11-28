@@ -9,10 +9,11 @@ import { getGooglePlacePhotos } from '@/app/actions';
 import { useEffect, useState } from 'react';
 import { Skeleton } from './ui/skeleton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { useRouter } from 'next/navigation';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
-    onViewHotel: (offer: AmadeusHotelOffer) => void;
+    searchParams: URLSearchParams;
 }
 
 const renderStars = (rating: string | undefined) => {
@@ -28,12 +29,18 @@ const renderStars = (rating: string | undefined) => {
     );
 };
 
-const HotelCard = ({ offer, onViewHotel }: { offer: AmadeusHotelOffer, onViewHotel: (offer: AmadeusHotelOffer) => void }) => {
+const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchParams: URLSearchParams }) => {
     const [photos, setPhotos] = useState<string[]>([]);
     const [loadingPhotos, setLoadingPhotos] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchPhotos = async () => {
+            if (!offer.hotel.name || !offer.hotel.address.cityName) {
+                setLoadingPhotos(false);
+                setPhotos(['https://placehold.co/800x600.png?text=No+Image']);
+                return;
+            }
             setLoadingPhotos(true);
             const photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
             
@@ -41,18 +48,24 @@ const HotelCard = ({ offer, onViewHotel }: { offer: AmadeusHotelOffer, onViewHot
                 .map(p => p.uri)
                 .filter(uri => !!uri);
 
-            const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
-            const validPhotos = combinedPhotos.filter(p => p && p.trim() !== '');
+            const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
 
-            setPhotos(validPhotos.length > 0 ? validPhotos : ['https://placehold.co/800x600.png?text=Image+not+found']);
+            setPhotos(combinedPhotos.length > 0 ? combinedPhotos : ['https://placehold.co/800x600.png?text=Image+not+found']);
             setLoadingPhotos(false);
         };
 
-        if (offer.hotel.name && offer.hotel.address.cityName) {
-          fetchPhotos();
-        }
+        fetchPhotos();
     }, [offer.hotel.name, offer.hotel.address.cityName, offer.hotel.media]);
 
+    const handleViewHotel = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        const hotelId = offer.hotel.hotelId || offer.id;
+        
+        const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+        
+        // Pass the offer data through router state to avoid re-fetching on the next page
+        router.push(url, { state: { offer } } as any);
+    };
 
     return (
         <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[4/5] relative flex flex-col justify-end shadow-card-3d hover:scale-[1.02]">
@@ -72,6 +85,7 @@ const HotelCard = ({ offer, onViewHotel }: { offer: AmadeusHotelOffer, onViewHot
                                             fill
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                                            unoptimized={photo.includes('placehold.co')}
                                         />
                                     </div>
                                 </CarouselItem>
@@ -106,7 +120,7 @@ const HotelCard = ({ offer, onViewHotel }: { offer: AmadeusHotelOffer, onViewHot
                           ${offer.offers?.[0]?.price?.total}
                         </p>
                     </div>
-                     <Button onClick={() => onViewHotel(offer)} size="lg" className="font-semibold bg-white/20 backdrop-blur-lg border-white/30 hover:bg-white/30 text-white">
+                     <Button onClick={handleViewHotel} size="lg" className="font-semibold bg-white/20 backdrop-blur-lg border-white/30 hover:bg-white/30 text-white">
                         Ver Habitaciones
                      </Button>
               </div>
@@ -115,12 +129,14 @@ const HotelCard = ({ offer, onViewHotel }: { offer: AmadeusHotelOffer, onViewHot
     );
 };
 
-export function HotelResults({ hotels, onViewHotel }: HotelResultsProps) {
+export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {hotels.map((offer) => (
-        <HotelCard key={`${offer.id}`} offer={offer} onViewHotel={onViewHotel} />
+        <HotelCard key={`${offer.id}`} offer={offer} searchParams={searchParams} />
       ))}
     </div>
   );
 }
+
+    

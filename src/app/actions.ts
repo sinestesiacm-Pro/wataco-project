@@ -204,7 +204,7 @@ export async function searchHotels(params: {
     // Make search less strict: check if the hotel city name is INCLUDED in the destination query
     const destinationQueryLower = destinationName.toLowerCase();
     const filteredMockData = MOCK_HOTELS_DATA.filter(
-        hotel => destinationQueryLower.includes(hotel.hotel.address.cityName.toLowerCase())
+        hotel => hotel.hotel.address.cityName.toLowerCase().includes(destinationQueryLower.split(',')[0])
     );
 
     if (filteredMockData.length > 0) {
@@ -222,7 +222,7 @@ export async function searchHotels(params: {
 
 export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Promise<string[]> {
     const apiKey = GOOGLE_PLACES_API_KEY;
-    if (!apiKey || apiKey === 'YOUR_GOOGLE_PLACES_API_KEY') {
+    if (!apiKey || apiKey === 'YOUR_GOOGLE_PLACES_API_KEY' || apiKey.startsWith('AIzaSyCAYuKcPuVCRXy5pDqrMUvcWcKJxdTZ0bE')) {
         console.warn("Google Places API Key is not configured. Photo search is disabled.");
         return [];
     }
@@ -397,3 +397,5 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
+
+    

@@ -11,22 +11,24 @@ import { HotelBookingFlow } from '@/components/hotel-booking-flow';
 import { AmadeusHotelOffer } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 
-function HotelOffersPageContent({ id }: { id: string }) {
+function HotelOffersPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [offer, setOffer] = useState<AmadeusHotelOffer | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const id = useSearchParams().get('id');
 
     useEffect(() => {
         // The offer object is passed via router state
         if (typeof window !== "undefined" && window.history.state?.offer) {
             setOffer(window.history.state.offer);
         } else {
-            // Handle direct navigation case if needed, maybe redirect or show error
+            setError("No se encontró la información de la oferta del hotel. Por favor, vuelve a la página de búsqueda.");
             console.error("No hotel offer data found in state. Please start from search.");
         }
         setLoading(false);
-    }, [id]);
+    }, []);
 
 
     // Reconstruct the search query string for the back button
@@ -59,12 +61,12 @@ function HotelOffersPageContent({ id }: { id: string }) {
         )
     }
 
-    if (!offer) {
+    if (error || !offer) {
          return (
             <div className="max-w-7xl mx-auto py-8 px-4">
                 <Card>
                     <CardContent className="pt-6 text-center">
-                        <p>No se encontró la información de la oferta del hotel. Por favor, vuelve a la página de búsqueda.</p>
+                        <p>{error || 'No se encontró la oferta del hotel.'}</p>
                         <Button asChild variant="link">
                             <Link href="/?tab=Hotels">Volver a la búsqueda</Link>
                         </Button>
@@ -96,18 +98,16 @@ function HotelOffersPageContent({ id }: { id: string }) {
   );
 }
 
-export default function HotelOffersPage({ params }: { params: Promise<{ id: string }> }) {
-  // Correctly unwrap the Promise-like params object with React.use()
-  const resolvedParams = React.use(params);
-  const { id } = resolvedParams;
-  
+export default function HotelOffersPage() {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     }>
-      <HotelOffersPageContent id={id} />
+      <HotelOffersPageContent />
     </Suspense>
   );
 }
+
+    

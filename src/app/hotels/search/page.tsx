@@ -69,16 +69,6 @@ function HotelResultsPageContent() {
 
         runSearch();
     }, [destinationName, checkInDate, checkOutDate, adults]);
-
-    const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
-        const params = new URLSearchParams(searchParams.toString());
-        const hotelId = offer.hotel.hotelId || offer.id;
-        
-        const url = `/hotels/${hotelId}/offers?${params.toString()}`;
-        
-        // Pass the offer data through router state to avoid re-fetching on the next page
-        router.push(url, { state: { offer } } as any);
-    }, [router, searchParams]);
     
     const filteredHotels = useMemo(() => {
       if (!hotels) return null;
@@ -139,8 +129,8 @@ function HotelResultsPageContent() {
             <Collapsible className="mb-6 bg-card/80 backdrop-blur-xl border p-4 rounded-2xl shadow-card-3d">
                 <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl sm:text-4xl font-bold font-headline">Hoteles en {destinationName}</h1>
-                    <p className="text-muted-foreground mt-1">
+                    <h1 className="text-2xl font-bold font-headline">Hoteles en {destinationName}</h1>
+                    <p className="text-muted-foreground mt-1 text-sm">
                         {filteredHotels ? `${filteredHotels.length} resultados encontrados` : ''}
                     </p>
                 </div>
@@ -195,7 +185,7 @@ function HotelResultsPageContent() {
             </FloatingActionButtons>
             <main className="lg:col-span-9">
             {filteredHotels && filteredHotels.length > 0 ? (
-                <HotelResults hotels={filteredHotels} onViewHotel={handleViewHotel} />
+                <HotelResults hotels={filteredHotels} searchParams={searchParams} />
             ) : (
                 <Card>
                     <CardContent className="pt-6 text-center text-muted-foreground">
@@ -222,3 +212,5 @@ export default function HotelSearchPageWrapper() {
     </Suspense>
   )
 }
+
+    
