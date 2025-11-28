@@ -33,14 +33,6 @@ export function HotelBookingFlow({ hotelId, adults, children, checkInDate, check
       setLoading(true);
       setError(null);
       
-      if (typeof window !== "undefined" && window.history.state?.offer) {
-          setHotelOffer(window.history.state.offer);
-          setLoading(false);
-          return;
-      }
-
-      // If no offer is in history state, it means the user likely refreshed the page or navigated directly.
-      // We need to fetch the offer details.
       try {
         const hotelDetailsResult = await getFirestoreHotelDetails(hotelId);
         if (!hotelDetailsResult.success || !hotelDetailsResult.data) {

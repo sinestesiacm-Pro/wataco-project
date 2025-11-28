@@ -39,9 +39,9 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
 
   const handleViewHotel = (offer: AmadeusHotelOffer) => {
       const params = new URLSearchParams(searchParams.toString());
-      params.set('hotelId', String(offer.hotel.hotelId));
-      // The destinationName and cityCode should already be on the searchParams from the search page
-      const url = `/hotels/${offer.hotel.hotelId}/offers?${params.toString()}`;
+      // The hotelId from Firestore is in offer.id when seeded, but from API it's in hotel.hotelId
+      const hotelId = offer.hotel.hotelId || offer.id;
+      const url = `/hotels/${hotelId}?${params.toString()}`;
       router.push(url);
   }
 
