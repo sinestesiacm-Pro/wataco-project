@@ -9,6 +9,8 @@ import { db, HOTELBEDS_API_KEY, HOTELBEDS_SECRET } from '@/lib/firebase';
 import crypto from 'crypto';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import { recommendedCruises } from '@/lib/mock-cruises';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com';
 const HOTELBEDS_API_URL = "https://api.test.hotelbeds.com";
@@ -320,8 +322,9 @@ export async function searchHotels(params: {
 
 
 export async function getFirestoreHotelDetails(id: string): Promise<{ success: boolean; data?: AmadeusHotel; error?: string }> {
+    const hotelDocRef = doc(db, 'hoteles', id);
+
     try {
-        const hotelDocRef = doc(db, 'hoteles', id);
         const hotelDoc = await getDoc(hotelDocRef);
 
         if (!hotelDoc.exists()) {
@@ -350,8 +353,12 @@ export async function getFirestoreHotelDetails(id: string): Promise<{ success: b
 
         return { success: true, data: hotelData };
     } catch (err: any) {
-        console.error('Error fetching hotel from Firestore:', err);
-        return { success: false, error: err.message || 'Ocurrió un error inesperado al buscar el hotel.' };
+        const permissionError = new FirestorePermissionError({
+          path: hotelDocRef.path,
+          operation: 'get',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+        return { success: false, error: permissionError.message };
     }
 }
 
