@@ -33,9 +33,13 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                 .map(p => p.uri)
                 .filter(uri => !!uri);
 
-            const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
+            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
 
-            setPhotos(combinedPhotos.length > 0 ? combinedPhotos : ['https://placehold.co/400x300.png']);
+            if (combinedPhotos.length === 0) {
+                 combinedPhotos = ['https://placehold.co/400x300.png?text=Image+not+found'];
+            }
+
+            setPhotos(combinedPhotos);
             setLoadingPhotos(false);
         };
 
@@ -135,3 +139,5 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
+
+    

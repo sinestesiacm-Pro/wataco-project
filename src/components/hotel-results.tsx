@@ -48,9 +48,13 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                 .map(p => p.uri)
                 .filter(uri => !!uri);
 
-            const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
+            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
 
-            setPhotos(combinedPhotos.length > 0 ? combinedPhotos : ['https://placehold.co/800x600.png?text=Image+not+found']);
+            if (combinedPhotos.length === 0) {
+                 combinedPhotos = ['https://placehold.co/800x600.png?text=Image+not+found'];
+            }
+
+            setPhotos(combinedPhotos);
             setLoadingPhotos(false);
         };
 
@@ -68,7 +72,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
     };
 
     return (
-        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[4/5] relative flex flex-col justify-end shadow-card-3d hover:scale-[1.02]">
+        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[16/9] relative flex flex-col justify-end shadow-card-3d hover:scale-[1.02]">
             <div className="absolute inset-0">
                 {loadingPhotos ? (
                     <Skeleton className="h-full w-full" />
@@ -138,3 +142,5 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
+
+    
