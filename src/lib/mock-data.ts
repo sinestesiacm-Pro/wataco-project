@@ -301,5 +301,20 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       },
       available: true,
       offers: [{ id: 'offer-fra1', price: { currency: 'USD', total: '1500.00', base: '1400' }, room: { type: 'SEA_VIEW_ROOM', description: { text: 'Habitación con vistas al Mediterráneo'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
+    },
+    {
+      type: 'hotel-offer',
+      id: 'MIA001',
+      hotel: {
+        hotelId: 'MIA001',
+        name: 'Fontainebleau Miami Beach',
+        rating: '5',
+        description: { lang: 'es', text: 'Un ícono de Miami que combina el glamour de la época dorada con el lujo moderno.' },
+        address: { cityName: 'Miami', countryCode: 'US', lines: ['4441 Collins Ave'], postalCode: '33140' },
+        media: [ { uri: "https://images.unsplash.com/photo-1549294413-26f195200c16?w=800", category: 'POOL' } ],
+        amenities: ['SWIMMING_POOL', 'SPA', 'BEACH_ACCESS', 'RESTAURANT']
+      },
+      available: true,
+      offers: [{ id: 'offer-mia1', price: { currency: 'USD', total: '550.00', base: '500' }, room: { type: 'OCEAN_VIEW', description: { text: 'Habitación con vistas al mar'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
     }
   ];

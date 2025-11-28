@@ -184,6 +184,27 @@ const hotelSearchSchema = z.object({
   currency: z.string().optional().default('USD'),
 });
 
+const handleFallback = (destinationName: string, errorMessage: string) => {
+    console.warn(`DIAGNÓSTICO: ${errorMessage}`);
+    const destinationCity = destinationName.split(',')[0].toLowerCase();
+    const filteredMockData = MOCK_HOTELS_DATA.filter(
+        hotel => hotel.hotel.address.cityName.toLowerCase() === destinationCity
+    );
+
+    if (filteredMockData.length > 0) {
+        return { 
+            success: true, 
+            data: filteredMockData,
+            error: `La API de Booking.com falló, usando datos de muestra. Error: ${errorMessage}`
+        };
+    } else {
+        return { 
+            success: false, 
+            error: `No se encontraron hoteles para la ciudad ${destinationName} en nuestra base de datos de respaldo.`
+        };
+    }
+}
+
 export async function searchHotels(params: {
   destinationName: string;
   checkInDate: string;
@@ -195,17 +216,13 @@ export async function searchHotels(params: {
   if (!validation.success) {
     return { success: false, error: 'Invalid hotel search parameters.' };
   }
+  
+  const { destinationName, checkInDate, checkOutDate, adults, currency } = validation.data;
 
   if (!RAPIDAPI_KEY || RAPIDAPI_KEY === 'YOUR_RAPIDAPI_KEY') {
-    console.warn("DIAGNÓSTICO: La API de RapidAPI (Booking.com) no está configurada. Usando datos de muestra como respaldo.");
-    return { 
-        success: true, 
-        data: MOCK_HOTELS_DATA,
-        error: "API Booking.com no configurada. Mostrando datos simulados."
-    };
+    return handleFallback(destinationName, "La API de RapidAPI (Booking.com) no está configurada.");
   }
 
-  const { destinationName, checkInDate, checkOutDate, adults, currency } = validation.data;
   const rapidApiHeaders = {
     'X-RapidAPI-Key': RAPIDAPI_KEY,
     'X-RapidAPI-Host': 'booking-com15.p.rapidapi.com'
@@ -216,13 +233,13 @@ export async function searchHotels(params: {
     const destResponse = await fetch(`${BOOKING_API_URL}/searchDestination?query=${destinationName}`, { headers: rapidApiHeaders });
     
     if (!destResponse.ok) {
-        throw new Error(`Failed to fetch destination ID from Booking.com API. Status: ${destResponse.status}`);
+        return handleFallback(destinationName, `Failed to fetch destination ID from Booking.com API. Status: ${destResponse.status}`);
     }
 
     const destData = await destResponse.json();
     const destinationId = destData.data?.[0]?.dest_id;
     if (!destinationId) {
-        return { success: false, error: `Could not find a destination ID for "${destinationName}".` };
+         return handleFallback(destinationName, `Could not find a destination ID for "${destinationName}".`);
     }
 
     // Step 2: Search for hotels using the destination ID
@@ -238,13 +255,9 @@ export async function searchHotels(params: {
     const hotelsResponse = await fetch(`${BOOKING_API_URL}/searchHotels?${searchHotelsParams.toString()}`, { headers: rapidApiHeaders });
 
     if (!hotelsResponse.ok) {
-      const errorBody = await hotelsResponse.json().catch(() => ({}));
-      const errorMessage = errorBody.message || hotelsResponse.statusText;
-      console.error("Booking.com Search API Error:", errorMessage);
-      if (hotelsResponse.status === 429) {
-          return { success: true, data: MOCK_HOTELS_DATA, error: "API Booking.com limitada, mostrando datos simulados." };
-      }
-      return { success: true, data: MOCK_HOTELS_DATA, error: `API falló, usando datos de muestra. Error: ${errorMessage}` };
+        const errorBody = await hotelsResponse.json().catch(() => ({}));
+        const errorMessage = errorBody.message || hotelsResponse.statusText;
+        return handleFallback(destinationName, `Booking.com Search API failed. Error: ${errorMessage}`);
     }
     
     const hotelsData = await hotelsResponse.json();
@@ -295,12 +308,7 @@ export async function searchHotels(params: {
     return { success: true, data: mappedOffers.slice(0, 30) };
 
   } catch (err: any) {
-    console.error('Error in searchHotels action:', err);
-    return { 
-        success: true, 
-        data: MOCK_HOTELS_DATA, 
-        error: `La API de Booking.com falló, usando datos de muestra. Error: ${err.message}` 
-    };
+    return handleFallback(destinationName, err.message);
   }
 }
 
