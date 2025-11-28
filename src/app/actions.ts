@@ -390,10 +390,9 @@ export async function activateVipMembership(params: { userId: string, membership
 
 export async function getRecommendedHotels(): Promise<{ success: boolean; data?: any[]; error?: string }> {
     try {
-        // Now, this function will always return the mock data for stability.
         const hotelsList = MOCK_HOTELS_DATA.map(offer => ({
             ...offer.hotel,
-            id: offer.hotel.hotelId, // Ensure the top-level ID is set
+            id: offer.hotel.hotelId, 
             nombre: offer.hotel.name,
             ubicacion: `${offer.hotel.address.cityName}, ${offer.hotel.address.countryCode}`,
             descripcion: offer.hotel.description?.text,
