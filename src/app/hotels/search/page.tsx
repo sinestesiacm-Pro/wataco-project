@@ -101,7 +101,7 @@ function HotelResultsPageContent() {
 
     if(loading) {
         return (
-            <div className="w-full h-screen relative overflow-hidden bg-hotels-background">
+            <div className="w-full h-screen relative overflow-hidden bg-background">
                 <HotelLoadingAnimation destinationName={destinationName} />
             </div>
         );
@@ -109,7 +109,7 @@ function HotelResultsPageContent() {
 
     if(error) {
         return (
-             <div className="w-full min-h-screen pt-24 pb-24 md:pb-8 bg-hotels-background">
+             <div className="w-full min-h-screen pt-24 pb-24 md:pb-8 bg-background">
                 <div className="max-w-4xl mx-auto py-8 px-4">
                     <Card>
                         <CardContent className="pt-6 text-center">
@@ -123,7 +123,7 @@ function HotelResultsPageContent() {
     }
     
     return (
-        <div className="w-full min-h-screen pt-24 pb-24 md:pb-8 bg-hotels-background">
+        <div className="w-full min-h-screen pt-24 pb-24 md:pb-8 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Collapsible className="mb-6 bg-card/80 backdrop-blur-xl border p-4 rounded-2xl">
                 <div className="flex justify-between items-center">
@@ -203,7 +203,7 @@ function HotelResultsPageContent() {
 export default function HotelSearchPageWrapper() {
   return (
     <Suspense fallback={
-        <div className="flex items-center justify-center min-h-screen bg-hotels-background">
+        <div className="flex items-center justify-center min-h-screen bg-background">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
     }>
@@ -211,5 +211,3 @@ export default function HotelSearchPageWrapper() {
     </Suspense>
   )
 }
-
-    

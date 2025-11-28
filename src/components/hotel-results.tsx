@@ -1,7 +1,7 @@
 
 'use client';
 import Image from 'next/image';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Star, MapPin } from 'lucide-react';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { Separator } from './ui/separator';
@@ -25,16 +25,11 @@ const renderStars = (rating: string | undefined) => {
     return (
         <div className="flex items-center gap-1">
             {[...Array(starCount)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
+                <Star key={i} className="w-4 h-4 text-amber-300 fill-amber-400" />
             ))}
-            <span className="text-sm font-semibold">{starCount}.0</span>
         </div>
     );
 };
-
-const formatAmenity = (amenity: string) => {
-  return amenity.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-}
 
 const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchParams: URLSearchParams }) => {
     const router = useRouter();
@@ -46,36 +41,35 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
             setLoadingPhotos(true);
             const photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
             
-            // Prioritize Google Photos, but use static media as a fallback
             const staticPhotos = (offer.hotel.media || [])
                 .map(p => p.uri)
                 .filter(uri => uri && uri.trim() !== '');
 
             const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
+            
+            // Filter out empty strings from the combined array
+            const validPhotos = combinedPhotos.filter(p => p && p.trim() !== '');
 
-            setPhotos(combinedPhotos);
+            setPhotos(validPhotos);
             setLoadingPhotos(false);
         };
 
         fetchPhotos();
     }, [offer.hotel.name, offer.hotel.address.cityName, offer.hotel.media]);
 
-    const displayPhotos = photos.length > 0 ? photos : ['https://placehold.co/400x300.png'];
+    const displayPhotos = photos.length > 0 ? photos : ['https://placehold.co/800x600.png?text=Image+not+found'];
 
     const handleViewHotel = () => {
         const params = new URLSearchParams(searchParams.toString());
-        // We use hotelId from the hotel object, which should be the Hotelbeds code or similar.
         const hotelId = offer.hotel.hotelId || offer.id;
         
-        // Pass the offer via state to avoid fetching again on the details page.
-        // This is a client-side navigation feature.
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         router.push(url, { state: { offer } } as any);
     }
 
     return (
-        <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-card/80 backdrop-blur-xl border flex flex-col md:flex-row">
-            <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4 flex-shrink-0">
+        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[4/5] relative flex flex-col justify-end shadow-card-3d hover:scale-[1.02]">
+            <div className="absolute inset-0">
                 {loadingPhotos ? (
                     <Skeleton className="h-full w-full" />
                 ) : (
@@ -83,7 +77,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                         <CarouselContent>
                             {displayPhotos.map((photo, index) => (
                                 <CarouselItem key={index}>
-                                    <div className="relative h-48 md:h-full w-full">
+                                    <div className="relative h-full w-full">
                                         <Image
                                             src={photo}
                                             data-ai-hint="hotel exterior"
@@ -96,56 +90,38 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
-                        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                        {displayPhotos.length > 1 && (
+                          <>
+                            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                          </>
+                        )}
                     </Carousel>
                 )}
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
             </div>
             
-            <div className="flex flex-col flex-grow">
-              <div className="p-6 flex-grow">
-                <div className="flex justify-between items-start">
-                    <div>
-                        <h3 className="text-2xl font-semibold font-headline">{offer.hotel.name}</h3>
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
-                            {renderStars(offer.hotel.rating)}
-                            {offer.hotel.address && (
-                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                    <MapPin className="w-4 h-4" />
-                                    {offer.hotel.address.cityName}, {offer.hotel.address.countryCode}
-                                </div>
-                            )}
+              <div className="relative p-6 text-white w-full">
+                <h3 className="text-2xl font-semibold font-headline drop-shadow-md">{offer.hotel.name}</h3>
+                <div className="flex items-center gap-4 mt-2 text-sm drop-shadow-sm">
+                    {renderStars(offer.hotel.rating)}
+                    {offer.hotel.address && (
+                        <div className="flex items-center gap-1">
+                            <MapPin className="w-4 h-4" />
+                            {offer.hotel.address.cityName}
                         </div>
-                    </div>
+                    )}
                 </div>
-                 <p className="text-sm text-muted-foreground mt-4 line-clamp-2">
-                    {offer.hotel.description?.text}
-                 </p>
-                 {offer.hotel.amenities && offer.hotel.amenities.length > 0 && (
-                    <div className="mt-4">
-                        <div className="flex flex-wrap gap-2">
-                            {offer.hotel.amenities.slice(0, 5).map((amenity, index) => (
-                            <Badge key={index} variant="secondary">
-                                {formatAmenity(amenity)}
-                            </Badge>
-                            ))}
-                        </div>
+                 <div className="flex justify-between items-end mt-4">
+                     <div className="text-white/90">
+                        <p className="text-xs">Precio por noche desde</p>
+                        <p className="font-semibold text-3xl drop-shadow-lg">
+                          ${offer.offers?.[0]?.price?.total}
+                        </p>
                     </div>
-                 )}
-              </div>
-              
-              <Separator className="mt-auto" />
-
-              <div className="p-4 sm:p-6 bg-muted/50 flex flex-col sm:flex-row justify-between items-center gap-4">
-                 <div className="text-center sm:text-left">
-                    <p className="text-xs text-muted-foreground font-body">Precio por noche desde</p>
-                    <p className="font-semibold text-3xl">
-                      ${offer.offers?.[0]?.price?.total}
-                    </p>
-                </div>
-                 <Button onClick={handleViewHotel} size="lg" className="font-semibold w-full sm:w-auto">
-                    Ver Habitaciones
-                 </Button>
+                     <Button onClick={handleViewHotel} size="lg" className="font-semibold bg-white/20 backdrop-blur-lg border-white/30 hover:bg-white/30 text-white">
+                        Ver Habitaciones
+                     </Button>
               </div>
             </div>
         </Card>
@@ -154,7 +130,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
 
 export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {hotels.map((offer) => (
         <HotelCard key={`${offer.id}`} offer={offer} searchParams={searchParams} />
       ))}
