@@ -54,9 +54,8 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Click Clack Hotel Bogotá',
         rating: '5',
         media: [
-          { uri: 'https://images.unsplash.com/photo-1596436889106-be35e843f974?w=500&auto=format&fit=crop', category: 'EXTERIOR' },
-          { uri: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500&auto=format&fit=crop', category: 'LOBBY' },
-          { uri: 'https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=500&auto=format&fit=crop', category: 'ROOM' },
+          { uri: 'https://www.clickclackhotel.com/bogota/wp-content/uploads/2019/11/1920x1080-INTERNA-CLICKCLACK-HOTEL-BOGOTA-NOCHE-ok.jpg', category: 'EXTERIOR' },
+          { uri: 'https://live.staticflickr.com/65535/50531393638_405db3a364_b.jpg', category: 'LOBBY' },
         ],
         address: { lines: ['Cra. 11 #93-77'], postalCode: '110221', cityName: 'Bogotá', countryCode: 'CO' },
         description: { lang: 'es', text: 'Sumérgete en el diseño y la creatividad en este hotel único en el corazón de Bogotá. Disfruta de su rooftop bar, eventos culturales y habitaciones llenas de detalles sorprendentes.' },
@@ -79,9 +78,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Hotel Charleston Santa Teresa',
         rating: '5',
         media: [
-          { uri: 'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'POOL' },
-          { uri: 'https://images.pexels.com/photos/161758/governor-s-mansion-montgomery-alabama-grand-staircase-161758.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'ROOM' },
+          { uri: 'https://image-tc.galaxy.tf/wipng-ay18s0je9nlxfl0vj341d3sow/charleston-santa-teresa_wide.png?w=1920', category: 'EXTERIOR' },
         ],
         address: { lines: ['Cra. 3 #31-23'], postalCode: '130001', cityName: 'Cartagena', countryCode: 'CO' },
         description: { lang: 'es', text: 'Ubicado en el corazón de la ciudad amurallada, nuestro hotel boutique ofrece un diseño elegante y un ambiente acogedor. Perfecto para viajeros que buscan explorar la historia y el encanto de Cartagena.' },
@@ -96,225 +93,139 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         room: { type: 'DOUBLE_ROOM', description: { text: 'Habitación doble estándar con escritorio.' }, amenities: ['WIFI', 'DESK'] }
       }]
     },
-    {
-      type: 'hotel-offer',
-      id: 'HB003',
-      hotel: {
-        hotelId: '448831', // Hotel Salento Real
-        name: 'Salento Real Eje Cafetero',
-        rating: '4',
-        media: [
-            { uri: 'https://images.pexels.com/photos/271643/pexels-photo-271643.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'EXTERIOR' },
-            { uri: 'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'ROOM' },
-            { uri: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'VIEW' },
-        ],
-        address: { lines: ['Cra. 6 #1-05'], postalCode: '631020', cityName: 'Salento', countryCode: 'CO' },
-        description: { lang: 'es', text: 'Escápate a la tranquilidad de las montañas cafeteras. Nuestro hotel ofrece un refugio acogedor con fácil acceso a la cultura del café y el Valle de Cocora.' },
-        amenities: ['PARKING', 'WIFI', 'PETS_ALLOWED']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-3',
-        checkInDate: '2024-10-10',
-        checkOutDate: '2024-10-15',
-        price: { currency: 'USD', total: '150.00', base: '130.00' },
-        room: { type: 'CABIN', description: { text: 'Cabaña acogedora con vistas a las montañas.' }, amenities: ['KITCHENETTE', 'WIFI'] }
-      }]
-    },
      {
       type: 'hotel-offer',
-      id: 'INTL001',
+      id: 'HB005',
       hotel: {
-        hotelId: '2321', // Hotel Regina Opera Grands Boulevards
-        name: 'Le Marais Charm & Spa',
-        rating: '4',
-        media: [
-          { uri: 'https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'LOBBY' },
-          { uri: 'https://images.pexels.com/photos/276671/pexels-photo-276671.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'ROOM' },
-        ],
-        address: { lines: ['97 Rue des Archives'], postalCode: '75003', cityName: 'Paris', countryCode: 'FR' },
-        description: { lang: 'es', text: 'Encantador hotel en el corazón de Le Marais, cerca de la Place des Vosges y el Museo Picasso.' },
-        amenities: ['WIFI', 'SPA', 'AIR_CONDITIONING', 'PETS_ALLOWED']
+        hotelId: 'BOG005',
+        name: 'Grand Hyatt Bogota',
+        rating: '5',
+        media: [],
+        address: { lines: ['Cl. 24a #57-60'], postalCode: '111321', cityName: 'Bogotá', countryCode: 'CO' },
+        description: { lang: 'es', text: 'Un oasis de lujo y sofisticación con uno de los spas más grandes de Latinoamérica. Disfruta de vistas panorámicas y una gastronomía excepcional.' },
+        amenities: ['SWIMMING_POOL', 'SPA', 'FITNESS_CENTER', 'RESTAURANT', 'BAR']
       },
       available: true,
-      offers: [{
-        id: 'offer-5',
-        checkInDate: '2024-11-05',
-        checkOutDate: '2024-11-10',
-        price: { currency: 'USD', total: '380.00', base: '350.00' },
-        room: { type: 'CHARM_ROOM', description: { text: 'Habitación con encanto parisino.' }, amenities: ['WIFI'] }
-      }]
+      offers: [{id: 'offer-5', checkInDate: '2024-10-10', price: { currency: 'USD', total: '310.00'}, room: { type: 'KING_ROOM' }}]
     },
     {
       type: 'hotel-offer',
-      id: 'INTL002',
+      id: 'CTG006',
       hotel: {
-        hotelId: '1074', // The New Yorker, A Wyndham Hotel
-        name: 'The New Yorker Inn',
-        rating: '4',
-        media: [
-          { uri: 'https://images.pexels.com/photos/261101/pexels-photo-261101.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/261169/pexels-photo-261169.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'LOBBY' },
-          { uri: 'https://images.pexels.com/photos/271619/pexels-photo-271619.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'ROOM' },
-        ],
-        address: { lines: ['481 8th Ave'], postalCode: '10001', cityName: 'New York', countryCode: 'US' },
-        description: { lang: 'es', text: 'Hotel icónico con arquitectura Art Deco, a pasos de Times Square y el Madison Square Garden.' },
-        amenities: ['WIFI', 'FITNESS_CENTER', 'RESTAURANT', 'BAR']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-6',
-        checkInDate: '2024-11-05',
-        checkOutDate: '2024-11-10',
-        price: { currency: 'USD', total: '410.00', base: '360.00' },
-        room: { type: 'SKYLINE_SUITE', description: { text: 'Suite con vistas al horizonte de Manhattan.' }, amenities: ['WIFI'] }
-      }]
-    },
-     {
-      type: 'hotel-offer',
-      id: 'INTL004',
-      hotel: {
-        hotelId: '1692', // The Beverly Hills Hotel
-        name: 'The Beverly Hills Hotel',
+        hotelId: 'CTG006',
+        name: 'Hotel Boutique Casa San Agustín',
         rating: '5',
-        media: [
-          { uri: 'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'EXTERIOR' },
-          { uri: 'https://images.pexels.com/photos/1579253/pexels-photo-1579253.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'POOL' },
-          { uri: 'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'ROOM' },
-        ],
-        address: { lines: ['9641 Sunset Blvd'], postalCode: '90210', cityName: 'Beverly Hills', countryCode: 'US' },
-        description: { lang: 'es', text: 'El legendario "Palacio Rosa" ofrece glamour atemporal y un servicio de primera clase en el corazón de Beverly Hills.' },
-        amenities: ['SWIMMING_POOL', 'SPA', 'BEACH_ACCESS', 'RESTAURANT', 'FITNESS_CENTER']
+        media: [],
+        address: { lines: ['Cl. de la Universidad #36-44'], postalCode: '130001', cityName: 'Cartagena', countryCode: 'CO' },
+        description: { lang: 'es', text: 'Lujo refinado en tres casas coloniales restauradas. Su piscina en el patio central es un ícono de la ciudad amurallada.' },
+        amenities: ['SWIMMING_POOL', 'RESTAURANT', 'SPA', 'WIFI']
       },
       available: true,
-      offers: [{
-        id: 'offer-8',
-        checkInDate: '2024-11-05',
-        checkOutDate: '2024-11-10',
-        price: { currency: 'USD', total: '780.00', base: '700.00' },
-        room: { type: 'OCEAN_VIEW_SUITE', description: { text: 'Bungalow privado con piscina.' }, amenities: ['WIFI'] }
-      }]
-    },
-     {
-      type: 'hotel-offer',
-      id: 'tsWNvOVuIHm1dAUjw0QA',
-      hotel: {
-        hotelId: 'BHR00002', // Fictional ID for Burj Al Arab
-        name: 'Burj Al Arab Jumeirah',
-        rating: '5',
-        media: [
-          { uri: 'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
-          { uri: 'https://images.pexels.com/photos/1580112/pexels-photo-1580112.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
-          { uri: 'https://images.pexels.com/photos/2082949/pexels-photo-2082949.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
-          { uri: 'https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
-          { uri: 'https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
-          { uri: 'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'GENERAL' },
-        ],
-        address: { lines: ['Umm Suqeim 3'], postalCode: '3414', cityName: 'Dubai', countryCode: 'AE' },
-        description: { lang: 'es', text: 'Lujo icónico en el hotel más famoso de Dubái.' },
-        amenities: ['SWIMMING_POOL', 'SPA', 'RESTAURANT', 'BAR', 'FITNESS_CENTER', 'AIRPORT_SHUTTLE']
-      },
-      available: true,
-      offers: [{
-        id: 'offer-burj',
-        checkInDate: '2024-12-01',
-        checkOutDate: '2024-12-07',
-        price: { currency: 'USD', total: '2500.00', base: '2200.00' },
-        room: { type: 'ROYAL_SUITE', description: { text: 'Suite Real con vistas panorámicas.' }, amenities: ['WIFI', 'SAFE', 'MINIBAR'] }
-      }]
+      offers: [{id: 'offer-6', checkInDate: '2024-10-10', price: { currency: 'USD', total: '650.00'}, room: { type: 'DELUXE_SUITE'}}]
     },
     {
       type: 'hotel-offer',
-      id: 'GRC001',
+      id: 'BCN001',
       hotel: {
-        hotelId: 'GRC001',
-        name: 'Santorini Grace',
+        hotelId: 'BCN001',
+        name: 'W Barcelona',
         rating: '5',
-        description: { lang: 'es', text: 'Vistas icónicas de la caldera y suites de lujo encaladas.' },
-        address: { cityName: 'Santorini', countryCode: 'GR', lines: ['Imerovigli'], postalCode: '84700' },
-        media: [
-            { uri: "https://images.unsplash.com/photo-1533104816931-20fa69146ca2?w=800", category: 'VIEW' },
-            { uri: "https://images.unsplash.com/photo-1590390161421-23606973344a?w=800", category: 'POOL' },
-        ],
-        amenities: ['SWIMMING_POOL', 'SPA', 'WIFI']
+        media: [],
+        address: { lines: ['Plaça de la Rosa dels Vents, 1'], postalCode: '08039', cityName: 'Barcelona', countryCode: 'ES' },
+        description: { lang: 'es', text: 'Icónico hotel en forma de vela en la playa de la Barceloneta, con vistas panorámicas, una animada azotea y un ambiente de lujo moderno.' },
+        amenities: ['SWIMMING_POOL', 'BEACH_ACCESS', 'FITNESS_CENTER', 'SPA', 'BAR']
       },
       available: true,
-      offers: [{ id: 'offer-grc1', price: { currency: 'USD', total: '950.00', base: '900' }, room: { type: 'SUITE', description: { text: 'Suite con piscina privada'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
+      offers: [{id: 'offer-bcn1', checkInDate: '2024-10-10', price: { currency: 'USD', total: '480.00'}, room: { type: 'WONDERFUL_SKY'}}]
     },
     {
       type: 'hotel-offer',
-      id: 'MAR001',
+      id: 'ROM001',
       hotel: {
-        hotelId: 'MAR001',
-        name: 'Riad Yasmine',
-        rating: '4',
-        description: { lang: 'es', text: 'Un oasis de paz con un patio de piscina icónico en la Medina.' },
-        address: { cityName: 'Marrakech', countryCode: 'MA', lines: ['209 Rue Ank Jemel'], postalCode: '40000' },
-        media: [ { uri: "https://images.unsplash.com/photo-1569431597028-9f15037746b9?w=800", category: 'POOL' } ],
-        amenities: ['SWIMMING_POOL', 'WIFI', 'AIR_CONDITIONING']
+        hotelId: 'ROM001',
+        name: 'Hotel Eden - Dorchester Collection',
+        rating: '5',
+        media: [],
+        address: { lines: ['Via Ludovisi, 49'], postalCode: '00187', cityName: 'Rome', countryCode: 'IT' },
+        description: { lang: 'es', text: 'Elegancia romana con un espectacular bar en la azotea que ofrece vistas panorámicas de la Ciudad Eterna. Un refugio de lujo cerca de la Via Veneto.' },
+        amenities: ['SPA', 'FITNESS_CENTER', 'RESTAURANT', 'BAR']
       },
       available: true,
-      offers: [{ id: 'offer-mar1', price: { currency: 'USD', total: '220.00', base: '200' }, room: { type: 'DOUBLE_ROOM', description: { text: 'Habitación doble con vistas al patio'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
+      offers: [{id: 'offer-rom1', checkInDate: '2024-10-10', price: { currency: 'USD', total: '850.00'}, room: { type: 'CLASSIC_ROOM'}}]
     },
     {
       type: 'hotel-offer',
-      id: 'USA001',
+      id: 'PAR001',
       hotel: {
-        hotelId: 'USA001',
-        name: 'Amangiri',
+        hotelId: 'PAR001',
+        name: 'Four Seasons Hotel George V',
         rating: '5',
-        description: { lang: 'es', text: 'Lujo minimalista y aislamiento en el desierto de Utah.' },
-        address: { cityName: 'Canyon Point', countryCode: 'US', lines: ['1 Kayenta Rd'], postalCode: '84741' },
-        media: [ { uri: "https://images.unsplash.com/photo-1572488949834-585429355b25?w=800", category: 'EXTERIOR' } ],
-        amenities: ['SWIMMING_POOL', 'SPA', 'RESTAURANT']
+        media: [],
+        address: { lines: ['31 Av. George V'], postalCode: '75008', cityName: 'Paris', countryCode: 'FR' },
+        description: { lang: 'es', text: 'Un icono del lujo parisino, a pocos pasos de los Campos Elíseos. Disfruta de sus tres restaurantes con estrellas Michelin y un servicio impecable.' },
+        amenities: ['SPA', 'FITNESS_CENTER', 'RESTAURANT', 'SWIMMING_POOL']
       },
       available: true,
-      offers: [{ id: 'offer-usa1', price: { currency: 'USD', total: '2500.00', base: '2400' }, room: { type: 'DESERT_SUITE', description: { text: 'Suite con vistas al desierto'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
+      offers: [{id: 'offer-par1', checkInDate: '2024-10-10', price: { currency: 'USD', total: '1500.00'}, room: { type: 'SUPERIOR_ROOM'}}]
     },
     {
       type: 'hotel-offer',
-      id: 'JPN001',
+      id: 'NYC001',
       hotel: {
-        hotelId: 'JPN001',
-        name: 'The Ritz-Carlton',
+        hotelId: 'NYC001',
+        name: 'The Plaza, A Fairmont Managed Hotel',
         rating: '5',
-        description: { lang: 'es', text: 'Elegancia japonesa y vistas al río Kamogawa.' },
-        address: { cityName: 'Kyoto', countryCode: 'JP', lines: ['Kamogawa Nijo-Ohashi Hotori'], postalCode: '604-0902' },
-        media: [ { uri: "https://images.unsplash.com/photo-1559624978-7013c74de359?w=800", category: 'LOBBY' } ],
-        amenities: ['SPA', 'FITNESS_CENTER', 'RESTAURANT']
+        media: [],
+        address: { lines: ['768 5th Ave'], postalCode: '10019', cityName: 'New York', countryCode: 'US' },
+        description: { lang: 'es', text: 'El hotel más famoso de Nueva York, un hito histórico en Central Park South. Lujo, elegancia y un servicio que ha definido generaciones.' },
+        amenities: ['SPA', 'RESTAURANT', 'BAR', 'FITNESS_CENTER']
       },
       available: true,
-      offers: [{ id: 'offer-jpn1', price: { currency: 'USD', total: '1100.00', base: '1000' }, room: { type: 'GARDEN_SUITE', description: { text: 'Suite con vistas al jardín zen'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
+      offers: [{id: 'offer-nyc1', checkInDate: '2024-10-10', price: { currency: 'USD', total: '950.00'}, room: { type: 'PLAZA_ROOM'}}]
     },
     {
       type: 'hotel-offer',
-      id: 'FRA001',
+      id: 'TYO001',
       hotel: {
-        hotelId: 'FRA001',
-        name: 'Hotel du Cap-Eden-Roc',
+        hotelId: 'TYO001',
+        name: 'Aman Tokyo',
         rating: '5',
-        description: { lang: 'es', text: 'Glamour de la Riviera Francesa y lujo atemporal.' },
-        address: { cityName: 'Antibes', countryCode: 'FR', lines: ['Boulevard J.F. Kennedy'], postalCode: '06160' },
-        media: [ { uri: "https://images.unsplash.com/photo-1601648439969-dd6247d4665d?w=800", category: 'POOL' } ],
-        amenities: ['SWIMMING_POOL', 'BEACH_ACCESS', 'RESTAURANT']
+        media: [],
+        address: { lines: ['1-5-6 Otemachi, Chiyoda-ku'], postalCode: '100-0004', cityName: 'Tokyo', countryCode: 'JP' },
+        description: { lang: 'es', text: 'Un santuario urbano con diseño japonés minimalista y vistas panorámicas de la ciudad y el Monte Fuji desde sus pisos más altos.' },
+        amenities: ['SWIMMING_POOL', 'SPA', 'FITNESS_CENTER', 'RESTAURANT']
       },
       available: true,
-      offers: [{ id: 'offer-fra1', price: { currency: 'USD', total: '1500.00', base: '1400' }, room: { type: 'SEA_VIEW_ROOM', description: { text: 'Habitación con vistas al Mediterráneo'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
+      offers: [{id: 'offer-tyo1', checkInDate: '2024-10-10', price: { currency: 'USD', total: '1300.00'}, room: { type: 'DELUXE_ROOM'}}]
+    },
+    {
+      type: 'hotel-offer',
+      id: 'LON001',
+      hotel: {
+        hotelId: 'LON001',
+        name: 'The Savoy',
+        rating: '5',
+        media: [],
+        address: { lines: ['Strand'], postalCode: 'WC2R 0EZ', cityName: 'London', countryCode: 'GB' },
+        description: { lang: 'es', text: 'Un icono eduardiano a orillas del Támesis, que combina un estilo atemporal con instalaciones modernas y un servicio de fama mundial.' },
+        amenities: ['SWIMMING_POOL', 'SPA', 'FITNESS_CENTER', 'RESTAURANT', 'BAR']
+      },
+      available: true,
+      offers: [{id: 'offer-lon1', checkInDate: '2024-10-10', price: { currency: 'USD', total: '850.00'}, room: { type: 'SUPERIOR_QUEEN'}}]
     },
     {
       type: 'hotel-offer',
       id: 'MIA001',
       hotel: {
         hotelId: 'MIA001',
-        name: 'Fontainebleau Miami Beach',
+        name: 'Faena Hotel Miami Beach',
         rating: '5',
-        description: { lang: 'es', text: 'Un ícono de Miami que combina el glamour de la época dorada con el lujo moderno.' },
-        address: { cityName: 'Miami', countryCode: 'US', lines: ['4441 Collins Ave'], postalCode: '33140' },
-        media: [ { uri: "https://images.unsplash.com/photo-1549294413-26f195200c16?w=800", category: 'POOL' } ],
-        amenities: ['SWIMMING_POOL', 'SPA', 'BEACH_ACCESS', 'RESTAURANT']
+        media: [],
+        address: { lines: ['3201 Collins Ave'], postalCode: '33140', cityName: 'Miami', countryCode: 'US' },
+        description: { lang: 'es', text: 'Un universo de arte, lujo y diseño de la mano de Alan Faena. Un teatro de experiencias con un servicio excepcional en Miami Beach.' },
+        amenities: ['SWIMMING_POOL', 'BEACH_ACCESS', 'SPA', 'RESTAURANT', 'BAR']
       },
       available: true,
-      offers: [{ id: 'offer-mia1', price: { currency: 'USD', total: '550.00', base: '500' }, room: { type: 'OCEAN_VIEW', description: { text: 'Habitación con vistas al mar'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
+      offers: [{id: 'offer-mia1', checkInDate: '2024-10-10', price: { currency: 'USD', total: '800.00'}, room: { type: 'BAY_VIEW_JUNIOR'}}]
     }
   ];
