@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -7,13 +8,14 @@ import Link from 'next/link';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { collection, getDocs } from 'firebase/firestore';
+import { getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Skeleton } from './ui/skeleton';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { MOCK_ROOMS_DATA } from '@/lib/mock-data';
 import { format, addDays } from 'date-fns';
+import { getRecommendedHotels } from '@/app/actions';
 
 interface Hotel {
     id: string;
@@ -150,22 +152,15 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     const fetchHotels = async () => {
       setLoading(true);
       setError(null);
-      try {
-        const hotelsCollection = collection(db, 'hoteles');
-        const hotelSnapshot = await getDocs(hotelsCollection);
-        if (hotelSnapshot.empty) {
-            setError("No se encontraron hoteles. Asegúrate de ejecutar el script de siembra: npx tsx src/lib/seed-hotels.ts");
-        } else {
-            const hotelsList = hotelSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Hotel));
-            setAllHotels(hotelsList);
-            setDisplayedHotels(shuffleArray([...hotelsList]).slice(0, 4));
-        }
-      } catch (err: any) {
-        console.error("Error fetching hotels from Firestore:", err);
-        setError("Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore.");
-      } finally {
-        setLoading(false);
+      const result = await getRecommendedHotels();
+      if (result.success && result.data) {
+        const hotelsList = result.data as Hotel[];
+        setAllHotels(hotelsList);
+        setDisplayedHotels(shuffleArray([...hotelsList]).slice(0, 4));
+      } else {
+        setError(result.error || "No se pudieron cargar los hoteles recomendados.");
       }
+      setLoading(false);
     };
 
     fetchHotels();
@@ -206,5 +201,3 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
-
-    

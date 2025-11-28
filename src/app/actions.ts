@@ -322,9 +322,8 @@ export async function searchHotels(params: {
 
 
 export async function getFirestoreHotelDetails(id: string): Promise<{ success: boolean; data?: AmadeusHotel; error?: string }> {
-    const hotelDocRef = doc(db, 'hoteles', id);
-
     try {
+        const hotelDocRef = doc(db, 'hoteles', id);
         const hotelDoc = await getDoc(hotelDocRef);
 
         if (!hotelDoc.exists()) {
@@ -353,19 +352,18 @@ export async function getFirestoreHotelDetails(id: string): Promise<{ success: b
 
         return { success: true, data: hotelData };
     } catch (err: any) {
+        console.error('Error fetching hotel from Firestore:', err);
         if (err.code === 'permission-denied') {
             const permissionError = new FirestorePermissionError({
-                path: hotelDocRef.path,
+                path: `hoteles/${id}`,
                 operation: 'get',
             });
             errorEmitter.emit('permission-error', permissionError);
             return { success: false, error: permissionError.message };
         }
-        
         return { success: false, error: err.message || 'Ocurrió un error inesperado al buscar el hotel.' };
     }
 }
-
 
 const packageSearchSchema = z.object({
   originLocationCode: z.string().min(3).max(3),
@@ -480,4 +478,19 @@ export async function activateVipMembership(params: { userId: string, membership
     }
 }
 
+
+export async function getRecommendedHotels(): Promise<{ success: boolean; data?: any[]; error?: string }> {
+    try {
+        const hotelsCollection = collection(db, 'hoteles');
+        const hotelSnapshot = await getDocs(hotelsCollection);
+        if (hotelSnapshot.empty) {
+            return { success: false, error: "No se encontraron hoteles. Asegúrate de ejecutar el script de siembra: npx tsx src/lib/seed-hotels.ts" };
+        }
+        const hotelsList = hotelSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+        return { success: true, data: hotelsList };
+    } catch (err: any) {
+        console.error("Error fetching hotels from Firestore:", err);
+        return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
+    }
+}
     
