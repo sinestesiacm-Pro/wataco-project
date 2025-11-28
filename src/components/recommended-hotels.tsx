@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Heart, Star, MapPin } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
-import Link from 'next/link';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -21,32 +20,29 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
 
     useEffect(() => {
         const fetchPhotos = async () => {
-            if (!hotel.name || !hotel.address.cityName) {
-                setLoadingPhotos(false);
-                setPhotos(hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/400x300.png']);
-                return;
-            }
             setLoadingPhotos(true);
-            const photoUrls = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
-            
-            const staticPhotos = (hotel.media || [])
-                .map(p => p.uri)
-                .filter(uri => !!uri);
+            let finalPhotos: string[] = [];
 
-            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
-
-            if (combinedPhotos.length === 0) {
-                 combinedPhotos = ['https://placehold.co/400x300.png?text=Image+not+found'];
+            if (hotel.name && hotel.address.cityName) {
+                const googlePhotos = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
+                finalPhotos.push(...googlePhotos);
             }
 
-            setPhotos(combinedPhotos);
+            const staticPhotos = (hotel.media || []).map(p => p.uri).filter(uri => !!uri);
+            finalPhotos.push(...staticPhotos);
+
+            let uniquePhotos = [...new Set(finalPhotos)];
+
+            if (uniquePhotos.length === 0) {
+                 uniquePhotos.push('https://placehold.co/400x300.png?text=Image+not+found');
+            }
+
+            setPhotos(uniquePhotos);
             setLoadingPhotos(false);
         };
 
         fetchPhotos();
     }, [hotel.name, hotel.address.cityName, hotel.media]);
-
-    const displayPhotos = photos.length > 0 ? photos : ['https://placehold.co/400x300.png'];
 
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
@@ -56,7 +52,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                 ) : (
                     <Carousel className="w-full h-full">
                         <CarouselContent>
-                            {displayPhotos.map((photo, index) => (
+                            {photos.map((photo, index) => (
                                 <CarouselItem key={index}>
                                     <div className="relative h-56 w-full">
                                         <Image
@@ -67,12 +63,13 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                                             className="object-cover"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
                                             draggable={false}
+                                            onError={(e) => { e.currentTarget.src = 'https://placehold.co/800x600.png?text=Error'; }}
                                         />
                                     </div>
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        {displayPhotos.length > 1 && (
+                        {photos.length > 1 && (
                             <>
                                 <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
                                 <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
@@ -119,6 +116,8 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
         checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
         adults: '2',
         children: '0',
+        destinationName: offer.hotel.address.cityName,
+        cityCode: offer.hotel.hotelId.substring(0,3),
       });
       
       const hotelId = offer.hotel.hotelId || offer.id;
@@ -139,5 +138,3 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
-
-    

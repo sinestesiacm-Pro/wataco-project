@@ -38,30 +38,32 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const fetchPhotos = async () => {
             setLoadingPhotos(true);
             let finalPhotos: string[] = [];
-
+            
             if (offer.hotel.name && offer.hotel.address.cityName) {
                 const googlePhotos = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
                 finalPhotos.push(...googlePhotos);
             }
-
+    
             const staticPhotos = (offer.hotel.media || []).map(p => p.uri).filter(uri => !!uri);
             finalPhotos.push(...staticPhotos);
-
-            const uniquePhotos = [...new Set(finalPhotos)];
-
+    
+            let uniquePhotos = [...new Set(finalPhotos)];
+    
             if (uniquePhotos.length === 0) {
                  uniquePhotos.push('https://placehold.co/800x600.png?text=Image+not+found');
             }
-
+    
             setPhotos(uniquePhotos);
             setLoadingPhotos(false);
         };
-
+    
         fetchPhotos();
     }, [offer.hotel.name, offer.hotel.address.cityName, offer.hotel.media]);
 
+
     const handleViewHotel = () => {
         const params = new URLSearchParams(searchParams.toString());
+        // Use hotelId from the main hotel object, fallback to offer id
         const hotelId = offer.hotel.hotelId || offer.id;
         
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
@@ -144,6 +146,3 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
-
-
-    
