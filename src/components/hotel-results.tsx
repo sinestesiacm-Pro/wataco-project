@@ -67,10 +67,12 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
                             <h3 className="text-2xl font-semibold font-headline">{offer.hotel.name}</h3>
                             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
                                 {renderStars(offer.hotel.rating)}
-                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                    <MapPin className="w-4 h-4" />
-                                    {offer.hotel.address.cityName}, {offer.hotel.address.countryCode}
-                                </div>
+                                {offer.hotel.address && (
+                                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                        <MapPin className="w-4 h-4" />
+                                        {offer.hotel.address.cityName}, {offer.hotel.address.countryCode}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
