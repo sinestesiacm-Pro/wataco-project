@@ -29,13 +29,11 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                 }
             }
     
-            // Fallback to static photos if Google Places fails or returns no images
             if (finalPhotos.length === 0) {
                 const staticPhotos = (hotel.media || []).map(p => p.uri).filter(uri => !!uri);
                 finalPhotos.push(...staticPhotos);
             }
             
-            // Ultimate fallback
             if (finalPhotos.length === 0) {
                  finalPhotos.push('https://placehold.co/800x600.png?text=Image+Not+Available');
             }
@@ -117,17 +115,19 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
       const checkOutDate = addDays(new Date(), 14);
 
       const params = new URLSearchParams({
+        destinationName: offer.hotel.address.cityName,
         checkInDate: format(checkInDate, 'yyyy-MM-dd'),
         checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
         adults: '2',
         children: '0',
-        destinationName: offer.hotel.address.cityName,
       });
        if (offer.hotel.hotelId) {
         params.set('cityCode', offer.hotel.hotelId);
       }
       
-      router.push(`/hotels/search?${params.toString()}`);
+      const url = `/hotels/search?${params.toString()}`;
+      
+      router.push(url);
   }, [router]);
 
   return (

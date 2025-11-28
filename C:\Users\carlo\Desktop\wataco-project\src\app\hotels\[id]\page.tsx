@@ -10,7 +10,7 @@ import { getFirestoreHotelDetails } from '@/app/actions';
 import { AmadeusHotel } from '@/lib/types';
 import { HotelDetailsView } from '@/components/hotel-details-view';
 import { AvailabilitySearch } from '@/components/availability-search';
-import { addDays, format } from 'date-fns';
+import { addDays, format, parse } from 'date-fns';
 import { Card, CardContent } from '@/components/ui/card';
 
 function HotelDetailPageContent({ id }: { id: string }) {
@@ -46,12 +46,21 @@ function HotelDetailPageContent({ id }: { id: string }) {
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
-            cityCode: hotel.hotelId // This is not ideal, but we're using mock data
+            cityCode: hotel.address.countryCode // Simplified
         });
 
-        // Redirect to the offers page for this specific hotel
+        // Redirect to the search results page for this specific hotel
         router.push(`/hotels/search?${params.toString()}`);
     };
+    
+    const getInitialDate = (param: string | null, fallback: Date): Date => {
+        if (!param) return fallback;
+        try {
+            return parse(param, 'yyyy-MM-dd', new Date());
+        } catch {
+            return fallback;
+        }
+    }
 
     if (loading) {
         return (
@@ -80,9 +89,9 @@ function HotelDetailPageContent({ id }: { id: string }) {
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
             <Button asChild className="bg-card/80 backdrop-blur-xl border text-foreground hover:bg-accent shadow-lg">
-            <Link href={'/?tab=Hotels'}>
+            <Link href={cameFromSearch ? `/hotels/search?${searchParams.toString()}` : '/?tab=Hotels'}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Volver a Hoteles
+                Volver
             </Link>
             </Button>
         </div>
@@ -92,10 +101,10 @@ function HotelDetailPageContent({ id }: { id: string }) {
         <AvailabilitySearch 
             onSearch={handleAvailabilitySearch} 
             initialData={{
-                checkInDate: addDays(new Date(), 7),
-                checkOutDate: addDays(new Date(), 14),
-                adults: 2,
-                children: 0,
+                checkInDate: getInitialDate(searchParams.get('checkInDate'), addDays(new Date(), 7)),
+                checkOutDate: getInitialDate(searchParams.get('checkOutDate'), addDays(new Date(), 14)),
+                adults: parseInt(searchParams.get('adults') || '2'),
+                children: parseInt(searchParams.get('children') || '0'),
             }}
             showDestination={false} 
         />

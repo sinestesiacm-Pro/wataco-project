@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 import { Skeleton } from './ui/skeleton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
-import { format, addDays } from 'date-fns';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
@@ -68,6 +67,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const hotelId = offer.hotel.hotelId || offer.id;
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         
+        // Pass the offer data through router state to avoid re-fetching
         router.push(url, { state: { offer } } as any);
     };
 

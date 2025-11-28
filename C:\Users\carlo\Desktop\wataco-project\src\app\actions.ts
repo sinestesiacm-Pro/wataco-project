@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import { recommendedCruises } from '@/lib/mock-cruises';
-import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch, limit, startAt, orderBy } from 'firebase/firestore';
 import { db, AMADEUS_API_KEY, AMADEUS_API_SECRET, HOTELBEDS_API_KEY, HOTELBEDS_SECRET, GOOGLE_PLACES_API_KEY } from '@/lib/firebase';
 import crypto from 'crypto';
 
@@ -163,7 +163,6 @@ export async function searchHotelDestinations(keyword: string): Promise<{ succes
         }
 
         const apiData: AirportSearchResponse = await response.json();
-        // Ensure we only return locations that have an IATA code and a name.
         const apiResults = apiData.data.filter(location => location.iataCode && location.name && location.geoCode);
         
         return { success: true, data: apiResults };
@@ -181,7 +180,6 @@ const hotelSearchSchema = z.object({
   currency: z.string().optional().default('USD'),
 });
 
-// This is a simplified search function that uses mock data.
 export async function searchHotels(params: {
   destinationName: string;
   checkInDate: string;
@@ -194,27 +192,76 @@ export async function searchHotels(params: {
         return { success: false, error: 'Invalid hotel search parameters.' };
     }
     
-    const { destinationName } = validation.data;
+    const { destinationName, checkInDate, checkOutDate } = validation.data;
     
-    // Simulate a short delay for a better user experience
-    await new Promise(resolve => setTimeout(resolve, 500));
+    try {
+        const hotelsRef = collection(db, 'hoteles');
+        const destinationQuery = destinationName.split(',')[0].trim();
+        
+        const q = query(
+            hotelsRef, 
+            where("ubicacion", ">=", destinationQuery),
+            where("ubicacion", "<=", destinationQuery + '\uf8ff')
+        );
 
-    // Make search less strict: check if the destination query INCLUDES the hotel city name
-    const destinationQueryLower = destinationName.toLowerCase().split(',')[0].trim();
-    const filteredMockData = MOCK_HOTELS_DATA.filter(
-        hotelOffer => hotelOffer.hotel.address.cityName.toLowerCase().includes(destinationQueryLower)
-    );
+        const querySnapshot = await getDocs(q);
 
-    if (filteredMockData.length > 0) {
-        return { 
-            success: true, 
-            data: filteredMockData,
-        };
-    } else {
-        // If no matches for the specific city, return a relevant error.
-        return { success: false, error: `No se encontraron hoteles para "${destinationName}". Intenta con otro destino.` };
+        if (querySnapshot.empty) {
+            return { success: false, error: `No se encontraron hoteles para "${destinationQuery}". Intenta con otro destino.` };
+        }
+
+        const hotelOffers: AmadeusHotelOffer[] = querySnapshot.docs.map(docSnap => {
+            const data = docSnap.data();
+            const hotel: AmadeusHotel = {
+                hotelId: docSnap.id,
+                name: data.nombre,
+                rating: data.rating?.toString(),
+                media: (data.media || []).map((url: string) => ({ uri: url, category: 'PHOTO' })),
+                address: {
+                    cityName: data.ubicacion.split(',')[0],
+                    countryCode: data.ubicacion.split(',')[1]?.trim() || 'N/A',
+                    lines: [data.ubicacion],
+                    postalCode: '',
+                },
+                description: { lang: 'es', text: data.descripcion },
+                amenities: data.amenities || []
+            };
+
+            const offer: AmadeusHotelOffer = {
+                type: 'hotel-offer',
+                id: docSnap.id,
+                hotel,
+                available: true,
+                offers: [
+                    {
+                        id: `${docSnap.id}-offer`,
+                        checkInDate,
+                        checkOutDate,
+                        price: {
+                            currency: 'USD',
+                            total: data.price?.toString() || '0',
+                            base: (data.price * 0.9).toString()
+                        },
+                        room: {
+                            type: 'STANDARD_ROOM',
+                            description: {
+                                text: 'Habitación Estándar'
+                            }
+                        }
+                    }
+                ]
+            };
+            return offer;
+        });
+        
+        return { success: true, data: hotelOffers };
+
+    } catch (err: any) {
+        console.error('Error in searchHotels from Firestore:', err);
+        return { success: false, error: 'Ocurrió un error al buscar hoteles.' };
     }
 }
+
 
 export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Promise<string[]> {
     const apiKey = GOOGLE_PLACES_API_KEY;
