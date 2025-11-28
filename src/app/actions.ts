@@ -196,15 +196,14 @@ export async function searchHotels(params: {
     }
     
     const { destinationName } = validation.data;
-    console.log(`Searching mock hotels for: ${destinationName}`);
     
     // Simulate a short delay for a better user experience
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Make search less strict: check if the hotel city name is INCLUDED in the destination query
+    // Make search less strict: check if the destination query INCLUDES the hotel city name
     const destinationQueryLower = destinationName.toLowerCase();
     const filteredMockData = MOCK_HOTELS_DATA.filter(
-        hotel => hotel.hotel.address.cityName.toLowerCase().includes(destinationQueryLower.split(',')[0])
+        hotelOffer => hotelOffer.hotel.address.cityName.toLowerCase().includes(destinationQueryLower.split(',')[0])
     );
 
     if (filteredMockData.length > 0) {
@@ -213,10 +212,8 @@ export async function searchHotels(params: {
             data: filteredMockData,
         };
     } else {
-        // If no matches for the specific city, return a generic list from mock data.
-        // This ensures the page never looks empty.
-        console.warn(`No mock hotels found for "${destinationName}". Returning a general list.`);
-        return { success: true, data: MOCK_HOTELS_DATA.slice(0, 5) };
+        // If no matches for the specific city, return a relevant error.
+        return { success: false, error: `No se encontraron hoteles para "${destinationName}". Intenta con otro destino.` };
     }
 }
 
@@ -397,5 +394,3 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
-
-    

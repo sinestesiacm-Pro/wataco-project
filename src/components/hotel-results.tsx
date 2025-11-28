@@ -38,7 +38,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const fetchPhotos = async () => {
             if (!offer.hotel.name || !offer.hotel.address.cityName) {
                 setLoadingPhotos(false);
-                setPhotos(['https://placehold.co/800x600.png?text=No+Image']);
+                setPhotos(offer.hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/800x600.png?text=No+Image']);
                 return;
             }
             setLoadingPhotos(true);
@@ -138,4 +138,3 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
-

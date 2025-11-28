@@ -21,6 +21,11 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
 
     useEffect(() => {
         const fetchPhotos = async () => {
+            if (!hotel.name || !hotel.address.cityName) {
+                setLoadingPhotos(false);
+                setPhotos(hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/400x300.png']);
+                return;
+            }
             setLoadingPhotos(true);
             const photoUrls = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
             
