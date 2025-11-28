@@ -225,78 +225,81 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       }]
     },
     {
-        nombre: 'Santorini Grace',
-        ubicacion: 'Santorini, Greece',
-        descripcion: 'Vistas icónicas de la caldera y suites de lujo encaladas.',
+      type: 'hotel-offer',
+      id: 'GRC001',
+      hotel: {
+        hotelId: 'GRC001',
+        name: 'Santorini Grace',
+        rating: '5',
+        description: { lang: 'es', text: 'Vistas icónicas de la caldera y suites de lujo encaladas.' },
+        address: { cityName: 'Santorini', countryCode: 'GR', lines: ['Imerovigli'], postalCode: '84700' },
         media: [
-            "https://images.unsplash.com/photo-1533104816931-20fa69146ca2?w=800",
-            "https://images.unsplash.com/photo-1590390161421-23606973344a?w=800",
-            "https://images.unsplash.com/photo-1589370143376-417163259b92?w=800",
-            "https://images.unsplash.com/photo-1570204568545-5ac835332a6f?w=800",
-            "https://images.unsplash.com/photo-1613482221894-4752b95c994a?w=800",
-            "https://images.unsplash.com/photo-1563823434121-b85de130e0a4?w=800"
+            { uri: "https://images.unsplash.com/photo-1533104816931-20fa69146ca2?w=800", category: 'VIEW' },
+            { uri: "https://images.unsplash.com/photo-1590390161421-23606973344a?w=800", category: 'POOL' },
         ],
-        rating: 5,
-        price: 950
+        amenities: ['SWIMMING_POOL', 'SPA', 'WIFI']
+      },
+      available: true,
+      offers: [{ id: 'offer-grc1', price: { currency: 'USD', total: '950.00', base: '900' }, room: { type: 'SUITE', description: { text: 'Suite con piscina privada'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
     },
     {
-        nombre: 'Riad Yasmine',
-        ubicacion: 'Marrakech, Morocco',
-        descripcion: 'Un oasis de paz con un patio de piscina icónico en la Medina.',
-        media: [
-            "https://images.unsplash.com/photo-1569431597028-9f15037746b9?w=800",
-            "https://images.unsplash.com/photo-1594917407351-403444062445?w=800",
-            "https://images.unsplash.com/photo-1628169493923-94E56a2f4761?w=800",
-            "https://images.unsplash.com/photo-1549973843-943e6a45e7b5?w=800",
-            "https://images.unsplash.com/photo-1559941948-2b5a6c38b293?w=800",
-            "https://images.unsplash.com/photo-1518423985043-43575f154344?w=800"
-        ],
-        rating: 4,
-        price: 220
+      type: 'hotel-offer',
+      id: 'MAR001',
+      hotel: {
+        hotelId: 'MAR001',
+        name: 'Riad Yasmine',
+        rating: '4',
+        description: { lang: 'es', text: 'Un oasis de paz con un patio de piscina icónico en la Medina.' },
+        address: { cityName: 'Marrakech', countryCode: 'MA', lines: ['209 Rue Ank Jemel'], postalCode: '40000' },
+        media: [ { uri: "https://images.unsplash.com/photo-1569431597028-9f15037746b9?w=800", category: 'POOL' } ],
+        amenities: ['SWIMMING_POOL', 'WIFI', 'AIR_CONDITIONING']
+      },
+      available: true,
+      offers: [{ id: 'offer-mar1', price: { currency: 'USD', total: '220.00', base: '200' }, room: { type: 'DOUBLE_ROOM', description: { text: 'Habitación doble con vistas al patio'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
     },
     {
-        nombre: 'Amangiri',
-        ubicacion: 'Canyon Point, USA',
-        descripcion: 'Lujo minimalista y aislamiento en el desierto de Utah.',
-        media: [
-            "https://images.unsplash.com/photo-1572488949834-585429355b25?w=800",
-            "https://images.unsplash.com/photo-1615247001936-9a23108c353a?w=800",
-            "https://images.unsplash.com/photo-1598328229976-92a54e52252b?w=800",
-            "https://images.unsplash.com/photo-1566649774356-9ddd4765713b?w=800",
-            "https://images.unsplash.com/photo-1542444599-4172b5363162?w=800",
-            "https://images.unsplash.com/photo-1598462699734-655293246757?w=800"
-        ],
-        rating: 5,
-        price: 2500
+      type: 'hotel-offer',
+      id: 'USA001',
+      hotel: {
+        hotelId: 'USA001',
+        name: 'Amangiri',
+        rating: '5',
+        description: { lang: 'es', text: 'Lujo minimalista y aislamiento en el desierto de Utah.' },
+        address: { cityName: 'Canyon Point', countryCode: 'US', lines: ['1 Kayenta Rd'], postalCode: '84741' },
+        media: [ { uri: "https://images.unsplash.com/photo-1572488949834-585429355b25?w=800", category: 'EXTERIOR' } ],
+        amenities: ['SWIMMING_POOL', 'SPA', 'RESTAURANT']
+      },
+      available: true,
+      offers: [{ id: 'offer-usa1', price: { currency: 'USD', total: '2500.00', base: '2400' }, room: { type: 'DESERT_SUITE', description: { text: 'Suite con vistas al desierto'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
     },
     {
-        nombre: 'The Ritz-Carlton',
-        ubicacion: 'Kyoto, Japan',
-        descripcion: 'Elegancia japonesa y vistas al río Kamogawa.',
-        media: [
-            "https://images.unsplash.com/photo-1559624978-7013c74de359?w=800",
-            "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800",
-            "https://images.unsplash.com/photo-1584949093418-659a8ae62649?w=800",
-            "https://images.unsplash.com/photo-1503792444264-92b465759349?w=800",
-            "https://images.unsplash.com/photo-1594914753556-45a7b8064132?w=800",
-            "https://images.unsplash.com/photo-1583796069502-a791d1e479a4?w=800"
-        ],
-        rating: 5,
-        price: 1100
+      type: 'hotel-offer',
+      id: 'JPN001',
+      hotel: {
+        hotelId: 'JPN001',
+        name: 'The Ritz-Carlton',
+        rating: '5',
+        description: { lang: 'es', text: 'Elegancia japonesa y vistas al río Kamogawa.' },
+        address: { cityName: 'Kyoto', countryCode: 'JP', lines: ['Kamogawa Nijo-Ohashi Hotori'], postalCode: '604-0902' },
+        media: [ { uri: "https://images.unsplash.com/photo-1559624978-7013c74de359?w=800", category: 'LOBBY' } ],
+        amenities: ['SPA', 'FITNESS_CENTER', 'RESTAURANT']
+      },
+      available: true,
+      offers: [{ id: 'offer-jpn1', price: { currency: 'USD', total: '1100.00', base: '1000' }, room: { type: 'GARDEN_SUITE', description: { text: 'Suite con vistas al jardín zen'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
     },
     {
-        nombre: 'Hotel du Cap-Eden-Roc',
-        ubicacion: 'Antibes, France',
-        descripcion: 'Glamour de la Riviera Francesa y lujo atemporal.',
-        media: [
-            "https://images.unsplash.com/photo-1601648439969-dd6247d4665d?w=800",
-            "https://images.unsplash.com/photo-1606526131698-975916183424?w=800",
-            "https://images.unsplash.com/photo-1622322528229-373c353a4789?w=800",
-            "https://images.unsplash.com/photo-1599896541042-490395431671?w=800",
-            "https://images.unsplash.com/photo-1504109586057-7a2ae83d1338?w=800",
-            "https://images.unsplash.com/photo-1589923188900-85da5548644f?w=800"
-        ],
-        rating: 5,
-        price: 1500
+      type: 'hotel-offer',
+      id: 'FRA001',
+      hotel: {
+        hotelId: 'FRA001',
+        name: 'Hotel du Cap-Eden-Roc',
+        rating: '5',
+        description: { lang: 'es', text: 'Glamour de la Riviera Francesa y lujo atemporal.' },
+        address: { cityName: 'Antibes', countryCode: 'FR', lines: ['Boulevard J.F. Kennedy'], postalCode: '06160' },
+        media: [ { uri: "https://images.unsplash.com/photo-1601648439969-dd6247d4665d?w=800", category: 'POOL' } ],
+        amenities: ['SWIMMING_POOL', 'BEACH_ACCESS', 'RESTAURANT']
+      },
+      available: true,
+      offers: [{ id: 'offer-fra1', price: { currency: 'USD', total: '1500.00', base: '1400' }, room: { type: 'SEA_VIEW_ROOM', description: { text: 'Habitación con vistas al Mediterráneo'}}, checkInDate: '2024-09-01', checkOutDate: '2024-09-08' }]
     }
   ];
