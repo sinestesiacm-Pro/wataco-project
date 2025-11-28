@@ -201,9 +201,9 @@ export async function searchHotels(params: {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     // Make search less strict: check if the destination query INCLUDES the hotel city name
-    const destinationQueryLower = destinationName.toLowerCase();
+    const destinationQueryLower = destinationName.toLowerCase().split(',')[0].trim();
     const filteredMockData = MOCK_HOTELS_DATA.filter(
-        hotelOffer => hotelOffer.hotel.address.cityName.toLowerCase().includes(destinationQueryLower.split(',')[0])
+        hotelOffer => hotelOffer.hotel.address.cityName.toLowerCase().includes(destinationQueryLower)
     );
 
     if (filteredMockData.length > 0) {
@@ -394,5 +394,7 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
+
+    
 
     

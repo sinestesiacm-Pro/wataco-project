@@ -213,4 +213,5 @@ export default function HotelSearchPageWrapper() {
   )
 }
 
+
     

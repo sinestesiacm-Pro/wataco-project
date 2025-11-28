@@ -36,25 +36,24 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
 
     useEffect(() => {
         const fetchPhotos = async () => {
-            if (!offer.hotel.name || !offer.hotel.address.cityName) {
-                setLoadingPhotos(false);
-                setPhotos(offer.hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/800x600.png?text=No+Image']);
-                return;
-            }
             setLoadingPhotos(true);
-            const photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
-            
-            const staticPhotos = (offer.hotel.media || [])
-                .map(p => p.uri)
-                .filter(uri => !!uri);
+            let finalPhotos: string[] = [];
 
-            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
-
-            if (combinedPhotos.length === 0) {
-                 combinedPhotos = ['https://placehold.co/800x600.png?text=Image+not+found'];
+            if (offer.hotel.name && offer.hotel.address.cityName) {
+                const googlePhotos = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
+                finalPhotos.push(...googlePhotos);
             }
 
-            setPhotos(combinedPhotos);
+            const staticPhotos = (offer.hotel.media || []).map(p => p.uri).filter(uri => !!uri);
+            finalPhotos.push(...staticPhotos);
+
+            const uniquePhotos = [...new Set(finalPhotos)];
+
+            if (uniquePhotos.length === 0) {
+                 uniquePhotos.push('https://placehold.co/800x600.png?text=Image+not+found');
+            }
+
+            setPhotos(uniquePhotos);
             setLoadingPhotos(false);
         };
 
@@ -72,7 +71,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
     };
 
     return (
-        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[16/9] relative flex flex-col justify-end shadow-card-3d hover:scale-[1.02]">
+        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[4/5] relative flex flex-col justify-end shadow-card-3d hover:scale-[1.02]">
             <div className="absolute inset-0">
                 {loadingPhotos ? (
                     <Skeleton className="h-full w-full" />
@@ -90,6 +89,9 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                                             unoptimized={photo.includes('placehold.co')}
+                                            onError={(e) => {
+                                                e.currentTarget.src = 'https://placehold.co/800x600.png?text=Error';
+                                            }}
                                         />
                                     </div>
                                 </CarouselItem>
@@ -142,5 +144,6 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
+
 
     
