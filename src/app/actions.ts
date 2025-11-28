@@ -5,6 +5,7 @@ import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageD
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
+import { recommendedCruises } from '@/lib/mock-cruises';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db, AMADEUS_API_KEY, AMADEUS_API_SECRET, HOTELBEDS_API_KEY, HOTELBEDS_SECRET, GOOGLE_PLACES_API_KEY } from '@/lib/firebase';
 import crypto from 'crypto';
@@ -318,7 +319,7 @@ export async function searchCruises(params: {
   // Simulate API call and filtering based on mock data
   try {
     const filteredCruises = recommendedCruises.filter(
-      (cruise) => cruise.region === destinationRegion
+      (cruise) => cruise.region === params.destinationRegion
     );
 
     if (filteredCruises.length === 0) {
@@ -387,20 +388,12 @@ export async function activateVipMembership(params: { userId: string, membership
 }
 
 
-export async function getRecommendedHotels(): Promise<{ success: boolean; data?: any[]; error?: string }> {
+export async function getRecommendedHotels(): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
     try {
-        const hotelsList = MOCK_HOTELS_DATA.map(offer => ({
-            ...offer.hotel,
-            id: offer.hotel.hotelId, 
-            nombre: offer.hotel.name,
-            ubicacion: `${offer.hotel.address.cityName}, ${offer.hotel.address.countryCode}`,
-            descripcion: offer.hotel.description?.text,
-            price: parseFloat(offer.offers[0]?.price.total || '0'),
-        }));
-        return { success: true, data: hotelsList };
+        // Return a slice of the full mock data
+        return { success: true, data: MOCK_HOTELS_DATA.slice(0, 4) };
     } catch (err: any) {
         console.error("Error processing recommended hotels from mock data:", err);
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
-
