@@ -51,18 +51,18 @@ export function AITravelTips({ destination, destinationName }: AITravelTipsProps
         }
     }}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="text-white bg-transparent border-white/20 hover:bg-white/10 hover:text-white">
+        <Button variant="outline" size="sm">
           <Wand2 className="mr-2 h-4 w-4" />
           Consejos de Viaje con IA para {destinationName}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] md:max-w-lg text-white">
+      <DialogContent className="sm:max-w-[425px] md:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="font-headline text-2xl flex items-center text-white">
+          <DialogTitle className="font-headline text-2xl flex items-center">
             <Wand2 className="mr-2 h-6 w-6 text-primary" />
             Consejos de Viaje con IA
           </DialogTitle>
-          <DialogDescription className="text-white/80">
+          <DialogDescription>
             Descubre consejos de expertos para tu viaje a {destinationName}, con la ayuda de IA.
           </DialogDescription>
         </DialogHeader>
@@ -74,8 +74,8 @@ export function AITravelTips({ destination, destinationName }: AITravelTipsProps
           )}
           {error && <p className="text-destructive">{error}</p>}
           {tips && (
-            <ScrollArea className="h-72 w-full rounded-md border border-white/20 bg-black/20 p-4">
-              <div className="prose prose-sm prose-invert whitespace-pre-wrap font-body text-white">
+            <ScrollArea className="h-72 w-full rounded-md border bg-muted/50 p-4">
+              <div className="prose prose-sm prose-invert dark:prose-invert-dark whitespace-pre-wrap font-body text-foreground">
                 {tips}
               </div>
             </ScrollArea>
