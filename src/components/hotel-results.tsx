@@ -47,9 +47,12 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   return (
     <div className="space-y-4">
       {hotels.map((offer, index) => {
-        const imageUrl = (offer.hotel.media && offer.hotel.media.length > 0 && offer.hotel.media[0].uri)
-          ? offer.hotel.media[0].uri
+        // Robust image URL validation
+        const potentialUri = offer.hotel.media?.[0]?.uri;
+        const imageUrl = (typeof potentialUri === 'string' && potentialUri) 
+          ? potentialUri 
           : 'https://placehold.co/400x300.png';
+
         return (
             <Card key={`${offer.id}-${index}`} className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group bg-card/80 backdrop-blur-xl border flex flex-col md:flex-row">
                 <div className="relative h-48 md:h-auto md:w-1/3 xl:w-1/4 flex-shrink-0">
