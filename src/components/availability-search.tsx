@@ -123,7 +123,7 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
     }, []);
 
     const handleSearchClick = () => {
-        if (date?.from && date?.to && (destination?.iataCode || !showDestination)) {
+        if (date?.from && date?.to && (destinationQuery || !showDestination)) {
             onSearch({
                 checkInDate: date.from,
                 checkOutDate: date.to,

@@ -134,11 +134,14 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
         adults: adults.toString(),
         children: children.toString(),
       });
+       if (destination?.iataCode) {
+        params.set('cityCode', destination.iataCode);
+      }
       router.push(`/hotels/search?${params.toString()}`);
   }, [destination, destinationQuery, date, adults, children, router, toast]);
   
   const totalGuests = useMemo(() => adults + children, [adults, children]);
-  const travelerText = useMemo(() => `${totalGuests} huésped${totalGuests > 1 ? 's' : ''}`, [totalGuests]);
+  const travelerText = useMemo(() => `${totalGuests} huésped${totalGuests > 1 ? 'es' : ''}`, [totalGuests]);
     
   const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     e.currentTarget.select();
@@ -275,5 +278,3 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
 });
 
 export default HotelSearchPage;
-
-    

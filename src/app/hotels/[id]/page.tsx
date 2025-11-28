@@ -49,19 +49,21 @@ function HotelDetailPageContent({ id }: { id: string }) {
     }, [id, cameFromSearch]);
 
     const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode?: string, destinationName?: string }) => {
-        if (!searchData.cityCode || !searchData.destinationName) {
-            console.error("City code and destination name are required for hotel search.");
+        if (!searchData.destinationName) {
+            console.error("Destination name is required for hotel search.");
             // Optionally, show a toast to the user
             return;
         }
         const params = new URLSearchParams({
-            cityCode: searchData.cityCode,
             destinationName: searchData.destinationName,
             checkInDate: format(searchData.checkInDate, 'yyyy-MM-dd'),
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
         });
+        if (searchData.cityCode) {
+            params.set('cityCode', searchData.cityCode);
+        }
         router.push(`/hotels/search?${params.toString()}`);
     };
 
@@ -73,14 +75,14 @@ function HotelDetailPageContent({ id }: { id: string }) {
         );
     }
     
-    const backLinkHref = `/hotels/search?${searchParams.toString()}`;
+    const backLinkHref = cameFromSearch ? `/hotels/search?${searchParams.toString()}` : "/?tab=Hotels";
 
   return (
     <div className={cn('w-full min-h-screen pt-24 pb-24')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
             <Button asChild className="bg-card/80 backdrop-blur-xl border text-foreground hover:bg-accent shadow-lg">
-            <Link href={cameFromSearch ? backLinkHref : "/?tab=Hotels"}>
+            <Link href={backLinkHref}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {cameFromSearch ? 'Volver a los resultados' : 'Volver a Hoteles'}
             </Link>
@@ -113,9 +115,10 @@ function HotelDetailPageContent({ id }: { id: string }) {
                     checkOutDate: addDays(new Date(), 14),
                     adults: 2,
                     children: 0,
-                    cityCode: hotel.address.countryCode,
+                    cityCode: hotel.address.countryCode, // This is not ideal but a placeholder
                     destinationName: hotel.address.cityName,
-                }} 
+                }}
+                showDestination={true} 
             />}
           </>
         )}
@@ -137,5 +140,3 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
     </Suspense>
   );
 }
-
-    
