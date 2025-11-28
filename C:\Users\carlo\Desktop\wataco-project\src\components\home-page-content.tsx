@@ -139,8 +139,8 @@ export function HomePageContent() {
                 )}
             </AnimatePresence>
 
-            <div className="relative z-10 flex flex-col flex-grow">
-                 <div className="py-8 pt-24">
+            <div className="relative z-10 flex flex-col flex-grow pt-24">
+                 <div className="py-8">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                          <RecommendedContent tab={tab} />
                     </div>

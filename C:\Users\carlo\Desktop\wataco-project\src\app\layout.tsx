@@ -3,7 +3,6 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { Header } from '@/components/header';
 import { AuthProvider } from '@/contexts/auth-context';
-import { ChatWidget } from '@/components/chat-widget';
 import { BottomNavbar } from '@/components/bottom-navbar';
 import { ThemeProvider } from '@/contexts/theme-context';
 import { cn } from '@/lib/utils';
@@ -41,7 +40,7 @@ export default function RootLayout({
                           {children}
                       </main>
                       <Toaster />
-                      <ChatWidget />
+                      
                       <BottomNavbar />
                   </div>
               </SearchProvider>

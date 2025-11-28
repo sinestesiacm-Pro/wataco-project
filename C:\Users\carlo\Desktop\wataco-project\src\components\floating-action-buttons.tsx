@@ -2,7 +2,7 @@
 
 import React, { useState, Children, isValidElement } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChatWidget } from './chat-widget';
 import { cn } from '@/lib/utils';
@@ -41,7 +41,10 @@ export function FloatingActionButtons({ children }: { children: React.ReactNode 
                     >
                         {/* We need to wrap the filter trigger in a component that can accept a ref */}
                         <div>{filterButton}</div>
-                        <ChatWidget isFab={true} />
+                        <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4">
+                            <MessageSquare className="mr-2 h-5 w-5"/>
+                            Chat
+                        </Button>
                     </motion.div>
                 )}
             </AnimatePresence>

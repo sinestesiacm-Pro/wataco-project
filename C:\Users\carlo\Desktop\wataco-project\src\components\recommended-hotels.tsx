@@ -13,11 +13,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Skeleton } from './ui/skeleton';
 import Link from 'next/link';
 
-const HotelCard = React.memo(function HotelCard({ hotelOffer }: { hotelOffer: AmadeusHotelOffer }) {
+const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOffer: AmadeusHotelOffer, onViewHotel: (offer: AmadeusHotelOffer) => void }) {
     const hotel = hotelOffer.hotel;
     const [photos, setPhotos] = useState<string[]>([]);
     const [loadingPhotos, setLoadingPhotos] = useState(true);
-    const router = useRouter();
 
     useEffect(() => {
         const fetchPhotos = async () => {
@@ -47,23 +46,6 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer }: { hotelOffer: Am
         fetchPhotos();
     }, [hotel.name, hotel.address.cityName, hotel.media]);
 
-    const handleViewHotel = () => {
-        const checkInDate = addDays(new Date(), 7);
-        const checkOutDate = addDays(new Date(), 14);
-
-        const params = new URLSearchParams({
-            checkInDate: format(checkInDate, 'yyyy-MM-dd'),
-            checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
-            adults: '2',
-            children: '0',
-            destinationName: hotel.address.cityName,
-        });
-
-        const hotelId = hotel.hotelId || hotelOffer.id;
-        const url = `/hotels/${hotelId}/offers?${params.toString()}`;
-        
-        router.push(url, { state: { offer: hotelOffer } } as any);
-    };
 
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
@@ -117,7 +99,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer }: { hotelOffer: Am
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">
                     <p className="font-semibold text-xl text-foreground drop-shadow-md">${hotelOffer.offers[0].price.total}<span className="text-sm font-normal">/noche</span></p>
-                    <Button onClick={handleViewHotel} className="font-semibold">
+                    <Button onClick={() => onViewHotel(hotelOffer)} className="font-semibold">
                         Ver Hotel
                     </Button>
                  </div>
@@ -127,15 +109,38 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer }: { hotelOffer: Am
 });
 
 export const RecommendedHotels = React.memo(function RecommendedHotels() {
-  return (
-    <div className="relative space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {MOCK_HOTELS_DATA.slice(0, 4).map((hotelOffer) => (
-            <HotelCard key={hotelOffer.id} hotelOffer={hotelOffer} />
-          ))}
-      </div>
-    </div>
-  );
+    const [recommended, setRecommended] = useState<AmadeusHotelOffer[]>([]);
+    const router = useRouter();
+
+    useEffect(() => {
+        // Simulating fetching recommended hotels
+        setRecommended(MOCK_HOTELS_DATA.slice(0, 4));
+    }, []);
+
+    const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
+        const checkInDate = addDays(new Date(), 7);
+        const checkOutDate = addDays(new Date(), 14);
+
+        const params = new URLSearchParams({
+            destinationName: offer.hotel.address.cityName,
+            checkInDate: format(checkInDate, 'yyyy-MM-dd'),
+            checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
+            adults: '2',
+            children: '0',
+        });
+        
+        router.push(`/hotels/search?${params.toString()}`);
+    }, [router]);
+
+    return (
+        <div className="relative space-y-6">
+            <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {recommended.map((hotelOffer) => (
+                    <HotelCard key={hotelOffer.id} hotelOffer={hotelOffer} onViewHotel={handleViewHotel} />
+                ))}
+            </div>
+        </div>
+    );
 });

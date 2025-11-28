@@ -18,7 +18,7 @@ type Message = {
   sender: 'user' | 'ai';
 };
 
-export function ChatWidget({ isFab = false }: { isFab?: boolean }) {
+export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -81,19 +81,17 @@ export function ChatWidget({ isFab = false }: { isFab?: boolean }) {
     }
   };
   
-  if (isFab) {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-              <Button size="lg" className="rounded-full shadow-lg w-auto h-auto p-4">
-                 <MessageSquare className="mr-2 h-5 w-5"/>
-                 Chat
+              <Button size="lg" className="fixed bottom-24 right-6 z-50 rounded-full shadow-lg w-16 h-16 bg-primary hover:bg-primary/90 md:hidden">
+                 <MessageSquare className="h-8 w-8"/>
               </Button>
           </DialogTrigger>
           <DialogContent
             className={cn(
               "fixed bottom-0 left-0 right-0 z-[100] w-full max-w-full h-[80vh] transition-all duration-300 ease-in-out transform-none rounded-t-3xl",
-              "md:max-w-sm md:h-[60vh] md:bottom-6 md:left-6 md:right-auto md:rounded-2xl",
+              "md:max-w-sm md:h-[60vh] md:bottom-6 md:left-auto md:right-6 md:rounded-2xl",
               "p-0 flex flex-col"
             )}
           >
@@ -169,5 +167,4 @@ export function ChatWidget({ isFab = false }: { isFab?: boolean }) {
           </DialogContent>
         </Dialog>
     );
-  }
 }
