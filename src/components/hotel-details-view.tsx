@@ -1,14 +1,16 @@
+
 'use client';
 
+import { useState, useEffect } from 'react';
 import type { AmadeusHotel } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import useEmblaCarousel from "embla-carousel-react";
 import Image from 'next/image';
 import { Star, MapPin, Wifi, Car, Waves, Utensils, GlassWater, Wind, Dumbbell, Sparkles, Dog, Plane, CheckCircle2, ArrowRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { HotelMapDialog } from './hotel-map-dialog';
 import { Badge } from './ui/badge';
+import { getGooglePlacePhotos } from '@/app/actions';
 
 const amenityIcons: { [key: string]: LucideIcon } = {
   SWIMMING_POOL: Waves,
@@ -39,22 +41,44 @@ interface HotelDetailsViewProps {
 }
 
 export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [loadingPhotos, setLoadingPhotos] = useState(true);
+
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      setLoadingPhotos(true);
+      const photoUrls = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
+      
+      const staticPhotos = hotel.media?.map(p => p.uri).filter(uri => !!uri) || [];
+
+      // Combine and deduplicate, prioritizing Google Photos
+      const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
+
+      setPhotos(combinedPhotos);
+      setLoadingPhotos(false);
+    };
+
+    fetchPhotos();
+  }, [hotel.name, hotel.address.cityName, hotel.media]);
+
+  const displayPhotos = photos.length > 0 ? photos : (hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/800x600.png']);
 
   return (
     <div className="space-y-8">
       <Card className="relative overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg h-[60vh] md:h-[70vh]">
         
-        {/* Background Image Carousel */}
-        <Carousel 
-          className="absolute inset-0 w-full h-full"
-        >
+        <Carousel className="absolute inset-0 w-full h-full">
           <CarouselContent>
-            {hotel.media && hotel.media.length > 0 ? (
-              hotel.media.map((photo, index) => (
+            {loadingPhotos ? (
+              <CarouselItem>
+                <div className="relative h-[60vh] md:h-[70vh] w-full bg-muted/20 animate-pulse" />
+              </CarouselItem>
+            ) : (
+              displayPhotos.map((photo, index) => (
                 <CarouselItem key={index}>
                    <div className="relative h-[60vh] md:h-[70vh] w-full">
                     <Image
-                        src={photo.uri}
+                        src={photo}
                         alt={`${hotel.name} - ${index + 1}`}
                         fill
                         className="object-cover"
@@ -64,27 +88,14 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
                    </div>
                 </CarouselItem>
               ))
-            ) : (
-               <CarouselItem>
-                  <div className="relative h-[60vh] md:h-[70vh] w-full bg-muted/20">
-                    <Image
-                        src="https://placehold.co/800x600.png"
-                        alt="Placeholder hotel image"
-                        fill
-                        className="object-cover"
-                    />
-                  </div>
-                </CarouselItem>
             )}
           </CarouselContent>
           <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
           <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
         </Carousel>
 
-        {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
 
-        {/* Content Overlay */}
         <div className="relative h-full flex flex-col justify-end p-6 md:p-8 pointer-events-none">
             <CardHeader className="p-0 mb-4">
                 <CardTitle className="text-3xl md:text-4xl font-headline text-white drop-shadow-lg">{hotel.name}</CardTitle>

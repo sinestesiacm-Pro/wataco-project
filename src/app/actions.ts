@@ -182,9 +182,7 @@ const hotelSearchSchema = z.object({
   currency: z.string().optional().default('USD'),
 });
 
-// This is a simplified search function that uses mock data as a fallback.
-// The complex RapidAPI logic has been removed to ensure stability.
-// To re-enable API search, the logic would need to be re-implemented here with robust error handling.
+// This is a simplified search function that uses mock data.
 export async function searchHotels(params: {
   destinationName: string;
   checkInDate: string;
@@ -222,16 +220,44 @@ export async function searchHotels(params: {
     }
 }
 
-export async function getHotelDetailsHybrid(hotelId: string, checkInDate: string, checkOutDate: string) {
-    console.log("getHotelDetailsHybrid called with:", { hotelId, checkInDate, checkOutDate });
-    return { success: false, error: "getHotelDetailsHybrid no está implementado." };
-}
-
 export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Promise<string[]> {
-    // This function is disabled as there is no API key provided.
-    // It will return an empty array to prevent errors.
-    console.warn("Google Places API Key is not configured. Photo search is disabled.");
-    return [];
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
+    if (!apiKey) {
+        console.warn("Google Places API Key is not configured. Photo search is disabled.");
+        return [];
+    }
+
+    try {
+        const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(placeName)}&inputtype=textquery&fields=place_id&key=${apiKey}`;
+        const findPlaceResponse = await fetch(findPlaceUrl);
+        const findPlaceData = await findPlaceResponse.json();
+
+        if (findPlaceData.status !== 'OK' || !findPlaceData.candidates || findPlaceData.candidates.length === 0) {
+            console.warn(`No Google Place ID found for "${placeName}".`);
+            return [];
+        }
+
+        const placeId = findPlaceData.candidates[0].place_id;
+
+        const placeDetailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${apiKey}`;
+        const placeDetailsResponse = await fetch(placeDetailsUrl);
+        const placeDetailsData = await placeDetailsResponse.json();
+
+        if (placeDetailsData.status !== 'OK' || !placeDetailsData.result.photos) {
+            console.warn(`No photos found for place ID "${placeId}".`);
+            return [];
+        }
+
+        const photoUrls = placeDetailsData.result.photos.slice(0, maxPhotos).map((photo: any) => {
+            return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${photo.photo_reference}&key=${apiKey}`;
+        });
+        
+        return photoUrls;
+
+    } catch (error) {
+        console.error("Error fetching photos from Google Places API:", error);
+        return [];
+    }
 }
 
 
@@ -379,5 +405,3 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
-
-    
