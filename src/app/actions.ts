@@ -218,22 +218,30 @@ export async function searchHotels(params: {
         'Api-key': HOTELBEDS_API_KEY,
         'X-Signature': signature,
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Accept-Encoding': 'gzip'
     };
 
     try {
-        const searchParams = new URLSearchParams({
-            'stay.checkIn': checkInDate,
-            'stay.checkOut': checkOutDate,
-            'occupancies[0].rooms': '1',
-            'occupancies[0].adults': adults.toString(),
-            'occupancies[0].children': '0',
-            'destination.code': cityCode
-        });
+        const availabilityRequestBody = {
+            "stay": {
+                "checkIn": checkInDate,
+                "checkOut": checkOutDate
+            },
+            "occupancies": [{
+                "rooms": 1,
+                "adults": adults,
+                "children": 0
+            }],
+            "destination": {
+                "code": cityCode
+            }
+        };
 
-        const availabilityResponse = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels?${searchParams.toString()}`, {
-            method: 'GET',
+        const availabilityResponse = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels`, {
+            method: 'POST',
             headers: headers,
+            body: JSON.stringify(availabilityRequestBody)
         });
 
         if (!availabilityResponse.ok) {
