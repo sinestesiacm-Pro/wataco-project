@@ -252,11 +252,11 @@ export async function searchHotels(params: {
         adults_number: adults.toString(),
         currency_code: currency || 'USD',
         page_number: '1',
-        language_code: 'es'
+        language_code: 'en-gb'
     });
 
     const hotelsResponse = await fetch(`${BOOKING_API_URL}/searchHotels?${searchHotelsParams.toString()}`, { 
-        method: 'GET', // searchHotels is a GET request
+        method: 'GET',
         headers: rapidApiHeaders 
     });
 
@@ -501,5 +501,7 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }
+
+    
 
     
