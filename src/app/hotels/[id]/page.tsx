@@ -13,28 +13,14 @@ import { HotelDetailsView } from '@/components/hotel-details-view';
 import { AvailabilitySearch } from '@/components/availability-search';
 import { addDays, format } from 'date-fns';
 import { Card, CardContent } from '@/components/ui/card';
-import { HotelBookingFlow } from '@/components/hotel-booking-flow';
 
 function HotelDetailPageContent({ id }: { id: string }) {
     const router = useRouter();
-    const searchParams = useSearchParams();
     const [hotel, setHotel] = useState<AmadeusHotel | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
-    // Check if we came from a search or are just viewing the hotel
-    const cameFromSearch = searchParams.has('checkInDate');
-    const adults = searchParams.get('adults') || '1';
-    const children = searchParams.get('children') || '0';
-    const checkInDate = searchParams.get('checkInDate');
-    const checkOutDate = searchParams.get('checkOutDate');
 
     useEffect(() => {
-        if (cameFromSearch) {
-            setLoading(false);
-            return;
-        }
-
         const fetchDetails = async () => {
             setLoading(true);
             const result = await getFirestoreHotelDetails(id);
@@ -46,25 +32,22 @@ function HotelDetailPageContent({ id }: { id: string }) {
             setLoading(false);
         };
         fetchDetails();
-    }, [id, cameFromSearch]);
+    }, [id]);
 
     const handleAvailabilitySearch = (searchData: { checkInDate: Date, checkOutDate: Date, adults: number, children: number, cityCode?: string, destinationName?: string }) => {
-        if (!searchData.destinationName) {
-            console.error("Destination name is required for hotel search.");
-            // Optionally, show a toast to the user
-            return;
-        }
+        if (!hotel) return;
+
         const params = new URLSearchParams({
-            destinationName: searchData.destinationName,
+            destinationName: hotel.address.cityName,
             checkInDate: format(searchData.checkInDate, 'yyyy-MM-dd'),
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
+            cityCode: hotel.hotelId // This is not ideal, but we're using mock data
         });
-        if (searchData.cityCode) {
-            params.set('cityCode', searchData.cityCode);
-        }
-        router.push(`/hotels/search?${params.toString()}`);
+
+        // Redirect to the offers page for this specific hotel
+        router.push(`/hotels/${id}/offers?${params.toString()}`);
     };
 
     if (loading) {
@@ -74,54 +57,45 @@ function HotelDetailPageContent({ id }: { id: string }) {
             </div>
         );
     }
-    
-    const backLinkHref = cameFromSearch ? `/hotels/search?${searchParams.toString()}` : "/?tab=Hotels";
+
+    if (error || !hotel) {
+        return (
+             <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
+                <CardContent className="pt-6 text-center">
+                    <h3 className="font-bold">Error al Cargar Hotel</h3>
+                    <p className="text-sm mt-2">{error}</p>
+                    <Button asChild variant="outline" className="mt-4">
+                        <Link href="/?tab=Hotels">Volver</Link>
+                    </Button>
+                </CardContent>
+            </Card>
+        );
+    }
 
   return (
     <div className={cn('w-full min-h-screen pt-24 pb-24')}>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex justify-between items-center">
             <Button asChild className="bg-card/80 backdrop-blur-xl border text-foreground hover:bg-accent shadow-lg">
-            <Link href={backLinkHref}>
+            <Link href={'/?tab=Hotels'}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                {cameFromSearch ? 'Volver a los resultados' : 'Volver a Hoteles'}
+                Volver a Hoteles
             </Link>
             </Button>
         </div>
         
-        {cameFromSearch && checkInDate && checkOutDate ? (
-             <HotelBookingFlow 
-                hotelId={id} 
-                adults={parseInt(adults, 10)} 
-                children={parseInt(children, 10)}
-                checkInDate={checkInDate}
-                checkOutDate={checkOutDate}
-            />
-        ) : (
-          <>
-            {hotel && <HotelDetailsView hotel={hotel} />}
-            {error && (
-                 <Card className="bg-destructive/20 border-destructive text-destructive-foreground p-4">
-                    <CardContent className="pt-6 text-center">
-                        <h3 className="font-bold">Error al Cargar Hotel</h3>
-                        <p className="text-sm mt-2">{error}</p>
-                    </CardContent>
-                </Card>
-            )}
-             {hotel && <AvailabilitySearch 
-                onSearch={handleAvailabilitySearch} 
-                initialData={{
-                    checkInDate: addDays(new Date(), 7),
-                    checkOutDate: addDays(new Date(), 14),
-                    adults: 2,
-                    children: 0,
-                    cityCode: hotel.address.countryCode, // This is not ideal but a placeholder
-                    destinationName: hotel.address.cityName,
-                }}
-                showDestination={true} 
-            />}
-          </>
-        )}
+        <HotelDetailsView hotel={hotel} />
+        
+        <AvailabilitySearch 
+            onSearch={handleAvailabilitySearch} 
+            initialData={{
+                checkInDate: addDays(new Date(), 7),
+                checkOutDate: addDays(new Date(), 14),
+                adults: 2,
+                children: 0,
+            }}
+            showDestination={false} 
+        />
       </div>
     </div>
   );

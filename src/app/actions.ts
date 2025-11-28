@@ -201,10 +201,10 @@ export async function searchHotels(params: {
     // Simulate a short delay for a better user experience
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Always use the mock data as a reliable source.
-    const destinationCity = destinationName.split(',')[0].toLowerCase();
+    // Make search less strict: check if the hotel city name is INCLUDED in the destination query
+    const destinationQueryLower = destinationName.toLowerCase();
     const filteredMockData = MOCK_HOTELS_DATA.filter(
-        hotel => hotel.hotel.address.cityName.toLowerCase() === destinationCity
+        hotel => destinationQueryLower.includes(hotel.hotel.address.cityName.toLowerCase())
     );
 
     if (filteredMockData.length > 0) {

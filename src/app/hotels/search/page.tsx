@@ -37,7 +37,7 @@ function HotelResultsPageContent() {
       amenities: [],
     });
 
-    const destinationName = searchParams.get('destinationName') || 'tu destino';
+    const destinationName = searchParams.get('destinationName') || '';
     const checkInDate = searchParams.get('checkInDate') || '';
     const checkOutDate = searchParams.get('checkOutDate') || '';
     const adults = searchParams.get('adults') || '1';
