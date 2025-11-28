@@ -1,33 +1,76 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Heart, Star, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
+import { Heart, Star, MapPin } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 import Link from 'next/link';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
 import type { AmadeusHotelOffer } from '@/lib/types';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { format, addDays } from 'date-fns';
+import { getGooglePlacePhotos } from '@/app/actions';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
+import { Skeleton } from './ui/skeleton';
 
 const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOffer: AmadeusHotelOffer, onViewHotel: (offer: AmadeusHotelOffer) => void }) {
     const hotel = hotelOffer.hotel;
-    const validMedia = hotel.media?.filter(item => item && item.uri) || [];
-    const imageUrl = validMedia.length > 0 ? validMedia[0].uri : "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800";
+    const [photos, setPhotos] = useState<string[]>([]);
+    const [loadingPhotos, setLoadingPhotos] = useState(true);
+
+    useEffect(() => {
+        const fetchPhotos = async () => {
+            setLoadingPhotos(true);
+            const photoUrls = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
+            
+            const staticPhotos = (hotel.media || [])
+                .map(p => p.uri)
+                .filter(uri => !!uri);
+
+            const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
+
+            setPhotos(combinedPhotos);
+            setLoadingPhotos(false);
+        };
+
+        fetchPhotos();
+    }, [hotel.name, hotel.address.cityName, hotel.media]);
+
+    const displayPhotos = photos.length > 0 ? photos : ['https://placehold.co/400x300.png'];
 
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
             <div className="relative w-full h-56 flex-shrink-0">
-                <Image 
-                    src={imageUrl}
-                    data-ai-hint="hotel photo" 
-                    alt={hotel.name || 'Hotel'}
-                    fill 
-                    className="object-cover"
-                    draggable={false}
-                />
-                <div className="absolute top-0 right-0 p-3 z-10">
+                {loadingPhotos ? (
+                    <Skeleton className="h-full w-full" />
+                ) : (
+                    <Carousel className="w-full h-full">
+                        <CarouselContent>
+                            {displayPhotos.map((photo, index) => (
+                                <CarouselItem key={index}>
+                                    <div className="relative h-56 w-full">
+                                        <Image
+                                            src={photo}
+                                            data-ai-hint="hotel photo"
+                                            alt={`${hotel.name || 'Hotel'} image ${index + 1}`}
+                                            fill
+                                            className="object-cover"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
+                                            draggable={false}
+                                        />
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        {displayPhotos.length > 1 && (
+                            <>
+                                <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                                <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                            </>
+                        )}
+                    </Carousel>
+                )}
+                 <div className="absolute top-0 right-0 p-3 z-10">
                     <Button variant="ghost" size="icon" className="w-8 h-8 flex-shrink-0 text-white bg-black/30 hover:bg-black/50 hover:text-white rounded-full">
                         <Heart className="h-5 w-5" />
                     </Button>
@@ -71,7 +114,6 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
       const hotelId = offer.hotel.hotelId || offer.id;
       const url = `/hotels/${hotelId}/offers?${params.toString()}`;
       
-      // Use router.push with state to pass the complex object
       router.push(url, { state: { offer } } as any);
   }, [router]);
 
@@ -87,5 +129,3 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
-
-    
