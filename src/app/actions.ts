@@ -196,7 +196,7 @@ export async function searchHotels(params: {
   }
 
   if (!RAPIDAPI_KEY || RAPIDAPI_KEY === 'YOUR_RAPIDAPI_KEY') {
-    console.warn("DIAGNÓSTICO: La API de Hotelbeds no está configurada. Usando datos de muestra como respaldo.");
+    console.warn("DIAGNÓSTICO: La API de RapidAPI (Sky Scrapper) no está configurada. Usando datos de muestra como respaldo.");
     return { 
         success: true, 
         data: MOCK_HOTELS_DATA,
@@ -230,14 +230,12 @@ export async function searchHotels(params: {
         const errorMessage = `Sky Scrapper API request failed: ${errorBody.message || response.statusText}`;
         console.error('Sky Scrapper API Error:', errorBody);
         
-        if (response.status === 429) { // Too Many Requests
-            return { 
-                success: true, 
-                data: MOCK_HOTELS_DATA,
-                error: `API falló, usando datos de muestra. Error: Sky Scrapper API request failed: Too many requests`
-            };
-        }
-        return { success: false, error: errorMessage };
+        // Universal fallback to mock data if the API fails for any reason (not just 429)
+        return { 
+            success: true, 
+            data: MOCK_HOTELS_DATA,
+            error: `API falló, usando datos de muestra. Error: ${errorMessage}`
+        };
     }
 
     const skyScrapperData = await response.json();
