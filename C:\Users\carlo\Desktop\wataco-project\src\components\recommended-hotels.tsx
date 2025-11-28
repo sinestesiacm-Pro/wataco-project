@@ -24,7 +24,6 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer }: { hotelOffer: Am
             setLoadingPhotos(true);
             let finalPhotos: string[] = [];
             
-            // Prioritize Google Photos
             if (hotel.name && hotel.address.cityName) {
                 const googlePhotos = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
                  if (googlePhotos.length > 0) {
@@ -32,13 +31,11 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer }: { hotelOffer: Am
                 }
             }
     
-            // Fallback to static photos from mock/db if Google fails or returns no images
             if (finalPhotos.length === 0) {
                 const staticPhotos = (hotel.media || []).map(p => p.uri).filter(uri => !!uri);
                 finalPhotos.push(...staticPhotos);
             }
             
-            // Ultimate fallback to a placeholder
             if (finalPhotos.length === 0) {
                  finalPhotos.push('https://placehold.co/800x600.png?text=Image+Not+Available');
             }
@@ -51,8 +48,21 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer }: { hotelOffer: Am
     }, [hotel.name, hotel.address.cityName, hotel.media]);
 
     const handleViewHotel = () => {
-        const hotelId = hotelOffer.hotel.hotelId || hotelOffer.id;
-        router.push(`/hotels/${hotelId}`);
+        const checkInDate = addDays(new Date(), 7);
+        const checkOutDate = addDays(new Date(), 14);
+
+        const params = new URLSearchParams({
+            checkInDate: format(checkInDate, 'yyyy-MM-dd'),
+            checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
+            adults: '2',
+            children: '0',
+            destinationName: hotel.address.cityName,
+        });
+
+        const hotelId = hotel.hotelId || hotelOffer.id;
+        const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+        
+        router.push(url, { state: { offer: hotelOffer } } as any);
     };
 
     return (

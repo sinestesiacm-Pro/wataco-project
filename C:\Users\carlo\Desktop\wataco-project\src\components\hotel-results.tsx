@@ -70,8 +70,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const hotelId = offer.hotel.hotelId || offer.id;
         const url = `/hotels/${hotelId}/offers`;
         
-        // Pass the offer data and search params through router state
-        router.push(url + '?' + params.toString(), { state: { offer, searchParams: params.toString() } } as any);
+        router.push(url + '?' + params.toString(), { state: { offer } } as any);
     };
 
     return (

@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
-import { getFirestore, doc } from "firebase/firestore";
+import { getFirestore, doc, collection, query, where, getDocs, writeBatch, limit, startAt, orderBy } from "firebase/firestore";
 import { firebaseConfig } from "@/firebase/config";
 
 // These are public keys and are safe to be exposed in the client-side code
