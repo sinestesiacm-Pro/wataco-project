@@ -38,6 +38,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
             setLoadingPhotos(true);
             let finalPhotos: string[] = [];
             
+            // Prioritize Google Photos
             if (offer.hotel.name && offer.hotel.address.cityName) {
                 const googlePhotos = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
                  if (googlePhotos.length > 0) {
@@ -45,11 +46,13 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                 }
             }
     
+            // Fallback to static photos from mock/db if Google fails or returns no images
             if (finalPhotos.length === 0) {
                 const staticPhotos = (offer.hotel.media || []).map(p => p.uri).filter(uri => !!uri);
                 finalPhotos.push(...staticPhotos);
             }
             
+            // Ultimate fallback to a placeholder
             if (finalPhotos.length === 0) {
                  finalPhotos.push('https://placehold.co/800x600.png?text=Image+Not+Available');
             }
@@ -65,10 +68,10 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
     const handleViewHotel = () => {
         const params = new URLSearchParams(searchParams.toString());
         const hotelId = offer.hotel.hotelId || offer.id;
-        const url = `/hotels/${hotelId}/offers?${params.toString()}`;
+        const url = `/hotels/${hotelId}/offers`;
         
-        // Pass the offer data through router state to avoid re-fetching
-        router.push(url, { state: { offer } } as any);
+        // Pass the offer data and search params through router state
+        router.push(url + '?' + params.toString(), { state: { offer, searchParams: params.toString() } } as any);
     };
 
     return (

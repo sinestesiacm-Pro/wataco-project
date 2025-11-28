@@ -46,8 +46,10 @@ function HotelDetailPageContent({ id }: { id: string }) {
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
-            cityCode: hotel.address.countryCode // Simplified
         });
+        if (hotel.address.countryCode) {
+            params.set('cityCode', hotel.address.countryCode);
+        }
 
         // Redirect to the search results page for this specific hotel
         router.push(`/hotels/search?${params.toString()}`);
@@ -56,6 +58,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
     const getInitialDate = (param: string | null, fallback: Date): Date => {
         if (!param) return fallback;
         try {
+            // Ensure correct parsing for 'yyyy-MM-dd'
             return parse(param, 'yyyy-MM-dd', new Date());
         } catch {
             return fallback;

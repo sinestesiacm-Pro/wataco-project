@@ -1,6 +1,6 @@
 'use client';
 import React, { Suspense, useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Loader2 } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -12,11 +12,13 @@ import { Card, CardContent } from '@/components/ui/card';
 
 function HotelOffersPageContent() {
     const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
     const [offer, setOffer] = useState<AmadeusHotelOffer | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const id = useSearchParams().get('id');
+    
+    const hotelId = pathname.split('/')[2];
 
     useEffect(() => {
         // The offer object is passed via router state
