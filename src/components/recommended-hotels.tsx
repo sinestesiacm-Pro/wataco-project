@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -29,7 +30,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
 
             const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
 
-            setPhotos(combinedPhotos);
+            setPhotos(combinedPhotos.length > 0 ? combinedPhotos : ['https://placehold.co/400x300.png']);
             setLoadingPhotos(false);
         };
 

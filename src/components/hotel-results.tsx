@@ -139,4 +139,3 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
   );
 }
 
-    
