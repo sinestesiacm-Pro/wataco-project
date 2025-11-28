@@ -213,36 +213,27 @@ export async function searchHotels(params: {
     
     const { cityCode, checkInDate, checkOutDate, adults } = validation.data;
     
-    // Hotelbeds authentication and request signature
     const signature = crypto.createHash('sha256').update(HOTELBEDS_API_KEY + HOTELBEDS_SECRET + Math.floor(Date.now() / 1000)).digest('hex');
     const headers = {
         'Api-key': HOTELBEDS_API_KEY,
         'X-Signature': signature,
         'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
         'Accept-Encoding': 'gzip'
     };
 
     try {
-        const availabilityRequestBody = {
-            "stay": {
-                "checkIn": checkInDate,
-                "checkOut": checkOutDate
-            },
-            "occupancies": [{
-                "rooms": 1,
-                "adults": adults,
-                "children": 0
-            }],
-            "destination": {
-                "code": cityCode
-            }
-        };
+        const searchParams = new URLSearchParams({
+            'stay.checkIn': checkInDate,
+            'stay.checkOut': checkOutDate,
+            'occupancies[0].rooms': '1',
+            'occupancies[0].adults': adults.toString(),
+            'occupancies[0].children': '0',
+            'destination.code': cityCode
+        });
 
-        const availabilityResponse = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(availabilityRequestBody)
+        const availabilityResponse = await fetch(`${HOTELBEDS_API_URL}/hotel-api/1.0/hotels?${searchParams.toString()}`, {
+            method: 'GET',
+            headers: headers,
         });
 
         if (!availabilityResponse.ok) {
@@ -254,7 +245,7 @@ export async function searchHotels(params: {
 
         const availabilityData = await availabilityResponse.json();
 
-        if (!availabilityData.hotels || availabilityData.hotels.hotels.length === 0) {
+        if (!availabilityData.hotels || !availabilityData.hotels.hotels || availabilityData.hotels.hotels.length === 0) {
             throw new Error("No hotels found for the specified destination in Hotelbeds.");
         }
         
@@ -264,16 +255,16 @@ export async function searchHotels(params: {
             hotel: {
                 hotelId: hotel.code.toString(),
                 name: hotel.name,
-                rating: hotel.categoryName.match(/\\d/)?.[0] || '3', // Extract star number
+                rating: hotel.categoryName.match(/\\d/)?.[0] || '3',
                 address: {
                     cityName: hotel.destinationName,
                     countryCode: hotel.countryCode,
-                    lines: [hotel.address || ''],
+                    lines: [hotel.address?.content || ''],
                     postalCode: hotel.postalCode || ''
                 },
                 media: hotel.images?.map((img: any) => ({ uri: `https://photos.hotelbeds.com/giata/${img.path}`, category: img.type })) || [],
-                description: { lang: 'es', text: '' }, // Hotelbeds content API needed for this
-                amenities: [] // Hotelbeds content API needed for this
+                description: { lang: 'es', text: '' }, 
+                amenities: [] 
             },
             available: true,
             offers: hotel.rooms.map((room: any): Room => ({
@@ -302,7 +293,6 @@ export async function searchHotels(params: {
 
     } catch (err: any) {
         console.error('Error in searchHotels action:', err);
-        // Fallback for network or other critical errors
         if (params.destinationName) {
             const mockOffers = MOCK_HOTELS_DATA.filter(h => h.hotel.address.cityName.toLowerCase().includes(params.destinationName!.toLowerCase() || ''));
              if (mockOffers.length > 0) {
@@ -493,3 +483,5 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al cargar los hoteles. Revisa la configuración de Firebase y las reglas de seguridad de Firestore." };
     }
 }
+
+    
