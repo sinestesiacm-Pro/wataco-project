@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -65,9 +64,9 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
 
   return (
     <div className="space-y-8">
-      <Card className="relative overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg h-[60vh] md:h-[70vh]">
+      <Card className="relative overflow-hidden bg-card/40 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl text-white">
         
-        <Carousel className="absolute inset-0 w-full h-full">
+        <Carousel className="w-full">
           <CarouselContent>
             {loadingPhotos ? (
               <CarouselItem>
@@ -90,13 +89,17 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
               ))
             )}
           </CarouselContent>
-          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
-          <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
+          {displayPhotos.length > 1 && (
+            <>
+                <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
+                <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
+            </>
+          )}
         </Carousel>
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
 
-        <div className="relative h-full flex flex-col justify-end p-6 md:p-8 pointer-events-none">
+        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
             <CardHeader className="p-0 mb-4">
                 <CardTitle className="text-3xl md:text-4xl font-headline text-white drop-shadow-lg">{hotel.name}</CardTitle>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-white/90">
@@ -105,30 +108,32 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
                 </div>
             </CardHeader>
             <CardContent className="p-0">
-                <div className="space-y-6">
-                    {hotel.description && (
-                        <div>
-                            <h3 className="font-semibold text-lg mb-2 text-white">Sobre esta propiedad</h3>
-                            <p className="text-white/80 line-clamp-3">{hotel.description.text}</p>
-                        </div>
-                    )}
-                    {hotel.amenities && hotel.amenities.length > 0 && (
-                        <div>
-                            <h3 className="font-semibold text-lg mb-3 text-white">Servicios Populares</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {hotel.amenities.slice(0, 6).map(amenity => {
-                                    const Icon = amenityIcons[amenity] || CheckCircle2;
-                                    return (
-                                        <Badge key={amenity} variant="secondary" className="gap-2 bg-white/10 text-white border-white/20">
-                                            <Icon className="h-4 w-4" />
-                                            {formatAmenity(amenity)}
-                                        </Badge>
-                                    );
-                                })}
+                <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                        {hotel.description && (
+                            <div>
+                                <h3 className="font-semibold text-lg mb-2 text-white">Sobre esta propiedad</h3>
+                                <p className="text-white/80 line-clamp-3">{hotel.description.text}</p>
                             </div>
-                        </div>
-                    )}
-                     <div className="pointer-events-auto">
+                        )}
+                    </div>
+                    <div className="space-y-4">
+                        {hotel.amenities && hotel.amenities.length > 0 && (
+                            <div>
+                                <h3 className="font-semibold text-lg mb-3 text-white">Servicios Populares</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {hotel.amenities.slice(0, 6).map(amenity => {
+                                        const Icon = amenityIcons[amenity] || CheckCircle2;
+                                        return (
+                                            <Badge key={amenity} variant="secondary" className="gap-2 bg-white/10 text-white border-white/20">
+                                                <Icon className="h-4 w-4" />
+                                                {formatAmenity(amenity)}
+                                            </Badge>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
                         <HotelMapDialog hotelName={hotel.name || 'Ubicación'} />
                     </div>
                 </div>

@@ -38,7 +38,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const fetchPhotos = async () => {
             if (!offer.hotel.name || !offer.hotel.address.cityName) {
                 setLoadingPhotos(false);
-                setPhotos(offer.hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2']);
+                setPhotos(offer.hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/800x600.png']);
                 return;
             }
             setLoadingPhotos(true);
@@ -50,8 +50,10 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
 
             let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
 
-            if (combinedPhotos.length === 0) {
-                 combinedPhotos = ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'];
+            if (combinedPhotos.length === 0 && staticPhotos.length > 0) {
+                 combinedPhotos = staticPhotos;
+            } else if (combinedPhotos.length === 0) {
+                combinedPhotos = ['https://placehold.co/800x600.png'];
             }
 
             setPhotos(combinedPhotos);
@@ -65,8 +67,6 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const params = new URLSearchParams(searchParams.toString());
         const hotelId = offer.hotel.hotelId || offer.id;
         
-        // IMPORTANT FIX: Ensure hotelId is explicitly set in the search params
-        // for the next page to use.
         params.set('hotelId', hotelId);
         
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
