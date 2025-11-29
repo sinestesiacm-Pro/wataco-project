@@ -145,29 +145,48 @@ export async function searchHotelDestinations(keyword: string): Promise<{ succes
         return { success: true, data: [] };
     }
     const validatedKeyword = validation.data.keyword.toLowerCase();
+    const apiKey = GOOGLE_PLACES_API_KEY;
+    if (!apiKey || apiKey === 'YOUR_GOOGLE_PLACES_API_KEY') {
+        console.warn("Google Places API Key is not configured. Destination search is disabled.");
+        return { success: false, error: "Google Places API key not configured." };
+    }
 
     try {
-        const token = await getAmadeusToken();
-        const searchParams = new URLSearchParams({
-            subType: 'CITY',
-            'page[limit]': '10',
-            keyword: validatedKeyword,
-        });
+        const autocompleteUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(validatedKeyword)}&types=(cities)&key=${apiKey}`;
+        const response = await fetch(autocompleteUrl);
+        const data = await response.json();
 
-        const response = await fetch(`${AMADEUS_BASE_URL}/v1/reference-data/locations?${searchParams.toString()}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok) {
-            console.warn('Amadeus API call failed for hotel destinations.');
-            return { success: false, error: 'Failed to fetch destination data.' };
+        if (data.status !== 'OK') {
+            return { success: false, error: 'Failed to fetch destination data from Google Places.' };
         }
-
-        const apiData: AirportSearchResponse = await response.json();
-        // Ensure we only return locations that have an IATA code and a name.
-        const apiResults = apiData.data.filter(location => location.iataCode && location.name && location.geoCode);
         
-        return { success: true, data: apiResults };
+        const iataPromises = data.predictions.map(async (prediction: any) => {
+            const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=address_components,name,geometry&key=${apiKey}`;
+            const detailsResponse = await fetch(detailsUrl);
+            const detailsData = await detailsResponse.json();
+            
+            if (detailsData.status === 'OK' && detailsData.result.geometry) {
+                 const iataCode = detailsData.result.address_components.find((c:any) => c.types.includes('airport'))?.short_name;
+                 return {
+                    name: prediction.structured_formatting.main_text,
+                    iataCode: iataCode || prediction.structured_formatting.main_text.substring(0,3).toUpperCase(),
+                    subType: 'CITY',
+                    address: {
+                        cityName: prediction.structured_formatting.main_text,
+                        countryName: detailsData.result.address_components.find((c:any) => c.types.includes('country'))?.long_name || ''
+                    },
+                    geoCode: {
+                        latitude: detailsData.result.geometry.location.lat,
+                        longitude: detailsData.result.geometry.location.lng,
+                    }
+                 } as Airport;
+            }
+            return null;
+        });
+
+        const results = (await Promise.all(iataPromises)).filter((item): item is Airport => item !== null);
+        
+        return { success: true, data: results };
     } catch (err: any) {
         console.error('diagnose: Error in searchHotelDestinations action:', err);
         return { success: false, error: 'An unexpected error occurred while searching for destinations.' };
@@ -179,7 +198,7 @@ const hotelSearchSchema = z.object({
   checkInDate: z.string(),
   checkOutDate: z.string(),
   adults: z.number().int().min(1),
-  currency: z.string().optional().default('USD'),
+  currency: z.string().optional(),
 });
 
 // This is a simplified search function that uses mock data.
@@ -225,25 +244,24 @@ export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Pr
     }
 
     try {
-        // Step 1: Find Place ID and basic photo info
-        const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(placeName)}&inputtype=textquery&fields=place_id,photos&key=${apiKey}`;
+        // Step 1: Find Place ID using Text Search, requesting photos field
+        const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(placeName)}&fields=place_id,photos&key=${apiKey}`;
         const findPlaceResponse = await fetch(findPlaceUrl);
         const findPlaceData = await findPlaceResponse.json();
 
-        if (findPlaceData.status !== 'OK' || !findPlaceData.candidates || findPlaceData.candidates.length === 0) {
+        if (findPlaceData.status !== 'OK' || !findPlaceData.results || findPlaceData.results.length === 0) {
             console.warn(`No Google Place ID found for "${placeName}".`);
             return [];
         }
 
-        const candidate = findPlaceData.candidates[0];
+        const candidate = findPlaceData.results[0];
 
-        // Step 2: Check if photos are included in the initial response
         if (!candidate.photos) {
-            console.warn(`No photos found for place ID "${candidate.place_id}" in initial search.`);
+            console.warn(`No photos found for place "${placeName}" in initial search.`);
             return [];
         }
 
-        // Step 3: Map photo references to full URLs
+        // Step 2: Map photo references to full URLs
         const photoUrls = candidate.photos.slice(0, maxPhotos).map((photo: any) => {
             return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${photo.photo_reference}&key=${apiKey}`;
         });

@@ -21,23 +21,17 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
 
     useEffect(() => {
         const fetchPhotos = async () => {
-            if (!hotel.name || !hotel.address.cityName) {
-                setLoadingPhotos(false);
-                const staticPhotos = hotel.media?.map(p => p.uri).filter(uri => !!uri) || [];
-                setPhotos(staticPhotos.length > 0 ? staticPhotos : ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2']);
-                return;
-            }
             setLoadingPhotos(true);
-            const photoUrls = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
+            const query = `${hotel.name}, ${hotel.address.cityName}`;
+            const photoUrls = await getGooglePlacePhotos(query);
             
-            const staticPhotos = (hotel.media || [])
-                .map(p => p.uri)
-                .filter(uri => !!uri);
+            const staticPhotos = (hotel.media || []).map(p => p.uri).filter(Boolean);
 
-            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
-
+            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
+            
             if (combinedPhotos.length === 0) {
-                 combinedPhotos = ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'];
+                // If still no photos, use a placeholder
+                combinedPhotos.push('https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
             }
 
             setPhotos(combinedPhotos);
@@ -47,7 +41,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
         fetchPhotos();
     }, [hotel.name, hotel.address.cityName, hotel.media]);
 
-    const displayPhotos = photos.length > 0 ? photos : ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'];
+    const displayPhotos = photos;
 
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
@@ -68,7 +62,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                                             className="object-cover"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
                                             draggable={false}
-                                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                            onError={(e) => { e.currentTarget.src = 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; }}
                                         />
                                     </div>
                                 </CarouselItem>
@@ -117,16 +111,17 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
       const checkOutDate = addDays(new Date(), 14);
 
       const params = new URLSearchParams({
+        destinationName: offer.hotel.address.cityName,
         checkInDate: format(checkInDate, 'yyyy-MM-dd'),
         checkOutDate: format(checkOutDate, 'yyyy-MM-dd'),
         adults: '2',
         children: '0',
+        cityCode: offer.hotel.hotelId // Using hotelId as a stand-in for cityCode
       });
       
       const hotelId = offer.hotel.hotelId || offer.id;
-      const url = `/hotels/${hotelId}/offers?${params.toString()}`;
-      
-      router.push(url, { state: { offer } } as any);
+      // Navigate to the search results page for this specific hotel, simulating a search
+      router.push(`/hotels/search?${params.toString()}`);
   }, [router]);
 
   return (
