@@ -25,21 +25,18 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
             const query = `${hotel.name}, ${hotel.address.cityName}`;
             const photoUrls = await getGooglePlacePhotos(query);
             
-            const staticPhotos = (hotel.media || []).map(p => p.uri).filter(Boolean);
-            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
-            
-            if (combinedPhotos.length === 0) {
-                combinedPhotos = ['https://placehold.co/800x600.png'];
+            if (photoUrls.length > 0) {
+                setPhotos(photoUrls);
+            } else {
+                const staticPhotos = (hotel.media || []).map(p => p.uri).filter(Boolean);
+                setPhotos(staticPhotos.length > 0 ? staticPhotos : ['https://placehold.co/800x600.png']);
             }
-
-            setPhotos(combinedPhotos);
+            
             setLoadingPhotos(false);
         };
 
         fetchPhotos();
     }, [hotel.name, hotel.address.cityName, hotel.media]);
-
-    const displayPhotos = photos;
 
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
@@ -49,7 +46,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                 ) : (
                     <Carousel className="w-full h-full">
                         <CarouselContent>
-                            {displayPhotos.map((photo, index) => (
+                            {photos.map((photo, index) => (
                                 <CarouselItem key={index}>
                                     <div className="relative h-56 w-full">
                                         <Image
@@ -66,7 +63,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        {displayPhotos.length > 1 && (
+                        {photos.length > 1 && (
                             <>
                                 <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
                                 <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
@@ -134,7 +131,3 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
-
-    
-
-    

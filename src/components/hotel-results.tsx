@@ -37,26 +37,22 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
     useEffect(() => {
         const fetchPhotos = async () => {
             if (!offer.hotel.name || !offer.hotel.address.cityName) {
+                const staticPhotos = (offer.hotel.media || []).map(p => p.uri).filter(Boolean);
+                setPhotos(staticPhotos.length > 0 ? staticPhotos : ['https://placehold.co/800x600.png']);
                 setLoadingPhotos(false);
-                setPhotos(offer.hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/800x600.png']);
                 return;
             }
+            
             setLoadingPhotos(true);
             const photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
             
-            const staticPhotos = (offer.hotel.media || [])
-                .map(p => p.uri)
-                .filter(uri => !!uri);
-
-            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
-
-            if (combinedPhotos.length === 0 && staticPhotos.length > 0) {
-                 combinedPhotos = staticPhotos;
-            } else if (combinedPhotos.length === 0) {
-                combinedPhotos = ['https://placehold.co/800x600.png'];
+            if (photoUrls.length > 0) {
+                setPhotos(photoUrls);
+            } else {
+                const staticPhotos = (offer.hotel.media || []).map(p => p.uri).filter(Boolean);
+                setPhotos(staticPhotos.length > 0 ? staticPhotos : ['https://placehold.co/800x600.png']);
             }
 
-            setPhotos(combinedPhotos);
             setLoadingPhotos(false);
         };
 
@@ -71,7 +67,16 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         
-        router.push(url, { state: { offer } } as any);
+        // This is a browser-only feature.
+        // We pass the offer data in the history state to avoid a re-fetch on the next page.
+        if (typeof window !== "undefined") {
+            window.history.pushState({ offer }, '', url);
+            // We need to manually trigger a re-render since we are not using router.push
+            router.refresh(); 
+            window.location.href = url; // Fallback to force navigation
+        } else {
+            router.push(url);
+        }
     };
 
     return (
