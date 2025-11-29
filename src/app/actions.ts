@@ -202,7 +202,7 @@ export async function searchHotels(params: {
 }
 
 export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Promise<string[]> {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
+    const apiKey = "AIzaSyCAYuKcPuVCRXy5pDqrMUvcWcKJxdTZ0bE";
     if (!apiKey || apiKey === 'YOUR_GOOGLE_PLACES_API_KEY') {
         console.warn("Google Places API Key is not configured. Photo search is disabled.");
         return [];
