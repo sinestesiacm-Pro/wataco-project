@@ -65,13 +65,12 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const params = new URLSearchParams(searchParams.toString());
         const hotelId = offer.hotel.hotelId || offer.id;
         
-        // We need to ensure all required params are present for the offers page.
-        // The searchParams from the parent already contains them.
+        // IMPORTANT FIX: Ensure hotelId is explicitly set in the search params
+        // for the next page to use.
+        params.set('hotelId', hotelId);
         
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         
-        // Pass the offer data through router state to avoid re-fetching on the next page
-        // This is a way to pass complex objects between pages on client-side navigation.
         router.push(url, { state: { offer } } as any);
     };
 

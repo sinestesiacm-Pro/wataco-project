@@ -42,24 +42,18 @@ function HotelOffersPageContent() {
             setLoading(true);
             setError(null);
             
-            // Prioritize data passed via state on navigation
             if (typeof window !== "undefined" && window.history.state?.offer) {
                 setHotelOffer(window.history.state.offer);
                 setLoading(false);
                 return;
             }
 
-            // Fallback: If no state, fetch data using search params.
-            // This handles direct navigation or page refresh.
-            console.warn("No offer data in state, fetching from server...");
             if (hotelId && checkInDate && checkOutDate) {
                  try {
-                    // We need full hotel details to construct the offer.
                     const detailsResult = await getFirestoreHotelDetails(hotelId);
                     if (!detailsResult.success || !detailsResult.data) {
                       throw new Error(detailsResult.error || 'Could not load hotel details for mock offer.');
                     }
-                    // Construct a mock offer since we don't have real-time pricing
                     const mockOffer: AmadeusHotelOffer = {
                         type: 'hotel-offer',
                         id: hotelId,
