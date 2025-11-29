@@ -72,7 +72,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
     };
 
     return (
-        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[16/9] relative flex flex-col justify-end shadow-card-3d hover:scale-[1.02]">
+        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[16/9] relative flex flex-col justify-end shadow-lg hover:shadow-xl hover:scale-[1.02] bg-card">
             <div className="absolute inset-0">
                 {loadingPhotos ? (
                     <Skeleton className="h-full w-full" />
@@ -90,6 +90,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                                             unoptimized={photo.includes('placehold.co')}
+                                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
                                         />
                                     </div>
                                 </CarouselItem>
@@ -142,5 +143,3 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
-
-    

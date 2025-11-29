@@ -225,7 +225,8 @@ export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Pr
     }
 
     try {
-        const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(placeName)}&inputtype=textquery&fields=place_id&key=${apiKey}`;
+        // Step 1: Find Place ID and basic photo info
+        const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(placeName)}&inputtype=textquery&fields=place_id,photos&key=${apiKey}`;
         const findPlaceResponse = await fetch(findPlaceUrl);
         const findPlaceData = await findPlaceResponse.json();
 
@@ -234,18 +235,16 @@ export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Pr
             return [];
         }
 
-        const placeId = findPlaceData.candidates[0].place_id;
+        const candidate = findPlaceData.candidates[0];
 
-        const placeDetailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${apiKey}`;
-        const placeDetailsResponse = await fetch(placeDetailsUrl);
-        const placeDetailsData = await placeDetailsResponse.json();
-
-        if (placeDetailsData.status !== 'OK' || !placeDetailsData.result.photos) {
-            console.warn(`No photos found for place ID "${placeId}".`);
+        // Step 2: Check if photos are included in the initial response
+        if (!candidate.photos) {
+            console.warn(`No photos found for place ID "${candidate.place_id}" in initial search.`);
             return [];
         }
 
-        const photoUrls = placeDetailsData.result.photos.slice(0, maxPhotos).map((photo: any) => {
+        // Step 3: Map photo references to full URLs
+        const photoUrls = candidate.photos.slice(0, maxPhotos).map((photo: any) => {
             return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${photo.photo_reference}&key=${apiKey}`;
         });
         

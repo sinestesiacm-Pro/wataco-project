@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -22,7 +23,8 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
         const fetchPhotos = async () => {
             if (!hotel.name || !hotel.address.cityName) {
                 setLoadingPhotos(false);
-                setPhotos(hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2']);
+                const staticPhotos = hotel.media?.map(p => p.uri).filter(uri => !!uri) || [];
+                setPhotos(staticPhotos.length > 0 ? staticPhotos : ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2']);
                 return;
             }
             setLoadingPhotos(true);
@@ -32,7 +34,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                 .map(p => p.uri)
                 .filter(uri => !!uri);
 
-            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
+            let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
 
             if (combinedPhotos.length === 0) {
                  combinedPhotos = ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'];
@@ -66,6 +68,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                                             className="object-cover"
                                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
                                             draggable={false}
+                                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
                                         />
                                     </div>
                                 </CarouselItem>
