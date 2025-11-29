@@ -16,10 +16,11 @@ import { Card, CardContent } from '@/components/ui/card';
 
 function HotelDetailPageContent({ id }: { id: string }) {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [hotel, setHotel] = useState<AmadeusHotel | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
+    
     useEffect(() => {
         const fetchDetails = async () => {
             setLoading(true);
@@ -43,10 +44,9 @@ function HotelDetailPageContent({ id }: { id: string }) {
             checkOutDate: format(searchData.checkOutDate, 'yyyy-MM-dd'),
             adults: searchData.adults.toString(),
             children: searchData.children.toString(),
-            cityCode: hotel.hotelId // This is not ideal, but we're using mock data
+            cityCode: hotel.hotelId // Using hotelId as a stand-in for cityCode
         });
 
-        // Redirect to the offers page for this specific hotel
         router.push(`/hotels/search?${params.toString()}`);
     };
 
@@ -114,5 +114,3 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
     </Suspense>
   );
 }
-
-    

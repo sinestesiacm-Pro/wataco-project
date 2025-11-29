@@ -64,6 +64,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
     const handleViewHotel = () => {
         const params = new URLSearchParams(searchParams.toString());
         const hotelId = offer.hotel.hotelId || offer.id;
+        params.set('hotelId', hotelId);
         
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         

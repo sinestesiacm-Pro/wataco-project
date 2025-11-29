@@ -7,36 +7,97 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { HotelBookingFlow } from '@/components/hotel-booking-flow';
-import { AmadeusHotelOffer } from '@/lib/types';
+import { AmadeusHotelOffer, Room } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
+import { searchHotels } from '@/app/actions';
+import { MOCK_ROOMS_DATA } from '@/lib/mock-data';
+import { getFirestoreHotelDetails } from '@/app/actions';
+import { RoomSelectionView, SelectedRoom } from '@/components/room-selection-view';
+import { CheckoutView } from '@/components/checkout-view';
+
+
+type BookingStep = 'rooms' | 'checkout';
 
 function HotelOffersPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [offer, setOffer] = useState<AmadeusHotelOffer | null>(null);
+    
+    const [step, setStep] = useState<BookingStep>('rooms');
+    const [hotelOffer, setHotelOffer] = useState<AmadeusHotelOffer | null>(null);
+    const [selectedRooms, setSelectedRooms] = useState<SelectedRoom[]>([]);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const id = useSearchParams().get('id');
+    
+    const hotelId = searchParams.get('hotelId') || '';
+    const cityCode = searchParams.get('cityCode') || '';
+    const checkInDate = searchParams.get('checkInDate') || '';
+    const checkOutDate = searchParams.get('checkOutDate') || '';
+    const adults = parseInt(searchParams.get('adults') || '1', 10);
+    const children = parseInt(searchParams.get('children') || '0', 10);
+    
 
     useEffect(() => {
-        // The offer object is passed via router state
-        if (typeof window !== "undefined" && window.history.state?.offer) {
-            setOffer(window.history.state.offer);
-        } else {
-            setError("No se encontró la información de la oferta del hotel. Por favor, vuelve a la página de búsqueda.");
-            console.error("No hotel offer data found in state. Please start from search.");
-        }
-        setLoading(false);
-    }, []);
+        const fetchHotelData = async () => {
+            setLoading(true);
+            setError(null);
+            
+            // Prioritize data passed via state on navigation
+            if (typeof window !== "undefined" && window.history.state?.offer) {
+                setHotelOffer(window.history.state.offer);
+                setLoading(false);
+                return;
+            }
 
+            // Fallback: If no state, fetch data using search params.
+            // This handles direct navigation or page refresh.
+            console.warn("No offer data in state, fetching from server...");
+            if (hotelId && checkInDate && checkOutDate) {
+                 try {
+                    // We need full hotel details to construct the offer.
+                    const detailsResult = await getFirestoreHotelDetails(hotelId);
+                    if (!detailsResult.success || !detailsResult.data) {
+                      throw new Error(detailsResult.error || 'Could not load hotel details for mock offer.');
+                    }
+                    // Construct a mock offer since we don't have real-time pricing
+                    const mockOffer: AmadeusHotelOffer = {
+                        type: 'hotel-offer',
+                        id: hotelId,
+                        hotel: detailsResult.data,
+                        available: true,
+                        offers: MOCK_ROOMS_DATA.map(r => ({
+                            ...r,
+                            checkInDate: checkInDate,
+                            checkOutDate: checkOutDate
+                        }))
+                    };
+                    setHotelOffer(mockOffer);
+                } catch (e: any) {
+                    setError(e.message || 'An unexpected error occurred while fetching hotel data.');
+                }
+            } else {
+                setError("Información de búsqueda incompleta. Por favor, vuelve a empezar.");
+            }
 
+            setLoading(false);
+        };
+        
+        fetchHotelData();
+    }, [hotelId, checkInDate, checkOutDate]);
+
+    const handleRoomsSelected = (rooms: SelectedRoom[]) => {
+        setSelectedRooms(rooms);
+        setStep('checkout');
+        window.scrollTo(0, 0);
+    };
+
+    const handleBackToRooms = () => {
+        setStep('rooms');
+        window.scrollTo(0, 0);
+    };
+    
     // Reconstruct the search query string for the back button
     const backLinkHref = `/hotels/search?${searchParams.toString()}`;
-    const adults = searchParams.get('adults') || '1';
-    const children = searchParams.get('children') || '0';
-    const checkInDate = searchParams.get('checkInDate');
-    const checkOutDate = searchParams.get('checkOutDate');
 
     if (loading) {
         return (
@@ -46,13 +107,14 @@ function HotelOffersPageContent() {
         );
     }
 
-     if (!checkInDate || !checkOutDate) {
-        return (
+     if (error || !hotelOffer) {
+         return (
             <div className="max-w-7xl mx-auto py-8 px-4">
                 <Card>
                     <CardContent className="pt-6 text-center">
-                        <p>Fechas de check-in o check-out no especificadas.</p>
-                        <Button asChild variant="link">
+                        <p className="text-destructive font-semibold">Error</p>
+                        <p>{error || 'No se encontró la oferta del hotel.'}</p>
+                        <Button asChild variant="link" className="mt-4">
                             <Link href="/?tab=Hotels">Volver a la búsqueda</Link>
                         </Button>
                     </CardContent>
@@ -61,20 +123,21 @@ function HotelOffersPageContent() {
         )
     }
 
-    if (error || !offer) {
-         return (
-            <div className="max-w-7xl mx-auto py-8 px-4">
-                <Card>
-                    <CardContent className="pt-6 text-center">
-                        <p>{error || 'No se encontró la oferta del hotel.'}</p>
-                        <Button asChild variant="link">
-                            <Link href="/?tab=Hotels">Volver a la búsqueda</Link>
-                        </Button>
-                    </CardContent>
-                </Card>
-            </div>
-        )
-    }
+    const renderStep = () => {
+        switch (step) {
+          case 'rooms':
+            return <RoomSelectionView hotelOffer={hotelOffer} onRoomsSelected={handleRoomsSelected} adults={adults} children={children} />;
+          case 'checkout':
+            if (!selectedRooms || selectedRooms.length === 0) {
+                return <p>Error: No se ha seleccionado ninguna habitación. <Button onClick={handleBackToRooms}>Volver</Button></p>
+            }
+            const totalRooms = selectedRooms.reduce((acc, curr) => acc + curr.quantity, 0);
+            return <CheckoutView hotelOffer={hotelOffer} selectedRoom={selectedRooms[0].room} adults={adults} children={children} numberOfRooms={totalRooms} onBack={handleBackToRooms} />;
+          default:
+            return null;
+        }
+    };
+
 
   return (
     <div className={cn('w-full min-h-screen pt-24 pb-24')}>
@@ -87,12 +150,7 @@ function HotelOffersPageContent() {
                 </Link>
             </Button>
         </div>
-        
-         <HotelBookingFlow 
-            hotelOffer={offer}
-            adults={parseInt(adults, 10)} 
-            children={parseInt(children, 10)}
-        />
+        {renderStep()}
       </div>
     </div>
   );
@@ -109,5 +167,3 @@ export default function HotelOffersPage() {
     </Suspense>
   );
 }
-
-    
