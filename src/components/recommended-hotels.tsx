@@ -120,8 +120,8 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
       });
       
       const hotelId = offer.hotel.hotelId || offer.id;
-      // Navigate to the search results page for this specific hotel, simulating a search
-      router.push(`/hotels/search?${params.toString()}`);
+      // Navigate to the hotel detail page
+      router.push(`/hotels/${hotelId}`);
   }, [router]);
 
   return (
@@ -136,5 +136,7 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
     </div>
   );
 });
+
+    
 
     

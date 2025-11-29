@@ -47,7 +47,7 @@ function HotelDetailPageContent({ id }: { id: string }) {
         });
 
         // Redirect to the offers page for this specific hotel
-        router.push(`/hotels/${id}/offers?${params.toString()}`);
+        router.push(`/hotels/search?${params.toString()}`);
     };
 
     if (loading) {
@@ -114,3 +114,5 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
     </Suspense>
   );
 }
+
+    
