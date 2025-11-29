@@ -5,7 +5,6 @@ import { FlightData, Airport, AirportSearchResponse, AmadeusHotelOffer, PackageD
 import { z } from 'zod';
 import { getAmadeusToken } from '@/lib/amadeus-auth';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
-import { recommendedCruises } from '@/lib/mock-cruises';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db, AMADEUS_API_KEY, AMADEUS_API_SECRET, HOTELBEDS_API_KEY, HOTELBEDS_SECRET } from '@/lib/firebase';
 import crypto from 'crypto';
@@ -135,6 +134,29 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
     return { success: false, error: 'An unexpected error occurred while searching for airports.' };
   }
 }
+
+// New function to get destination suggestions from MOCK_HOTELS_DATA
+export async function searchHotelDestinations(keyword: string): Promise<{ success: boolean; data?: { city: string, country: string }[]; error?: string }> {
+    if (!keyword) {
+        return { success: true, data: [] };
+    }
+
+    const lowercasedKeyword = keyword.toLowerCase();
+    
+    const allCities = MOCK_HOTELS_DATA.map(hotel => ({
+        city: hotel.hotel.address.cityName,
+        country: hotel.hotel.address.countryCode,
+    }));
+
+    const uniqueCities = Array.from(new Map(allCities.map(item => [`${item.city}-${item.country}`, item])).values());
+
+    const filteredCities = uniqueCities.filter(destination => 
+        destination.city.toLowerCase().includes(lowercasedKeyword)
+    );
+
+    return { success: true, data: filteredCities.slice(0, 10) };
+}
+
 
 const hotelSearchSchema = z.object({
   destinationName: z.string().min(2, "Destination city is required."),
@@ -273,25 +295,7 @@ export async function searchCruises(params: {
     return { success: false, error: 'Invalid cruise search parameters.' };
   }
 
-  // Simulate API call and filtering based on mock data
-  try {
-    const filteredCruises = recommendedCruises.filter(
-      (cruise) => cruise.region === params.destinationRegion
-    );
-
-    if (filteredCruises.length === 0) {
-      return { success: false, error: "No se encontraron cruceros para la región seleccionada." };
-    }
-    
-    // We need to add a small delay to simulate a real API call for better UX
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    return { success: true, data: { data: filteredCruises } };
-    
-  } catch (err: any) {
-    console.error('Error in searchCruises action:', err);
-    return { success: false, error: err.message || 'An unexpected error occurred while searching for cruises.' };
-  }
+  return { success: false, error: "Cruise search is not available in this demo." };
 }
 
 const vipActivationSchema = z.object({

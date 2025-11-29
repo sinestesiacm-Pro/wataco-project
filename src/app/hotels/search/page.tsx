@@ -38,6 +38,7 @@ function HotelResultsPageContent() {
     });
 
     const destinationName = searchParams.get('destinationName') || '';
+    const cityCode = searchParams.get('cityCode') || '';
     const checkInDate = searchParams.get('checkInDate') || '';
     const checkOutDate = searchParams.get('checkOutDate') || '';
     const adults = searchParams.get('adults') || '1';
@@ -53,7 +54,7 @@ function HotelResultsPageContent() {
             setError(null);
             
             const result = await searchHotels({
-                destinationName,
+                destinationName: destinationName,
                 checkInDate,
                 checkOutDate,
                 adults: parseInt(adults, 10),
@@ -149,7 +150,7 @@ function HotelResultsPageContent() {
             </Collapsible>
         
         <div className="flex justify-end items-center mb-6">
-              <AITravelTips destination={destinationName} destinationName={destinationName} />
+              <AITravelTips destination={cityCode || destinationName} destinationName={destinationName} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
