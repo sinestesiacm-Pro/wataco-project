@@ -1,8 +1,9 @@
+
 'use client';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { format, addDays } from 'date-fns';
 import type { Airport } from '@/lib/types';
-import { searchHotelDestinations } from '@/app/actions';
+import { searchAirports } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
 
 import { Button } from '@/components/ui/button';
@@ -82,7 +83,7 @@ export default function ActivitySearchPage() {
           return;
         }
         setSuggestionsLoading(true);
-        const result = await searchHotelDestinations(query);
+        const result = await searchAirports(query);
         if (result.success && result.data) {
           setSuggestions(result.data);
         } else {
@@ -231,3 +232,4 @@ export default function ActivitySearchPage() {
         </form>
     );
 }
+    

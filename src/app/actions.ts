@@ -136,63 +136,6 @@ export async function searchAirports(keyword: string): Promise<{ success: boolea
   }
 }
 
-export async function searchHotelDestinations(keyword: string): Promise<{ success: boolean; data?: Airport[]; error?: string }> {
-    const validation = airportSearchSchema.safeParse({ keyword });
-    if (!validation.success) {
-        return { success: false, error: 'Invalid search keyword.' };
-    }
-    if (!keyword) {
-        return { success: true, data: [] };
-    }
-    const validatedKeyword = validation.data.keyword.toLowerCase();
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
-    if (!apiKey || apiKey === 'YOUR_GOOGLE_PLACES_API_KEY') {
-        console.warn("Google Places API Key is not configured. Destination search is disabled.");
-        return { success: false, error: "Google Places API key not configured." };
-    }
-
-    try {
-        const autocompleteUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(validatedKeyword)}&types=(cities)&key=${apiKey}`;
-        const response = await fetch(autocompleteUrl);
-        const data = await response.json();
-
-        if (data.status !== 'OK') {
-            return { success: false, error: 'Failed to fetch destination data from Google Places.' };
-        }
-        
-        const iataPromises = data.predictions.map(async (prediction: any) => {
-            const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=address_components,name,geometry&key=${apiKey}`;
-            const detailsResponse = await fetch(detailsUrl);
-            const detailsData = await detailsResponse.json();
-            
-            if (detailsData.status === 'OK' && detailsData.result.geometry) {
-                 const iataCode = detailsData.result.address_components.find((c:any) => c.types.includes('airport'))?.short_name;
-                 return {
-                    name: prediction.structured_formatting.main_text,
-                    iataCode: iataCode || prediction.structured_formatting.main_text.substring(0,3).toUpperCase(),
-                    subType: 'CITY',
-                    address: {
-                        cityName: prediction.structured_formatting.main_text,
-                        countryName: detailsData.result.address_components.find((c:any) => c.types.includes('country'))?.long_name || ''
-                    },
-                    geoCode: {
-                        latitude: detailsData.result.geometry.location.lat,
-                        longitude: detailsData.result.geometry.location.lng,
-                    }
-                 } as Airport;
-            }
-            return null;
-        });
-
-        const results = (await Promise.all(iataPromises)).filter((item): item is Airport => item !== null);
-        
-        return { success: true, data: results };
-    } catch (err: any) {
-        console.error('diagnose: Error in searchHotelDestinations action:', err);
-        return { success: false, error: 'An unexpected error occurred while searching for destinations.' };
-    }
-}
-
 const hotelSearchSchema = z.object({
   destinationName: z.string().min(2, "Destination city is required."),
   checkInDate: z.string(),
@@ -238,7 +181,7 @@ export async function searchHotels(params: {
 
 export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Promise<string[]> {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
-    if (!apiKey || apiKey === 'YOUR_GOOGLE_PLACES_API_KEY' || apiKey.startsWith('AIzaSyCAYuKcPuVCRXy5pDqrMUvcWcKJxdTZ0bE')) {
+    if (!apiKey || apiKey === 'YOUR_GOOGLE_PLACES_API_KEY') {
         console.warn("Google Places API Key is not configured. Photo search is disabled.");
         return [];
     }
@@ -411,7 +354,3 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
-
-    
-
-    
