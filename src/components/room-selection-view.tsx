@@ -41,7 +41,7 @@ interface RoomOptionProps {
 const RoomOption = React.memo(function RoomOption({ roomOffer, onAdd, onRemove, quantity, isRecommended }: RoomOptionProps) {
     const isFreeCancellation = true; 
     const roomCapacity = parseInt(roomOffer.room.type.split('_')[0] || '2');
-    const roomTypeName = roomOffer.room.description.text;
+    const roomTypeName = roomOffer.room?.description?.text || roomOffer.room.type;
 
     return (
         <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col md:flex-row bg-card rounded-2xl">
@@ -215,7 +215,7 @@ export function RoomSelectionView({ hotelOffer, onRoomsSelected, adults, childre
                             <div>
                                 <h3 className="font-bold">Tu Selección</h3>
                                 <p className="text-sm opacity-80">
-                                   {selectionArray.map(s => `${s.quantity}x ${s.room.room.description.text}`).join(', ')}
+                                   {selectionArray.map(s => `${s.quantity}x ${s.room.room.description?.text || s.room.room.type}`).join(', ')}
                                 </p>
                             </div>
                         </div>
@@ -240,3 +240,5 @@ export function RoomSelectionView({ hotelOffer, onRoomsSelected, adults, childre
     </div>
   );
 }
+
+    
