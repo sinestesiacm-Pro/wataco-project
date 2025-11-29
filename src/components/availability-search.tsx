@@ -12,7 +12,7 @@ import { format, addDays } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { es } from 'date-fns/locale';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { searchHotelDestinations } from '@/app/actions';
+import { searchAirports } from '@/app/actions';
 import { useDebounce } from '@/hooks/use-debounce';
 import { Airport } from '@/lib/types';
 import { Input } from './ui/input';
@@ -98,9 +98,9 @@ export function AvailabilitySearch({ onSearch, initialData, showDestination = fa
           return;
         }
         setSuggestionsLoading(true);
-        const result = await searchHotelDestinations(query);
+        const result = await searchAirports(query);
         if (result.success && result.data) {
-          setSuggestions(result.data);
+          setSuggestions(result.data.filter(a => a.subType === 'CITY'));
         } else {
           setSuggestions([]);
         }
