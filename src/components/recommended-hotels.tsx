@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -23,7 +22,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
         const fetchPhotos = async () => {
             if (!hotel.name || !hotel.address.cityName) {
                 setLoadingPhotos(false);
-                setPhotos(hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/400x300.png']);
+                setPhotos(hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2']);
                 return;
             }
             setLoadingPhotos(true);
@@ -36,7 +35,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
             let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
 
             if (combinedPhotos.length === 0) {
-                 combinedPhotos = ['https://placehold.co/400x300.png?text=Image+not+found'];
+                 combinedPhotos = ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'];
             }
 
             setPhotos(combinedPhotos);
@@ -46,7 +45,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
         fetchPhotos();
     }, [hotel.name, hotel.address.cityName, hotel.media]);
 
-    const displayPhotos = photos.length > 0 ? photos : ['https://placehold.co/400x300.png'];
+    const displayPhotos = photos.length > 0 ? photos : ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'];
 
     return (
         <Card className="rounded-2xl p-0 flex flex-col group transition-all duration-300 shadow-inner hover:shadow-card-3d bg-card/80 backdrop-blur-xl border hover:scale-105 overflow-hidden">
@@ -93,7 +92,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                    {hotel.address.cityName}, {hotel.address.countryCode}
                  </div>
                  <div className="flex items-center gap-1 text-amber-400 mt-1">
-                    {[...Array(parseInt(hotel.rating || '0'))].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                    {[...Array(parseInt(hotel.rating || '0'))].map((_, i) => <Star key={i} className="w-4 w-4 fill-current" />)}
                  </div>
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">

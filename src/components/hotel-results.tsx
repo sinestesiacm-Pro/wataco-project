@@ -38,7 +38,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const fetchPhotos = async () => {
             if (!offer.hotel.name || !offer.hotel.address.cityName) {
                 setLoadingPhotos(false);
-                setPhotos(offer.hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/800x600.png?text=No+Image']);
+                setPhotos(offer.hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2']);
                 return;
             }
             setLoadingPhotos(true);
@@ -51,7 +51,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
             let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])].filter(p => p && p.trim() !== '');
 
             if (combinedPhotos.length === 0) {
-                 combinedPhotos = ['https://placehold.co/800x600.png?text=Image+not+found'];
+                 combinedPhotos = ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'];
             }
 
             setPhotos(combinedPhotos);
@@ -112,7 +112,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                     {renderStars(offer.hotel.rating)}
                     {offer.hotel.address && (
                         <div className="flex items-center gap-1">
-                            <MapPin className="w-4 h-4" />
+                            <MapPin className="w-4 w-4" />
                             {offer.hotel.address.cityName}
                         </div>
                     )}
