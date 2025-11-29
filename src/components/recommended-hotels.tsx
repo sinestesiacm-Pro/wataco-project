@@ -25,12 +25,12 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
             const query = `${hotel.name}, ${hotel.address.cityName}`;
             const photoUrls = await getGooglePlacePhotos(query);
             
+            // Use static media as a fallback
             const staticPhotos = (hotel.media || []).map(p => p.uri).filter(Boolean);
-
             let combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
             
+            // If still no photos, use a generic placeholder
             if (combinedPhotos.length === 0) {
-                // If still no photos, use a placeholder
                 combinedPhotos.push('https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
             }
 

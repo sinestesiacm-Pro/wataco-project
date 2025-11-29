@@ -93,17 +93,19 @@ const HotelSearchPage = React.memo(function HotelSearchPage() {
       setSuggestions(result.data);
     } else {
       setSuggestions([]);
-      toast({
-          title: "Error de Búsqueda de Ciudad",
-          description: result.error || "No se pudieron obtener las sugerencias.",
-          variant: "destructive",
-      });
+      if (result.error) {
+        toast({
+            title: "Error de Búsqueda de Ciudad",
+            description: result.error,
+            variant: "destructive",
+        });
+      }
     }
     setSuggestionsLoading(false);
   }, [toast]);
 
   useEffect(() => {
-    if (isDestinationPopoverOpen) {
+    if (isDestinationPopoverOpen && debouncedDestinationQuery) {
       fetchSuggestions(debouncedDestinationQuery);
     }
   }, [debouncedDestinationQuery, isDestinationPopoverOpen, fetchSuggestions]);
