@@ -358,3 +358,5 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
+
+    

@@ -36,15 +36,12 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
 
     useEffect(() => {
         const fetchPhotos = async () => {
-            if (!offer.hotel.name || !offer.hotel.address.cityName) {
-                const staticPhotos = (offer.hotel.media || []).map(p => p.uri).filter(Boolean);
-                setPhotos(staticPhotos.length > 0 ? staticPhotos : ['https://placehold.co/800x600.png']);
-                setLoadingPhotos(false);
-                return;
-            }
-            
             setLoadingPhotos(true);
-            const photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
+            
+            let photoUrls: string[] = [];
+            if (offer.hotel.name && offer.hotel.address.cityName) {
+                photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`);
+            }
             
             if (photoUrls.length > 0) {
                 setPhotos(photoUrls);
@@ -67,20 +64,17 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         
         const url = `/hotels/${hotelId}/offers?${params.toString()}`;
         
-        // This is a browser-only feature.
-        // We pass the offer data in the history state to avoid a re-fetch on the next page.
         if (typeof window !== "undefined") {
             window.history.pushState({ offer }, '', url);
-            // We need to manually trigger a re-render since we are not using router.push
             router.refresh(); 
-            window.location.href = url; // Fallback to force navigation
+            window.location.href = url;
         } else {
             router.push(url);
         }
     };
 
     return (
-        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[16/9] relative flex flex-col justify-end shadow-lg hover:shadow-xl hover:scale-[1.02] bg-card">
+        <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[4/5] relative flex flex-col justify-end shadow-lg hover:shadow-xl hover:scale-[1.02] bg-card">
             <div className="absolute inset-0">
                 {loadingPhotos ? (
                     <Skeleton className="h-full w-full" />
@@ -151,3 +145,5 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
+
+    
