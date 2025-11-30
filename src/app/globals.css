@@ -22,9 +22,6 @@
     --secondary: 160 50% 40%; /* #2D8C6E - Tropical Green */
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
-
     --accent: 33 94% 50%; /* #ff9800 - Orange */
     --accent-foreground: 210 40% 98%;
 
@@ -632,16 +629,17 @@
 
 .glitch-container:hover::before {
   left: 2px;
-  text-shadow: -2px 0 red;
+  text-shadow: -2px 0 hsl(var(--primary));
   animation: glitch 1.5s infinite linear alternate-reverse;
 }
 
 .glitch-container:hover::after {
   left: -2px;
-  text-shadow: -2px 0 blue;
+  text-shadow: -2px 0 hsl(var(--accent));
   animation: glitch 2s infinite linear alternate-reverse;
 }
     
 
     
 
+    
