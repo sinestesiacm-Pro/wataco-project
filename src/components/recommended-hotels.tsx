@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -14,6 +13,20 @@ import { getGooglePlacePhotos } from '@/app/actions';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Skeleton } from './ui/skeleton';
 
+const renderStars = (rating: string | undefined) => {
+    const starCount = parseInt(rating || '0', 10);
+    if (starCount === 0) return null;
+    
+    return (
+        <div className="flex items-center gap-1">
+            {[...Array(starCount)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 text-amber-300 fill-amber-400" />
+            ))}
+        </div>
+    );
+};
+
+
 const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOffer: AmadeusHotelOffer, onViewHotel: (offer: AmadeusHotelOffer) => void }) {
     const hotel = hotelOffer.hotel;
     const [photos, setPhotos] = useState<string[]>([]);
@@ -23,15 +36,12 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
         const fetchPhotos = async () => {
             setLoadingPhotos(true);
             const query = `${hotel.name}, ${hotel.address.cityName}`;
-            const photoUrls = await getGooglePlacePhotos(query);
+            const googlePhotos = await getGooglePlacePhotos(query, 5);
             
-            if (photoUrls.length > 0) {
-                setPhotos(photoUrls);
-            } else {
-                const staticPhotos = (hotel.media || []).map(p => p.uri).filter(Boolean);
-                setPhotos(staticPhotos.length > 0 ? staticPhotos : ['https://placehold.co/800x600.png']);
-            }
+            const staticPhotos = (hotel.media || []).map(p => p.uri).filter(Boolean);
+            const displayPhotos = googlePhotos.length > 0 ? googlePhotos : staticPhotos.length > 0 ? staticPhotos : ['https://placehold.co/800x600.png'];
             
+            setPhotos(displayPhotos);
             setLoadingPhotos(false);
         };
 
@@ -84,7 +94,7 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                    {hotel.address.cityName}, {hotel.address.countryCode}
                  </div>
                  <div className="flex items-center gap-1 text-amber-400 mt-1">
-                    {[...Array(parseInt(hotel.rating || '0'))].map((_, i) => <Star key={i} className="w-4 w-4 fill-current" />)}
+                    {renderStars(hotel.rating)}
                  </div>
                 <div className="flex-grow"></div>
                 <div className="flex justify-between items-end mt-2">
