@@ -133,7 +133,9 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
   return (
     <div className="relative space-y-6">
       <div className="glitch-container">
-        <h2 className="text-2xl font-bold font-headline text-foreground drop-shadow-lg">Hoteles Recomendados Alrededor del Mundo</h2>
+        <h2 className="text-2xl font-bold font-headline text-foreground drop-shadow-lg" data-text="Hoteles Recomendados Alrededor del Mundo">
+            <span>Hoteles Recomendados Alrededor del Mundo</span>
+        </h2>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
