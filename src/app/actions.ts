@@ -220,15 +220,21 @@ export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Pr
             return [];
         }
 
-        const candidate = findPlaceData.results[0];
+        const placeId = findPlaceData.results[0].place_id;
 
-        if (!candidate.photos || candidate.photos.length === 0) {
-            console.warn(`No photos found for place "${placeName}" in initial search.`);
+        // Step 2: Use Place ID to get Place Details, which includes a full photo array.
+        const placeDetailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${apiKey}`;
+        const placeDetailsResponse = await fetch(placeDetailsUrl);
+        const placeDetailsData = await placeDetailsResponse.json();
+
+        if (placeDetailsData.status !== 'OK' || !placeDetailsData.result || !placeDetailsData.result.photos) {
+            console.warn(`No photos found for place ID "${placeId}".`);
             return [];
         }
 
-        // Step 2: Map photo references to full URLs.
-        const photoUrls = candidate.photos.slice(0, maxPhotos).map((photo: any) => {
+        // Step 3: Map photo references to full URLs.
+        const photoReferences = placeDetailsData.result.photos;
+        const photoUrls = photoReferences.slice(0, maxPhotos).map((photo: any) => {
             return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${photo.photo_reference}&key=${apiKey}`;
         });
         
