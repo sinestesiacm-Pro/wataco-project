@@ -605,21 +605,11 @@
     
 
 @keyframes glitch {
-  0%, 100% {
-    clip-path: inset(0 0 0 0);
-  }
-  20% {
-    clip-path: inset(40% 0 60% 0); transform: translate(-3px, 3px);
-  }
-  40% {
-    clip-path: inset(20% 0 80% 0); transform: translate(3px, -3px);
-  }
-  60% {
-    clip-path: inset(60% 0 40% 0); transform: translate(3px, 3px);
-  }
-  80% {
-    clip-path: inset(80% 0 20% 0); transform: translate(-3px, -3px);
-  }
+  0%, 100% { clip-path: inset(0 0 0 0); }
+  20% { clip-path: inset(40% 0 60% 0); transform: translate(-3px, 3px); }
+  40% { clip-path: inset(20% 0 80% 0); transform: translate(3px, -3px); }
+  60% { clip-path: inset(60% 0 40% 0); transform: translate(3px, 3px); }
+  80% { clip-path: inset(80% 0 20% 0); transform: translate(-3px, -3px); }
 }
 
 .glitch-container {
@@ -628,13 +618,8 @@
   color: hsl(var(--foreground));
 }
 
-.glitch-container > span {
-    position: relative;
-    z-index: 1;
-}
-
-.glitch-container:hover > span::before,
-.glitch-container:hover > span::after {
+.glitch-container:hover::before,
+.glitch-container:hover::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
@@ -645,13 +630,13 @@
   overflow: hidden;
 }
 
-.glitch-container:hover > span::before {
+.glitch-container:hover::before {
   left: 2px;
   text-shadow: -2px 0 red;
   animation: glitch 1.5s infinite linear alternate-reverse;
 }
 
-.glitch-container:hover > span::after {
+.glitch-container:hover::after {
   left: -2px;
   text-shadow: -2px 0 blue;
   animation: glitch 2s infinite linear alternate-reverse;
@@ -659,3 +644,4 @@
     
 
     
+

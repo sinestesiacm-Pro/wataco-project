@@ -132,11 +132,12 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
 
   return (
     <div className="relative space-y-6">
-      <div className="glitch-container">
-        <h2 className="text-2xl font-bold font-headline text-foreground">
-            <span data-text="Hoteles Recomendados Alrededor del Mundo">Hoteles Recomendados Alrededor del Mundo</span>
-        </h2>
-      </div>
+      <h2 
+        className="glitch-container text-2xl font-bold font-headline text-foreground"
+        data-text="Hoteles Recomendados Alrededor del Mundo"
+      >
+        Hoteles Recomendados Alrededor del Mundo
+      </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {MOCK_HOTELS_DATA.slice(0, 4).map((hotelOffer) => (
