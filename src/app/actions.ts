@@ -209,8 +209,9 @@ export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Pr
     }
 
     try {
-        // Step 1: Find Place ID using Text Search, requesting photos field
-        const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(placeName)}&fields=place_id,photos&key=${apiKey}`;
+        // Step 1: Find Place ID using Text Search.
+        const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(placeName)}&key=${apiKey}`;
+        
         const findPlaceResponse = await fetch(findPlaceUrl);
         const findPlaceData = await findPlaceResponse.json();
 
@@ -221,14 +222,14 @@ export async function getGooglePlacePhotos(placeName: string, maxPhotos = 5): Pr
 
         const candidate = findPlaceData.results[0];
 
-        if (!candidate.photos) {
+        if (!candidate.photos || candidate.photos.length === 0) {
             console.warn(`No photos found for place "${placeName}" in initial search.`);
             return [];
         }
 
-        // Step 2: Map photo references to full URLs
+        // Step 2: Map photo references to full URLs.
         const photoUrls = candidate.photos.slice(0, maxPhotos).map((photo: any) => {
-            return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${photo.photo_reference}&key=${apiKey}`;
+            return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${photo.photo_reference}&key=${apiKey}`;
         });
         
         return photoUrls;
@@ -358,5 +359,3 @@ export async function getRecommendedHotels(): Promise<{ success: boolean; data?:
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };
     }
 }
-
-    
