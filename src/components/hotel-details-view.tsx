@@ -65,7 +65,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
     <div className="space-y-8">
       <Card className="relative overflow-hidden bg-card/40 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl text-white">
         
-        <Carousel className="w-full group">
+        <Carousel className="w-full group" opts={{ loop: true }}>
           <CarouselContent>
             {loadingPhotos ? (
               <CarouselItem>
@@ -73,7 +73,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
               </CarouselItem>
             ) : (
               photos.map((photo, index) => (
-                <CarouselItem key={index}>
+                <CarouselItem key={index} className="basis-full">
                    <div className="relative h-[60vh] md:h-[70vh] w-full">
                     <Image
                         src={photo}
