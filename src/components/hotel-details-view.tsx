@@ -10,6 +10,7 @@ import type { LucideIcon } from 'lucide-react';
 import { HotelMapDialog } from './hotel-map-dialog';
 import { Badge } from './ui/badge';
 import { getGooglePlacePhotos } from '@/app/actions';
+import { Skeleton } from './ui/skeleton';
 
 const amenityIcons: { [key: string]: LucideIcon } = {
   SWIMMING_POOL: Waves,
@@ -53,27 +54,25 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
       // Combine and deduplicate, prioritizing Google Photos
       const combinedPhotos = [...new Set([...photoUrls, ...staticPhotos])];
 
-      setPhotos(combinedPhotos);
+      setPhotos(combinedPhotos.length > 0 ? combinedPhotos : ['https://placehold.co/800x600.png']);
       setLoadingPhotos(false);
     };
 
     fetchPhotos();
   }, [hotel.name, hotel.address.cityName, hotel.media]);
 
-  const displayPhotos = photos.length > 0 ? photos : (hotel.media?.map(p => p.uri).filter(uri => !!uri) || ['https://placehold.co/800x600.png']);
-
   return (
     <div className="space-y-8">
       <Card className="relative overflow-hidden bg-card/40 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl text-white">
         
-        <Carousel className="w-full">
+        <Carousel className="w-full group">
           <CarouselContent>
             {loadingPhotos ? (
               <CarouselItem>
                 <div className="relative h-[60vh] md:h-[70vh] w-full bg-muted/20 animate-pulse" />
               </CarouselItem>
             ) : (
-              displayPhotos.map((photo, index) => (
+              photos.map((photo, index) => (
                 <CarouselItem key={index}>
                    <div className="relative h-[60vh] md:h-[70vh] w-full">
                     <Image
@@ -89,10 +88,10 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
               ))
             )}
           </CarouselContent>
-          {displayPhotos.length > 1 && (
+          {photos.length > 1 && (
             <>
-                <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
-                <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white" />
+                <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
             </>
           )}
         </Carousel>
