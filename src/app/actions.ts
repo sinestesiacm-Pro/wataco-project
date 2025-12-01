@@ -359,7 +359,7 @@ export async function activateVipMembership(params: { userId: string, membership
 export async function getRecommendedHotels(): Promise<{ success: boolean; data?: AmadeusHotelOffer[]; error?: string }> {
     try {
         // Return a slice of the full mock data
-        return { success: true, data: MOCK_HOTELS_DATA.slice(0, 4) };
+        return { success: true, data: MOCK_HOTELS_DATA };
     } catch (err: any) {
         console.error("Error processing recommended hotels from mock data:", err);
         return { success: false, error: "Ocurrió un error al procesar los hoteles recomendados." };

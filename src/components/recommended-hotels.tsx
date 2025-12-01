@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { format, addDays } from 'date-fns';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Skeleton } from './ui/skeleton';
+import { getRecommendedHotels } from '@/app/actions';
 
 const renderStars = (rating: string | undefined) => {
     const starCount = parseInt(rating || '0', 10);
@@ -75,27 +76,48 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
 
 export const RecommendedHotels = React.memo(function RecommendedHotels() {
   const router = useRouter();
+  const [allHotels, setAllHotels] = useState<AmadeusHotelOffer[]>([]);
   const [displayedHotels, setDisplayedHotels] = useState<AmadeusHotelOffer[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const initialHotels = shuffleArray([...MOCK_HOTELS_DATA]).slice(0, 4);
-    setDisplayedHotels(initialHotels);
-
-    const interval = setInterval(() => {
-        setDisplayedHotels(shuffleArray([...MOCK_HOTELS_DATA]).slice(0, 4));
-    }, 10000); // Rotate every 10 seconds
-
-    return () => clearInterval(interval);
+    const fetchHotels = async () => {
+        setLoading(true);
+        const result = await getRecommendedHotels();
+        if(result.success && result.data) {
+            setAllHotels(result.data);
+            setDisplayedHotels(shuffleArray([...result.data]).slice(0, 4));
+        }
+        setLoading(false);
+    }
+    fetchHotels();
   }, []);
 
-  const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
-      const checkInDate = addDays(new Date(), 7);
-      const checkOutDate = addDays(new Date(), 14);
+  useEffect(() => {
+    if (allHotels.length > 0) {
+        const interval = setInterval(() => {
+            setDisplayedHotels(shuffleArray([...allHotels]).slice(0, 4));
+        }, 10000); // Rotate every 10 seconds
 
+        return () => clearInterval(interval);
+    }
+  }, [allHotels]);
+
+  const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
       const hotelId = offer.hotel.hotelId || offer.id;
-      // Navigate to the hotel detail page
       router.push(`/hotels/${hotelId}`);
   }, [router]);
+  
+  if (loading) {
+      return (
+          <div className="space-y-6">
+               <Skeleton className="h-8 w-1/3" />
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                   {[...Array(4)].map((_, i) => <Skeleton key={i} className="aspect-[4/5] rounded-2xl" />)}
+               </div>
+          </div>
+      )
+  }
 
   return (
     <div className="relative space-y-6">
@@ -103,7 +125,7 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
         className="glitch-container text-2xl font-bold font-headline text-foreground"
         data-text="Hoteles Recomendados Alrededor del Mundo"
       >
-        Hoteles Recomendados Alrededor del Mundo
+        <span data-text="Hoteles Recomendados Alrededor del Mundo">Hoteles Recomendados Alrededor del Mundo</span>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
