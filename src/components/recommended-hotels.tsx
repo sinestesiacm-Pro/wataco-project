@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -6,9 +5,9 @@ import { Star, MapPin } from 'lucide-react';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import React, { useCallback, useEffect, useState, memo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Skeleton } from './ui/skeleton';
-import { getRecommendedHotels, getGooglePlacePhotos } from '@/app/actions';
 import { AnimatePresence, motion } from 'framer-motion';
+import { getRecommendedHotels, getGooglePlacePhotos } from '@/app/actions';
+import { Skeleton } from './ui/skeleton';
 
 const renderStars = (rating: string | undefined) => {
     const starCount = parseInt(rating || '0', 10);
@@ -166,5 +165,3 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
     </div>
   );
 });
-
-    
