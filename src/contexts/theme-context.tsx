@@ -8,6 +8,7 @@ type ColorTheme = 'light' | 'dark';
 interface ThemeContextType {
   colorTheme: ColorTheme;
   setColorTheme: (theme: ColorTheme) => void;
+  setTabTheme: (tab: string) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -24,14 +25,23 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       }
   }, []);
   
+  const setTabTheme = useCallback((tab: string) => {
+    // This function can be expanded later if needed, but for now,
+    // its logic is handled directly in the HomePageContent component.
+  }, []);
+
    useEffect(() => {
     // Set the light theme as default on initial load
-    const root = window.document.documentElement;
-    root.classList.add('light');
+    if (typeof window !== 'undefined') {
+        const root = window.document.documentElement;
+        if (!root.classList.contains('light') && !root.classList.contains('dark')) {
+            root.classList.add('light');
+        }
+    }
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ colorTheme, setColorTheme }}>
+    <ThemeContext.Provider value={{ colorTheme, setColorTheme, setTabTheme }}>
       {children}
     </ThemeContext.Provider>
   );
