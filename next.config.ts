@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: 'https_prot',
         hostname: 'flagcdn.com',
         port: '',
         pathname: '/**',
@@ -84,7 +84,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'httpshttps',
+        protocol: 'https',
         hostname: 'i.postimg.cc',
         port: '',
         pathname: '/**',

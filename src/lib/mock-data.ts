@@ -79,7 +79,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Hotel Charleston Santa Teresa',
         rating: '5',
         media: [
-          { uri: 'https://www.hotelcharlestonsantateresa.com/images/layout/charleston-cartagena-fachada.jpg', category: 'EXTERIOR' },
+          { uri: 'https://i.postimg.cc/C1x2L6pX/charleston-cartagena-fachada.jpg', category: 'EXTERIOR' },
         ],
         address: { lines: ['Cra. 3 #31-23'], postalCode: '130001', cityName: 'Cartagena', countryCode: 'CO' },
         description: { lang: 'es', text: 'Ubicado en el corazón de la ciudad amurallada, nuestro hotel boutique ofrece un diseño elegante y un ambiente acogedor. Perfecto para viajeros que buscan explorar la historia y el encanto de Cartagena.' },
@@ -101,7 +101,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'BOG005',
         name: 'Grand Hyatt Bogota',
         rating: '5',
-        media: [{uri: 'https://live.staticflickr.com/65535/51989445907_63821b0699_b.jpg', category: 'EXTERIOR'}],
+        media: [{uri: 'https://i.postimg.cc/hvkj3vSg/grand-hyatt-bogota.jpg', category: 'EXTERIOR'}],
         address: { lines: ['Cl. 24a #57-60'], postalCode: '111321', cityName: 'Bogotá', countryCode: 'CO' },
         description: { lang: 'es', text: 'Un oasis de lujo y sofisticación con uno de los spas más grandes de Latinoamérica. Disfruta de vistas panorámicas y una gastronomía excepcional.' },
         amenities: ['SWIMMING_POOL', 'SPA', 'FITNESS_CENTER', 'RESTAURANT', 'BAR']
