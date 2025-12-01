@@ -42,6 +42,7 @@ export default {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+          'translucent': 'hsla(var(--secondary), 0.8)',
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
