@@ -65,7 +65,7 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 flex items-center justify-center bg-muted/50"
+                        className="absolute inset-0 flex items-center justify-center bg-white"
                      >
                         <Loader2 className="h-8 w-8 animate-spin text-primary"/>
                     </motion.div>
@@ -122,11 +122,10 @@ const HotelRotationSlot = ({ allHotels, onViewHotel }: { allHotels: AmadeusHotel
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
-        const nextIndex = (currentIndex + 1) % allHotels.length;
         // Staggered update time between 10 and 20 seconds
         const randomDelay = Math.random() * 10000 + 10000; 
         timeoutRef.current = setTimeout(() => {
-            setCurrentIndex(nextIndex);
+            setCurrentIndex(prevIndex => (prevIndex + 1) % allHotels.length);
         }, randomDelay);
     }, [currentIndex, allHotels.length]);
 
@@ -139,19 +138,19 @@ const HotelRotationSlot = ({ allHotels, onViewHotel }: { allHotels: AmadeusHotel
                 clearTimeout(timeoutRef.current);
             }
         };
-    }, [allHotels, scheduleNextUpdate]);
+    }, [allHotels, scheduleNextUpdate, currentIndex]);
 
     const hotelToShow = allHotels[currentIndex];
 
-    if (!hotelToShow) return <Skeleton className="aspect-[4/5] rounded-2xl" />;
+    if (!hotelToShow) return <Skeleton className="aspect-[4/5] rounded-2xl bg-white" />;
 
     return (
         <AnimatePresence mode="wait">
             <motion.div
                 key={hotelToShow.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 1.5 }}
             >
                 <HotelCard hotelOffer={hotelToShow} onViewHotel={onViewHotel} />
@@ -186,9 +185,9 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
   if (loading) {
       return (
           <div className="space-y-6">
-               <Skeleton className="h-8 w-1/3" />
+               <Skeleton className="h-8 w-1/3 bg-white" />
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                   {[...Array(4)].map((_, i) => <Skeleton key={i} className="aspect-[4/5] rounded-2xl" />)}
+                   {[...Array(4)].map((_, i) => <Skeleton key={i} className="aspect-[4/5] rounded-2xl bg-white" />)}
                </div>
           </div>
       )
