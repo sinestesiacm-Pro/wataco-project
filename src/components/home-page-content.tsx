@@ -1,3 +1,4 @@
+
 'use client';
 
 import HotelSearchPage from '@/components/hotel-search-page';
@@ -18,9 +19,10 @@ import { FlightSearchClassic } from './flight-search-classic';
 import ActivitySearchPage from './activity-search-page';
 import { useSearch } from '@/contexts/search-context';
 import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
 
 
-function SearchSection({ tab }: { tab?: string }) {
+const SearchSection = React.memo(function SearchSection({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   const renderSearch = () => {
@@ -39,7 +41,7 @@ function SearchSection({ tab }: { tab?: string }) {
         {renderSearch()}
     </div>
   );
-}
+});
 
 const airlinePartners = [
   { name: 'American Airlines', code: 'AA' },
@@ -59,7 +61,8 @@ const hotelPartners = [
     { name: 'Sheraton', domain: 'sheraton.com' },
 ];
 
-const PartnersGrid = ({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, domain?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) => (
+const PartnersGrid = React.memo(function PartnersGrid({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, domain?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) {
+    return (
     <div className="py-16 text-center">
         <h2 className="text-3xl font-headline font-bold text-foreground drop-shadow-lg">{title}</h2>
         <p className="text-lg text-muted-foreground mt-2 drop-shadow-lg">{subtitle}</p>
@@ -82,10 +85,10 @@ const PartnersGrid = ({ title, subtitle, partners, partnerType }: { title: strin
             ))}
         </div>
     </div>
-);
+)});
 
 
-function RecommendedContent({ tab }: { tab?: string }) {
+const RecommendedContent = React.memo(function RecommendedContent({ tab }: { tab?: string }) {
   const activeTab = tab || 'Flights';
 
   switch (activeTab) {
@@ -113,7 +116,7 @@ function RecommendedContent({ tab }: { tab?: string }) {
           </>
       )
   }
-}
+});
 
 export function HomePageContent() {
     const searchParams = useSearchParams();

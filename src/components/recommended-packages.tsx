@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,7 @@ const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer
                     fill 
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    priority
                 />
 
                 {/* 2. Gradiente Oscuro Superpuesto */}
