@@ -54,8 +54,8 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Click Clack Hotel Bogotá',
         rating: '5',
         media: [
-          { uri: 'https://i.postimg.cc/kXqC08fF/The-Click-Clack-Hotel-Bogota.jpg', category: 'EXTERIOR' },
-          { uri: 'https://i.postimg.cc/pT3sS8sV/click-clack-lobby.jpg', category: 'LOBBY' },
+          { uri: 'https://www.clickclackhotel.com/wp-content/uploads/2023/12/Desktop-portada-Click-Clack-1.webp', category: 'EXTERIOR' },
+          { uri: 'https://www.clickclackhotel.com/wp-content/uploads/2023/12/Desktop-CIEN-3-1.webp', category: 'LOBBY' },
         ],
         address: { lines: ['Cra. 11 #93-77'], postalCode: '110221', cityName: 'Bogotá', countryCode: 'CO' },
         description: { lang: 'es', text: 'Sumérgete en el diseño y la creatividad en este hotel único en el corazón de Bogotá. Disfruta de su rooftop bar, eventos culturales y habitaciones llenas de detalles sorprendentes.' },
@@ -78,7 +78,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'Hotel Charleston Santa Teresa',
         rating: '5',
         media: [
-          { uri: 'https://i.postimg.cc/wMPb0n7p/charleston-santa-teresa.jpg', category: 'EXTERIOR' },
+          { uri: 'https://www.hotelcharlestonsantateresa.com/images/layout/charleston-cartagena-fachada.jpg', category: 'EXTERIOR' },
         ],
         address: { lines: ['Cra. 3 #31-23'], postalCode: '130001', cityName: 'Cartagena', countryCode: 'CO' },
         description: { lang: 'es', text: 'Ubicado en el corazón de la ciudad amurallada, nuestro hotel boutique ofrece un diseño elegante y un ambiente acogedor. Perfecto para viajeros que buscan explorar la historia y el encanto de Cartagena.' },
@@ -229,4 +229,3 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
       offers: [{id: 'offer-mia1', checkInDate: '2024-10-10', price: { currency: 'USD', total: '800.00'}, room: { type: 'BAY_VIEW_JUNIOR'}}]
     }
   ];
-
