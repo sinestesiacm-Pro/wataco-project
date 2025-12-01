@@ -73,6 +73,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'www.hotelcharlestonsantateresa.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'image-tc.galaxy.tf',
         port: '',
         pathname: '/**',
