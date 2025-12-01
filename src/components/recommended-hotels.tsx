@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -11,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { format, addDays } from 'date-fns';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Skeleton } from './ui/skeleton';
-import { getRecommendedHotels } from '@/app/actions';
+import { getRecommendedHotels, getGooglePlacePhotos } from '@/app/actions';
 
 const renderStars = (rating: string | undefined) => {
     const starCount = parseInt(rating || '0', 10);
@@ -38,19 +37,39 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOffer: AmadeusHotelOffer, onViewHotel: (offer: AmadeusHotelOffer) => void }) {
     const hotel = hotelOffer.hotel;
+    const [photo, setPhoto] = useState<string | null>(null);
+    const [loadingPhoto, setLoadingPhoto] = useState(true);
+
+    useEffect(() => {
+        const fetchPrimaryPhoto = async () => {
+            setLoadingPhoto(true);
+            const photoUrls = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`, 1);
+            if (photoUrls.length > 0) {
+                setPhoto(photoUrls[0]);
+            } else {
+                setPhoto(hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png');
+            }
+            setLoadingPhoto(false);
+        };
+        fetchPrimaryPhoto();
+    }, [hotel.name, hotel.address.cityName, hotel.media]);
 
     return (
-        <div className="group relative aspect-[4/5] w-full overflow-hidden rounded-2xl transition-all duration-500 ease-in-out hover:shadow-2xl" onClick={() => onViewHotel(hotelOffer)}>
-             <Image
-                src={hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png'}
-                data-ai-hint="hotel photo"
-                alt={`${hotel.name || 'Hotel'} image`}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
-                draggable={false}
-                onError={(e) => { e.currentTarget.src = 'https://placehold.co/800x600.png'; }}
-            />
+        <div className="group relative aspect-[4/5] w-full overflow-hidden rounded-2xl transition-all duration-500 ease-in-out hover:shadow-2xl cursor-pointer" onClick={() => onViewHotel(hotelOffer)}>
+             {loadingPhoto ? (
+                 <Skeleton className="h-full w-full" />
+             ) : (
+                <Image
+                    src={photo || 'https://placehold.co/800x600.png'}
+                    data-ai-hint="hotel photo"
+                    alt={`${hotel.name || 'Hotel'} image`}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
+                    draggable={false}
+                    onError={(e) => { e.currentTarget.src = 'https://placehold.co/800x600.png'; }}
+                />
+             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white flex flex-col justify-end h-full">
                 <div className="transform transition-transform duration-500 group-hover:-translate-y-4">
