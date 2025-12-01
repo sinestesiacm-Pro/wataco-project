@@ -101,7 +101,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'BOG005',
         name: 'Grand Hyatt Bogota',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://live.staticflickr.com/65535/51989445907_63821b0699_b.jpg', category: 'EXTERIOR'}],
         address: { lines: ['Cl. 24a #57-60'], postalCode: '111321', cityName: 'Bogotá', countryCode: 'CO' },
         description: { lang: 'es', text: 'Un oasis de lujo y sofisticación con uno de los spas más grandes de Latinoamérica. Disfruta de vistas panorámicas y una gastronomía excepcional.' },
         amenities: ['SWIMMING_POOL', 'SPA', 'FITNESS_CENTER', 'RESTAURANT', 'BAR']
@@ -116,7 +116,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'CTG006',
         name: 'Hotel Boutique Casa San Agustín',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://images.pexels.com/photos/2227775/pexels-photo-2227775.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'EXTERIOR'}],
         address: { lines: ['Cl. de la Universidad #36-44'], postalCode: '130001', cityName: 'Cartagena', countryCode: 'CO' },
         description: { lang: 'es', text: 'Lujo refinado en tres casas coloniales restauradas. Su piscina en el patio central es un ícono de la ciudad amurallada.' },
         amenities: ['SWIMMING_POOL', 'RESTAURANT', 'SPA', 'WIFI']
@@ -131,7 +131,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'BCN001',
         name: 'W Barcelona',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'EXTERIOR'}],
         address: { lines: ['Plaça de la Rosa dels Vents, 1'], postalCode: '08039', cityName: 'Barcelona', countryCode: 'ES' },
         description: { lang: 'es', text: 'Icónico hotel en forma de vela en la playa de la Barceloneta, con vistas panorámicas, una animada azotea y un ambiente de lujo moderno.' },
         amenities: ['SWIMMING_POOL', 'BEACH_ACCESS', 'FITNESS_CENTER', 'SPA', 'BAR']
@@ -146,7 +146,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'ROM001',
         name: 'Hotel Eden - Dorchester Collection',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'EXTERIOR'}],
         address: { lines: ['Via Ludovisi, 49'], postalCode: '00187', cityName: 'Rome', countryCode: 'IT' },
         description: { lang: 'es', text: 'Elegancia romana con un espectacular bar en la azotea que ofrece vistas panorámicas de la Ciudad Eterna. Un refugio de lujo cerca de la Via Veneto.' },
         amenities: ['SPA', 'FITNESS_CENTER', 'RESTAURANT', 'BAR']
@@ -161,7 +161,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'PAR001',
         name: 'Four Seasons Hotel George V',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'EXTERIOR'}],
         address: { lines: ['31 Av. George V'], postalCode: '75008', cityName: 'Paris', countryCode: 'FR' },
         description: { lang: 'es', text: 'Un icono del lujo parisino, a pocos pasos de los Campos Elíseos. Disfruta de sus tres restaurantes con estrellas Michelin y un servicio impecable.' },
         amenities: ['SPA', 'FITNESS_CENTER', 'RESTAURANT', 'SWIMMING_POOL']
@@ -176,7 +176,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'NYC001',
         name: 'The Plaza, A Fairmont Managed Hotel',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'EXTERIOR'}],
         address: { lines: ['768 5th Ave'], postalCode: '10019', cityName: 'New York', countryCode: 'US' },
         description: { lang: 'es', text: 'El hotel más famoso de Nueva York, un hito histórico en Central Park South. Lujo, elegancia y un servicio que ha definido generaciones.' },
         amenities: ['SPA', 'RESTAURANT', 'BAR', 'FITNESS_CENTER']
@@ -191,7 +191,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'TYO001',
         name: 'Aman Tokyo',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://image-tc.galaxy.tf/wijpeg-9qluun035w5p2syx5l2ok2ydu/standard.jpg?width=1920', category: 'EXTERIOR'}],
         address: { lines: ['1-5-6 Otemachi, Chiyoda-ku'], postalCode: '100-0004', cityName: 'Tokyo', countryCode: 'JP' },
         description: { lang: 'es', text: 'Un santuario urbano con diseño japonés minimalista y vistas panorámicas de la ciudad y el Monte Fuji desde sus pisos más altos.' },
         amenities: ['SWIMMING_POOL', 'SPA', 'FITNESS_CENTER', 'RESTAURANT']
@@ -206,7 +206,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'LON001',
         name: 'The Savoy',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://images.pexels.com/photos/261169/pexels-photo-261169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'EXTERIOR'}],
         address: { lines: ['Strand'], postalCode: 'WC2R 0EZ', cityName: 'London', countryCode: 'GB' },
         description: { lang: 'es', text: 'Un icono eduardiano a orillas del Támesis, que combina un estilo atemporal con instalaciones modernas y un servicio de fama mundial.' },
         amenities: ['SWIMMING_POOL', 'SPA', 'FITNESS_CENTER', 'RESTAURANT', 'BAR']
@@ -221,7 +221,7 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         hotelId: 'MIA001',
         name: 'Faena Hotel Miami Beach',
         rating: '5',
-        media: [],
+        media: [{uri: 'https://images.pexels.com/photos/1287460/pexels-photo-1287460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', category: 'EXTERIOR'}],
         address: { lines: ['3201 Collins Ave'], postalCode: '33140', cityName: 'Miami', countryCode: 'US' },
         description: { lang: 'es', text: 'Un universo de arte, lujo y diseño de la mano de Alan Faena. Un teatro de experiencias con un servicio excepcional en Miami Beach.' },
         amenities: ['SWIMMING_POOL', 'BEACH_ACCESS', 'SPA', 'RESTAURANT', 'BAR']
