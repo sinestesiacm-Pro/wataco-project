@@ -31,12 +31,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'i.ibb.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'cf.bstatic.com',
         port: '',
         pathname: '/**',
@@ -90,7 +84,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: 'httpshttps',
         hostname: 'i.postimg.cc',
         port: '',
         pathname: '/**',

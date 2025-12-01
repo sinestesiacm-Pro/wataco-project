@@ -54,9 +54,9 @@ export const MOCK_HOTELS_DATA: AmadeusHotelOffer[] = [
         name: 'The Click Clack Hotel Bogotá',
         rating: '5',
         media: [
-          { uri: 'https://i.ibb.co/3sYj8Dc/click-clack-main.jpg', category: 'EXTERIOR' },
-          { uri: 'https://i.ibb.co/bFqfL8p/click-clack-lobby.jpg', category: 'LOBBY' },
-          { uri: 'https://i.ibb.co/yQjJg6T/click-clack-rooftop.jpg', category: 'LOBBY' },
+          { uri: 'https://i.postimg.cc/8cJ3Yk1x/click-clack-main.jpg', category: 'EXTERIOR' },
+          { uri: 'https://i.postimg.cc/L8pL5fJ6/click-clack-lobby.jpg', category: 'LOBBY' },
+          { uri: 'https://i.postimg.cc/j5GgZq7G/click-clack-rooftop.jpg', category: 'LOBBY' },
         ],
         address: { lines: ['Cra. 11 #93-77'], postalCode: '110221', cityName: 'Bogotá', countryCode: 'CO' },
         description: { lang: 'es', text: 'Sumérgete en el diseño y la creatividad en este hotel único en el corazón de Bogotá. Disfruta de su rooftop bar, eventos culturales y habitaciones llenas de detalles sorprendentes.' },
