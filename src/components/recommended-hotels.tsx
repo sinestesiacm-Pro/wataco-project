@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -104,7 +105,7 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
                 </div>
                  <div className="mt-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100 flex justify-between items-end">
                     <p className="font-semibold text-xl drop-shadow-lg">${hotelOffer.offers[0].price.total}<span className="text-sm font-normal">/noche</span></p>
-                    <Button className="bg-secondary-translucent backdrop-blur-md border-white/30 text-white hover:bg-secondary/90">
+                    <Button className="bg-primary-translucent backdrop-blur-md border-white/30 text-white hover:bg-primary/90">
                         Ver Hotel
                     </Button>
                 </div>
