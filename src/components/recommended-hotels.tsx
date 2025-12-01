@@ -1,16 +1,14 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Heart, Star, MapPin } from 'lucide-react';
-import Link from 'next/link';
-import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
+import { Star, MapPin } from 'lucide-react';
 import type { AmadeusHotelOffer } from '@/lib/types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, memo } from 'react';
 import { useRouter } from 'next/navigation';
-import { format, addDays } from 'date-fns';
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Skeleton } from './ui/skeleton';
 import { getRecommendedHotels, getGooglePlacePhotos } from '@/app/actions';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const renderStars = (rating: string | undefined) => {
     const starCount = parseInt(rating || '0', 10);
@@ -35,32 +33,23 @@ const shuffleArray = <T,>(array: T[]): T[] => {
     return array;
 }
 
-const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOffer: AmadeusHotelOffer, onViewHotel: (offer: AmadeusHotelOffer) => void }) {
+const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel, photo }: { hotelOffer: AmadeusHotelOffer, onViewHotel: (offer: AmadeusHotelOffer) => void, photo: string | null }) {
     const hotel = hotelOffer.hotel;
-    const [photo, setPhoto] = useState<string | null>(null);
-    const [loadingPhoto, setLoadingPhoto] = useState(true);
-
-    useEffect(() => {
-        const fetchPrimaryPhoto = async () => {
-            setLoadingPhoto(true);
-            const photoUrls = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`, 1);
-            if (photoUrls.length > 0) {
-                setPhoto(photoUrls[0]);
-            } else {
-                setPhoto(hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png');
-            }
-            setLoadingPhoto(false);
-        };
-        fetchPrimaryPhoto();
-    }, [hotel.name, hotel.address.cityName, hotel.media]);
 
     return (
-        <div className="group relative aspect-[4/5] w-full overflow-hidden rounded-2xl transition-all duration-500 ease-in-out hover:shadow-2xl cursor-pointer" onClick={() => onViewHotel(hotelOffer)}>
-             {loadingPhoto ? (
+        <motion.div 
+            className="group relative aspect-[4/5] w-full overflow-hidden rounded-2xl transition-all duration-500 ease-in-out hover:shadow-2xl cursor-pointer bg-card" 
+            onClick={() => onViewHotel(hotelOffer)}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+        >
+             {!photo ? (
                  <Skeleton className="h-full w-full" />
              ) : (
                 <Image
-                    src={photo || 'https://placehold.co/800x600.png'}
+                    src={photo}
                     data-ai-hint="hotel photo"
                     alt={`${hotel.name || 'Hotel'} image`}
                     fill
@@ -89,38 +78,58 @@ const HotelCard = React.memo(function HotelCard({ hotelOffer, onViewHotel }: { h
                     </Button>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 });
 
-export const RecommendedHotels = React.memo(function RecommendedHotels() {
+export const RecommendedHotels = memo(function RecommendedHotels() {
   const router = useRouter();
   const [allHotels, setAllHotels] = useState<AmadeusHotelOffer[]>([]);
-  const [displayedHotels, setDisplayedHotels] = useState<AmadeusHotelOffer[]>([]);
+  const [displayedHotels, setDisplayedHotels] = useState<{offer: AmadeusHotelOffer, photo: string | null}[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchHotels = async () => {
+    const fetchAndPrepareHotels = async () => {
         setLoading(true);
         const result = await getRecommendedHotels();
-        if(result.success && result.data) {
+        if (result.success && result.data) {
             setAllHotels(result.data);
-            setDisplayedHotels(shuffleArray([...result.data]).slice(0, 4));
+            
+            const firstBatch = shuffleArray([...result.data]).slice(0, 4);
+            const hotelPromises = firstBatch.map(async (offer) => {
+                const photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`, 1);
+                return {
+                    offer: offer,
+                    photo: photoUrls.length > 0 ? photoUrls[0] : (offer.hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png')
+                };
+            });
+            const firstDisplayedHotels = await Promise.all(hotelPromises);
+            setDisplayedHotels(firstDisplayedHotels);
         }
         setLoading(false);
     }
-    fetchHotels();
+    fetchAndPrepareHotels();
   }, []);
 
   useEffect(() => {
-    if (allHotels.length > 0) {
-        const interval = setInterval(() => {
-            setDisplayedHotels(shuffleArray([...allHotels]).slice(0, 4));
-        }, 10000); // Rotate every 10 seconds
+    if (allHotels.length === 0) return;
 
-        return () => clearInterval(interval);
-    }
+    const interval = setInterval(async () => {
+        const nextBatch = shuffleArray([...allHotels]).slice(0, 4);
+        const hotelPromises = nextBatch.map(async (offer) => {
+            const photoUrls = await getGooglePlacePhotos(`${offer.hotel.name}, ${offer.hotel.address.cityName}`, 1);
+            return {
+                offer: offer,
+                photo: photoUrls.length > 0 ? photoUrls[0] : (offer.hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png')
+            };
+        });
+        const nextDisplayedHotels = await Promise.all(hotelPromises);
+        setDisplayedHotels(nextDisplayedHotels);
+    }, 10000); // Rotate every 10 seconds
+
+    return () => clearInterval(interval);
   }, [allHotels]);
+
 
   const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
       const hotelId = offer.hotel.hotelId || offer.id;
@@ -148,10 +157,14 @@ export const RecommendedHotels = React.memo(function RecommendedHotels() {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {displayedHotels.map((hotelOffer) => (
-            <HotelCard key={hotelOffer.id} hotelOffer={hotelOffer} onViewHotel={handleViewHotel} />
-          ))}
+          <AnimatePresence mode="popLayout">
+            {displayedHotels.map(({offer, photo}) => (
+              <HotelCard key={offer.id} hotelOffer={offer} onViewHotel={handleViewHotel} photo={photo} />
+            ))}
+          </AnimatePresence>
       </div>
     </div>
   );
 });
+
+    
