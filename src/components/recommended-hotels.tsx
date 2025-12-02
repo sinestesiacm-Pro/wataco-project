@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -106,7 +107,7 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
                 </div>
                  <div className="mt-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100 flex justify-between items-end">
                     <p className="font-semibold text-xl drop-shadow-lg">${hotelOffer.offers[0].price.total}<span className="text-sm font-normal">/noche</span></p>
-                    <Button className="bg-primary-translucent backdrop-blur-md border-white/30 text-white hover:bg-primary/90">
+                    <Button className="bg-primary-translucent backdrop-blur-lg border-white/30 text-white hover:bg-primary/90">
                         Ver Hotel
                     </Button>
                 </div>
@@ -123,7 +124,8 @@ const HotelRotationSlot = ({ allHotels, onViewHotel }: { allHotels: AmadeusHotel
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
-        const randomDelay = Math.random() * 10000 + 10000; 
+        // Random delay between 15 and 25 seconds (average 20 seconds)
+        const randomDelay = Math.random() * 10000 + 15000; 
         timeoutRef.current = setTimeout(() => {
             setCurrentIndex(prevIndex => (prevIndex + 1) % allHotels.length);
         }, randomDelay);
