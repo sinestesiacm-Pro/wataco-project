@@ -1,16 +1,30 @@
-
 'use client';
 
 import { AmadeusHotelOffer, Room } from '@/lib/types';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
-import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, XCircle, Star, Users, BedDouble, Square, Coffee, Salad, Wine, Building, Minus, Plus, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Tv, Wifi, Utensils, XCircle, Star, Users, BedDouble, Square, Coffee, Salad, Wine, Building, Minus, Plus, ShoppingCart, MapPin } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from './ui/separator';
 import React, { useState, useMemo, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { HotelMapDialog } from './hotel-map-dialog';
+
+const amenityIcons: { [key: string]: LucideIcon } = {
+  SWIMMING_POOL: Utensils,
+  SPA: Star,
+  WIFI: Wifi,
+  RESTAURANT: Utensils,
+  PARKING: Tv,
+  FITNESS_CENTER: Tv,
+  BAR: Utensils,
+  AIR_CONDITIONING: Tv,
+  PETS_ALLOWED: Tv,
+  AIRPORT_SHUTTLE: Tv,
+  BEACH_ACCESS: Utensils,
+};
 
 const roomAmenityIcons: { [key: string]: LucideIcon } = {
   WIFI: Wifi,
@@ -120,6 +134,62 @@ interface RoomSelectionViewProps {
   children: number;
 }
 
+const HotelHeader = ({ hotel }: { hotel: AmadeusHotelOffer['hotel'] }) => {
+    const renderStars = (rating: string | undefined) => {
+        const starCount = parseInt(rating || '0', 10);
+        if (starCount === 0) return null;
+        
+        return (
+            <div className="flex items-center gap-1">
+                {[...Array(starCount)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 text-amber-300 fill-amber-400" />
+                ))}
+            </div>
+        );
+    };
+
+    return (
+        <Card className="bg-card/80 backdrop-blur-xl border rounded-2xl overflow-hidden">
+            <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row gap-6">
+                    <div className="relative w-full sm:w-1/3 h-48 sm:h-auto rounded-lg overflow-hidden">
+                        <Image 
+                            src={hotel.media?.[0]?.uri || 'https://placehold.co/400x300.png'}
+                            alt={hotel.name || 'Hotel'}
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
+                    <div className="flex-grow">
+                        <h2 className="text-2xl font-bold font-headline">{hotel.name}</h2>
+                        <div className="flex items-center gap-4 mt-1 text-muted-foreground text-sm">
+                            {renderStars(hotel.rating)}
+                            <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/> {hotel.address.cityName}</div>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-3 line-clamp-3">{hotel.description?.text}</p>
+                        
+                        <div className="flex flex-wrap gap-2 mt-4">
+                            {(hotel.amenities || []).slice(0, 4).map(amenity => {
+                                const Icon = amenityIcons[amenity] || CheckCircle2;
+                                return (
+                                    <Badge key={amenity} variant="secondary" className="gap-2">
+                                        <Icon className="h-4 w-4"/>
+                                        {formatAmenity(amenity)}
+                                    </Badge>
+                                )
+                            })}
+                        </div>
+                        
+                        <div className="mt-4">
+                             <HotelMapDialog hotelName={hotel.name || 'Ubicación'} />
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
 
 export function RoomSelectionView({ hotelOffer, onRoomsSelected, adults, children }: RoomSelectionViewProps) {
   const rooms = hotelOffer.offers;
@@ -177,27 +247,32 @@ export function RoomSelectionView({ hotelOffer, onRoomsSelected, adults, childre
 
 
   return (
-    <div className="space-y-6 pb-32"> {/* Padding at bottom for summary bar */}
-       <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold font-headline">{hotelOffer.hotel.name} - Elige tu habitación</h2>
-       </div>
-       <p className="text-muted-foreground -mt-6">Has buscado para <span className="font-bold">{guestsText}</span>. Selecciona una o más habitaciones para alojar a todo tu grupo.</p>
+    <div className="space-y-6 pb-32">
+        <HotelHeader hotel={hotelOffer.hotel} />
+        
+       <Card>
+            <CardHeader>
+                <CardTitle>Selecciona tu Habitación</CardTitle>
+                <p className="text-muted-foreground">Has buscado para <span className="font-bold">{guestsText}</span>. Selecciona una o más habitaciones para alojar a todo tu grupo.</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {rooms.map((roomOffer, index) => {
+                 const roomCapacity = parseInt(roomOffer.room.type.split('_')[0] || '2');
+                 const isRecommended = totalGuests > 2 && roomCapacity >= 4 && index === 0;
 
-      {rooms.map((roomOffer, index) => {
-         const roomCapacity = parseInt(roomOffer.room.type.split('_')[0] || '2');
-         const isRecommended = totalGuests > 2 && roomCapacity >= 4 && index === 0;
-
-        return (
-           <RoomOption 
-                key={roomOffer.id}
-                roomOffer={roomOffer}
-                onAdd={() => handleAddRoom(roomOffer)}
-                onRemove={() => handleRemoveRoom(roomOffer)}
-                quantity={selectedRooms[roomOffer.id]?.quantity || 0}
-                isRecommended={isRecommended}
-           />
-        )
-      })}
+                return (
+                   <RoomOption 
+                        key={roomOffer.id}
+                        roomOffer={roomOffer}
+                        onAdd={() => handleAddRoom(roomOffer)}
+                        onRemove={() => handleRemoveRoom(roomOffer)}
+                        quantity={selectedRooms[roomOffer.id]?.quantity || 0}
+                        isRecommended={isRecommended}
+                   />
+                )
+              })}
+            </CardContent>
+       </Card>
 
       <AnimatePresence>
         {selectionArray.length > 0 && (
@@ -240,5 +315,3 @@ export function RoomSelectionView({ hotelOffer, onRoomsSelected, adults, childre
     </div>
   );
 }
-
-    

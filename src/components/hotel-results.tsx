@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Skeleton } from './ui/skeleton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
+import { Badge } from './ui/badge';
 
 interface HotelResultsProps {
     hotels: AmadeusHotelOffer[];
@@ -60,17 +60,8 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
         const params = new URLSearchParams(searchParams.toString());
         const hotelId = offer.hotel.hotelId || offer.id;
         
-        params.set('hotelId', hotelId);
-        
-        const url = `/hotels/${hotelId}/offers?${params.toString()}`;
-        
-        if (typeof window !== "undefined") {
-            window.history.pushState({ offer }, '', url);
-            router.refresh(); 
-            window.location.href = url;
-        } else {
-            router.push(url);
-        }
+        // Instead of navigating to offers, we navigate to the main hotel detail page
+        router.push(`/hotels/${hotelId}`);
     };
 
     return (
@@ -79,7 +70,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                 {loadingPhotos ? (
                     <Skeleton className="h-full w-full" />
                 ) : (
-                    <Carousel className="w-full h-full">
+                    <Carousel className="w-full h-full" opts={{ loop: true }}>
                         <CarouselContent>
                             {photos.map((photo, index) => (
                                 <CarouselItem key={index}>
@@ -98,12 +89,6 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        {photos.length > 1 && (
-                          <>
-                            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
-                            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
-                          </>
-                        )}
                     </Carousel>
                 )}
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
@@ -122,13 +107,13 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                 </div>
                  <div className="flex justify-between items-end mt-4">
                      <div className="text-white/90">
-                        <p className="text-xs">Precio por noche desde</p>
+                        <p className="text-xs">Desde</p>
                         <p className="font-semibold text-3xl drop-shadow-lg">
                           ${offer.offers?.[0]?.price?.total}
                         </p>
                     </div>
                      <Button onClick={handleViewHotel} size="lg" className="font-semibold bg-white/20 backdrop-blur-lg border-white/30 hover:bg-white/30 text-white">
-                        Ver Habitaciones
+                        Ver Detalles
                      </Button>
               </div>
             </div>
@@ -145,5 +130,3 @@ export function HotelResults({ hotels, searchParams }: HotelResultsProps) {
     </div>
   );
 }
-
-    

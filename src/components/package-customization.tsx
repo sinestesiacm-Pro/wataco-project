@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -11,7 +10,7 @@ import { Hotel, Plane, Star, ArrowRight, CheckCircle, Wifi, Utensils, Sparkles, 
 import type { PackageOffer } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Badge } from './ui/badge';
 import { MOCK_HOTELS_DATA } from '@/lib/mock-data';
@@ -209,8 +208,7 @@ export function PackageCustomization({ pkg }: { pkg: PackageOffer }) {
                                                         </CarouselItem>
                                                     ))}
                                                 </CarouselContent>
-                                                <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 border-white/20 text-white hover:bg-black/50 hover:text-white" />
-                                                <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                                                <CarouselDots />
                                             </Carousel>
                                         </div>
                                     </div>

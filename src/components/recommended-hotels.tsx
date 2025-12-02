@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import type { AmadeusHotelOffer } from '@/lib/types';
 import React, { useCallback, useEffect, useState, memo } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { getRecommendedHotels, getGooglePlacePhotos } from '@/app/actions';
+import { getRecommendedHotels } from '@/app/actions';
 import { Skeleton } from './ui/skeleton';
 import { cn } from '@/lib/utils';
 
@@ -36,18 +35,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOffer: AmadeusHotelOffer; onViewHotel: (offer: AmadeusHotelOffer) => void; }) {
     const hotel = hotelOffer.hotel;
-    const [photo, setPhoto] = useState<string | null>(null);
-    const [loadingPhoto, setLoadingPhoto] = useState(true);
-
-    useEffect(() => {
-        const fetchPhoto = async () => {
-            setLoadingPhoto(true);
-            const photoUrls = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`, 1);
-            setPhoto(photoUrls.length > 0 ? photoUrls[0] : (hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png'));
-            setLoadingPhoto(false);
-        };
-        fetchPhoto();
-    }, [hotel.name, hotel.address.cityName, hotel.media]);
+    const photo = hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png';
 
     return (
         <motion.div 
@@ -59,36 +47,25 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
             transition={{ duration: 0.8, ease: "easeInOut" }}
         >
              <AnimatePresence>
-                {loadingPhoto ? (
-                     <motion.div 
-                        key="loader"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 flex items-center justify-center bg-white"
-                     >
-                        <Loader2 className="h-8 w-8 animate-spin text-primary"/>
-                    </motion.div>
-                ) : (
-                    <motion.div
-                        key="image"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className="absolute inset-0"
-                    >
-                        <Image
-                            src={photo!}
-                            data-ai-hint="hotel photo"
-                            alt={`${hotel.name || 'Hotel'} image`}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-110"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
-                            draggable={false}
-                            onError={(e) => { e.currentTarget.src = 'https://placehold.co/800x600.png'; }}
-                        />
-                    </motion.div>
-                 )}
+                <motion.div
+                    key={photo}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0"
+                >
+                    <Image
+                        src={photo}
+                        data-ai-hint="hotel photo"
+                        alt={`${hotel.name || 'Hotel'} image`}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
+                        draggable={false}
+                        priority
+                        onError={(e) => { e.currentTarget.src = 'https://placehold.co/800x600.png'; }}
+                    />
+                </motion.div>
             </AnimatePresence>
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
@@ -122,12 +99,11 @@ const HotelRotationSlot = ({ allHotels, onViewHotel }: { allHotels: AmadeusHotel
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
-        // Staggered update time between 10 and 20 seconds
         const randomDelay = Math.random() * 10000 + 10000; 
         timeoutRef.current = setTimeout(() => {
             setCurrentIndex(prevIndex => (prevIndex + 1) % allHotels.length);
         }, randomDelay);
-    }, [currentIndex, allHotels.length]);
+    }, [allHotels.length]);
 
     useEffect(() => {
         if (allHotels.length > 1) {
@@ -142,7 +118,7 @@ const HotelRotationSlot = ({ allHotels, onViewHotel }: { allHotels: AmadeusHotel
 
     const hotelToShow = allHotels[currentIndex];
 
-    if (!hotelToShow) return <Skeleton className="aspect-[4/5] rounded-2xl bg-white" />;
+    if (!hotelToShow) return <div className="aspect-[4/5] rounded-2xl bg-white" />;
 
     return (
         <AnimatePresence mode="wait">
@@ -185,9 +161,9 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
   if (loading) {
       return (
           <div className="space-y-6">
-               <Skeleton className="h-8 w-1/3 bg-white" />
+               <Skeleton className="h-8 w-1/3 bg-muted" />
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                   {[...Array(4)].map((_, i) => <Skeleton key={i} className="aspect-[4/5] rounded-2xl bg-white" />)}
+                   {[...Array(4)].map((_, i) => <Skeleton key={i} className="aspect-[4/5] rounded-2xl bg-muted" />)}
                </div>
           </div>
       )
@@ -206,7 +182,6 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {hotelSlots.map((slotIndex) => {
-              // Create buckets of hotels for each slot to avoid duplicates on screen
               const hotelsForSlot = allHotels.filter((_, index) => index % 4 === slotIndex);
               return hotelsForSlot.length > 0 ? (
                   <HotelRotationSlot 

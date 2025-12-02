@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { AmadeusHotel } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Star, MapPin, Wifi, Car, Waves, Utensils, GlassWater, Wind, Dumbbell, Sparkles, Dog, Plane, CheckCircle2, ArrowRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -63,7 +63,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
 
   return (
     <div className="space-y-8">
-      <Card className="relative overflow-hidden bg-card/40 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl text-white">
+      <Card className="relative overflow-hidden bg-card/40 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl text-card-foreground">
         
         <Carousel className="w-full group" opts={{ loop: true }}>
           <CarouselContent>
@@ -88,12 +88,7 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
               ))
             )}
           </CarouselContent>
-          {photos.length > 1 && !loadingPhotos && (
-            <>
-                <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-            </>
-          )}
+          {photos.length > 1 && !loadingPhotos && <CarouselDots />}
         </Carousel>
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />

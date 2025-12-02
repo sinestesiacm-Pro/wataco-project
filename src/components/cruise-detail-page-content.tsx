@@ -1,15 +1,14 @@
-
 'use client';
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Ship, Star, Clock, Anchor, ChevronLeft, ChevronRight } from "lucide-react";
+import { Ship, Star, Clock, Anchor } from "lucide-react";
 import Image from 'next/image';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { CruiseItinerary } from '@/components/cruise-itinerary';
 import { Badge } from '@/components/ui/badge';
 import type { CruisePackage } from '@/lib/types';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselDots } from "@/components/ui/carousel";
 
 export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
     
@@ -46,8 +45,7 @@ export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePack
                             </CarouselItem>
                         ))}
                     </CarouselContent>
-                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
-                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                    <CarouselDots />
                 </Carousel>
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
