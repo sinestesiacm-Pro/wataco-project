@@ -582,9 +582,9 @@
 
 .marquee-content {
   display: flex;
-  gap: var(--gap, 2.5rem);
+  gap: 1.5rem; /* Reduced gap */
   width: fit-content;
-  animation: marquee 40s linear infinite;
+  animation: marquee 80s linear infinite; /* Slower animation */
   will-change: transform;
 }
 
@@ -597,7 +597,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4rem; /* 64px */
+  height: 5rem; /* 80px */
+  width: 10rem; /* 160px */
 }
     
 

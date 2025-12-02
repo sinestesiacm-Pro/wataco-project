@@ -57,32 +57,40 @@ const hotelPartners = [
     { name: 'Hilton', domain: 'hilton.com' },
     { name: 'Hyatt', domain: 'hyatt.com' },
     { name: 'Accor', domain: 'accor.com' },
+    { name: 'Wyndham', domain: 'wyndhamhotels.com' },
     { name: 'Choice Hotels', domain: 'choicehotels.com' },
-    { name: 'Sheraton', domain: 'sheraton.com' },
+    { name: 'Four Seasons', domain: 'fourseasons.com' },
+    { name: 'Mandarin Oriental', domain: 'mandarinoriental.com' },
+    { name: 'Rosewood', domain: 'rosewoodhotels.com' },
+    { name: 'Belmond', domain: 'belmond.com' },
 ];
 
-const PartnersGrid = React.memo(function PartnersGrid({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, domain?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) {
+const PartnersMarquee = React.memo(function PartnersMarquee({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, domain?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) {
+    const extendedPartners = [...partners, ...partners]; // Duplicate for seamless loop
+
     return (
     <div className="py-16 text-center">
         <h2 className="text-3xl font-headline font-bold text-foreground drop-shadow-lg">{title}</h2>
         <p className="text-lg text-muted-foreground mt-2 drop-shadow-lg">{subtitle}</p>
-        <div className="mt-8 grid grid-cols-3 md:grid-cols-6 gap-4 max-w-4xl mx-auto">
-            {partners.map(partner => (
-                <div key={partner.name} className="bg-white/80 backdrop-blur-sm rounded-xl p-4 flex items-center justify-center aspect-square transition-all duration-300 hover:scale-110 hover:shadow-2xl">
-                    <Image
-                        src={partnerType === 'airline' ? `https://images.kiwi.com/airlines/64/${partner.code}.png` : `https://logo.clearbit.com/${partner.domain}`}
-                        alt={partner.name}
-                        width={64}
-                        height={64}
-                        className="object-contain w-auto h-auto max-w-full max-h-full"
-                        unoptimized={partnerType === 'airline'}
-                        onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                        }}
-                    />
-                </div>
-            ))}
+        <div className="marquee mt-8">
+            <div className="marquee-content">
+                {extendedPartners.map((partner, index) => (
+                    <div key={`${partner.name}-${index}`} className="partner-logo bg-white/80 backdrop-blur-sm rounded-xl p-4 flex items-center justify-center shadow-card-3d">
+                        <Image
+                            src={partnerType === 'airline' ? `https://images.kiwi.com/airlines/64/${partner.code}.png` : `https://logo.clearbit.com/${partner.domain}`}
+                            alt={partner.name}
+                            width={64}
+                            height={64}
+                            className="object-contain w-auto h-auto max-w-full max-h-full"
+                            unoptimized={partnerType === 'airline'}
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                            }}
+                        />
+                    </div>
+                ))}
+            </div>
         </div>
     </div>
 )});
@@ -96,7 +104,7 @@ const RecommendedContent = React.memo(function RecommendedContent({ tab }: { tab
       return (
           <>
             <RecommendedHotels />
-            <PartnersGrid title="Nuestros Hoteles de Confianza" subtitle="Red mundial de confianza" partners={hotelPartners} partnerType="hotel" />
+            <PartnersMarquee title="Nuestros Hoteles de Confianza" subtitle="Red mundial de confianza" partners={hotelPartners} partnerType="hotel" />
           </>
       )
     case 'Packages':
@@ -112,7 +120,7 @@ const RecommendedContent = React.memo(function RecommendedContent({ tab }: { tab
       return (
           <>
             <RecommendedDestinations />
-            <PartnersGrid title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} partnerType="airline" />
+            <PartnersMarquee title="Nuestras Aerolíneas Asociadas" subtitle="Red mundial de confianza" partners={airlinePartners} partnerType="airline" />
           </>
       )
   }

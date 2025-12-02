@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       boxShadow: {
-        'card-3d': '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.15)',
+        'card-3d': '0 8px 32px 0 rgba(0, 0, 0, 0.25)',
       },
       fontFamily: {
         body: ['Inter', 'sans-serif'],
