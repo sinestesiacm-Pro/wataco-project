@@ -107,7 +107,7 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
                 </div>
                  <div className="mt-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100 flex justify-between items-end">
                     <p className="font-semibold text-xl drop-shadow-lg">${hotelOffer.offers[0].price.total}<span className="text-sm font-normal">/noche</span></p>
-                    <Button className="bg-primary-translucent backdrop-blur-lg border-white/30 text-white hover:bg-primary/90">
+                    <Button className="bg-primary-translucent hover:bg-success backdrop-blur-lg border-white/30 text-white">
                         Ver Hotel
                     </Button>
                 </div>
@@ -116,7 +116,7 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
     );
 });
 
-const HotelRotationSlot = ({ allHotels, onViewHotel }: { allHotels: AmadeusHotelOffer[], onViewHotel: (offer: AmadeusHotelOffer) => void }) => {
+const HotelRotationSlot = ({ allHotels, onViewHotel, updateInterval }: { allHotels: AmadeusHotelOffer[], onViewHotel: (offer: AmadeusHotelOffer) => void, updateInterval: number }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
@@ -124,12 +124,10 @@ const HotelRotationSlot = ({ allHotels, onViewHotel }: { allHotels: AmadeusHotel
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
-        // Random delay between 15 and 25 seconds (average 20 seconds)
-        const randomDelay = Math.random() * 10000 + 15000; 
         timeoutRef.current = setTimeout(() => {
             setCurrentIndex(prevIndex => (prevIndex + 1) % allHotels.length);
-        }, randomDelay);
-    }, [allHotels.length]);
+        }, updateInterval);
+    }, [allHotels.length, updateInterval]);
 
     useEffect(() => {
         if (allHotels.length > 1) {
@@ -181,7 +179,6 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
 
   const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
       const hotelId = offer.hotel.hotelId || offer.id;
-      // Navigate to the main hotel detail page, which will handle its own data fetching
       router.push(`/hotels/${hotelId}`);
   }, [router]);
   
@@ -196,7 +193,12 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
       )
   }
   
-  const hotelSlots = allHotels.length > 0 ? [0, 1, 2, 3] : [];
+  const hotelSlots = allHotels.length > 0 ? [
+      { slotIndex: 2, interval: 30000 }, // Slot 3, 30s
+      { slotIndex: 0, interval: 45000 }, // Slot 1, 45s
+      { slotIndex: 1, interval: 55000 }, // Slot 2, 55s
+      { slotIndex: 3, interval: 65000 }  // Slot 4, 65s
+  ] : [];
 
   return (
     <div className="relative space-y-6">
@@ -208,13 +210,14 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {hotelSlots.map((slotIndex) => {
+          {hotelSlots.map(({ slotIndex, interval }) => {
               const hotelsForSlot = allHotels.filter((_, index) => index % 4 === slotIndex);
               return hotelsForSlot.length > 0 ? (
                   <HotelRotationSlot 
                       key={slotIndex} 
                       allHotels={hotelsForSlot}
                       onViewHotel={handleViewHotel}
+                      updateInterval={interval}
                   />
               ) : null;
           })}

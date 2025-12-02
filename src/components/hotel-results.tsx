@@ -117,7 +117,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                           ${offer.offers?.[0]?.price?.total}
                         </p>
                     </div>
-                     <Button onClick={handleViewHotel} size="lg" className="font-semibold bg-primary-translucent backdrop-blur-lg border-white/30 hover:bg-primary/90 text-white">
+                     <Button onClick={handleViewHotel} size="lg" className="font-semibold bg-primary-translucent hover:bg-success backdrop-blur-lg border-white/30 text-white">
                         Ver Hotel
                      </Button>
               </div>
