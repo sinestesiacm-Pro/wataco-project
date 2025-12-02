@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -95,7 +96,7 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white flex flex-col justify-end h-full">
                 <div className="transform transition-transform duration-500 group-hover:-translate-y-4">
-                    <h3 className="font-bold font-headline text-2xl text-white drop-shadow-md">{hotel.name}</h3>
+                    <h3 className="font-semibold font-headline text-2xl text-white">{hotel.name}</h3>
                      <div className="flex items-center gap-4 mt-1 text-sm text-white/90">
                        {renderStars(hotel.rating)}
                        <div className="flex items-center gap-1">
@@ -105,8 +106,8 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
                     </div>
                 </div>
                  <div className="mt-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100 flex justify-between items-end">
-                    <p className="font-semibold text-xl drop-shadow-lg">${hotelOffer.offers[0].price.total}<span className="text-sm font-normal">/noche</span></p>
-                    <Button variant="glass">
+                    <p className="font-semibold text-xl">${hotelOffer.offers[0].price.total}<span className="text-sm font-normal">/noche</span></p>
+                    <Button variant="glass" className="hover:bg-success">
                         Ver Hotel
                     </Button>
                 </div>
@@ -202,7 +203,7 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
   return (
     <div className="relative space-y-6">
       <div 
-        className="glitch-container text-2xl font-bold font-headline text-foreground"
+        className="glitch-container text-2xl font-semibold font-headline text-foreground"
         data-text="Hoteles Recomendados Alrededor del Mundo"
       >
         <span data-text="Hoteles Recomendados Alrededor del Mundo">Hoteles Recomendados Alrededor del Mundo</span>

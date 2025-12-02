@@ -24,11 +24,11 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
                 </Button>
             </div>
             
-            <div className="absolute bottom-0 left-0 right-0 h-2/3 soft-shadow-gradient pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
 
             <div className="absolute bottom-0 left-0 right-0 p-4">
-                <h3 className="font-bold text-xl font-headline text-white drop-shadow-md">{cruise.name}</h3>
-                <p className="text-sm text-white/80 drop-shadow-md">{cruise.ship} - {cruise.duration}</p>
+                <h3 className="font-semibold font-headline text-xl text-white">{cruise.name}</h3>
+                <p className="text-sm text-white/80">{cruise.ship} - {cruise.duration}</p>
             </div>
         </div>
         <div className="p-4 flex flex-col flex-grow text-card-foreground">
@@ -55,7 +55,7 @@ const CruiseCard = ({ cruise }: { cruise: CruisePackage }) => (
 export function RecommendedCruises({ cruises = recommendedCruises }: { cruises?: CruisePackage[] }) {
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold font-headline text-foreground">Cruceros Recomendados</h2>
+      <h2 className="text-3xl font-semibold font-headline text-foreground">Cruceros Recomendados</h2>
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {cruises.map((cruise, index) => (
           <CruiseCard key={index} cruise={cruise} />

@@ -69,12 +69,12 @@ const PartnersMarquee = React.memo(function PartnersMarquee({ title, subtitle, p
 
     return (
     <div className="py-16 text-center">
-        <h2 className="text-3xl font-headline font-bold text-foreground drop-shadow-lg">{title}</h2>
-        <p className="text-lg text-muted-foreground mt-2 drop-shadow-lg">{subtitle}</p>
+        <h2 className="text-3xl font-headline font-semibold text-foreground">{title}</h2>
+        <p className="text-lg text-muted-foreground mt-2">{subtitle}</p>
         <div className="marquee mt-8">
             <div className="marquee-content">
                 {extendedPartners.map((partner, index) => (
-                    <div key={`${partner.name}-${index}`} className="partner-logo bg-white/80 backdrop-blur-sm rounded-xl p-4 flex items-center justify-center shadow-card-3d">
+                    <div key={`${partner.name}-${index}`} className="partner-logo">
                         <Image
                             src={partnerType === 'airline' ? `https://images.kiwi.com/airlines/64/${partner.code}.png` : `https://logo.clearbit.com/${partner.domain}`}
                             alt={partner.name}

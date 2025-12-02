@@ -35,8 +35,8 @@ const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer
                 {/* 3. Contenido Superpuesto */}
                 <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white">
                     <div>
-                        <h3 className="font-bold text-3xl font-headline drop-shadow-lg">{pkg.title}</h3>
-                        <p className="text-white/90 drop-shadow-md">{pkg.destination}</p>
+                        <h3 className="font-semibold text-3xl font-headline">{pkg.title}</h3>
+                        <p className="text-white/90">{pkg.destination}</p>
                     </div>
 
                     <div className="flex justify-between items-center text-sm mt-4">
@@ -53,7 +53,7 @@ const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: PackageOffer
                     <div className="flex justify-between items-end mt-6">
                         <div>
                             <p className="text-xs">Desde</p>
-                            <p className="font-bold text-4xl drop-shadow-xl">${pkg.price}</p>
+                            <p className="font-bold text-4xl">${pkg.price}</p>
                         </div>
                         <Button className="bg-success hover:bg-success/90 font-semibold" size="lg">
                             Ver Paquete
@@ -71,8 +71,8 @@ export function RecommendedPackages() {
   return (
      <div className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold font-headline text-foreground drop-shadow-lg">Paquetes Inolvidables</h2>
-        <p className="text-muted-foreground mt-2 drop-shadow-lg">Experiencias completas al mejor precio, listas para que las descubras.</p>
+        <h2 className="text-3xl font-semibold font-headline text-foreground">Paquetes Inolvidables</h2>
+        <p className="text-muted-foreground mt-2">Experiencias completas al mejor precio, listas para que las descubras.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {recommendedPackages.map((pkg) => (
