@@ -583,7 +583,7 @@
 
 .marquee-content {
   display: flex;
-  gap: 1.5rem; /* Reduced gap */
+  gap: 1rem; /* Reduced gap */
   width: fit-content;
   animation: marquee 80s linear infinite; /* Slower animation */
   will-change: transform;
@@ -603,7 +603,7 @@
   background-color: #ffffff;
   border-radius: 16px;
   padding: 1.25rem; /* 20px */
-  margin: 0.9375rem; /* 15px */
+  margin: 0.75rem; /* 12px */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
