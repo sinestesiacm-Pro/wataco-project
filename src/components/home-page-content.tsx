@@ -53,18 +53,18 @@ const airlinePartners = [
 ];
 
 const hotelPartners = [
-    { name: 'Marriott', domain: 'marriott.com' },
-    { name: 'Hilton', domain: 'hilton.com' },
-    { name: 'Hyatt', domain: 'hyatt.com' },
-    { name: 'Accor', domain: 'accor.com' },
-    { name: 'Four Seasons', domain: 'fourseasons.com' },
-    { name: 'Sheraton', domain: 'sheraton.com' },
-    { name: 'Mandarin Oriental', domain: 'mandarinoriental.com' },
-    { name: 'Rosewood', domain: 'rosewoodhotels.com' },
-    { name: 'Belmond', domain: 'belmond.com' },
+    { name: 'Marriott', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Marriott_logo.svg/1280px-Marriott_logo.svg.png' },
+    { name: 'Hilton', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Hilton_Worldwide_logo.svg/1280px-Hilton_Worldwide_logo.svg.png' },
+    { name: 'Hyatt', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Hyatt_logo.svg/1280px-Hyatt_logo.svg.png' },
+    { name: 'Accor', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Accor_logo.svg/1280px-Accor_logo.svg.png' },
+    { name: 'Four Seasons', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Four_Seasons_Hotels_and_Resorts_logo.svg/1280px-Four_Seasons_Hotels_and_Resorts_logo.svg.png' },
+    { name: 'Sheraton', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Sheraton_logo.svg/1280px-Sheraton_logo.svg.png' },
+    { name: 'Mandarin Oriental', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Mandarin_Oriental_logo.svg/1280px-Mandarin_Oriental_logo.svg.png' },
+    { name: 'Rosewood', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Rosewood-Hotels-And-Resorts-Logo.png' },
+    { name: 'Belmond', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Belmond_logo.svg/1280px-Belmond_logo.svg.png' },
 ];
 
-const PartnersMarquee = React.memo(function PartnersMarquee({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, domain?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) {
+const PartnersMarquee = React.memo(function PartnersMarquee({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, logoUrl?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) {
     const extendedPartners = [...partners, ...partners]; // Duplicate for seamless loop
 
     return (
@@ -76,12 +76,12 @@ const PartnersMarquee = React.memo(function PartnersMarquee({ title, subtitle, p
                 {extendedPartners.map((partner, index) => (
                     <div key={`${partner.name}-${index}`} className="partner-logo">
                         <Image
-                            src={partnerType === 'airline' ? `https://images.kiwi.com/airlines/64/${partner.code}.png` : `https://logo.clearbit.com/${partner.domain}`}
+                            src={partnerType === 'airline' ? `https://images.kiwi.com/airlines/64/${partner.code}.png` : partner.logoUrl!}
                             alt={partner.name}
-                            width={64}
-                            height={64}
+                            width={120}
+                            height={40}
                             className="object-contain w-auto h-auto max-w-full max-h-full"
-                            unoptimized={partnerType === 'airline'}
+                            unoptimized
                             onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 target.style.display = 'none';
