@@ -576,6 +576,7 @@
   overflow: hidden;
   position: relative;
   width: 100%;
+  background: transparent; /* Ensure no background on the main container */
   -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
   mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
 }
