@@ -1,13 +1,13 @@
 'use client';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, Loader2 } from 'lucide-react';
 import type { AmadeusHotelOffer } from '@/lib/types';
 import { Button } from './ui/button';
 import { getGooglePlacePhotos } from '@/app/actions';
 import { useEffect, useState } from 'react';
 import { Skeleton } from './ui/skeleton';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
 import { Badge } from './ui/badge';
 
@@ -58,17 +58,20 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
 
     const handleViewHotel = () => {
         const params = new URLSearchParams(searchParams.toString());
-        const hotelId = offer.hotel.hotelId || offer.id;
+        params.set('hotelId', offer.hotel.hotelId);
         
-        // Instead of navigating to offers, we navigate to the main hotel detail page
-        router.push(`/hotels/${hotelId}`);
+        router.push(`/hotels/${offer.hotel.hotelId}/offers?${params.toString()}`, {
+           state: { offer }
+        } as any);
     };
 
     return (
         <Card className="rounded-2xl overflow-hidden transition-all duration-300 group aspect-[4/5] relative flex flex-col justify-end shadow-lg hover:shadow-xl hover:scale-[1.02] bg-card">
             <div className="absolute inset-0">
                 {loadingPhotos ? (
-                    <Skeleton className="h-full w-full" />
+                    <div className="h-full w-full bg-white flex items-center justify-center">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </div>
                 ) : (
                     <Carousel className="w-full h-full" opts={{ loop: true }}>
                         <CarouselContent>
@@ -89,6 +92,7 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
+                        <CarouselDots />
                     </Carousel>
                 )}
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
@@ -112,8 +116,8 @@ const HotelCard = ({ offer, searchParams }: { offer: AmadeusHotelOffer, searchPa
                           ${offer.offers?.[0]?.price?.total}
                         </p>
                     </div>
-                     <Button onClick={handleViewHotel} size="lg" className="font-semibold bg-white/20 backdrop-blur-lg border-white/30 hover:bg-white/30 text-white">
-                        Ver Detalles
+                     <Button onClick={handleViewHotel} size="lg" className="font-semibold bg-primary-translucent backdrop-blur-lg border-white/30 hover:bg-primary/90 text-white">
+                        Ver Hotel
                      </Button>
               </div>
             </div>

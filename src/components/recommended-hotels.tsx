@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useState, memo } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getRecommendedHotels } from '@/app/actions';
-import { Skeleton } from './ui/skeleton';
+import { getGooglePlacePhotos } from '@/app/actions';
 import { cn } from '@/lib/utils';
 
 const renderStars = (rating: string | undefined) => {
@@ -35,7 +35,22 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOffer: AmadeusHotelOffer; onViewHotel: (offer: AmadeusHotelOffer) => void; }) {
     const hotel = hotelOffer.hotel;
-    const photo = hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png';
+    const [photo, setPhoto] = useState<string | null>(null);
+    const [loadingPhoto, setLoadingPhoto] = useState(true);
+    
+    useEffect(() => {
+        let isCancelled = false;
+        const fetchPhoto = async () => {
+            setLoadingPhoto(true);
+            const photos = await getGooglePlacePhotos(`${hotel.name}, ${hotel.address.cityName}`);
+            if (!isCancelled) {
+                setPhoto(photos[0] || hotel.media?.[0]?.uri || 'https://placehold.co/800x600.png');
+                setLoadingPhoto(false);
+            }
+        };
+        fetchPhoto();
+        return () => { isCancelled = true; };
+    }, [hotel.name, hotel.address.cityName, hotel.media]);
 
     return (
         <motion.div 
@@ -47,25 +62,34 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
             transition={{ duration: 0.8, ease: "easeInOut" }}
         >
              <AnimatePresence>
-                <motion.div
-                    key={photo}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="absolute inset-0"
-                >
-                    <Image
-                        src={photo}
-                        data-ai-hint="hotel photo"
-                        alt={`${hotel.name || 'Hotel'} image`}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
-                        draggable={false}
-                        priority
-                        onError={(e) => { e.currentTarget.src = 'https://placehold.co/800x600.png'; }}
-                    />
-                </motion.div>
+                {loadingPhoto ? (
+                    <div className="absolute inset-0 bg-white flex items-center justify-center">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </div>
+                ) : (
+                     photo && (
+                        <motion.div
+                            key={photo}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            className="absolute inset-0"
+                        >
+                            <Image
+                                src={photo}
+                                data-ai-hint="hotel photo"
+                                alt={`${hotel.name || 'Hotel'} image`}
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
+                                draggable={false}
+                                priority
+                                unoptimized={photo.includes('placehold.co')}
+                                onError={(e) => { e.currentTarget.src = 'https://placehold.co/800x600.png'; }}
+                            />
+                        </motion.div>
+                    )
+                )}
             </AnimatePresence>
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
@@ -155,15 +179,16 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
 
   const handleViewHotel = useCallback((offer: AmadeusHotelOffer) => {
       const hotelId = offer.hotel.hotelId || offer.id;
+      // Navigate to the main hotel detail page, which will handle its own data fetching
       router.push(`/hotels/${hotelId}`);
   }, [router]);
   
   if (loading) {
       return (
           <div className="space-y-6">
-               <Skeleton className="h-8 w-1/3 bg-muted" />
+               <div className="h-8 w-1/3 bg-gray-200 rounded animate-pulse" />
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                   {[...Array(4)].map((_, i) => <Skeleton key={i} className="aspect-[4/5] rounded-2xl bg-muted" />)}
+                   {[...Array(4)].map((_, i) => <div key={i} className="aspect-[4/5] rounded-2xl bg-gray-200 animate-pulse" />)}
                </div>
           </div>
       )

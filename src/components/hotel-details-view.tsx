@@ -11,6 +11,8 @@ import { HotelMapDialog } from './hotel-map-dialog';
 import { Badge } from './ui/badge';
 import { getGooglePlacePhotos } from '@/app/actions';
 import { Skeleton } from './ui/skeleton';
+import { Loader2 } from 'lucide-react';
+
 
 const amenityIcons: { [key: string]: LucideIcon } = {
   SWIMMING_POOL: Waves,
@@ -69,7 +71,9 @@ export function HotelDetailsView({ hotel }: HotelDetailsViewProps) {
           <CarouselContent>
             {loadingPhotos ? (
               <CarouselItem>
-                <div className="relative h-[60vh] md:h-[70vh] w-full bg-muted/20 animate-pulse" />
+                <div className="relative h-[60vh] md:h-[70vh] w-full bg-white flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div>
               </CarouselItem>
             ) : (
               photos.map((photo, index) => (

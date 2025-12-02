@@ -31,6 +31,7 @@ type CarouselContextProps = {
   scrollSnaps: number[]
   selectedIndex: number
   onDotButtonClick: (index: number) => void
+  progress: number
 } & CarouselProps
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
@@ -72,6 +73,7 @@ const Carousel = React.forwardRef<
     const [canScrollNext, setCanScrollNext] = React.useState(false)
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
+    const [progress, setProgress] = React.useState(0);
 
     const onDotButtonClick = React.useCallback(
       (index: number) => {
@@ -93,20 +95,30 @@ const Carousel = React.forwardRef<
       setCanScrollNext(api.canScrollNext())
     }, [])
 
+     const onScroll = React.useCallback((api: CarouselApi) => {
+        if (!api) return;
+        const progress = Math.max(0, Math.min(1, api.scrollProgress()));
+        setProgress(progress * 100);
+    }, []);
+
 
     React.useEffect(() => {
       if (!api) return;
 
       onInit(api);
       onSelect(api);
+      onScroll(api);
       api.on("reInit", onInit);
       api.on("reInit", onSelect);
+      api.on("reInit", onScroll);
       api.on("select", onSelect);
+      api.on("scroll", onScroll);
 
       return () => {
           api?.off("select", onSelect);
+          api?.off("scroll", onScroll);
       };
-    }, [api, onInit, onSelect]);
+    }, [api, onInit, onSelect, onScroll]);
 
 
     const scrollPrev = React.useCallback(() => {
@@ -166,7 +178,8 @@ const Carousel = React.forwardRef<
           canScrollNext,
           scrollSnaps,
           selectedIndex,
-          onDotButtonClick
+          onDotButtonClick,
+          progress
         }}
       >
         <div
@@ -192,11 +205,11 @@ const CarouselContent = React.forwardRef<
   const { carouselRef, orientation } = useCarousel()
 
   return (
-    <div ref={carouselRef} className="overflow-hidden">
+    <div ref={carouselRef} className="overflow-hidden h-full">
       <div
         ref={ref}
         className={cn(
-          "flex",
+          "flex h-full",
           orientation === "horizontal" ? "" : "flex-col",
           className
         )}
@@ -219,7 +232,7 @@ const CarouselItem = React.forwardRef<
       role="group"
       aria-roledescription="slide"
       className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
+        "min-w-0 shrink-0 grow-0 basis-full h-full",
         className
       )}
       {...props}
@@ -228,16 +241,19 @@ const CarouselItem = React.forwardRef<
 })
 CarouselItem.displayName = "CarouselItem"
 
+
 const CarouselDots = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { scrollSnaps, selectedIndex, onDotButtonClick } = useCarousel();
+  const { scrollSnaps, selectedIndex, onDotButtonClick, progress } = useCarousel();
+
+  if (scrollSnaps.length <= 1) return null;
 
   return (
     <div
       ref={ref}
-      className={cn("absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2", className)}
+      className={cn("absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2", className)}
       {...props}
     >
       {scrollSnaps.map((_, index) => (
@@ -247,11 +263,17 @@ const CarouselDots = React.forwardRef<
           variant="ghost"
           size="icon"
           className={cn(
-            "h-2 w-2 rounded-full p-0 bg-white/50 backdrop-blur-sm transition-all duration-300",
-            index === selectedIndex ? "w-6 bg-white" : "hover:bg-white/80"
+            "h-2 w-2 rounded-full p-0 bg-white/50 backdrop-blur-sm transition-all duration-300 relative overflow-hidden",
+             "hover:bg-white/80"
           )}
-        />
+          aria-label={`Go to slide ${index + 1}`}
+        >
+            <div className={cn("absolute inset-0 bg-white transition-transform duration-300", index === selectedIndex ? "scale-x-100" : "scale-x-0", "origin-left")}></div>
+        </Button>
       ))}
+       <div className="absolute left-0 top-0 h-full w-full rounded-full overflow-hidden pointer-events-none">
+         <div className="h-full bg-white/50" style={{ width: `${progress}%` }} />
+      </div>
     </div>
   );
 });
