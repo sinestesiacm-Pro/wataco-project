@@ -58,7 +58,7 @@ const hotelPartners = [
     { name: 'Hyatt', domain: 'hyatt.com' },
     { name: 'Accor', domain: 'accor.com' },
     { name: 'Four Seasons', domain: 'fourseasons.com' },
-    { name: 'Choice Hotels', domain: 'choicehotels.com' },
+    { name: 'Sheraton', domain: 'sheraton.com' },
     { name: 'Mandarin Oriental', domain: 'mandarinoriental.com' },
     { name: 'Rosewood', domain: 'rosewoodhotels.com' },
     { name: 'Belmond', domain: 'belmond.com' },
