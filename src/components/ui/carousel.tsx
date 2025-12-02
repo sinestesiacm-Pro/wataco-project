@@ -31,7 +31,6 @@ type CarouselContextProps = {
   scrollSnaps: number[]
   selectedIndex: number
   onDotButtonClick: (index: number) => void
-  progress: number
 } & CarouselProps
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
@@ -73,7 +72,6 @@ const Carousel = React.forwardRef<
     const [canScrollNext, setCanScrollNext] = React.useState(false)
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
-    const [progress, setProgress] = React.useState(0);
 
     const onDotButtonClick = React.useCallback(
       (index: number) => {
@@ -95,30 +93,21 @@ const Carousel = React.forwardRef<
       setCanScrollNext(api.canScrollNext())
     }, [])
 
-     const onScroll = React.useCallback((api: CarouselApi) => {
-        if (!api) return;
-        const progress = Math.max(0, Math.min(1, api.scrollProgress()));
-        setProgress(progress * 100);
-    }, []);
-
-
     React.useEffect(() => {
       if (!api) return;
 
       onInit(api);
       onSelect(api);
-      onScroll(api);
       api.on("reInit", onInit);
       api.on("reInit", onSelect);
-      api.on("reInit", onScroll);
       api.on("select", onSelect);
-      api.on("scroll", onScroll);
 
       return () => {
+          api?.off("reInit", onInit);
+          api?.off("reInit", onSelect);
           api?.off("select", onSelect);
-          api?.off("scroll", onScroll);
       };
-    }, [api, onInit, onSelect, onScroll]);
+    }, [api, onInit, onSelect]);
 
 
     const scrollPrev = React.useCallback(() => {
@@ -179,7 +168,6 @@ const Carousel = React.forwardRef<
           scrollSnaps,
           selectedIndex,
           onDotButtonClick,
-          progress
         }}
       >
         <div
@@ -246,7 +234,7 @@ const CarouselDots = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { scrollSnaps, selectedIndex, onDotButtonClick, progress } = useCarousel();
+  const { scrollSnaps, selectedIndex, onDotButtonClick } = useCarousel();
 
   if (scrollSnaps.length <= 1) return null;
 
@@ -257,23 +245,16 @@ const CarouselDots = React.forwardRef<
       {...props}
     >
       {scrollSnaps.map((_, index) => (
-        <Button
+        <button
           key={index}
           onClick={() => onDotButtonClick(index)}
-          variant="ghost"
-          size="icon"
           className={cn(
-            "h-2 w-2 rounded-full p-0 bg-white/50 backdrop-blur-sm transition-all duration-300 relative overflow-hidden",
-             "hover:bg-white/80"
+            "h-2 w-2 rounded-full transition-all duration-300",
+            index === selectedIndex ? "w-4 bg-primary" : "bg-white/50 hover:bg-white/80"
           )}
           aria-label={`Go to slide ${index + 1}`}
-        >
-            <div className={cn("absolute inset-0 bg-white transition-transform duration-300", index === selectedIndex ? "scale-x-100" : "scale-x-0", "origin-left")}></div>
-        </Button>
+        />
       ))}
-       <div className="absolute left-0 top-0 h-full w-full rounded-full overflow-hidden pointer-events-none">
-         <div className="h-full bg-white/50" style={{ width: `${progress}%` }} />
-      </div>
     </div>
   );
 });
