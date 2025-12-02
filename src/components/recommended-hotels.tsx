@@ -107,7 +107,7 @@ const HotelCard = memo(function HotelCard({ hotelOffer, onViewHotel }: { hotelOf
                 </div>
                  <div className="mt-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100 flex justify-between items-end">
                     <p className="font-semibold text-xl drop-shadow-lg">${hotelOffer.offers[0].price.total}<span className="text-sm font-normal">/noche</span></p>
-                    <Button className="bg-primary-translucent hover:bg-success backdrop-blur-lg border-white/30 text-white">
+                    <Button className="!bg-primary-translucent hover:bg-success backdrop-blur-lg border-white/30 text-white">
                         Ver Hotel
                     </Button>
                 </div>
