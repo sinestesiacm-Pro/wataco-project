@@ -1,4 +1,3 @@
-
 'use client';
 
 import HotelSearchPage from '@/components/hotel-search-page';
@@ -53,15 +52,15 @@ const airlinePartners = [
 ];
 
 const hotelPartners = [
-    { name: 'Marriott', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Marriott_logo.svg/1280px-Marriott_logo.svg.png' },
-    { name: 'Hilton', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Hilton_Worldwide_logo.svg/1280px-Hilton_Worldwide_logo.svg.png' },
-    { name: 'Hyatt', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Hyatt_logo.svg/1280px-Hyatt_logo.svg.png' },
-    { name: 'Accor', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Accor_logo.svg/1280px-Accor_logo.svg.png' },
-    { name: 'Four Seasons', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Four_Seasons_Hotels_and_Resorts_logo.svg/1280px-Four_Seasons_Hotels_and_Resorts_logo.svg.png' },
-    { name: 'Sheraton', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Sheraton_logo.svg/1280px-Sheraton_logo.svg.png' },
-    { name: 'Mandarin Oriental', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Mandarin_Oriental_logo.svg/1280px-Mandarin_Oriental_logo.svg.png' },
-    { name: 'Rosewood', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Rosewood-Hotels-And-Resorts-Logo.png' },
-    { name: 'Belmond', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Belmond_logo.svg/1280px-Belmond_logo.svg.png' },
+    { name: 'Marriott', logoUrl: 'https://i.postimg.cc/k4nJv2wD/marriott.png' },
+    { name: 'Hilton', logoUrl: 'https://i.postimg.cc/j2f2fV1D/hilton.png' },
+    { name: 'Hyatt', logoUrl: 'https://i.postimg.cc/P5tTS2vV/hyatt.png' },
+    { name: 'Accor', logoUrl: 'https://i.postimg.cc/d1GfCgD0/accor.png' },
+    { name: 'Four Seasons', logoUrl: 'https://i.postimg.cc/BvYdYVmp/four-seasons.png' },
+    { name: 'Sheraton', logoUrl: 'https://i.postimg.cc/d11nSJJJ/sheraton.png' },
+    { name: 'Mandarin Oriental', logoUrl: 'https://i.postimg.cc/tJn5Pq5M/mandarin-oriental.png' },
+    { name: 'Rosewood', logoUrl: 'https://i.postimg.cc/7PMDbC2H/rosewood.png' },
+    { name: 'Belmond', logoUrl: 'https://i.postimg.cc/SNwTzPZQ/belmond.png' },
 ];
 
 const PartnersMarquee = React.memo(function PartnersMarquee({ title, subtitle, partners, partnerType }: { title: string, subtitle: string, partners: {name: string, logoUrl?: string, code?: string}[], partnerType: 'airline' | 'hotel' }) {
