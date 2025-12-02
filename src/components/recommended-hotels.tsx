@@ -194,10 +194,10 @@ export const RecommendedHotels = memo(function RecommendedHotels() {
   }
   
   const hotelSlots = allHotels.length > 0 ? [
-      { slotIndex: 2, interval: 30000 }, // Slot 3, 30s
-      { slotIndex: 0, interval: 45000 }, // Slot 1, 45s
-      { slotIndex: 1, interval: 55000 }, // Slot 2, 55s
-      { slotIndex: 3, interval: 65000 }  // Slot 4, 65s
+      { slotIndex: 2, interval: 30000 },
+      { slotIndex: 0, interval: 45000 },
+      { slotIndex: 1, interval: 55000 },
+      { slotIndex: 3, interval: 65000 }
   ] : [];
 
   return (
