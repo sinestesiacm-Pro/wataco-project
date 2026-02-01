@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image, FlatList, Keyboard, Dimensions, Modal } from 'react-native';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image, FlatList, Keyboard, Dimensions, Modal, StatusBar as RNStatusBar } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
+import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useIsFocused } from '@react-navigation/native';
+import * as Location from 'expo-location';
 
 import { useCart } from '@/context/CartContext';
 import { CATEGORIES, MOCK_SERVICES } from '@/constants/mockData';
@@ -13,33 +16,99 @@ import { Offer } from '@/lib/types';
 import { getCategoryGradient, getCategoryColor } from '@/lib/theme';
 import { NeumorphicIcon } from '@/components/NeumorphicIcon';
 
-const { width } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+const mapStyleDark = [
+    { "elementType": "geometry", "stylers": [{ "color": "#242f3e" }] },
+    { "elementType": "labels.text.fill", "stylers": [{ "color": "#746855" }] },
+    { "elementType": "labels.text.stroke", "stylers": [{ "color": "#242f3e" }] },
+    { "featureType": "administrative.locality", "elementType": "labels.text.fill", "stylers": [{ "color": "#d59563" }] },
+    { "featureType": "poi", "elementType": "labels.text.fill", "stylers": [{ "color": "#d59563" }] },
+    { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#263c3f" }] },
+    { "featureType": "poi.park", "elementType": "labels.text.fill", "stylers": [{ "color": "#6b9a76" }] },
+    { "featureType": "road", "elementType": "geometry", "stylers": [{ "color": "#38414e" }] },
+    { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "color": "#212a37" }] },
+    { "featureType": "road", "elementType": "labels.text.fill", "stylers": [{ "color": "#9ca5b3" }] },
+    { "featureType": "road.highway", "elementType": "geometry", "stylers": [{ "color": "#746855" }] },
+    { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#1f2835" }] },
+    { "featureType": "road.highway", "elementType": "labels.text.fill", "stylers": [{ "color": "#f3d19c" }] },
+    { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#2f3948" }] },
+    { "featureType": "transit.station", "elementType": "labels.text.fill", "stylers": [{ "color": "#d59563" }] },
+    { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#17263c" }] },
+    { "featureType": "water", "elementType": "labels.text.fill", "stylers": [{ "color": "#515c6d" }] },
+    { "featureType": "water", "elementType": "labels.text.stroke", "stylers": [{ "color": "#17263c" }] }
+];
 
 export default function SearchScreen() {
     const router = useRouter();
+    const isFocused = useIsFocused();
     const params = useLocalSearchParams();
-    const { addToCart, cartCount, themeColor, setThemeColor } = useCart();
+    const { addToCart, cartCount, themeColor, setThemeColor, isDarkMode } = useCart();
+    const mapRef = useRef<MapView>(null);
 
     // State
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('Todos');
     const [filteredResults, setFilteredResults] = useState<Offer[]>(MOCK_SERVICES);
-    const [isSearching, setIsSearching] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
+    const [userLocation, setUserLocation] = useState<Location.LocationObject | null>(null);
+    const [locationLabel, setLocationLabel] = useState('Detectando ubicación...');
 
-    // Initial load from params
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setLocationLabel('Ubicación predeterminada');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            setUserLocation(location);
+
+            // Reverse geocode to get city name
+            try {
+                const reverseGeocoded = await Location.reverseGeocodeAsync({
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude
+                });
+                if (reverseGeocoded.length > 0) {
+                    const place = reverseGeocoded[0];
+                    setLocationLabel(`${place.district || place.city || 'Tu zona'}, ${place.region || 'Lima'}`.toUpperCase());
+                }
+            } catch (error) {
+                console.log("Geocode error:", error);
+                setLocationLabel("Ubicación actual");
+            }
+
+            // Animate map to user
+            mapRef.current?.animateToRegion({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
+            }, 1000);
+        })();
+    }, []);
+
+    // Initial load from params OR global theme
     useEffect(() => {
         if (params.category) {
             const catStr = params.category as string;
             const normalizedCat = catStr.charAt(0).toUpperCase() + catStr.slice(1).toLowerCase();
             setActiveCategory(normalizedCat);
-            setIsSearching(true);
+            // setIsSearching(true); // Removed as isSearching is from context
+        } else {
+            // Check if global theme matches a category
+            const matchingCat = CATEGORIES.find(c => c.color.toLowerCase() === themeColor.toLowerCase());
+            if (matchingCat) {
+                setActiveCategory(matchingCat.label);
+            }
         }
         if (params.q) {
             setSearchQuery(params.q as string);
-            setIsSearching(true);
+            // setIsSearching(true); // Removed as isSearching is from context
         }
-    }, [params]);
+    }, [params, themeColor]);
 
     // Filter Logic
     useEffect(() => {
@@ -64,21 +133,34 @@ export default function SearchScreen() {
     }, [searchQuery, activeCategory]);
 
     // Handlers
+    const handleMyLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') return;
+
+        let location = await Location.getCurrentPositionAsync({});
+        mapRef.current?.animateToRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+        }, 1000);
+    };
+
     const handleCategorySelect = (catLabel: string) => {
         setActiveCategory(catLabel);
-        setIsSearching(true);
+        // setIsSearching(true); // Removed as isSearching is from context
         setThemeColor(getCategoryColor(catLabel));
     };
 
     const handleSearchSubmit = () => {
         Keyboard.dismiss();
-        setIsSearching(true);
+        // setIsSearching(true); // Removed as isSearching is from context
     };
 
     const handleClearSearch = () => {
         setSearchQuery('');
         setActiveCategory('Todos');
-        setIsSearching(false);
+        // setIsSearching(false); // Removed as isSearching is from context
         Keyboard.dismiss();
         router.setParams({ category: '', q: '' });
     };
@@ -99,8 +181,17 @@ export default function SearchScreen() {
     const renderResultItem = ({ item }: { item: Offer }) => (
         <TouchableOpacity
             activeOpacity={0.95}
-            style={styles.resultCard}
-            onPress={() => router.push(`/details/${item.id}`)}
+            style={[styles.resultCard, isDarkMode && styles.resultCardDark]}
+            onPress={() => {
+                const lat = -12.1190 + (parseInt(item.id.replace(/\D/g, '') || '0') % 50 - 25) * 0.0002;
+                const lon = -77.0285 + (parseInt(item.id.replace(/\D/g, '') || '0') % 50 - 25) * 0.0002;
+                mapRef.current?.animateToRegion({
+                    latitude: lat,
+                    longitude: lon,
+                    latitudeDelta: 0.005,
+                    longitudeDelta: 0.005,
+                }, 1000);
+            }}
         >
             <Image source={{ uri: item.image }} style={styles.resultImage} resizeMode="cover" />
             <LinearGradient
@@ -148,35 +239,9 @@ export default function SearchScreen() {
 
     const renderDashboard = () => (
         <View>
-            {/* Main Categories Grid */}
-            <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>CATEGORÍAS PRINCIPALES</Text>
-                <View style={styles.categoriesGrid}>
-                    {CATEGORIES.map((cat) => {
-                        const glowColor = getCategoryColor(cat.label);
-                        return (
-                            <TouchableOpacity
-                                key={cat.id}
-                                style={styles.categoryGridItem}
-                                onPress={() => handleCategorySelect(cat.label)}
-                            >
-                                <NeumorphicIcon
-                                    icon={cat.icon}
-                                    glowColor={glowColor}
-                                    size={(width - 40 - 48) / 4} // Scale to grid
-                                    iconSize={24}
-                                    isActive={activeCategory === cat.label}
-                                />
-                                <Text style={styles.categoryGridLabel}>{cat.label}</Text>
-                            </TouchableOpacity>
-                        );
-                    })}
-                </View>
-            </View>
-
             {/* Popular Businesses */}
             <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>NEGOCIOS TOP</Text>
+                <Text style={[styles.sectionTitle, isDarkMode && { color: '#E2E8F0' }]}>NEGOCIOS TOP</Text>
                 <FlatList
                     data={(MOCK_SERVICES || []).slice(0, 4)}
                     horizontal
@@ -201,7 +266,7 @@ export default function SearchScreen() {
 
             {/* Feed */}
             <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>FEED DE OPORTUNIDADES</Text>
+                <Text style={[styles.sectionTitle, isDarkMode && { color: '#E2E8F0' }]}>FEED DE OPORTUNIDADES</Text>
                 <View style={{ paddingHorizontal: 20, gap: 16 }}>
                     {MOCK_SERVICES.slice(0, 3).map(item => (
                         <View key={`feed-${item.id}`}>
@@ -214,8 +279,8 @@ export default function SearchScreen() {
     );
 
     return (
-        <View style={styles.container}>
-            <StatusBar style="light" />
+        <View style={[styles.container, isDarkMode && styles.containerDark]}>
+            {isFocused && <StatusBar style="light" backgroundColor={themeColor} animated={false} />}
             {/* Filter Modal - Moved to main return */}
             <Modal
                 animationType="slide"
@@ -228,20 +293,20 @@ export default function SearchScreen() {
                     activeOpacity={1}
                     onPress={() => setFilterModalVisible(false)}
                 >
-                    <View style={styles.modalContent}>
+                    <View style={[styles.modalContent, isDarkMode && { backgroundColor: '#1E293B' }]}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>FILTRAR BÚSQUEDA</Text>
+                            <Text style={[styles.modalTitle, isDarkMode && { color: '#E2E8F0' }]}>FILTRAR BÚSQUEDA</Text>
                             <TouchableOpacity onPress={() => setFilterModalVisible(false)}>
-                                <MaterialIcons name="close" size={24} color="#64748B" />
+                                <MaterialIcons name="close" size={24} color={isDarkMode ? '#94A3B8' : '#64748B'} />
                             </TouchableOpacity>
                         </View>
 
-                        <Text style={styles.filterGroupTitle}>ORDENAR POR</Text>
+                        <Text style={[styles.filterGroupTitle, isDarkMode && { color: '#94A3B8' }]}>ORDENAR POR</Text>
                         <View style={styles.filterOptions}>
                             {['Más cercano', 'Mejor valorados', 'Novedades'].map(opt => (
                                 <TouchableOpacity key={opt} style={styles.filterOption}>
-                                    <Text style={styles.filterOptionText}>{opt}</Text>
-                                    <View style={styles.radioOuter} />
+                                    <Text style={[styles.filterOptionText, isDarkMode && { color: '#E2E8F0' }]}>{opt}</Text>
+                                    <View style={[styles.radioOuter, isDarkMode && { borderColor: '#475569' }]} />
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -260,6 +325,14 @@ export default function SearchScreen() {
                 <SafeAreaView edges={['top']} style={styles.safeHeader}>
                     <View style={styles.topRow}>
                         <View>
+                            <View style={styles.headerTop}>
+                                <TouchableOpacity style={styles.locationSelector}>
+                                    <MaterialIcons name="location-on" size={16} color="#fff" />
+                                    <Text style={styles.locationTextHeader}>Centro Histórico</Text>
+                                    <MaterialIcons name="expand-more" size={16} color="#fff" />
+                                </TouchableOpacity>
+                                <Text style={[styles.headerTitle, isDarkMode && styles.headerTitleDark]}>DESCUBRE <Text style={styles.brandAccent}>WATACO</Text></Text>
+                            </View>
                             <Text style={styles.headerBigTitle}>EXPLORAR</Text>
                             <Text style={[styles.headerSubtitle, { color: 'rgba(255,255,255,0.7)' }]}>DESCUBRE TU CIUDAD</Text>
                         </View>
@@ -277,10 +350,10 @@ export default function SearchScreen() {
 
                     {/* Search Bar */}
                     <View style={styles.searchContainer}>
-                        <View style={styles.searchBar}>
-                            <MaterialIcons name="search" size={24} color="#94A3B8" />
+                        <View style={[styles.searchBar, isDarkMode && { backgroundColor: '#334155' }]}>
+                            <MaterialIcons name="search" size={24} color={isDarkMode ? '#94A3B8' : '#94A3B8'} />
                             <TextInput
-                                style={styles.searchInput}
+                                style={[styles.searchInput, isDarkMode && { color: '#E2E8F0' }]}
                                 placeholder="BUSCAR EN WATACO..."
                                 placeholderTextColor="#94A3B8"
                                 value={searchQuery}
@@ -311,37 +384,39 @@ export default function SearchScreen() {
 
                     {/* Tabs */}
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsContainer}>
-                        <TouchableOpacity style={styles.filterBtn} onPress={() => setFilterModalVisible(true)}>
-                            <MaterialIcons name="tune" size={20} color="#64748B" />
+                        <TouchableOpacity
+                            style={[styles.filterBtn, { backgroundColor: isDarkMode ? '#334155' : '#fff' }]}
+                            onPress={() => setFilterModalVisible(true)}
+                        >
+                            <MaterialIcons name="tune" size={20} color={themeColor} />
                         </TouchableOpacity>
-                        {['Todos', ...CATEGORIES.map(c => c.label)].map((cat) => {
-                            const glowColor = cat === 'Todos' ? themeColor : getCategoryColor(cat);
-                            const isActive = activeCategory === cat;
-                            return (
-                                <TouchableOpacity
-                                    key={cat}
-                                    onPress={() => handleCategorySelect(cat)}
-                                    style={[
-                                        styles.tabItem,
-                                        isActive && {
-                                            backgroundColor: glowColor,
-                                            borderColor: '#fff',
-                                            shadowColor: glowColor,
-                                            shadowOpacity: 0.6,
-                                            shadowRadius: 10,
-                                            elevation: 8
-                                        }
-                                    ]}
-                                >
-                                    <Text style={[
-                                        styles.tabText,
-                                        isActive && { color: '#fff', fontWeight: '900' }
-                                    ]}>
-                                        {cat}
-                                    </Text>
-                                </TouchableOpacity>
-                            );
-                        })}
+                        {CATEGORIES.map(c => (
+                            <TouchableOpacity
+                                key={c.label}
+                                onPress={() => handleCategorySelect(c.label)}
+                                style={[
+                                    styles.tabItem,
+                                    isDarkMode && { backgroundColor: '#334155', borderColor: '#475569' },
+                                    activeCategory === c.label && {
+                                        backgroundColor: getCategoryColor(c.label),
+                                        borderColor: '#fff',
+                                        transform: [{ scale: 1.05 }]
+                                    }
+                                ]}
+                            >
+                                <MaterialIcons
+                                    name={c.icon as any}
+                                    size={18}
+                                    color={activeCategory === c.label ? '#fff' : (isDarkMode ? '#CBD5E1' : '#64748B')}
+                                    style={{ marginRight: 6 }}
+                                />
+                                <Text style={[
+                                    styles.tabLabel,
+                                    activeCategory === c.label && styles.activeTabLabel,
+                                    isDarkMode && activeCategory !== c.label && styles.tabLabelDark
+                                ]}>{c.label.toUpperCase()}</Text>
+                            </TouchableOpacity>
+                        ))}
                     </ScrollView>
                 </SafeAreaView>
             </View>
@@ -350,8 +425,73 @@ export default function SearchScreen() {
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
-                {isSearching || searchQuery.length > 0 ? (
+                {/* Global Professional Map (Always Visible at Top) */}
+                <View style={[styles.sectionContainer, { marginBottom: 10 }]}>
+                    <View style={styles.sectionHeaderRow}>
+                        <Text style={[styles.sectionTitle, isDarkMode && { color: '#E2E8F0' }]}>
+                            {searchQuery.length > 0 ? `RESULTADOS EN EL MAPA (${filteredResults.length})` : locationLabel}
+                        </Text>
+                        <TouchableOpacity style={styles.mapActionBtn} onPress={handleMyLocation}>
+                            <MaterialIcons name="my-location" size={20} color={themeColor} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={[styles.mapCardContainer, isDarkMode && styles.mapCardContainerDark]}>
+                        <MapView
+                            ref={mapRef}
+                            provider={PROVIDER_GOOGLE}
+                            style={styles.map}
+                            initialRegion={{
+                                latitude: -12.1190,
+                                longitude: -77.0285,
+                                latitudeDelta: 0.012,
+                                longitudeDelta: 0.012,
+                            }}
+                            customMapStyle={isDarkMode ? mapStyleDark : []}
+                        >
+                            {(searchQuery.length > 0 ? filteredResults : MOCK_SERVICES).slice(0, 15).map((service) => {
+                                const lat = -12.1190 + (parseInt(service.id.replace(/\D/g, '') || '0') % 50 - 25) * 0.0002;
+                                const lon = -77.0285 + (parseInt(service.id.replace(/\D/g, '') || '0') % 50 - 25) * 0.0002;
+                                return (
+                                    <Marker
+                                        key={`marker-${service.id}`}
+                                        coordinate={{ latitude: lat, longitude: lon }}
+                                    >
+                                        <View style={[styles.customMarker, { backgroundColor: getCategoryColor(service.category || 'Todos') }]}>
+                                            <MaterialIcons name={CATEGORIES.find(c => c.label === service.category)?.icon as any || 'location-on'} size={14} color="#fff" />
+                                        </View>
+                                        <Callout tooltip onPress={() => router.push(`/details/${service.id}`)}>
+                                            <BlurView intensity={90} tint={isDarkMode ? "dark" : "light"} style={styles.calloutContainer}>
+                                                <Text style={[styles.calloutTitle, isDarkMode && { color: '#fff' }]}>{service.title}</Text>
+                                                <Text style={styles.calloutSubtitle}>{service.category}</Text>
+                                                <View style={[styles.calloutAction, { backgroundColor: themeColor }]}>
+                                                    <Text style={styles.calloutActionText}>VER MÁS</Text>
+                                                </View>
+                                            </BlurView>
+                                        </Callout>
+                                    </Marker>
+                                );
+                            })}
+                        </MapView>
+
+                        {/* Floating Map Overlay */}
+                        <View style={styles.mapOverlay}>
+                            <BlurView intensity={80} tint={isDarkMode ? "dark" : "light"} style={styles.mapBlur}>
+                                <MaterialIcons name="layers" size={16} color={themeColor} />
+                                <Text style={[styles.mapOverlayText, isDarkMode && { color: '#fff' }]}>VISTA HÍBRIDA</Text>
+                            </BlurView>
+                        </View>
+                    </View>
+                </View>
+
+                {searchQuery.length > 0 ? (
                     <View style={styles.resultsContainer}>
+                        <View style={styles.resultsHeaderRow}>
+                            <Text style={[styles.resultsCount, isDarkMode && { color: '#94A3B8' }]}>
+                                {filteredResults.length} NEGOCIOS ENCONTRADOS
+                            </Text>
+                            <View style={styles.resultsDivider} />
+                        </View>
                         {filteredResults.length > 0 ? (
                             filteredResults.map(item => (
                                 <View key={item.id} style={{ marginBottom: 20 }}>
@@ -360,11 +500,11 @@ export default function SearchScreen() {
                             ))
                         ) : (
                             <View style={styles.emptyState}>
-                                <View style={styles.emptyIcon}>
+                                <View style={[styles.emptyIcon, isDarkMode && { backgroundColor: '#334155' }]}>
                                     <MaterialIcons name="search-off" size={40} color="#CBD5E1" />
                                 </View>
-                                <Text style={styles.emptyTitle}>SIN RESULTADOS</Text>
-                                <Text style={styles.emptyText}>No encontramos nada para "{searchQuery}"</Text>
+                                <Text style={[styles.emptyTitle, isDarkMode && { color: '#E2E8F0' }]}>SIN RESULTADOS</Text>
+                                <Text style={[styles.emptyText, isDarkMode && { color: '#94A3B8' }]}>No encontramos nada para "{searchQuery}"</Text>
                                 <TouchableOpacity style={styles.clearButton} onPress={handleClearSearch}>
                                     <Text style={styles.clearButtonText}>VER TODO</Text>
                                 </TouchableOpacity>
@@ -384,10 +524,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F8FAFC',
     },
+    containerDark: {
+        backgroundColor: '#0F172A',
+    },
     headerContainer: {
         backgroundColor: 'rgba(255,255,255,0.95)',
-        borderBottomWidth: 1,
-        borderBottomColor: '#F1F5F9',
+        borderBottomWidth: 0,
         zIndex: 100,
     },
     safeHeader: {
@@ -400,6 +542,39 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginBottom: 20,
         paddingTop: 10,
+    },
+    headerTop: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 8,
+    },
+    locationSelector: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+        backgroundColor: 'rgba(255,255,255,0.2)',
+        borderRadius: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+    },
+    locationTextHeader: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: '700',
+    },
+    headerTitle: {
+        fontSize: 16,
+        fontWeight: '900',
+        color: '#fff',
+        letterSpacing: 2,
+    },
+    headerTitleDark: {
+        color: '#fff',
+    },
+    brandAccent: {
+        color: '#fff',
+        opacity: 0.8,
     },
     headerBigTitle: {
         fontSize: 24,
@@ -492,7 +667,8 @@ const styles = StyleSheet.create({
     tabsContainer: {
         paddingHorizontal: 20,
         gap: 10,
-        paddingBottom: 8,
+        paddingTop: 8,
+        paddingBottom: 12,
     },
     filterBtn: {
         width: 40,
@@ -517,14 +693,32 @@ const styles = StyleSheet.create({
         backgroundColor: '#0EA5E9',
         borderColor: '#0EA5E9',
     },
-    tabText: {
+    tabLabel: {
         fontSize: 10,
         fontWeight: '900',
         color: '#94A3B8',
         textTransform: 'uppercase',
         letterSpacing: 1,
     },
-    activeTabText: {
+    tabLabelDark: {
+        color: 'rgba(255,255,255,0.4)',
+    },
+    activeTabLabel: {
+        color: '#fff',
+    },
+    categoryLabel: {
+        fontSize: 9,
+        fontWeight: '900',
+        color: '#64748B',
+        textAlign: 'center',
+    },
+    categoryLabelDark: {
+        color: '#94A3B8',
+    },
+    activeCategoryLabel: {
+        color: '#0F172A',
+    },
+    activeCategoryLabelDark: {
         color: '#fff',
     },
     scrollContent: {
@@ -539,8 +733,89 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         color: '#0F172A',
         letterSpacing: 2,
-        marginLeft: 20,
         marginBottom: 16,
+    },
+    sectionHeaderRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        marginBottom: 8,
+    },
+    mapActionBtn: {
+        padding: 4,
+    },
+    mapCardContainer: {
+        marginHorizontal: 20,
+        height: 300,
+        borderRadius: 32,
+        overflow: 'hidden',
+        backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+        elevation: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(0,0,0,0.05)',
+    },
+    mapCardContainerDark: {
+        backgroundColor: '#1E293B',
+        borderColor: 'rgba(255,255,255,0.05)',
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+    },
+    customMarker: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    mapOverlay: {
+        position: 'absolute',
+        top: 16,
+        right: 16,
+        borderRadius: 12,
+        overflow: 'hidden',
+    },
+    mapBlur: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        gap: 8,
+    },
+    mapOverlayText: {
+        fontSize: 9,
+        fontWeight: '900',
+        color: '#0F172A',
+        letterSpacing: 1,
+    },
+    resultsHeaderRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+        gap: 12,
+    },
+    resultsCount: {
+        fontSize: 10,
+        fontWeight: '900',
+        color: '#64748B',
+        letterSpacing: 1,
+    },
+    resultsDivider: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#F1F5F9',
     },
     categoriesGrid: {
         flexDirection: 'row',
@@ -549,7 +824,7 @@ const styles = StyleSheet.create({
         gap: 16,
     },
     categoryGridItem: {
-        width: (width - 40 - 48) / 4,
+        width: (SCREEN_WIDTH - 40 - 48) / 4,
         alignItems: 'center',
         gap: 8,
     },
@@ -638,7 +913,7 @@ const styles = StyleSheet.create({
 
     // Result Card Styles
     resultCard: {
-        height: 250,
+        height: SCREEN_WIDTH * 0.6,
         borderRadius: 32,
         overflow: 'hidden',
         backgroundColor: '#fff',
@@ -647,6 +922,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 16,
         elevation: 4,
+    },
+    resultCardDark: {
+        backgroundColor: '#1E293B',
+        shadowOpacity: 0.3,
     },
     resultImage: { width: '100%', height: '100%' },
     gradientOverlay: { position: 'absolute', inset: 0 },
@@ -740,6 +1019,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     clearButtonText: { color: '#fff', fontWeight: '900', fontSize: 12 },
+    header: {
+        paddingBottom: 20,
+    },
     // Modal Styles
     modalOverlay: {
         flex: 1,
@@ -811,5 +1093,39 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '900',
         letterSpacing: 1.5,
+    },
+    calloutContainer: {
+        padding: 12,
+        borderRadius: 20,
+        minWidth: 160,
+        maxWidth: 200,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.2)',
+        overflow: 'hidden',
+    },
+    calloutTitle: {
+        fontSize: 14,
+        fontWeight: '900',
+        color: '#0F172A',
+        marginBottom: 2,
+    },
+    calloutSubtitle: {
+        fontSize: 10,
+        fontWeight: '700',
+        color: '#64748B',
+        textTransform: 'uppercase',
+        marginBottom: 8,
+    },
+    calloutAction: {
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    calloutActionText: {
+        color: '#fff',
+        fontSize: 9,
+        fontWeight: '900',
+        letterSpacing: 1,
     },
 });

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+
+import { useCart, ThemeMode } from '@/context/CartContext';
 
 // Mock User Data
 const USER = {
@@ -22,38 +25,82 @@ const { width } = Dimensions.get('window');
 
 export default function ProfileScreen() {
     const router = useRouter();
+    const isFocused = useIsFocused();
+    const { themeMode, setThemeMode, isDarkMode } = useCart();
+    const [settingsExpanded, setSettingsExpanded] = useState(false);
+
 
     const renderStat = (value: string | number, label: string, color: string) => (
-        <View style={styles.statBox}>
+        <View style={[styles.statBox, isDarkMode && styles.statBoxDark]}>
             <Text style={[styles.statValue, { color }]}>{value}</Text>
-            <Text style={styles.statLabel}>{label}</Text>
+            <Text style={[styles.statLabel, isDarkMode && styles.textMuted]}>{label}</Text>
         </View>
     );
 
     const renderMenuButton = (icon: any, label: string, sublabel: string, color: string, bgColor: string) => (
-        <TouchableOpacity style={styles.menuButton}>
-            <View style={[styles.menuIconBox, { backgroundColor: bgColor }]}>
+        <TouchableOpacity style={[styles.menuButton, isDarkMode && styles.menuButtonDark]}>
+            <View style={[styles.menuIconBox, { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : bgColor }]}>
                 <MaterialIcons name={icon} size={24} color={color} />
             </View>
             <View>
-                <Text style={styles.menuTitle}>{label}</Text>
-                <Text style={styles.menuSubtitle}>{sublabel}</Text>
+                <Text style={[styles.menuTitle, isDarkMode && styles.textLight]}>{label}</Text>
+                <Text style={[styles.menuSubtitle, isDarkMode && styles.textMuted]}>{sublabel}</Text>
             </View>
         </TouchableOpacity>
     );
 
+    const renderThemeOption = (mode: ThemeMode, label: string, icon: string) => {
+        const isSelected = themeMode === mode;
+        return (
+            <TouchableOpacity
+                style={[
+                    styles.themeOption,
+                    isSelected && styles.themeOptionSelected,
+                    isDarkMode && styles.themeOptionDark,
+                    isDarkMode && isSelected && styles.themeOptionSelectedDark
+                ]}
+                onPress={() => setThemeMode(mode)}
+            >
+                <MaterialIcons
+                    name={icon as any}
+                    size={24}
+                    color={isSelected ? '#0EA5E9' : (isDarkMode ? '#94A3B8' : '#64748B')}
+                />
+                <Text style={[
+                    styles.themeOptionText,
+                    isSelected && styles.themeOptionTextSelected,
+                    isDarkMode && styles.textMuted
+                ]}>{label}</Text>
+                {isSelected && (
+                    <View style={styles.checkmark}>
+                        <MaterialIcons name="check-circle" size={20} color="#0EA5E9" />
+                    </View>
+                )}
+            </TouchableOpacity>
+        );
+    };
+
     return (
-        <View style={styles.container}>
-            <StatusBar style="dark" />
+        <View style={[styles.container, isDarkMode && styles.containerDark]}>
+            {isFocused && (
+                <StatusBar
+                    style={isDarkMode ? "light" : "dark"}
+                    backgroundColor={isDarkMode ? "#0F172A" : "#F8FAFC"}
+                    animated={false}
+                />
+            )}
             <SafeAreaView style={styles.safeArea}>
                 <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
                     {/* Hero Section */}
-                    <View style={styles.card}>
+                    <View style={[styles.card, isDarkMode && styles.cardDark]}>
                         <View style={styles.headerRow}>
-                            <Text style={styles.headerTitle}>MI PERFIL</Text>
-                            <TouchableOpacity style={styles.settingsButton}>
-                                <MaterialIcons name="settings" size={20} color="#64748B" />
+                            <Text style={[styles.headerTitle, isDarkMode && styles.textLight]}>MI PERFIL</Text>
+                            <TouchableOpacity
+                                style={[styles.settingsButton, isDarkMode && styles.settingsButtonDark]}
+                                onPress={() => setSettingsExpanded(!settingsExpanded)}
+                            >
+                                <MaterialIcons name={settingsExpanded ? "close" : "settings"} size={20} color={isDarkMode ? "#CBD5E1" : "#64748B"} />
                             </TouchableOpacity>
                         </View>
 
@@ -65,8 +112,8 @@ export default function ProfileScreen() {
                                 </View>
                             </View>
 
-                            <Text style={styles.userName}>{USER.name}</Text>
-                            <Text style={styles.userEmail}>{USER.email}</Text>
+                            <Text style={[styles.userName, isDarkMode && styles.textLight]}>{USER.name}</Text>
+                            <Text style={[styles.userEmail, isDarkMode && styles.textMuted]}>{USER.email}</Text>
 
                             <View style={styles.membershipBadge}>
                                 <View style={styles.premiumTag}>
@@ -84,10 +131,55 @@ export default function ProfileScreen() {
                         </View>
                     </View>
 
+                    {/* Settings Section (Expandable) */}
+                    {settingsExpanded && (
+                        <View style={[styles.settingsCard, isDarkMode && styles.cardDark]}>
+                            <Text style={[styles.settingsSectionTitle, isDarkMode && styles.textLight]}>CONFIGURACIÓN</Text>
+
+                            {/* Theme Selection */}
+                            <View style={styles.settingsGroup}>
+                                <Text style={[styles.settingsGroupLabel, isDarkMode && styles.textMuted]}>TEMA DE LA APP</Text>
+                                <View style={styles.themeOptions}>
+                                    {renderThemeOption('light', 'Claro', 'light-mode')}
+                                    {renderThemeOption('dark', 'Oscuro', 'dark-mode')}
+                                    {renderThemeOption('auto', 'Automático', 'brightness-auto')}
+                                </View>
+                            </View>
+
+                            {/* Other Settings */}
+                            <TouchableOpacity style={[styles.settingsRow, isDarkMode && styles.settingsRowDark]}>
+                                <View style={styles.settingsRowLeft}>
+                                    <MaterialIcons name="notifications" size={22} color="#0EA5E9" />
+                                    <Text style={[styles.settingsRowText, isDarkMode && styles.textLight]}>Notificaciones</Text>
+                                </View>
+                                <MaterialIcons name="chevron-right" size={24} color={isDarkMode ? "#64748B" : "#CBD5E1"} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={[styles.settingsRow, isDarkMode && styles.settingsRowDark]}>
+                                <View style={styles.settingsRowLeft}>
+                                    <MaterialIcons name="language" size={22} color="#22C55E" />
+                                    <Text style={[styles.settingsRowText, isDarkMode && styles.textLight]}>Idioma</Text>
+                                </View>
+                                <View style={styles.settingsRowRight}>
+                                    <Text style={[styles.settingsRowValue, isDarkMode && styles.textMuted]}>Español</Text>
+                                    <MaterialIcons name="chevron-right" size={24} color={isDarkMode ? "#64748B" : "#CBD5E1"} />
+                                </View>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={[styles.settingsRow, isDarkMode && styles.settingsRowDark]}>
+                                <View style={styles.settingsRowLeft}>
+                                    <MaterialIcons name="security" size={22} color="#F43F5E" />
+                                    <Text style={[styles.settingsRowText, isDarkMode && styles.textLight]}>Privacidad</Text>
+                                </View>
+                                <MaterialIcons name="chevron-right" size={24} color={isDarkMode ? "#64748B" : "#CBD5E1"} />
+                            </TouchableOpacity>
+                        </View>
+                    )}
+
                     {/* Wallet Section */}
                     <View style={styles.section}>
                         <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>Wataco Wallet</Text>
+                            <Text style={[styles.sectionTitle, isDarkMode && styles.textLight]}>Wataco Wallet</Text>
                             <TouchableOpacity>
                                 <Text style={styles.seeAllText}>Ver todo</Text>
                             </TouchableOpacity>
@@ -118,17 +210,17 @@ export default function ProfileScreen() {
                             </View>
 
                             {/* Visa Card */}
-                            <View style={[styles.walletCard, styles.visaCard]}>
+                            <View style={[styles.walletCard, styles.visaCard, isDarkMode && styles.visaCardDark]}>
                                 <View style={styles.cardTop}>
-                                    <Text style={styles.visaBrand}>Visa</Text>
+                                    <Text style={[styles.visaBrand, isDarkMode && styles.textLight]}>Visa</Text>
                                     <MaterialIcons name="lock" size={20} color="#94A3B8" />
                                 </View>
                                 <View style={{ marginTop: 'auto' }}>
-                                    <Text style={styles.visaNumber}>**** **** **** 4219</Text>
+                                    <Text style={[styles.visaNumber, isDarkMode && styles.textLight]}>**** **** **** 4219</Text>
                                     <View style={styles.cardBottom}>
                                         <Text style={styles.expiryText}>Expira 12/25</Text>
-                                        <View style={styles.mainBadge}>
-                                            <Text style={styles.mainBadgeText}>Principal</Text>
+                                        <View style={[styles.mainBadge, isDarkMode && styles.mainBadgeDark]}>
+                                            <Text style={[styles.mainBadgeText, isDarkMode && styles.textMuted]}>Principal</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -144,9 +236,9 @@ export default function ProfileScreen() {
                         {renderMenuButton('help', 'Soporte', 'Chat 24/7', '#A855F7', '#FAF5FF')}
                     </View>
 
-                    <TouchableOpacity style={styles.logoutButton} onPress={() => router.replace('/')}>
-                        <MaterialIcons name="logout" size={20} color="#475569" />
-                        <Text style={styles.logoutText}>Cerrar Sesión</Text>
+                    <TouchableOpacity style={[styles.logoutButton, isDarkMode && styles.logoutButtonDark]} onPress={() => router.replace('/')}>
+                        <MaterialIcons name="logout" size={20} color={isDarkMode ? "#94A3B8" : "#475569"} />
+                        <Text style={[styles.logoutText, isDarkMode && styles.textMuted]}>Cerrar Sesión</Text>
                     </TouchableOpacity>
 
                 </ScrollView>
@@ -453,5 +545,135 @@ const styles = StyleSheet.create({
         color: '#475569',
         fontSize: 14,
         fontWeight: '700',
+    },
+    // Dark mode styles
+    containerDark: {
+        backgroundColor: '#0F172A',
+    },
+    cardDark: {
+        backgroundColor: '#1E293B',
+    },
+    textLight: {
+        color: '#F1F5F9',
+    },
+    textMuted: {
+        color: '#94A3B8',
+    },
+    statBoxDark: {
+        backgroundColor: 'rgba(255,255,255,0.05)',
+    },
+    menuButtonDark: {
+        backgroundColor: '#1E293B',
+    },
+    settingsButtonDark: {
+        backgroundColor: 'rgba(255,255,255,0.1)',
+    },
+    visaCardDark: {
+        backgroundColor: '#1E293B',
+        borderColor: '#334155',
+    },
+    mainBadgeDark: {
+        backgroundColor: 'rgba(255,255,255,0.1)',
+    },
+    logoutButtonDark: {
+        backgroundColor: 'rgba(255,255,255,0.05)',
+    },
+    // Settings section styles
+    settingsCard: {
+        backgroundColor: '#fff',
+        borderRadius: 24,
+        padding: 24,
+        marginBottom: 30,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+        elevation: 2,
+    },
+    settingsSectionTitle: {
+        fontSize: 14,
+        fontWeight: '900',
+        color: '#0F172A',
+        letterSpacing: 1,
+        marginBottom: 20,
+    },
+    settingsGroup: {
+        marginBottom: 24,
+    },
+    settingsGroupLabel: {
+        fontSize: 10,
+        fontWeight: '900',
+        color: '#64748B',
+        letterSpacing: 1,
+        marginBottom: 12,
+    },
+    themeOptions: {
+        flexDirection: 'row',
+        gap: 12,
+    },
+    themeOption: {
+        flex: 1,
+        backgroundColor: '#F1F5F9',
+        padding: 16,
+        borderRadius: 16,
+        alignItems: 'center',
+        gap: 8,
+        borderWidth: 2,
+        borderColor: 'transparent',
+    },
+    themeOptionSelected: {
+        borderColor: '#0EA5E9',
+        backgroundColor: 'rgba(14, 165, 233, 0.1)',
+    },
+    themeOptionDark: {
+        backgroundColor: 'rgba(255,255,255,0.05)',
+    },
+    themeOptionSelectedDark: {
+        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+    },
+    themeOptionText: {
+        fontSize: 11,
+        fontWeight: '700',
+        color: '#64748B',
+    },
+    themeOptionTextSelected: {
+        color: '#0EA5E9',
+        fontWeight: '900',
+    },
+    checkmark: {
+        position: 'absolute',
+        top: 8,
+        right: 8,
+    },
+    settingsRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 14,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F1F5F9',
+    },
+    settingsRowDark: {
+        borderBottomColor: 'rgba(255,255,255,0.1)',
+    },
+    settingsRowLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+    },
+    settingsRowRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    settingsRowText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#0F172A',
+    },
+    settingsRowValue: {
+        fontSize: 12,
+        fontWeight: '600',
+        color: '#94A3B8',
     },
 });

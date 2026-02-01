@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useColorScheme } from 'react-native';
 
 export interface CartItem {
     id: string | number;
@@ -10,6 +11,8 @@ export interface CartItem {
     shop?: string;
 }
 
+export type ThemeMode = 'light' | 'dark' | 'auto';
+
 interface CartContextType {
     cartItems: CartItem[];
     addToCart: (item: CartItem) => void;
@@ -20,6 +23,9 @@ interface CartContextType {
     getTotal: () => number;
     themeColor: string;
     setThemeColor: (color: string) => void;
+    isDarkMode: boolean;
+    themeMode: ThemeMode;
+    setThemeMode: (mode: ThemeMode) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -27,6 +33,14 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [themeColor, setThemeColor] = useState('#8B5CF6');
+    const [themeMode, setThemeMode] = useState<ThemeMode>('auto');
+
+    const systemColorScheme = useColorScheme();
+
+    // Calculate effective dark mode based on themeMode setting
+    const isDarkMode = themeMode === 'auto'
+        ? systemColorScheme === 'dark'
+        : themeMode === 'dark';
 
     const addToCart = (item: CartItem) => {
         setCartItems(prev => {
@@ -70,7 +84,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             cartCount,
             getTotal,
             themeColor,
-            setThemeColor
+            setThemeColor,
+            isDarkMode,
+            themeMode,
+            setThemeMode
         }}>
             {children}
         </CartContext.Provider>

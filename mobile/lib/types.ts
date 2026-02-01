@@ -26,6 +26,9 @@ export interface Offer {
     isOpen?: boolean;
     expiresIn?: string;
     category?: string; // e.g. "Comida", "Salud", "Belleza"
+    location?: string; // e.g. "San Isidro, Lima"
+    latitude?: number;
+    longitude?: number;
 }
 
 export interface User {

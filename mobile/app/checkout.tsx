@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert, Dimensions, Platform } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,7 +11,7 @@ const { width } = Dimensions.get('window');
 
 export default function CheckoutScreen() {
     const router = useRouter();
-    const { cartItems, removeFromCart, updateQuantity, getTotal, clearCart } = useCart();
+    const { cartItems, removeFromCart, updateQuantity, getTotal, clearCart, isDarkMode } = useCart();
     const [deliveryType, setDeliveryType] = useState<'pickup' | 'delivery'>('pickup');
     const [paymentMethod, setPaymentMethod] = useState('visa');
 
@@ -30,25 +30,25 @@ export default function CheckoutScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDarkMode && styles.containerDark]}>
             <Stack.Screen options={{ headerShown: false }} />
             <StatusBar style="dark" />
 
             {/* Header */}
-            <SafeAreaView edges={['top']} style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                    <MaterialIcons name="arrow-back" size={24} color="#0F172A" />
+            <SafeAreaView edges={['top']} style={[styles.header, isDarkMode && { backgroundColor: '#0F172A', borderBottomColor: '#1E293B' }]}>
+                <TouchableOpacity onPress={() => router.back()} style={[styles.backButton, isDarkMode && { backgroundColor: '#1E293B' }]}>
+                    <MaterialIcons name="arrow-back" size={24} color={isDarkMode ? "#fff" : "#0F172A"} />
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>CHECKOUT</Text>
+                <Text style={[styles.headerTitle, isDarkMode && { color: '#fff' }]}>CHECKOUT</Text>
                 <View style={styles.placeholder} />
             </SafeAreaView>
 
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 {cartItems.length === 0 ? (
                     <View style={styles.emptyContainer}>
-                        <MaterialIcons name="shopping-cart" size={80} color="#E2E8F0" />
-                        <Text style={styles.emptyTitle}>Tu carrito está vacío</Text>
-                        <Text style={styles.emptySubtitle}>Agrega alguna oferta para continuar</Text>
+                        <MaterialIcons name="shopping-cart" size={80} color={isDarkMode ? "#334155" : "#E2E8F0"} />
+                        <Text style={[styles.emptyTitle, isDarkMode && { color: '#fff' }]}>Tu carrito está vacío</Text>
+                        <Text style={[styles.emptySubtitle, isDarkMode && { color: '#94A3B8' }]}>Agrega alguna oferta para continuar</Text>
                         <TouchableOpacity style={styles.exploreButton} onPress={() => router.back()}>
                             <Text style={styles.exploreButtonText}>EXPLORAR OFERTAS</Text>
                         </TouchableOpacity>
@@ -60,25 +60,25 @@ export default function CheckoutScreen() {
                             <Text style={styles.sectionTitle}>TUS OFERTAS</Text>
                         </View>
                         {cartItems.map((item) => (
-                            <View key={item.id} style={styles.cartItem}>
+                            <View key={item.id} style={[styles.cartItem, isDarkMode && { backgroundColor: '#1E293B' }]}>
                                 <Image source={{ uri: item.img }} style={styles.itemImage} />
                                 <View style={styles.itemInfo}>
                                     <View style={styles.itemHeader}>
-                                        <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
+                                        <Text style={[styles.itemName, isDarkMode && { color: '#fff' }]} numberOfLines={1}>{item.name}</Text>
                                         <TouchableOpacity onPress={() => removeFromCart(item.id)}>
-                                            <MaterialIcons name="delete-outline" size={20} color="#CBD5E1" />
+                                            <MaterialIcons name="delete-outline" size={20} color={isDarkMode ? "#94A3B8" : "#CBD5E1"} />
                                         </TouchableOpacity>
                                     </View>
-                                    <Text style={styles.itemOption}>Opción: Canje Directo x{item.quantity}</Text>
+                                    <Text style={[styles.itemOption, isDarkMode && { color: '#94A3B8' }]}>Opción: Canje Directo x{item.quantity}</Text>
                                     <View style={styles.itemFooter}>
-                                        <View style={styles.quantityContainer}>
+                                        <View style={[styles.quantityContainer, isDarkMode && styles.quantityContainerDark]}>
                                             <TouchableOpacity
                                                 style={styles.quantityBtn}
                                                 onPress={() => updateQuantity(item.id, item.quantity - 1)}
                                             >
-                                                <MaterialIcons name="remove" size={14} color="#64748B" />
+                                                <MaterialIcons name="remove" size={14} color={isDarkMode ? "#94A3B8" : "#64748B"} />
                                             </TouchableOpacity>
-                                            <Text style={styles.quantityVal}>{item.quantity}</Text>
+                                            <Text style={[styles.quantityVal, isDarkMode && { color: '#fff' }]}>{item.quantity}</Text>
                                             <TouchableOpacity
                                                 style={styles.quantityBtn}
                                                 onPress={() => updateQuantity(item.id, item.quantity + 1)}
@@ -86,7 +86,7 @@ export default function CheckoutScreen() {
                                                 <MaterialIcons name="add" size={14} color="#8B5CF6" />
                                             </TouchableOpacity>
                                         </View>
-                                        <Text style={styles.itemPrice}>€{((item.price || 0) * item.quantity).toFixed(2)}</Text>
+                                        <Text style={[styles.itemPrice, isDarkMode && { color: '#fff' }]}>€{((item.price || 0) * item.quantity).toFixed(2)}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -94,55 +94,57 @@ export default function CheckoutScreen() {
 
                         {/* Entrega Section */}
                         <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>ENTREGA</Text>
+                            <Text style={styles.sectionTitle}>MÉTODO DE ENTREGA</Text>
                             <TouchableOpacity>
                                 <Text style={styles.sectionAction}>CAMBIAR</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.deliveryRow}>
                             <TouchableOpacity
-                                style={[styles.deliveryCard, deliveryType === 'pickup' && styles.deliveryCardActive]}
+                                style={[styles.deliveryCard, isDarkMode && styles.deliveryCardDark, deliveryType === 'pickup' && styles.deliveryCardActive]}
                                 onPress={() => setDeliveryType('pickup')}
                             >
+                                <View style={[styles.deliveryIconBg, deliveryType === 'pickup' ? styles.iconBgActive : { backgroundColor: 'transparent' }]}>
+                                    <MaterialIcons name="storefront" size={24} color={deliveryType === 'pickup' ? '#fff' : '#64748B'} />
+                                </View>
+                                <Text style={[styles.deliveryTitle, deliveryType === 'pickup' && { color: '#8B5CF6' }]}>Recojo</Text>
+                                <Text style={styles.deliveryNote}>Gratis • 20min</Text>
                                 {deliveryType === 'pickup' && (
-                                    <View style={styles.checkIcon}>
-                                        <MaterialIcons name="check-circle" size={18} color="#8B5CF6" />
+                                    <View style={[styles.checkIcon, isDarkMode ? styles.checkIconDark : { borderColor: '#fff' }]}>
+                                        <MaterialIcons name="check" size={12} color="#fff" />
                                     </View>
                                 )}
-                                <View style={[styles.deliveryIconBg, deliveryType === 'pickup' ? styles.iconBgActive : styles.iconBgInactive]}>
-                                    <MaterialIcons name="storefront" size={24} color={deliveryType === 'pickup' ? '#fff' : '#8B5CF6'} />
-                                </View>
-                                <Text style={styles.deliveryTitle}>Recojo</Text>
-                                <Text style={styles.deliveryNote}>Gratis • 20min</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
-                                style={[styles.deliveryCard, deliveryType === 'delivery' && styles.deliveryCardActive]}
+                                style={[styles.deliveryCard, isDarkMode && styles.deliveryCardDark, deliveryType === 'delivery' && styles.deliveryCardActive]}
                                 onPress={() => setDeliveryType('delivery')}
                             >
+                                <View style={[styles.deliveryIconBg, deliveryType === 'delivery' ? styles.iconBgActive : { backgroundColor: 'transparent' }]}>
+                                    <MaterialIcons name="moped" size={24} color={deliveryType === 'delivery' ? '#fff' : '#64748B'} />
+                                </View>
+                                <Text style={[styles.deliveryTitle, deliveryType === 'delivery' && { color: '#8B5CF6' }]}>Delivery</Text>
+                                <Text style={styles.deliveryNote}>Desde €2.50 • 45m</Text>
                                 {deliveryType === 'delivery' && (
-                                    <View style={styles.checkIcon}>
-                                        <MaterialIcons name="check-circle" size={18} color="#8B5CF6" />
+                                    <View style={[styles.checkIcon, isDarkMode ? styles.checkIconDark : { borderColor: '#fff' }]}>
+                                        <MaterialIcons name="check" size={12} color="#fff" />
                                     </View>
                                 )}
-                                <View style={[styles.deliveryIconBg, deliveryType === 'delivery' ? styles.iconBgActive : styles.iconBgInactiveSecondary]}>
-                                    <MaterialIcons name="moped" size={24} color={deliveryType === 'delivery' ? '#fff' : '#0EA5E9'} />
-                                </View>
-                                <Text style={styles.deliveryTitle}>Delivery</Text>
-                                <Text style={styles.deliveryNote}>Desde €2.50 • 45m</Text>
                             </TouchableOpacity>
                         </View>
 
                         {/* Location Card */}
-                        <View style={styles.locationCard}>
-                            <View style={styles.locationIconCircle}>
-                                <MaterialIcons name="location-on" size={20} color="#F97316" />
+                        <View style={[styles.locationCard, isDarkMode && styles.locationCardDark, !isDarkMode && { backgroundColor: '#FFF7ED', borderColor: '#FED7AA' }]}>
+                            <View style={[styles.locationIconCircle, { backgroundColor: isDarkMode ? 'rgba(249, 115, 22, 0.1)' : '#FFF7ED' }]}>
+                                <MaterialIcons name="store" size={20} color="#F97316" />
                             </View>
                             <View style={styles.locationTextContainer}>
-                                <Text style={styles.locationLabel}>UBICACIÓN DE TIENDA</Text>
-                                <Text style={styles.locationValue}>AV. LARCO 123, MIRAFLORES</Text>
+                                <Text style={[styles.locationLabel, isDarkMode && { color: '#94A3B8' }]}>RECOJO EN TIENDA</Text>
+                                <Text style={[styles.locationValue, isDarkMode && { color: '#fff' }]}>CALLE PRINCIPAL 456, LIMA</Text>
                             </View>
-                            <MaterialIcons name="map" size={20} color="#CBD5E1" />
+                            <TouchableOpacity style={[styles.mapSmallBtn, isDarkMode && { backgroundColor: '#334155' }]}>
+                                <MaterialIcons name="map" size={18} color="#F97316" />
+                            </TouchableOpacity>
                         </View>
 
                         {/* Pago Section */}
@@ -159,7 +161,7 @@ export default function CheckoutScreen() {
                             ].map((method) => (
                                 <TouchableOpacity
                                     key={method.id}
-                                    style={[styles.paymentCard, paymentMethod === method.id && styles.paymentCardActive]}
+                                    style={[styles.paymentCard, isDarkMode && styles.paymentCardDark, paymentMethod === method.id && (isDarkMode ? { borderColor: '#8B5CF6', backgroundColor: 'rgba(139, 92, 246, 0.15)' } : styles.paymentCardActive)]}
                                     onPress={() => setPaymentMethod(method.id)}
                                 >
                                     <View style={styles.paymentLeft}>
@@ -171,11 +173,11 @@ export default function CheckoutScreen() {
                                             )}
                                         </View>
                                         <View>
-                                            <Text style={styles.methodLabel}>{method.label}</Text>
+                                            <Text style={[styles.methodLabel, isDarkMode && { color: '#fff' }]}>{method.label}</Text>
                                             {method.id === 'cash' && <Text style={styles.methodType}>{method.type}</Text>}
                                         </View>
                                     </View>
-                                    <View style={[styles.radio, paymentMethod === method.id && styles.radioActive]}>
+                                    <View style={[styles.radio, paymentMethod === method.id && styles.radioActive, isDarkMode && { borderColor: '#475569' }]}>
                                         {paymentMethod === method.id && <View style={styles.radioInner} />}
                                     </View>
                                 </TouchableOpacity>
@@ -183,40 +185,40 @@ export default function CheckoutScreen() {
                         </View>
 
                         {/* Summary Table */}
-                        <View style={styles.summaryCard}>
+                        <View style={[styles.summaryCard, isDarkMode && styles.summaryCardDark]}>
                             <View style={styles.summaryRow}>
-                                <Text style={styles.summaryLabel}>Subtotal</Text>
-                                <Text style={styles.summaryValue}>€{subtotal.toFixed(2)}</Text>
+                                <Text style={[styles.summaryLabel, isDarkMode && { color: '#94A3B8' }]}>Subtotal</Text>
+                                <Text style={[styles.summaryValue, isDarkMode && { color: '#fff' }]}>€{subtotal.toFixed(2)}</Text>
                             </View>
                             <View style={styles.summaryRow}>
-                                <Text style={styles.summaryLabel}>Impuestos</Text>
-                                <Text style={styles.summaryValue}>€{taxes.toFixed(2)}</Text>
+                                <Text style={[styles.summaryLabel, isDarkMode && { color: '#94A3B8' }]}>Impuestos</Text>
+                                <Text style={[styles.summaryValue, isDarkMode && { color: '#fff' }]}>€{taxes.toFixed(2)}</Text>
                             </View>
                             <View style={styles.summaryRow}>
                                 <View style={styles.couponLabelRow}>
                                     <MaterialIcons name="confirmation-number" size={16} color="#22C55E" />
-                                    <Text style={styles.couponLabel}>Cupón</Text>
+                                    <Text style={[styles.couponLabel, isDarkMode && { color: '#94A3B8' }]}>Cupón</Text>
                                 </View>
                                 <Text style={styles.couponValue}>-€{discount.toFixed(2)}</Text>
                             </View>
 
-                            <View style={styles.pointsBanner}>
+                            <View style={[styles.pointsBanner, isDarkMode && { backgroundColor: 'rgba(234, 179, 8, 0.1)' }]}>
                                 <MaterialIcons name="stars" size={18} color="#EAB308" />
-                                <Text style={styles.pointsText}>
+                                <Text style={[styles.pointsText, isDarkMode && { color: '#FACC15' }]}>
                                     GANAS <Text style={styles.pointsHighlight}>40 W-POINTS</Text> CON ESTA COMPRA.
                                 </Text>
                             </View>
 
-                            <View style={styles.divider} />
+                            <View style={[styles.divider, isDarkMode && { backgroundColor: '#334155' }]} />
 
                             <View style={styles.totalRow}>
                                 <View>
-                                    <Text style={styles.totalCaption}>TOTAL A PAGAR</Text>
-                                    <Text style={styles.totalAmount}>€{total.toFixed(2)}</Text>
+                                    <Text style={[styles.totalCaption, isDarkMode && { color: '#94A3B8' }]}>TOTAL A PAGAR</Text>
+                                    <Text style={[styles.totalAmount, isDarkMode && { color: '#fff' }]}>€{total.toFixed(2)}</Text>
                                 </View>
                                 <View style={styles.avatarStack}>
-                                    <View style={[styles.avatar, { backgroundColor: '#E2E8F0' }]} />
-                                    <View style={[styles.avatar, { backgroundColor: '#CBD5E1', marginLeft: -12 }]} />
+                                    <View style={[styles.avatar, { backgroundColor: isDarkMode ? '#334155' : '#E2E8F0' }]} />
+                                    <View style={[styles.avatar, { backgroundColor: isDarkMode ? '#1E293B' : '#CBD5E1', marginLeft: -12 }]} />
                                     <View style={[styles.avatar, styles.avatarCount, { marginLeft: -12 }]}>
                                         <Text style={styles.avatarCountText}>+12</Text>
                                     </View>
@@ -229,14 +231,14 @@ export default function CheckoutScreen() {
 
             {/* Fixed Footer Button */}
             {cartItems.length > 0 && (
-                <View style={styles.fixedFooter}>
+                <SafeAreaView edges={['bottom']} style={styles.fixedFooter}>
                     <TouchableOpacity style={styles.checkoutBtn} onPress={handleCheckout}>
                         <Text style={styles.checkoutBtnText}>CONFIRMAR PAGO</Text>
                         <View style={styles.arrowIconBg}>
                             <MaterialIcons name="arrow-forward" size={18} color="#fff" />
                         </View>
                     </TouchableOpacity>
-                </View>
+                </SafeAreaView>
             )}
         </View>
     );
@@ -246,6 +248,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F8FAFC',
+    },
+    containerDark: {
+        backgroundColor: '#0F172A',
     },
     header: {
         flexDirection: 'row',
@@ -276,7 +281,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollContent: {
-        paddingBottom: 120,
+        paddingBottom: 180, // Increased to clear fixed footer and safe areas
     },
     emptyContainer: {
         flex: 1,
@@ -389,6 +394,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#F1F5F9',
     },
+    quantityContainerDark: {
+        backgroundColor: '#334155',
+        borderColor: '#475569',
+    },
     quantityBtn: {
         padding: 2,
     },
@@ -420,14 +429,28 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 2,
     },
+    deliveryCardDark: {
+        backgroundColor: '#1E293B',
+    },
     deliveryCardActive: {
         borderColor: '#8B5CF6',
         backgroundColor: 'rgba(139, 92, 246, 0.05)',
     },
     checkIcon: {
         position: 'absolute',
-        top: 12,
-        right: 12,
+        top: -8,
+        right: -8,
+        backgroundColor: '#8B5CF6',
+        width: 24,
+        height: 24,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 3,
+        borderColor: '#fff',
+    },
+    checkIconDark: {
+        borderColor: '#1E293B',
     },
     deliveryIconBg: {
         width: 48,
@@ -474,6 +497,9 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 2,
     },
+    locationCardDark: {
+        backgroundColor: '#1E293B',
+    },
     locationIconCircle: {
         width: 40,
         height: 40,
@@ -511,6 +537,10 @@ const styles = StyleSheet.create({
         borderRadius: 24,
         borderWidth: 2,
         borderColor: '#F1F5F9',
+    },
+    paymentCardDark: {
+        backgroundColor: '#1E293B',
+        borderColor: '#334155',
     },
     paymentCardActive: {
         borderColor: '#8B5CF6',
@@ -575,6 +605,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 20,
         elevation: 5,
+    },
+    summaryCardDark: {
+        backgroundColor: '#1E293B',
     },
     summaryRow: {
         flexDirection: 'row',
@@ -677,8 +710,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        padding: 24,
-        backgroundColor: 'rgba(255,255,255,0.9)',
+        paddingHorizontal: 24,
+        paddingTop: 16,
+        paddingBottom: Platform.OS === 'ios' ? 0 : 24, // SafeAreaView handles iOS bottom
+        backgroundColor: 'rgba(255,255,255,0.95)',
         borderTopWidth: 1,
         borderTopColor: '#F1F5F9',
     },
@@ -706,5 +741,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.2)',
         padding: 8,
         borderRadius: 12,
+    },
+    mapSmallBtn: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#F97316',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
 });

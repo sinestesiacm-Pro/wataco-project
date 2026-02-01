@@ -14,6 +14,13 @@ export default function TabLayout() {
         tabBarShowLabel: true,
         tabBarActiveTintColor: themeColor,
         tabBarInactiveTintColor: '#94A3B8',
+        tabBarLabelStyle: {
+          fontSize: 10,
+          fontWeight: '900',
+          marginBottom: 4,
+          textTransform: 'uppercase',
+          letterSpacing: 0.5,
+        },
         tabBarStyle: {
           position: 'absolute',
           bottom: 0,
@@ -22,72 +29,79 @@ export default function TabLayout() {
           elevation: 0,
           backgroundColor: 'transparent',
           borderTopWidth: 0,
-          height: 75,
-          paddingBottom: 10,
+          height: Platform.OS === 'android' ? 95 : 105,
+          paddingBottom: Platform.OS === 'android' ? 15 : 35,
+          overflow: 'visible',
         },
         tabBarBackground: () => (
-          Platform.OS === 'ios' ? (
-            <BlurView
-              intensity={95}
-              tint="light"
-              style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(255,255,255,0.85)' }]}
-            />
-          ) : (
-            <View style={[StyleSheet.absoluteFill, { backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E2E8F0' }]} />
-          )
+          <BlurView
+            intensity={100}
+            tint={useCart().isDarkMode ? 'dark' : 'light'}
+            experimentalBlurMethod="dimezisBlurView"
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                borderTopLeftRadius: 36,
+                borderTopRightRadius: 36,
+                overflow: 'hidden',
+                backgroundColor: useCart().isDarkMode ? 'rgba(30, 58, 138, 0.5)' : 'rgba(255, 255, 255, 0.4)',
+              }
+            ]}
+          />
         ),
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Inicio',
-          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="home" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons size={24} name="home" color={color} />,
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
           title: 'Explorar',
-          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="explore" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons size={24} name="explore" color={color} />,
         }}
       />
       <Tabs.Screen
         name="scan"
         options={{
-          title: 'Scan',
+          title: '',
           tabBarIcon: ({ color }) => (
             <View style={{
-              top: -20,
-              width: 60,
-              height: 60,
-              borderRadius: 30,
+              top: -15,
+              width: 64,
+              height: 64,
+              borderRadius: 32,
               backgroundColor: themeColor,
               justifyContent: 'center',
               alignItems: 'center',
               shadowColor: themeColor,
-              shadowOffset: { width: 0, height: 8 },
+              shadowOffset: { width: 0, height: 10 },
               shadowOpacity: 0.4,
-              shadowRadius: 12,
-              elevation: 5
+              shadowRadius: 15,
+              elevation: 8,
+              borderWidth: 4,
+              borderColor: useCart().isDarkMode ? '#0F172A' : '#fff',
             }}>
               <MaterialIcons size={32} name="qr-code-scanner" color="#fff" />
             </View>
           ),
-          tabBarLabelStyle: { display: 'none' }
         }}
       />
       <Tabs.Screen
         name="suggestions"
         options={{
           title: 'Cupones',
-          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="confirmation-number" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons size={24} name="confirmation-number" color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Perfil',
-          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="person" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons size={24} name="person" color={color} />,
         }}
       />
     </Tabs>

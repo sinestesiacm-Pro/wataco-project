@@ -1,6 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, FlatList, Platform, StatusBar, Modal } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, FlatList, Platform, Modal, StatusBar as RNStatusBar } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
+import { useIsFocused } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -16,10 +18,15 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { addToCart, cartCount, setThemeColor } = useCart(); // Removed themeColor from destructuring as it's redefined below
+  const isFocused = useIsFocused();
+  const { addToCart, cartCount, setThemeColor, isDarkMode } = useCart();
   const [selectedCategory, setSelectedCategory] = React.useState('Todos');
   const [promoIndex, setPromoIndex] = React.useState(0);
-  const themeColor = CATEGORIES.find(c => c.label === selectedCategory)?.color || '#8B5CF6';
+  // Memoize theme color
+  const themeColor = useMemo(() =>
+    getHeaderColor(selectedCategory),
+    [selectedCategory]
+  );
   const [filterModalVisible, setFilterModalVisible] = React.useState(false);
 
   // Update global theme when category changes
@@ -27,7 +34,8 @@ export default function HomeScreen() {
     setThemeColor(getHeaderColor(selectedCategory));
   }, [selectedCategory]);
 
-  const handleAddToCart = (item: any) => {
+  // Memoized add to cart handler
+  const handleAddToCart = useCallback((item: any) => {
     addToCart({
       id: item.id || Date.now() + Math.random(),
       name: item.title || item.name,
@@ -37,9 +45,10 @@ export default function HomeScreen() {
       type: 'service',
       shop: item.shop || item.title || item.name
     });
-  };
+  }, [addToCart]);
 
-  const renderCategory = ({ item }: { item: Category | { id: string, label: string, icon: string, color: string } }) => {
+  // Memoized category renderer
+  const renderCategory = useCallback(({ item }: { item: Category | { id: string, label: string, icon: string, color: string } }) => {
     const isActive = selectedCategory === item.label;
     const gradient = getCategoryGradient(item.label);
     const glowColor = gradient[1];
@@ -49,19 +58,31 @@ export default function HomeScreen() {
         onPress={() => setSelectedCategory(item.label)}
         style={[styles.categoryContainer, isActive && styles.activeCategoryContainer]}
       >
-        <NeumorphicIcon
-          icon={item.icon}
-          glowColor={glowColor}
-          isActive={isActive}
-        />
-        <Text style={[styles.categoryLabel, isActive && styles.activeCategoryLabel]}>
+        <View style={[
+          styles.categoryCard,
+          isActive && { borderColor: glowColor, backgroundColor: isDarkMode ? '#1E293B' : '#fff' },
+          isDarkMode && !isActive && styles.categoryCardDark
+        ]}>
+          <MaterialIcons
+            name={item.icon as any}
+            size={28}
+            color={isActive ? glowColor : (isDarkMode ? '#CBD5E1' : '#64748B')}
+          />
+        </View>
+        <Text style={[
+          styles.categoryLabel,
+          isActive && styles.activeCategoryLabel,
+          isDarkMode && !isActive && styles.categoryLabelDark,
+          isDarkMode && isActive && styles.activeCategoryLabelDark
+        ]}>
           {item.label}
         </Text>
       </TouchableOpacity>
     );
-  };
+  }, [selectedCategory, isDarkMode]);
 
-  const renderFeatured = ({ item }: { item: Offer }) => (
+  // Memoized featured renderer
+  const renderFeatured = useCallback(({ item }: { item: Offer }) => (
     <TouchableOpacity
       activeOpacity={0.9}
       style={styles.featuredCard}
@@ -99,14 +120,19 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
-  );
+  ), [handleAddToCart, router]);
+
+  // Memoized key extractors
+  const categoryKeyExtractor = useCallback((item: Category) => item.id, []);
+  const featuredKeyExtractor = useCallback((item: Offer) => item.id, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={getHeaderColor(selectedCategory)} />
+    <View style={[styles.container, isDarkMode && styles.containerDark]}>
+      {isFocused && <StatusBar style="light" backgroundColor={getHeaderColor(selectedCategory)} animated={false} />}
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: getHeaderColor(selectedCategory) }]}>
+      <View style={[styles.header, { backgroundColor: themeColor }]}>
         <SafeAreaView edges={['top']} style={styles.headerSafeArea}>
+          {/* Header Top Row: Location + Actions */}
           <View style={styles.headerContent}>
             <TouchableOpacity style={styles.locationContainer} onPress={() => router.push('/profile')}>
               <View style={styles.locationIconBg}>
@@ -122,22 +148,39 @@ export default function HomeScreen() {
             </TouchableOpacity>
 
             <View style={styles.headerActions}>
-              <TouchableOpacity style={styles.iconButton} onPress={() => router.push('/checkout')}>
-                <MaterialIcons name="shopping-bag" size={24} color="#fff" />
+              <TouchableOpacity style={styles.iconCircleButton} onPress={() => router.push('/checkout')}>
+                <MaterialIcons name="shopping-cart" size={22} color="#fff" />
                 {cartCount > 0 && (
                   <View style={styles.cartBadge}>
                     <Text style={styles.cartBadgeText}>{cartCount}</Text>
                   </View>
                 )}
               </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton} onPress={() => router.push('/notifications')}>
-                <MaterialIcons name="notifications" size={24} color="#fff" />
+              <TouchableOpacity style={styles.iconCircleButton} onPress={() => router.push('/notifications')}>
+                <MaterialIcons name="notifications" size={22} color="#fff" />
                 <View style={[
                   styles.notificationDot,
-                  (selectedCategory === 'Comida' || selectedCategory === 'Belleza' || selectedCategory === 'Mascotas') && { backgroundColor: '#FACC15' } // Yellow dot for red themes
+                  (selectedCategory === 'Comida' || selectedCategory === 'Belleza' || selectedCategory === 'Mascotas') && { backgroundColor: '#FACC15' }
                 ]} />
               </TouchableOpacity>
             </View>
+          </View>
+
+          {/* Header Bottom Row: Search + Filter */}
+          <View style={styles.headerSearchRow}>
+            <TouchableOpacity
+              style={[styles.searchPill, isDarkMode && styles.searchPillDark]}
+              onPress={() => router.push('/search')}
+            >
+              <MaterialIcons name="search" size={24} color={isDarkMode ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.3)"} />
+              <Text style={[styles.searchPillText, isDarkMode && styles.searchPillTextDark]}>¿QUÉ ESTÁS BUSCANDO?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.filterPill, isDarkMode && styles.filterPillDark]}
+              onPress={() => setFilterModalVisible(true)}
+            >
+              <MaterialIcons name="tune" size={24} color={themeColor} />
+            </TouchableOpacity>
           </View>
         </SafeAreaView>
       </View>
@@ -147,88 +190,84 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Search Bar */}
-        <View style={styles.searchSection}>
-          <TouchableOpacity style={styles.searchBar} onPress={() => router.push('/search')}>
-            <MaterialIcons name="search" size={24} color="#94A3B8" />
-            <Text style={styles.searchText}>¿QUÉ ESTÁS BUSCANDO?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.filterButton, { backgroundColor: themeColor, shadowColor: themeColor }]} onPress={() => setFilterModalVisible(true)}>
-            <MaterialIcons name="tune" size={24} color="#fff" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Promotions Section (Uber Eats 2026 Aesthetic) */}
-        <View style={styles.promoSection}>
+        {/* Hero Impact Section (Promotions Card) */}
+        <View style={styles.heroSection}>
           <FlatList
             data={PROMOTIONS}
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}
-            snapToInterval={SCREEN_WIDTH - 40}
-            decelerationRate="fast"
             onScroll={(e) => {
               const x = e.nativeEvent.contentOffset.x;
-              const index = Math.round(x / (SCREEN_WIDTH - 40));
+              const index = Math.round(x / SCREEN_WIDTH);
               if (index !== promoIndex) setPromoIndex(index);
             }}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.promoList}
             renderItem={({ item }) => (
-              <View style={styles.promoCardShadowWrapper}>
-                <View style={styles.promoCardInner}>
-                  <LinearGradient
-                    colors={item.gradientColors as [string, string, ...string[]]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.promoGradient}
-                  >
-                    {/* Glass Overlay for modern look */}
-                    <View style={styles.promoGlassOverlay} />
-                    {/* Premium Hairline Border */}
-                    <View style={styles.promoHairlineBorder} />
+              <View style={styles.promoCardContainer}>
+                <View style={styles.promoCardShadowWrapper}>
+                  <View style={styles.promoCardInner}>
+                    <View style={styles.promoCardAction}>
+                      <TouchableOpacity
+                        activeOpacity={0.9}
+                        style={styles.promoCardAction}
+                        onPress={() => router.push(`/details/${item.id}`)}
+                      >
+                        <Image source={{ uri: item.image }} style={styles.promoBgImage} />
+                        <LinearGradient
+                          colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.2)', 'transparent']}
+                          start={{ x: 0, y: 0.5 }}
+                          end={{ x: 1, y: 0.5 }}
+                          style={styles.promoImpactGradient}
+                        />
 
-                    <TouchableOpacity activeOpacity={0.9} style={styles.promoContent}>
-                      {/* Image with subtle elevation */}
-                      <View style={styles.promoImageWrapper}>
-                        <Image source={{ uri: item.image }} style={styles.promoImage} />
-                      </View>
+                        <View style={styles.promoImpactContent}>
+                          {/* Commercial Tag */}
+                          <View style={[styles.promoBadge, { backgroundColor: item.color || '#6B21A8' }]}>
+                            <Text style={styles.promoBadgeText}>{item.tag}</Text>
+                          </View>
 
-                      {/* Text Section */}
-                      <View style={styles.promoTextCol}>
-                        <Text style={styles.promoTitle}>{item.title}</Text>
-                        <Text style={styles.promoSubtitle}>{item.subtitle}</Text>
-                        <View style={styles.promoFooterRow}>
-                          <Text style={styles.promoFooterText}>{item.footer}</Text>
+                          <Text style={styles.promoImpactTitle} numberOfLines={2}>{item.title}</Text>
+                          <Text style={styles.promoImpactSubtitle} numberOfLines={1}>{item.subtitle}</Text>
+
+                          {/* Commercial CTA Button */}
+                          <View style={styles.promoImpactCTA}>
+                            <Text style={[styles.promoImpactCTAText, { color: themeColor }]}>{item.footer}</Text>
+                            <MaterialIcons name="arrow-forward" size={16} color={themeColor} />
+                          </View>
                         </View>
-                      </View>
-
-                      {/* Circular Chevron Button (Glass style) */}
-                      <View style={styles.promoCircularButton}>
-                        <MaterialIcons name="chevron-right" size={24} color="#141414" />
-                      </View>
-                    </TouchableOpacity>
-                  </LinearGradient>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
               </View>
             )}
+            keyExtractor={(item) => item.id}
           />
-
-          {/* Minimalist Pagination Dots */}
-          <View style={styles.paginationRow}>
+          {/* Pagination Dots (Inside Hero, Top Right) */}
+          <View style={styles.heroPagination}>
             {PROMOTIONS.map((_, i) => (
               <View
                 key={i}
                 style={[
-                  styles.paginationDot,
-                  promoIndex === i ? [styles.paginationDotActive, { backgroundColor: themeColor }] : null
+                  styles.heroDot,
+                  promoIndex === i ? { width: 14, backgroundColor: '#fff' } : { backgroundColor: 'rgba(255,255,255,0.4)' }
                 ]}
               />
             ))}
           </View>
         </View>
 
-        {/* Filter Modal */}
+        {/* Categories */}
+        <View style={styles.categoriesSection}>
+          <FlatList
+            data={CATEGORIES}
+            renderItem={renderCategory}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoriesList}
+          />
+        </View>
         <Modal
           animationType="slide"
           transparent={true}
@@ -268,21 +307,10 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </Modal>
 
-        {/* Categories */}
-        <View style={styles.categoriesSection}>
-          <FlatList
-            data={[{ id: 'all', label: 'Todos', icon: 'apps', color: 'slate' }, ...CATEGORIES]}
-            renderItem={renderCategory}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoriesList}
-          />
-        </View>
 
         {/* Featured */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>DESTACADOS <Text style={styles.brandText}>WATACO</Text></Text>
+          <Text style={[styles.sectionTitle, isDarkMode && styles.sectionTitleDark]}>DESTACADOS <Text style={styles.brandText}>WATACO</Text></Text>
           <TouchableOpacity onPress={() => router.push('/search')}>
             <View style={styles.seeAllContainer}>
               <Text style={styles.seeAllText}>VER TODO</Text>
@@ -292,7 +320,7 @@ export default function HomeScreen() {
         </View>
 
         <FlatList
-          data={FEATURED_OFFERS}
+          data={FEATURED_OFFERS.filter(offer => selectedCategory === 'Todos' || offer.category === selectedCategory)}
           renderItem={renderFeatured}
           keyExtractor={(item) => item.id}
           horizontal
@@ -301,11 +329,17 @@ export default function HomeScreen() {
           snapToInterval={310} // card width + margin
           decelerationRate="fast"
           snapToAlignment="start"
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <MaterialIcons name="info-outline" size={32} color={isDarkMode ? '#475569' : '#CBD5E1'} />
+              <Text style={styles.emptyText}>No hay destacados en esta categoría</Text>
+            </View>
+          )}
         />
 
         {/* List Offers (Filtered) */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>
+          <Text style={[styles.sectionTitle, isDarkMode && styles.sectionTitleDark]}>
             {selectedCategory === 'Todos' ? 'OFERTAS DEL DÍA' : `OFERTAS DE ${selectedCategory.toUpperCase()}`}
           </Text>
         </View>
@@ -314,7 +348,7 @@ export default function HomeScreen() {
           {LIST_OFFERS.filter(offer => selectedCategory === 'Todos' || offer.category === selectedCategory).map((item) => (
             <TouchableOpacity
               key={item.id}
-              style={styles.recommendationCard}
+              style={[styles.recommendationCard, isDarkMode && styles.recommendationCardDark]}
               onPress={() => router.push(`/details/${item.id}`)}
             >
               <Image source={{ uri: item.image }} style={styles.recommendationImage} resizeMode="cover" />
@@ -354,8 +388,8 @@ export default function HomeScreen() {
             </TouchableOpacity>
           ))}
         </View>
-
       </ScrollView>
+
     </View>
   );
 }
@@ -366,23 +400,95 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8FAFC',
   },
+  containerDark: {
+    backgroundColor: '#0F172A',
+  },
   header: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
+    paddingBottom: 22, // Compacted
+    borderBottomLeftRadius: 36,
+    borderBottomRightRadius: 36,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.15,
+    shadowRadius: 18,
+    elevation: 12,
     zIndex: 100,
-    overflow: 'hidden',
-    backgroundColor: '#8B5CF6', // Vibrant Violet (Vercel Style)
   },
   headerSafeArea: {
-    paddingHorizontal: 20,
-    paddingBottom: 15,
+    paddingTop: Platform.OS === 'android' ? (RNStatusBar.currentHeight || 0) : 0,
   },
   headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 4, // Compacted
+  },
+  headerSearchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 20,
+    marginTop: 4, // Compacted
+  },
+  searchPill: {
+    flex: 1,
+    height: 54,
+    backgroundColor: '#fff',
+    borderRadius: 27,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    gap: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  searchPillDark: {
+    backgroundColor: '#1E293B',
+    shadowOpacity: 0.3,
+  },
+  searchPillText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: 'rgba(0,0,0,0.3)',
+    letterSpacing: -0.2,
+  },
+  searchPillTextDark: {
+    color: 'rgba(255,255,255,0.4)',
+  },
+  filterPill: {
+    width: 54,
+    height: 54,
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  filterPillDark: {
+    backgroundColor: '#1E293B',
+    shadowOpacity: 0.3,
+  },
+  iconCircleButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
   },
   locationContainer: {
     flexDirection: 'row',
@@ -450,8 +556,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingTop: 120, // Header height
-    paddingBottom: 100, // Navbar height + extra for visibility
+    paddingTop: 0,
+    paddingBottom: 120,
   },
   searchSection: {
     flexDirection: 'row',
@@ -497,126 +603,138 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.3)',
   },
-  promoSection: {
-    marginVertical: 10,
+  heroSection: {
+    position: 'relative',
+    marginTop: 0,
+    marginBottom: 10,
+    zIndex: 1,
+  },
+  promoHeaderSection: {
+    paddingTop: 0,
+  },
+  heroPagination: {
+    position: 'absolute',
+    bottom: 45, // Moved to bottom right over image
+    right: 45,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    zIndex: 20,
+  },
+  heroDot: {
+    height: 6,
+    width: 6,
+    borderRadius: 3,
   },
   promoList: {
-    paddingHorizontal: 20,
-    gap: 12,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    overflow: 'visible',
+  },
+  promoCardContainer: {
+    width: SCREEN_WIDTH,
+    paddingHorizontal: 20, // Add padding for "Floating Card" look
+    overflow: 'visible',
   },
   promoCardShadowWrapper: {
-    width: SCREEN_WIDTH - 40,
-    height: 102,             // más compacto
-    borderRadius: 28,
+    width: '100%',
+    height: 420, // Increased to provide more clearance
     backgroundColor: 'transparent',
     overflow: 'visible',
-    // sombra más moderna y ligera
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.06,
-    shadowRadius: 30,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 8,
   },
   promoCardInner: {
     flex: 1,
-    borderRadius: 28,
+    borderRadius: 24, // Matches mockup
     overflow: 'hidden',
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
   },
-  promoGradient: {
+  promoCardAction: {
     flex: 1,
   },
-  promoGlassOverlay: {
+  promoBgImage: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.28)',
+    width: '100%',
+    height: '100%',
+    opacity: 0.8, // Better contrast for white text
   },
-  promoHairlineBorder: {
+  promoImpactGradient: {
     ...StyleSheet.absoluteFillObject,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.55)',
-    borderRadius: 28,
   },
-  promoContent: {
+  promoImpactContent: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    gap: 12,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 30,
+    paddingBottom: 35,
+    paddingTop: 180, // Reduced to match compact header
   },
-  promoImageWrapper: {
-    borderRadius: 16,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.05,
-    shadowRadius: 14,
-    elevation: 2,
-  },
-  promoImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 16,
-    backgroundColor: '#fff',
-  },
-  promoTextCol: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  promoTitle: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#141414',
-    lineHeight: 19,
-    marginBottom: 2,
-  },
-  promoSubtitle: {
-    fontSize: 12,
-    color: 'rgba(20,20,20,0.55)',
-    fontWeight: '600',
+  promoBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 0,
     marginBottom: 6,
+    alignSelf: 'flex-start',
   },
-  promoFooterRow: {
+  promoBadgeText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 1.2,
+  },
+  promoImpactTitle: {
+    fontSize: 20, // More compact
+    fontWeight: '900',
+    color: '#fff',
+    lineHeight: 26,
+    marginBottom: 4,
+  },
+  promoImpactSubtitle: {
+    fontSize: 13, // More compact
+    color: 'rgba(255,255,255,0.95)',
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  promoImpactCTA: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 100,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  promoFooterText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: 'rgba(20,20,20,0.78)',
-  },
-  promoCircularButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: 'rgba(255,255,255,0.55)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.55)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    gap: 8,
+    alignSelf: 'flex-start',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.06,
-    shadowRadius: 18,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  promoImpactCTAText: {
+    fontSize: 11, // More compact
+    fontWeight: '900',
+    letterSpacing: 0.5,
   },
   paginationRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
     marginTop: 10,
+    marginBottom: 15,
   },
   paginationDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: 'rgba(0,0,0,0.10)',
+    backgroundColor: 'rgba(0,0,0,0.1)',
   },
   paginationDotActive: {
-    width: 18,
-    borderRadius: 6,
-    backgroundColor: '#8B5CF6',
+    width: 25,
+    borderRadius: 10,
   },
   categoriesSection: {
     marginVertical: 10,
@@ -630,21 +748,63 @@ const styles = StyleSheet.create({
   },
   categoryContainer: {
     alignItems: 'center',
-    gap: 10,
-    width: 78,
+    gap: 8,
+    width: 72,
+  },
+  categoryCard: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  categoryCardDark: {
+    backgroundColor: '#1E293B',
+    shadowOpacity: 0.2,
   },
   categoryLabel: {
     fontSize: 12,
-    fontWeight: '900', // Bolder labels
-    color: '#0F172A', // Darker navy/black
+    fontWeight: '900',
+    color: '#64748B',
     textTransform: 'none',
     marginTop: 8,
+  },
+  categoryLabelDark: {
+    color: '#94A3B8',
   },
   activeCategoryContainer: {
     transform: [{ scale: 1.05 }],
   },
   activeCategoryLabel: {
     color: '#0F172A',
+    fontWeight: '900',
+  },
+  activeCategoryLabelDark: {
+    color: '#fff',
+    fontWeight: '900',
+  },
+  emptyContainer: {
+    width: SCREEN_WIDTH - 40,
+    height: 190,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.02)',
+    borderRadius: 20,
+    marginHorizontal: 20,
+    gap: 12,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#94A3B8',
+    fontWeight: '600',
   },
   // Modal Styles
   modalOverlay: {
@@ -742,14 +902,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
+    marginTop: 24,
     marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 14,
     fontWeight: '900',
     color: '#0F172A',
+    letterSpacing: 2,
     textTransform: 'uppercase',
-    letterSpacing: -0.5,
+  },
+  sectionTitleDark: {
+    color: '#fff',
   },
   brandText: {
     color: '#0EA5E9',
@@ -870,16 +1034,20 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   recommendationCard: {
+    height: 140,
     width: '100%',
-    height: 175,
+    backgroundColor: '#fff',
     borderRadius: 24,
     overflow: 'hidden',
-    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.1,
     shadowRadius: 16,
     elevation: 4,
+  },
+  recommendationCardDark: {
+    backgroundColor: '#1E293B',
+    shadowOpacity: 0.3,
   },
   recommendationImage: {
     width: '100%',

@@ -8,6 +8,7 @@ interface NeumorphicIconProps {
     size?: number;
     iconSize?: number;
     isActive?: boolean;
+    isDarkMode?: boolean;
 }
 
 export const NeumorphicIcon: React.FC<NeumorphicIconProps> = ({
@@ -15,7 +16,8 @@ export const NeumorphicIcon: React.FC<NeumorphicIconProps> = ({
     glowColor,
     size = 64,
     iconSize = 33,
-    isActive = false
+    isActive = false,
+    isDarkMode = false
 }) => {
     const pulseAnim = useRef(new Animated.Value(0.3)).current;
 
@@ -43,7 +45,11 @@ export const NeumorphicIcon: React.FC<NeumorphicIconProps> = ({
     const centerSize = size - 4;
 
     return (
-        <View style={[styles.neumorphicContainer, { width: containerSize, height: containerSize, borderRadius: containerSize / 2, shadowColor: glowColor }]}>
+        <View style={[
+            styles.neumorphicContainer,
+            { width: containerSize, height: containerSize, borderRadius: containerSize / 2, shadowColor: glowColor },
+            isDarkMode && styles.neumorphicContainerDark
+        ]}>
             {/* Animated Neon Glow Ring */}
             <Animated.View
                 style={[
@@ -68,6 +74,7 @@ export const NeumorphicIcon: React.FC<NeumorphicIconProps> = ({
             <View style={[
                 styles.whiteCenter,
                 { width: centerSize, height: centerSize, borderRadius: centerSize / 2 },
+                isDarkMode && styles.whiteCenterDark,
                 isActive && { backgroundColor: glowColor, borderColor: 'rgba(255,255,255,0.3)' }
             ]}>
                 {/* Top-left relief highlight */}
@@ -75,7 +82,7 @@ export const NeumorphicIcon: React.FC<NeumorphicIconProps> = ({
                 <MaterialIcons
                     name={icon as any}
                     size={iconSize}
-                    color={isActive ? '#FFFFFF' : '#1E293B'}
+                    color={isActive ? '#FFFFFF' : (isDarkMode ? '#F8FAFC' : '#1E293B')}
                 />
             </View>
         </View>
@@ -93,9 +100,12 @@ const styles = StyleSheet.create({
         shadowRadius: 14,
         elevation: 10,
     },
+    neumorphicContainerDark: {
+        backgroundColor: '#1E293B',
+    },
     glowRing: {
         position: 'absolute',
-        borderWidth: 4.5, // Much thicker neon ring as requested in Capture 3
+        borderWidth: 4.5,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 1,
         shadowRadius: 18,
@@ -105,14 +115,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 3, // Thicker White Border
+        borderWidth: 3,
         borderColor: '#FFFFFF',
-        // Inner depth shadow for convex effect
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.15,
         shadowRadius: 4,
         elevation: 3,
+    },
+    whiteCenterDark: {
+        backgroundColor: '#1E293B',
+        borderColor: '#1E293B',
     },
     reliefHighlight: {
         position: 'absolute',
@@ -120,6 +133,6 @@ const styles = StyleSheet.create({
         left: 2,
         borderTopWidth: 3,
         borderLeftWidth: 3,
-        borderColor: 'rgba(255,255,255,1)', // Sharper highlight
+        borderColor: 'rgba(255,255,255,1)',
     },
 });

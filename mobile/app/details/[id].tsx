@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity, Image, Dimensions, StatusBar, Platform, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 import { useCart } from '@/context/CartContext';
 import { MOCK_SERVICES, CATEGORIES } from '@/constants/mockData';
@@ -15,21 +17,44 @@ const { width } = Dimensions.get('window');
 export default function DetailsScreen() {
     const { id } = useLocalSearchParams();
     const router = useRouter();
-    const { addToCart, themeColor, setThemeColor } = useCart();
+    const { addToCart, setThemeColor } = useCart();
     const scrollY = React.useRef(new Animated.Value(0)).current;
+    const mapRef = React.useRef<MapView>(null);
 
     const service = MOCK_SERVICES.find(s => s.id === id) || MOCK_SERVICES[0];
+
+    // Memoize the category color to ensure consistency
+    const categoryColor = useMemo(() => getCategoryColor(service.category || 'Todos'), [service.category]);
 
     // Sync theme on mount
     React.useEffect(() => {
         if (service.category) {
-            setThemeColor(getCategoryColor(service.category));
+            setThemeColor(categoryColor);
         }
-    }, [service.category]);
+
+        // Auto-detect business district if coordinates exist
+        if (service.latitude && service.longitude) {
+            (async () => {
+                try {
+                    const reverseGeocoded = await Location.reverseGeocodeAsync({
+                        latitude: service.latitude!,
+                        longitude: service.longitude!
+                    });
+                    if (reverseGeocoded.length > 0) {
+                        const place = reverseGeocoded[0];
+                        setUserLocationLabel(`${place.district || place.city || 'Tu zona'}`.toUpperCase());
+                    }
+                } catch (error) {
+                    console.log("Geocode mount error:", error);
+                }
+            })();
+        }
+    }, [service.category, categoryColor]);
 
     const [liked, setLiked] = useState(false);
     const [selectedDate, setSelectedDate] = useState('Hoy');
     const [selectedTime, setSelectedTime] = useState('14:00');
+    const [userLocationLabel, setUserLocationLabel] = useState<string | null>(null);
 
     // Interpolations for scroll effects
     const headerOpacity = scrollY.interpolate({
@@ -50,6 +75,34 @@ export default function DetailsScreen() {
         extrapolate: 'clamp',
     });
 
+    const handleMyLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') return;
+
+        let location = await Location.getCurrentPositionAsync({});
+
+        // Reverse geocode to update label
+        try {
+            const reverseGeocoded = await Location.reverseGeocodeAsync({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude
+            });
+            if (reverseGeocoded.length > 0) {
+                const place = reverseGeocoded[0];
+                setUserLocationLabel(`${place.district || place.city || 'Tu zona'}`.toUpperCase());
+            }
+        } catch (error) {
+            console.log("Geocode error:", error);
+        }
+
+        mapRef.current?.animateToRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+        }, 1000);
+    };
+
     const handleAddToCart = () => {
         addToCart({
             id: Date.now(),
@@ -66,7 +119,11 @@ export default function DetailsScreen() {
     return (
         <View style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
-            <StatusBar barStyle="light-content" />
+            <StatusBar
+                barStyle="light-content"
+                translucent={true}
+                backgroundColor="transparent"
+            />
 
             {/* Hero Image */}
             <View style={styles.heroContainer}>
@@ -81,13 +138,12 @@ export default function DetailsScreen() {
             <Animated.View style={[
                 styles.header,
                 {
-                    backgroundColor: themeColor,
+                    backgroundColor: categoryColor,
                     opacity: headerOpacity,
                     height: headerHeight,
                     paddingTop: Platform.OS === 'ios' ? 40 : 20,
                 }
             ]}>
-                <StatusBar barStyle="light-content" backgroundColor={themeColor} />
                 <TouchableOpacity onPress={() => router.back()} style={styles.headerIconBtn}>
                     <MaterialIcons name="arrow-back" size={22} color="#fff" />
                 </TouchableOpacity>
@@ -176,7 +232,7 @@ export default function DetailsScreen() {
                         {['Hoy', 'Mañana', 'Lunes 22', 'Martes 23'].map((date) => (
                             <TouchableOpacity
                                 key={date}
-                                style={[styles.chip, selectedDate === date && { backgroundColor: themeColor }]}
+                                style={[styles.chip, selectedDate === date && { backgroundColor: categoryColor }]}
                                 onPress={() => setSelectedDate(date)}
                             >
                                 <Text style={[styles.chipText, selectedDate === date && styles.selectedChipText]}>{date}</Text>
@@ -187,7 +243,7 @@ export default function DetailsScreen() {
                         {['12:00', '13:00', '14:00', '15:00', '16:00', '17:00'].map((time) => (
                             <TouchableOpacity
                                 key={time}
-                                style={[styles.timeChip, selectedTime === time && { backgroundColor: themeColor }]}
+                                style={[styles.timeChip, selectedTime === time && { backgroundColor: categoryColor }]}
                                 onPress={() => setSelectedTime(time)}
                             >
                                 <Text style={[styles.timeChipText, selectedTime === time && styles.selectedTimeChipText]}>{time}</Text>
@@ -201,19 +257,51 @@ export default function DetailsScreen() {
                         Disfruta de una experiencia única con nuestros servicios premium. Calidad garantizada y la mejor atención en el corazón de la ciudad.
                     </Text>
 
-                    {/* Location Placeholder (Map) */}
+                    {/* Interactive Map Section */}
                     <View style={styles.mapContainer}>
                         <View style={styles.mapHeader}>
                             <Text style={[styles.sectionTitle, { marginBottom: 0 }]}>UBICACIÓN</Text>
                             <View style={styles.locationBadge}>
-                                <Text style={styles.locationBadgeText}>MIRAFLORES, LIMA</Text>
+                                <Text style={styles.locationBadgeText}>
+                                    {userLocationLabel || (service.location ? service.location.toUpperCase() : 'UBICACIÓN DETECTADA')}
+                                </Text>
                             </View>
                         </View>
-                        <View style={styles.mapPlaceholder}>
-                            <MaterialIcons name="map" size={48} color="#CBD5E1" />
-                            <Text style={styles.mapPlaceholderText}>Mapa interactivo próximamente</Text>
+                        <View style={[styles.mapPlaceholder, { overflow: 'hidden', height: 250 }]}>
+                            <MapView
+                                ref={mapRef}
+                                provider={PROVIDER_GOOGLE}
+                                style={styles.mapView}
+                                initialRegion={{
+                                    latitude: service.latitude || -12.1190,
+                                    longitude: service.longitude || -77.0285,
+                                    latitudeDelta: 0.005,
+                                    longitudeDelta: 0.005,
+                                }}
+                                scrollEnabled={false}
+                                zoomEnabled={false}
+                            >
+                                <Marker
+                                    coordinate={{
+                                        latitude: service.latitude || -12.1190,
+                                        longitude: service.longitude || -77.0285,
+                                    }}
+                                >
+                                    <View style={[styles.customMarker, { backgroundColor: categoryColor }]}>
+                                        <MaterialIcons name={CATEGORIES.find(c => c.label === service.category)?.icon as any || 'location-on'} size={18} color="#fff" />
+                                    </View>
+                                </Marker>
+                            </MapView>
 
-                            <TouchableOpacity style={[styles.directionsButton, { backgroundColor: themeColor, shadowColor: themeColor }]}>
+                            <TouchableOpacity
+                                style={styles.detailsMapGpsBtn}
+                                onPress={handleMyLocation}
+                                activeOpacity={0.7}
+                            >
+                                <MaterialIcons name="my-location" size={20} color={categoryColor} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={[styles.directionsButton, { backgroundColor: categoryColor, shadowColor: categoryColor }]}>
                                 <MaterialIcons name="directions" size={20} color="#fff" />
                                 <Text style={styles.directionsText}>IR AHORA</Text>
                             </TouchableOpacity>
@@ -229,12 +317,12 @@ export default function DetailsScreen() {
                 <TouchableOpacity style={styles.bookmarkButton}>
                     <MaterialIcons name="bookmark-border" size={24} color="#94A3B8" />
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.clamButton, { backgroundColor: themeColor, shadowColor: themeColor }]} onPress={handleAddToCart}>
+                <TouchableOpacity style={[styles.clamButton, { backgroundColor: categoryColor, shadowColor: categoryColor }]} onPress={handleAddToCart}>
                     <Text style={styles.claimButtonText}>CANJEAR OFERTA</Text>
                     <MaterialIcons name="confirmation-number" size={20} color="#fff" />
                 </TouchableOpacity>
             </View>
-        </View>
+        </View >
     );
 }
 
@@ -561,6 +649,22 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         letterSpacing: 1,
     },
+    detailsMapGpsBtn: {
+        position: 'absolute',
+        top: 16,
+        right: 16,
+        backgroundColor: '#fff',
+        width: 38,
+        height: 38,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 4,
+    },
     bottomBar: {
         position: 'absolute',
         bottom: 0,
@@ -604,6 +708,23 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '900',
         letterSpacing: 2,
+    },
+    mapView: {
+        ...StyleSheet.absoluteFillObject,
+    },
+    customMarker: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 3,
+        borderColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        elevation: 6,
     },
 });
 

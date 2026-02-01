@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 
+import { useCart } from '@/context/CartContext';
 import { COUPONS } from '@/constants/mockData';
 
 export default function SuggestionsScreen() {
     const router = useRouter();
+    const isFocused = useIsFocused();
+    const { isDarkMode } = useCart();
     const [activeCategory, setActiveCategory] = useState("Todos");
 
     const copyToClipboard = async (code: string) => {
@@ -19,7 +24,7 @@ export default function SuggestionsScreen() {
         <TouchableOpacity
             key={item.id}
             activeOpacity={0.9}
-            style={styles.couponCard}
+            style={[styles.couponCard, isDarkMode && styles.couponCardDark]}
             onPress={() => router.push(`/details/${item.id}`)}
         >
             <View style={[styles.colorStrip, { backgroundColor: item.color }]} />
@@ -40,8 +45,8 @@ export default function SuggestionsScreen() {
                             </View>
                         )}
                     </View>
-                    <Text style={styles.shopName}>{item.shop}</Text>
-                    <Text style={styles.description}>{item.desc}</Text>
+                    <Text style={[styles.shopName, isDarkMode && styles.textLight]}>{item.shop}</Text>
+                    <Text style={[styles.description, isDarkMode && styles.textMuted]}>{item.desc}</Text>
                 </View>
             </View>
 
@@ -52,37 +57,44 @@ export default function SuggestionsScreen() {
                 <View style={styles.halfCircleRight} />
             </View>
 
-            <View style={[styles.cardFooter, { backgroundColor: item.bg }]}>
+            <View style={[styles.cardFooter, { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : item.bg }]}>
                 <View style={{ flex: 1 }}>
-                    <Text style={styles.offerValue}>{item.offer}</Text>
-                    <Text style={styles.offerDetail}>{item.detail}</Text>
+                    <Text style={[styles.offerValue, isDarkMode && styles.textLight]}>{item.offer}</Text>
+                    <Text style={[styles.offerDetail, isDarkMode && styles.textMuted]}>{item.detail}</Text>
                 </View>
                 <TouchableOpacity
-                    style={styles.codeButton}
+                    style={[styles.codeButton, isDarkMode && styles.codeButtonDark]}
                     onPress={(e) => {
                         e.stopPropagation();
                         copyToClipboard(item.code);
                     }}
                 >
-                    <Text style={styles.codeText}>{item.code}</Text>
-                    <MaterialIcons name="content-copy" size={16} color="#64748B" />
+                    <Text style={[styles.codeText, isDarkMode && styles.textMuted]}>{item.code}</Text>
+                    <MaterialIcons name="content-copy" size={16} color={isDarkMode ? "#94A3B8" : "#64748B"} />
                 </TouchableOpacity>
             </View>
         </TouchableOpacity>
     );
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDarkMode && styles.containerDark]}>
+            {isFocused && (
+                <StatusBar
+                    style={isDarkMode ? "light" : "dark"}
+                    backgroundColor={isDarkMode ? "#0F172A" : "#F8FAFC"}
+                    animated={false}
+                />
+            )}
             {/* Header */}
-            <View style={styles.headerContainer}>
+            <View style={[styles.headerContainer, isDarkMode && styles.headerContainerDark]}>
                 <SafeAreaView edges={['top']} style={styles.safeHeader}>
                     <View style={styles.headerRow}>
                         <View>
-                            <Text style={styles.headerTitle}>BENEFICIOS</Text>
+                            <Text style={[styles.headerTitle, isDarkMode && styles.textLight]}>BENEFICIOS</Text>
                             <Text style={styles.headerSubtitle}>EXCLUSIVO WATACO PREMIUM</Text>
                         </View>
-                        <TouchableOpacity style={styles.historyButton}>
-                            <MaterialIcons name="history" size={24} color="#64748B" />
+                        <TouchableOpacity style={[styles.historyButton, isDarkMode && styles.historyButtonDark]}>
+                            <MaterialIcons name="history" size={24} color={isDarkMode ? "#94A3B8" : "#64748B"} />
                         </TouchableOpacity>
                     </View>
 
@@ -91,9 +103,17 @@ export default function SuggestionsScreen() {
                             <TouchableOpacity
                                 key={tab}
                                 onPress={() => setActiveCategory(tab)}
-                                style={[styles.tab, activeCategory === tab && styles.activeTab]}
+                                style={[
+                                    styles.tab,
+                                    isDarkMode && styles.tabDark,
+                                    activeCategory === tab && styles.activeTab
+                                ]}
                             >
-                                <Text style={[styles.tabText, activeCategory === tab && styles.activeTabText]}>{tab}</Text>
+                                <Text style={[
+                                    styles.tabText,
+                                    activeCategory === tab && styles.activeTabText,
+                                    isDarkMode && activeCategory !== tab && styles.textMuted
+                                ]}>{tab}</Text>
                             </TouchableOpacity>
                         ))}
                     </ScrollView>
@@ -116,11 +136,18 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F8FAFC',
     },
+    containerDark: {
+        backgroundColor: '#0F172A',
+    },
     headerContainer: {
         backgroundColor: 'rgba(255,255,255,0.95)',
         borderBottomWidth: 1,
         borderBottomColor: '#F1F5F9',
         zIndex: 10,
+    },
+    headerContainerDark: {
+        backgroundColor: '#1E293B',
+        borderBottomColor: 'rgba(255,255,255,0.1)',
     },
     safeHeader: {
         paddingBottom: 16,
@@ -139,6 +166,12 @@ const styles = StyleSheet.create({
         color: '#0F172A',
         textTransform: 'uppercase',
     },
+    textLight: {
+        color: '#F1F5F9',
+    },
+    textMuted: {
+        color: '#94A3B8',
+    },
     headerSubtitle: {
         fontSize: 10,
         fontWeight: '900',
@@ -153,6 +186,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    historyButtonDark: {
+        backgroundColor: 'rgba(255,255,255,0.1)',
+    },
     tabsContainer: {
         paddingHorizontal: 20,
         gap: 10,
@@ -162,6 +198,9 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 12,
         backgroundColor: '#fff',
+    },
+    tabDark: {
+        backgroundColor: 'rgba(255,255,255,0.05)',
     },
     activeTab: {
         backgroundColor: '#0EA5E9',
@@ -193,6 +232,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.05,
         shadowRadius: 10,
         elevation: 3,
+    },
+    couponCardDark: {
+        backgroundColor: '#1E293B',
     },
     colorStrip: {
         position: 'absolute',
@@ -320,6 +362,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderStyle: 'dashed',
         borderColor: '#94A3B8',
+    },
+    codeButtonDark: {
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        borderColor: 'rgba(255,255,255,0.2)',
     },
     codeText: {
         fontSize: 12,

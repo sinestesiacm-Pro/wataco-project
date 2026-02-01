@@ -1,46 +1,44 @@
 import { Category, Offer, Promotion } from "../lib/types";
 
 export const CATEGORIES: Category[] = [
-    { id: '1', label: 'Comida', icon: 'restaurant', color: 'orange' },
-    { id: '2', label: 'Salud', icon: 'medical-services', color: 'cyan' },
-    { id: '3', label: 'Tiendas', icon: 'storefront', color: 'purple' },
-    { id: '4', label: 'Belleza', icon: 'face-retouching-natural', color: 'pink' },
-    { id: '5', label: 'Servicios', icon: 'home', color: 'green' },
-    { id: '6', label: 'Mascotas', icon: 'pets', color: 'red' },
-    { id: '7', label: 'Tech', icon: 'smartphone', color: 'slate' },
-    { id: '8', label: 'Fitness', icon: 'sports-gymnastics', color: 'blue' },
+    { id: 'cat1', label: 'Todos', icon: 'grid-view', color: '#22C55E' },
+    { id: 'cat2', label: 'Comida', icon: 'restaurant', color: '#F97316' },
+    { id: 'cat3', label: 'Salud', icon: 'medical-services', color: '#0EA5E9' },
+    { id: 'cat4', label: 'Tiendas', icon: 'storefront', color: '#9333EA' },
+    { id: 'cat5', label: 'Belleza', icon: 'face-retouching-natural', color: '#E11D48' },
+    { id: 'cat6', label: 'Servicios', icon: 'home', color: '#22C55E' },
+    { id: 'cat7', label: 'Mascotas', icon: 'pets', color: '#EF4444' },
+    { id: 'cat8', label: 'Tech', icon: 'smartphone', color: '#475569' },
+    { id: 'cat9', label: 'Fitness', icon: 'sports-gymnastics', color: '#0284C7' },
 ];
 
 export const PROMOTIONS: Promotion[] = [
     {
         id: 'p1',
-        title: 'Carlos, aprovecha el 2x1 en Sushi 🍣',
+        title: 'CARLOS, APROVECHA EL\n2X1 EN SUSHI 🍣',
         subtitle: 'Solo este fin de semana',
-        footer: 'Hasta el domingo →',
-        image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=400',
-        color: '#8B5CF6',
-        gradientColors: ['#FEF9C3', '#FFFBEB'], // Amarillo pastel -> Crema
-        tag: 'DESTACADO'
+        footer: 'PEDIR AHORA',
+        image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=800',
+        color: '#F97316',
+        tag: 'PREMIUM DEAL'
     },
     {
         id: 'p2',
-        title: 'Ofertas del día 🔥',
-        subtitle: 'Descuentos exclusivos',
-        footer: 'Ver más ofertas →',
-        image: 'https://images.unsplash.com/photo-1512152272829-e3139592d56f?auto=format&fit=crop&q=80&w=400',
-        color: '#F472B6',
-        gradientColors: ['#FCE7F3', '#F5F3FF'], // Rosa pastel -> Lila
-        tag: 'PROMO'
+        title: 'HAMBURGUESAS -\n50% OFF YA! 🔥',
+        subtitle: 'En locales seleccionados',
+        footer: 'VER OFERTAS',
+        image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800',
+        color: '#EA580C',
+        tag: 'SÚPER OFERTA'
     },
     {
         id: 'p3',
-        title: 'Envío Gratis 🛵',
-        subtitle: 'En tus primeras 3 compras',
-        footer: 'Solicitar ahora →',
-        image: 'https://images.unsplash.com/photo-1526367790999-0150786486a9?auto=format&fit=crop&q=80&w=400',
-        color: '#10B981',
-        gradientColors: ['#DCFCE7', '#F0FDFA'], // Menta -> Verde suave
-        tag: 'NUEVO'
+        title: 'ENVÍO GRATIS EN TU\nPRIMERA COMPRA 🛵',
+        subtitle: 'Válido hoy por ser tu primer día',
+        footer: 'APROVECHAR',
+        image: 'https://images.unsplash.com/photo-1526367793999-111050a1f305?auto=format&fit=crop&q=80&w=800',
+        color: '#6B21A8',
+        tag: 'CORTESÍA'
     }
 ];
 
@@ -55,7 +53,10 @@ export const FEATURED_OFFERS: Offer[] = [
         isOpen: true,
         rating: 4.8,
         category: 'Comida',
-        price: 35.00
+        price: 35.00,
+        location: 'San Isidro, Lima',
+        latitude: -12.0921,
+        longitude: -77.0302
     },
     {
         id: '2',
@@ -66,7 +67,10 @@ export const FEATURED_OFFERS: Offer[] = [
         tagColor: 'w-purple',
         expiresIn: '24h Left',
         category: 'Fitness',
-        price: 0.00
+        price: 0.00,
+        location: 'Miraflores, Lima',
+        latitude: -12.1190,
+        longitude: -77.0285
     },
     {
         id: '3',
@@ -77,7 +81,10 @@ export const FEATURED_OFFERS: Offer[] = [
         tagColor: 'w-red',
         rating: 4.9,
         category: 'Comida',
-        price: 45.00
+        price: 45.00,
+        location: 'Barranco, Lima',
+        latitude: -12.1485,
+        longitude: -77.0210
     }
 ];
 
@@ -94,7 +101,10 @@ export const LIST_OFFERS: Offer[] = [
         originalPrice: 18.00,
         isOpen: true,
         distance: '1.2km',
-        category: 'Comida'
+        category: 'Comida',
+        location: 'Surco, Lima',
+        latitude: -12.1287,
+        longitude: -76.9856
     },
     {
         id: '102',

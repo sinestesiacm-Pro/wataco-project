@@ -1,13 +1,14 @@
 export const CATEGORY_GRADIENTS: { [key: string]: [string, string] } = {
-    'Comida': ['#FF9838', '#FB5B1B'],
-    'Salud': ['#5EEAD4', '#0D9488'],
-    'Tiendas': ['#A78BFA', '#7C3AED'],
-    'Belleza': ['#F472B6', '#DB2777'],
-    'Servicios': ['#6EE7B7', '#059669'],
+    'Comida': ['#FFB473', '#F97316'],
+    'Salud': ['#38BDF8', '#0EA5E9'],
+    'Tiendas': ['#C084FC', '#9333EA'],
+    'Belleza': ['#FB7185', '#E11D48'],
+    'Servicios': ['#4ADE80', '#22C55E'],
     'Mascotas': ['#FCA5A5', '#EF4444'],
     'Tech': ['#94A3B8', '#475569'],
     'Fitness': ['#7DD3FC', '#0284C7'],
-    'Todos': ['#C084FC', '#9333EA'],
+    'Ocio': ['#A78BFA', '#7C3AED'],
+    'Todos': ['#4ADE80', '#22C55E'],
 };
 
 export const getCategoryGradient = (categoryLabel: string): [string, string] => {
