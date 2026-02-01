@@ -1,4 +1,4 @@
-import { Category, Offer } from "../lib/types";
+import { Category, Offer, Promotion } from "../lib/types";
 
 export const CATEGORIES: Category[] = [
     { id: '1', label: 'Comida', icon: 'restaurant', color: 'orange' },
@@ -9,6 +9,39 @@ export const CATEGORIES: Category[] = [
     { id: '6', label: 'Mascotas', icon: 'pets', color: 'red' },
     { id: '7', label: 'Tech', icon: 'smartphone', color: 'slate' },
     { id: '8', label: 'Fitness', icon: 'sports-gymnastics', color: 'blue' },
+];
+
+export const PROMOTIONS: Promotion[] = [
+    {
+        id: 'p1',
+        title: 'Carlos, aprovecha el 2x1 en Sushi 🍣',
+        subtitle: 'Solo este fin de semana',
+        footer: 'Hasta el domingo →',
+        image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=400',
+        color: '#8B5CF6',
+        gradientColors: ['#FEF9C3', '#FFFBEB'], // Amarillo pastel -> Crema
+        tag: 'DESTACADO'
+    },
+    {
+        id: 'p2',
+        title: 'Ofertas del día 🔥',
+        subtitle: 'Descuentos exclusivos',
+        footer: 'Ver más ofertas →',
+        image: 'https://images.unsplash.com/photo-1512152272829-e3139592d56f?auto=format&fit=crop&q=80&w=400',
+        color: '#F472B6',
+        gradientColors: ['#FCE7F3', '#F5F3FF'], // Rosa pastel -> Lila
+        tag: 'PROMO'
+    },
+    {
+        id: 'p3',
+        title: 'Envío Gratis 🛵',
+        subtitle: 'En tus primeras 3 compras',
+        footer: 'Solicitar ahora →',
+        image: 'https://images.unsplash.com/photo-1526367790999-0150786486a9?auto=format&fit=crop&q=80&w=400',
+        color: '#10B981',
+        gradientColors: ['#DCFCE7', '#F0FDFA'], // Menta -> Verde suave
+        tag: 'NUEVO'
+    }
 ];
 
 export const FEATURED_OFFERS: Offer[] = [

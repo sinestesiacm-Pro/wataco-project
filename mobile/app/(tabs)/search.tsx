@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image, FlatList, Keyboard, Dimensions, Modal } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -214,6 +215,7 @@ export default function SearchScreen() {
 
     return (
         <View style={styles.container}>
+            <StatusBar style="light" />
             {/* Filter Modal - Moved to main return */}
             <Modal
                 animationType="slide"
@@ -313,7 +315,7 @@ export default function SearchScreen() {
                             <MaterialIcons name="tune" size={20} color="#64748B" />
                         </TouchableOpacity>
                         {['Todos', ...CATEGORIES.map(c => c.label)].map((cat) => {
-                            const glowColor = getCategoryColor(cat);
+                            const glowColor = cat === 'Todos' ? themeColor : getCategoryColor(cat);
                             const isActive = activeCategory === cat;
                             return (
                                 <TouchableOpacity

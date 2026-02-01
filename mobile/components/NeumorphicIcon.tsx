@@ -84,37 +84,42 @@ export const NeumorphicIcon: React.FC<NeumorphicIconProps> = ({
 
 const styles = StyleSheet.create({
     neumorphicContainer: {
-        backgroundColor: '#F8FAFC',
+        backgroundColor: '#FFFFFF',
         justifyContent: 'center',
         alignItems: 'center',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
-        elevation: 5,
+        // External Neon Glow
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.35,
+        shadowRadius: 14,
+        elevation: 10,
     },
     glowRing: {
         position: 'absolute',
-        borderWidth: 2,
+        borderWidth: 4.5, // Much thicker neon ring as requested in Capture 3
         shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.8,
-        shadowRadius: 10,
+        shadowOpacity: 1,
+        shadowRadius: 18,
+        zIndex: -1,
     },
     whiteCenter: {
         backgroundColor: '#FFFFFF',
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'rgba(0,0,0,0.03)',
-        shadowOffset: { width: 4, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
+        borderWidth: 3, // Thicker White Border
+        borderColor: '#FFFFFF',
+        // Inner depth shadow for convex effect
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+        elevation: 3,
     },
     reliefHighlight: {
         position: 'absolute',
         top: 2,
         left: 2,
-        borderTopWidth: 2,
-        borderLeftWidth: 2,
-        borderColor: 'rgba(255,255,255,0.8)',
+        borderTopWidth: 3,
+        borderLeftWidth: 3,
+        borderColor: 'rgba(255,255,255,1)', // Sharper highlight
     },
 });

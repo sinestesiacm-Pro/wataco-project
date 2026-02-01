@@ -7,15 +7,19 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useCart } from '@/context/CartContext';
-import { CATEGORIES, FEATURED_OFFERS, LIST_OFFERS } from '@/constants/mockData';
-import { Offer, Category } from '@/lib/types';
+import { CATEGORIES, FEATURED_OFFERS, LIST_OFFERS, PROMOTIONS } from '@/constants/mockData';
+import { Offer, Category, Promotion } from '@/lib/types';
 import { getCategoryGradient, getHeaderColor } from '@/lib/theme';
 import { NeumorphicIcon } from '@/components/NeumorphicIcon';
 
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
 export default function HomeScreen() {
   const router = useRouter();
-  const { addToCart, cartCount, setThemeColor, themeColor } = useCart();
+  const { addToCart, cartCount, setThemeColor } = useCart(); // Removed themeColor from destructuring as it's redefined below
   const [selectedCategory, setSelectedCategory] = React.useState('Todos');
+  const [promoIndex, setPromoIndex] = React.useState(0);
+  const themeColor = CATEGORIES.find(c => c.label === selectedCategory)?.color || '#8B5CF6';
   const [filterModalVisible, setFilterModalVisible] = React.useState(false);
 
   // Update global theme when category changes
@@ -128,7 +132,10 @@ export default function HomeScreen() {
               </TouchableOpacity>
               <TouchableOpacity style={styles.iconButton} onPress={() => router.push('/notifications')}>
                 <MaterialIcons name="notifications" size={24} color="#fff" />
-                <View style={styles.notificationDot} />
+                <View style={[
+                  styles.notificationDot,
+                  (selectedCategory === 'Comida' || selectedCategory === 'Belleza' || selectedCategory === 'Mascotas') && { backgroundColor: '#FACC15' } // Yellow dot for red themes
+                ]} />
               </TouchableOpacity>
             </View>
           </View>
@@ -146,9 +153,79 @@ export default function HomeScreen() {
             <MaterialIcons name="search" size={24} color="#94A3B8" />
             <Text style={styles.searchText}>¿QUÉ ESTÁS BUSCANDO?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.filterButton} onPress={() => setFilterModalVisible(true)}>
+          <TouchableOpacity style={[styles.filterButton, { backgroundColor: themeColor, shadowColor: themeColor }]} onPress={() => setFilterModalVisible(true)}>
             <MaterialIcons name="tune" size={24} color="#fff" />
           </TouchableOpacity>
+        </View>
+
+        {/* Promotions Section (Uber Eats 2026 Aesthetic) */}
+        <View style={styles.promoSection}>
+          <FlatList
+            data={PROMOTIONS}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={SCREEN_WIDTH - 40}
+            decelerationRate="fast"
+            onScroll={(e) => {
+              const x = e.nativeEvent.contentOffset.x;
+              const index = Math.round(x / (SCREEN_WIDTH - 40));
+              if (index !== promoIndex) setPromoIndex(index);
+            }}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.promoList}
+            renderItem={({ item }) => (
+              <View style={styles.promoCardShadowWrapper}>
+                <View style={styles.promoCardInner}>
+                  <LinearGradient
+                    colors={item.gradientColors as [string, string, ...string[]]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.promoGradient}
+                  >
+                    {/* Glass Overlay for modern look */}
+                    <View style={styles.promoGlassOverlay} />
+                    {/* Premium Hairline Border */}
+                    <View style={styles.promoHairlineBorder} />
+
+                    <TouchableOpacity activeOpacity={0.9} style={styles.promoContent}>
+                      {/* Image with subtle elevation */}
+                      <View style={styles.promoImageWrapper}>
+                        <Image source={{ uri: item.image }} style={styles.promoImage} />
+                      </View>
+
+                      {/* Text Section */}
+                      <View style={styles.promoTextCol}>
+                        <Text style={styles.promoTitle}>{item.title}</Text>
+                        <Text style={styles.promoSubtitle}>{item.subtitle}</Text>
+                        <View style={styles.promoFooterRow}>
+                          <Text style={styles.promoFooterText}>{item.footer}</Text>
+                        </View>
+                      </View>
+
+                      {/* Circular Chevron Button (Glass style) */}
+                      <View style={styles.promoCircularButton}>
+                        <MaterialIcons name="chevron-right" size={24} color="#141414" />
+                      </View>
+                    </TouchableOpacity>
+                  </LinearGradient>
+                </View>
+              </View>
+            )}
+          />
+
+          {/* Minimalist Pagination Dots */}
+          <View style={styles.paginationRow}>
+            {PROMOTIONS.map((_, i) => (
+              <View
+                key={i}
+                style={[
+                  styles.paginationDot,
+                  promoIndex === i ? [styles.paginationDotActive, { backgroundColor: themeColor }] : null
+                ]}
+              />
+            ))}
+          </View>
         </View>
 
         {/* Filter Modal */}
@@ -386,36 +463,160 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 56,
     backgroundColor: '#fff',
-    borderRadius: 16,
+    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     gap: 12,
+    // Higher 3D Elevation
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    elevation: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
   },
   searchText: {
     color: '#94A3B8',
     fontSize: 13,
-    fontWeight: '900',
+    fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   filterButton: {
-    width: 56,
-    height: 56,
-    backgroundColor: '#0EA5E9',
-    borderRadius: 20, // More rounded like the image
+    width: 60,
+    height: 60,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#0EA5E9',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.3)',
+  },
+  promoSection: {
+    marginVertical: 10,
+  },
+  promoList: {
+    paddingHorizontal: 20,
+    gap: 12,
+  },
+  promoCardShadowWrapper: {
+    width: SCREEN_WIDTH - 40,
+    height: 102,             // más compacto
+    borderRadius: 28,
+    backgroundColor: 'transparent',
+    overflow: 'visible',
+    // sombra más moderna y ligera
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.06,
+    shadowRadius: 30,
     elevation: 4,
+  },
+  promoCardInner: {
+    flex: 1,
+    borderRadius: 28,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+  },
+  promoGradient: {
+    flex: 1,
+  },
+  promoGlassOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.28)',
+  },
+  promoHairlineBorder: {
+    ...StyleSheet.absoluteFillObject,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.55)',
+    borderRadius: 28,
+  },
+  promoContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 12,
+  },
+  promoImageWrapper: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.05,
+    shadowRadius: 14,
+    elevation: 2,
+  },
+  promoImage: {
+    width: 64,
+    height: 64,
+    borderRadius: 16,
+    backgroundColor: '#fff',
+  },
+  promoTextCol: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  promoTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#141414',
+    lineHeight: 19,
+    marginBottom: 2,
+  },
+  promoSubtitle: {
+    fontSize: 12,
+    color: 'rgba(20,20,20,0.55)',
+    fontWeight: '600',
+    marginBottom: 6,
+  },
+  promoFooterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  promoFooterText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: 'rgba(20,20,20,0.78)',
+  },
+  promoCircularButton: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: 'rgba(255,255,255,0.55)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 18,
+    elevation: 3,
+  },
+  paginationRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 10,
+  },
+  paginationDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(0,0,0,0.10)',
+  },
+  paginationDotActive: {
+    width: 18,
+    borderRadius: 6,
+    backgroundColor: '#8B5CF6',
   },
   categoriesSection: {
     marginVertical: 10,
@@ -432,60 +633,12 @@ const styles = StyleSheet.create({
     gap: 10,
     width: 78,
   },
-  neumorphicContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: '#F8FAFC', // Same as background for integration
-    justifyContent: 'center',
-    alignItems: 'center',
-    // Neumorphic "Relief" Shadows
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  glowRing: {
-    position: 'absolute',
-    width: 68,
-    height: 68,
-    borderRadius: 34,
-    borderWidth: 1.5,
-    opacity: 0.4, // Subtle glow
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-  },
-  whiteCenter: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.03)',
-    // Light shadow for relief
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-  },
-  reliefHighlight: {
-    position: 'absolute',
-    top: 2,
-    left: 2,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    borderTopWidth: 2,
-    borderLeftWidth: 2,
-    borderColor: 'rgba(255,255,255,0.8)', // Pure white highlight on top-left
-  },
   categoryLabel: {
     fontSize: 12,
-    fontWeight: '800',
-    color: '#334155',
+    fontWeight: '900', // Bolder labels
+    color: '#0F172A', // Darker navy/black
     textTransform: 'none',
+    marginTop: 8,
   },
   activeCategoryContainer: {
     transform: [{ scale: 1.05 }],

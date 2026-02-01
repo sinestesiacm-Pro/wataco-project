@@ -33,3 +33,14 @@ export interface User {
     avatar: string;
     location: string;
 }
+
+export interface Promotion {
+    id: string;
+    title: string;
+    subtitle: string;
+    footer?: string;
+    image: string;
+    color: string;
+    gradientColors?: string[];
+    tag?: string;
+}
