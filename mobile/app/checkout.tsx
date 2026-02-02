@@ -32,7 +32,7 @@ export default function CheckoutScreen() {
     return (
         <View style={[styles.container, isDarkMode && styles.containerDark]}>
             <Stack.Screen options={{ headerShown: false }} />
-            <StatusBar style="dark" />
+            <StatusBar style={isDarkMode ? "light" : "dark"} />
 
             {/* Header */}
             <SafeAreaView edges={['top']} style={[styles.header, isDarkMode && { backgroundColor: '#0F172A', borderBottomColor: '#1E293B' }]}>
@@ -101,14 +101,27 @@ export default function CheckoutScreen() {
                         </View>
                         <View style={styles.deliveryRow}>
                             <TouchableOpacity
-                                style={[styles.deliveryCard, isDarkMode && styles.deliveryCardDark, deliveryType === 'pickup' && styles.deliveryCardActive]}
+                                style={[
+                                    styles.deliveryCard,
+                                    isDarkMode && styles.deliveryCardDark,
+                                    deliveryType === 'pickup' && (isDarkMode ? styles.deliveryCardActiveDark : styles.deliveryCardActive)
+                                ]}
                                 onPress={() => setDeliveryType('pickup')}
+                                activeOpacity={0.7}
                             >
-                                <View style={[styles.deliveryIconBg, deliveryType === 'pickup' ? styles.iconBgActive : { backgroundColor: 'transparent' }]}>
-                                    <MaterialIcons name="storefront" size={24} color={deliveryType === 'pickup' ? '#fff' : '#64748B'} />
+                                <View style={[styles.deliveryIconBg, deliveryType === 'pickup' && styles.iconBgActive]}>
+                                    <MaterialIcons
+                                        name="storefront"
+                                        size={24}
+                                        color={deliveryType === 'pickup' ? '#fff' : (isDarkMode ? '#94A3B8' : '#64748B')}
+                                    />
                                 </View>
-                                <Text style={[styles.deliveryTitle, deliveryType === 'pickup' && { color: '#8B5CF6' }]}>Recojo</Text>
-                                <Text style={styles.deliveryNote}>Gratis • 20min</Text>
+                                <Text style={[
+                                    styles.deliveryTitle,
+                                    isDarkMode && { color: '#fff' },
+                                    deliveryType === 'pickup' && { color: '#8B5CF6' }
+                                ]}>RECOJO</Text>
+                                <Text style={[styles.deliveryNote, isDarkMode && { color: '#94A3B8' }]}>Gratis • 20min</Text>
                                 {deliveryType === 'pickup' && (
                                     <View style={[styles.checkIcon, isDarkMode ? styles.checkIconDark : { borderColor: '#fff' }]}>
                                         <MaterialIcons name="check" size={12} color="#fff" />
@@ -117,14 +130,27 @@ export default function CheckoutScreen() {
                             </TouchableOpacity>
 
                             <TouchableOpacity
-                                style={[styles.deliveryCard, isDarkMode && styles.deliveryCardDark, deliveryType === 'delivery' && styles.deliveryCardActive]}
+                                style={[
+                                    styles.deliveryCard,
+                                    isDarkMode && styles.deliveryCardDark,
+                                    deliveryType === 'delivery' && (isDarkMode ? styles.deliveryCardActiveDark : styles.deliveryCardActive)
+                                ]}
                                 onPress={() => setDeliveryType('delivery')}
+                                activeOpacity={0.7}
                             >
-                                <View style={[styles.deliveryIconBg, deliveryType === 'delivery' ? styles.iconBgActive : { backgroundColor: 'transparent' }]}>
-                                    <MaterialIcons name="moped" size={24} color={deliveryType === 'delivery' ? '#fff' : '#64748B'} />
+                                <View style={[styles.deliveryIconBg, deliveryType === 'delivery' && styles.iconBgActive]}>
+                                    <MaterialIcons
+                                        name="moped"
+                                        size={24}
+                                        color={deliveryType === 'delivery' ? '#fff' : (isDarkMode ? '#94A3B8' : '#64748B')}
+                                    />
                                 </View>
-                                <Text style={[styles.deliveryTitle, deliveryType === 'delivery' && { color: '#8B5CF6' }]}>Delivery</Text>
-                                <Text style={styles.deliveryNote}>Desde €2.50 • 45m</Text>
+                                <Text style={[
+                                    styles.deliveryTitle,
+                                    isDarkMode && { color: '#fff' },
+                                    deliveryType === 'delivery' && { color: '#8B5CF6' }
+                                ]}>DELIVERY</Text>
+                                <Text style={[styles.deliveryNote, isDarkMode && { color: '#94A3B8' }]}>Desde €2.50 • 45m</Text>
                                 {deliveryType === 'delivery' && (
                                     <View style={[styles.checkIcon, isDarkMode ? styles.checkIconDark : { borderColor: '#fff' }]}>
                                         <MaterialIcons name="check" size={12} color="#fff" />
@@ -423,18 +449,25 @@ const styles = StyleSheet.create({
         padding: 20,
         borderWidth: 2,
         borderColor: 'transparent',
+        alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.05,
         shadowRadius: 10,
-        elevation: 2,
+        elevation: 1, // Reduced to avoid artifacts
     },
     deliveryCardDark: {
         backgroundColor: '#1E293B',
     },
     deliveryCardActive: {
         borderColor: '#8B5CF6',
-        backgroundColor: 'rgba(139, 92, 246, 0.05)',
+        backgroundColor: '#F5F3FF', // Opaque instead of alpha for artifact prevention
+        elevation: 0,
+    },
+    deliveryCardActiveDark: {
+        borderColor: '#8B5CF6',
+        backgroundColor: 'rgba(139, 92, 246, 0.15)',
+        elevation: 0,
     },
     checkIcon: {
         position: 'absolute',
@@ -459,15 +492,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 16,
+        backgroundColor: 'transparent',
     },
     iconBgActive: {
         backgroundColor: '#8B5CF6',
-    },
-    iconBgInactive: {
-        backgroundColor: '#F5F3FF',
-    },
-    iconBgInactiveSecondary: {
-        backgroundColor: '#F0F9FF',
     },
     deliveryTitle: {
         fontSize: 14,
