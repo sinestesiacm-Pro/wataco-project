@@ -17,22 +17,27 @@ import { NeumorphicIcon } from '@/components/NeumorphicIcon';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function HomeScreen() {
+  const flatListRef = React.useRef<FlatList>(null);
   const router = useRouter();
   const isFocused = useIsFocused();
-  const { addToCart, cartCount, setThemeColor, isDarkMode } = useCart();
-  const [selectedCategory, setSelectedCategory] = React.useState('Todos');
+  const { addToCart, cartCount, setThemeColor, isDarkMode, hasActiveOrder, activeCategory, setActiveCategory, themeColor } = useCart();
   const [promoIndex, setPromoIndex] = React.useState(0);
-  // Memoize theme color
-  const themeColor = useMemo(() =>
-    getHeaderColor(selectedCategory),
-    [selectedCategory]
-  );
   const [filterModalVisible, setFilterModalVisible] = React.useState(false);
 
-  // Update global theme when category changes
+  // Auto-scroll categories when activeCategory changes globally
   React.useEffect(() => {
-    setThemeColor(getHeaderColor(selectedCategory));
-  }, [selectedCategory]);
+    const index = CATEGORIES.findIndex(c => c.label === activeCategory);
+    if (index !== -1 && flatListRef.current && isFocused) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToIndex({
+          index,
+          animated: true,
+          viewPosition: 0.5,
+        });
+      }, 100);
+    }
+  }, [activeCategory, isFocused]);
+
 
   // Memoized add to cart handler
   const handleAddToCart = useCallback((item: any) => {
@@ -49,24 +54,28 @@ export default function HomeScreen() {
 
   // Memoized category renderer
   const renderCategory = useCallback(({ item }: { item: Category | { id: string, label: string, icon: string, color: string } }) => {
-    const isActive = selectedCategory === item.label;
+    const isActive = activeCategory === item.label;
     const gradient = getCategoryGradient(item.label);
     const glowColor = gradient[1];
 
     return (
       <TouchableOpacity
-        onPress={() => setSelectedCategory(item.label)}
+        onPress={() => setActiveCategory(item.label)}
         style={[styles.categoryContainer, isActive && styles.activeCategoryContainer]}
       >
         <View style={[
           styles.categoryCard,
-          isActive && { borderColor: glowColor, backgroundColor: isDarkMode ? '#1E293B' : '#fff' },
+          isActive && {
+            backgroundColor: glowColor,
+            borderColor: '#fff',
+            transform: [{ scale: 1.1 }]
+          },
           isDarkMode && !isActive && styles.categoryCardDark
         ]}>
           <MaterialIcons
             name={item.icon as any}
             size={28}
-            color={isActive ? glowColor : (isDarkMode ? '#CBD5E1' : '#64748B')}
+            color={isActive ? '#fff' : (isDarkMode ? '#CBD5E1' : '#64748B')}
           />
         </View>
         <Text style={[
@@ -79,7 +88,7 @@ export default function HomeScreen() {
         </Text>
       </TouchableOpacity>
     );
-  }, [selectedCategory, isDarkMode]);
+  }, [activeCategory, isDarkMode, setActiveCategory]);
 
   // Memoized featured renderer
   const renderFeatured = useCallback(({ item }: { item: Offer }) => (
@@ -128,12 +137,12 @@ export default function HomeScreen() {
 
   return (
     <View style={[styles.container, isDarkMode && styles.containerDark]}>
-      {isFocused && <StatusBar style="light" backgroundColor={getHeaderColor(selectedCategory)} animated={false} />}
+      {isFocused && <StatusBar style="light" backgroundColor={getHeaderColor(activeCategory)} animated={false} />}
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: themeColor }]}>
-        <SafeAreaView edges={['top']} style={styles.headerSafeArea}>
+      <View style={[styles.header, { backgroundColor: themeColor }]} pointerEvents="box-none">
+        <SafeAreaView edges={['top']} style={styles.headerSafeArea} pointerEvents="box-none">
           {/* Header Top Row: Location + Actions */}
-          <View style={styles.headerContent}>
+          <View style={styles.headerContent} pointerEvents="box-none">
             <TouchableOpacity style={styles.locationContainer} onPress={() => router.push('/profile')}>
               <View style={styles.locationIconBg}>
                 <MaterialIcons name="location-on" size={20} color="#fff" />
@@ -147,7 +156,7 @@ export default function HomeScreen() {
               </View>
             </TouchableOpacity>
 
-            <View style={styles.headerActions}>
+            <View style={styles.headerActions} pointerEvents="box-none">
               <TouchableOpacity style={styles.iconCircleButton} onPress={() => router.push('/checkout')}>
                 <MaterialIcons name="shopping-cart" size={22} color="#fff" />
                 {cartCount > 0 && (
@@ -160,15 +169,16 @@ export default function HomeScreen() {
                 <MaterialIcons name="notifications" size={22} color="#fff" />
                 <View style={[
                   styles.notificationDot,
-                  (selectedCategory === 'Comida' || selectedCategory === 'Belleza' || selectedCategory === 'Mascotas') && { backgroundColor: '#FACC15' }
+                  (activeCategory === 'Comida' || activeCategory === 'Belleza' || activeCategory === 'Mascotas') && { backgroundColor: '#FACC15' }
                 ]} />
               </TouchableOpacity>
             </View>
           </View>
 
           {/* Header Bottom Row: Search + Filter */}
-          <View style={styles.headerSearchRow}>
+          <View style={styles.headerSearchRow} pointerEvents="box-none">
             <TouchableOpacity
+              activeOpacity={0.7}
               style={[styles.searchPill, isDarkMode && styles.searchPillDark]}
               onPress={() => router.push('/search')}
             >
@@ -176,6 +186,7 @@ export default function HomeScreen() {
               <Text style={[styles.searchPillText, isDarkMode && styles.searchPillTextDark]}>¿QUÉ ESTÁS BUSCANDO?</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              activeOpacity={0.7}
               style={[styles.filterPill, isDarkMode && styles.filterPillDark]}
               onPress={() => setFilterModalVisible(true)}
             >
@@ -190,6 +201,26 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        {/* Navigation Header Spacer */}
+        <View style={{ height: 180 }} />
+
+        {/* Active Order Banner */}
+        {hasActiveOrder && (
+          <TouchableOpacity
+            style={[styles.activeOrderBanner, isDarkMode && styles.activeOrderBannerDark]}
+            onPress={() => router.push('/order-tracking')}
+          >
+            <View style={styles.activeOrderIcon}>
+              <MaterialIcons name="moped" size={24} color="#fff" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.activeOrderTitle}>PEDIDO EN CAMINO</Text>
+              <Text style={styles.activeOrderSubtitle}>Tu oferta llegará en aprox. 25 min</Text>
+            </View>
+            <MaterialIcons name="chevron-right" size={24} color="#8B5CF6" />
+          </TouchableOpacity>
+        )}
+
         {/* Hero Impact Section (Promotions Card) */}
         <View style={styles.heroSection}>
           <FlatList
@@ -260,12 +291,19 @@ export default function HomeScreen() {
         {/* Categories */}
         <View style={styles.categoriesSection}>
           <FlatList
+            ref={flatListRef}
             data={CATEGORIES}
             renderItem={renderCategory}
             keyExtractor={(item) => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.categoriesList}
+            extraData={activeCategory}
+            onScrollToIndexFailed={(info) => {
+              setTimeout(() => {
+                flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
+              }, 500);
+            }}
           />
         </View>
         <Modal
@@ -320,15 +358,16 @@ export default function HomeScreen() {
         </View>
 
         <FlatList
-          data={FEATURED_OFFERS.filter(offer => selectedCategory === 'Todos' || offer.category === selectedCategory)}
+          data={(FEATURED_OFFERS || []).filter(offer => activeCategory === 'Todos' || offer.category === activeCategory)}
           renderItem={renderFeatured}
-          keyExtractor={(item) => item.id}
+          keyExtractor={featuredKeyExtractor}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.featuredList}
           snapToInterval={310} // card width + margin
           decelerationRate="fast"
           snapToAlignment="start"
+          extraData={activeCategory}
           ListEmptyComponent={() => (
             <View style={styles.emptyContainer}>
               <MaterialIcons name="info-outline" size={32} color={isDarkMode ? '#475569' : '#CBD5E1'} />
@@ -340,12 +379,12 @@ export default function HomeScreen() {
         {/* List Offers (Filtered) */}
         <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, isDarkMode && styles.sectionTitleDark]}>
-            {selectedCategory === 'Todos' ? 'OFERTAS DEL DÍA' : `OFERTAS DE ${selectedCategory.toUpperCase()}`}
+            {activeCategory === 'Todos' ? 'OFERTAS DEL DÍA' : `OFERTAS DE ${activeCategory.toUpperCase()}`}
           </Text>
         </View>
 
         <View style={styles.recommendationsList}>
-          {LIST_OFFERS.filter(offer => selectedCategory === 'Todos' || offer.category === selectedCategory).map((item) => (
+          {LIST_OFFERS.filter(offer => activeCategory === 'Todos' || offer.category === activeCategory).map((item) => (
             <TouchableOpacity
               key={item.id}
               style={[styles.recommendationCard, isDarkMode && styles.recommendationCardDark]}
@@ -427,6 +466,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 4, // Compacted
+  },
+  activeOrderBanner: {
+    margin: 20,
+    marginTop: 0, // Handled by spacer
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    shadowColor: '#8B5CF6',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.1)',
+  },
+  activeOrderBannerDark: {
+    backgroundColor: '#1E293B',
+    borderColor: 'rgba(139, 92, 246, 0.2)',
+  },
+  activeOrderIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: '#8B5CF6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  activeOrderTitle: {
+    fontSize: 10,
+    fontWeight: '900',
+    color: '#8B5CF6',
+    letterSpacing: 1.5,
+    marginBottom: 2,
+  },
+  activeOrderSubtitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#475569',
   },
   headerSearchRow: {
     flexDirection: 'row',
@@ -605,7 +685,7 @@ const styles = StyleSheet.create({
   },
   heroSection: {
     position: 'relative',
-    marginTop: 0,
+    marginTop: 10,
     marginBottom: 10,
     zIndex: 1,
   },
@@ -739,6 +819,7 @@ const styles = StyleSheet.create({
   categoriesSection: {
     marginVertical: 10,
     paddingVertical: 10,
+    zIndex: 1, // Ensure it's above the ScrollView background but below fixed header
   },
   categoriesList: {
     paddingHorizontal: 20,

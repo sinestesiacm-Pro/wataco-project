@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -26,7 +26,7 @@ const { width } = Dimensions.get('window');
 export default function ProfileScreen() {
     const router = useRouter();
     const isFocused = useIsFocused();
-    const { themeMode, setThemeMode, isDarkMode } = useCart();
+    const { themeMode, setThemeMode, isDarkMode, hasActiveOrder } = useCart();
     const [settingsExpanded, setSettingsExpanded] = useState(false);
 
 
@@ -37,8 +37,11 @@ export default function ProfileScreen() {
         </View>
     );
 
-    const renderMenuButton = (icon: any, label: string, sublabel: string, color: string, bgColor: string) => (
-        <TouchableOpacity style={[styles.menuButton, isDarkMode && styles.menuButtonDark]}>
+    const renderMenuButton = (icon: any, label: string, sublabel: string, color: string, bgColor: string, onPress?: () => void) => (
+        <TouchableOpacity
+            style={[styles.menuButton, isDarkMode && styles.menuButtonDark]}
+            onPress={onPress}
+        >
             <View style={[styles.menuIconBox, { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : bgColor }]}>
                 <MaterialIcons name={icon} size={24} color={color} />
             </View>
@@ -230,7 +233,14 @@ export default function ProfileScreen() {
 
                     {/* Grid Menu */}
                     <View style={styles.menuGrid}>
-                        {renderMenuButton('local-offer', 'Mis Ofertas', '8 activas', '#F43F5E', '#FFF1F2')}
+                        {renderMenuButton(
+                            'local-offer',
+                            'Mis Ofertas',
+                            hasActiveOrder ? '1 activa' : 'Ver todas',
+                            '#F43F5E',
+                            '#FFF1F2',
+                            () => hasActiveOrder ? router.push('/order-tracking') : Alert.alert("Sin pedidos", "No tienes ofertas activas actualmente.")
+                        )}
                         {renderMenuButton('history', 'Historial', '24 canjes', '#64748B', '#F1F5F9')}
                         {renderMenuButton('favorite', 'Favoritos', '15 guardados', '#22C55E', '#F0FDF4')}
                         {renderMenuButton('help', 'Soporte', 'Chat 24/7', '#A855F7', '#FAF5FF')}

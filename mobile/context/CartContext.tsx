@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import { getHeaderColor } from '../lib/theme';
 
 export interface CartItem {
     id: string | number;
@@ -26,18 +27,23 @@ interface CartContextType {
     isDarkMode: boolean;
     themeMode: ThemeMode;
     setThemeMode: (mode: ThemeMode) => void;
+    hasActiveOrder: boolean;
+    setHasActiveOrder: (active: boolean) => void;
+    activeCategory: string;
+    setActiveCategory: (category: string) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [themeColor, setThemeColor] = useState('#8B5CF6');
     const [themeMode, setThemeMode] = useState<ThemeMode>('auto');
-
+    const [hasActiveOrder, setHasActiveOrder] = useState(false);
+    const [activeCategory, setActiveCategory] = useState('Todos');
+    const themeColor = getHeaderColor(activeCategory);
+    const setThemeColor = (color: string) => { };
     const systemColorScheme = useColorScheme();
 
-    // Calculate effective dark mode based on themeMode setting
     const isDarkMode = themeMode === 'auto'
         ? systemColorScheme === 'dark'
         : themeMode === 'dark';
@@ -87,7 +93,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setThemeColor,
             isDarkMode,
             themeMode,
-            setThemeMode
+            setThemeMode,
+            hasActiveOrder,
+            setHasActiveOrder,
+            activeCategory,
+            setActiveCategory
         }}>
             {children}
         </CartContext.Provider>

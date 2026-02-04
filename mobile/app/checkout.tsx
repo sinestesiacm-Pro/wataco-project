@@ -11,7 +11,7 @@ const { width } = Dimensions.get('window');
 
 export default function CheckoutScreen() {
     const router = useRouter();
-    const { cartItems, removeFromCart, updateQuantity, getTotal, clearCart, isDarkMode } = useCart();
+    const { cartItems, removeFromCart, updateQuantity, getTotal, clearCart, isDarkMode, setHasActiveOrder } = useCart();
     const [deliveryType, setDeliveryType] = useState<'pickup' | 'delivery'>('pickup');
     const [paymentMethod, setPaymentMethod] = useState('visa');
 
@@ -26,7 +26,11 @@ export default function CheckoutScreen() {
             Alert.alert("Carrito vacío", "Agrega ofertas para continuar.");
             return;
         }
-        router.push('/claim-success');
+
+        // Final Transaction Logic
+        clearCart();
+        setHasActiveOrder(true);
+        router.push('/order-success');
     };
 
     return (

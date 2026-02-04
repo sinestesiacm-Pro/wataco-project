@@ -12,6 +12,7 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: true,
+        animation: 'fade',
         tabBarActiveTintColor: themeColor,
         tabBarInactiveTintColor: '#94A3B8',
         tabBarLabelStyle: {

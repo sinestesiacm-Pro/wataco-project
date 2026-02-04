@@ -43,16 +43,31 @@ export default function SearchScreen() {
     const router = useRouter();
     const isFocused = useIsFocused();
     const params = useLocalSearchParams();
-    const { addToCart, cartCount, themeColor, setThemeColor, isDarkMode } = useCart();
+    const { addToCart, cartCount, themeColor, setThemeColor, isDarkMode, activeCategory, setActiveCategory } = useCart();
+
     const mapRef = useRef<MapView>(null);
+    const tabsScrollRef = useRef<ScrollView>(null);
+
+    // Auto-scroll categories
+    useEffect(() => {
+        const index = CATEGORIES.findIndex(c => c.label === activeCategory);
+        if (index !== -1 && tabsScrollRef.current && isFocused) {
+            // Approximation of tab width (around 120px each with gap)
+            tabsScrollRef.current.scrollTo({ x: index * 120, animated: true });
+        }
+    }, [activeCategory, isFocused]);
 
     // State
     const [searchQuery, setSearchQuery] = useState('');
-    const [activeCategory, setActiveCategory] = useState('Todos');
     const [filteredResults, setFilteredResults] = useState<Offer[]>(MOCK_SERVICES);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [userLocation, setUserLocation] = useState<Location.LocationObject | null>(null);
     const [locationLabel, setLocationLabel] = useState('Detectando ubicación...');
+
+    // Detailed Filters
+    const [sortBy, setSortBy] = useState('Recomendados');
+    const [priceRange, setPriceRange] = useState<string | null>(null);
+    const [onlyOpen, setOnlyOpen] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -90,30 +105,25 @@ export default function SearchScreen() {
         })();
     }, []);
 
-    // Initial load from params OR global theme
+    // Initial load from params (only on first mount with specific link)
     useEffect(() => {
-        if (params.category) {
+        if (params.category && isFocused) {
             const catStr = params.category as string;
             const normalizedCat = catStr.charAt(0).toUpperCase() + catStr.slice(1).toLowerCase();
-            setActiveCategory(normalizedCat);
-            // setIsSearching(true); // Removed as isSearching is from context
-        } else {
-            // Check if global theme matches a category
-            const matchingCat = CATEGORIES.find(c => c.color.toLowerCase() === themeColor.toLowerCase());
-            if (matchingCat) {
-                setActiveCategory(matchingCat.label);
+            if (activeCategory !== normalizedCat) {
+                setActiveCategory(normalizedCat);
             }
         }
-        if (params.q) {
+        if (params.q && params.q !== searchQuery) {
             setSearchQuery(params.q as string);
-            // setIsSearching(true); // Removed as isSearching is from context
         }
-    }, [params, themeColor]);
+    }, [params, isFocused]); // Still sync with params but only when focused
 
     // Filter Logic
     useEffect(() => {
-        let results = MOCK_SERVICES;
+        let results = [...MOCK_SERVICES];
 
+        // 1. Category Filter
         if (activeCategory !== 'Todos') {
             results = results.filter(item =>
                 item.category === activeCategory ||
@@ -121,6 +131,7 @@ export default function SearchScreen() {
             );
         }
 
+        // 2. Search Query
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
             results = results.filter(item =>
@@ -129,8 +140,28 @@ export default function SearchScreen() {
             );
         }
 
+        // 3. Price Filter (Mock Logic)
+        if (priceRange) {
+            // In a real app we'd have price data, using category for mock mapping
+            if (priceRange === '€') results = results.filter(i => (i.category === 'Comida' || i.category === 'Café'));
+            if (priceRange === '€€€') results = results.filter(i => (i.category === 'Premium' || i.category === 'Spa'));
+        }
+
+        // 4. Open Only
+        if (onlyOpen) {
+            results = results.filter(item => item.isOpen);
+        }
+
+        // 5. Sorting
+        if (sortBy === 'Más cercano') {
+            // Mock sort by id length as distance proxy
+            results.sort((a, b) => a.id.length - b.id.length);
+        } else if (sortBy === 'Mejor valorados') {
+            results.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        }
+
         setFilteredResults(results);
-    }, [searchQuery, activeCategory]);
+    }, [searchQuery, activeCategory, sortBy, priceRange, onlyOpen]);
 
     // Handlers
     const handleMyLocation = async () => {
@@ -148,8 +179,6 @@ export default function SearchScreen() {
 
     const handleCategorySelect = (catLabel: string) => {
         setActiveCategory(catLabel);
-        // setIsSearching(true); // Removed as isSearching is from context
-        setThemeColor(getCategoryColor(catLabel));
     };
 
     const handleSearchSubmit = () => {
@@ -237,8 +266,52 @@ export default function SearchScreen() {
         </TouchableOpacity>
     );
 
+    const isSearching = searchQuery.length > 0 || (activeCategory && activeCategory !== 'Todos');
+
     const renderDashboard = () => (
         <View>
+            {/* Categories Grid */}
+            <View style={styles.sectionContainer}>
+                <Text style={[styles.sectionTitle, isDarkMode && { color: '#E2E8F0' }]}>CATEGORÍAS</Text>
+                <View style={styles.categoriesGrid}>
+                    {CATEGORIES.map(c => (
+                        <TouchableOpacity
+                            key={c.label}
+                            onPress={() => handleCategorySelect(c.label)}
+                            style={[
+                                styles.categoryGridItem,
+                                activeCategory === c.label && { transform: [{ scale: 1.05 }] }
+                            ]}
+                        >
+                            <View style={[
+                                styles.categoryIconBox,
+                                { backgroundColor: isDarkMode ? '#1E293B' : '#fff' },
+                                activeCategory === c.label && {
+                                    backgroundColor: c.color,
+                                    shadowColor: c.color,
+                                    shadowOpacity: 0.4,
+                                    shadowRadius: 10,
+                                    elevation: 6
+                                }
+                            ]}>
+                                <MaterialIcons
+                                    name={c.icon as any}
+                                    size={28}
+                                    color={activeCategory === c.label ? '#fff' : (isDarkMode ? '#94A3B8' : '#64748B')}
+                                />
+                            </View>
+                            <Text style={[
+                                styles.categoryGridLabel,
+                                isDarkMode && { color: '#94A3B8' },
+                                activeCategory === c.label && { color: themeColor, fontWeight: '900' }
+                            ]}>
+                                {c.label.toUpperCase()}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            </View>
+
             {/* Popular Businesses */}
             <View style={styles.sectionContainer}>
                 <Text style={[styles.sectionTitle, isDarkMode && { color: '#E2E8F0' }]}>NEGOCIOS TOP</Text>
@@ -266,9 +339,9 @@ export default function SearchScreen() {
 
             {/* Feed */}
             <View style={styles.sectionContainer}>
-                <Text style={[styles.sectionTitle, isDarkMode && { color: '#E2E8F0' }]}>FEED DE OPORTUNIDADES</Text>
+                <Text style={[styles.sectionTitle, isDarkMode && { color: '#E2E8F0' }]}>OFERTAS CERCA DE TI</Text>
                 <View style={{ paddingHorizontal: 20, gap: 16 }}>
-                    {MOCK_SERVICES.slice(0, 3).map(item => (
+                    {MOCK_SERVICES.slice(0, 5).map(item => (
                         <View key={`feed-${item.id}`}>
                             {renderResultItem({ item })}
                         </View>
@@ -281,9 +354,8 @@ export default function SearchScreen() {
     return (
         <View style={[styles.container, isDarkMode && styles.containerDark]}>
             {isFocused && <StatusBar style="light" backgroundColor={themeColor} animated={false} />}
-            {/* Filter Modal - Moved to main return */}
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={filterModalVisible}
                 onRequestClose={() => setFilterModalVisible(false)}
@@ -294,38 +366,73 @@ export default function SearchScreen() {
                     onPress={() => setFilterModalVisible(false)}
                 >
                     <View style={[styles.modalContent, isDarkMode && { backgroundColor: '#1E293B' }]}>
+                        <View style={styles.modalIndicator} />
                         <View style={styles.modalHeader}>
-                            <Text style={[styles.modalTitle, isDarkMode && { color: '#E2E8F0' }]}>FILTRAR BÚSQUEDA</Text>
-                            <TouchableOpacity onPress={() => setFilterModalVisible(false)}>
-                                <MaterialIcons name="close" size={24} color={isDarkMode ? '#94A3B8' : '#64748B'} />
+                            <Text style={[styles.modalTitle, isDarkMode && { color: '#E2E8F0' }]}>FILTRAR Y ORDENAR</Text>
+                            <TouchableOpacity onPress={() => {
+                                setSortBy('Recomendados');
+                                setPriceRange(null);
+                                setOnlyOpen(false);
+                            }}>
+                                <Text style={{ color: themeColor, fontWeight: '700', fontSize: 12 }}>LIMPIAR</Text>
                             </TouchableOpacity>
                         </View>
 
                         <Text style={[styles.filterGroupTitle, isDarkMode && { color: '#94A3B8' }]}>ORDENAR POR</Text>
                         <View style={styles.filterOptions}>
-                            {['Más cercano', 'Mejor valorados', 'Novedades'].map(opt => (
-                                <TouchableOpacity key={opt} style={styles.filterOption}>
-                                    <Text style={[styles.filterOptionText, isDarkMode && { color: '#E2E8F0' }]}>{opt}</Text>
-                                    <View style={[styles.radioOuter, isDarkMode && { borderColor: '#475569' }]} />
+                            {['Recomendados', 'Más cercano', 'Mejor valorados'].map(opt => (
+                                <TouchableOpacity key={opt} style={styles.filterOption} onPress={() => setSortBy(opt)}>
+                                    <Text style={[styles.filterOptionText, isDarkMode && { color: '#E2E8F0' }, sortBy === opt && { color: themeColor }]}>{opt}</Text>
+                                    <View style={[styles.radioOuter, isDarkMode && { borderColor: '#475569' }, sortBy === opt && { borderColor: themeColor, borderWidth: 6 }]} />
                                 </TouchableOpacity>
                             ))}
+                        </View>
+
+                        <Text style={[styles.filterGroupTitle, isDarkMode && { color: '#94A3B8' }]}>PRECIO</Text>
+                        <View style={styles.priceOptions}>
+                            {['€', '€€', '€€€'].map(price => (
+                                <TouchableOpacity
+                                    key={price}
+                                    style={[
+                                        styles.priceOption,
+                                        priceRange === price && { backgroundColor: themeColor, borderColor: themeColor },
+                                        isDarkMode && { backgroundColor: '#334155', borderColor: '#475569' },
+                                        isDarkMode && priceRange === price && { backgroundColor: themeColor }
+                                    ]}
+                                    onPress={() => setPriceRange(priceRange === price ? null : price)}
+                                >
+                                    <Text style={[styles.priceOptionText, (priceRange === price || (isDarkMode && !priceRange)) && { color: '#fff' }]}>{price}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
+                        <View style={styles.switchOption}>
+                            <Text style={[styles.filterOptionText, isDarkMode && { color: '#E2E8F0' }]}>Solo abiertos ahora</Text>
+                            <TouchableOpacity
+                                style={[styles.switchBase, onlyOpen && { backgroundColor: themeColor }]}
+                                onPress={() => setOnlyOpen(!onlyOpen)}
+                            >
+                                <View style={[styles.switchCircle, onlyOpen && { transform: [{ translateX: 20 }] }]} />
+                            </TouchableOpacity>
                         </View>
 
                         <TouchableOpacity
                             style={[styles.applyButton, { backgroundColor: themeColor }]}
                             onPress={() => setFilterModalVisible(false)}
                         >
-                            <Text style={styles.applyButtonText}>APLICAR FILTROS</Text>
+                            <Text style={styles.applyButtonText}>MOSTRAR {filteredResults.length} RESULTADOS</Text>
                         </TouchableOpacity>
                     </View>
                 </TouchableOpacity>
             </Modal>
 
-            <View style={[styles.headerContainer, { backgroundColor: themeColor }]}>
-                <SafeAreaView edges={['top']} style={styles.safeHeader}>
-                    <View style={styles.topRow}>
-                        <View>
-                            <View style={styles.headerTop}>
+            {isFocused && <StatusBar style="light" backgroundColor={themeColor} animated={false} />}
+
+            <View style={[styles.headerContainer, { backgroundColor: themeColor }]} pointerEvents="box-none">
+                <SafeAreaView edges={['top']} style={styles.safeHeader} pointerEvents="box-none">
+                    <View style={styles.topRow} pointerEvents="box-none">
+                        <View pointerEvents="box-none">
+                            <View style={styles.headerTop} pointerEvents="box-none">
                                 <TouchableOpacity style={styles.locationSelector}>
                                     <MaterialIcons name="location-on" size={16} color="#fff" />
                                     <Text style={styles.locationTextHeader}>Centro Histórico</Text>
@@ -336,7 +443,7 @@ export default function SearchScreen() {
                             <Text style={styles.headerBigTitle}>EXPLORAR</Text>
                             <Text style={[styles.headerSubtitle, { color: 'rgba(255,255,255,0.7)' }]}>DESCUBRE TU CIUDAD</Text>
                         </View>
-                        <View style={styles.headerActions}>
+                        <View style={styles.headerActions} pointerEvents="box-none">
                             <TouchableOpacity style={styles.headerIconBtn} onPress={() => router.push('/checkout')}>
                                 <MaterialIcons name="shopping-bag" size={24} color="#fff" />
                                 {cartCount > 0 && <View style={styles.badge}><Text style={styles.badgeText}>{cartCount}</Text></View>}
@@ -349,7 +456,7 @@ export default function SearchScreen() {
                     </View>
 
                     {/* Search Bar */}
-                    <View style={styles.searchContainer}>
+                    <View style={styles.searchContainer} pointerEvents="box-none">
                         <View style={[styles.searchBar, isDarkMode && { backgroundColor: '#334155' }]}>
                             <MaterialIcons name="search" size={24} color={isDarkMode ? '#94A3B8' : '#94A3B8'} />
                             <TextInput
@@ -383,7 +490,7 @@ export default function SearchScreen() {
                     </View>
 
                     {/* Tabs */}
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsContainer}>
+                    <ScrollView ref={tabsScrollRef} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsContainer}>
                         <TouchableOpacity
                             style={[styles.filterBtn, { backgroundColor: isDarkMode ? '#334155' : '#fff' }]}
                             onPress={() => setFilterModalVisible(true)}
@@ -484,7 +591,7 @@ export default function SearchScreen() {
                     </View>
                 </View>
 
-                {searchQuery.length > 0 ? (
+                {isSearching ? (
                     <View style={styles.resultsContainer}>
                         <View style={styles.resultsHeaderRow}>
                             <Text style={[styles.resultsCount, isDarkMode && { color: '#94A3B8' }]}>
@@ -504,7 +611,12 @@ export default function SearchScreen() {
                                     <MaterialIcons name="search-off" size={40} color="#CBD5E1" />
                                 </View>
                                 <Text style={[styles.emptyTitle, isDarkMode && { color: '#E2E8F0' }]}>SIN RESULTADOS</Text>
-                                <Text style={[styles.emptyText, isDarkMode && { color: '#94A3B8' }]}>No encontramos nada para "{searchQuery}"</Text>
+                                <Text style={[styles.emptyText, isDarkMode && { color: '#94A3B8' }]}>
+                                    {searchQuery.length > 0
+                                        ? `No encontramos nada para "${searchQuery}"`
+                                        : `No hay ofertas disponibles en ${activeCategory}`
+                                    }
+                                </Text>
                                 <TouchableOpacity style={styles.clearButton} onPress={handleClearSearch}>
                                     <Text style={styles.clearButtonText}>VER TODO</Text>
                                 </TouchableOpacity>
@@ -528,9 +640,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#0F172A',
     },
     headerContainer: {
-        backgroundColor: 'rgba(255,255,255,0.95)',
         borderBottomWidth: 0,
-        zIndex: 100,
+        zIndex: 110,
+        elevation: 4,
     },
     safeHeader: {
         paddingBottom: 10,
@@ -1093,6 +1205,65 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '900',
         letterSpacing: 1.5,
+    },
+    modalIndicator: {
+        width: 40,
+        height: 4,
+        backgroundColor: '#E2E8F0',
+        borderRadius: 2,
+        alignSelf: 'center',
+        marginBottom: 12,
+    },
+    seeAllText: {
+        fontSize: 10,
+        fontWeight: '900',
+        letterSpacing: 1,
+    },
+    activeDot: {
+        position: 'absolute',
+        bottom: -4,
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+    },
+    priceOptions: {
+        flexDirection: 'row',
+        gap: 12,
+        marginBottom: 32,
+    },
+    priceOption: {
+        flex: 1,
+        height: 44,
+        borderRadius: 14,
+        borderWidth: 1,
+        borderColor: '#F1F5F9',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+    },
+    priceOptionText: {
+        fontSize: 13,
+        fontWeight: '900',
+        color: '#64748B',
+    },
+    switchOption: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 40,
+    },
+    switchBase: {
+        width: 44,
+        height: 24,
+        borderRadius: 12,
+        backgroundColor: '#E2E8F0',
+        padding: 2,
+    },
+    switchCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        backgroundColor: '#fff',
     },
     calloutContainer: {
         padding: 12,
