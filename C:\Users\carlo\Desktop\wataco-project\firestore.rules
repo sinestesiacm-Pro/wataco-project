@@ -1,0 +1,50 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // USER DATA: Private to each user
+    match /users/{userId}/{document=**} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    // PUBLIC DATA: Read-only for everyone
+    match /airlines/{docId} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+    match /destination_recommendations/{docId} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+    match /travel_tips/{docId} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+    
+    // HOTELS: Read-only for everyone
+    match /hoteles/{hotelId} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    // VIP MEMBERSHIPS: Read for users, write is more restricted
+    match /vip_memberships/{codeId} {
+      allow read: if isSignedIn();
+      // Write logic should be handled by secure backend functions (or more complex rules)
+      // For this app, we allow a user to "claim" a code by updating it.
+      allow update: if isSignedIn() && request.resource.data.usedBy == request.auth.uid;
+      allow create, delete: if false;
+    }
+  }
+}

@@ -1,0 +1,84 @@
+'use client';
+
+import React from 'react';
+import { Button } from "@/components/ui/button";
+import { Ship, Star, Clock, Anchor, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from 'next/image';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { CruiseItinerary } from '@/components/cruise-itinerary';
+import { Badge } from '@/components/ui/badge';
+import type { CruisePackage } from '@/lib/types';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
+export default function CruiseDetailPageContent({ cruise }: { cruise: CruisePackage }) {
+    
+    const renderStars = (rating: number) => {
+        return [...Array(rating)].map((_, i) => (
+            <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
+        ));
+    };
+
+    if (!cruise) {
+        return (
+            <div className="flex items-center justify-center h-full text-white">
+                <p>Cargando detalles del crucero...</p>
+            </div>
+        )
+    }
+
+    return (
+        <Card className="overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-2xl">
+            <div className="relative h-64 md:h-96 w-full">
+                <Carousel className="w-full h-full">
+                    <CarouselContent>
+                        {(cruise.carouselImages && cruise.carouselImages.length > 0 ? cruise.carouselImages : [cruise.image]).map((imgSrc, index) => (
+                            <CarouselItem key={index}>
+                                <div className="relative h-64 md:h-96 w-full">
+                                    <Image
+                                        src={imgSrc}
+                                        alt={`${cruise.name} - Imagen ${index + 1}`}
+                                        fill
+                                        className="object-cover"
+                                        priority={index === 0}
+                                    />
+                                </div>
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm border-white/20 text-white hover:bg-black/50 hover:text-white" />
+                </Carousel>
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                <div className="absolute bottom-6 left-6 pointer-events-none">
+                    <Badge variant="secondary" className="mb-2">{cruise.ship}</Badge>
+                    <h1 className="text-4xl md:text-5xl font-bold font-headline drop-shadow-lg">{cruise.name}</h1>
+                </div>
+            </div>
+            <CardContent className="p-6 grid md:grid-cols-12 gap-8">
+                <div className="md:col-span-4 space-y-6">
+                    <Card className="bg-black/20 p-4">
+                        <CardTitle className="text-xl mb-4">Detalles del Viaje</CardTitle>
+                        <div className="space-y-3 text-white/80">
+                            <div className="flex items-center gap-3"><Ship className="h-5 w-5 text-primary"/><span>{cruise.ship}</span></div>
+                            <div className="flex items-center gap-3"><Clock className="h-5 w-5 text-primary"/><span>{cruise.duration}</span></div>
+                            <div className="flex items-center gap-3"><Anchor className="h-5 w-5 text-primary"/><span>{cruise.itinerary.length} paradas</span></div>
+                            <div className="flex items-center gap-3">{renderStars(cruise.rating)}<span>({cruise.reviews} reviews)</span></div>
+                        </div>
+                    </Card>
+                    <Card className="bg-black/20 p-4">
+                        <CardTitle className="text-xl mb-2">Precio</CardTitle>
+                        <p className="text-sm text-white/80">Desde</p>
+                        <p className="text-4xl font-bold text-white">${cruise.price}</p>
+                        <p className="text-sm text-white/80">por persona</p>
+                        <Button size="lg" className="w-full mt-4 bg-success hover:bg-success/90">Reservar Ahora</Button>
+                    </Card>
+                </div>
+                <div className="md:col-span-8">
+                    <h2 className="text-2xl font-bold font-headline mb-6">Itinerario del Crucero</h2>
+                    <CruiseItinerary itinerary={cruise.itinerary} />
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
